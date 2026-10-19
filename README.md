@@ -62,7 +62,7 @@ Bubylift es una herramienta de registro, no un consejo médico ni de entrenamien
 Source-available, all rights reserved. You may view the code and use the app personally. Copying, modifying or redistributing it requires written permission from the author. See `LICENSE`.
 
 ## Credits / Créditos
-Exercise categories and training concepts are based on the NASM-CPT program. Bubylift is independent and not endorsed by NASM. / Las categorías de ejercicios y los conceptos de entrenamiento están basados en el programa NASM-CPT. Bubylift es independiente y no está avalada por NASM.
+Workout structure, training phases (OPT model), exercise categories and training concepts are based on NASM-CPT7 materials, used with permission. Bubylift is independent and not endorsed by NASM. / La estructura de los entrenamientos, las fases (modelo OPT), las categorías de ejercicios y los conceptos están basados en los materiales NASM-CPT7, usados con permiso. Bubylift es independiente y no está avalada por NASM.
 
 ## Profiles, password, encryption & transfer / Perfiles, contraseña, cifrado y transferencia
 - EN: Up to 5 profiles per device, each with its own data. Data is stored encrypted (AES-256-GCM) with a random master key, wrapped by the password and by the three security answers together (PBKDF2-SHA256). Forgetting both means the data cannot be recovered. Profile name, avatar, language and theme are not encrypted. QR transfer is a one-time copy encrypted with an 8-digit PIN shown on the sending phone (it carries the key too).

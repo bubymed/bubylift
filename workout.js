@@ -94,7 +94,16 @@ function vActive(){
   let h='<div class="wk-head"><input id="wkName" class="wkname" type="text" maxlength="60" placeholder="'+esc(t('wkNamePh'))+'" value="'+esc(ACT.name)+'" oninput="ACT.name=this.value;saveAct()">'+
     '<div class="muted" id="wkstats">'+statsLine()+'</div>'+
     '<div class="row"><button class="btn pri" onclick="finishAsk()">'+t('finish')+'</button><button class="btn" onclick="cancelAsk()">'+t('cancelWk')+'</button></div></div>';
-  ACT.ex.forEach((x,i)=>{h+=exCard(i,x);});
+  const pl=(ACT.pl!=null&&DATA.plan&&DATA.plan.ph&&DATA.plan.ds[ACT.pl])?DATA.plan:null;
+  if(pl)h+='<details class="card optd"><summary>'+t('optWu')+'</summary>'+optWarm(pl.ds[ACT.pl],pl).replace(/^<div class="card optb"><b>[^<]*<\/b>/,'<div>')+'</details>';
+  let lastSec='';
+  ACT.ex.forEach((x,i)=>{
+    const sc=x.tg&&x.tg.sec;
+    if(sc&&sc!==lastSec)h+='<div class="secl">'+t('sec_'+sc)+'</div>';
+    if(sc)lastSec=sc;
+    h+=exCard(i,x);
+  });
+  if(pl)h+='<details class="card optd"><summary>'+t('optCd')+'</summary>'+optWarm(pl.ds[ACT.pl],pl,true).replace(/^<div class="card optb"><b>[^<]*<\/b>/,'<div>')+'</details>';
   h+='<button class="btn wide" onclick="pickEx()">＋ '+t('addEx')+'</button>';
   h+='<textarea class="note-in" rows="2" maxlength="500" placeholder="'+esc(t('wkNotePh'))+'" oninput="ACT.note=this.value;saveAct()">'+esc(ACT.note)+'</textarea>';
   if(ACT.ex.length)h+='<button class="btn wide" onclick="saveAsRoutine()">'+t('saveRoutine')+'</button>';
@@ -163,7 +172,7 @@ function tgSet(i,j){
     const prev=bestScore(x.eid,m,s),sc=setScore(m,s);
     s.done=true;
     if(prev>0&&sc>prev){s.pr=true;toast(t('newPR'));}else delete s.pr;
-    startRest();
+    startRest(x.tg&&x.tg.rs!=null?x.tg.rs:undefined);
   }else{s.done=false;delete s.pr;}
   saveAct();render();
 }
@@ -213,6 +222,7 @@ function beep(){
 }
 function startRest(sec){
   if(!SET.auto)return;
+  if(sec===0){return;} // supersets: straight to the next exercise / supersets: directo al siguiente ejercicio
   sec=sec||SET.rest||90;
   REST={end:Date.now()+sec*1000,tot:sec,done:false};restBuilt=false;
   drawRest();if(!restTick)restTick=setInterval(drawRest,250);

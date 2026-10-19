@@ -97,9 +97,10 @@ const PGOALS=['muscle','bodybuilding','strength','fat','general','hybrid','milit
 /* short coaching notes shown under an exercise / notas cortas bajo un ejercicio */
 const SKILLS=['strength','power','speed','endurance','balance'];
 const isHy=g=>g==='hybrid'||g==='military'; // hybrid athlete (no test) and military test prep share the engine / híbrido (sin prueba) y militar comparten el motor
-const NT_KEYS=['ntIntR','ntLong','ntInt','ntEasy','ntTempo','ntSdc','ntMdl','ntHrp','ntPlk','ntSim'];
+const OPT_SEC_OK=['ac','sk','rs','cc'];
+const NT_KEYS=['ntIntR','ntLong','ntInt','ntEasy','ntTempo','ntSdc','ntMdl','ntHrp','ntPlk','ntSim','ntBal','ntLand'];
 const NTEID={hexdl:'ntMdl',hrpushup:'ntHrp',plank:'ntPlk',sdcdrill:'ntSdc',sleddrag:'ntSdc'};
-const PDAYKEYS=Object.keys(DAYSPEC).concat(['fullA','fullB','fullC','up1','up2','low1','low2']); // old keys stay valid / las claves viejas siguen válidas
+const PDAYKEYS=Object.keys(DAYSPEC).concat(['fullA','fullB','fullC','up1','up2','low1','low2','oCB','oLeg']); // old keys stay valid / las claves viejas siguen válidas
 const LENMAX={30:4,45:5,60:6,75:7};
 
 function planScheme(goal,lvl,role,skills){
@@ -147,13 +148,22 @@ const HYFIRST={
 };
 /* ---------- weekly volume: hard sets per muscle per week / volumen semanal: series duras por músculo por semana ---------- */
 const VOLMU='QHGCPBSITA';
+const OPT_VF={1:[0.4,0.7],2:[0.5,1.9],3:[0.4,1.3],4:[0.35,1.2],5:[0.4,1.5]}; // OPT phases change how many sets a muscle gets (low,high factor) / las fases OPT cambian las series por músculo
 const VOLR={lo:{M:[6,9],m:[4,6],A:[4,6]},md:{M:[10,14],m:[6,10],A:[6,10]},hi:{M:[15,20],m:[10,16],A:[10,15]}};
 function volFactor(prof){
   const gs=goalsOf(prof),lowv=g=>isHy(g)||g==='runner';
   return gs.every(lowv)?0.6:gs.some(lowv)?0.8:(gs[0]==='strength'?0.85:1);
 }
-function volRange(mu,vol,prof){
-  const c='QHGPB'.indexOf(mu)>=0?'M':mu==='A'?'A':'m',r=(VOLR[vol]||VOLR.md)[c],f=volFactor(prof);
+function volRange(mu,vol,prof,ph){
+  const c='QHGPB'.indexOf(mu)>=0?'M':mu==='A'?'A':'m',r=(VOLR[vol]||VOLR.md)[c],vf=volFactor(prof);
+  if(ph){ // OPT: core is trained every session as activation / el core se entrena en cada sesión como activación
+    const n=prof.n||3,vi={lo:0,md:1,hi:2}[vol]!=null?{lo:0,md:1,hi:2}[vol]:1;
+    if(mu==='A')return[[1,2,3][vi]*n,[4,6,8][vi]*n];
+    const o=OPT_VF[ph]||[1,1],fq=n>=4?(ph===3||ph===4?1.8:1.7):1; // more days = more weekly sets / más días = más series semanales
+    const lw=(mu==='H'||mu==='G')?0.5:1,up=mu==='S'?1.6:1; // hamstrings/glutes also work in squats; shoulders appear in every pair day / isquios y glúteos trabajan en otras; el hombro aparece en todos los días
+    return[Math.max(2,Math.round(r[0]*vf*o[0]*lw)),Math.max(3,Math.round(r[1]*vf*o[1]*fq*up))];
+  }
+  const f=vf;
   return[Math.max(2,Math.round(r[0]*f)),Math.max(3,Math.round(r[1]*f))];
 }
 function volCounts(e){return(e.r==='m'||e.r==='a'||e.r==='c')&&VOLMU.indexOf(muOf(e.eid))>=0;}
@@ -181,6 +191,7 @@ function normProf(p){
   o.focus=(o.focus||[]).filter(k=>FOCUS_MU[k]).slice(0,3);o.have=(o.have||[]).filter(k=>HAVE_KEYS.indexOf(k)>=0);o.inj=(o.inj||[]).filter(k=>INJ[k]);o.cond=o.cond?1:0;
   o.ff=Math.max(1,Math.min(4,Math.round(o.ff)||2));o.skills=(o.skills||[]).filter((k,i,a)=>SKILLS.indexOf(k)>=0&&a.indexOf(k)===i).slice(0,2);
   if(['lo','md','hi'].indexOf(o.vol)<0)o.vol='md';
+  o.ph=(o.ph>=1&&o.ph<=5)?Math.round(o.ph):0; // 0 = chosen by level / 0 = según el nivel
   if(TESTS.indexOf(o.test)<0)o.test='gen';
   if(o.goal==='hybrid'&&o.test!=='gen')o.goal='military'; // old plans: hybrid with a test is now military / planes viejos: híbrido con prueba ahora es militar
   if(o.goal==='hybrid')o.test='gen';
@@ -213,6 +224,7 @@ function dayPlan(prof){
 function days0(g,n){const a=[];for(let i=0;i<n;i++)a.push(g);return a;}
 function genPlan(prof0){
   const prof=normProf(prof0);
+  if(typeof optOn==='function'&&optOn(prof))return genOpt(prof); // NASM OPT engine / motor NASM OPT
   const eff=Object.assign({},prof);
   if(prof.cond){eff.lvl='new';if(['strength','hybrid','military','bodybuilding'].indexOf(eff.goal)>=0)eff.goal='general';} // medical condition: keep it gentle / condición médica: algo suave
   const L=injLetters(prof.inj),maxLv=eff.lvl==='new'?1:2,have=prof.have;
@@ -331,12 +343,13 @@ function cleanPlan(p){
   const ds=[];
   for(const d of p.ds){
     if(!d||PDAYKEYS.indexOf(d.k)<0||!Array.isArray(d.ex))return null;
-    const ex=d.ex.filter(e=>e&&ID_RE.test(String(e.eid))).slice(0,12).map(e=>({eid:String(e.eid),sets:Math.max(1,Math.min(8,Math.round(cn(e.sets)||1))),lo:cn(e.lo)||0,hi:cn(e.hi)||0,u:e.u==='m'?'m':'r',r:['m','a','c','p','e'].indexOf(e.r)>=0?e.r:'a',cn:String(e.cn||'').replace(/[^kbsewhan]/g,'').slice(0,8),nt:NT_KEYS.indexOf(e.nt)>=0?e.nt:undefined}));
+    const ex=d.ex.filter(e=>e&&ID_RE.test(String(e.eid))).slice(0,20).map(e=>({eid:String(e.eid),sets:Math.max(1,Math.min(8,Math.round(cn(e.sets)||1))),lo:cn(e.lo)||0,hi:cn(e.hi)||0,u:e.u==='m'?'m':'r',r:['m','a','c','p','e','z','y'].indexOf(e.r)>=0?e.r:'a',sec:OPT_SEC_OK.indexOf(e.sec)>=0?e.sec:undefined,tp:['sl','md','ex','ct','rp'].indexOf(e.tp)>=0?e.tp:undefined,rs:(e.rs>=0&&e.rs<=600)?Math.round(e.rs):undefined,ss:/^[A-H]$/.test(e.ss)?e.ss:undefined,cn:String(e.cn||'').replace(/[^kbsewhan]/g,'').slice(0,8),nt:NT_KEYS.indexOf(e.nt)>=0?e.nt:undefined}));
     if(!ex.length)return null;ds.push(PGOALS.indexOf(d.g)>=0?{k:d.k,g:d.g,ex:ex}:{k:d.k,ex:ex});
   }
   const checks=(Array.isArray(p.checks)?p.checks:[]).slice(-40).filter(c=>c&&typeof c.t==='number').map(c=>({t:c.t,bw:cn(c.bw)||null,feel:['easy','right','hard'].indexOf(c.feel)>=0?c.feel:'right'}));
   const prof=normProf(p.prof&&typeof p.prof==='object'?Object.assign({},p.prof,{n:p.n,goal:p.goal,lvl:p.lvl}):{n:p.n,goal:p.goal,lvl:p.lvl,have:HAVE_KEYS.slice()});
   const o={goal:prof.goal,n:p.n,lvl:p.lvl,t0:p.t0,ct:cn(p.ct)||0,ds:ds,checks:checks,prof:prof};
+  if(Number.isInteger(p.ph)&&p.ph>=1&&p.ph<=5){o.ph=p.ph;o.pt=(typeof p.pt==='number'&&p.pt>0&&p.pt<4e12)?p.pt:p.t0;}
   if(Number.isInteger(p.cur)&&p.cur>=0&&p.cur<p.n)o.cur=p.cur;
   const okWd=Array.isArray(p.wd)&&p.wd.length===p.n&&p.wd.every((w,i)=>Number.isInteger(w)&&w>=0&&w<=6&&p.wd.indexOf(w)===i);
   o.wd=okWd?p.wd.slice():defaultWd(ds);o.wu=okWd&&p.wu?1:0;
@@ -379,6 +392,7 @@ function suggLine(x){
     h='<div class="goalln">'+((x.tg.lo||x.tg.hi)?'<b>'+t('target')+':</b> '+esc(tgText({sets:x.sets.length,lo:x.tg.lo,hi:x.tg.hi,u:x.tg.u})):'');
     if(s)h+='<br><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span>';
     if(x.tg.nt&&NT_KEYS.indexOf(x.tg.nt)>=0)h+='<br><span class="muted">'+esc(t(x.tg.nt))+'</span>';
+    if(x.tg.tp){const ss=x.tg.ss?optSsLabelAct(x):'';h+='<br><span class="muted">'+(ss?'<i class="ssl">'+ss+'</i> ':'')+esc(optLine(x.tg))+'</span>'+(ss?'<br><span class="muted">'+esc(t('ssHint'))+'</span>':'');}
     h+='</div>';
   }
   if(L&&stressLvl(x.eid,L))h+='<div class="goalln warnln">⚠ '+esc(t(stressLvl(x.eid,L)>=2?'injNo':'injCare',jointNames(stressJoints(x.eid,L,1))))+'</div>';
@@ -403,9 +417,16 @@ function dayName(i){
   return t('planDay',i+1)+' · '+t('pd_'+d.k)+(same>1?' '+String.fromCharCode(65+idx):'');
 }
 function planExList(d,di,withEdit){
-  return d.ex.map((e,ei)=>'<div class="plex'+(withEdit?' tap':'')+'"'+(withEdit?' role="button" tabindex="0" onclick="planEdit('+di+','+ei+')"':'')+'><span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgText(e))+'</small>'+
+  let last='';
+  return d.ex.map((e,ei)=>{
+    let h='';
+    if(e.sec&&e.sec!==last){h+='<div class="secl">'+t('sec_'+e.sec)+'</div>';}
+    last=e.sec||last;
+    const ss=optSsLabel(d,ei),ln=optLine(e);
+    return h+'<div class="plex'+(withEdit?' tap':'')+'"'+(withEdit?' role="button" tabindex="0" onclick="planEdit('+di+','+ei+')"':'')+'><span><b>'+(ss?'<i class="ssl">'+ss+'</i>':'')+esc(exName(e.eid))+'</b><small>'+esc(tgText(e))+(ln?' · '+esc(ln):'')+'</small>'+
     (e.nt?'<small>'+esc(t(e.nt))+'</small>':'')+(e.cn?'<small class="warnt">⚠ '+esc(t('injCare',jointNames(e.cn)))+'</small>':'')+'</span>'+
-    (withEdit?'<em class="go">'+t('edit')+' ›</em>':'')+'</div>').join('');
+    (withEdit?'<em class="go">'+t('edit')+' ›</em>':'')+'</div>';
+  }).join('');
 }
 /* short list for the home card: names only / lista corta para la tarjeta de inicio */
 function planBrief(d){
@@ -448,7 +469,9 @@ function planCard(){
   let h='<div class="swp"><div class="swp-h swp-hl">'+t('swSkip')+'</div><div class="swp-h swp-hr">'+t('swChange')+'</div><div class="card plan swp-in" data-l="planSkipAsk" data-r="planPickDay"><div class="plh"><b>'+t('planToday')+'</b><span class="muted sm">'+t('planWeek',planWeek(),p.n)+'</span></div><h3>'+esc(dayName(i))+'</h3>'+planBrief(d)+
     (p.wu?'<p class="muted sm">📅 '+(p.wd.indexOf(new Date().getDay())>=0?t('schCardOn',wdName(new Date().getDay())):t('schCardRest'))+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn" onclick="planOpen()">'+t('planAll')+'</button></div>'+
+    (p.ph?'<p class="muted sm">🎯 '+esc(phLine(p))+'</p>':'')+
     '<div class="row"><button class="btn" onclick="schedOpen()">📅 '+t('schBtn')+'</button><button class="btn" onclick="volOpen()">📊 '+t('volBtn')+'</button></div>'+
+    (p.ph?'<div class="row"><button class="btn" onclick="phOpen()">🎯 '+t('phBtn')+'</button></div>':'')+
     '<div class="row"><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDelShort')+'</button></div>'+
     '<p class="muted sm swhint">'+t('swHint')+'</p>'+testLine(p);
   if(checkDue())h+='<div class="pldue"><b>'+t('chkDue')+'</b><button class="btn sm" onclick="chkOpen()">'+t('chkOpen')+'</button></div>';
@@ -480,7 +503,7 @@ function planPickDay(){
 function planStart(i){
   const p=DATA.plan;if(!p)return;
   sheetClose();
-  startWorkout({name:dayName(i),pl:i,ex:p.ds[i].ex.map(e=>({eid:e.eid,sets:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u,nt:e.nt}}))});
+  startWorkout({name:dayName(i),pl:i,ex:p.ds[i].ex.map(e=>({eid:e.eid,sets:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u,nt:e.nt,tp:e.tp,rs:e.rs,ss:e.ss,sec:e.sec}}))});
 }
 
 /* ---------- full plan view and editing ---------- */
@@ -491,12 +514,13 @@ function planOpen(d){
   const pr=p.prof,i=PV;
   let h='<div class="form"><div class="pick-h"><h3>'+t('planMine')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<p class="muted sm">'+t('planInfo',goalTxt(p.prof),p.n,t('pl_'+p.lvl))+'</p>'+
+    (p.ph?'<p class="sm"><b>'+esc(phLine(p))+'</b> <button class="btn sm" onclick="phOpen()">🎯 '+t('phBtn')+'</button></p>':'')+
     (pr.focus.length?'<p class="muted sm">'+t('planFocus',pr.focus.map(k=>t('fm_'+k)).join(', '))+'</p>':'')+
     (pr.skills.length?'<p class="muted sm">'+t('planSkill',pr.skills.map(k=>t('sk_'+k)).join(', '))+'</p>':'')+
     (pr.inj.length?'<p class="muted sm">⚠ '+t('planInj',pr.inj.map(k=>t('inj_'+k)).join(', '))+'</p>':'')+
     (pr.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'')+
     '<div class="chips wrap daytabs">'+p.ds.map((d,k)=>'<button class="chip'+(k===i?' on':'')+'" onclick="planOpen('+k+')">'+esc(dayName(k).split(' · ')[0])+'</button>').join('')+'</div>'+
-    '<h3 class="dayh">'+esc(dayName(i))+'</h3>'+(p.ds[i].g?'<p class="muted sm daytag">'+esc(t('pg_'+p.ds[i].g))+'</p>':'')+planExList(p.ds[i],i,true)+
+    '<h3 class="dayh">'+esc(dayName(i))+'</h3>'+(p.ds[i].g?'<p class="muted sm daytag">'+esc(t('pg_'+p.ds[i].g))+'</p>':'')+(p.ph?optWarm(p.ds[i],p):'')+planExList(p.ds[i],i,true)+(p.ph?optWarm(p.ds[i],p,true):'')+
     '<div class="row"><button class="btn pri" onclick="planStart('+i+')">▶ '+t('planStart')+'</button><button class="btn" onclick="planAddEx('+i+')">＋ '+t('addEx')+'</button></div>';
   let tips='';
   const gs=goalsOf(pr),hyg=gs.filter(isHy)[0];
@@ -680,7 +704,7 @@ function wizDraw(){
       '<div class="lbl">'+t('psLen')+'</div>'+wch('len',[30,45,60,75],PW.len,v=>t('psLenN',v))+'<p class="muted sm">'+t('psLenP')+'</p>'+
       '<div class="lbl">'+t('psVol')+'</div>'+wch('vol',['lo','md','hi'],PW.vol,v=>t('vol_'+v))+'<p class="muted sm">'+t('vold_'+PW.vol)+'</p>';
   }else if(s===4){
-    b='<div class="lbl">'+t('psLvl')+'</div>'+wch('lvl',PLVLS,PW.lvl,v=>t('pl_'+v))+'<p class="muted sm">'+t('pld_'+PW.lvl)+'</p>';
+    b='<div class="lbl">'+t('psLvl')+'</div>'+wch('lvl',PLVLS,PW.lvl,v=>t('pl_'+v))+'<p class="muted sm">'+t('pld_'+PW.lvl)+'</p>'+phBlock();
   }else if(s===5){
     b='<div class="lbl">'+t('psEquip')+'</div><p class="muted sm">'+t('psEquipP')+'</p>'+
       '<div class="row"><button class="btn sm" onclick="pwPreset(\'gym\')">'+t('eqp_gym')+'</button><button class="btn sm" onclick="pwPreset(\'db\')">'+t('eqp_db')+'</button><button class="btn sm" onclick="pwPreset(\'home\')">'+t('eqp_home')+'</button><button class="btn sm" onclick="pwPreset(\'none\')">'+t('eqp_none')+'</button></div>'+
@@ -695,7 +719,7 @@ function wizDraw(){
       (PW.focus.length?'<li>'+t('planFocus',PW.focus.map(k=>t('fm_'+k)).join(', '))+' · '+t('psDaysN',PW.ff)+'</li>':'')+
       (PW.skills.length?'<li>'+t('planSkill',PW.skills.map(k=>t('sk_'+k)).join(', '))+'</li>':'')+
       '<li>'+t('psDaysN',PW.n)+' · '+t('psLenN',PW.len)+' · '+t('pl_'+PW.lvl)+'</li>'+
-      '<li>'+t('psVol')+': '+t('vol_'+PW.vol)+'</li>'+
+      '<li>'+t('psVol')+': '+t('vol_'+PW.vol)+'</li>'+(optOn(PW)?'<li>'+t('phNow',PW.ph||optPhase(Object.assign({},PW,{ph:0})),t('ph_'+(PW.ph||optPhase(Object.assign({},PW,{ph:0})))))+'</li>':'')+
       '<li>'+t('psEquip')+': '+(PW.have.length?PW.have.map(k=>t('hv_'+k)).join(', '):t('eqp_none'))+'</li>'+
       (PW.inj.length?'<li>⚠ '+t('planInj',PW.inj.map(k=>t('inj_'+k)).join(', '))+(L?'':'')+'</li>':'')+'</ul><p class="muted sm">'+t('planNote')+'</p>';
   }
@@ -703,12 +727,20 @@ function wizDraw(){
     '<div class="row">'+(s>1?'<button class="btn" onclick="pwGo(-1)">‹ '+t('back')+'</button>':'<button class="btn" onclick="sheetClose()">'+t('cancel')+'</button>')+
     (s<PW_STEPS?'<button class="btn pri" onclick="pwGo(1)">'+t('next')+' ›</button>':'<button class="btn pri" onclick="planCreate()">'+t('planCreate')+'</button>')+'</div></div>');
 }
+/* training phase choice (NASM OPT) / elección de fase de entrenamiento */
+function phBlock(){
+  if(!optOn(PW))return'';
+  const al=optAllowed(PW),auto=optPhase(Object.assign({},PW,{ph:0}));
+  return'<div class="lbl">'+t('phT')+'</div><div class="chips wrap"><button class="chip'+(PW.ph?'':' on')+'" onclick="pwSet(\'ph\',0)">'+t('phAuto')+'</button>'+
+    al.map(v=>'<button class="chip'+(PW.ph===v?' on':'')+'" onclick="pwSet(\'ph\','+v+')">'+t('phShort',v)+'</button>').join('')+'</div>'+
+    '<p class="muted sm">'+(PW.ph?t('phd_'+PW.ph):t('phAutoP',auto,t('ph_'+auto)))+'</p>';
+}
 function focusApply(){
   const prof=normProf(Object.assign({},DATA.plan.prof,{focus:PW.focus,ff:PW.ff,skills:PW.skills}));
   const old=DATA.plan,p=genPlan(prof);p.checks=old.checks;DATA.plan=p;saveData();render();planOpen();toast(t('planReady'));
 }
 function planCreate(){
-  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
+  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
   const old=DATA.plan,p=genPlan(prof);
   if(old){p.checks=old.checks;}
   DATA.plan=p;saveData();render();
@@ -724,6 +756,7 @@ function rtEdit(id){rbOpen(id);}
 /* ---------- periodic check-in / evaluación periódica ---------- */
 let CK={feel:'right'};
 function chkOpen(){CK={feel:'right'};chkDraw();}
+function ckAdv(v){CK.adv=v;const w=$('ckw');CK.w=w?w.value:'';chkDraw();}
 function ckFeel(v){CK.feel=v;const w=$('ckw');CK.w=w?w.value:'';chkDraw();}
 function chkDraw(){
   const p=DATA.plan;if(!p)return;
@@ -735,7 +768,7 @@ function chkDraw(){
     '<div class="stats"><div><b>'+since.length+'</b><span>'+t('chkSess')+'</span></div><div><b>'+prs+'</b><span>'+t('chkPr')+'</span></div><div><b>'+(first!=null&&last!=null&&bw.length>1?(last-first>0?'+':'')+wShow(last-first)+' '+wUnit():'—')+'</b><span>'+t('chkBw')+'</span></div></div>'+
     '<label>'+t('chkWeight')+' ('+wUnit()+')<input id="ckw" class="in wide" type="text" inputmode="decimal" autocomplete="off" value="'+esc(CK.w||'')+'" placeholder="'+esc(last!=null?wShow(last):'')+'"></label>'+
     '<div class="lbl">'+t('chkFeel')+'</div>'+chips2([['easy','chkEasy'],['right','chkRight'],['hard','chkHard']])+
-    '<p class="muted sm">'+t('chkEff_'+CK.feel)+'</p>'+
+    '<p class="muted sm">'+t('chkEff_'+CK.feel)+'</p>'+(p.ph&&optNext(p)?'<div class="lbl">'+t('phT')+'</div><p class="muted sm">'+t('phAdvP',p.ph,phWeek(p))+'</p><div class="chips wrap"><button class="chip'+(CK.adv?'':' on')+'" onclick="ckAdv(0)">'+t('phStay')+'</button><button class="chip'+(CK.adv?' on':'')+'" onclick="ckAdv(1)">'+t('phMove',optNext(p))+'</button></div>':'')+
     '<div class="row"><button class="btn pri" onclick="chkSave()">'+t('save')+'</button><button class="btn" onclick="sheetClose()">'+t('cancel')+'</button></div></div>');
 }
 function chips2(a){return'<div class="chips wrap">'+a.map(x=>'<button class="chip'+(CK.feel===x[0]?' on':'')+'" onclick="ckFeel(\''+x[0]+'\')">'+t(x[1])+'</button>').join('')+'</div>';}
@@ -746,7 +779,10 @@ function chkSave(){
   const dlt=CK.feel==='easy'?1:(CK.feel==='hard'?-1:0);
   if(dlt)p.ds.forEach(d=>d.ex.forEach(e=>{if(e.r==='m')e.sets=Math.max(2,Math.min(5,e.sets+dlt));}));
   p.checks.push({t:now,bw:w!=null&&w>0&&w<700?w:null,feel:CK.feel});if(p.checks.length>40)p.checks.shift();
-  p.ct=now;saveData();sheetClose();render();toast(t('chkSaved'));
+  p.ct=now;
+  const nx=p.ph&&CK.adv?optNext(p):0;
+  if(nx){planRegen({ph:nx});toast(t('phMoved',nx));sheetClose();return;}
+  saveData();sheetClose();render();toast(t('chkSaved'));
 }
 
 /* ---------- technique guide ---------- */
@@ -772,7 +808,7 @@ function volSet(v){VS=v;volDraw();}
 function volDraw(){
   const p=DATA.plan;if(!p)return;
   const pr=p.prof,plan=volOfDs(p.ds),done=volDone(),rg={};let mx=6,sd=0,sp=0;
-  VOLMU.split('').forEach(m=>{rg[m]=volRange(m,VS,pr);mx=Math.max(mx,rg[m][1],plan[m]||0,done[m]||0);sd+=done[m]||0;sp+=plan[m]||0;});
+  VOLMU.split('').forEach(m=>{rg[m]=volRange(m,VS,pr,p.ph);mx=Math.max(mx,rg[m][1],plan[m]||0,done[m]||0);sd+=done[m]||0;sp+=plan[m]||0;});
   mx=Math.ceil(mx*1.1);
   const rows=VOLMU.split('').filter(m=>plan[m]||done[m]).map(m=>{
     const a=rg[m],pl=plan[m]||0,dn=done[m]||0,st=pl<a[0]?'Under':pl>a[1]?'Over':'Ok';
@@ -789,16 +825,22 @@ function volDraw(){
     '<p class="muted sm">'+t('volNote')+'</p><p class="muted sm">'+t('volTime')+'</p>'+
     '<div class="row"><button class="btn" onclick="sheetClose()">'+t('close')+'</button></div></div>');
 }
-function volApply(){
+/* rebuild the plan with a change, keeping history, schedule and progress / rehace el plan con un cambio, conservando historial, horario y progreso */
+function planRegen(patch){
   const old=DATA.plan;if(!old)return;
-  const p=genPlan(Object.assign({},old.prof,{vol:VS}));
-  p.checks=old.checks;if(p.n===old.n){p.wd=old.wd;p.wu=old.wu;p.cur=old.cur;}
-  DATA.plan=p;saveData();render();volOpen();toast(t('planReady'));
+  const p=genPlan(Object.assign({},old.prof,patch));
+  p.checks=old.checks;p.t0=old.t0;p.ct=old.ct;
+  if(p.n===old.n){p.wd=old.wd;p.wu=old.wu;p.cur=old.cur;}
+  if(p.ph&&old.ph&&p.ph===old.ph)p.pt=old.pt;
+  DATA.plan=p;saveData();render();
+}
+function volApply(){
+  planRegen({vol:VS});volOpen();toast(t('planReady'));
 }
 
 /* ---------- weekly schedule: put each training day on a weekday, with advice / horario semanal: cada día de entrenamiento en un día de la semana, con consejos ---------- */
 // l = loads the legs · u = upper body · R = hard run or work-capacity day · r = easy run / l = piernas · u = tren superior · R = carrera dura o capacidad · r = carrera suave
-const WD_DT={full:'lu',fullL:'lu',fullA:'lu',fullB:'lu',fullC:'lu',up:'u',up1:'u',up2:'u',upLite:'u',push:'u',pull:'u',arms:'u',lowQ:'l',lowG:'l',low1:'l',low2:'l',hyStr:'lu',hyStrL:'l',hyStrU:'u',hyRunI:'R',hyRunE:'r',hyCap:'R',runT:'R',runL:'R',runS:'l',bbFull:'lu',bbUp:'u',bbLow:'l',bbLow2:'l',bbPush:'u',bbPull:'u'};
+const WD_DT={full:'lu',fullL:'lu',fullA:'lu',fullB:'lu',fullC:'lu',up:'u',up1:'u',up2:'u',upLite:'u',push:'u',pull:'u',arms:'u',lowQ:'l',lowG:'l',low1:'l',low2:'l',hyStr:'lu',hyStrL:'l',hyStrU:'u',hyRunI:'R',hyRunE:'r',hyCap:'R',runT:'R',runL:'R',runS:'l',bbFull:'lu',bbUp:'u',bbLow:'l',bbLow2:'l',bbPush:'u',bbPull:'u',oCB:'u',oLeg:'l'};
 const wdHas=(k,c)=>(WD_DT[k]||'').indexOf(c)>=0;
 const wdName=(w,short)=>new Date(2023,0,1+w).toLocaleDateString(LANG==='es'?'es':'en-US',{weekday:short?'short':'long'});
 function wdAt(wd){const at=[-1,-1,-1,-1,-1,-1,-1];wd.forEach((w,i)=>{at[w]=i;});return at;}

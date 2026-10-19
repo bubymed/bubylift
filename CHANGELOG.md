@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v24 — 2026-10-19
+- **NASM OPT engine (muscle, bodybuilding, strength, fat loss and general plans):** plans now follow the NASM CPT7 OPT model. Phase 1 stabilization endurance, 2 strength endurance (supersets), 3 muscular development, 4 maximal strength and 5 power (strength + power supersets), with the sets, reps, tempo and rest from the NASM handouts. Each session has a warm-up, activation (2 core + 1 balance), optional skill development (plyometrics), resistance training, a client's choice exercise and a cool-down. You start in the phase that fits your level (or choose one), move up from the plan or at your check-in, and the volume choice (Low / Medium / High) picks the number of sets inside each phase's range. The workout shows tempo, rest and superset labels, and the rest timer follows the prescribed rest. Hybrid, military and runner plans keep their own structure for now.
+  **Motor NASM OPT (planes de músculo, fisicoculturismo, fuerza, pérdida de grasa y general):** los planes ahora siguen el modelo OPT del NASM CPT7. Fase 1 resistencia de estabilización, 2 resistencia de fuerza (supersets), 3 desarrollo muscular, 4 fuerza máxima y 5 potencia (supersets de fuerza + potencia), con las series, repeticiones, tempo y descanso de los handouts del NASM. Cada sesión tiene calentamiento, activación (2 de core + 1 de equilibrio), desarrollo de habilidades opcional (pliométricos), resistencia, un ejercicio a elección y enfriamiento. Empiezas en la fase que corresponde a tu nivel (o eliges una), subes de fase desde el plan o en tu chequeo, y el volumen (Bajo / Medio / Alto) define el número de series dentro del rango de cada fase. El entrenamiento muestra tempo, descanso y etiquetas de superset, y el temporizador de descanso sigue el descanso indicado. Los planes híbrido, militar y de corredor mantienen su estructura por ahora.
+- **Credits:** the NASM credit now says the OPT model and templates are used with permission.
+  **Créditos:** el crédito del NASM ahora indica que el modelo OPT y las plantillas se usan con permiso.
+
 ## v23 — 2026-10-19
 - **Check for updates:** More › App has a button showing the current version; it looks for a newer one, clears the saved copies and reloads.
   **Buscar actualizaciones:** Más › App tiene un botón que muestra la versión actual; busca una nueva, borra las copias guardadas y recarga.
