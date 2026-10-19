@@ -110,7 +110,7 @@ function cleanWk(x){
   const ex=[];
   x.ex.forEach(e=>{if(!e||!ID_RE.test(String(e.eid))||!Array.isArray(e.sets))return;const sets=e.sets.map(cleanSet).filter(Boolean);if(sets.length)ex.push({eid:String(e.eid),n:String(e.n||e.eid).slice(0,80),sets:sets});});
   if(!ex.length)return null;
-  return{id:String(x.id),t:x.t,end:(typeof x.end==='number'&&isFinite(x.end))?x.end:0,name:String(x.name||'').slice(0,80),note:String(x.note||'').slice(0,500),ex:ex};
+  return{id:String(x.id),t:x.t,end:(typeof x.end==='number'&&isFinite(x.end))?x.end:0,name:String(x.name||'').slice(0,80),note:String(x.note||'').slice(0,500),ex:ex,pl:(Number.isInteger(x.pl)&&x.pl>=0&&x.pl<5)?x.pl:undefined};
 }
 function cleanBody(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||typeof x.t!=='number'||!isFinite(x.t))return null;
@@ -138,12 +138,12 @@ function importFile(inp){
     if(!o||o.app!=='bubylift'||!o.data||typeof o.data!=='object'){toast(t('impBad'));return;}
     const d=o.data,arr=k=>Array.isArray(d[k])?d[k]:[];
     const have=k=>{const s={};DATA[k].forEach(x=>{s[x.id]=1;});return s;};
-    const nw=arr('workouts').map(cleanWk).filter(Boolean),nb=arr('body').map(cleanBody).filter(Boolean),nr=arr('routines').map(cleanRt).filter(Boolean),nc=arr('custom').map(cleanCx).filter(Boolean);
+    const nw=arr('workouts').map(cleanWk).filter(Boolean),nb=arr('body').map(cleanBody).filter(Boolean),nr=arr('routines').map(cleanRt).filter(Boolean),nc=arr('custom').map(cleanCx).filter(Boolean),np=(!DATA.plan&&d.plan)?cleanPlan(d.plan):null;
     const hw=have('workouts'),hb=have('body'),hr=have('routines'),hc=have('custom');
     const aw=nw.filter(x=>!hw[x.id]),ab=nb.filter(x=>!hb[x.id]),ar=nr.filter(x=>!hr[x.id]),ac=nc.filter(x=>!hc[x.id]);
-    if(!aw.length&&!ab.length&&!ar.length&&!ac.length){toast(t('impNone'));return;}
+    if(!aw.length&&!ab.length&&!ar.length&&!ac.length&&!np){toast(t('impNone'));return;}
     ask(t('impAsk',aw.length,ab.length),t('import'),function(){
-      aw.forEach(x=>DATA.workouts.push(x));ab.forEach(x=>DATA.body.push(x));ar.forEach(x=>DATA.routines.push(x));ac.forEach(x=>DATA.custom.push(x));
+      aw.forEach(x=>DATA.workouts.push(x));ab.forEach(x=>DATA.body.push(x));ar.forEach(x=>DATA.routines.push(x));ac.forEach(x=>DATA.custom.push(x));if(np)DATA.plan=np;
       DATA.workouts.sort((a,b)=>b.t-a.t);DATA.body.sort((a,b)=>b.t-a.t);
       saveData();toast(t('imported'));render();
     });
