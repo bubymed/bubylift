@@ -297,9 +297,14 @@ function dayName(i){
   return t('planDay',i+1)+' · '+t('pd_'+d.k)+(same>1?' '+String.fromCharCode(65+idx):'');
 }
 function planExList(d,di,withEdit){
-  return d.ex.map((e,ei)=>'<div class="plex"><span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgText(e))+'</small>'+
+  return d.ex.map((e,ei)=>'<div class="plex'+(withEdit?' tap':'')+'"'+(withEdit?' role="button" tabindex="0" onclick="planEdit('+di+','+ei+')"':'')+'><span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgText(e))+'</small>'+
     (e.nt?'<small>'+esc(t(e.nt))+'</small>':'')+(e.cn?'<small class="warnt">⚠ '+esc(t('injCare',jointNames(e.cn)))+'</small>':'')+'</span>'+
-    (withEdit?'<button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="howOpen(\''+e.eid+'\')">ⓘ</button><button class="ico" aria-label="'+esc(t('edit'))+'" onclick="planEdit('+di+','+ei+')">✎</button>':'')+'</div>').join('');
+    (withEdit?'<em class="go">'+t('edit')+' ›</em>':'')+'</div>').join('');
+}
+/* short list for the home card: names only / lista corta para la tarjeta de inicio */
+function planBrief(d){
+  const n=d.ex.length,nm=d.ex.slice(0,3).map(e=>exName(e.eid));
+  return'<p class="brief"><b>'+t('planExN',n)+'</b></p><p class="muted">'+esc(nm.join(' · '))+(n>3?' · '+t('planMoreN',n-3):'')+'</p>';
 }
 
 /* ---------- swipe gestures / gestos de deslizar ---------- */
@@ -334,7 +339,7 @@ function planCard(){
   const p=DATA.plan;
   if(!p)return'<div class="card tip"><b>'+t('planT')+'</b><p>'+t('planP')+'</p><div class="row"><button class="btn pri" onclick="planSetup()">'+t('planMake')+'</button></div></div>';
   const i=planNext(),d=p.ds[i];
-  let h='<div class="swp"><div class="swp-h swp-hl">'+t('swSkip')+'</div><div class="swp-h swp-hr">'+t('swChange')+'</div><div class="card plan swp-in" data-l="planSkipAsk" data-r="planPickDay"><div class="plh"><b>'+t('planToday')+'</b><span class="muted sm">'+t('planWeek',planWeek(),p.n)+'</span></div><h3>'+esc(dayName(i))+'</h3>'+planExList(d,i,false)+
+  let h='<div class="swp"><div class="swp-h swp-hl">'+t('swSkip')+'</div><div class="swp-h swp-hr">'+t('swChange')+'</div><div class="card plan swp-in" data-l="planSkipAsk" data-r="planPickDay"><div class="plh"><b>'+t('planToday')+'</b><span class="muted sm">'+t('planWeek',planWeek(),p.n)+'</span></div><h3>'+esc(dayName(i))+'</h3>'+planBrief(d)+
     '<div class="row"><button class="btn pri" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn" onclick="planOpen()">'+t('planAll')+'</button></div>'+
     '<p class="muted sm swhint">'+t('swHint')+'</p>'+testLine(p);
   if(checkDue())h+='<div class="pldue"><b>'+t('chkDue')+'</b><button class="btn sm" onclick="chkOpen()">'+t('chkOpen')+'</button></div>';
@@ -370,19 +375,26 @@ function planStart(i){
 }
 
 /* ---------- full plan view and editing ---------- */
-function planOpen(){
+let PV=0;
+function planOpen(d){
   const p=DATA.plan;if(!p){planSetup();return;}
-  const pr=p.prof;
+  if(typeof d==='number')PV=d;if(PV<0||PV>=p.ds.length)PV=0;
+  const pr=p.prof,i=PV;
   let h='<div class="form"><div class="pick-h"><h3>'+t('planMine')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<p class="muted sm">'+t('planInfo',t('pg_'+p.goal),p.n,t('pl_'+p.lvl))+'</p>'+
     (pr.focus.length?'<p class="muted sm">'+t('planFocus',pr.focus.map(k=>t('fm_'+k)).join(', '))+'</p>':'')+
     (pr.skills.length?'<p class="muted sm">'+t('planSkill',pr.skills.map(k=>t('sk_'+k)).join(', '))+'</p>':'')+
     (pr.inj.length?'<p class="muted sm">⚠ '+t('planInj',pr.inj.map(k=>t('inj_'+k)).join(', '))+'</p>':'')+
-    (pr.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'');
-  p.ds.forEach((d,i)=>{h+='<div class="lbl">'+esc(dayName(i))+'</div>'+planExList(d,i,true)+'<div class="row"><button class="btn sm pri" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn sm" onclick="planAddEx('+i+')">＋ '+t('addEx')+'</button></div>';});
-  if(pr.goal==='hybrid')h+='<div class="lbl">'+t('hyT')+'</div>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
-  h+='<div class="lbl">'+t('guideT')+'</div><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p>'+
-    '<p class="muted sm">'+t('planNote')+'</p><div class="row"><button class="btn pri" onclick="chkOpen()">'+t('chkOpen')+'</button><button class="btn" onclick="focusOpen()">🎯 '+t('focusT')+'</button><button class="btn" onclick="planSetup()">'+t('planChange')+'</button></div><div class="dz"><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDel')+'</button></div></div>';
+    (pr.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'')+
+    '<div class="chips wrap daytabs">'+p.ds.map((d,k)=>'<button class="chip'+(k===i?' on':'')+'" onclick="planOpen('+k+')">'+esc(dayName(k).split(' · ')[0])+'</button>').join('')+'</div>'+
+    '<h3 class="dayh">'+esc(dayName(i))+'</h3>'+planExList(p.ds[i],i,true)+
+    '<div class="row"><button class="btn pri" onclick="planStart('+i+')">▶ '+t('planStart')+'</button><button class="btn" onclick="planAddEx('+i+')">＋ '+t('addEx')+'</button></div>';
+  let tips='';
+  if(pr.goal==='hybrid')tips+='<h4>'+t('hyT')+'</h4>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
+  tips+='<h4>'+t('guideT')+'</h4><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p><p class="muted sm">'+t('planNote')+'</p>';
+  h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="chkOpen()">📋 '+t('chkOpen')+'</button><button class="btn" onclick="focusOpen()">🎯 '+t('focusT')+'</button><button class="btn" onclick="planSetup()">⚙ '+t('planChange')+'</button></div>'+
+    '<details class="dtl"><summary>'+t('tipsT')+'</summary>'+tips+'</details>'+
+    '<div class="dz"><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDel')+'</button></div></div>';
   sheet(h);
 }
 let PE={d:0,e:0};

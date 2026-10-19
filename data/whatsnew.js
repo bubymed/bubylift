@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v10',items:[
+  {i:'🧹',en:'<b>Cleaner screens</b> — My plan shows one day at a time, the home card is a short summary, exercise buttons have labels (Swap, Guide, Options) and About folds away.',es:'<b>Pantallas más limpias</b> — Mi plan muestra un día a la vez, la tarjeta de inicio es un resumen corto, los botones de ejercicio tienen texto (Sustituir, Guía, Opciones) y Acerca de se pliega.'}]},
  {v:'v9',items:[
   {i:'👆',en:'<b>Easier-to-see buttons</b> — buttons now have clear outlines and bigger tap areas, main actions stand out, and Delete sits apart in red.',es:'<b>Botones más fáciles de ver</b> — los botones ahora tienen contorno claro y áreas más grandes para tocar, las acciones principales resaltan y Eliminar queda aparte en rojo.'}]},
  {v:'v8',items:[
