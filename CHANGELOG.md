@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v7 — 2026-10-19
+- **Technique guides for all 227 exercises:** every exercise now has its own steps and most common mistake in English and Spanish (before, only 53 had one and the rest showed general tips by muscle group). Written in our own words; general precautions only, not medical advice.
+  **Guías de técnica para los 227 ejercicios:** cada ejercicio ahora tiene sus propios pasos y el error más común en inglés y español (antes solo 53 tenían guía y el resto mostraba consejos generales por grupo muscular). Escritas con nuestras palabras; solo precauciones generales, no es consejo médico.
+
 ## v6 — 2026-10-19
 - **Focus you control:** choose focus muscles (up to 3) and how many days a week each one is trained (1–4). A glute, quad or hamstring focus now adds extra lower-body slots on more days instead of leaving one or two leg days. New **Change focus** button in My plan rebuilds the plan without redoing the whole guide (check-ins are kept).
   **Enfoque que tú controlas:** elige los músculos de enfoque (hasta 3) y cuántos días por semana se entrena cada uno (1–4). Un enfoque en glúteos, cuádriceps o isquios ahora agrega más huecos de tren inferior en más días en vez de dejar uno o dos días de pierna. Nuevo botón **Cambiar enfoque** en Mi plan que rehace el plan sin repetir toda la guía (se conservan las revisiones).
