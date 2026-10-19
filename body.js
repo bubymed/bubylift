@@ -4,29 +4,52 @@
 
 /* ---------- body ---------- */
 const MEAS=['chest','waist','hips','arm','thigh','neck'];
+/* weight trend: smoothed line (time-aware moving average) and pace per week / tendencia del peso: línea suavizada y ritmo por semana */
+function bwEma(ws){let e=null,pt=0;return ws.map(b=>{if(e==null)e=b.w;else e+=(1-Math.pow(0.5,Math.max(0.5,(b.t-pt)/864e5)/5))*(b.w-e);pt=b.t;return{t:b.t,y:e};});}
+function bwRate(ws){ // kg per week from the last 28 days, or null / kg por semana de los últimos 28 días
+  const now=ws[ws.length-1].t,a=ws.filter(b=>b.t>=now-28*864e5);
+  if(a.length<3||a[a.length-1].t-a[0].t<6*864e5)return null;
+  const x0=a[0].t,xs=a.map(b=>(b.t-x0)/864e5),n=a.length,mx=xs.reduce((p,c)=>p+c,0)/n,my=a.reduce((p,c)=>p+c.w,0)/n;
+  let nu=0,de=0;a.forEach((b,k)=>{nu+=(xs[k]-mx)*(b.w-my);de+=(xs[k]-mx)*(xs[k]-mx);});
+  return de?nu/de*7:null;
+}
+function bwRange(v){UI.bwr=v;render();}
+function bwStep(d){
+  const e=$('bw');if(!e)return;const last=DATA.body.find(b=>b.w);
+  let v=numParse(e.value);if(v==null)v=last?parseFloat(wShow(last.w)):null;if(v==null)return;
+  e.value=fmtNum(Math.max(0,Math.round((v+d)*10)/10),1);
+}
 function vBody(){
-  const today=dInput(Date.now()),last=DATA.body.find(b=>b.w);
-  let h='<div class="card form"><h2>'+t('logBody')+'</h2>'+
+  const today=dInput(Date.now()),last=DATA.body.find(b=>b.w),sg=d=>(d>0?'+':'')+fmtNum(d,1);
+  const toU=kg=>imp()?kg*KG_LB:kg;
+  let h='<div class="card form bwhero"><div class="lbl c">'+t('bwTitle')+'</div>'+
+    '<div class="bw-row"><button class="bw-st" aria-label="'+esc(t('bwMinus'))+'" onclick="bwStep(-0.1)">−</button>'+
+    '<span class="bw-f"><input id="bw" class="bw-in" type="text" inputmode="decimal" autocomplete="off" placeholder="'+esc(last?wShow(last.w):'0.0')+'"><b class="bw-u">'+wUnit()+'</b></span>'+
+    '<button class="bw-st" aria-label="'+esc(t('bwPlus'))+'" onclick="bwStep(0.1)">+</button></div>'+
+    (last?'<p class="muted sm c">'+t('bwLast',wShow(last.w)+' '+wUnit(),esc(dFmt(last.t,{month:'short',day:'numeric'})))+'</p>':'')+
+    '<button class="btn pri big wide" onclick="bodySave()">'+t('bwSave')+'</button>'+
+    '<details class="dtl"><summary>'+t('bwMore')+'</summary>'+
     '<label>'+t('date')+'<input id="bd" class="in wide" type="date" value="'+today+'" max="'+today+'"></label>'+
-    '<div class="two"><label>'+t('weight')+' ('+wUnit()+')<input id="bw" class="in wide" type="text" inputmode="decimal" autocomplete="off" placeholder="'+esc(last?wShow(last.w):'')+'"></label>'+
-    '<label>'+t('bodyFat')+' (%)<input id="bf" class="in wide" type="text" inputmode="decimal" autocomplete="off"></label></div>'+
-    '<details><summary>'+t('measure')+' ('+lUnit()+')</summary><div class="two">'+MEAS.map(k=>'<label>'+t('me_'+k)+'<input id="bm_'+k+'" class="in wide" type="text" inputmode="decimal" autocomplete="off"></label>').join('')+'</div></details>'+
-    '<label>'+t('note')+'<input id="bn" class="in wide" type="text" maxlength="120"></label>'+
-    '<button class="btn pri wide" onclick="bodySave()">'+t('save')+'</button></div>';
+    '<label>'+t('bodyFat')+' (%)<input id="bf" class="in wide" type="text" inputmode="decimal" autocomplete="off"></label>'+
+    '<div class="lbl">'+t('measure')+' ('+lUnit()+')</div><div class="two">'+MEAS.map(k=>'<label>'+t('me_'+k)+'<input id="bm_'+k+'" class="in wide" type="text" inputmode="decimal" autocomplete="off"></label>').join('')+'</div>'+
+    '<label>'+t('note')+'<input id="bn" class="in wide" type="text" maxlength="120"></label></details></div>';
   if(!DATA.body.length)return h+'<div class="card tip"><b>'+t('emptyBodyT')+'</b><p>'+t('emptyBodyP')+'</p></div>';
 
   const ws=DATA.body.filter(b=>b.w>0).slice().reverse();
   if(ws.length){
-    const cur=ws[ws.length-1],first=ws[0],prev=ws.length>1?ws[ws.length-2]:null;
-    const ago=cur.t-30*864e5,base=ws.filter(b=>b.t<=ago).pop()||first;
-    const ch=(a,b)=>{const d=(imp()?(a-b)*KG_LB:(a-b));return(d>0?'+':'')+fmtNum(d,1);};
+    const cur=ws[ws.length-1],em=bwEma(ws),tr=em[em.length-1].y,rate=bwRate(ws),goal=SET.goal;
+    const rg=UI.bwr||'3',days={'1':30,'3':91,'12':365,A:1e5}[rg]||91,from=cur.t-days*864e5;
+    let idx=ws.findIndex(b=>b.t>=from);if(idx<0)idx=ws.length-1;if(idx>ws.length-2)idx=Math.max(0,ws.length-2);
+    const pts=ws.slice(idx).map(b=>({t:b.t,y:b.w})),tpts=em.slice(idx);
     h+='<div class="stats card"><div><b>'+wShow(cur.w)+'</b><span>'+t('current')+' ('+wUnit()+')</span></div>'+
-      '<div><b>'+(prev?ch(cur.w,prev.w):'—')+'</b><span>'+t('vsLast')+'</span></div>'+
-      '<div><b>'+(base!==cur?ch(cur.w,base.w):'—')+'</b><span>'+t('vs30')+'</span></div></div>';
-    const goal=SET.goal;
-    h+='<div class="card"><b>'+t('weightTrend')+'</b>'+lineSvg(ws.slice(-90).map(b=>({t:b.t,y:b.w})),v=>wShow(v),goal)+
-      '<div class="goalrow"><label>'+t('goal')+' ('+wUnit()+')<input id="bg" class="in" type="text" inputmode="decimal" autocomplete="off" value="'+esc(goal?wShow(goal):'')+'"></label><button class="btn sm" onclick="goalSet()">'+t('set')+'</button></div>'+
-      (goal?'<p class="muted sm">'+(Math.abs(cur.w-goal)*(imp()?KG_LB:1)<0.5?t('goalReached'):t('toGo',fmtNum(Math.abs(cur.w-goal)*(imp()?KG_LB:1),1)+' '+wUnit()))+'</p>':'')+'</div>';
+      '<div><b>'+wShow(tr)+'</b><span>'+t('bwTrendL')+' ('+wUnit()+')</span></div>'+
+      '<div><b>'+(rate==null?'—':sg(toU(rate)))+'</b><span>'+t('bwRate')+' ('+wUnit()+')</span></div></div>';
+    h+='<div class="card"><b>'+t('weightTrend')+'</b>'+seg([['1',t('bwRng1')],['3',t('bwRng3')],['12',t('bwRng12')],['A',t('bwRngA')]],rg,'bwRange')+
+      lineSvg(pts,v=>wShow(v),goal,tpts)+'<p class="muted sm">'+t('bwDots')+'</p>'+
+      (rate==null?'<p class="muted sm">'+t('bwNeed')+'</p>':'')+
+      (goal?'<p class="sm">'+(Math.abs(tr-goal)*toU(1)<0.5?t('goalReached'):t('toGo',fmtNum(Math.abs(tr-goal)*toU(1),1)+' '+wUnit()))+'</p>':'')+
+      (goal&&rate!=null&&Math.abs(tr-goal)*toU(1)>=0.5?'<p class="muted sm">'+((goal-tr)*rate>0&&Math.abs(rate)>0.02?(function(){const wk=Math.round((goal-tr)/rate);return wk<=104?t('bwEta',Math.max(1,wk)):'';})():t('bwAway'))+'</p>':'')+
+      '<details class="dtl"><summary>'+t('bwGoalH')+'</summary><div class="goalrow"><label>'+t('goal')+' ('+wUnit()+')<input id="bg" class="in" type="text" inputmode="decimal" autocomplete="off" value="'+esc(goal?wShow(goal):'')+'"></label><button class="btn sm" onclick="goalSet()">'+t('set')+'</button></div></details></div>';
   }
   const ms=MEAS.map(k=>{const b=DATA.body.find(x=>x.m&&x.m[k]>0);return b?[k,b.m[k],b.t]:null;}).filter(Boolean);
   if(ms.length)h+='<div class="card"><b>'+t('measure')+'</b><div class="mtab">'+ms.map(a=>'<div><span>'+t('me_'+a[0])+'</span><b>'+lShow(a[1])+' '+lUnit()+'</b><small>'+esc(dFmt(a[2],{month:'short',day:'numeric'}))+'</small></div>').join('')+'</div></div>';
@@ -46,6 +69,8 @@ function bodySave(){
   if(Object.keys(m).length)o.m=m;
   const n=$('bn').value.trim();if(n)o.note=n;
   if(o.w==null&&o.bf==null&&!o.m){toast(t('needBody'));return;}
+  const day=dInput(o.t),ex=DATA.body.find(b=>dInput(b.t)===day); // one entry per day: update it / una entrada por día: se actualiza
+  if(ex){if(o.w!=null)ex.w=o.w;if(o.bf!=null)ex.bf=o.bf;if(o.m)ex.m=Object.assign({},ex.m,o.m);if(o.note)ex.note=o.note;saveData();toast(t('bwUpd'));render();return;}
   DATA.body.push(o);DATA.body.sort((a,b)=>b.t-a.t);saveData();toast(t('saved'));render();
 }
 function bodyDel(id){ask(t('delEntry'),t('delete'),function(){DATA.body=DATA.body.filter(b=>b.id!==id);saveData();render();},true);}

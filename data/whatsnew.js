@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v17',items:[
+  {i:'⚖️',en:'<b>Easier weigh-ins</b> — big number with − / + buttons, one tap to save. The chart now shows a smoothed trend, your pace per week and how long to reach your goal.',es:'<b>Pesajes más fáciles</b> — número grande con botones − / +, un toque para guardar. La gráfica ahora muestra una tendencia suavizada, tu ritmo por semana y cuánto falta para tu meta.'},
+  {i:'🎯',en:'<b>Mix two goals</b> — when building a plan, add a second goal (for example muscle + runner) and choose a 50/50 or 70/30 split. Each training day follows one goal.',es:'<b>Mezcla dos metas</b> — al crear un plan, agrega una segunda meta (por ejemplo músculo + corredor) y elige un reparto 50/50 o 70/30. Cada día de entrenamiento sigue una meta.'}]},
  {v:'v16',items:[
   {i:'📷',en:'<b>Meet the creator</b> — More now has a card about Mike, who built Bubylift, with a link to follow @bubylifts on Instagram.',es:'<b>Conoce al creador</b> — Más ahora tiene una tarjeta sobre Mike, quien creó Bubylift, con un enlace para seguir a @bubylifts en Instagram.'}]},
  {v:'v15',items:[
