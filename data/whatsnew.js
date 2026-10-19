@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v21',items:[
+  {i:'👤',en:'<b>Try it as a guest</b> — start training right away without a profile. When you want to keep your data safe and move it to another phone with a QR, create a profile and everything you logged comes with you.',es:'<b>Pruébalo como invitado</b> — empieza a entrenar ya sin crear un perfil. Cuando quieras proteger tus datos y pasarlos a otro teléfono con un QR, crea un perfil y todo lo que registraste se viene contigo.'}]},
  {v:'v20',items:[
   {i:'📊',en:'<b>Choose your weekly volume</b> — pick Low, Medium or High when you build a plan, and see a counter of the sets you do per muscle each week, with the recommended range and why it matters.',es:'<b>Elige tu volumen semanal</b> — escoge Bajo, Medio o Alto al crear tu plan y mira un contador de las series que haces por músculo cada semana, con el rango recomendado y por qué importa.'}]},
  {v:'v19',items:[

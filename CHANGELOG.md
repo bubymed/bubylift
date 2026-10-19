@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v21 — 2026-10-19
+- **Guest mode:** the first screen now offers Create a profile, Continue as guest, or Bring a profile from another phone. Guests start training right away; their data stays only in this browser. A reminder (at most once a week, after the first workout) and a button in the avatar menu explain the risk and let them create a real profile. The guest's data moves into the new protected profile.
+  **Modo invitado:** la primera pantalla ofrece Crear un perfil, Continuar como invitado o Traer un perfil de otro teléfono. Los invitados empiezan a entrenar al instante; sus datos se quedan solo en este navegador. Un aviso (como máximo una vez por semana, tras el primer entrenamiento) y un botón en el menú del avatar explican el riesgo y permiten crear un perfil real. Los datos del invitado pasan al nuevo perfil protegido.
+
 ## v20 — 2026-10-19
 - **Weekly volume:** new Low / Medium / High choice when building a plan. The plan now adjusts sets (or adds an exercise) so each muscle lands in its weekly range, for example a second core exercise on High. A new 📊 Weekly volume screen on the plan card shows the sets you did this week per muscle, your plan, the recommended range and why volume matters.
   **Volumen semanal:** nueva opción Bajo / Medio / Alto al crear el plan. El plan ajusta las series (o agrega un ejercicio) para que cada músculo caiga en su rango semanal, por ejemplo un segundo ejercicio de core en Alto. Una pantalla nueva 📊 Volumen semanal en la tarjeta del plan muestra las series que hiciste esta semana por músculo, tu plan, el rango recomendado y por qué importa el volumen.

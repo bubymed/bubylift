@@ -23,11 +23,12 @@ function pfClean(p){
   if(!p||typeof p!=='object'||typeof p.id!=='string'||!/^[a-z0-9]{3,24}$/.test(p.id))return null;
   const qs=(Array.isArray(p.qs)?p.qs:[]).map(q=>{if(!q||!((q.i|0)>=0&&(q.i|0)<PF_QN))return null;const r=pfRec(q);return r?Object.assign(r,{i:q.i|0}):{i:q.i|0};}).filter(Boolean).slice(0,3);
   const enc=pfEncRec(p.enc);
-  return{id:p.id,name:String(p.name||'').trim().slice(0,20)||'Profile',av:pfAv(p.av),pw:pfRec(p.pw),qs:qs,enc:enc,rm:enc?0:(p.rm?1:0),t:+p.t||Date.now()};
+  return{id:p.id,name:String(p.name||'').trim().slice(0,20)||'Profile',av:pfAv(p.av),pw:pfRec(p.pw),qs:qs,enc:enc,rm:enc?0:(p.rm?1:0),t:+p.t||Date.now(),g:(!enc&&!pfRec(p.pw)&&p.g)?1:0};
 }
 function pfLoad(){const a=jget('bl_profiles',[]);PFS=(Array.isArray(a)?a:[]).map(pfClean).filter(Boolean).slice(0,PF_MAX);return PFS;}
 function pfSave(){jset('bl_profiles',PFS);}
 const pfGet=id=>PFS.find(p=>p.id===id);
+const pfName=p=>p.g?t('pfGuest'):p.name; // guests are shown in the current language / el invitado se muestra en el idioma actual
 const pfCur=()=>pfGet(PFID);
 
 /* ---------- crypto helpers ---------- */
@@ -111,7 +112,7 @@ function avHtml(av,sz){
   const c=PF_AVC[av.c];
   return'<span class="av" style="'+st+';background:linear-gradient(135deg,'+c[0]+','+c[1]+');font-size:'+Math.round(sz*0.5)+'px">'+av.e+'</span>';
 }
-function pfRenderAv(){const b=$('avBtn');if(!b)return;const p=pfCur();if(!p){b.hidden=true;return;}b.hidden=false;b.innerHTML=avHtml(p.av,32);b.setAttribute('aria-label',p.name);}
+function pfRenderAv(){const b=$('avBtn');if(!b)return;const p=pfCur();if(!p){b.hidden=true;return;}b.hidden=false;b.innerHTML=avHtml(p.av,32);b.setAttribute('aria-label',pfName(p));}
 
 /* ---------- boot / enter / leave ---------- */
 async function boot(){
@@ -124,7 +125,7 @@ async function boot(){
     try{const raw=unb64(sk);if(raw.length===32){await pfEnter(p.id,raw);return;}}catch(e){}
   }
   const lp=pfGet(last);
-  if(!PFS.length)gNew(1,{first:true});
+  if(!PFS.length)gWelcome();
   else if(PFS.length===1&&!PFS[0].pw){await pfEnter(PFS[0].id,null);}
   else gPick();
 }
@@ -135,7 +136,7 @@ function pfPrefs(){
   document.documentElement.lang=LANG;applyTheme();
 }
 /* raw = unlocked master key (32 bytes) for encrypted profiles; seed = {storageKey:jsonString} to write first / raw = llave maestra desbloqueada; seed = datos iniciales */
-async function pfEnter(id,raw,seed){
+async function pfEnter(id,raw,seed,noBoot){
   const p=pfGet(id);if(!p){gPick();return;}
   const k=pfKeys(id);
   try{
@@ -156,8 +157,10 @@ async function pfEnter(id,raw,seed){
   }
   PFID=id;K_DATA=k.d;K_SET=k.s;K_ACT=k.a;
   try{sessionStorage.setItem('bl_sess',id);localStorage.setItem('bl_last',id);}catch(e){}
+  if(noBoot)return;
   gateHide();pfRenderAv();bootApp();
   if(ENC)pfPump();
+  try{if(sessionStorage.getItem('bl_up')){sessionStorage.removeItem('bl_up');setTimeout(()=>toast(t('pfUpDone')),700);}}catch(e){}
 }
 function pfLeave(){
   const go=function(){
@@ -183,10 +186,39 @@ const gv=id=>{const e=$(id);return e?e.value:'';};
 function gLang(){return'<div class="g-lang"><button onclick="pfSetLang(\'en\')"'+(LANG==='en'?' class="on"':'')+'>English</button><button onclick="pfSetLang(\'es\')"'+(LANG==='es'?' class="on"':'')+'>Español</button></div>';}
 function pfSetLang(l){LANG=l==='es'?'es':'en';try{localStorage.setItem('bl_lang',LANG);}catch(e){}document.documentElement.lang=LANG;const f=GS.redraw;if(f)f();else gPick();}
 
+/* first screen: create a profile or just try it as a guest / primera pantalla: crear perfil o probar como invitado */
+function gWelcome(){
+  GS={redraw:gWelcome};
+  gateShow('<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">🏋️</div></div><h1 class="lt g-h">'+t('pfWelT')+'</h1><p class="muted g-c">'+t('pfWelP')+'</p>'+(pfHasLegacy()?'<p class="note">'+t('pfLegacy')+'</p>':'')+
+    '<div class="g-form"><button class="btn pri big wide" onclick="gNew(1,{first:true})">✨ '+t('pfWelNew')+'</button><p class="muted sm g-c">'+t('pfWelNewP')+'</p>'+
+    '<button class="btn big wide" onclick="pfGuest()">👤 '+t('pfGuestB')+'</button><p class="muted sm g-c">'+t('pfGuestP')+'</p>'+
+    '<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button><p id="gmsg" class="g-msg"></p></div>'+gLang());
+}
+function pfGuest(){
+  if(PFS.some(x=>x.g)||PFS.length>=PF_MAX)return;
+  const prof={id:'g'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:'Guest',av:{k:'e',e:PF_AVE[0],c:3},pw:null,qs:[],enc:null,rm:0,t:Date.now(),g:1};
+  const k=pfKeys(prof.id),lg=PFS.length?{map:{},del:[]}:pfLegacy(prof.id);
+  if(!lg.map[k.s])lg.map[k.s]=JSON.stringify({lang:LANG});
+  try{for(const kk in lg.map)localStorage.setItem(kk,lg.map[kk]);}catch(e){const m=$('gmsg');if(m)m.textContent=t('pfTxBad');return;}
+  PFS.push(prof);pfSave();GS={};
+  try{lg.del.forEach(x=>localStorage.removeItem(x));}catch(e){}
+  pfEnter(prof.id,null);
+}
+/* a guest turns into a real profile: same data, now protected / el invitado pasa a perfil real: mismos datos, ahora protegidos */
+function gSave(){const p=pfCur();if(!p||!p.g)return;GS={};gNew(1,{upg:p.id});}
+function guestNag(){
+  const p=pfCur();if(!p||!p.g||!$('sheetov').hidden||!$('gate').hidden)return;
+  if(!(DATA&&DATA.workouts&&DATA.workouts.length))return;
+  let last=0;try{last=+localStorage.getItem('bl_gn')||0;}catch(e){}
+  if(Date.now()-last<7*864e5)return;
+  try{localStorage.setItem('bl_gn',String(Date.now()));}catch(e){}
+  sheet('<div class="sum"><div class="sum-e">💾</div><h3>'+t('gnT')+'</h3><p class="muted">'+t('gnP')+'</p><div class="row"><button class="btn" onclick="sheetClose()">'+t('gnNo')+'</button><button class="btn pri" onclick="sheetClose();gSave()">'+t('gnYes')+'</button></div></div>');
+}
+
 /* who's training? / ¿quién entrena? */
 function gPick(edit){
   GS={redraw:function(){gPick(edit);}};
-  const tiles=PFS.map(p=>'<button class="pf-tile" onclick="'+(edit?'gEdit(\''+p.id+'\')':'gPw(\''+p.id+'\')')+'">'+avHtml(p.av,edit?84:92)+(edit?'<i class="pf-pen">✎</i>':'')+'<b>'+esc(p.name)+'</b></button>').join('')+
+  const tiles=PFS.map(p=>'<button class="pf-tile" onclick="'+(edit?(p.g?'gDelete':'gEdit')+'(\''+p.id+'\')':'gPw(\''+p.id+'\')')+'">'+avHtml(p.av,edit?84:92)+(edit?'<i class="pf-pen">'+(p.g?'🗑':'✎')+'</i>':'')+'<b>'+esc(pfName(p))+'</b></button>').join('')+
     (PFS.length<PF_MAX&&!edit?'<button class="pf-tile" onclick="gAdd()"><span class="av av-add" style="width:92px;height:92px">＋</span><b>'+t('pfAdd')+'</b></button>':'');
   gateShow('<div class="g-top"><span></span><button class="g-link" onclick="gPick('+(edit?'false':'true')+')">'+(edit?t('done'):t('edit'))+'</button></div><h1 class="lt g-h">'+t('pfWho')+'</h1><div class="pf-grid">'+tiles+'</div>'+gLang());
 }
@@ -298,11 +330,11 @@ function gNew(step,o){
   if(!GS.av)GS.av={k:'e',e:PF_AVE[0],c:0};
   if(GS.name===undefined)GS.name='';
   GS.step=step;GS.redraw=function(){gNew(GS.step);};
-  const first=!!GS.first,back=first?'':'<button class="g-link" onclick="'+(step===1?'gAdd()':'gNew('+(step-1)+')')+'">‹ '+t('back')+'</button>';
+  const first=!!GS.first,back='<button class="g-link" onclick="'+(step===1?(first?'gWelcome()':GS.upg?'gateHide()':'gAdd()'):'gNew('+(step-1)+')')+'">‹ '+t('back')+'</button>';
   let b='';
   if(step===1){
     b='<div class="g-c" id="avprev">'+avHtml(GS.av,104)+'</div><div class="g-form"><label>'+t('pfName')+'<input id="gname" class="in wide" maxlength="20" autocomplete="off" value="'+esc(GS.name)+'"></label>'+avPicker()+
-      (first&&pfHasLegacy()?'<p class="note">'+t('pfLegacy')+'</p>':'')+'<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="gNewNext1()">'+t('next')+' ›</button>'+(first?'<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button>':'')+'</div>';
+      (first&&pfHasLegacy()?'<p class="note">'+t('pfLegacy')+'</p>':'')+(GS.upg?'<p class="note">'+t('pfUpNote')+'</p>':'')+'<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="gNewNext1()">'+t('next')+' ›</button>'+(first&&!PFS.length?'<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button>':'')+'</div>';
   }else if(step===2){
     b='<h1 class="lt g-h">'+t('pfPw')+'</h1><p class="muted">'+t('pfPwP')+'</p><div class="g-form">'+(hasCrypto()?pfPwFields(GS.name):'<p class="note">'+t('pfNoCrypto')+'</p>')+
       '<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="gNewNext2()">'+t('next')+' ›</button></div>';
@@ -374,17 +406,25 @@ async function gNewDone(){
       prof.enc={wp:await pfWrap(GS.pw1,raw),wq:await pfWrap(pfAnsKey(q.map(x=>x.a)),raw)};
     }
     if(PFS.length>=PF_MAX){m.textContent=t('pfMax');return;}
+    const gid=GS.upg&&pfGet(GS.upg)&&pfGet(GS.upg).g?GS.upg:null;
+    if(gid){try{saveData();saveAct();}catch(e){}}
     const first=PFS.length===0;PFS.push(prof);pfSave();
     const k=pfKeys(prof.id),lg=first?pfLegacy(prof.id):{map:{},del:[]};
+    if(gid){ // move the guest's log into the new profile / mueve el registro del invitado al perfil nuevo
+      const gk=pfKeys(gid);
+      [[gk.d,k.d],[gk.s,k.s],[gk.a,k.a]].forEach(x=>{try{const v=localStorage.getItem(x[0]);if(v!=null)lg.map[x[1]]=v;}catch(e){}});
+      lg.del=[gk.d,gk.s,gk.a];
+    }
     if(!lg.map[k.s])lg.map[k.s]=JSON.stringify({lang:LANG});
     GS={};
     if(prof.enc){
-      await pfEnter(prof.id,raw,lg.map);await pfFlush();
+      await pfEnter(prof.id,raw,lg.map,!!gid);await pfFlush();
       try{lg.del.forEach(x=>localStorage.removeItem(x));}catch(e){} // plain copies removed only after the encrypted ones are written / se borran los originales solo después de guardar los cifrados
     }else{
       try{for(const kk in lg.map)localStorage.setItem(kk,lg.map[kk]);lg.del.forEach(x=>localStorage.removeItem(x));}catch(e){}
-      await pfEnter(prof.id,null);
+      await pfEnter(prof.id,null,null,!!gid);
     }
+    if(gid){PFS=PFS.filter(x=>x.id!==gid);pfSave();try{sessionStorage.setItem('bl_up','1');}catch(e){}location.replace(location.pathname);}
   }catch(e){m.textContent=t('pfNoCrypto');}
 }
 
@@ -406,7 +446,7 @@ function pfEditSave(id,inApp){
 function gDelete(id){
   const p=pfGet(id);if(!p)return;
   GS={redraw:function(){gDelete(id);}};
-  gateShow('<div class="g-top"><button class="g-link" onclick="gEdit(\''+id+'\')">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('pfDel')+'</h1><p class="muted">'+t('pfDelP',esc(p.name))+'</p><div class="g-form">'+
+  gateShow('<div class="g-top"><button class="g-link" onclick="'+(p.g?'gPick(true)':'gEdit(\''+id+'\')')+'">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('pfDel')+'</h1><p class="muted">'+t('pfDelP',esc(pfName(p)))+'</p><div class="g-form">'+
     (p.pw?'<label>'+t('pfPw')+'<input id="gpw" class="in wide" type="password" autocomplete="current-password"></label>':'')+'<p id="gmsg" class="g-msg"></p><button class="btn danger big wide" onclick="pfDelete(\''+id+'\')">🗑 '+t('pfDel')+'</button></div>');
 }
 async function pfDelete(id){
@@ -416,13 +456,18 @@ async function pfDelete(id){
   const k=pfKeys(id);try{[k.d,k.s,k.a,'bl_thrp_'+id,'bl_thrq_'+id].forEach(x=>localStorage.removeItem(x));}catch(e){}
   PFS=PFS.filter(x=>x.id!==id);pfSave();
   try{if(localStorage.getItem('bl_last')===id)localStorage.removeItem('bl_last');}catch(e){}
-  if(!PFS.length){GS={};gNew(1,{first:true});}else gPick(true);
+  if(!PFS.length){GS={};gWelcome();}else gPick(true);
 }
 
 /* in-app profile menu (avatar button) / menú del perfil dentro de la app */
 function pfMenu(){
   const p=pfCur();if(!p)return;
-  sheet('<div class="form"><div class="g-c">'+avHtml(p.av,76)+'<h3 class="g-n">'+esc(p.name)+'</h3></div><div class="menu">'+
+  if(p.g){
+    sheet('<div class="form"><div class="g-c">'+avHtml(p.av,76)+'<h3 class="g-n">'+esc(pfName(p))+'</h3></div><div class="menu"><button class="pri" onclick="sheetClose();gSave()">💾 '+t('pfGuestSave')+'</button><button onclick="sheetClose();pfLeave()">⇄ '+t('pfSwitch')+'</button></div>'+
+      '<p class="muted sm">'+t('gnP')+'</p><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
+    return;
+  }
+  sheet('<div class="form"><div class="g-c">'+avHtml(p.av,76)+'<h3 class="g-n">'+esc(pfName(p))+'</h3></div><div class="menu">'+
     '<button onclick="sheetClose();pfLeave()">⇄ '+t('pfSwitch')+'</button><button onclick="sheetClose();gEdit(\''+p.id+'\',true)">✎ '+t('pfEditT')+'</button>'+
     (p.pw?'<button onclick="sheetClose();gSetPw(\''+p.id+'\',true)">🔑 '+t('pfChange')+'</button><button onclick="sheetClose();gQuest(\''+p.id+'\')">❓ '+t('pfQT')+'</button>':'')+
     '<button onclick="sheetClose();gSend()">📲 '+t('pfTx')+'</button></div><p class="muted sm">'+t('pfNote')+'</p><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
@@ -535,7 +580,7 @@ function pfShowFrames(fr,pin){
 /* receiver: scan frames, ask PIN, decrypt, add profile / destino */
 function gRecv(){
   GS={redraw:gRecv};
-  const back=PFS.length?'gAdd()':'gNew(1,{first:true})';
+  const back=PFS.length?'gAdd()':'gWelcome()';
   gateShow('<div class="g-top"><button class="g-link" onclick="'+back+'">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('pfBring')+'</h1><p class="muted">'+t('pfRxP')+'</p>'+
     (PFS.length>=PF_MAX?'<p class="note">'+t('pfMax')+'</p>':(hasCrypto()?'<div class="g-form"><button class="btn pri big wide" onclick="pfScan()">📷 '+t('pfScan')+'</button></div>':'<p class="note">'+t('pfNoCrypto')+'</p>'))+'<p id="gmsg" class="g-msg"></p>'+gLang());
 }

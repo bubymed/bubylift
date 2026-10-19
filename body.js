@@ -88,7 +88,8 @@ function setRest(v){SET.rest=parseInt(v,10)||90;saveSet();}
 function vMore(){
   // iOS-style grouped list: one card, one row per setting / lista agrupada estilo iOS: una tarjeta, una fila por ajuste
   const row=(lab,ctl)=>'<div class="lrow"><span>'+lab+'</span>'+ctl+'</div>';
-  let h='<div class="sec"><h2>'+t('prefs')+'</h2></div><div class="card grp">'+
+  const gp=(typeof pfCur==='function'&&pfCur());
+  let h=(gp&&gp.g?'<div class="card tip"><b>👤 '+t('gnT')+'</b><p class="sm">'+t('gnP')+'</p><div class="row"><button class="btn pri" onclick="gSave()">'+t('gnYes')+'</button></div></div>':'')+'<div class="sec"><h2>'+t('prefs')+'</h2></div><div class="card grp">'+
     row(t('language'),seg([['en','English'],['es','Español']],LANG,'setLang'))+
     row(t('appearance'),seg([['system',t('thSystem')],['dark',t('thDark')],['light',t('thLight')]],SET.theme||'system','setTheme'))+
     row(t('units'),seg([['imperial','lb·in·mi'],['metric','kg·cm·km']],SET.units,'setUnits'))+
