@@ -145,6 +145,24 @@ const HYFIRST={
  usmc:{Bm:['pullup','chinup','assistpu'],Pm:['pushup','hrpushup'],Am:['plank'],Ac:['plank'],Dm:['firecarry','sleddrag'],Da:['lowcrawl','farmer']},
  gen:{}
 };
+/* ---------- weekly volume: hard sets per muscle per week / volumen semanal: series duras por músculo por semana ---------- */
+const VOLMU='QHGCPBSITA';
+const VOLR={lo:{M:[6,9],m:[4,6],A:[4,6]},md:{M:[10,14],m:[6,10],A:[6,10]},hi:{M:[15,20],m:[10,16],A:[10,15]}};
+function volFactor(prof){
+  const gs=goalsOf(prof),lowv=g=>isHy(g)||g==='runner';
+  return gs.every(lowv)?0.6:gs.some(lowv)?0.8:(gs[0]==='strength'?0.85:1);
+}
+function volRange(mu,vol,prof){
+  const c='QHGPB'.indexOf(mu)>=0?'M':mu==='A'?'A':'m',r=(VOLR[vol]||VOLR.md)[c],f=volFactor(prof);
+  return[Math.max(2,Math.round(r[0]*f)),Math.max(3,Math.round(r[1]*f))];
+}
+function volCounts(e){return(e.r==='m'||e.r==='a'||e.r==='c')&&VOLMU.indexOf(muOf(e.eid))>=0;}
+function volOfDs(ds){const o={};ds.forEach(d=>d.ex.forEach(e=>{if(volCounts(e)){const m=muOf(e.eid);o[m]=(o[m]||0)+e.sets;}}));return o;}
+function volDone(){
+  const ws=weekStart(),o={};
+  DATA.workouts.forEach(w=>{if(w.t>=ws)w.ex.forEach(x=>{const m=muOf(x.eid);if(VOLMU.indexOf(m)>=0)o[m]=(o[m]||0)+x.sets.length;});});
+  return o;
+}
 /* pick the best available exercise for a muscle slot / elige el mejor ejercicio disponible para un hueco */
 /* test-specific drills only appear for that test / los ejercicios propios de una prueba solo salen con esa prueba */
 const TESTONLY={sdcdrill:'aft',firecarry:'usmc',ammolift:'usmc'};
@@ -162,6 +180,7 @@ function normProf(p){
   o.n=Math.max(2,Math.min(5,Math.round(o.n)||3));if(!LENMAX[o.len])o.len=60;
   o.focus=(o.focus||[]).filter(k=>FOCUS_MU[k]).slice(0,3);o.have=(o.have||[]).filter(k=>HAVE_KEYS.indexOf(k)>=0);o.inj=(o.inj||[]).filter(k=>INJ[k]);o.cond=o.cond?1:0;
   o.ff=Math.max(1,Math.min(4,Math.round(o.ff)||2));o.skills=(o.skills||[]).filter((k,i,a)=>SKILLS.indexOf(k)>=0&&a.indexOf(k)===i).slice(0,2);
+  if(['lo','md','hi'].indexOf(o.vol)<0)o.vol='md';
   if(TESTS.indexOf(o.test)<0)o.test='gen';
   if(o.goal==='hybrid'&&o.test!=='gen')o.goal='military'; // old plans: hybrid with a test is now military / planes viejos: híbrido con prueba ahora es militar
   if(o.goal==='hybrid')o.test='gen';
@@ -272,6 +291,38 @@ function genPlan(prof0){
     }
     if(ed.goal==='fat'){const cid=avail('treadmill',have)?'treadmill':'walk';ex.push({eid:cid,sets:1,lo:15,hi:20,u:'m',r:'a',cn:''});}
     return prof.mix?{k:k,g:dgoal[di],ex:ex}:{k:k,ex:ex};
+  });
+  // weekly volume: nudge sets (or add one exercise) so every trained muscle lands in its range / volumen semanal: ajusta series (o agrega un ejercicio) para que cada músculo caiga en su rango
+  const vv=prof.cond&&prof.vol==='hi'?'md':prof.vol;
+  VOLMU.split('').forEach(mu=>{
+    const rg=volRange(mu,vv,prof),cnt=()=>volOfDs(ds)[mu]||0,cap=e=>e.r==='m'&&e.u!=='m'?5:4;
+    let tot=cnt(),g=40;
+    if(!tot)return;
+    while(tot<rg[0]&&g-->0){
+      let best=null;
+      ds.forEach(d=>d.ex.forEach(e=>{if(volCounts(e)&&muOf(e.eid)===mu&&e.sets<cap(e)&&(!best||e.sets<best.sets))best=e;}));
+      if(best){best.sets++;tot++;continue;}
+      let add=false;
+      ds.map((d,di)=>di).sort((x,y)=>ds[x].ex.length-ds[y].ex.length).forEach(di=>{
+        if(add)return;const d=ds[di];if(d.ex.length>=(vv==='hi'?maxEx+1:maxEx))return;
+        const has=d.ex.some(e=>muOf(e.eid)===mu),half=MUS_LOWER.indexOf(mu)>=0?MUS_LOWER:MUS_UPPER;
+        if(!has&&mu!=='A'&&!d.ex.some(e=>half.indexOf(muOf(e.eid))>=0))return;
+        const dayIds={};d.ex.forEach(e=>{dayIds[e.eid]=1;});
+        const id=pickFor(mu,mu==='A'?'c':'a',{have:have,L:L,maxLv:maxLv,used:used,day:dayIds,hy:isHy(dgoal[di]),test:effOf(di).test});
+        if(!id)return;
+        used[id]=(used[id]||0)+1;
+        const it=planItem(id,mu==='A'?'c':'a',effOf(di),0);let ins=d.ex.length;
+        while(ins>0&&muOf(d.ex[ins-1].eid)==='K'&&d.ex[ins-1].r!=='m')ins--;
+        d.ex.splice(ins,0,it);tot+=it.sets;add=true;
+      });
+      if(!add)break;
+    }
+    g=40;
+    while(tot>rg[1]&&g-->0){
+      let best=null;
+      ds.forEach(d=>d.ex.forEach(e=>{if(volCounts(e)&&muOf(e.eid)===mu&&e.sets>2&&(!best||(e.r==='m')<(best.r==='m')||((e.r==='m')===(best.r==='m')&&e.sets>best.sets)))best=e;}));
+      if(!best)break;best.sets--;tot--;
+    }
   });
   return{goal:prof.goal,n:prof.n,lvl:prof.lvl,t0:Date.now(),ct:0,cur:0,ds:ds,wd:defaultWd(ds),wu:0,checks:[],prof:prof};
 }
@@ -397,7 +448,8 @@ function planCard(){
   let h='<div class="swp"><div class="swp-h swp-hl">'+t('swSkip')+'</div><div class="swp-h swp-hr">'+t('swChange')+'</div><div class="card plan swp-in" data-l="planSkipAsk" data-r="planPickDay"><div class="plh"><b>'+t('planToday')+'</b><span class="muted sm">'+t('planWeek',planWeek(),p.n)+'</span></div><h3>'+esc(dayName(i))+'</h3>'+planBrief(d)+
     (p.wu?'<p class="muted sm">📅 '+(p.wd.indexOf(new Date().getDay())>=0?t('schCardOn',wdName(new Date().getDay())):t('schCardRest'))+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn" onclick="planOpen()">'+t('planAll')+'</button></div>'+
-    '<div class="row"><button class="btn" onclick="schedOpen()">📅 '+t('schBtn')+'</button><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDelShort')+'</button></div>'+
+    '<div class="row"><button class="btn" onclick="schedOpen()">📅 '+t('schBtn')+'</button><button class="btn" onclick="volOpen()">📊 '+t('volBtn')+'</button></div>'+
+    '<div class="row"><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDelShort')+'</button></div>'+
     '<p class="muted sm swhint">'+t('swHint')+'</p>'+testLine(p);
   if(checkDue())h+='<div class="pldue"><b>'+t('chkDue')+'</b><button class="btn sm" onclick="chkOpen()">'+t('chkOpen')+'</button></div>';
   return h+'</div></div>';
@@ -625,7 +677,8 @@ function wizDraw(){
       '<div class="lbl">'+t('psFocus')+'</div>'+focusBlock();
   }else if(s===3){
     b='<div class="lbl">'+t('psDays')+'</div>'+wch('n',[2,3,4,5],PW.n,v=>t('psDaysN',v))+
-      '<div class="lbl">'+t('psLen')+'</div>'+wch('len',[30,45,60,75],PW.len,v=>t('psLenN',v))+'<p class="muted sm">'+t('psLenP')+'</p>';
+      '<div class="lbl">'+t('psLen')+'</div>'+wch('len',[30,45,60,75],PW.len,v=>t('psLenN',v))+'<p class="muted sm">'+t('psLenP')+'</p>'+
+      '<div class="lbl">'+t('psVol')+'</div>'+wch('vol',['lo','md','hi'],PW.vol,v=>t('vol_'+v))+'<p class="muted sm">'+t('vold_'+PW.vol)+'</p>';
   }else if(s===4){
     b='<div class="lbl">'+t('psLvl')+'</div>'+wch('lvl',PLVLS,PW.lvl,v=>t('pl_'+v))+'<p class="muted sm">'+t('pld_'+PW.lvl)+'</p>';
   }else if(s===5){
@@ -642,6 +695,7 @@ function wizDraw(){
       (PW.focus.length?'<li>'+t('planFocus',PW.focus.map(k=>t('fm_'+k)).join(', '))+' · '+t('psDaysN',PW.ff)+'</li>':'')+
       (PW.skills.length?'<li>'+t('planSkill',PW.skills.map(k=>t('sk_'+k)).join(', '))+'</li>':'')+
       '<li>'+t('psDaysN',PW.n)+' · '+t('psLenN',PW.len)+' · '+t('pl_'+PW.lvl)+'</li>'+
+      '<li>'+t('psVol')+': '+t('vol_'+PW.vol)+'</li>'+
       '<li>'+t('psEquip')+': '+(PW.have.length?PW.have.map(k=>t('hv_'+k)).join(', '):t('eqp_none'))+'</li>'+
       (PW.inj.length?'<li>⚠ '+t('planInj',PW.inj.map(k=>t('inj_'+k)).join(', '))+(L?'':'')+'</li>':'')+'</ul><p class="muted sm">'+t('planNote')+'</p>';
   }
@@ -654,7 +708,7 @@ function focusApply(){
   const old=DATA.plan,p=genPlan(prof);p.checks=old.checks;DATA.plan=p;saveData();render();planOpen();toast(t('planReady'));
 }
 function planCreate(){
-  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
+  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
   const old=DATA.plan,p=genPlan(prof);
   if(old){p.checks=old.checks;}
   DATA.plan=p;saveData();render();
@@ -710,6 +764,37 @@ function howOpen(eid,back){
     '<div class="row"><button class="btn pri" onclick="'+(back||'sheetClose')+'()">'+t('done')+'</button></div></div>');
 }
 
+
+/* weekly volume counter / contador de volumen semanal */
+let VS=null;
+function volOpen(){const p=DATA.plan;if(!p)return;VS=p.prof.vol;volDraw();}
+function volSet(v){VS=v;volDraw();}
+function volDraw(){
+  const p=DATA.plan;if(!p)return;
+  const pr=p.prof,plan=volOfDs(p.ds),done=volDone(),rg={};let mx=6,sd=0,sp=0;
+  VOLMU.split('').forEach(m=>{rg[m]=volRange(m,VS,pr);mx=Math.max(mx,rg[m][1],plan[m]||0,done[m]||0);sd+=done[m]||0;sp+=plan[m]||0;});
+  mx=Math.ceil(mx*1.1);
+  const rows=VOLMU.split('').filter(m=>plan[m]||done[m]).map(m=>{
+    const a=rg[m],pl=plan[m]||0,dn=done[m]||0,st=pl<a[0]?'Under':pl>a[1]?'Over':'Ok';
+    return'<div class="vrow"><div class="vh"><b>'+esc(t('vm_'+m))+'</b><span class="vs v'+st+'">'+t('vol'+st)+'</span></div>'+
+      '<div class="vbar"><i class="vz" style="left:'+(a[0]/mx*100)+'%;width:'+((a[1]-a[0])/mx*100)+'%"></i><i class="vf" style="width:'+Math.min(100,dn/mx*100)+'%"></i><i class="vp" style="left:'+Math.min(99,pl/mx*100)+'%"></i></div>'+
+      '<div class="muted sm">'+t('volLine',dn,pl,a[0]+'–'+a[1])+'</div></div>';
+  }).join('');
+  sheet('<div class="form"><div class="pick-h"><h3>📊 '+t('volT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+    '<p class="sm"><b>'+t('volWeek',sd,sp)+'</b></p>'+
+    '<div class="card tip"><b>'+t('volWhyT')+'</b><p class="sm">'+t('volWhy')+'</p></div>'+
+    '<div class="lbl">'+t('psVol')+'</div><div class="chips wrap">'+['lo','md','hi'].map(v=>'<button class="chip'+(VS===v?' on':'')+'" onclick="volSet(\''+v+'\')">'+t('vol_'+v)+'</button>').join('')+'</div><p class="muted sm">'+t('vold_'+VS)+'</p>'+
+    (VS!==pr.vol?'<div class="row"><button class="btn pri" onclick="volApply()">'+t('volApply',t('vol_'+VS))+'</button></div><p class="muted sm">'+t('volApplyP')+'</p>':'')+
+    '<div class="vleg"><span><i class="vz"></i>'+t('volLgGoal')+'</span><span><i class="vf"></i>'+t('volLgDone')+'</span><span><i class="vp"></i>'+t('volLgPlan')+'</span></div>'+rows+
+    '<p class="muted sm">'+t('volNote')+'</p><p class="muted sm">'+t('volTime')+'</p>'+
+    '<div class="row"><button class="btn" onclick="sheetClose()">'+t('close')+'</button></div></div>');
+}
+function volApply(){
+  const old=DATA.plan;if(!old)return;
+  const p=genPlan(Object.assign({},old.prof,{vol:VS}));
+  p.checks=old.checks;if(p.n===old.n){p.wd=old.wd;p.wu=old.wu;p.cur=old.cur;}
+  DATA.plan=p;saveData();render();volOpen();toast(t('planReady'));
+}
 
 /* ---------- weekly schedule: put each training day on a weekday, with advice / horario semanal: cada día de entrenamiento en un día de la semana, con consejos ---------- */
 // l = loads the legs · u = upper body · R = hard run or work-capacity day · r = easy run / l = piernas · u = tren superior · R = carrera dura o capacidad · r = carrera suave
