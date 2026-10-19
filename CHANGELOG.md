@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v6 — 2026-10-19
+- **Focus you control:** choose focus muscles (up to 3) and how many days a week each one is trained (1–4). A glute, quad or hamstring focus now adds extra lower-body slots on more days instead of leaving one or two leg days. New **Change focus** button in My plan rebuilds the plan without redoing the whole guide (check-ins are kept).
+  **Enfoque que tú controlas:** elige los músculos de enfoque (hasta 3) y cuántos días por semana se entrena cada uno (1–4). Un enfoque en glúteos, cuádriceps o isquios ahora agrega más huecos de tren inferior en más días en vez de dejar uno o dos días de pierna. Nuevo botón **Cambiar enfoque** en Mi plan que rehace el plan sin repetir toda la guía (se conservan las revisiones).
+- **Physical skills (up to 2):** strength (heavier, lower reps), power (jumps and throws), speed/agility (ladder, shuffles, sprints), endurance (higher reps plus cardio) and balance (stability work). Impact drills are never chosen when an injury flags the joint.
+  **Habilidades físicas (hasta 2):** fuerza (más pesado, menos repeticiones), potencia (saltos y lanzamientos), velocidad/agilidad (escalera, desplazamientos, sprints), resistencia (más repeticiones y cardio) y equilibrio (estabilidad). Nunca se eligen ejercicios de impacto si una lesión marca esa articulación.
+
 ## v5 — 2026-10-18
 - **Hybrid / military athlete plan:** a new goal that mixes strength days, interval and easy runs, and work-capacity days (sprint-drag-carry style), built around the Army AFT (3-rep max deadlift, hand-release push-ups, sprint-drag-carry, plank, 2-mile run) or the Marines PFT / CFT. Events mirrored in training; strict-plank, hand-release and deadlift coaching notes. Everything else (focus muscles, injuries, equipment, swaps) works with it.
   **Plan de atleta híbrido / militar:** una meta nueva que mezcla días de fuerza, carreras de intervalos y suaves, y días de capacidad de trabajo (estilo sprint-arrastre-acarreo), armada alrededor del AFT del Ejército (peso muerto de 3 repeticiones máximas, flexiones con liberación de manos, sprint-arrastre-acarreo, plancha, 2 millas) o del PFT / CFT de los Marines. Los eventos se reflejan en el entrenamiento; con notas de técnica para plancha estricta, flexión con liberación de manos y peso muerto. Todo lo demás (músculos de enfoque, lesiones, equipo, sustituciones) funciona con él.

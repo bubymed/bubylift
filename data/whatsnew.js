@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v6',items:[
+  {i:'🍑',en:'<b>Choose your focus</b> — pick the muscles to bring up and how many days a week they get (e.g. glutes 3 days), so a leg-focused week really has more leg days.',es:'<b>Elige tu enfoque</b> — escoge los músculos que quieres destacar y cuántos días a la semana (ej. glúteos 3 días), para que una semana enfocada en pierna tenga de verdad más días de pierna.'},
+  {i:'⚡',en:'<b>Physical skills</b> — add strength, power, speed, endurance or balance to your plan. Change your focus any time from My plan → Change focus.',es:'<b>Habilidades físicas</b> — suma fuerza, potencia, velocidad, resistencia o equilibrio a tu plan. Cambia tu enfoque cuando quieras en Mi plan → Cambiar enfoque.'}]},
  {v:'v5',items:[
   {i:'🎖️',en:'<b>Hybrid / military athlete</b> — a plan that mixes strength, running and work capacity around your test: Army AFT or Marines PFT/CFT.',es:'<b>Atleta híbrido / militar</b> — un plan que mezcla fuerza, carrera y capacidad de trabajo alrededor de tu prueba: AFT del Ejército o PFT/CFT de los Marines.'},
   {i:'⏱️',en:'<b>Practice tests</b> — run a practice AFT, PFT or CFT, log your results and compare them over time. Set your test date to see the countdown and test-week tips.',es:'<b>Simulacros</b> — haz un simulacro de AFT, PFT o CFT, anota tus resultados y compáralos con el tiempo. Pon la fecha de tu prueba para ver la cuenta regresiva y consejos para la semana de la prueba.'}]},
