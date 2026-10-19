@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v13',items:[
+  {i:'📅',en:'<b>Date field fixed on iPhone</b> — it now stays inside the card and lines up with the other fields.',es:'<b>Campo de fecha corregido en iPhone</b> — ahora queda dentro de la tarjeta y alineado con los demás campos.'}]},
  {v:'v12',items:[
   {i:'✨',en:'<b>A fresh, calmer look</b> — large titles, softer grouped cards, clear tinted buttons, a translucent tab bar and a simpler More tab. Language and theme are now in More → Preferences.',es:'<b>Un diseño nuevo y más tranquilo</b> — títulos grandes, tarjetas agrupadas más suaves, botones tintados claros, barra de pestañas translúcida y una pestaña Más más simple. El idioma y el tema ahora están en Más → Preferencias.'}]},
  {v:'v11',items:[

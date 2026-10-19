@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v13 — 2026-10-19
+- **Fix:** the Date field in Body overflowed its card and was centered on iPhone; it now fits the card and is left-aligned like the other fields.
+  **Corrección:** el campo Fecha en Cuerpo se salía de la tarjeta y estaba centrado en iPhone; ahora cabe en la tarjeta y va alineado a la izquierda como los demás.
+
 ## v12 — 2026-10-19
 - **Apple-style redesign:** large page titles, grouped rounded cards without borders, tinted labeled buttons (filled for the main action), iOS-style segmented controls, a translucent tab bar, bottom sheets with a grabber, hairline separators and more white space. More now has a single grouped Preferences list; the EN/ES switch moved from the header to More → Preferences (the language is still detected automatically).
   **Rediseño estilo Apple:** títulos de página grandes, tarjetas agrupadas y redondeadas sin bordes, botones tintados con texto (rellenos para la acción principal), controles segmentados estilo iOS, barra de pestañas translúcida, hojas inferiores con asa, separadores finos y más espacio en blanco. Más ahora tiene una sola lista agrupada de Preferencias; el selector EN/ES pasó del encabezado a Más → Preferencias (el idioma se sigue detectando automáticamente).
