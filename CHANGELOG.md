@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v12 — 2026-10-19
+- **Apple-style redesign:** large page titles, grouped rounded cards without borders, tinted labeled buttons (filled for the main action), iOS-style segmented controls, a translucent tab bar, bottom sheets with a grabber, hairline separators and more white space. More now has a single grouped Preferences list; the EN/ES switch moved from the header to More → Preferences (the language is still detected automatically).
+  **Rediseño estilo Apple:** títulos de página grandes, tarjetas agrupadas y redondeadas sin bordes, botones tintados con texto (rellenos para la acción principal), controles segmentados estilo iOS, barra de pestañas translúcida, hojas inferiores con asa, separadores finos y más espacio en blanco. Más ahora tiene una sola lista agrupada de Preferencias; el selector EN/ES pasó del encabezado a Más → Preferencias (el idioma se sigue detectando automáticamente).
+
 ## v11 — 2026-10-19
 - **Separate goals:** the plan builder now offers **Bodybuilding (max muscle)**, **Runner**, **Hybrid athlete** and **Military fitness test** next to Build muscle, Get stronger, Lose fat and General fitness. Hybrid no longer needs a test; Military keeps the Army AFT / Marines PFT-CFT / general options, test date and practice tests. Old hybrid plans that had a test become Military automatically.
   **Metas separadas:** el armador de planes ahora ofrece **Fisicoculturismo (máximo músculo)**, **Corredor**, **Atleta híbrido** y **Prueba física militar** junto a Ganar músculo, Ganar fuerza, Bajar grasa y Estar en forma. Híbrido ya no necesita prueba; Militar conserva las opciones AFT del Ejército / PFT-CFT de los Marines / general, la fecha de la prueba y los simulacros. Los planes híbridos viejos con prueba pasan a Militar automáticamente.

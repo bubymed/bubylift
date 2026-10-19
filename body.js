@@ -61,19 +61,22 @@ function setAuto(v){SET.auto=v==='1';saveSet();render();}
 function setSound(v){SET.sound=v==='1';saveSet();render();}
 function setRest(v){SET.rest=parseInt(v,10)||90;saveSet();}
 function vMore(){
-  let h='<div class="card"><h2>'+t('language')+'</h2>'+seg([['en','English'],['es','Español']],LANG,'setLang')+'</div>';
-  h+='<div class="card"><h2>'+t('appearance')+'</h2>'+seg([['system',t('thSystem')],['dark',t('thDark')],['light',t('thLight')]],SET.theme||'system','setTheme')+'</div>';
-  h+='<div class="card"><h2>'+t('units')+'</h2>'+seg([['imperial','lb · in · mi'],['metric','kg · cm · km']],SET.units,'setUnits')+'</div>';
-  h+='<div class="card"><h2>'+t('restTimer')+'</h2>'+seg([['1',t('on')],['0',t('off')]],SET.auto?'1':'0','setAuto')+
-    '<label class="lblrow">'+t('restLen')+'<select class="in" onchange="setRest(this.value)">'+[30,45,60,90,120,150,180,240,300].map(s=>'<option value="'+s+'"'+(s===SET.rest?' selected':'')+'>'+fmtClock(s)+'</option>').join('')+'</select></label>'+
-    '<div class="lblrow">'+t('sound')+seg([['1',t('on')],['0',t('off')]],SET.sound?'1':'0','setSound')+'</div></div>';
-  h+='<div class="card"><h2>'+t('yourData')+'</h2><p class="muted sm">'+t('dataP',DATA.workouts.length,DATA.body.length)+'</p>'+
+  // iOS-style grouped list: one card, one row per setting / lista agrupada estilo iOS: una tarjeta, una fila por ajuste
+  const row=(lab,ctl)=>'<div class="lrow"><span>'+lab+'</span>'+ctl+'</div>';
+  let h='<div class="sec"><h2>'+t('prefs')+'</h2></div><div class="card grp">'+
+    row(t('language'),seg([['en','English'],['es','Español']],LANG,'setLang'))+
+    row(t('appearance'),seg([['system',t('thSystem')],['dark',t('thDark')],['light',t('thLight')]],SET.theme||'system','setTheme'))+
+    row(t('units'),seg([['imperial','lb·in·mi'],['metric','kg·cm·km']],SET.units,'setUnits'))+
+    row(t('restTimer'),seg([['1',t('on')],['0',t('off')]],SET.auto?'1':'0','setAuto'))+
+    row(t('restLen'),'<select class="in" onchange="setRest(this.value)">'+[30,45,60,90,120,150,180,240,300].map(s=>'<option value="'+s+'"'+(s===SET.rest?' selected':'')+'>'+fmtClock(s)+'</option>').join('')+'</select>')+
+    row(t('sound'),seg([['1',t('on')],['0',t('off')]],SET.sound?'1':'0','setSound'))+'</div>';
+  h+='<div class="sec"><h2>'+t('yourData')+'</h2></div><div class="card"><p class="muted sm">'+t('dataP',DATA.workouts.length,DATA.body.length)+'</p>'+
     '<div class="menu"><button onclick="exportJSON()">⬇ '+t('exportBackup')+'</button><button onclick="exportCSV()">⬇ '+t('exportCsv')+'</button><label class="btnl">⬆ '+t('importBackup')+'<input type="file" accept=".json,application/json" onchange="importFile(this)" hidden></label></div>'+
     '<p class="muted sm">'+(SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+'</p></div>';
-  h+='<div class="card"><h2>'+t('app')+'</h2><div class="menu">'+(canInstall()?'<button onclick="installApp()">📲 '+t('install')+'</button>':'')+'<button onclick="wnShow(true)">✨ '+t('whatsNew')+'</button></div></div>';
-  h+='<div class="card"><details class="dtl nob"><summary>'+t('about')+' · Bubylift '+APP_VER+'</summary><p class="sm">'+t('privacy')+'</p><p class="muted sm">'+t('credits')+'</p><p class="muted sm">'+t('disclaimer')+'</p>'+
+  h+='<div class="sec"><h2>'+t('app')+'</h2></div><div class="card"><div class="menu">'+(canInstall()?'<button onclick="installApp()">📲 '+t('install')+'</button>':'')+'<button onclick="wnShow(true)">✨ '+t('whatsNew')+'</button></div>'+
+    '<details class="dtl nob"><summary>'+t('about')+' · Bubylift '+APP_VER+'</summary><p class="sm">'+t('privacy')+'</p><p class="muted sm">'+t('credits')+'</p><p class="muted sm">'+t('disclaimer')+'</p>'+
     '<p class="sm"><a href="https://github.com/bubymed/bubylift" target="_blank" rel="noopener">github.com/bubymed/bubylift</a></p></details></div>';
-  h+='<div class="card"><h2>'+t('danger')+'</h2><button class="btn danger wide" onclick="eraseAsk()">'+t('eraseAll')+'</button></div>';
+  h+='<div class="card"><button class="btn danger wide" onclick="eraseAsk()">'+t('eraseAll')+'</button></div>';
   return h;
 }
 
