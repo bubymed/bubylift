@@ -22,12 +22,14 @@
     <span class="brand">Bubylift</span>
     <span class="langsw"><button id="lEN" onclick="setLang('en')" title="English">EN</button><button id="lES" onclick="setLang('es')" title="Español">ES</button></span>
     <span class="spacer"></span>
+    <button id="avBtn" class="avbtn" onclick="pfMenu()" aria-label="Profile" hidden></button>
     <button id="instBtn" class="inst-btn" onclick="installApp()" style="display:none">📲 Install</button>
   </header>
   <main id="main"><noscript>Bubylift needs JavaScript. / Bubylift necesita JavaScript.</noscript></main>
 </div>
 <div id="restbar" hidden></div>
 <nav id="tabbar"></nav>
+<div id="gate" hidden></div>
 <div id="sheetov" hidden><div id="sheet" role="dialog" aria-modal="true"></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="data/i18n.js"></script>
@@ -43,6 +45,7 @@
 <script src="plan.js"></script>
 <script src="history.js"></script>
 <script src="body.js"></script>
+<script src="profiles.js"></script>
 <script>boot();</script>
 </body>
 </html>
