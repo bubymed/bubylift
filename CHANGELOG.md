@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v2 — 2026-10-18
+- **More than 200 exercises:** the built-in library grows from 88 to over 200, with two new categories — Balance and Power & agility (plyometrics, sprints, drills) — plus more core, glute, back and chest variations. New equipment: bands, stability ball, medicine ball and suspension trainer.
+  **Más de 200 ejercicios:** la biblioteca incluida pasa de 88 a más de 200, con dos categorías nuevas — Equilibrio y Potencia y agilidad (pliometría, sprints, ejercicios de agilidad) — y más variantes de abdomen, glúteos, espalda y pecho. Equipo nuevo: bandas, pelota de estabilidad, balón medicinal y suspensión.
+- **Credits:** exercise categories and training concepts are based on the NASM-CPT program; shown in More → About. Descriptions are in our own words; Bubylift is independent and not endorsed by NASM.
+  **Créditos:** las categorías de ejercicios y los conceptos de entrenamiento están basados en el programa NASM-CPT; se muestran en Más → Acerca de. Las descripciones están en nuestras propias palabras; Bubylift es independiente y no está avalada por NASM.
+
 ## v1 — 2026-10-18
 - **First release — workout log:** start an empty workout or a saved routine, pick from 88 built-in exercises (EN/ES names) or create your own, log weight × reps, bodyweight reps or time & distance, see what you did last time, and finish to save. Sets can be marked done with one tap (empty rows accept the grey "previous" values). New personal records get a 🏆.
   **Primera versión — registro de entrenamientos:** empieza un entrenamiento vacío o una rutina guardada, escoge entre 88 ejercicios incluidos (nombres EN/ES) o crea el tuyo, registra peso × repeticiones, repeticiones con peso corporal o tiempo y distancia, mira lo que hiciste la vez anterior y termina para guardar. Cada serie se marca hecha con un toque (las filas vacías aceptan los valores grises de "anterior"). Los récords personales nuevos llevan un 🏆.
