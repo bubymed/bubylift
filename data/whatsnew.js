@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v23',items:[
+  {i:'🔄',en:'<b>Check for updates</b> — More › App has a button that looks for a newer version and loads it, and shows which version you have.',es:'<b>Buscar actualizaciones</b> — Más › App tiene un botón que busca una versión nueva y la carga, y muestra qué versión tienes.'}]},
  {v:'v22',items:[
   {i:'📤',en:'<b>Share the app with a QR code</b> — More › Share the app shows a code your friends can scan to open Bubylift, plus buttons to send or copy the link.',es:'<b>Comparte la app con un código QR</b> — Más › Compartir la app muestra un código que tus amigos pueden escanear para abrir Bubylift, con botones para enviar o copiar el enlace.'}]},
  {v:'v21',items:[
