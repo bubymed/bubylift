@@ -146,11 +146,13 @@ const HYFIRST={
  gen:{}
 };
 /* pick the best available exercise for a muscle slot / elige el mejor ejercicio disponible para un hueco */
+/* test-specific drills only appear for that test / los ejercicios propios de una prueba solo salen con esa prueba */
+const TESTONLY={sdcdrill:'aft',firecarry:'usmc',ammolift:'usmc'};
 function pickFor(mu,role,ctx){
   const P=POOL[mu];if(!P)return null;
   const first=(ctx.hy&&HYFIRST[ctx.test]&&HYFIRST[ctx.test][mu+role])||[];
   const list=first.concat(role==='m'?P.m.concat(P.a):P.a.concat(P.m)).filter((x,i,a)=>a.indexOf(x)===i);
-  const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
+  const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&(!TESTONLY[id]||TESTONLY[id]===ctx.test)&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
   c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||((ctx.used[a]||0)-(ctx.used[b]||0)));
   return c[0]||null;
 }
@@ -750,17 +752,17 @@ function wdFix(ds,wd){
   }});
   return best;
 }
-let SC={pick:null};
-function schedOpen(){SC.pick=null;schedDraw();}
+/* move a day with big arrows or by dragging the handle / mover un día con flechas grandes o arrastrando el asa */
 function schedDraw(){
   const p=DATA.plan;if(!p)return;
-  const at=wdAt(p.wd),today=new Date().getDay(),pk=SC.pick;
+  const at=wdAt(p.wd),today=new Date().getDay();
   const rows=[0,1,2,3,4,5,6].map(w=>{
     const i=at[w],tag=w===today?' <span class="schtd">'+t('schToday')+'</span>':'';
-    if(i<0)return'<div class="schr rest"><div class="schw">'+esc(wdName(w))+tag+'</div><div class="schb muted">'+t('schRest')+'</div>'+(pk!=null?'<button class="btn sm" onclick="schedMove('+w+')">'+t('schHere')+'</button>':'<span></span>')+'</div>';
+    if(i<0)return'<div class="schr rest" data-w="'+w+'"><div class="schw">'+esc(wdName(w))+tag+'</div><div class="schb muted">'+t('schRest')+'</div><span></span><span></span></div>';
     const d=p.ds[i],names=d.ex.map(e=>esc(exName(e.eid))).join(' · ');
-    return'<div class="schr'+(pk===i?' pick':'')+'"><div class="schw">'+esc(wdName(w))+tag+'</div><div class="schb"><b>'+esc(dayName(i))+'</b>'+(d.g?'<span class="muted sm"> · '+esc(t('pg_'+d.g))+'</span>':'')+'<small>'+names+'</small></div>'+
-      (pk==null?'<button class="btn sm" onclick="schedMove('+w+')">↕ '+t('schMove')+'</button>':(pk===i?'<button class="btn sm" onclick="schedCancel()">'+t('cancel')+'</button>':'<button class="btn sm" onclick="schedMove('+w+')">⇄ '+t('schSwap')+'</button>'))+'</div>';
+    return'<div class="schr tr" data-w="'+w+'" data-i="'+i+'"><div class="schw">'+esc(wdName(w))+tag+'</div><div class="schb"><b>'+esc(dayName(i))+'</b>'+(d.g?'<span class="muted sm"> · '+esc(t('pg_'+d.g))+'</span>':'')+'<small>'+names+'</small></div>'+
+      '<div class="schar"><button class="sar" aria-label="'+esc(t('schUp'))+'"'+(w===0?' disabled':'')+' onclick="schedStep('+i+',-1)">▲</button><button class="sar" aria-label="'+esc(t('schDn'))+'"'+(w===6?' disabled':'')+' onclick="schedStep('+i+',1)">▼</button></div>'+
+      '<button class="sdrag" aria-label="'+esc(t('schDrag'))+'" title="'+esc(t('schDrag'))+'">≡</button></div>';
   }).join('');
   const W=wdWarn(p.ds,p.wd);
   const adv=W.map(x=>'<li>⚠ '+esc(t('schW_'+x.t,dayName(x.a),dayName(x.b),wdName(x.w,1),wdName((x.w+1)%7,1)))+'</li>');
@@ -769,18 +771,45 @@ function schedDraw(){
   if(mx>=3&&mx<7)adv.push('<li>ℹ️ '+esc(t('schStreak',mx,wdName(st%7,1)))+'</li>');
   const fix=W.length?wdFix(p.ds,p.wd):null;
   sheet('<div class="form"><div class="pick-h"><h3>'+t('schT')+'</h3><button class="ico" onclick="planOpen()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
-    '<p class="muted sm">'+(pk!=null?t('schPick',esc(dayName(pk))):t('schP'))+'</p>'+rows+
+    '<p class="muted sm">'+t('schP')+'</p><div id="schlist">'+rows+'</div>'+
     '<div class="lbl">'+t('schAdv')+'</div><div class="card schadv"><ul class="schul">'+(adv.length?adv.join(''):'<li>✓ '+t('schOk')+'</li>')+'</ul>'+
     (W.length?(fix?'<button class="btn pri wide" onclick="schedFix()">'+t('schFix')+'</button>':'<p class="muted sm">'+t('schNoFix')+'</p>'):'')+'</div>'+
     '<div class="row"><button class="btn" onclick="schedReset()">'+t('schReset')+'</button><button class="btn pri" onclick="planOpen()">'+t('done')+'</button></div></div>');
 }
-function schedMove(w){
-  const p=DATA.plan;if(!p)return;const at=wdAt(p.wd);
-  if(SC.pick==null){SC.pick=at[w];schedDraw();return;}
-  const a=SC.pick,b=at[w],from=p.wd[a];
-  if(b!==a){p.wd[a]=w;if(b>=0)p.wd[b]=from;p.wu=1;saveData();}
-  SC.pick=null;schedDraw();
+/* put training day i on weekday w2 (swap if taken) / poner el día i en el día de la semana w2 (intercambia si está ocupado) */
+function schedTo(i,w2){
+  const p=DATA.plan;if(!p||w2<0||w2>6||p.wd[i]===w2)return;
+  const at=wdAt(p.wd),j=at[w2],from=p.wd[i];
+  p.wd[i]=w2;if(j>=0)p.wd[j]=from;p.wu=1;saveData();render();schedDraw();
 }
-function schedCancel(){SC.pick=null;schedDraw();}
+function schedStep(i,d){const p=DATA.plan;if(p)schedTo(i,p.wd[i]+d);}
+(function(){
+  let drag=null;
+  document.addEventListener('pointerdown',function(ev){
+    const h=ev.target.closest&&ev.target.closest('.sdrag');if(!h)return;
+    const row=h.closest('.schr');if(!row)return;
+    ev.preventDefault();drag={row:row,i:+row.dataset.i,y0:ev.clientY,to:null,id:ev.pointerId};
+    try{h.setPointerCapture(ev.pointerId);}catch(e){}
+    row.classList.add('lift');
+  });
+  document.addEventListener('pointermove',function(ev){
+    if(!drag)return;
+    drag.row.style.transform='translateY('+(ev.clientY-drag.y0)+'px)';
+    let to=null;document.querySelectorAll('#schlist .schr').forEach(r=>{
+      const b=r.getBoundingClientRect(),over=r!==drag.row&&ev.clientY>=b.top&&ev.clientY<=b.bottom;
+      r.classList.toggle('drop',over);if(over)to=+r.dataset.w;
+    });
+    drag.to=to;
+  });
+  const end=function(ev){
+    if(!drag)return;
+    const d=drag;drag=null;d.row.classList.remove('lift');d.row.style.transform='';
+    document.querySelectorAll('#schlist .schr.drop').forEach(r=>r.classList.remove('drop'));
+    if(ev.type==='pointerup'&&d.to!=null)schedTo(d.i,d.to);
+  };
+  document.addEventListener('pointerup',end);
+  document.addEventListener('pointercancel',end);
+})();
 function schedFix(){const p=DATA.plan;if(!p)return;const f=wdFix(p.ds,p.wd);if(f){p.wd=f;p.wu=1;saveData();render();}schedDraw();}
-function schedReset(){const p=DATA.plan;if(!p)return;p.wd=defaultWd(p.ds);p.wu=0;saveData();render();SC.pick=null;schedDraw();}
+function schedReset(){const p=DATA.plan;if(!p)return;p.wd=defaultWd(p.ds);p.wu=0;saveData();render();schedDraw();}
+function schedOpen(){schedDraw();}
