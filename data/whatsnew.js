@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v9',items:[
+  {i:'👆',en:'<b>Easier-to-see buttons</b> — buttons now have clear outlines and bigger tap areas, main actions stand out, and Delete sits apart in red.',es:'<b>Botones más fáciles de ver</b> — los botones ahora tienen contorno claro y áreas más grandes para tocar, las acciones principales resaltan y Eliminar queda aparte en rojo.'}]},
  {v:'v8',items:[
   {i:'🗑️',en:'<b>Delete your plan</b> — My plan now has a Delete this plan button (your logged workouts are kept). You can make a new one any time.',es:'<b>Eliminar tu plan</b> — Mi plan ahora tiene el botón Eliminar este plan (tus entrenamientos registrados se conservan). Puedes crear uno nuevo cuando quieras.'}]},
  {v:'v7',items:[
