@@ -6,6 +6,16 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v15 — 2026-10-19
+- **Encrypted data:** each profile's workouts, routines, body log, plan and settings are stored encrypted (AES-256-GCM) with a random master key. The key is stored wrapped twice: by the password and by the three security answers together (answers are no longer stored individually, so each one cannot be guessed separately). Forgetting the password and the answers means the data cannot be recovered.
+  **Datos cifrados:** los entrenamientos, rutinas, registro corporal, plan y ajustes de cada perfil se guardan cifrados (AES-256-GCM) con una llave maestra aleatoria. La llave se guarda envuelta dos veces: por la contraseña y por las tres respuestas de seguridad juntas (las respuestas ya no se guardan por separado, así que no se pueden adivinar una a una). Si se olvidan la contraseña y las respuestas, los datos no se pueden recuperar.
+- **Changed:** "Keep me signed in" removed (it would store the key on the phone). The session lasts until the app is closed. Profiles from v14 are encrypted at next sign-in and ask for new security questions.
+  **Cambio:** se quitó "Mantener mi sesión" (guardaría la llave en el teléfono). La sesión dura hasta cerrar la app. Los perfiles de v14 se cifran en el siguiente inicio de sesión y piden nuevas preguntas de seguridad.
+- **Transfer:** the encrypted PIN-protected QR now also carries the key so the new phone keeps the same password and recovery.
+  **Transferencia:** el QR cifrado con PIN ahora también lleva la llave para que el teléfono nuevo conserve la misma contraseña y recuperación.
+- **Limits:** the language and theme are kept in plain storage so the sign-in screen can use them; profile name and avatar are not encrypted. Someone who can run code inside the unlocked app can read the data.
+  **Límites:** el idioma y el tema se guardan sin cifrar para la pantalla de entrada; el nombre y el avatar del perfil no se cifran. Quien pueda ejecutar código dentro de la app desbloqueada puede leer los datos.
+
 ## v14 — 2026-10-19
 - **Profiles:** up to 5 per device, each with its own workouts, routines, body log and settings. Netflix-style "Who's training?" screen, generic avatars (emoji + color) or your own photo. Your existing log is kept inside the first profile you create.
   **Perfiles:** hasta 5 por dispositivo, cada uno con sus propios entrenamientos, rutinas, registro corporal y ajustes. Pantalla "¿Quién entrena?" estilo Netflix, avatares genéricos (emoji + color) o tu propia foto. Tu registro actual se conserva dentro del primer perfil que crees.
