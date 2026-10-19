@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v20 — 2026-10-19
+- **Weekly volume:** new Low / Medium / High choice when building a plan. The plan now adjusts sets (or adds an exercise) so each muscle lands in its weekly range, for example a second core exercise on High. A new 📊 Weekly volume screen on the plan card shows the sets you did this week per muscle, your plan, the recommended range and why volume matters.
+  **Volumen semanal:** nueva opción Bajo / Medio / Alto al crear el plan. El plan ajusta las series (o agrega un ejercicio) para que cada músculo caiga en su rango semanal, por ejemplo un segundo ejercicio de core en Alto. Una pantalla nueva 📊 Volumen semanal en la tarjeta del plan muestra las series que hiciste esta semana por músculo, tu plan, el rango recomendado y por qué importa el volumen.
+
 ## v19 — 2026-10-19
 - **Easier schedule moves:** each training day in the weekly schedule has big ▲ ▼ buttons (one tap = one weekday earlier or later) and a ≡ handle to drag it onto any weekday. Dropping on a taken day swaps the two. Removed the old two-step Move/Swap buttons.
   **Mover días más fácil:** cada día de entrenamiento en el horario semanal tiene botones ▲ ▼ grandes (un toque = un día de la semana antes o después) y un asa ≡ para arrastrarlo a cualquier día. Soltar sobre un día ocupado intercambia los dos. Se quitaron los botones Mover/Intercambiar de dos pasos.

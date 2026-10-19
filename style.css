@@ -383,3 +383,19 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .sdrag{width:40px;height:78px;border-radius:10px;background:var(--panel2);color:var(--dim);font-size:1.6rem;touch-action:none;cursor:grab}
 .schr.lift{z-index:5;background:var(--panel);box-shadow:0 8px 24px rgba(0,0,0,.45);border-radius:12px;opacity:.97}
 .schr.drop{background:color-mix(in srgb,var(--accent) 22%,transparent);border-radius:12px}
+
+/* ===== v20: weekly volume / volumen semanal ===== */
+.vrow{padding:10px 0;border-bottom:1px solid var(--line)}
+.vh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.vs{font-size:.72rem;font-weight:700;border-radius:999px;padding:2px 8px}
+.vs.vOk{background:color-mix(in srgb,var(--green) 20%,transparent);color:var(--green)}
+.vs.vUnder{background:color-mix(in srgb,var(--warn) 20%,transparent);color:var(--warn)}
+.vs.vOver{background:color-mix(in srgb,var(--red) 18%,transparent);color:var(--red)}
+.vbar{position:relative;height:14px;background:var(--panel2);border-radius:7px;overflow:hidden;margin-bottom:4px}
+.vbar i{position:absolute;top:0;bottom:0;display:block}
+.vz{background:color-mix(in srgb,var(--green) 28%,transparent)}
+.vf{left:0;background:var(--accent);opacity:.9;height:60%;top:20%!important;bottom:auto!important;border-radius:0 4px 4px 0}
+.vp{width:3px;background:var(--txt)}
+.vleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.75rem;color:var(--dim);margin:12px 0 2px}
+.vleg i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:5px;vertical-align:middle;position:static}
+.vleg i.vp{width:3px;height:12px}
