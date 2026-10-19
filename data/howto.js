@@ -61,3 +61,4 @@ const HOWGEN={
  cardio:['Warm up for 3–5 minutes.|Hold a pace where you can still talk in short sentences.|Cool down at the end.','Calienta 3–5 minutos.|Mantén un ritmo en el que aún puedas hablar con frases cortas.|Enfría al final.']
 };
 const HOWSAFE=['Start light and stop if you feel sharp pain (not normal effort). Ask a professional if unsure.','Empieza ligero y para si sientes dolor agudo (no el esfuerzo normal). Consulta a un profesional si tienes dudas.'];
+HOWTO.dbrdl=HOWTO.rdl;
