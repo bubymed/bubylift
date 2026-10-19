@@ -343,6 +343,8 @@ const STR={
  eraseAsk:['This deletes every workout, routine and body entry in this profile on this device. Export a backup first if you want to keep them.','Esto borra todos los entrenamientos, rutinas y registros del cuerpo de este perfil en este dispositivo. Exporta un respaldo antes si quieres conservarlos.'],
  eraseAsk2:['Last chance: erase everything for good?','Última oportunidad: ¿borrar todo para siempre?'],
  // profiles / perfiles
+ creator:['Creator','Creador'],crFollow:['Follow on Instagram','Seguir en Instagram'],
+ crBio:['Hi, I\'m Mike — from New York, a U.S. Army combat medic, NASM-certified personal trainer and EMT. I love programming, making video and audio content, and sharing what I know. I built Bubylift so anyone can train with a clear plan, whatever their budget.','Hola, soy Mike — de Nueva York, médico de combate del Ejército de EE. UU., entrenador personal certificado por NASM y EMT. Me apasionan la programación, crear contenido de video y audio, y compartir lo que sé. Creé Bubylift para que cualquiera pueda entrenar con un plan claro, sin importar su presupuesto.'],
  pfDataBad:['This profile\'s data could not be unlocked','No se pudieron abrir los datos de este perfil'],
  pfMig:['Your data is now encrypted. Set your security questions so you can recover it.','Tus datos ahora están cifrados. Define tus preguntas de seguridad para poder recuperarlos.'],
  pfWho:['Who\'s training?','¿Quién entrena?'],

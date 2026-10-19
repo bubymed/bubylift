@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v16',items:[
+  {i:'📷',en:'<b>Meet the creator</b> — More now has a card about Mike, who built Bubylift, with a link to follow @bubylifts on Instagram.',es:'<b>Conoce al creador</b> — Más ahora tiene una tarjeta sobre Mike, quien creó Bubylift, con un enlace para seguir a @bubylifts en Instagram.'}]},
  {v:'v15',items:[
   {i:'🔐',en:'<b>Your data is now encrypted</b> on this phone (AES-256). Your password unlocks it. If you forget it, you need all three security answers, exactly, to get back in — so choose answers you will remember.',es:'<b>Tus datos ahora están cifrados</b> en este teléfono (AES-256). Tu contraseña los abre. Si la olvidas, necesitas las tres respuestas de seguridad, exactas, para volver a entrar — elige respuestas que recuerdes.'},
   {i:'ℹ️',en:'"Keep me signed in" was removed: it would have meant leaving the key on the phone. You stay signed in until you close the app.',es:'Se quitó "Mantener mi sesión": habría obligado a dejar la llave en el teléfono. Sigues dentro hasta que cierres la app.'}]},

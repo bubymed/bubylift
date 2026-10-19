@@ -341,3 +341,9 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .pinbox b{font-size:2rem;letter-spacing:.12em;font-variant-numeric:tabular-nums}
 .pin-in{text-align:center;font-size:1.6rem;letter-spacing:.12em}
 .cam{width:100%;border-radius:16px;background:#000;aspect-ratio:3/4;object-fit:cover;margin-top:10px}
+
+/* ===== v16: creator card / tarjeta del creador ===== */
+.cr-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.cr-av{position:relative;width:60px;height:60px;border-radius:50%;overflow:hidden;flex:none;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;color:#fff;background:linear-gradient(135deg,#FF7A3D,#FF3D6E)}
+.cr-av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.creator .btn{margin-top:6px;text-decoration:none}

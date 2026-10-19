@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v16 — 2026-10-19
+- **Creator card in More:** photo, short bio and a button to follow @bubylifts on Instagram.
+  **Tarjeta del creador en Más:** foto, breve descripción y un botón para seguir a @bubylifts en Instagram.
+
 ## v15 — 2026-10-19
 - **Encrypted data:** each profile's workouts, routines, body log, plan and settings are stored encrypted (AES-256-GCM) with a random master key. The key is stored wrapped twice: by the password and by the three security answers together (answers are no longer stored individually, so each one cannot be guessed separately). Forgetting the password and the answers means the data cannot be recovered.
   **Datos cifrados:** los entrenamientos, rutinas, registro corporal, plan y ajustes de cada perfil se guardan cifrados (AES-256-GCM) con una llave maestra aleatoria. La llave se guarda envuelta dos veces: por la contraseña y por las tres respuestas de seguridad juntas (las respuestas ya no se guardan por separado, así que no se pueden adivinar una a una). Si se olvidan la contraseña y las respuestas, los datos no se pueden recuperar.

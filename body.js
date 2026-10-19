@@ -73,6 +73,8 @@ function vMore(){
   h+='<div class="sec"><h2>'+t('yourData')+'</h2></div><div class="card"><p class="muted sm">'+t('dataP',DATA.workouts.length,DATA.body.length)+'</p>'+
     '<div class="menu"><button onclick="exportJSON()">⬇ '+t('exportBackup')+'</button><button onclick="exportCSV()">⬇ '+t('exportCsv')+'</button><label class="btnl">⬆ '+t('importBackup')+'<input type="file" accept=".json,application/json" onchange="importFile(this)" hidden></label></div>'+
     '<p class="muted sm">'+(SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+'</p></div>';
+  h+='<div class="sec"><h2>'+t('creator')+'</h2></div><div class="card creator"><div class="cr-top"><span class="cr-av">M<img src="icons/creator.jpg" alt="" onerror="this.remove()"></span><div><b>Mike</b><div class="muted sm">@bubylifts</div></div></div>'+
+    '<p class="sm">'+t('crBio')+'</p><a class="btn pri wide" href="https://www.instagram.com/bubylifts/" target="_blank" rel="noopener">📷 '+t('crFollow')+'</a></div>';
   h+='<div class="sec"><h2>'+t('app')+'</h2></div><div class="card"><div class="menu">'+(canInstall()?'<button onclick="installApp()">📲 '+t('install')+'</button>':'')+'<button onclick="wnShow(true)">✨ '+t('whatsNew')+'</button></div>'+
     '<details class="dtl nob"><summary>'+t('about')+' · Bubylift '+APP_VER+'</summary><p class="sm">'+t('privacy')+'</p><p class="muted sm">'+t('credits')+'</p><p class="muted sm">'+t('disclaimer')+'</p>'+
     '<p class="sm"><a href="https://github.com/bubymed/bubylift" target="_blank" rel="noopener">github.com/bubymed/bubylift</a></p></details></div>';
