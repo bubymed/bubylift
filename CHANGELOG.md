@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v8 — 2026-10-19
+- **Delete plan:** a "Delete this plan" button in My plan (with confirmation). Logged workouts are kept; the plan and its check-ins are removed and you can build a new one.
+  **Eliminar plan:** botón "Eliminar este plan" en Mi plan (con confirmación). Los entrenamientos registrados se conservan; se borran el plan y sus revisiones y puedes crear uno nuevo.
+
 ## v7 — 2026-10-19
 - **Technique guides for all 227 exercises:** every exercise now has its own steps and most common mistake in English and Spanish (before, only 53 had one and the rest showed general tips by muscle group). Written in our own words; general precautions only, not medical advice.
   **Guías de técnica para los 227 ejercicios:** cada ejercicio ahora tiene sus propios pasos y el error más común en inglés y español (antes solo 53 tenían guía y el resto mostraba consejos generales por grupo muscular). Escritas con nuestras palabras; solo precauciones generales, no es consejo médico.
