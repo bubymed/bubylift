@@ -23,7 +23,7 @@ const EXM={
  squat:'Q2k1b1h1a1',frontsq:'Q2k1w1b1',overheadsq:'Q2k1b1s1',boxsq:'Q2k1b1',gobsq:'Q1k1',legpress:'Q1k1',hacksq:'Q2k1',lunge:'Q1k2h1',fwdlunge:'Q1k2h1',revlunge:'Q1k1h1',latlunge:'Q1k1h1',
  splitsq:'Q1k2h1',bulgsplit:'Q2k2h1',stepup:'Q1k1',latstep:'Q1k1',legext:'Q1k2',bodysq:'Q1k1',ballsq:'Q1k1',slsquat:'Q2k2a1',sledpush:'Q1k1a1',bwlunge:'Q1k1h1',bwstepup:'Q1k1',sqpress:'F2k1s1',
  // hamstrings / hinge
- rdl:'H2b1',deadlift:'H2b2h1',hexdl:'H2b1h1',goodmorn:'H2b2',sldl:'H2b1a1',dbrdl:'H1b1',legcurl:'H1',seatlc:'H1',legcurlball:'H1',bandrdl:'H1b1',
+ rdl:'H2b1',deadlift:'H2b2h1',hexdl:'H2b1h1',goodmorn:'H2b2',sldl:'H2b1a1',dbrdl:'H1b1',sleddrag:'D1k1a1',sdcdrill:'D1k1a1b1',ruck:'K1k1a1b1s1',firecarry:'D2b1k1',ammolift:'S1s2n1',lowcrawl:'D1w1s1',legcurl:'H1',seatlc:'H1',legcurlball:'H1',bandrdl:'H1b1',
  // glutes
  sumo:'G2b1h1k1',hipthrust:'G1',glutebr:'G1',slbridge:'G1',ballbridge:'G1',frogpump:'G1',firehydrant:'G1',donkeykick:'G1',clamshell:'G1',bandwalk:'G1',kbdl:'G1b1',cablekick:'G1',abduct:'G1h1',adduct:'G1h1',bandbridge:'G1',bandkick:'G1',
  // calves
@@ -45,9 +45,9 @@ const EXM={
    Cosas extra que necesita un ejercicio además de su equipo principal: 'bench' (banco o cajón firme) o 'bar' (barra de dominadas / paralelas). */
 const NEED={pullup:'bar',chinup:'bar',assistpu:'machine',legraise:'bar',kneeup:'bar',dip:'bar',invrow:'bar',
  bench:'bench',incbench:'bench',declbench:'bench',dbbench:'bench',dbinc:'bench',decldb:'bench',cgbp:'bench',skull:'bench',lyingext:'bench',benchdip:'bench',hipthrust:'bench',
- bulgsplit:'bench',stepup:'bench',latstep:'bench',bwstepup:'bench',boxjump:'bench',boxdrop:'bench',powerstep:'bench',balstepup:'bench',inccurl:'bench',concurl:'bench',seatpress:'bench',seatdbcurl:'bench',pullover:'bench',preacher:'machine',sledpush:'machine',dbfly:'bench',ballpress:'ball'};
+ bulgsplit:'bench',stepup:'bench',latstep:'bench',bwstepup:'bench',boxjump:'bench',boxdrop:'bench',powerstep:'bench',balstepup:'bench',inccurl:'bench',concurl:'bench',seatpress:'bench',seatdbcurl:'bench',pullover:'bench',preacher:'machine',sledpush:'sled',sleddrag:'sled',dbfly:'bench',ballpress:'ball'};
 /* Equipment the person can say they have. / Equipo que la persona puede decir que tiene. */
-const HAVE_KEYS=['barbell','dumbbell','cable','machine','kettlebell','band','ball','medball','suspension','bench','bar'];
+const HAVE_KEYS=['barbell','dumbbell','cable','machine','kettlebell','band','ball','medball','suspension','bench','bar','sled'];
 const HAVE_PRESETS={gym:HAVE_KEYS.slice(),db:['dumbbell','bench'],home:['band'],none:[]};
 /* Which injuries exist in the app: key → joint letters. / Lesiones disponibles: clave → letras de articulación. */
 const INJ={knee:'k',back:'b',shoulder:'s',elbow:'e',wrist:'w',hip:'h',ankle:'a',neck:'n'};

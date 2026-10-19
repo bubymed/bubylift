@@ -48,6 +48,7 @@ const POOL={
  S:{m:['dbohp','machsp','ohp','seatpress','arnold','pikepush','bandohp'],a:['latraise','cablelat','reardelt','revfly','scaption','frontraise','bandlat','bandpull','facepull','cubanrot','bandextrot','uprow']},
  I:{m:['dbcurl','hammer','cablecurl','bbcurl','ezcurl','preacher','inccurl','concurl','bandcurl','seatdbcurl'],a:['hammer','cablecurl','inccurl','concurl','dbcurl','preacher','bandcurl','ezcurl','seatdbcurl','bbcurl']},
  T:{m:['pushdown','ropepd','ohext','cgbp','cableohext','bandpd','kickback','diamondpu','benchdip','skull'],a:['ropepd','ohext','kickback','cableohext','bandpd','pushdown','benchdip','diamondpu','skull','lyingext']},
+ D:{m:['sdcdrill','sleddrag','sledpush','farmer','kbswing','bearcrawl','burpee'],a:['farmer','coneshuffle','bearcrawl','lowcrawl','burpee','mbslam','suitcase','shuttle','sprint']},
  A:{m:['plank','deadbug','birddog','pallof','cablecr','sideplank','revcrunch','bicycle','crunch','hollow','mountain'],a:['deadbug','birddog','pallof','sideplank','plank','proneiso','suitcase','cablecr','revcrunch','hollow','bicycle','crunch','mountain','kneeup','russian']}
 };
 const DAYSPEC={
@@ -59,21 +60,33 @@ const DAYSPEC={
  pull:[['B','m'],['B','a'],['B','a'],['S','a'],['I','a'],['I','a']],
  arms:[['S','m'],['S','a'],['I','a'],['T','a'],['I','a'],['T','a']],
  lowQ:[['Q','m'],['H','a'],['G','a'],['Q','a'],['C','a'],['A','c']],
- lowG:[['G','m'],['H','m'],['Q','a'],['G','a'],['G','a'],['A','c']]
+ lowG:[['G','m'],['H','m'],['Q','a'],['G','a'],['G','a'],['A','c']],
+ // hybrid / military: R = run work (i intervals · e easy · t tempo) · D = work capacity (drag, carry, sprint)
+ hyStr:[['H','m'],['P','m'],['B','m'],['Q','a'],['A','c']],
+ hyStrL:[['H','m'],['Q','m'],['G','a'],['C','a'],['A','c']],
+ hyStrU:[['P','m'],['B','m'],['S','a'],['B','a'],['T','a'],['A','c']],
+ hyRunI:[['R','i'],['G','a'],['A','c']],
+ hyRunE:[['R','e'],['C','a'],['A','c']],
+ hyCap:[['D','m'],['D','a'],['R','e'],['A','c']]
 };
 const SPLITS={
  bal:{2:['full','full'],3:['full','full','full'],4:['up','lowQ','up','lowG'],5:['push','pull','lowQ','up','lowG']},
  low:{2:['lowG','fullL'],3:['lowG','upLite','lowQ'],4:['lowG','upLite','lowQ','fullL'],5:['lowG','upLite','lowQ','lowG','upLite']},
- up:{2:['full','up'],3:['push','pull','lowQ'],4:['push','pull','lowQ','arms'],5:['push','pull','lowQ','arms','up']}
+ up:{2:['full','up'],3:['push','pull','lowQ'],4:['push','pull','lowQ','arms'],5:['push','pull','lowQ','arms','up']},
+ hy:{2:['hyStr','hyRunI'],3:['hyStr','hyRunI','hyCap'],4:['hyStrU','hyRunI','hyStrL','hyCap'],5:['hyStrU','hyRunI','hyStrL','hyCap','hyRunE']}
 };
 const FOCUS_MU={glutes:['G'],quads:['Q'],hams:['H'],calves:['C'],chest:['P'],back:['B'],shoulders:['S'],arms:['I','T'],abs:['A']};
-const PGOALS=['muscle','strength','fat','general'],PLVLS=['new','some','adv'],PEMPH=['bal','low','up'],PSEX=['f','m','x'];
+const PGOALS=['muscle','strength','fat','general','hybrid'],PLVLS=['new','some','adv'],PEMPH=['bal','low','up'],ALLEMPH=['bal','low','up','hy'],PSEX=['f','m','x'],TESTS=['aft','usmc','gen'],TW=[0,4,8,12,16];
+/* short coaching notes shown under an exercise / notas cortas bajo un ejercicio */
+const NT_KEYS=['ntInt','ntEasy','ntTempo','ntSdc','ntMdl','ntHrp','ntPlk','ntSim'];
+const NTEID={hexdl:'ntMdl',hrpushup:'ntHrp',plank:'ntPlk',sdcdrill:'ntSdc',sleddrag:'ntSdc'};
 const PDAYKEYS=Object.keys(DAYSPEC).concat(['fullA','fullB','fullC','up1','up2','low1','low2']); // old keys stay valid / las claves viejas siguen válidas
 const LENMAX={30:4,45:5,60:6,75:7};
 
 function planScheme(goal,lvl,role){
   const N=lvl==='new',A=lvl==='adv';
   if(role==='c')return{sets:3,lo:8,hi:12};
+  if(goal==='hybrid')return role==='m'?(N?{sets:3,lo:5,hi:8}:{sets:4,lo:3,hi:5}):(N?{sets:2,lo:8,hi:12}:{sets:3,lo:8,hi:12});
   const b=goal==='strength'?(role==='m'?(N?{sets:3,lo:6,hi:8}:{sets:4,lo:4,hi:6}):(N?{sets:2,lo:10,hi:12}:{sets:3,lo:8,hi:10}))
     :goal==='muscle'?(role==='m'?(N?{sets:3,lo:10,hi:12}:{sets:4,lo:8,hi:12}):(N?{sets:2,lo:12,hi:15}:{sets:3,lo:10,hi:15}))
     :(role==='m'?(N?{sets:3,lo:10,hi:12}:{sets:3,lo:8,hi:12}):(N?{sets:2,lo:12,hi:15}:{sets:3,lo:12,hi:15}));
@@ -82,29 +95,48 @@ function planScheme(goal,lvl,role){
 }
 function planItem(eid,role,prof,extra){
   const m=exMode(eid),sc=planScheme(prof.goal,prof.lvl,role),L=injLetters(prof.inj);
-  const cn=stressJoints(eid,L,1);
-  if(m==='t')return{eid:eid,sets:3,lo:0.5,hi:1,u:'m',r:role,cn:cn};
-  return{eid:eid,sets:Math.min(6,sc.sets+(extra?1:0)),lo:sc.lo,hi:sc.hi,u:'r',r:role,cn:cn};
+  const cn=stressJoints(eid,L,1),hy=prof.goal==='hybrid',nt=hy&&NTEID[eid]&&(prof.test!=='gen'||eid==='sdcdrill'||eid==='sleddrag')?NTEID[eid]:undefined;
+  let it;
+  if(m==='t')it=(hy&&prof.test!=='gen'&&eid==='plank')?{eid:eid,sets:3,lo:1,hi:2,u:'m',r:role,cn:cn}:(hy&&(eid==='sdcdrill'||eid==='sleddrag'||eid==='firecarry'||eid==='lowcrawl')?{eid:eid,sets:4,lo:0.5,hi:1,u:'m',r:role,cn:cn}:{eid:eid,sets:3,lo:0.5,hi:1,u:'m',r:role,cn:cn});
+  else if(hy&&m==='bw'&&role==='m'){const pu=/pullup|chinup|assistpu/.test(eid);it={eid:eid,sets:4,lo:pu?3:8,hi:pu?8:15,u:'r',r:role,cn:cn};}
+  else it={eid:eid,sets:Math.min(6,sc.sets+(extra?1:0)),lo:sc.lo,hi:sc.hi,u:'r',r:role,cn:cn};
+  if(nt)it.nt=nt;
+  return it;
 }
+function runItem(kind,prof){
+  const N=prof.lvl==='new',cn=stressJoints('run',injLetters(prof.inj),1);
+  if(kind==='i')return{eid:'run',sets:N?4:6,lo:1.5,hi:2,u:'m',r:'m',cn:cn,nt:'ntInt'};
+  if(kind==='t')return{eid:'run',sets:1,lo:15,hi:25,u:'m',r:'m',cn:cn,nt:'ntTempo'};
+  return{eid:'run',sets:1,lo:N?15:25,hi:N?25:45,u:'m',r:'a',cn:cn,nt:'ntEasy'};
+}
+/* exercises that mirror each test's events come first / los ejercicios que imitan los eventos de cada prueba van primero */
+const HYFIRST={
+ aft:{Pm:['hrpushup'],Hm:['hexdl','kbdl','dbrdl'],Am:['plank'],Ac:['plank'],Dm:['sdcdrill'],Da:['sleddrag','farmer']},
+ usmc:{Bm:['pullup','chinup','assistpu'],Pm:['pushup','hrpushup'],Am:['plank'],Ac:['plank'],Dm:['firecarry','sleddrag'],Da:['lowcrawl','farmer']},
+ gen:{}
+};
 /* pick the best available exercise for a muscle slot / elige el mejor ejercicio disponible para un hueco */
 function pickFor(mu,role,ctx){
   const P=POOL[mu];if(!P)return null;
-  const list=(role==='m'?P.m.concat(P.a):P.a.concat(P.m)).filter((x,i,a)=>a.indexOf(x)===i);
+  const first=(ctx.hy&&HYFIRST[ctx.test]&&HYFIRST[ctx.test][mu+role])||[];
+  const list=first.concat(role==='m'?P.m.concat(P.a):P.a.concat(P.m)).filter((x,i,a)=>a.indexOf(x)===i);
   const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&stressLvl(id,ctx.L)<=1;});
   c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||((ctx.used[a]||0)-(ctx.used[b]||0)));
   return c[0]||null;
 }
 function normProf(p){
   const o=Object.assign({sex:'x',goal:'muscle',emph:'bal',focus:[],n:3,len:60,lvl:'new',have:HAVE_PRESETS.gym.slice(),inj:[],cond:0},p||{});
-  if(PGOALS.indexOf(o.goal)<0)o.goal='muscle';if(PEMPH.indexOf(o.emph)<0)o.emph='bal';if(PLVLS.indexOf(o.lvl)<0)o.lvl='new';if(PSEX.indexOf(o.sex)<0)o.sex='x';
+  if(PGOALS.indexOf(o.goal)<0)o.goal='muscle';if(ALLEMPH.indexOf(o.emph)<0)o.emph='bal';if(PLVLS.indexOf(o.lvl)<0)o.lvl='new';if(PSEX.indexOf(o.sex)<0)o.sex='x';
   o.n=Math.max(2,Math.min(5,Math.round(o.n)||3));if(!LENMAX[o.len])o.len=60;
   o.focus=(o.focus||[]).filter(k=>FOCUS_MU[k]).slice(0,3);o.have=(o.have||[]).filter(k=>HAVE_KEYS.indexOf(k)>=0);o.inj=(o.inj||[]).filter(k=>INJ[k]);o.cond=o.cond?1:0;
+  if(TESTS.indexOf(o.test)<0)o.test='gen';o.td=(typeof o.td==='number'&&isFinite(o.td)&&o.td>0&&o.td<4e12)?o.td:0;
+  if(o.goal==='hybrid')o.emph='hy';else if(o.emph==='hy')o.emph='bal';
   return o;
 }
 function genPlan(prof0){
   const prof=normProf(prof0);
   const eff=Object.assign({},prof);
-  if(prof.cond){eff.lvl='new';if(eff.goal==='strength')eff.goal='general';} // medical condition: keep it gentle / condición médica: algo suave
+  if(prof.cond){eff.lvl='new';if(eff.goal==='strength'||eff.goal==='hybrid')eff.goal='general';} // medical condition: keep it gentle / condición médica: algo suave
   const L=injLetters(prof.inj),maxLv=eff.lvl==='new'?1:2,have=prof.have;
   const days=SPLITS[prof.emph][prof.n].slice();
   const fm=[];prof.focus.forEach(k=>FOCUS_MU[k].forEach(m=>{if(fm.indexOf(m)<0)fm.push(m);}));
@@ -128,7 +160,7 @@ function genPlan(prof0){
     });
   });
   const maxEx=LENMAX[prof.len];
-  const DROP='ITCSBPHGQ'; // least important first / menos importante primero
+  const DROP='ITCSDBPHGQ'; // least important first / menos importante primero
   specs.forEach(sp=>{
     while(sp.length>maxEx){
       let bi=-1,br=99;
@@ -141,8 +173,9 @@ function genPlan(prof0){
     }
   });
   const used={},ds=days.map((k,di)=>{
-    const ctx={have:have,L:L,maxLv:maxLv,used:used,day:{}},ex=[];
+    const ctx={have:have,L:L,maxLv:maxLv,used:used,day:{},hy:prof.goal==='hybrid',test:prof.test},ex=[];
     specs[di].forEach(s=>{
+      if(s[0]==='R'){ex.push(runItem(s[1],eff));return;}
       const id=pickFor(s[0],s[1],ctx);if(!id)return;
       ctx.day[id]=1;used[id]=(used[id]||0)+1;ex.push(planItem(id,s[1],eff,s[2]));
     });
@@ -166,7 +199,7 @@ function cleanPlan(p){
   const ds=[];
   for(const d of p.ds){
     if(!d||PDAYKEYS.indexOf(d.k)<0||!Array.isArray(d.ex))return null;
-    const ex=d.ex.filter(e=>e&&ID_RE.test(String(e.eid))).slice(0,12).map(e=>({eid:String(e.eid),sets:Math.max(1,Math.min(8,Math.round(cn(e.sets)||1))),lo:cn(e.lo)||0,hi:cn(e.hi)||0,u:e.u==='m'?'m':'r',r:['m','a','c'].indexOf(e.r)>=0?e.r:'a',cn:String(e.cn||'').replace(/[^kbsewhan]/g,'').slice(0,8)}));
+    const ex=d.ex.filter(e=>e&&ID_RE.test(String(e.eid))).slice(0,12).map(e=>({eid:String(e.eid),sets:Math.max(1,Math.min(8,Math.round(cn(e.sets)||1))),lo:cn(e.lo)||0,hi:cn(e.hi)||0,u:e.u==='m'?'m':'r',r:['m','a','c'].indexOf(e.r)>=0?e.r:'a',cn:String(e.cn||'').replace(/[^kbsewhan]/g,'').slice(0,8),nt:NT_KEYS.indexOf(e.nt)>=0?e.nt:undefined}));
     if(!ex.length)return null;ds.push({k:d.k,ex:ex});
   }
   const checks=(Array.isArray(p.checks)?p.checks:[]).slice(-40).filter(c=>c&&typeof c.t==='number').map(c=>({t:c.t,bw:cn(c.bw)||null,feel:['easy','right','hard'].indexOf(c.feel)>=0?c.feel:'right'}));
@@ -209,8 +242,9 @@ function suggLine(x){
   let h='';
   if(x.tg){
     const s=sugg(x.eid,x.tg);
-    h='<div class="goalln"><b>'+t('target')+':</b> '+esc(tgText({sets:x.sets.length,lo:x.tg.lo,hi:x.tg.hi,u:x.tg.u}));
+    h='<div class="goalln">'+((x.tg.lo||x.tg.hi)?'<b>'+t('target')+':</b> '+esc(tgText({sets:x.sets.length,lo:x.tg.lo,hi:x.tg.hi,u:x.tg.u})):'');
     if(s)h+='<br><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span>';
+    if(x.tg.nt&&NT_KEYS.indexOf(x.tg.nt)>=0)h+='<br><span class="muted">'+esc(t(x.tg.nt))+'</span>';
     h+='</div>';
   }
   if(L&&stressLvl(x.eid,L))h+='<div class="goalln warnln">⚠ '+esc(t(stressLvl(x.eid,L)>=2?'injNo':'injCare',jointNames(stressJoints(x.eid,L,1))))+'</div>';
@@ -234,7 +268,7 @@ function dayName(i){
 }
 function planExList(d,di,withEdit){
   return d.ex.map((e,ei)=>'<div class="plex"><span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgText(e))+'</small>'+
-    (e.cn?'<small class="warnt">⚠ '+esc(t('injCare',jointNames(e.cn)))+'</small>':'')+'</span>'+
+    (e.nt?'<small>'+esc(t(e.nt))+'</small>':'')+(e.cn?'<small class="warnt">⚠ '+esc(t('injCare',jointNames(e.cn)))+'</small>':'')+'</span>'+
     (withEdit?'<button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="howOpen(\''+e.eid+'\')">ⓘ</button><button class="ico" aria-label="'+esc(t('edit'))+'" onclick="planEdit('+di+','+ei+')">✎</button>':'')+'</div>').join('');
 }
 
@@ -272,9 +306,26 @@ function planCard(){
   const i=planNext(),d=p.ds[i];
   let h='<div class="swp"><div class="swp-h swp-hl">'+t('swSkip')+'</div><div class="swp-h swp-hr">'+t('swChange')+'</div><div class="card plan swp-in" data-l="planSkipAsk" data-r="planPickDay"><div class="plh"><b>'+t('planToday')+'</b><span class="muted sm">'+t('planWeek',planWeek(),p.n)+'</span></div><h3>'+esc(dayName(i))+'</h3>'+planExList(d,i,false)+
     '<div class="row"><button class="btn pri" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn" onclick="planOpen()">'+t('planAll')+'</button></div>'+
-    '<p class="muted sm swhint">'+t('swHint')+'</p>';
+    '<p class="muted sm swhint">'+t('swHint')+'</p>'+testLine(p);
   if(checkDue())h+='<div class="pldue"><b>'+t('chkDue')+'</b><button class="btn sm" onclick="chkOpen()">'+t('chkOpen')+'</button></div>';
   return h+'</div></div>';
+}
+function testLine(p){
+  const pr=p.prof;if(pr.goal!=='hybrid'||!pr.td)return'';
+  const left=pr.td-Date.now();if(left<=0)return'<p class="sm testln">'+t('testDone')+'</p>';
+  const wk=Math.ceil(left/(7*864e5));
+  return'<p class="sm testln">🎯 '+t('testIn',t('te_'+pr.test),wk)+(left<=7*864e5?'<br>'+t('taperNote'):'')+'</p>';
+}
+function simStart(k){
+  if(ACT){toast(t('finishFirst'));return;}
+  const T=(lo,hi,u)=>({lo:lo,hi:hi,u:u||'m',nt:'ntSim'});
+  const L={
+   aft:[['hexdl',3,{lo:3,hi:3,u:'r',nt:'ntSim'}],['hrpushup',1,T(0,0)],['sdcdrill',1,T(0,0)],['plank',1,T(0,0)],['run',1,T(0,0)]],
+   pft:[['pullup',1,T(0,0)],['plank',1,T(0,0)],['run',1,T(0,0)]],
+   cft:[['sprint',1,T(0,0)],['ammolift',1,T(0,0)],['lowcrawl',1,T(0,0)],['sleddrag',1,T(0,0)],['firecarry',1,T(0,0)],['pushup',1,T(0,0)]]
+  }[k];
+  sheetClose();
+  startWorkout({name:t('sim_'+k),ex:L.map(r=>({eid:r[0],sets:r[1],tg:r[2]}))});
 }
 function planSkipAsk(){ask(t('skipAsk'),t('swSkipB'),function(){const p=DATA.plan;if(!p)return;p.cur=(planNext()+1)%p.n;saveData();render();toast(t('skipped'));});}
 function planPickDay(){
@@ -285,7 +336,7 @@ function planPickDay(){
 function planStart(i){
   const p=DATA.plan;if(!p)return;
   sheetClose();
-  startWorkout({name:dayName(i),pl:i,ex:p.ds[i].ex.map(e=>({eid:e.eid,sets:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u}}))});
+  startWorkout({name:dayName(i),pl:i,ex:p.ds[i].ex.map(e=>({eid:e.eid,sets:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u,nt:e.nt}}))});
 }
 
 /* ---------- full plan view and editing ---------- */
@@ -298,6 +349,7 @@ function planOpen(){
     (pr.inj.length?'<p class="muted sm">⚠ '+t('planInj',pr.inj.map(k=>t('inj_'+k)).join(', '))+'</p>':'')+
     (pr.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'');
   p.ds.forEach((d,i)=>{h+='<div class="lbl">'+esc(dayName(i))+'</div>'+planExList(d,i,true)+'<div class="row"><button class="btn sm" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn sm" onclick="planAddEx('+i+')">＋ '+t('addEx')+'</button></div>';});
+  if(pr.goal==='hybrid')h+='<div class="lbl">'+t('hyT')+'</div>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
   h+='<div class="lbl">'+t('guideT')+'</div><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p>'+
     '<p class="muted sm">'+t('planNote')+'</p><div class="row"><button class="btn" onclick="chkOpen()">'+t('chkOpen')+'</button><button class="btn" onclick="planSetup()">'+t('planChange')+'</button></div></div>';
   sheet(h);
@@ -396,6 +448,7 @@ const PW_STEPS=7;
 function planSetup(){
   const base=DATA.plan?DATA.plan.prof:normProf({});
   PW=Object.assign({step:1,touched:!!DATA.plan},JSON.parse(JSON.stringify(base)));
+  PW.tw=0;if(PW.td>Date.now()){const w=(PW.td-Date.now())/(7*864e5);PW.tw=TW.slice(1).reduce((a,b)=>Math.abs(b-w)<Math.abs(a-w)?b:a);}
   wizDraw();
 }
 function pwSet(k,v){
@@ -418,6 +471,10 @@ function wizDraw(){
   if(s===1){
     b='<div class="lbl">'+t('psGoal')+'</div>'+wch('goal',PGOALS,PW.goal,v=>t('pg_'+v))+'<p class="muted sm">'+t('pgd_'+PW.goal)+'</p>'+
       '<div class="lbl">'+t('psSex')+'</div>'+wch('sex',PSEX,PW.sex,v=>t('sex_'+v))+'<p class="muted sm">'+t('psSexP')+'</p>';
+  }else if(s===2&&PW.goal==='hybrid'){
+    b='<div class="lbl">'+t('psTest')+'</div>'+wch('test',TESTS,PW.test,v=>t('te_'+v))+'<p class="muted sm">'+t('ted_'+PW.test)+'</p>'+
+      '<div class="lbl">'+t('psTw')+'</div>'+wch('tw',TW,PW.tw,v=>v?t('psTwN',v):t('psTwNone'))+
+      '<div class="lbl">'+t('psFocus')+'</div>'+wchm('focus',Object.keys(FOCUS_MU),v=>t('fm_'+v),3);
   }else if(s===2){
     b='<div class="lbl">'+t('psEmph')+'</div>'+wch('emph',PEMPH,PW.emph,v=>t('em_'+v))+'<p class="muted sm">'+t('emd_'+PW.emph)+'</p>'+
       '<div class="lbl">'+t('psFocus')+'</div>'+wchm('focus',Object.keys(FOCUS_MU),v=>t('fm_'+v),3)+'<p class="muted sm">'+t('psFocusP')+'</p>';
@@ -436,7 +493,7 @@ function wizDraw(){
       (PW.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'')+'<p class="muted sm">'+t('psInjN')+'</p>';
   }else{
     const L=injLetters(PW.inj);
-    b='<div class="lbl">'+t('psSum')+'</div><ul class="sumul"><li>'+t('pg_'+PW.goal)+' · '+t('em_'+PW.emph)+'</li>'+
+    b='<div class="lbl">'+t('psSum')+'</div><ul class="sumul"><li>'+t('pg_'+PW.goal)+' · '+(PW.goal==='hybrid'?t('te_'+PW.test)+(PW.tw?' · '+t('psTwN',PW.tw):''):t('em_'+PW.emph))+'</li>'+
       (PW.focus.length?'<li>'+t('planFocus',PW.focus.map(k=>t('fm_'+k)).join(', '))+'</li>':'')+
       '<li>'+t('psDaysN',PW.n)+' · '+t('psLenN',PW.len)+' · '+t('pl_'+PW.lvl)+'</li>'+
       '<li>'+t('psEquip')+': '+(PW.have.length?PW.have.map(k=>t('hv_'+k)).join(', '):t('eqp_none'))+'</li>'+
@@ -447,7 +504,7 @@ function wizDraw(){
     (s<PW_STEPS?'<button class="btn pri" onclick="pwGo(1)">'+t('next')+' ›</button>':'<button class="btn pri" onclick="planCreate()">'+t('planCreate')+'</button>')+'</div></div>');
 }
 function planCreate(){
-  const prof=normProf({sex:PW.sex,goal:PW.goal,emph:PW.emph,focus:PW.focus,n:PW.n,len:PW.len,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond});
+  const prof=normProf({sex:PW.sex,goal:PW.goal,emph:PW.emph,focus:PW.focus,n:PW.n,len:PW.len,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
   const old=DATA.plan,p=genPlan(prof);
   if(old){p.checks=old.checks;}
   DATA.plan=p;saveData();render();

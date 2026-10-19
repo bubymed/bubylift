@@ -232,6 +232,12 @@ const EXLIB=[
  ['bandbridge','Banded Glute Bridge','Puente de glúteos con banda','glutes','band','bw'],
  ['bandkick','Band Glute Kickback','Patada de glúteo con banda','glutes','band','bw'],
  ['bwlunge','Bodyweight Reverse Lunge','Zancada hacia atrás con peso corporal','legs','bodyweight','bw'],
+ ['sleddrag','Sled Drag','Arrastre de trineo','full','other','t'],
+ ['sdcdrill','Sprint-Drag-Carry Drill','Práctica de sprint-arrastre-acarreo','full','other','t'],
+ ['ruck','Ruck March','Marcha con mochila (ruck)','cardio','other','t'],
+ ['firecarry','Fireman Carry','Acarreo de bombero','full','bodyweight','t'],
+ ['ammolift','Ammo Can Overhead Press','Press sobre la cabeza con caja de municiones','shoulders','other','bw'],
+ ['lowcrawl','Low Crawl','Arrastre bajo (gateo en el piso)','full','bodyweight','t'],
  ['dbrdl','Dumbbell Romanian Deadlift','Peso muerto rumano con mancuernas','legs','dumbbell'],
  ['bwstepup','Bodyweight Step-Up','Subida al cajón con peso corporal','legs','bodyweight','bw'],
  // cardio

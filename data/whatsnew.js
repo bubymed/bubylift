@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v5',items:[
+  {i:'🎖️',en:'<b>Hybrid / military athlete</b> — a plan that mixes strength, running and work capacity around your test: Army AFT or Marines PFT/CFT.',es:'<b>Atleta híbrido / militar</b> — un plan que mezcla fuerza, carrera y capacidad de trabajo alrededor de tu prueba: AFT del Ejército o PFT/CFT de los Marines.'},
+  {i:'⏱️',en:'<b>Practice tests</b> — run a practice AFT, PFT or CFT, log your results and compare them over time. Set your test date to see the countdown and test-week tips.',es:'<b>Simulacros</b> — haz un simulacro de AFT, PFT o CFT, anota tus resultados y compáralos con el tiempo. Pon la fecha de tu prueba para ver la cuenta regresiva y consejos para la semana de la prueba.'}]},
  {v:'v4',items:[
   {i:'🎯',en:'<b>Smarter plans</b> — tell Bubylift your goal, the muscles you want to bring up, upper or lower body emphasis, time, experience and equipment.',es:'<b>Planes más inteligentes</b> — dile a Bubylift tu meta, los músculos que quieres destacar, énfasis en tren superior o inferior, tiempo, experiencia y equipo.'},
   {i:'🩹',en:'<b>Injury-aware</b> — pick knee, back, shoulder and more; the plan avoids what stresses them and flags exercises to do lightly.',es:'<b>Adaptado a lesiones</b> — elige rodilla, espalda, hombro y más; el plan evita lo que las carga y marca ejercicios para hacer con poco peso.'},
