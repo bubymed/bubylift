@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v19',items:[
+  {i:'↕️',en:'<b>Moving training days is now easy</b> — tap ▲ ▼ to move a day earlier or later, or drag the ≡ handle to any weekday.',es:'<b>Mover los días de entrenamiento ahora es fácil</b> — toca ▲ ▼ para mover un día antes o después, o arrastra el asa ≡ a cualquier día de la semana.'}]},
  {v:'v18',items:[
   {i:'✕',en:'<b>Clear a set in one tap</b> — every set row has a red ✕ to empty it when you typed something wrong.',es:'<b>Borra una serie con un toque</b> — cada fila de serie tiene una ✕ roja para vaciarla cuando escribiste algo mal.'},
   {i:'🗑',en:'<b>Delete plan is on the plan card</b> — no more digging through menus.',es:'<b>Eliminar plan está en la tarjeta del plan</b> — ya no hay que buscar en los menús.'},

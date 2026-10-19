@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v19 — 2026-10-19
+- **Easier schedule moves:** each training day in the weekly schedule has big ▲ ▼ buttons (one tap = one weekday earlier or later) and a ≡ handle to drag it onto any weekday. Dropping on a taken day swaps the two. Removed the old two-step Move/Swap buttons.
+  **Mover días más fácil:** cada día de entrenamiento en el horario semanal tiene botones ▲ ▼ grandes (un toque = un día de la semana antes o después) y un asa ≡ para arrastrarlo a cualquier día. Soltar sobre un día ocupado intercambia los dos. Se quitaron los botones Mover/Intercambiar de dos pasos.
+
 ## v18 — 2026-10-19
 - **Clear set:** a visible red ✕ button on every set row empties that set (weight, reps/time, done mark) in one tap.
   **Borrar serie:** un botón ✕ rojo visible en cada fila de serie vacía esa serie (peso, repeticiones/tiempo y marca de hecho) con un toque.
