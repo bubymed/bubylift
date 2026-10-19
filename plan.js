@@ -382,7 +382,7 @@ function planOpen(){
   p.ds.forEach((d,i)=>{h+='<div class="lbl">'+esc(dayName(i))+'</div>'+planExList(d,i,true)+'<div class="row"><button class="btn sm" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn sm" onclick="planAddEx('+i+')">＋ '+t('addEx')+'</button></div>';});
   if(pr.goal==='hybrid')h+='<div class="lbl">'+t('hyT')+'</div>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
   h+='<div class="lbl">'+t('guideT')+'</div><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p>'+
-    '<p class="muted sm">'+t('planNote')+'</p><div class="row"><button class="btn" onclick="chkOpen()">'+t('chkOpen')+'</button><button class="btn" onclick="focusOpen()">🎯 '+t('focusT')+'</button><button class="btn" onclick="planSetup()">'+t('planChange')+'</button></div></div>';
+    '<p class="muted sm">'+t('planNote')+'</p><div class="row"><button class="btn" onclick="chkOpen()">'+t('chkOpen')+'</button><button class="btn" onclick="focusOpen()">🎯 '+t('focusT')+'</button><button class="btn" onclick="planSetup()">'+t('planChange')+'</button></div><div class="row"><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDel')+'</button></div></div>';
   sheet(h);
 }
 let PE={d:0,e:0};
@@ -564,6 +564,7 @@ function planCreate(){
 }
 
 /* ---------- routines: swipe to delete / edit ---------- */
+function planDelAsk(){ask(t('delPlan'),t('delete'),function(){DATA.plan=null;saveData();render();toast(t('planDeleted'));},true);}
 function rtDelAsk(id){ask(t('delRoutine'),t('delete'),function(){DATA.routines=DATA.routines.filter(x=>x.id!==id);saveData();render();},true);}
 function rtEdit(id){rbOpen(id);}
 

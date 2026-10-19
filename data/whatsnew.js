@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v8',items:[
+  {i:'🗑️',en:'<b>Delete your plan</b> — My plan now has a Delete this plan button (your logged workouts are kept). You can make a new one any time.',es:'<b>Eliminar tu plan</b> — Mi plan ahora tiene el botón Eliminar este plan (tus entrenamientos registrados se conservan). Puedes crear uno nuevo cuando quieras.'}]},
  {v:'v7',items:[
   {i:'📖',en:'<b>Technique guides for every exercise</b> — tap ⓘ on any of the 227 exercises for clear steps and the most common mistake, in English and Spanish.',es:'<b>Guías de técnica para todos los ejercicios</b> — toca ⓘ en cualquiera de los 227 ejercicios para ver pasos claros y el error más común, en inglés y español.'}]},
  {v:'v6',items:[
