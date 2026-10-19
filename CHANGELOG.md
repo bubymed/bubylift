@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v17 — 2026-10-19
+- **Weight entry and trend:** big weight field with − / + (0.1) buttons and one-tap save; one entry per day (saving again updates it). The chart shows your weigh-ins as dots and a smoothed trend line, with ranges (1 month, 3 months, 1 year, all), your pace per week and an estimate of the weeks to your goal. Date, body fat, measurements and note moved into a "more" section.
+  **Registro y tendencia del peso:** campo grande con botones − / + (0.1) y guardado en un toque; una entrada por día (guardar de nuevo la actualiza). La gráfica muestra tus pesajes como puntos y una línea de tendencia suavizada, con rangos (1 mes, 3 meses, 1 año, todo), tu ritmo por semana y una estimación de semanas para tu meta. Fecha, grasa, medidas y nota pasaron a una sección "más".
+- **Mix two goals in a plan:** pick a second goal and a 50/50 or 70/30 split of training days. Each day is built for one goal (its own exercises, rep ranges and runs) and is spread across the week. Not available for two hybrid/military goals together.
+  **Mezcla dos metas en un plan:** elige una segunda meta y un reparto 50/50 o 70/30 de los días de entrenamiento. Cada día se arma para una meta (sus ejercicios, repeticiones y carreras) y se reparte en la semana. No disponible para dos metas híbrido/militar a la vez.
+
 ## v16 — 2026-10-19
 - **Creator card in More:** photo, short bio and a button to follow @bubylifts on Instagram.
   **Tarjeta del creador en Más:** foto, breve descripción y un botón para seguir a @bubylifts en Instagram.

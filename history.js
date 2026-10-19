@@ -3,10 +3,10 @@
    Pestañas Historial y Progreso + gráficas SVG pequeñas. */
 
 /* ---------- charts ---------- */
-function lineSvg(pts,fmt,goalY){
+function lineSvg(pts,fmt,goalY,trend){
   if(!pts.length)return'';
   const W=320,H=170,L=42,R=10,T=12,B=26;
-  let ys=pts.map(p=>p.y);if(goalY!=null)ys=ys.concat(goalY);
+  let ys=pts.map(p=>p.y);if(goalY!=null)ys=ys.concat(goalY);if(trend)ys=ys.concat(trend.map(p=>p.y));
   let mn=Math.min.apply(null,ys),mx=Math.max.apply(null,ys);
   if(mn===mx){mn-=1;mx+=1;}
   const pad=(mx-mn)*0.12;mn-=pad;mx+=pad;
@@ -16,8 +16,10 @@ function lineSvg(pts,fmt,goalY){
   let s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="chart">';
   [0,0.5,1].forEach(f=>{const y=T+f*(H-T-B),v=mx-f*(mx-mn);s+='<line class="ch-g" x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'"/><text class="ch-t" x="'+(L-5)+'" y="'+(y+3)+'" text-anchor="end">'+esc(fmt(v))+'</text>';});
   if(goalY!=null)s+='<line class="ch-goal" x1="'+L+'" y1="'+Y(goalY)+'" x2="'+(W-R)+'" y2="'+Y(goalY)+'"/>';
-  if(pts.length>1)s+='<path class="ch-l" d="'+pts.map((p,i)=>(i?'L':'M')+X(p).toFixed(1)+' '+Y(p.y).toFixed(1)).join(' ')+'"/>';
-  if(pts.length<=60)pts.forEach(p=>{s+='<circle class="ch-d" cx="'+X(p).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="3"/>';});
+  const pth=a=>a.map((p,i)=>(i?'L':'M')+X(p).toFixed(1)+' '+Y(p.y).toFixed(1)).join(' ');
+  if(trend&&trend.length>1)s+='<path class="ch-l" d="'+pth(trend)+'"/>';
+  else if(pts.length>1)s+='<path class="ch-l" d="'+pth(pts)+'"/>';
+  if(pts.length<=(trend?120:60))pts.forEach(p=>{s+='<circle class="ch-d'+(trend?' lite':'')+'" cx="'+X(p).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="3"/>';});
   const dopt={month:'short',day:'numeric'};
   s+='<text class="ch-t" x="'+L+'" y="'+(H-8)+'">'+esc(dFmt(t0,dopt))+'</text>';
   if(pts.length>1)s+='<text class="ch-t" x="'+(W-R)+'" y="'+(H-8)+'" text-anchor="end">'+esc(dFmt(t1,dopt))+'</text>';
