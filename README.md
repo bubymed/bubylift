@@ -63,3 +63,8 @@ Source-available, all rights reserved. You may view the code and use the app per
 
 ## Credits / Créditos
 Exercise categories and training concepts are based on the NASM-CPT program. Bubylift is independent and not endorsed by NASM. / Las categorías de ejercicios y los conceptos de entrenamiento están basados en el programa NASM-CPT. Bubylift es independiente y no está avalada por NASM.
+
+## Profiles, password & transfer / Perfiles, contraseña y transferencia
+- EN: Up to 5 profiles per device, each with its own data. The password is a salted PBKDF2 hash and works as a lock for the app on that phone; it does **not** encrypt the data in the browser storage. Security-question answers are hashed too (weaker than a password). QR transfer is a one-time copy encrypted with an 8-digit PIN shown on the sending phone.
+- ES: Hasta 5 perfiles por dispositivo, cada uno con sus datos. La contraseña es un hash PBKDF2 con sal y funciona como candado de la app en ese teléfono; **no** cifra los datos del almacenamiento del navegador. Las respuestas de seguridad también se guardan con hash (más débiles que una contraseña). La transferencia por QR es una copia única cifrada con un PIN de 8 dígitos que muestra el teléfono de origen.
+- Third-party libraries in `lib/` / Librerías de terceros en `lib/`: qrcode-generator (MIT), jsQR (Apache-2.0); see the license files / ver los archivos de licencia.

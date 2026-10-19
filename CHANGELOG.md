@@ -6,6 +6,16 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v14 — 2026-10-19
+- **Profiles:** up to 5 per device, each with its own workouts, routines, body log and settings. Netflix-style "Who's training?" screen, generic avatars (emoji + color) or your own photo. Your existing log is kept inside the first profile you create.
+  **Perfiles:** hasta 5 por dispositivo, cada uno con sus propios entrenamientos, rutinas, registro corporal y ajustes. Pantalla "¿Quién entrena?" estilo Netflix, avatares genéricos (emoji + color) o tu propia foto. Tu registro actual se conserva dentro del primer perfil que crees.
+- **Password:** strong-password rules with strength meter, "keep me signed in" option, and a pause after repeated wrong tries. Stored only as a salted PBKDF2 hash. It is a lock for the app on this phone; it does not encrypt the stored data.
+  **Contraseña:** reglas de contraseña fuerte con medidor, opción "mantener mi sesión" y pausa tras intentos fallidos. Se guarda solo como hash PBKDF2 con sal. Es un candado de la app en este teléfono; no cifra los datos guardados.
+- **Recovery:** three security questions (answers are hashed too). Weaker than a password by nature; pick answers only you know.
+  **Recuperación:** tres preguntas de seguridad (las respuestas también se guardan con hash). Son más débiles que una contraseña; elige respuestas que solo tú sepas.
+- **QR transfer:** copy a profile to another phone with an animated QR; data is encrypted with an 8-digit PIN shown on the sending phone. One-time copy, not a sync. Uses vendored qrcode-generator (MIT) and jsQR (Apache-2.0) in `lib/`.
+  **Transferencia por QR:** copia un perfil a otro teléfono con un QR animado; los datos se cifran con un PIN de 8 dígitos que muestra el teléfono de origen. Copia única, no sincronización. Usa qrcode-generator (MIT) y jsQR (Apache-2.0) incluidos en `lib/`.
+
 ## v13 — 2026-10-19
 - **Fix:** the Date field in Body overflowed its card and was centered on iPhone; it now fits the card and is left-aligned like the other fields.
   **Corrección:** el campo Fecha en Cuerpo se salía de la tarjeta y estaba centrado en iPhone; ahora cabe en la tarjeta y va alineado a la izquierda como los demás.

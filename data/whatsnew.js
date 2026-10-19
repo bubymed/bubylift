@@ -2,6 +2,10 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v14',items:[
+  {i:'👤',en:'<b>Profiles</b> — everyone gets their own log. Pick who is training from a Netflix-style screen, with an avatar or your own photo and a strong password.',es:'<b>Perfiles</b> — cada quien tiene su propio registro. Elige quién entrena en una pantalla estilo Netflix, con avatar o tu propia foto y una contraseña fuerte.'},
+  {i:'🔑',en:'<b>Forgot your password?</b> Answer your three security questions to set a new one. The password is a lock for this phone; it does not encrypt your data.',es:'<b>¿Olvidaste tu contraseña?</b> Responde tus tres preguntas de seguridad para crear una nueva. La contraseña es un candado para este teléfono; no cifra tus datos.'},
+  {i:'📲',en:'<b>Move to a new phone</b> — Profile menu › Transfer to another phone. Scan an animated QR and type the PIN. It is a one-time copy, not a sync.',es:'<b>Cambia de teléfono</b> — menú del perfil › Transferir a otro teléfono. Escanea un QR animado y escribe el PIN. Es una copia única, no una sincronización.'}]},
  {v:'v13',items:[
   {i:'📅',en:'<b>Date field fixed on iPhone</b> — it now stays inside the card and lines up with the other fields.',es:'<b>Campo de fecha corregido en iPhone</b> — ahora queda dentro de la tarjeta y alineado con los demás campos.'}]},
  {v:'v12',items:[
