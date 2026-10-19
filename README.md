@@ -60,3 +60,6 @@ Bubylift es una herramienta de registro, no un consejo médico ni de entrenamien
 
 ## License
 Source-available, all rights reserved. You may view the code and use the app personally. Copying, modifying or redistributing it requires written permission from the author. See `LICENSE`.
+
+## Credits / Créditos
+Exercise categories and training concepts are based on the NASM-CPT program. Bubylift is independent and not endorsed by NASM. / Las categorías de ejercicios y los conceptos de entrenamiento están basados en el programa NASM-CPT. Bubylift es independiente y no está avalada por NASM.
