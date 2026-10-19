@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v7',items:[
+  {i:'📖',en:'<b>Technique guides for every exercise</b> — tap ⓘ on any of the 227 exercises for clear steps and the most common mistake, in English and Spanish.',es:'<b>Guías de técnica para todos los ejercicios</b> — toca ⓘ en cualquiera de los 227 ejercicios para ver pasos claros y el error más común, en inglés y español.'}]},
  {v:'v6',items:[
   {i:'🍑',en:'<b>Choose your focus</b> — pick the muscles to bring up and how many days a week they get (e.g. glutes 3 days), so a leg-focused week really has more leg days.',es:'<b>Elige tu enfoque</b> — escoge los músculos que quieres destacar y cuántos días a la semana (ej. glúteos 3 días), para que una semana enfocada en pierna tenga de verdad más días de pierna.'},
   {i:'⚡',en:'<b>Physical skills</b> — add strength, power, speed, endurance or balance to your plan. Change your focus any time from My plan → Change focus.',es:'<b>Habilidades físicas</b> — suma fuerza, potencia, velocidad, resistencia o equilibrio a tu plan. Cambia tu enfoque cuando quieras en Mi plan → Cambiar enfoque.'}]},
