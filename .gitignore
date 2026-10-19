@@ -1,0 +1,5 @@
+# local test screenshots / capturas de prueba locales
+/*.png
+# local tooling output / salida de herramientas locales
+node_modules/
+.DS_Store
