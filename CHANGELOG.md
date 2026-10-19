@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v23 — 2026-10-19
+- **Check for updates:** More › App has a button showing the current version; it looks for a newer one, clears the saved copies and reloads.
+  **Buscar actualizaciones:** Más › App tiene un botón que muestra la versión actual; busca una nueva, borra las copias guardadas y recarga.
+
 ## v22 — 2026-10-19
 - **Share the app:** More › Share the app shows a QR code of the app link, with Share and Copy link buttons.
   **Compartir la app:** Más › Compartir la app muestra un código QR con el enlace de la app, con botones para compartir y copiar el enlace.
