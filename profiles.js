@@ -1,6 +1,6 @@
 'use strict';
 /* Profiles ("who's training?"), password sign-in, recovery questions, avatars and phone-to-phone transfer by QR.
-   Everything stays on this device. The password keeps other people out of the app; it does not encrypt the stored data.
+   Everything stays on this device. The password unlocks a key that encrypts this profile's data on the device.
    Perfiles ("¿quién entrena?"), contraseña, preguntas de recuperación, avatares y transferencia entre teléfonos por QR.
    Todo se queda en este dispositivo. La contraseña impide que otros entren a la app; no cifra los datos guardados. */
 const PF_MAX=5,PF_ITER=150000,PF_QN=8;
@@ -16,11 +16,14 @@ function pfAv(a){
   if(a&&a.k==='i'&&typeof a.d==='string'&&a.d.length<60000&&/^data:image\/(jpeg|png);base64,[A-Za-z0-9+/=]+$/.test(a.d))return{k:'i',d:a.d};
   return{k:'e',e:PF_AVE.indexOf(a&&a.e)>=0?a.e:PF_AVE[0],c:Math.max(0,Math.min(PF_AVC.length-1,(a&&a.c)|0))};
 }
+const pfWrapOk=r=>r&&typeof r.s==='string'&&typeof r.i==='string'&&typeof r.c==='string'&&r.s.length===24&&r.i.length===16&&r.c.length===64&&B64_RE.test(r.s)&&B64_RE.test(r.i)&&B64_RE.test(r.c)?{s:r.s,i:r.i,c:r.c}:null;
+function pfEncRec(e){const wp=e&&pfWrapOk(e.wp);return wp?{wp:wp,wq:pfWrapOk(e.wq)}:null;}
 function pfRec(r){return r&&typeof r.s==='string'&&typeof r.h==='string'&&B64_RE.test(r.s)&&B64_RE.test(r.h)&&r.s.length<40&&r.h.length<80?{s:r.s,h:r.h,n:Math.max(1000,Math.min(1000000,(r.n|0)||PF_ITER))}:null;}
 function pfClean(p){
   if(!p||typeof p!=='object'||typeof p.id!=='string'||!/^[a-z0-9]{3,24}$/.test(p.id))return null;
-  const qs=(Array.isArray(p.qs)?p.qs:[]).map(q=>{const r=pfRec(q);return r&&(q.i|0)>=0&&(q.i|0)<PF_QN?Object.assign(r,{i:q.i|0}):null;}).filter(Boolean).slice(0,3);
-  return{id:p.id,name:String(p.name||'').trim().slice(0,20)||'Profile',av:pfAv(p.av),pw:pfRec(p.pw),qs:qs,rm:p.rm?1:0,t:+p.t||Date.now()};
+  const qs=(Array.isArray(p.qs)?p.qs:[]).map(q=>{if(!q||!((q.i|0)>=0&&(q.i|0)<PF_QN))return null;const r=pfRec(q);return r?Object.assign(r,{i:q.i|0}):{i:q.i|0};}).filter(Boolean).slice(0,3);
+  const enc=pfEncRec(p.enc);
+  return{id:p.id,name:String(p.name||'').trim().slice(0,20)||'Profile',av:pfAv(p.av),pw:pfRec(p.pw),qs:qs,enc:enc,rm:enc?0:(p.rm?1:0),t:+p.t||Date.now()};
 }
 function pfLoad(){const a=jget('bl_profiles',[]);PFS=(Array.isArray(a)?a:[]).map(pfClean).filter(Boolean).slice(0,PF_MAX);return PFS;}
 function pfSave(){jset('bl_profiles',PFS);}
@@ -38,6 +41,49 @@ async function pbk(text,salt,iter,bits){
 async function pfHash(text){const salt=crypto.getRandomValues(new Uint8Array(16));return{s:b64(salt),h:b64(await pbk(text,salt,PF_ITER)),n:PF_ITER};}
 async function pfCheck(text,rec){if(!rec)return true;return b64(await pbk(text,unb64(rec.s),rec.n||PF_ITER))===rec.h;}
 const pfNormAns=a=>String(a||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+
+/* ---------- encrypted storage / almacenamiento cifrado ----------
+   A random master key encrypts this profile's data (AES-256-GCM). The key is stored wrapped twice: by the password, and by the three security answers together.
+   Una llave maestra aleatoria cifra los datos del perfil (AES-256-GCM). La llave se guarda envuelta dos veces: por la contraseña y por las tres respuestas juntas. */
+const encOn=k=>!!(ENC&&ENC.ks.indexOf(k)>=0);
+function encGet(k,d){const s=ENC.c[k];if(s==null)return d;try{return JSON.parse(s);}catch(e){return d;}}
+function encSet(k,v){ENC.c[k]=JSON.stringify(v);ENC.q[k]=1;pfPump();return true;}
+function encDel(k){ENC.c[k]=null;ENC.q[k]=1;pfPump();}
+async function pfSeal(s,k,E){
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv,additionalData:new TextEncoder().encode(k)},E.key,new TextEncoder().encode(s));
+  return'e1.'+b64(iv)+'.'+b64(ct);
+}
+async function pfOpen(str,k,E){
+  const m=/^e1\.([A-Za-z0-9+/=]+)\.([A-Za-z0-9+/=]+)$/.exec(str);if(!m)throw new Error('fmt');
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(m[1]),additionalData:new TextEncoder().encode(k)},E.key,unb64(m[2]));
+  return new TextDecoder().decode(pt);
+}
+async function pfPump(){
+  const E=ENC;if(!E||E.busy)return;E.busy=true;
+  try{
+    while(Object.keys(E.q).length){
+      for(const k of Object.keys(E.q)){
+        delete E.q[k];const s=E.c[k];
+        if(s==null)localStorage.removeItem(k);else localStorage.setItem(k,await pfSeal(s,k,E));
+      }
+    }
+  }catch(e){try{toast(t('saveFail'));}catch(x){}}
+  E.busy=false;
+}
+async function pfFlush(){const E=ENC;if(!E)return;for(let i=0;i<200&&(E.busy||Object.keys(E.q).length);i++){if(!E.busy)pfPump();await new Promise(r=>setTimeout(r,25));}}
+/* wrap/unwrap the master key with a secret (password or joined answers) / envolver la llave maestra */
+async function pfWrap(secret,raw){
+  const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},await pfAesKey(secret,salt,'encrypt'),raw);
+  return{s:b64(salt),i:b64(iv),c:b64(ct)};
+}
+async function pfUnwrap(secret,rec){
+  const raw=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(rec.i)},await pfAesKey(secret,unb64(rec.s),'decrypt'),unb64(rec.c));
+  return new Uint8Array(raw);
+}
+const pfAnsKey=a=>a.map(pfNormAns).join('|');
+const pfNewKey=()=>crypto.getRandomValues(new Uint8Array(32));
 
 /* password rules and strength / reglas y fuerza de la contraseña */
 function pfRules(pw,name){
@@ -68,39 +114,64 @@ function avHtml(av,sz){
 function pfRenderAv(){const b=$('avBtn');if(!b)return;const p=pfCur();if(!p){b.hidden=true;return;}b.hidden=false;b.innerHTML=avHtml(p.av,32);b.setAttribute('aria-label',p.name);}
 
 /* ---------- boot / enter / leave ---------- */
-function boot(){
+async function boot(){
   pfLoad();
-  let sess=null,last=null;try{sess=sessionStorage.getItem('bl_sess');last=localStorage.getItem('bl_last');}catch(e){}
-  pfPrefs(last);
-  const pick=pfGet(sess)||(last&&pfGet(last)&&pfGet(last).rm?pfGet(last):null);
-  if(pick){pfEnter(pick.id,pick.rm);return;}
-  if(!PFS.length)gNew(1,{first:true});else gPick();
+  let sess=null,sk=null,last=null;try{sess=sessionStorage.getItem('bl_sess');sk=sessionStorage.getItem('bl_sk');last=localStorage.getItem('bl_last');}catch(e){}
+  pfPrefs();
+  const p=pfGet(sess);
+  if(p&&!p.enc){await pfEnter(p.id,null);return;}
+  if(p&&p.enc&&sk){
+    try{const raw=unb64(sk);if(raw.length===32){await pfEnter(p.id,raw);return;}}catch(e){}
+  }
+  const lp=pfGet(last);
+  if(!PFS.length)gNew(1,{first:true});
+  else if(PFS.length===1&&!PFS[0].pw){await pfEnter(PFS[0].id,null);}
+  else gPick();
 }
-/* language/theme before sign-in come from the last profile / idioma y tema antes de entrar */
-function pfPrefs(last){
-  const s=last?jget('bl_s_'+last,{}):{};
-  let l=null;try{l=localStorage.getItem('bl_lang');}catch(e){}
-  SET={theme:s.theme||'system'};LANG=(s.lang||l||(/^es/i.test(navigator.language||'')?'es':'en'))==='es'?'es':'en';
+/* language/theme before sign-in (kept in plain, non-sensitive keys) / idioma y tema antes de entrar (claves simples, no sensibles) */
+function pfPrefs(){
+  let l=null,th=null;try{l=localStorage.getItem('bl_lang');th=localStorage.getItem('bl_theme');}catch(e){}
+  SET={theme:th||'system'};LANG=(l||(/^es/i.test(navigator.language||'')?'es':'en'))==='es'?'es':'en';
   document.documentElement.lang=LANG;applyTheme();
 }
-function pfEnter(id,keep){
-  const p=pfGet(id);if(!p)return gPick();
-  PFID=id;const k=pfKeys(id);K_DATA=k.d;K_SET=k.s;K_ACT=k.a;
+/* raw = unlocked master key (32 bytes) for encrypted profiles; seed = {storageKey:jsonString} to write first / raw = llave maestra desbloqueada; seed = datos iniciales */
+async function pfEnter(id,raw,seed){
+  const p=pfGet(id);if(!p){gPick();return;}
+  const k=pfKeys(id);
+  try{
+    if(p.enc){
+      if(!raw||raw.length!==32)throw new Error('key');
+      const E={raw:raw,key:await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['encrypt','decrypt']),c:{},q:{},busy:false,ks:[k.d,k.s,k.a]};
+      for(const kk of E.ks){
+        const v=localStorage.getItem(kk);if(v==null)continue;
+        if(v.indexOf('e1.')===0)E.c[kk]=await pfOpen(v,kk,E);else{E.c[kk]=v;E.q[kk]=1;} // plain leftovers get encrypted now / restos sin cifrar se cifran ahora
+      }
+      if(seed)for(const kk in seed){E.c[kk]=seed[kk];E.q[kk]=1;}
+      ENC=E;
+      try{sessionStorage.setItem('bl_sk',b64(raw));}catch(e){}
+    }else ENC=null;
+  }catch(e){
+    ENC=null;try{sessionStorage.removeItem('bl_sk');sessionStorage.removeItem('bl_sess');}catch(x){}
+    gPick();toast(t('pfDataBad'));return;
+  }
+  PFID=id;K_DATA=k.d;K_SET=k.s;K_ACT=k.a;
   try{sessionStorage.setItem('bl_sess',id);localStorage.setItem('bl_last',id);}catch(e){}
-  if(keep!==undefined&&!!p.rm!==!!keep){p.rm=keep?1:0;pfSave();}
   gateHide();pfRenderAv();bootApp();
+  if(ENC)pfPump();
 }
 function pfLeave(){
-  try{sessionStorage.removeItem('bl_sess');}catch(e){}
-  const p=pfCur();if(p&&p.rm){p.rm=0;pfSave();} // switching profile turns "stay signed in" off / al cambiar de perfil se apaga "mantener sesión"
-  stopRest&&stopRest();unwake&&unwake();
-  location.replace(location.pathname);
+  const go=function(){
+    try{sessionStorage.removeItem('bl_sess');sessionStorage.removeItem('bl_sk');}catch(e){}
+    location.replace(location.pathname);
+  };
+  try{stopRest();unwake();}catch(e){}
+  if(ENC)pfFlush().then(go,go);else go();
 }
 /* the first profile adopts any log saved before profiles existed / el primer perfil adopta el registro previo */
-function pfAdoptLegacy(id){
-  const k=pfKeys(id);let any=false;
-  [['bl_data',k.d],['bl_settings',k.s],['bl_active',k.a]].forEach(x=>{try{const v=localStorage.getItem(x[0]);if(v!=null){localStorage.setItem(x[1],v);localStorage.removeItem(x[0]);any=true;}}catch(e){}});
-  return any;
+function pfLegacy(id){
+  const k=pfKeys(id),map={},del=[];
+  [['bl_data',k.d],['bl_settings',k.s],['bl_active',k.a]].forEach(x=>{try{const v=localStorage.getItem(x[0]);if(v!=null){map[x[1]]=v;del.push(x[0]);}}catch(e){}});
+  return{map:map,del:del};
 }
 const pfHasLegacy=()=>{try{return localStorage.getItem('bl_data')!=null;}catch(e){return false;}};
 
@@ -128,12 +199,11 @@ function gAdd(){
 /* password prompt / contraseña */
 function gPw(id){
   const p=pfGet(id);if(!p)return gPick();
-  if(!p.pw){pfEnter(id,false);return;}
+  if(!p.pw){pfEnter(id,null);return;}
   GS={redraw:function(){gPw(id);}};
   const w=pfWait('p',id);
   gateShow('<div class="g-top"><button class="g-link" onclick="gPick()">‹ '+t('pfSwitch')+'</button><span></span></div><div class="g-c">'+avHtml(p.av,96)+'<h2 class="g-n">'+esc(p.name)+'</h2></div>'+
     '<div class="g-form"><label>'+t('pfPw')+'<span class="pw-w"><input id="gpw" class="in wide" type="password" autocomplete="current-password" onkeydown="if(event.key===\'Enter\')pfLogin(\''+id+'\')"><button class="pw-eye" type="button" onclick="pfEye(\'gpw\',this)">'+t('pfShow')+'</button></span></label>'+
-    '<label class="chk-l"><input id="gkeep" type="checkbox"'+(p.rm?' checked':'')+'> '+t('pfStay')+'</label>'+
     '<p id="gmsg" class="g-msg">'+(w?t('pfWait',pfWaitTxt(w)):'')+'</p>'+
     '<button class="btn pri big wide" onclick="pfLogin(\''+id+'\')">'+t('pfSignIn')+'</button>'+
     '<button class="btn wide" onclick="gForgot(\''+id+'\')">'+t('pfForgot')+'</button></div>'+gLang());
@@ -142,11 +212,20 @@ function pfEye(id,b){const e=$(id);if(!e)return;const h=e.type==='password';e.ty
 async function pfLogin(id){
   const p=pfGet(id),m=$('gmsg');if(!p||!m)return;
   const w=pfWait('p',id);if(w){m.textContent=t('pfWait',pfWaitTxt(w));return;}
-  const pw=gv('gpw'),keep=$('gkeep')&&$('gkeep').checked;
+  const pw=gv('gpw');
   if(!pw){m.textContent=t('pfNeedPw');return;}
   m.textContent='…';let ok=false;
   try{ok=await pfCheck(pw,p.pw);}catch(e){m.textContent=t('pfNoCrypto');return;}
-  if(ok){pfOk('p',id);pfEnter(id,keep);return;}
+  if(ok){
+    pfOk('p',id);let raw=null,mig=false;
+    try{
+      if(p.enc)raw=await pfUnwrap(pw,p.enc.wp);
+      else if(hasCrypto()){raw=pfNewKey();p.enc={wp:await pfWrap(pw,raw),wq:null};p.qs=[];p.rm=0;pfSave();mig=true;} // upgrade older profile / actualizar perfil anterior
+    }catch(e){m.textContent=t('pfDataBad');return;}
+    await pfEnter(id,raw);
+    if(mig)setTimeout(function(){toast(t('pfMig'));gQuest(id);},400);
+    return;
+  }
   const x=pfFail('p',id),left=Math.max(0,3-x.n);
   m.textContent=x.u>Date.now()?t('pfWait',pfWaitTxt(pfWait('p',id))):t('pfWrong',left);
 }
@@ -155,7 +234,7 @@ async function pfLogin(id){
 function gForgot(id){
   const p=pfGet(id);if(!p)return gPick();
   GS={redraw:function(){gForgot(id);}};
-  if(!p.qs.length){gateShow('<div class="g-top"><button class="g-link" onclick="gPw(\''+id+'\')">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('pfRecT')+'</h1><p class="muted">'+t('pfNoQ')+'</p>'+gLang());return;}
+  if(!p.qs.length||(p.enc&&!p.enc.wq)){gateShow('<div class="g-top"><button class="g-link" onclick="gPw(\''+id+'\')">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('pfRecT')+'</h1><p class="muted">'+t('pfNoQ')+'</p>'+gLang());return;}
   gateShow('<div class="g-top"><button class="g-link" onclick="gPw(\''+id+'\')">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('pfRecT')+'</h1><p class="muted">'+t('pfRecP')+'</p><div class="g-form">'+
     p.qs.map((q,i)=>'<label>'+t('pfQ'+q.i)+'<input id="ga'+i+'" class="in wide" autocomplete="off" autocapitalize="off"></label>').join('')+
     '<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="pfRecover(\''+id+'\')">'+t('pfVerify')+'</button></div>'+gLang());
@@ -163,15 +242,18 @@ function gForgot(id){
 async function pfRecover(id){
   const p=pfGet(id),m=$('gmsg');if(!p||!m)return;
   const w=pfWait('q',id);if(w){m.textContent=t('pfWait',pfWaitTxt(w));return;}
-  m.textContent='…';let good=0;
-  try{for(let i=0;i<p.qs.length;i++)if(await pfCheck(pfNormAns(gv('ga'+i)),p.qs[i]))good++;}catch(e){m.textContent=t('pfNoCrypto');return;}
+  m.textContent='…';let good=0;GS.raw=null;
+  try{
+    if(p.enc){if(!p.enc.wq)throw new Error('noq');try{GS.raw=await pfUnwrap(pfAnsKey(p.qs.map((q,i)=>gv('ga'+i))),p.enc.wq);good=p.qs.length;}catch(e){good=-1;}}
+    else for(let i=0;i<p.qs.length;i++)if(await pfCheck(pfNormAns(gv('ga'+i)),p.qs[i]))good++;
+  }catch(e){m.textContent=t('pfNoCrypto');return;}
   if(good===p.qs.length){pfOk('q',id);gSetPw(id);return;}
   const x=pfFail('q',id);m.textContent=x.u>Date.now()?t('pfWait',pfWaitTxt(pfWait('q',id))):t('pfRecBad');
 }
 /* set a new password (recovery or change) / nueva contraseña */
 function gSetPw(id,inApp){
   const p=pfGet(id);if(!p)return gPick();
-  GS={redraw:function(){gSetPw(id,inApp);}};
+  GS={raw:GS&&GS.raw,redraw:function(){gSetPw(id,inApp);}};
   gateShow('<div class="g-top"><button class="g-link" onclick="'+(inApp?'gateHide()':'gPw(\''+id+'\')')+'">'+(inApp?t('cancel'):'‹ '+t('back'))+'</button><span></span></div><h1 class="lt g-h">'+t(inApp?'pfChange':'pfRecT')+'</h1><div class="g-form">'+
     (inApp?'<label>'+t('pfCurPw')+'<input id="gcur" class="in wide" type="password" autocomplete="current-password"></label>':'')+
     pfPwFields(p.name)+'<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="pfDoSetPw(\''+id+'\','+(inApp?1:0)+')">'+t('save')+'</button></div>');
@@ -186,9 +268,13 @@ async function pfDoSetPw(id,inApp){
     if(inApp){const w=pfWait('p',id);if(w){m.textContent=t('pfWait',pfWaitTxt(w));return;}
       if(!(await pfCheck(gv('gcur'),p.pw))){const x=pfFail('p',id);m.textContent=x.u>Date.now()?t('pfWait',pfWaitTxt(pfWait('p',id))):t('pfWrong',Math.max(0,3-x.n));return;}
       pfOk('p',id);}
-    p.pw=await pfHash(pw);pfSave();pfOk('p',id);
+    const raw=inApp?(ENC&&ENC.raw):GS.raw;
+    const np=await pfHash(pw),wp=(p.enc&&raw)?await pfWrap(pw,raw):null;
+    if(p.enc&&!wp)throw new Error('raw');
+    p.pw=np;if(wp)p.enc.wp=wp;pfSave();pfOk('p',id);
+    if(!inApp){const r=GS.raw;GS={};await pfEnter(id,r||null);return;}
   }catch(e){m.textContent=t('pfNoCrypto');return;}
-  if(inApp){gateHide();toast(t('saved'));}else pfEnter(id,false);
+  gateHide();toast(t('saved'));
 }
 /* password + confirm with live rules and meter / contraseña y confirmación con reglas y medidor */
 function pfPwFields(name){
@@ -219,7 +305,7 @@ function gNew(step,o){
       (first&&pfHasLegacy()?'<p class="note">'+t('pfLegacy')+'</p>':'')+'<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="gNewNext1()">'+t('next')+' ›</button>'+(first?'<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button>':'')+'</div>';
   }else if(step===2){
     b='<h1 class="lt g-h">'+t('pfPw')+'</h1><p class="muted">'+t('pfPwP')+'</p><div class="g-form">'+(hasCrypto()?pfPwFields(GS.name):'<p class="note">'+t('pfNoCrypto')+'</p>')+
-      '<label class="chk-l"><input id="gkeep" type="checkbox"'+(GS.keep?' checked':'')+'> '+t('pfStay')+'</label><p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="gNewNext2()">'+t('next')+' ›</button></div>';
+      '<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="gNewNext2()">'+t('next')+' ›</button></div>';
   }else{
     b='<h1 class="lt g-h">'+t('pfQT')+'</h1><p class="muted">'+t('pfQP')+'</p><div class="g-form">'+[0,1,2].map(i=>qBlock(i,GS.q&&GS.q[i])).join('')+
       '<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="gNewDone()">'+t('pfCreate')+'</button></div>';
@@ -267,7 +353,6 @@ function gNewNext1(){
   gNew(2);
 }
 function gNewNext2(){
-  GS.keep=!!($('gkeep')&&$('gkeep').checked);
   if(!hasCrypto()){GS.pw1='';GS.nopw=true;gNew(3);return;}
   const pw=gv('npw'),c=gv('npw2'),m=$('gmsg');
   if(!pfRulesOk(pfRules(pw,GS.name))){m.textContent=t('pfWeak');return;}
@@ -281,14 +366,25 @@ async function gNewDone(){
   if(q.some(x=>pfNormAns(x.a).length<2)){m.textContent=t('pfQShort');return;}
   GS.q=q;m.textContent=t('pfSecuring');
   try{
-    const prof={id:'p'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:GS.name,av:GS.av,pw:null,qs:[],rm:GS.keep?1:0,t:Date.now()};
-    if(hasCrypto()&&GS.pw1){prof.pw=await pfHash(GS.pw1);prof.qs=await Promise.all(q.map(async x=>Object.assign(await pfHash(pfNormAns(x.a)),{i:x.i})));}
+    const prof={id:'p'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:GS.name,av:GS.av,pw:null,qs:[],enc:null,rm:0,t:Date.now()};
+    let raw=null;
+    if(hasCrypto()&&GS.pw1){
+      raw=pfNewKey();prof.pw=await pfHash(GS.pw1);
+      prof.qs=q.map(x=>({i:x.i})); // answers are never stored; they only unlock the key together / las respuestas no se guardan; solo abren la llave juntas
+      prof.enc={wp:await pfWrap(GS.pw1,raw),wq:await pfWrap(pfAnsKey(q.map(x=>x.a)),raw)};
+    }
     if(PFS.length>=PF_MAX){m.textContent=t('pfMax');return;}
     const first=PFS.length===0;PFS.push(prof);pfSave();
-    if(first)pfAdoptLegacy(prof.id);
-    const k=pfKeys(prof.id);
-    if(!localStorage.getItem(k.s)){jset(k.s,{lang:LANG});}
-    const keep=GS.keep;GS={};pfEnter(prof.id,keep);
+    const k=pfKeys(prof.id),lg=first?pfLegacy(prof.id):{map:{},del:[]};
+    if(!lg.map[k.s])lg.map[k.s]=JSON.stringify({lang:LANG});
+    GS={};
+    if(prof.enc){
+      await pfEnter(prof.id,raw,lg.map);await pfFlush();
+      try{lg.del.forEach(x=>localStorage.removeItem(x));}catch(e){} // plain copies removed only after the encrypted ones are written / se borran los originales solo después de guardar los cifrados
+    }else{
+      try{for(const kk in lg.map)localStorage.setItem(kk,lg.map[kk]);lg.del.forEach(x=>localStorage.removeItem(x));}catch(e){}
+      await pfEnter(prof.id,null);
+    }
   }catch(e){m.textContent=t('pfNoCrypto');}
 }
 
@@ -317,7 +413,7 @@ async function pfDelete(id){
   const p=pfGet(id),m=$('gmsg');if(!p)return;
   const w=pfWait('p',id);if(w){m.textContent=t('pfWait',pfWaitTxt(w));return;}
   try{if(p.pw&&!(await pfCheck(gv('gpw'),p.pw))){const x=pfFail('p',id);m.textContent=x.u>Date.now()?t('pfWait',pfWaitTxt(pfWait('p',id))):t('pfWrong',Math.max(0,3-x.n));return;}}catch(e){m.textContent=t('pfNoCrypto');return;}
-  const k=pfKeys(id);try{[k.d,k.s,k.a,'bl_thp_'+id,'bl_thq_'+id].forEach(x=>localStorage.removeItem(x));}catch(e){}
+  const k=pfKeys(id);try{[k.d,k.s,k.a,'bl_thrp_'+id,'bl_thrq_'+id].forEach(x=>localStorage.removeItem(x));}catch(e){}
   PFS=PFS.filter(x=>x.id!==id);pfSave();
   try{if(localStorage.getItem('bl_last')===id)localStorage.removeItem('bl_last');}catch(e){}
   if(!PFS.length){GS={};gNew(1,{first:true});}else gPick(true);
@@ -348,7 +444,10 @@ async function pfQSave(id){
   m.textContent=t('pfSecuring');
   try{
     if(!(await pfCheck(gv('gcur'),p.pw))){const x=pfFail('p',id);m.textContent=x.u>Date.now()?t('pfWait',pfWaitTxt(pfWait('p',id))):t('pfWrong',Math.max(0,3-x.n));return;}
-    pfOk('p',id);p.qs=await Promise.all(q.map(async x=>Object.assign(await pfHash(pfNormAns(x.a)),{i:x.i})));pfSave();
+    pfOk('p',id);
+    if(p.enc&&ENC){p.enc.wq=await pfWrap(pfAnsKey(q.map(x=>x.a)),ENC.raw);p.qs=q.map(x=>({i:x.i}));}
+    else p.qs=await Promise.all(q.map(async x=>Object.assign(await pfHash(pfNormAns(x.a)),{i:x.i})));
+    pfSave();
   }catch(e){m.textContent=t('pfNoCrypto');return;}
   gateHide();toast(t('saved'));
 }
@@ -418,7 +517,7 @@ async function pfSendGo(){
     pfOk('p',p.id);
     await pfLib('lib/qrcode.min.js');
     const n8=crypto.getRandomValues(new Uint32Array(2)),pin=String(n8[0]%10000).padStart(4,'0')+String(n8[1]%10000).padStart(4,'0');
-    const bytes=await pfPack({v:1,p:{name:p.name,av:p.av,pw:p.pw,qs:p.qs},d:DATA,s:SET},pin);
+    const bytes=await pfPack({v:1,p:{name:p.name,av:p.av,pw:p.pw,qs:p.qs,enc:p.enc},k:(p.enc&&ENC)?b64(ENC.raw):null,d:DATA,s:SET},pin);
     const fr=pfFrames(bytes);pfShowFrames(fr,pin);
   }catch(e){m.textContent=t('pfTxFail');}
 }
@@ -501,11 +600,19 @@ async function pfRecvGo(){
     pfOk('x','rx');
     if(!pl||pl.v!==1||!pl.p)throw new Error('fmt');
     if(PFS.length>=PF_MAX){m.textContent=t('pfMax');return;}
-    const base=pfClean({id:'p'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:pl.p.name,av:pl.p.av,pw:pl.p.pw,qs:pl.p.qs,rm:0,t:Date.now()});
+    const base=pfClean({id:'p'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:pl.p.name,av:pl.p.av,pw:pl.p.pw,qs:pl.p.qs,enc:pl.p.enc,rm:0,t:Date.now()});
     if(!base)throw new Error('prof');
-    const k=pfKeys(base.id),set=pfSafeSet(pl.s);
+    const k=pfKeys(base.id),set=pfSafeSet(pl.s),data=pfSafeData(pl.d);
     if(!set.lang)set.lang=LANG;
-    if(!jset(k.d,pfSafeData(pl.d))||!jset(k.s,set))throw new Error('save');
-    PFS.push(base);pfSave();GS={};pfEnter(base.id,false);
+    PFS.push(base);pfSave();GS={};
+    if(base.enc){
+      const raw=typeof pl.k==='string'&&B64_RE.test(pl.k)?unb64(pl.k):null;
+      if(!raw||raw.length!==32){PFS.pop();pfSave();throw new Error('key');}
+      const seed={};seed[k.d]=JSON.stringify(data);seed[k.s]=JSON.stringify(set);
+      await pfEnter(base.id,raw,seed);
+    }else{
+      if(!jset(k.d,data)||!jset(k.s,set)){PFS.pop();pfSave();throw new Error('save');}
+      await pfEnter(base.id,null);
+    }
   }catch(e){m.textContent=t('pfTxBad');}
 }

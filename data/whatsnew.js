@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v15',items:[
+  {i:'🔐',en:'<b>Your data is now encrypted</b> on this phone (AES-256). Your password unlocks it. If you forget it, you need all three security answers, exactly, to get back in — so choose answers you will remember.',es:'<b>Tus datos ahora están cifrados</b> en este teléfono (AES-256). Tu contraseña los abre. Si la olvidas, necesitas las tres respuestas de seguridad, exactas, para volver a entrar — elige respuestas que recuerdes.'},
+  {i:'ℹ️',en:'"Keep me signed in" was removed: it would have meant leaving the key on the phone. You stay signed in until you close the app.',es:'Se quitó "Mantener mi sesión": habría obligado a dejar la llave en el teléfono. Sigues dentro hasta que cierres la app.'}]},
  {v:'v14',items:[
   {i:'👤',en:'<b>Profiles</b> — everyone gets their own log. Pick who is training from a Netflix-style screen, with an avatar or your own photo and a strong password.',es:'<b>Perfiles</b> — cada quien tiene su propio registro. Elige quién entrena en una pantalla estilo Netflix, con avatar o tu propia foto y una contraseña fuerte.'},
   {i:'🔑',en:'<b>Forgot your password?</b> Answer your three security questions to set a new one. The password is a lock for this phone; it does not encrypt your data.',es:'<b>¿Olvidaste tu contraseña?</b> Responde tus tres preguntas de seguridad para crear una nueva. La contraseña es un candado para este teléfono; no cifra tus datos.'},

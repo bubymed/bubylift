@@ -158,7 +158,8 @@ function importFile(inp){
 /* ---------- erase everything ---------- */
 function eraseAsk(){ask(t('eraseAsk'),t('continue'),function(){ask(t('eraseAsk2'),t('eraseAll'),eraseAll,true);},true);}
 function eraseAll(){
-  try{[K_DATA,K_SET,K_ACT].forEach(k=>localStorage.removeItem(k));}catch(e){}
+  [K_DATA,K_SET,K_ACT].forEach(jdel);
   stopRest();unwake();
-  location.replace(location.pathname);
+  const go=function(){location.replace(location.pathname);};
+  if(ENC)pfFlush().then(go,go);else go();
 }
