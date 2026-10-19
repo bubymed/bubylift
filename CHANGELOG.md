@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v22 — 2026-10-19
+- **Share the app:** More › Share the app shows a QR code of the app link, with Share and Copy link buttons.
+  **Compartir la app:** Más › Compartir la app muestra un código QR con el enlace de la app, con botones para compartir y copiar el enlace.
+
 ## v21 — 2026-10-19
 - **Guest mode:** the first screen now offers Create a profile, Continue as guest, or Bring a profile from another phone. Guests start training right away; their data stays only in this browser. A reminder (at most once a week, after the first workout) and a button in the avatar menu explain the risk and let them create a real profile. The guest's data moves into the new protected profile.
   **Modo invitado:** la primera pantalla ofrece Crear un perfil, Continuar como invitado o Traer un perfil de otro teléfono. Los invitados empiezan a entrenar al instante; sus datos se quedan solo en este navegador. Un aviso (como máximo una vez por semana, tras el primer entrenamiento) y un botón en el menú del avatar explican el riesgo y permiten crear un perfil real. Los datos del invitado pasan al nuevo perfil protegido.
