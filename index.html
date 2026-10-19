@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bubylift — Workout Log</title>
+<meta name="description" content="Free offline workout, progress and body log. No account — your data stays on your phone.">
+<meta name="theme-color" content="#0B0B0F">
+<script>try{var _s=JSON.parse(localStorage.getItem("bl_settings")||"{}"),_m=_s.theme;if(_m!=="light"&&_m!=="dark")_m=(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)?"light":"dark";document.documentElement.setAttribute("data-mode",_m);}catch(e){document.documentElement.setAttribute("data-mode","dark");}</script>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bubylift">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/favicon-32.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header id="top">
+    <span class="brand">Bubylift</span>
+    <span class="langsw"><button id="lEN" onclick="setLang('en')" title="English">EN</button><button id="lES" onclick="setLang('es')" title="Español">ES</button></span>
+    <span class="spacer"></span>
+    <button id="instBtn" class="inst-btn" onclick="installApp()" style="display:none">📲 Install</button>
+  </header>
+  <main id="main"><noscript>Bubylift needs JavaScript. / Bubylift necesita JavaScript.</noscript></main>
+</div>
+<div id="restbar" hidden></div>
+<nav id="tabbar"></nav>
+<div id="sheetov" hidden><div id="sheet" role="dialog" aria-modal="true"></div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="data/i18n.js"></script>
+<script src="data/exercises.js"></script>
+<script src="data/whatsnew.js"></script>
+<script src="app.js"></script>
+<script src="workout.js"></script>
+<script src="history.js"></script>
+<script src="body.js"></script>
+<script>boot();</script>
+</body>
+</html>
