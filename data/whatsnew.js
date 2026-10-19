@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v22',items:[
+  {i:'📤',en:'<b>Share the app with a QR code</b> — More › Share the app shows a code your friends can scan to open Bubylift, plus buttons to send or copy the link.',es:'<b>Comparte la app con un código QR</b> — Más › Compartir la app muestra un código que tus amigos pueden escanear para abrir Bubylift, con botones para enviar o copiar el enlace.'}]},
  {v:'v21',items:[
   {i:'👤',en:'<b>Try it as a guest</b> — start training right away without a profile. When you want to keep your data safe and move it to another phone with a QR, create a profile and everything you logged comes with you.',es:'<b>Pruébalo como invitado</b> — empieza a entrenar ya sin crear un perfil. Cuando quieras proteger tus datos y pasarlos a otro teléfono con un QR, crea un perfil y todo lo que registraste se viene contigo.'}]},
  {v:'v20',items:[

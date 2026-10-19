@@ -386,6 +386,13 @@ const STR={
  schW_runrun:['{0} and {1} are two hard runs or conditioning days in a row ({2}, {3}). Put an easy or rest day between them.','{0} y {1} son dos días duros de carrera o acondicionamiento seguidos ({2}, {3}). Pon un día suave o de descanso entre ellos.'],
  schW_upup:['{0} and {1} train the same upper-body muscles on back-to-back days ({2}, {3}). A rest day in between helps recovery.','{0} y {1} trabajan los mismos músculos del tren superior en días seguidos ({2}, {3}). Un descanso en medio ayuda a recuperar.'],
  planDelShort:['Delete plan','Eliminar plan'],
+ // v22 share
+ shT:['Share the app','Compartir la app'],
+ shP:['Point a friend\'s camera at this code to open Bubylift. It is free, works offline and keeps their data on their own phone.','Apunta la cámara de un amigo a este código para abrir Bubylift. Es gratis, funciona sin internet y sus datos se quedan en su propio teléfono.'],
+ shSend:['Share link','Compartir enlace'],
+ shCopy:['Copy link','Copiar enlace'],
+ shCopied:['Link copied','Enlace copiado'],
+ shMsg:['Bubylift: a free gym log and smart workout plans that work offline.','Bubylift: un registro de gimnasio gratis y planes de entrenamiento inteligentes que funcionan sin internet.'],
  // v21 guest
  pfGuest:['Guest','Invitado'],
  pfWelT:['Welcome to Bubylift','Bienvenido a Bubylift'],

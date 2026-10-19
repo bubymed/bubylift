@@ -101,7 +101,7 @@ function vMore(){
     '<p class="muted sm">'+(SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+'</p></div>';
   h+='<div class="sec"><h2>'+t('creator')+'</h2></div><div class="card creator"><div class="cr-top"><span class="cr-av">M<img src="icons/creator.jpg" alt="" onerror="this.remove()"></span><div><b>Mike</b><div class="muted sm">@bubylifts</div></div></div>'+
     '<p class="sm">'+t('crBio')+'</p><a class="btn pri wide" href="https://www.instagram.com/bubylifts/" target="_blank" rel="noopener">📷 '+t('crFollow')+'</a></div>';
-  h+='<div class="sec"><h2>'+t('app')+'</h2></div><div class="card"><div class="menu">'+(canInstall()?'<button onclick="installApp()">📲 '+t('install')+'</button>':'')+'<button onclick="wnShow(true)">✨ '+t('whatsNew')+'</button></div>'+
+  h+='<div class="sec"><h2>'+t('app')+'</h2></div><div class="card"><div class="menu">'+(canInstall()?'<button onclick="installApp()">📲 '+t('install')+'</button>':'')+'<button onclick="shareOpen()">📤 '+t('shT')+'</button><button onclick="wnShow(true)">✨ '+t('whatsNew')+'</button></div>'+
     '<details class="dtl nob"><summary>'+t('about')+' · Bubylift '+APP_VER+'</summary><p class="sm">'+t('privacy')+'</p><p class="muted sm">'+t('credits')+'</p><p class="muted sm">'+t('disclaimer')+'</p>'+
     '<p class="sm"><a href="https://github.com/bubymed/bubylift" target="_blank" rel="noopener">github.com/bubymed/bubylift</a></p></details></div>';
   h+='<div class="card"><button class="btn danger wide" onclick="eraseAsk()">'+t('eraseAll')+'</button></div>';
@@ -190,4 +190,17 @@ function eraseAll(){
   stopRest();unwake();
   const go=function(){location.replace(location.pathname);};
   if(ENC)pfFlush().then(go,go);else go();
+}
+
+/* share the app with a QR code / compartir la app con un código QR */
+const APP_URL='https://bubymed.github.io/bubylift/';
+async function shareOpen(){
+  sheet('<div class="form"><div class="pick-h"><h3>📤 '+t('shT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted">'+t('shP')+'</p><div class="qrbox" id="shqr" style="cursor:default"></div><p class="g-c"><b>'+APP_URL.replace('https://','')+'</b></p>'+
+    '<div class="row">'+(navigator.share?'<button class="btn pri" onclick="shareNative()">📤 '+t('shSend')+'</button>':'')+'<button class="btn" onclick="shareCopy()">🔗 '+t('shCopy')+'</button></div><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
+  try{await pfLib('lib/qrcode.min.js');const e=$('shqr');if(e)e.innerHTML=pfQrSvg(APP_URL);}catch(e){const x=$('shqr');if(x)x.remove();}
+}
+function shareNative(){try{navigator.share({title:'Bubylift',text:t('shMsg'),url:APP_URL}).catch(function(){});}catch(e){}}
+function shareCopy(){
+  const ok=()=>toast(t('shCopied'));
+  try{navigator.clipboard.writeText(APP_URL).then(ok,()=>prompt(t('shCopy'),APP_URL));}catch(e){prompt(t('shCopy'),APP_URL);}
 }
