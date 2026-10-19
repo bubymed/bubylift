@@ -271,7 +271,7 @@ function genPlan(prof0){
     if(ed.goal==='fat'){const cid=avail('treadmill',have)?'treadmill':'walk';ex.push({eid:cid,sets:1,lo:15,hi:20,u:'m',r:'a',cn:''});}
     return prof.mix?{k:k,g:dgoal[di],ex:ex}:{k:k,ex:ex};
   });
-  return{goal:prof.goal,n:prof.n,lvl:prof.lvl,t0:Date.now(),ct:0,cur:0,ds:ds,checks:[],prof:prof};
+  return{goal:prof.goal,n:prof.n,lvl:prof.lvl,t0:Date.now(),ct:0,cur:0,ds:ds,wd:defaultWd(ds),wu:0,checks:[],prof:prof};
 }
 function cleanPlan(p){
   if(!p||typeof p!=='object'||PGOALS.indexOf(p.goal)<0||PLVLS.indexOf(p.lvl)<0||!(p.n>=2&&p.n<=5)||typeof p.t0!=='number'||!Array.isArray(p.ds)||p.ds.length!==p.n)return null;
@@ -285,6 +285,8 @@ function cleanPlan(p){
   const prof=normProf(p.prof&&typeof p.prof==='object'?Object.assign({},p.prof,{n:p.n,goal:p.goal,lvl:p.lvl}):{n:p.n,goal:p.goal,lvl:p.lvl,have:HAVE_KEYS.slice()});
   const o={goal:prof.goal,n:p.n,lvl:p.lvl,t0:p.t0,ct:cn(p.ct)||0,ds:ds,checks:checks,prof:prof};
   if(Number.isInteger(p.cur)&&p.cur>=0&&p.cur<p.n)o.cur=p.cur;
+  const okWd=Array.isArray(p.wd)&&p.wd.length===p.n&&p.wd.every((w,i)=>Number.isInteger(w)&&w>=0&&w<=6&&p.wd.indexOf(w)===i);
+  o.wd=okWd?p.wd.slice():defaultWd(ds);o.wu=okWd&&p.wu?1:0;
   return o;
 }
 
@@ -333,7 +335,9 @@ function suggLine(x){
 /* ---------- progress through the plan ---------- */
 function planDone(){const p=DATA.plan;return p?DATA.workouts.filter(w=>w.pl!=null&&w.t>=p.t0):[];}
 function weekStart(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d.getTime();}
-function planNext(){const p=DATA.plan;if(!p)return 0;return Number.isInteger(p.cur)?p.cur%p.n:planDone().length%p.n;}
+function planNext(){const p=DATA.plan;if(!p)return 0;
+  if(p.wu&&Array.isArray(p.wd)){const i=p.wd.indexOf(new Date().getDay());if(i>=0&&!planDone().some(w=>w.pl===i&&dInput(w.t)===dInput(Date.now())))return i;} // your own schedule decides today / tu horario decide hoy
+  return Number.isInteger(p.cur)?p.cur%p.n:planDone().length%p.n;}
 function planWeek(){const ws=weekStart();return planDone().filter(w=>w.t>=ws).length;}
 function checkDue(){
   const p=DATA.plan;if(!p)return false;
@@ -389,7 +393,9 @@ function planCard(){
   if(!p)return'<div class="card tip"><b>'+t('planT')+'</b><p>'+t('planP')+'</p><div class="row"><button class="btn pri" onclick="planSetup()">'+t('planMake')+'</button></div></div>';
   const i=planNext(),d=p.ds[i];
   let h='<div class="swp"><div class="swp-h swp-hl">'+t('swSkip')+'</div><div class="swp-h swp-hr">'+t('swChange')+'</div><div class="card plan swp-in" data-l="planSkipAsk" data-r="planPickDay"><div class="plh"><b>'+t('planToday')+'</b><span class="muted sm">'+t('planWeek',planWeek(),p.n)+'</span></div><h3>'+esc(dayName(i))+'</h3>'+planBrief(d)+
+    (p.wu?'<p class="muted sm">📅 '+(p.wd.indexOf(new Date().getDay())>=0?t('schCardOn',wdName(new Date().getDay())):t('schCardRest'))+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn" onclick="planOpen()">'+t('planAll')+'</button></div>'+
+    '<div class="row"><button class="btn" onclick="schedOpen()">📅 '+t('schBtn')+'</button><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDelShort')+'</button></div>'+
     '<p class="muted sm swhint">'+t('swHint')+'</p>'+testLine(p);
   if(checkDue())h+='<div class="pldue"><b>'+t('chkDue')+'</b><button class="btn sm" onclick="chkOpen()">'+t('chkOpen')+'</button></div>';
   return h+'</div></div>';
@@ -444,7 +450,7 @@ function planOpen(d){
   if(gs.indexOf('bodybuilding')>=0)tips+='<h4>'+t('bbT')+'</h4><p class="sm">'+t('bbTips1')+'</p><p class="sm">'+t('bbTips2')+'</p>';
   if(hyg)tips+='<h4>'+t(hyg==='military'?'hyT':'hyT2')+'</h4>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
   tips+='<h4>'+t('guideT')+'</h4><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p><p class="muted sm">'+t('planNote')+'</p>';
-  h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="chkOpen()">📋 '+t('chkOpen')+'</button><button class="btn" onclick="focusOpen()">🎯 '+t('focusT')+'</button><button class="btn" onclick="planSetup()">⚙ '+t('planChange')+'</button></div>'+
+  h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="chkOpen()">📋 '+t('chkOpen')+'</button><button class="btn" onclick="schedOpen()">📅 '+t('schBtn')+'</button><button class="btn" onclick="focusOpen()">🎯 '+t('focusT')+'</button><button class="btn" onclick="planSetup()">⚙ '+t('planChange')+'</button></div>'+
     '<details class="dtl"><summary>'+t('tipsT')+'</summary>'+tips+'</details>'+
     '<div class="dz"><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDel')+'</button></div></div>';
   sheet(h);
@@ -701,3 +707,80 @@ function howOpen(eid,back){
     '<p class="muted sm">'+esc(HOWSAFE[es?1:0])+'</p>'+
     '<div class="row"><button class="btn pri" onclick="'+(back||'sheetClose')+'()">'+t('done')+'</button></div></div>');
 }
+
+
+/* ---------- weekly schedule: put each training day on a weekday, with advice / horario semanal: cada día de entrenamiento en un día de la semana, con consejos ---------- */
+// l = loads the legs · u = upper body · R = hard run or work-capacity day · r = easy run / l = piernas · u = tren superior · R = carrera dura o capacidad · r = carrera suave
+const WD_DT={full:'lu',fullL:'lu',fullA:'lu',fullB:'lu',fullC:'lu',up:'u',up1:'u',up2:'u',upLite:'u',push:'u',pull:'u',arms:'u',lowQ:'l',lowG:'l',low1:'l',low2:'l',hyStr:'lu',hyStrL:'l',hyStrU:'u',hyRunI:'R',hyRunE:'r',hyCap:'R',runT:'R',runL:'R',runS:'l',bbFull:'lu',bbUp:'u',bbLow:'l',bbLow2:'l',bbPush:'u',bbPull:'u'};
+const wdHas=(k,c)=>(WD_DT[k]||'').indexOf(c)>=0;
+const wdName=(w,short)=>new Date(2023,0,1+w).toLocaleDateString(LANG==='es'?'es':'en-US',{weekday:short?'short':'long'});
+function wdAt(wd){const at=[-1,-1,-1,-1,-1,-1,-1];wd.forEach((w,i)=>{at[w]=i;});return at;}
+function wdWarn(ds,wd){
+  const at=wdAt(wd),out=[];
+  for(let w=0;w<7;w++){
+    const a=at[w],b=at[(w+1)%7];if(a<0||b<0||a===b)continue;
+    const ka=ds[a].k,kb=ds[b].k,la=wdHas(ka,'l'),lb=wdHas(kb,'l'),ra=wdHas(ka,'R'),rb=wdHas(kb,'R');
+    if(la&&lb)out.push({t:'lo',a:a,b:b,w:w});
+    else if((la&&rb)||(ra&&lb))out.push({t:'runlo',a:a,b:b,w:w});
+    else if(ra&&rb)out.push({t:'runrun',a:a,b:b,w:w});
+    else if(ka===kb&&wdHas(ka,'u')&&!la)out.push({t:'upup',a:a,b:b,w:w});
+  }
+  return out;
+}
+/* best weekdays for the plan: no clashes, evenly spread, weekdays preferred / mejores días: sin choques, repartidos, entre semana primero */
+function defaultWd(ds){
+  const n=ds.length;let best=null,bs=1e9;
+  for(let m=0;m<128;m++){
+    const sel=[];for(let w=0;w<7;w++)if(m&(1<<w))sel.push(w);
+    if(sel.length!==n)continue;
+    let sc=wdWarn(ds,sel).length*100+sel.filter(w=>w===0||w===6).length*2+(sel[0]===0?1:0);
+    for(let i=0;i<n;i++){const g=((sel[(i+1)%n]-sel[i])+7)%7||7;sc+=Math.pow(g-7/n,2);}
+    if(sc<bs){bs=sc;best=sel;}
+  }
+  return best||ds.map((d,i)=>i);
+}
+function wdFix(ds,wd){
+  const cur=wdWarn(ds,wd).length,at=wdAt(wd);let best=null,bc=1e9;
+  ds.forEach((d,i)=>{for(let w2=0;w2<7;w2++){
+    if(w2===wd[i])continue;
+    const nw=wd.slice(),j=at[w2];nw[i]=w2;if(j>=0)nw[j]=wd[i];
+    const c=wdWarn(ds,nw).length;if(c>=cur)continue;
+    const cost=c*10+Math.min(Math.abs(w2-wd[i]),7-Math.abs(w2-wd[i]));
+    if(cost<bc){bc=cost;best=nw;}
+  }});
+  return best;
+}
+let SC={pick:null};
+function schedOpen(){SC.pick=null;schedDraw();}
+function schedDraw(){
+  const p=DATA.plan;if(!p)return;
+  const at=wdAt(p.wd),today=new Date().getDay(),pk=SC.pick;
+  const rows=[0,1,2,3,4,5,6].map(w=>{
+    const i=at[w],tag=w===today?' <span class="schtd">'+t('schToday')+'</span>':'';
+    if(i<0)return'<div class="schr rest"><div class="schw">'+esc(wdName(w))+tag+'</div><div class="schb muted">'+t('schRest')+'</div>'+(pk!=null?'<button class="btn sm" onclick="schedMove('+w+')">'+t('schHere')+'</button>':'<span></span>')+'</div>';
+    const d=p.ds[i],names=d.ex.map(e=>esc(exName(e.eid))).join(' · ');
+    return'<div class="schr'+(pk===i?' pick':'')+'"><div class="schw">'+esc(wdName(w))+tag+'</div><div class="schb"><b>'+esc(dayName(i))+'</b>'+(d.g?'<span class="muted sm"> · '+esc(t('pg_'+d.g))+'</span>':'')+'<small>'+names+'</small></div>'+
+      (pk==null?'<button class="btn sm" onclick="schedMove('+w+')">↕ '+t('schMove')+'</button>':(pk===i?'<button class="btn sm" onclick="schedCancel()">'+t('cancel')+'</button>':'<button class="btn sm" onclick="schedMove('+w+')">⇄ '+t('schSwap')+'</button>'))+'</div>';
+  }).join('');
+  const W=wdWarn(p.ds,p.wd);
+  const adv=W.map(x=>'<li>⚠ '+esc(t('schW_'+x.t,dayName(x.a),dayName(x.b),wdName(x.w,1),wdName((x.w+1)%7,1)))+'</li>');
+  // three or more training days in a row / tres o más días seguidos
+  let run=0,mx=0,st=-1;for(let k=0;k<14;k++){const w=k%7;if(at[w]>=0){run++;if(run>mx){mx=run;st=k-run+1;}}else run=0;}
+  if(mx>=3&&mx<7)adv.push('<li>ℹ️ '+esc(t('schStreak',mx,wdName(st%7,1)))+'</li>');
+  const fix=W.length?wdFix(p.ds,p.wd):null;
+  sheet('<div class="form"><div class="pick-h"><h3>'+t('schT')+'</h3><button class="ico" onclick="planOpen()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+    '<p class="muted sm">'+(pk!=null?t('schPick',esc(dayName(pk))):t('schP'))+'</p>'+rows+
+    '<div class="lbl">'+t('schAdv')+'</div><div class="card schadv"><ul class="schul">'+(adv.length?adv.join(''):'<li>✓ '+t('schOk')+'</li>')+'</ul>'+
+    (W.length?(fix?'<button class="btn pri wide" onclick="schedFix()">'+t('schFix')+'</button>':'<p class="muted sm">'+t('schNoFix')+'</p>'):'')+'</div>'+
+    '<div class="row"><button class="btn" onclick="schedReset()">'+t('schReset')+'</button><button class="btn pri" onclick="planOpen()">'+t('done')+'</button></div></div>');
+}
+function schedMove(w){
+  const p=DATA.plan;if(!p)return;const at=wdAt(p.wd);
+  if(SC.pick==null){SC.pick=at[w];schedDraw();return;}
+  const a=SC.pick,b=at[w],from=p.wd[a];
+  if(b!==a){p.wd[a]=w;if(b>=0)p.wd[b]=from;p.wu=1;saveData();}
+  SC.pick=null;schedDraw();
+}
+function schedCancel(){SC.pick=null;schedDraw();}
+function schedFix(){const p=DATA.plan;if(!p)return;const f=wdFix(p.ds,p.wd);if(f){p.wd=f;p.wu=1;saveData();render();}schedDraw();}
+function schedReset(){const p=DATA.plan;if(!p)return;p.wd=defaultWd(p.ds);p.wu=0;saveData();render();SC.pick=null;schedDraw();}

@@ -6,6 +6,14 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v18 — 2026-10-19
+- **Clear set:** a visible red ✕ button on every set row empties that set (weight, reps/time, done mark) in one tap.
+  **Borrar serie:** un botón ✕ rojo visible en cada fila de serie vacía esa serie (peso, repeticiones/tiempo y marca de hecho) con un toque.
+- **Delete plan on the main card:** "Delete plan" now sits on the plan card (it still asks for confirmation).
+  **Eliminar plan en la tarjeta principal:** "Eliminar plan" ahora está en la tarjeta del plan (sigue pidiendo confirmación).
+- **Weekly schedule:** Sunday to Saturday list with each training day's name and exercises; move a day to another weekday (or swap). Advice flags back-to-back leg days, hard run next to legs, two hard runs in a row and same upper-body days, with a "Fix it for me" button. Once you edit the schedule, "today" follows it.
+  **Horario semanal:** lista de domingo a sábado con el nombre y los ejercicios de cada día; mueve un día a otro día de la semana (o intercámbialo). Los consejos avisan de días de piernas seguidos, carrera dura junto a piernas, dos carreras duras seguidas y el mismo tren superior, con un botón "Arréglalo por mí". Cuando editas el horario, "hoy" lo sigue.
+
 ## v17 — 2026-10-19
 - **Weight entry and trend:** big weight field with − / + (0.1) buttons and one-tap save; one entry per day (saving again updates it). The chart shows your weigh-ins as dots and a smoothed trend line, with ranges (1 month, 3 months, 1 year, all), your pace per week and an estimate of the weeks to your goal. Date, body fat, measurements and note moved into a "more" section.
   **Registro y tendencia del peso:** campo grande con botones − / + (0.1) y guardado en un toque; una entrada por día (guardar de nuevo la actualiza). La gráfica muestra tus pesajes como puntos y una línea de tendencia suavizada, con rangos (1 mes, 3 meses, 1 año, todo), tu ritmo por semana y una estimación de semanas para tu meta. Fecha, grasa, medidas y nota pasaron a una sección "más".
