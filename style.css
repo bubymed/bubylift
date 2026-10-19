@@ -405,3 +405,12 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .g-c.muted,.g-form p.g-c{text-align:center}
 .g-form .btn+p.muted.sm{margin:-4px 0 10px}
 .menu button.pri{background:var(--accent);color:var(--on-accent);font-weight:700}
+
+/* ===== v24: NASM OPT sessions / sesiones NASM OPT ===== */
+.secl{margin:18px 0 6px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.ssl{display:inline-block;min-width:1.7em;margin-right:6px;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);font-style:normal;font-size:.72rem;font-weight:800;text-align:center}
+.optb{margin:10px 0}
+.optul{margin:6px 0 0;padding-left:18px;font-size:.85rem;color:var(--dim);line-height:1.45}
+.optd{margin:10px 0}
+.optd summary{font-weight:700;cursor:pointer}
+.optd .optul{margin-top:8px}

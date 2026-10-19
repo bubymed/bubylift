@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v24',items:[
+  {i:'🎯',en:'<b>Workouts now follow the NASM OPT model</b> — five training phases, and every session has a warm-up, core and balance activation, resistance training (with supersets in Phases 2 and 5) and a cool-down, with the sets, reps, tempo and rest from the NASM templates. You start in the phase that fits your level and can move up from More or at your check-in.',es:'<b>Los entrenamientos ahora siguen el modelo OPT del NASM</b> — cinco fases de entrenamiento, y cada sesión tiene calentamiento, activación de core y equilibrio, resistencia (con supersets en las Fases 2 y 5) y enfriamiento, con las series, repeticiones, tempo y descanso de las plantillas del NASM. Empiezas en la fase que corresponde a tu nivel y puedes subir de fase desde el plan o en tu chequeo.'}]},
  {v:'v23',items:[
   {i:'🔄',en:'<b>Check for updates</b> — More › App has a button that looks for a newer version and loads it, and shows which version you have.',es:'<b>Buscar actualizaciones</b> — Más › App tiene un botón que busca una versión nueva y la carga, y muestra qué versión tienes.'}]},
  {v:'v22',items:[
