@@ -106,7 +106,7 @@ function exCard(i,x){
   h+=suggLine(x);
   h+='<div class="exsub muted sm">'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
-  h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+t('colPrev')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
+  h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+t('colPrev')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span><span></span></div>';
   x.sets.forEach((s,j)=>{
     const ph=pv[j]||(pv.length?pv[pv.length-1]:null)||(j>0?x.sets[j-1]:null);
     let f1,f2,p1,p2,k1,k2;
@@ -115,10 +115,16 @@ function exCard(i,x){
     const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
     const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+(d<0?'−':'+')+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
     const inp=(k,v,p,mode)=>m==='t'?inp0(k,v,p,mode):'<span class="stc">'+stb(k,-1)+inp0(k,v,p,mode)+stb(k,1)+'</span>';
-    h+='<div class="srow'+(s.done?' done':'')+'"><span class="sn">'+(j+1)+(s.pr?'<i class="pr" title="PR">🏆</i>':'')+'</span><span class="sp">'+esc(fmtPrev(m,pv[j]))+'</span>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('doneSet'))+'" onclick="tgSet('+i+','+j+')">✓</button></div>';
+    h+='<div class="srow'+(s.done?' done':'')+'"><span class="sn">'+(j+1)+(s.pr?'<i class="pr" title="PR">🏆</i>':'')+'</span><span class="sp">'+esc(fmtPrev(m,pv[j]))+'</span>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('doneSet'))+'" onclick="tgSet('+i+','+j+')">✓</button><button class="clr'+((s.w!=null||s.r!=null||s.t!=null||s.d||s.done)?'':' off')+'" aria-label="'+esc(t('clrSet'))+'" title="'+esc(t('clrSet'))+'" onclick="clrSet('+i+','+j+')">✕</button></div>';
   });
   h+='<button class="btn sm wide" onclick="addSet('+i+')">＋ '+t('addSet')+'</button></section>';
   return h;
+}
+/* wipe one set back to empty (fix a typo quickly) / dejar una serie vacía (corregir un error rápido) */
+function clrSet(i,j){
+  const s=ACT.ex[i].sets[j];if(!s)return;
+  s.w=null;s.r=null;s.t=null;s.d=null;s.done=false;delete s.pr;
+  saveAct();render();toast(t('clrDone'));
 }
 function sv(i,j,f,v){
   const s=ACT.ex[i].sets[j];v=String(v).trim();let n=null;
