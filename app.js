@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v12';
+const APP_VER='v13';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 const K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active';
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';

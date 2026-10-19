@@ -283,3 +283,7 @@ h3{font-size:1.2rem;font-weight:600}
 .wkc{padding:14px 16px}.wkc-n{font-weight:500;color:var(--dim);margin:0 0 2px}
 .wkc .muted:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .wkc::after{content:'›';float:right;color:var(--dim)}
+/* iOS Safari: date fields keep their width and align left / los campos de fecha en iOS respetan el ancho y van a la izquierda */
+input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;min-height:44px;text-align:left;line-height:1.2}
+input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and-time-value{text-align:left;min-height:1.2em}
+input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
