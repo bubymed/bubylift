@@ -399,3 +399,9 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .vleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.75rem;color:var(--dim);margin:12px 0 2px}
 .vleg i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:5px;vertical-align:middle;position:static}
 .vleg i.vp{width:3px;height:12px}
+
+/* ===== v21: guest mode / modo invitado ===== */
+.wel-e{font-size:3.4rem;margin-top:24px}
+.g-c.muted,.g-form p.g-c{text-align:center}
+.g-form .btn+p.muted.sm{margin:-4px 0 10px}
+.menu button.pri{background:var(--accent);color:var(--on-accent);font-weight:700}
