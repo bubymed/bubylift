@@ -6,6 +6,18 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v4 — 2026-10-18
+- **Smarter plan builder:** a 7-step guide asks your goal, the muscles you want to bring up (up to 3), upper / lower / balanced emphasis, days per week, time per workout, experience, equipment and injuries. Focus muscles get extra exercises and sets and are trained at least twice a week. Plans are fully editable (sets, rep range, swap, add, remove).
+  **Armador de planes más inteligente:** una guía de 7 pasos pregunta tu meta, los músculos que quieres destacar (hasta 3), énfasis superior / inferior / equilibrado, días por semana, tiempo por entrenamiento, experiencia, equipo y lesiones. Los músculos de enfoque reciben ejercicios y series extra y se entrenan al menos dos veces por semana. Los planes se pueden editar por completo (series, rango de repeticiones, sustituir, agregar, quitar).
+- **Injury-aware:** knee, low back, shoulder, elbow, wrist, hip, ankle/foot and neck. The plan avoids exercises that stress those joints, flags others to do lightly in a pain-free range, and warns in the exercise picker. Medical conditions (pregnancy, postpartum, high blood pressure, heart) keep the plan gentle and recommend talking to a doctor. General precautions only, not medical advice.
+  **Adaptado a lesiones:** rodilla, espalda baja, hombro, codo, muñeca, cadera, tobillo/pie y cuello. El plan evita los ejercicios que cargan esas articulaciones, marca otros para hacerlos con poco peso y sin dolor, y avisa en el selector de ejercicios. Las condiciones médicas (embarazo, posparto, presión alta, corazón) mantienen el plan suave y recomiendan hablar con un médico. Solo precauciones generales, no consejo médico.
+- **Equipment & substitutions:** tell Bubylift what you have (barbell, dumbbells, cables, machines, bands, bench, pull-up bar…). Tap ↔ on any exercise, in your workout or your plan, to get alternatives you can actually do, and save your equipment. Eight new home-friendly exercises.
+  **Equipo y sustituciones:** dile a Bubylift qué tienes (barra, mancuernas, poleas, máquinas, bandas, banco, barra de dominadas…). Toca ↔ en cualquier ejercicio, en tu entrenamiento o en tu plan, para ver alternativas que sí puedes hacer, y guarda tu equipo. Ocho ejercicios nuevos para casa.
+- **Easier logging:** − / + buttons for weight and reps on every set.
+  **Registro más fácil:** botones − / + para el peso y las repeticiones en cada serie.
+- **Swipe gestures:** swipe the "Up next" card left to skip today or right to pick another day; swipe a routine left to delete or right to edit.
+  **Gestos de deslizar:** desliza la tarjeta "Te toca" a la izquierda para saltar hoy o a la derecha para escoger otro día; desliza una rutina a la izquierda para eliminarla o a la derecha para editarla.
+
 ## v3 — 2026-10-18
 - **Guided weekly plan:** answer 3 questions (goal, days per week, experience) and get a week of workouts with sets and reps, started with one tap. Plans are original Bubylift templates; "Up next" shows today's day and your weekly progress. Included in backups.
   **Plan semanal guiado:** responde 3 preguntas (meta, días por semana, experiencia) y recibe una semana de entrenamientos con series y repeticiones, que se inicia con un toque. Los planes son plantillas originales de Bubylift; "Te toca" muestra el día de hoy y tu avance semanal. Se incluye en los respaldos.

@@ -67,7 +67,7 @@ function vStart(){
   h+='<button class="btn pri big wide" onclick="startWorkout()">＋ '+t('startEmpty')+'</button>';
   h+='<div class="sec"><h2>'+t('routines')+'</h2><button class="btn sm" onclick="rbOpen()">＋ '+t('newRoutine')+'</button></div>';
   if(!DATA.routines.length)h+='<p class="muted">'+t('noRoutines')+'</p>';
-  else h+=DATA.routines.map(r=>'<div class="card rt"><div class="rt-main"><b>'+esc(r.name)+'</b><div class="muted sm">'+r.ex.slice(0,4).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(r.ex.length>4?' …':'')+'</div></div><div class="rt-b"><button class="btn pri sm" onclick="startRoutine(\''+r.id+'\')">'+t('start')+'</button><button class="btn sm" onclick="rbOpen(\''+r.id+'\')">'+t('edit')+'</button></div></div>').join('');
+  else h+=DATA.routines.map(r=>'<div class="swp"><div class="swp-h swp-hl">'+t('swDelete')+'</div><div class="swp-h swp-hr">'+t('swEdit')+'</div><div class="card rt swp-in" data-l="rtDelAsk" data-r="rtEdit" data-a="'+r.id+'"><div class="rt-main"><b>'+esc(r.name)+'</b><div class="muted sm">'+r.ex.slice(0,4).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(r.ex.length>4?' …':'')+'</div></div><div class="rt-b"><button class="btn pri sm" onclick="startRoutine(\''+r.id+'\')">'+t('start')+'</button><button class="btn sm" onclick="rbOpen(\''+r.id+'\')">'+t('edit')+'</button></div></div></div>').join('');
   const lw=DATA.workouts[0];
   if(lw)h+='<div class="sec"><h2>'+t('lastWorkout')+'</h2></div>'+wkCard(lw);
   else h+='<div class="card tip"><b>'+t('welcomeT')+'</b><p>'+t('welcomeP')+'</p></div>';
@@ -102,7 +102,7 @@ function vActive(){
 }
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
-  let h='<section class="exc"><div class="exh"><b>'+esc(exName(x.eid,x.n))+'</b><span class="exb"><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="howOpen(\''+x.eid+'\')">ⓘ</button><button class="ico" aria-label="'+esc(t('options'))+'" onclick="exMenu('+i+')">⋯</button></span></div>';
+  let h='<section class="exc"><div class="exh"><b>'+esc(exName(x.eid,x.n))+'</b><span class="exb"><button class="ico" aria-label="'+esc(t('swapB'))+'" onclick="swapOpen('+i+')">↔</button><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="howOpen(\''+x.eid+'\')">ⓘ</button><button class="ico" aria-label="'+esc(t('options'))+'" onclick="exMenu('+i+')">⋯</button></span></div>';
   h+=suggLine(x);
   h+='<div class="exsub muted sm">'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
@@ -112,7 +112,9 @@ function exCard(i,x){
     let f1,f2,p1,p2,k1,k2;
     if(m==='t'){k1='t';k2='d';f1=s.t!=null?fmtNum(s.t):'';f2=dShow(s.d);p1=ph&&ph.t!=null?fmtNum(ph.t):'';p2=ph&&ph.d?dShow(ph.d):'';}
     else{k1='w';k2='r';f1=wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?wShow(ph.w):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=wShow(x.sg);}
-    const inp=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
+    const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
+    const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+(d<0?'−':'+')+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
+    const inp=(k,v,p,mode)=>m==='t'?inp0(k,v,p,mode):'<span class="stc">'+stb(k,-1)+inp0(k,v,p,mode)+stb(k,1)+'</span>';
     h+='<div class="srow'+(s.done?' done':'')+'"><span class="sn">'+(j+1)+(s.pr?'<i class="pr" title="PR">🏆</i>':'')+'</span><span class="sp">'+esc(fmtPrev(m,pv[j]))+'</span>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('doneSet'))+'" onclick="tgSet('+i+','+j+')">✓</button></div>';
   });
   h+='<button class="btn sm wide" onclick="addSet('+i+')">＋ '+t('addSet')+'</button></section>';
@@ -126,6 +128,18 @@ function sv(i,j,f,v){
     else n=numParse(v);
   }
   s[f]=n;saveAct();updTop();
+}
+function stepSet(i,j,f,d){
+  const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);if(m==='t')return;
+  const pv=lastEx(x.eid),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
+  if(f==='w'){
+    let b=s.w;if(b==null)b=(m==='wr'&&x.sg!=null)?x.sg:(ph&&ph.w!=null?ph.w:0);
+    const st=wInc();s.w=Math.max(0,Math.round((b+d*st)/st)*st);
+  }else{
+    let b=s.r;if(b==null)b=ph&&ph.r!=null?ph.r:(x.tg&&x.tg.u==='r'?x.tg.lo:0);
+    s.r=Math.max(0,Math.min(999,b+d));
+  }
+  saveAct();render();
 }
 function addSet(i){ACT.ex[i].sets.push(newSet());saveAct();render();}
 function tgSet(i,j){
@@ -170,7 +184,7 @@ function finishWk(){
   const end=Date.now();
   const ex=ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;return o;})})).filter(x=>x.sets.length);
   const wk={id:ACT.id,t:ACT.t0,end:end,name:(ACT.name||'').trim()||autoName(ACT.t0),note:(ACT.note||'').trim(),ex:ex};
-  if(ACT.pl!=null)wk.pl=ACT.pl;
+  if(ACT.pl!=null){wk.pl=ACT.pl;if(DATA.plan)DATA.plan.cur=(ACT.pl+1)%DATA.plan.n;}
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
   saveData();
   ACT=null;saveAct();stopRest();unwake();
@@ -230,7 +244,7 @@ function recentIds(){
   for(const wk of DATA.workouts){for(const x of wk.ex){if(r.indexOf(x.eid)<0)r.push(x.eid);if(r.length>=6)return r;}}
   return r;
 }
-function exRow(e){return'<button class="exrow" onclick="pickDone(\''+e.id+'\')"><b>'+esc(LANG==='es'?e.es:e.en)+'</b><small>'+t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+'</small></button>';}
+function exRow(e){return'<button class="exrow" onclick="pickDone(\''+e.id+'\')"><b>'+esc(LANG==='es'?e.es:e.en)+'</b><small>'+t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+esc(injBadge(e.id))+'</small></button>';}
 function exListHtml(){
   const q=norm(UI.q.trim()),all=EXLIB.map(a=>exById(a[0])).concat(DATA.custom.map(c=>exById(c.id)));
   let h='';
