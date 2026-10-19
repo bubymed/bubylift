@@ -102,7 +102,7 @@ function vActive(){
 }
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
-  let h='<section class="exc"><div class="exh"><b>'+esc(exName(x.eid,x.n))+'</b><span class="exb"><button class="ico" aria-label="'+esc(t('swapB'))+'" onclick="swapOpen('+i+')">↔</button><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="howOpen(\''+x.eid+'\')">ⓘ</button><button class="ico" aria-label="'+esc(t('options'))+'" onclick="exMenu('+i+')">⋯</button></span></div>';
+  let h='<section class="exc"><div class="exh"><b>'+esc(exName(x.eid,x.n))+'</b></div><div class="exb"><button class="btn sm" onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button><button class="btn sm" onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button><button class="btn sm" onclick="exMenu('+i+')">⋯ '+t('options')+'</button></div>';
   h+=suggLine(x);
   h+='<div class="exsub muted sm">'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');

@@ -71,8 +71,8 @@ function vMore(){
     '<div class="menu"><button onclick="exportJSON()">⬇ '+t('exportBackup')+'</button><button onclick="exportCSV()">⬇ '+t('exportCsv')+'</button><label class="btnl">⬆ '+t('importBackup')+'<input type="file" accept=".json,application/json" onchange="importFile(this)" hidden></label></div>'+
     '<p class="muted sm">'+(SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+'</p></div>';
   h+='<div class="card"><h2>'+t('app')+'</h2><div class="menu">'+(canInstall()?'<button onclick="installApp()">📲 '+t('install')+'</button>':'')+'<button onclick="wnShow(true)">✨ '+t('whatsNew')+'</button></div></div>';
-  h+='<div class="card"><h2>'+t('about')+'</h2><p class="muted sm">Bubylift '+APP_VER+'</p><p class="sm">'+t('privacy')+'</p><p class="muted sm">'+t('credits')+'</p><p class="muted sm">'+t('disclaimer')+'</p>'+
-    '<p class="sm"><a href="https://github.com/bubymed/bubylift" target="_blank" rel="noopener">github.com/bubymed/bubylift</a></p></div>';
+  h+='<div class="card"><details class="dtl nob"><summary>'+t('about')+' · Bubylift '+APP_VER+'</summary><p class="sm">'+t('privacy')+'</p><p class="muted sm">'+t('credits')+'</p><p class="muted sm">'+t('disclaimer')+'</p>'+
+    '<p class="sm"><a href="https://github.com/bubymed/bubylift" target="_blank" rel="noopener">github.com/bubymed/bubylift</a></p></details></div>';
   h+='<div class="card"><h2>'+t('danger')+'</h2><button class="btn danger wide" onclick="eraseAsk()">'+t('eraseAll')+'</button></div>';
   return h;
 }

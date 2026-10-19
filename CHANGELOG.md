@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v10 — 2026-10-19
+- **Cleaner, calmer screens:** My plan shows one day at a time (Day 1–4 tabs) with tappable exercises and an "Edit ›" label, plan options grouped below, tips folded away and Delete separated. The home plan card is now a short summary (exercise count + first three). Exercise cards have labeled buttons (Swap, Guide, Options) instead of bare icons. About and credits fold away in More.
+  **Pantallas más limpias y tranquilas:** Mi plan muestra un día a la vez (pestañas Día 1–4) con ejercicios tocables y la etiqueta "Editar ›", opciones del plan agrupadas abajo, consejos plegados y Eliminar aparte. La tarjeta del plan en inicio ahora es un resumen corto (cantidad de ejercicios + los tres primeros). Las tarjetas de ejercicio tienen botones con texto (Sustituir, Guía, Opciones) en vez de íconos sueltos. Acerca de y créditos se pliegan en Más.
+
 ## v9 — 2026-10-19
 - **More visible buttons:** clear outlines, bolder text and a 44 px minimum height on every button; main actions (Start, Check-in) use the accent color; destructive actions like Delete this plan are red, full-width and separated from the rest.
   **Botones más visibles:** contorno claro, texto más grueso y altura mínima de 44 px en todos los botones; las acciones principales (Empezar, Revisión) usan el color de acento; las acciones destructivas como Eliminar este plan van en rojo, a lo ancho y separadas del resto.
