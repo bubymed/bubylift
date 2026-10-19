@@ -146,11 +146,13 @@ const HYFIRST={
  gen:{}
 };
 /* pick the best available exercise for a muscle slot / elige el mejor ejercicio disponible para un hueco */
+/* test-specific drills only appear for that test / los ejercicios propios de una prueba solo salen con esa prueba */
+const TESTONLY={sdcdrill:'aft',firecarry:'usmc',ammolift:'usmc'};
 function pickFor(mu,role,ctx){
   const P=POOL[mu];if(!P)return null;
   const first=(ctx.hy&&HYFIRST[ctx.test]&&HYFIRST[ctx.test][mu+role])||[];
   const list=first.concat(role==='m'?P.m.concat(P.a):P.a.concat(P.m)).filter((x,i,a)=>a.indexOf(x)===i);
-  const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
+  const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&(!TESTONLY[id]||TESTONLY[id]===ctx.test)&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
   c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||((ctx.used[a]||0)-(ctx.used[b]||0)));
   return c[0]||null;
 }
