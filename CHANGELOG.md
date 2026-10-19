@@ -6,6 +6,16 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v3 — 2026-10-18
+- **Guided weekly plan:** answer 3 questions (goal, days per week, experience) and get a week of workouts with sets and reps, started with one tap. Plans are original Bubylift templates; "Up next" shows today's day and your weekly progress. Included in backups.
+  **Plan semanal guiado:** responde 3 preguntas (meta, días por semana, experiencia) y recibe una semana de entrenamientos con series y repeticiones, que se inicia con un toque. Los planes son plantillas originales de Bubylift; "Te toca" muestra el día de hoy y tu avance semanal. Se incluye en los respaldos.
+- **How to do it:** tap ⓘ on any exercise for step-by-step technique and a common mistake (guides for the plan exercises, general tips for the rest).
+  **Cómo hacerlo:** toca ⓘ en cualquier ejercicio para ver la técnica paso a paso y un error común (guías para los ejercicios del plan, consejos generales para los demás).
+- **Weight suggestions:** plan exercises show your goal and suggest when to add weight, keep it, or lower it, based on your last sessions.
+  **Sugerencias de peso:** los ejercicios del plan muestran tu meta y sugieren cuándo subir, mantener o bajar el peso según tus últimas sesiones.
+- **Check-ins:** every ~4 weeks (or any time) log your weight and how it felt; the plan adds or removes a set on the main exercises.
+  **Evaluaciones:** cada ~4 semanas (o cuando quieras) registra tu peso y cómo te sentiste; el plan agrega o quita una serie en los ejercicios principales.
+
 ## v2 — 2026-10-18
 - **More than 200 exercises:** the built-in library grows from 88 to over 200, with two new categories — Balance and Power & agility (plyometrics, sprints, drills) — plus more core, glute, back and chest variations. New equipment: bands, stability ball, medicine ball and suspension trainer.
   **Más de 200 ejercicios:** la biblioteca incluida pasa de 88 a más de 200, con dos categorías nuevas — Equilibrio y Potencia y agilidad (pliometría, sprints, ejercicios de agilidad) — y más variantes de abdomen, glúteos, espalda y pecho. Equipo nuevo: bandas, pelota de estabilidad, balón medicinal y suspensión.

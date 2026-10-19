@@ -158,3 +158,15 @@ textarea.note-in{width:100%;background:var(--panel);border:0;border-radius:var(-
 .inst ol{margin:10px 0 12px 20px}.inst li{margin:6px 0}
 .ib{display:inline-block;padding:0 6px;border-radius:6px;background:var(--panel2)}
 .note{background:var(--panel2);border-radius:10px;padding:10px;font-size:.88rem;margin-bottom:12px}
+
+/* guided plan, technique, suggestions / plan guiado, técnica, sugerencias */
+.card.plan{border:1px solid var(--accent)}
+.plh{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.card.plan h3{margin:4px 0 8px}
+.plex{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-top:1px solid var(--line)}
+.plex span{display:flex;flex-direction:column;min-width:0}.plex small{color:var(--dim)}
+.pldue{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding:8px 10px;border-radius:10px;background:var(--panel2)}
+.exb{display:flex;gap:2px}
+.goalln{margin:4px 0 6px;font-size:.88rem}.goalln .sg{color:var(--accent)}
+.chips.wrap{flex-wrap:wrap}
+ol.how{margin:6px 0 0 20px}ol.how li{margin:6px 0}

@@ -43,12 +43,14 @@ function fmtPrev(m,s){
 function startWorkout(o){
   if(ACT){toast(t('finishFirst'));return;}
   ACT={id:uid(),t0:Date.now(),name:(o&&o.name)||'',note:'',ex:[]};
-  ((o&&o.ex)||[]).forEach(x=>addExTo(x.eid,x.sets,x.n));
+  if(o&&o.pl!=null)ACT.pl=o.pl;
+  ((o&&o.ex)||[]).forEach(x=>addExTo(x.eid,x.sets,x.n,x.tg));
   saveAct();wake();tab='workout';renderTabs();render();window.scrollTo(0,0);
 }
-function addExTo(eid,nSets,nm){
-  const e=exById(eid);
-  ACT.ex.push({eid:eid,n:e?e.en:(nm||eid),sets:Array.from({length:Math.max(1,nSets||1)},()=>newSet())});
+function addExTo(eid,nSets,nm,tg){
+  const e=exById(eid),x={eid:eid,n:e?e.en:(nm||eid),sets:Array.from({length:Math.max(1,nSets||1)},()=>newSet())};
+  if(tg){x.tg=tg;const sg=sugg(eid,tg);if(sg&&sg.w!=null)x.sg=sg.w;}
+  ACT.ex.push(x);
 }
 function startRoutine(id){const r=DATA.routines.find(x=>x.id===id);if(r)startWorkout({name:r.name,ex:r.ex});}
 
@@ -61,6 +63,7 @@ function needBackup(){
 function vStart(){
   let h='';
   if(needBackup())h+='<div class="card warn"><b>'+t('bkT')+'</b><p>'+t('bkP')+'</p><div class="row"><button class="btn pri sm" onclick="exportJSON()">'+t('exportBackup')+'</button><button class="btn sm" onclick="bkLater()">'+t('later')+'</button></div></div>';
+  h+=planCard();
   h+='<button class="btn pri big wide" onclick="startWorkout()">＋ '+t('startEmpty')+'</button>';
   h+='<div class="sec"><h2>'+t('routines')+'</h2><button class="btn sm" onclick="rbOpen()">＋ '+t('newRoutine')+'</button></div>';
   if(!DATA.routines.length)h+='<p class="muted">'+t('noRoutines')+'</p>';
@@ -99,7 +102,8 @@ function vActive(){
 }
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
-  let h='<section class="exc"><div class="exh"><b>'+esc(exName(x.eid,x.n))+'</b><button class="ico" aria-label="'+esc(t('options'))+'" onclick="exMenu('+i+')">⋯</button></div>';
+  let h='<section class="exc"><div class="exh"><b>'+esc(exName(x.eid,x.n))+'</b><span class="exb"><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="howOpen(\''+x.eid+'\')">ⓘ</button><button class="ico" aria-label="'+esc(t('options'))+'" onclick="exMenu('+i+')">⋯</button></span></div>';
+  h+=suggLine(x);
   h+='<div class="exsub muted sm">'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
   h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+t('colPrev')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
@@ -107,7 +111,7 @@ function exCard(i,x){
     const ph=pv[j]||(pv.length?pv[pv.length-1]:null)||(j>0?x.sets[j-1]:null);
     let f1,f2,p1,p2,k1,k2;
     if(m==='t'){k1='t';k2='d';f1=s.t!=null?fmtNum(s.t):'';f2=dShow(s.d);p1=ph&&ph.t!=null?fmtNum(ph.t):'';p2=ph&&ph.d?dShow(ph.d):'';}
-    else{k1='w';k2='r';f1=wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?wShow(ph.w):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';}
+    else{k1='w';k2='r';f1=wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?wShow(ph.w):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=wShow(x.sg);}
     const inp=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
     h+='<div class="srow'+(s.done?' done':'')+'"><span class="sn">'+(j+1)+(s.pr?'<i class="pr" title="PR">🏆</i>':'')+'</span><span class="sp">'+esc(fmtPrev(m,pv[j]))+'</span>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('doneSet'))+'" onclick="tgSet('+i+','+j+')">✓</button></div>';
   });
@@ -129,6 +133,7 @@ function tgSet(i,j){
   unlockAudio();
   if(!s.done){
     const pv=lastEx(x.eid),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
+    if(m==='wr'&&s.w==null&&x.sg!=null)s.w=x.sg;
     if(ph){
       if(m==='t'){if(s.t==null&&ph.t!=null)s.t=ph.t;if(s.d==null&&ph.d)s.d=ph.d;}
       else{if(s.w==null&&ph.w!=null&&m!=='bw')s.w=ph.w;if(s.w==null&&m==='bw'&&ph.w)s.w=ph.w;if(s.r==null&&ph.r!=null)s.r=ph.r;}
@@ -165,6 +170,7 @@ function finishWk(){
   const end=Date.now();
   const ex=ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;return o;})})).filter(x=>x.sets.length);
   const wk={id:ACT.id,t:ACT.t0,end:end,name:(ACT.name||'').trim()||autoName(ACT.t0),note:(ACT.note||'').trim(),ex:ex};
+  if(ACT.pl!=null)wk.pl=ACT.pl;
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
   saveData();
   ACT=null;saveAct();stopRest();unwake();

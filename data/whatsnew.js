@@ -2,6 +2,10 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v3',items:[
+  {i:'🗓️',en:'<b>Guided weekly plan</b> — pick your goal, days and experience; Bubylift tells you what to train each day, with sets and reps.',es:'<b>Plan semanal guiado</b> — elige tu meta, días y experiencia; Bubylift te dice qué entrenar cada día, con series y repeticiones.'},
+  {i:'ⓘ',en:'<b>How to do it</b> — tap ⓘ on an exercise for step-by-step technique and the most common mistake.',es:'<b>Cómo hacerlo</b> — toca ⓘ en un ejercicio para ver la técnica paso a paso y el error más común.'},
+  {i:'📈',en:'<b>Smart weight suggestions + check-ins</b> — it suggests when to go heavier, and every few weeks a quick check-in adjusts your plan.',es:'<b>Sugerencias de peso y evaluaciones</b> — te sugiere cuándo subir de peso y cada pocas semanas una evaluación rápida ajusta tu plan.'}]},
  {v:'v2',items:[
   {i:'📚',en:'<b>More than 200 exercises</b> — new Balance and Power & agility categories, plus bands, stability ball, medicine ball and suspension trainer.',es:'<b>Más de 200 ejercicios</b> — nuevas categorías de Equilibrio y Potencia y agilidad, y equipo como bandas, pelota de estabilidad, balón medicinal y suspensión.'},
   {i:'🙏',en:'<b>Credits</b> — exercise categories are based on the NASM-CPT program (see More → About).',es:'<b>Créditos</b> — las categorías de ejercicios están basadas en el programa NASM-CPT (ver Más → Acerca de).'}]},

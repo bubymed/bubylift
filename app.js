@@ -1,10 +1,10 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v2';
+const APP_VER='v3';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 const K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active';
-let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[]},ACT=null,tab='workout';
+let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
 const UI={q:'',g:'',prog:null,pm:'',pickCb:null,rb:null};
 
 /* ---------- helpers ---------- */
@@ -22,7 +22,8 @@ function defUnits(){return /-(US|LR|MM)$/i.test(navigator.language||'')?'imperia
 function loadAll(){
   SET=Object.assign({lang:/^es/i.test(navigator.language||'')?'es':'en',theme:'system',units:defUnits(),rest:90,auto:true,sound:true,wnSeen:null,lastExport:0,bkSnooze:0,goal:null},jget(K_SET,{}));
   const d=jget(K_DATA,null);
-  if(d&&typeof d==='object')DATA=Object.assign({workouts:[],routines:[],body:[],custom:[]},d);
+  if(d&&typeof d==='object')DATA=Object.assign({workouts:[],routines:[],body:[],custom:[],plan:null},d);
+  DATA.plan=cleanPlan(DATA.plan);
   ['workouts','routines','body','custom'].forEach(k=>{if(!Array.isArray(DATA[k]))DATA[k]=[];});
   DATA.workouts.sort((a,b)=>b.t-a.t);DATA.body.sort((a,b)=>b.t-a.t);
   ACT=jget(K_ACT,null);
