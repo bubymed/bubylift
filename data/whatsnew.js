@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v11',items:[
+  {i:'🎯',en:'<b>More goals</b> — pick Runner, Bodybuilding (max muscle), Hybrid athlete, or Military fitness test. Hybrid and Military are now separate: Hybrid needs no test.',es:'<b>Más metas</b> — elige Corredor, Fisicoculturismo (máximo músculo), Atleta híbrido o Prueba física militar. Híbrido y Militar ahora son separados: Híbrido no necesita prueba.'},
+  {i:'🏃',en:'<b>Runner plans</b> — easy, interval, tempo and long runs plus leg and core strength, shaped by your running goal (5K to marathon).',es:'<b>Planes para corredores</b> — carreras suaves, intervalos, tempo y largas más fuerza de piernas y core, según tu meta (de 5K a maratón).'}]},
  {v:'v10',items:[
   {i:'🧹',en:'<b>Cleaner screens</b> — My plan shows one day at a time, the home card is a short summary, exercise buttons have labels (Swap, Guide, Options) and About folds away.',es:'<b>Pantallas más limpias</b> — Mi plan muestra un día a la vez, la tarjeta de inicio es un resumen corto, los botones de ejercicio tienen texto (Sustituir, Guía, Opciones) y Acerca de se pliega.'}]},
  {v:'v9',items:[

@@ -71,19 +71,33 @@ const DAYSPEC={
  hyStrU:[['P','m'],['B','m'],['S','a'],['B','a'],['T','a'],['A','c']],
  hyRunI:[['R','i'],['G','a'],['A','c']],
  hyRunE:[['R','e'],['C','a'],['A','c']],
- hyCap:[['D','m'],['D','a'],['R','e'],['A','c']]
+ hyCap:[['D','m'],['D','a'],['R','e'],['A','c']],
+ // runner: R = run work (i intervals · e easy · t tempo · l long) + strength that supports running / corredor: carrera + fuerza que la apoya
+ runT:[['R','t'],['G','a'],['A','c']],
+ runL:[['R','l'],['C','a'],['A','c']],
+ runS:[['Q','m'],['H','m'],['G','a'],['C','a'],['A','c']],
+ // bodybuilding: more exercises and sets per muscle / fisicoculturismo: más ejercicios y series por músculo
+ bbFull:[['Q','m'],['P','m'],['B','m'],['H','a'],['S','a'],['I','a'],['T','a']],
+ bbUp:[['P','m'],['B','m'],['S','m'],['P','a'],['B','a'],['S','a'],['I','a'],['T','a']],
+ bbLow:[['Q','m'],['H','m'],['G','a'],['Q','a'],['H','a'],['C','a'],['A','c']],
+ bbLow2:[['H','m'],['Q','m'],['G','m'],['Q','a'],['H','a'],['C','a'],['A','c']],
+ bbPush:[['P','m'],['S','m'],['P','a'],['S','a'],['P','a'],['T','a'],['T','a']],
+ bbPull:[['B','m'],['B','m'],['B','a'],['S','a'],['I','a'],['I','a'],['A','c']]
 };
 const SPLITS={
  bal:{2:['full','full'],3:['full','full','full'],4:['up','lowQ','up','lowG'],5:['push','pull','lowQ','up','lowG']},
  low:{2:['lowG','fullL'],3:['lowG','upLite','lowQ'],4:['lowG','upLite','lowQ','fullL'],5:['lowG','upLite','lowQ','lowG','upLite']},
  up:{2:['full','up'],3:['push','pull','lowQ'],4:['push','pull','lowQ','arms'],5:['push','pull','lowQ','arms','up']},
+ run:{2:['hyRunI','runL'],3:['hyRunI','runS','runL'],4:['hyRunE','hyRunI','runS','runL'],5:['hyRunE','hyRunI','runS','runT','runL']},
+ bb:{2:['bbFull','bbFull'],3:['bbFull','bbFull','bbFull'],4:['bbUp','bbLow','bbUp','bbLow2'],5:['bbPush','bbPull','bbLow','bbUp','bbLow2']},
  hy:{2:['hyStr','hyRunI'],3:['hyStr','hyRunI','hyCap'],4:['hyStrU','hyRunI','hyStrL','hyCap'],5:['hyStrU','hyRunI','hyStrL','hyCap','hyRunE']}
 };
 const FOCUS_MU={glutes:['G'],quads:['Q'],hams:['H'],calves:['C'],chest:['P'],back:['B'],shoulders:['S'],arms:['I','T'],abs:['A']};
-const PGOALS=['muscle','strength','fat','general','hybrid'],PLVLS=['new','some','adv'],PEMPH=['bal','low','up'],ALLEMPH=['bal','low','up','hy'],PSEX=['f','m','x'],TESTS=['aft','usmc','gen'],TW=[0,4,8,12,16];
+const PGOALS=['muscle','bodybuilding','strength','fat','general','hybrid','military','runner'],PLVLS=['new','some','adv'],PEMPH=['bal','low','up'],ALLEMPH=['bal','low','up','hy','run','bb'],RACES=['5k','10k','half','full','fit'],RACEF={'5k':0.8,'10k':1,half:1.3,full:1.6,fit:0.8},PSEX=['f','m','x'],TESTS=['aft','usmc','gen'],TW=[0,4,8,12,16];
 /* short coaching notes shown under an exercise / notas cortas bajo un ejercicio */
 const SKILLS=['strength','power','speed','endurance','balance'];
-const NT_KEYS=['ntInt','ntEasy','ntTempo','ntSdc','ntMdl','ntHrp','ntPlk','ntSim'];
+const isHy=g=>g==='hybrid'||g==='military'; // hybrid athlete (no test) and military test prep share the engine / híbrido (sin prueba) y militar comparten el motor
+const NT_KEYS=['ntIntR','ntLong','ntInt','ntEasy','ntTempo','ntSdc','ntMdl','ntHrp','ntPlk','ntSim'];
 const NTEID={hexdl:'ntMdl',hrpushup:'ntHrp',plank:'ntPlk',sdcdrill:'ntSdc',sleddrag:'ntSdc'};
 const PDAYKEYS=Object.keys(DAYSPEC).concat(['fullA','fullB','fullC','up1','up2','low1','low2']); // old keys stay valid / las claves viejas siguen válidas
 const LENMAX={30:4,45:5,60:6,75:7};
@@ -92,8 +106,10 @@ function planScheme(goal,lvl,role,skills){
   const N=lvl==='new',A=lvl==='adv';
   if(role==='c')return{sets:3,lo:8,hi:12};
   if(role==='p')return{sets:3,lo:3,hi:6};
-  if(skills&&skills.indexOf('strength')>=0&&role==='m'&&goal!=='hybrid'&&goal!=='strength')goal='strength';
-  if(goal==='hybrid')return role==='m'?(N?{sets:3,lo:5,hi:8}:{sets:4,lo:3,hi:5}):(N?{sets:2,lo:8,hi:12}:{sets:3,lo:8,hi:12});
+  if(skills&&skills.indexOf('strength')>=0&&role==='m'&&!isHy(goal)&&goal!=='strength'&&goal!=='runner')goal='strength';
+  if(goal==='runner')return role==='m'?(N?{sets:3,lo:8,hi:10}:{sets:3,lo:5,hi:8}):{sets:2,lo:10,hi:12};
+  if(goal==='bodybuilding')return role==='m'?(N?{sets:3,lo:8,hi:12}:{sets:4,lo:6,hi:10}):(N?{sets:3,lo:10,hi:15}:{sets:3,lo:10,hi:15});
+  if(isHy(goal))return role==='m'?(N?{sets:3,lo:5,hi:8}:{sets:4,lo:3,hi:5}):(N?{sets:2,lo:8,hi:12}:{sets:3,lo:8,hi:12});
   const b=goal==='strength'?(role==='m'?(N?{sets:3,lo:6,hi:8}:{sets:4,lo:4,hi:6}):(N?{sets:2,lo:10,hi:12}:{sets:3,lo:8,hi:10}))
     :goal==='muscle'?(role==='m'?(N?{sets:3,lo:10,hi:12}:{sets:4,lo:8,hi:12}):(N?{sets:2,lo:12,hi:15}:{sets:3,lo:10,hi:15}))
     :(role==='m'?(N?{sets:3,lo:10,hi:12}:{sets:3,lo:8,hi:12}):(N?{sets:2,lo:12,hi:15}:{sets:3,lo:12,hi:15}));
@@ -102,7 +118,7 @@ function planScheme(goal,lvl,role,skills){
 }
 function planItem(eid,role,prof,extra){
   const m=exMode(eid),sc=planScheme(prof.goal,prof.lvl,role,prof.have.some(k=>/^(barbell|dumbbell|machine|cable|kettlebell)$/.test(k))?prof.skills:[]),L=injLetters(prof.inj);
-  const cn=stressJoints(eid,L,1),hy=prof.goal==='hybrid',nt=hy&&NTEID[eid]&&(prof.test!=='gen'||eid==='sdcdrill'||eid==='sleddrag')?NTEID[eid]:undefined;
+  const cn=stressJoints(eid,L,1),hy=isHy(prof.goal),nt=hy&&NTEID[eid]&&(prof.test!=='gen'||eid==='sdcdrill'||eid==='sleddrag')?NTEID[eid]:undefined;
   let it;
   if(role==='e')it={eid:eid,sets:1,lo:10,hi:15,u:'m',r:role,cn:cn};
   else if(m==='t'&&role==='p')it={eid:eid,sets:4,lo:0.5,hi:1,u:'m',r:role,cn:cn};
@@ -116,9 +132,11 @@ function planItem(eid,role,prof,extra){
   return it;
 }
 function runItem(kind,prof){
-  const N=prof.lvl==='new',cn=stressJoints('run',injLetters(prof.inj),1);
-  if(kind==='i')return{eid:'run',sets:N?4:6,lo:1.5,hi:2,u:'m',r:'m',cn:cn,nt:'ntInt'};
+  const N=prof.lvl==='new',cn=stressJoints('run',injLetters(prof.inj),1),rn=prof.goal==='runner';
+  const rf=Math.min(RACEF[prof.race]||1,N?1.2:9),r5=v=>Math.max(15,Math.round(v/5)*5);
+  if(kind==='i')return{eid:'run',sets:N?4:6,lo:1.5,hi:2,u:'m',r:'m',cn:cn,nt:rn?'ntIntR':'ntInt'};
   if(kind==='t')return{eid:'run',sets:1,lo:15,hi:25,u:'m',r:'m',cn:cn,nt:'ntTempo'};
+  if(kind==='l')return{eid:'run',sets:1,lo:r5((N?25:40)*rf),hi:r5((N?40:70)*rf),u:'m',r:'m',cn:cn,nt:'ntLong'};
   return{eid:'run',sets:1,lo:N?15:25,hi:N?25:45,u:'m',r:'a',cn:cn,nt:'ntEasy'};
 }
 /* exercises that mirror each test's events come first / los ejercicios que imitan los eventos de cada prueba van primero */
@@ -142,14 +160,19 @@ function normProf(p){
   o.n=Math.max(2,Math.min(5,Math.round(o.n)||3));if(!LENMAX[o.len])o.len=60;
   o.focus=(o.focus||[]).filter(k=>FOCUS_MU[k]).slice(0,3);o.have=(o.have||[]).filter(k=>HAVE_KEYS.indexOf(k)>=0);o.inj=(o.inj||[]).filter(k=>INJ[k]);o.cond=o.cond?1:0;
   o.ff=Math.max(1,Math.min(4,Math.round(o.ff)||2));o.skills=(o.skills||[]).filter((k,i,a)=>SKILLS.indexOf(k)>=0&&a.indexOf(k)===i).slice(0,2);
-  if(TESTS.indexOf(o.test)<0)o.test='gen';o.td=(typeof o.td==='number'&&isFinite(o.td)&&o.td>0&&o.td<4e12)?o.td:0;
-  if(o.goal==='hybrid')o.emph='hy';else if(o.emph==='hy')o.emph='bal';
+  if(TESTS.indexOf(o.test)<0)o.test='gen';
+  if(o.goal==='hybrid'&&o.test!=='gen')o.goal='military'; // old plans: hybrid with a test is now military / planes viejos: híbrido con prueba ahora es militar
+  if(o.goal==='hybrid')o.test='gen';
+  if(RACES.indexOf(o.race)<0)o.race='fit';
+  o.td=(typeof o.td==='number'&&isFinite(o.td)&&o.td>0&&o.td<4e12)?o.td:0;
+  if(isHy(o.goal))o.emph='hy';else if(o.goal==='runner')o.emph='run';else if(o.goal==='bodybuilding')o.emph='bb';else if(['hy','run','bb'].indexOf(o.emph)>=0)o.emph='bal';
+  if(o.goal!=='military')o.td=0;
   return o;
 }
 function genPlan(prof0){
   const prof=normProf(prof0);
   const eff=Object.assign({},prof);
-  if(prof.cond){eff.lvl='new';if(eff.goal==='strength'||eff.goal==='hybrid')eff.goal='general';} // medical condition: keep it gentle / condición médica: algo suave
+  if(prof.cond){eff.lvl='new';if(['strength','hybrid','military','bodybuilding'].indexOf(eff.goal)>=0)eff.goal='general';} // medical condition: keep it gentle / condición médica: algo suave
   const L=injLetters(prof.inj),maxLv=eff.lvl==='new'?1:2,have=prof.have;
   const days=SPLITS[prof.emph][prof.n].slice();
   const fm=[];prof.focus.forEach(k=>FOCUS_MU[k].forEach(m=>{if(fm.indexOf(m)<0)fm.push(m);}));
@@ -203,7 +226,7 @@ function genPlan(prof0){
     }
   });
   const used={},ds=days.map((k,di)=>{
-    const ctx={have:have,L:L,maxLv:maxLv,used:used,day:{},hy:prof.goal==='hybrid',test:prof.test},ex=[];
+    const ctx={have:have,L:L,maxLv:maxLv,used:used,day:{},hy:isHy(prof.goal),test:prof.test},ex=[];
     specs[di].forEach(s=>{
       if(s[0]==='R'){ex.push(runItem(s[1],eff));return;}
       const id=pickFor(s[0],s[1],ctx);if(!id)return;
@@ -234,7 +257,7 @@ function cleanPlan(p){
   }
   const checks=(Array.isArray(p.checks)?p.checks:[]).slice(-40).filter(c=>c&&typeof c.t==='number').map(c=>({t:c.t,bw:cn(c.bw)||null,feel:['easy','right','hard'].indexOf(c.feel)>=0?c.feel:'right'}));
   const prof=normProf(p.prof&&typeof p.prof==='object'?Object.assign({},p.prof,{n:p.n,goal:p.goal,lvl:p.lvl}):{n:p.n,goal:p.goal,lvl:p.lvl,have:HAVE_KEYS.slice()});
-  const o={goal:p.goal,n:p.n,lvl:p.lvl,t0:p.t0,ct:cn(p.ct)||0,ds:ds,checks:checks,prof:prof};
+  const o={goal:prof.goal,n:p.n,lvl:p.lvl,t0:p.t0,ct:cn(p.ct)||0,ds:ds,checks:checks,prof:prof};
   if(Number.isInteger(p.cur)&&p.cur>=0&&p.cur<p.n)o.cur=p.cur;
   return o;
 }
@@ -346,7 +369,7 @@ function planCard(){
   return h+'</div></div>';
 }
 function testLine(p){
-  const pr=p.prof;if(pr.goal!=='hybrid'||!pr.td)return'';
+  const pr=p.prof;if(pr.goal!=='military'||!pr.td)return'';
   const left=pr.td-Date.now();if(left<=0)return'<p class="sm testln">'+t('testDone')+'</p>';
   const wk=Math.ceil(left/(7*864e5));
   return'<p class="sm testln">🎯 '+t('testIn',t('te_'+pr.test),wk)+(left<=7*864e5?'<br>'+t('taperNote'):'')+'</p>';
@@ -390,7 +413,9 @@ function planOpen(d){
     '<h3 class="dayh">'+esc(dayName(i))+'</h3>'+planExList(p.ds[i],i,true)+
     '<div class="row"><button class="btn pri" onclick="planStart('+i+')">▶ '+t('planStart')+'</button><button class="btn" onclick="planAddEx('+i+')">＋ '+t('addEx')+'</button></div>';
   let tips='';
-  if(pr.goal==='hybrid')tips+='<h4>'+t('hyT')+'</h4>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
+  if(pr.goal==='runner')tips+='<h4>'+t('runT')+'</h4><p class="sm">'+t('runTips1')+'</p><p class="sm">'+t('runTips2')+'</p>';
+  if(pr.goal==='bodybuilding')tips+='<h4>'+t('bbT')+'</h4><p class="sm">'+t('bbTips1')+'</p><p class="sm">'+t('bbTips2')+'</p>';
+  if(isHy(pr.goal))tips+='<h4>'+t(pr.goal==='military'?'hyT':'hyT2')+'</h4>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
   tips+='<h4>'+t('guideT')+'</h4><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p><p class="muted sm">'+t('planNote')+'</p>';
   h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="chkOpen()">📋 '+t('chkOpen')+'</button><button class="btn" onclick="focusOpen()">🎯 '+t('focusT')+'</button><button class="btn" onclick="planSetup()">⚙ '+t('planChange')+'</button></div>'+
     '<details class="dtl"><summary>'+t('tipsT')+'</summary>'+tips+'</details>'+
@@ -498,6 +523,8 @@ function pwSet(k,v){
   PW[k]=v;
   if(k==='sex'&&!PW.touched){PW.emph=v==='f'?'low':'bal';}
   if(k==='emph')PW.touched=true;
+  if(k==='goal'&&v==='military'&&PW.test==='gen')PW.test='aft';
+  if(k==='goal'&&v==='hybrid')PW.test='gen';
   wizDraw();
 }
 function pwTog(k,v,max){
@@ -529,7 +556,11 @@ function wizDraw(){
   if(s===1){
     b='<div class="lbl">'+t('psGoal')+'</div>'+wch('goal',PGOALS,PW.goal,v=>t('pg_'+v))+'<p class="muted sm">'+t('pgd_'+PW.goal)+'</p>'+
       '<div class="lbl">'+t('psSex')+'</div>'+wch('sex',PSEX,PW.sex,v=>t('sex_'+v))+'<p class="muted sm">'+t('psSexP')+'</p>';
-  }else if(s===2&&PW.goal==='hybrid'){
+  }else if(s===2&&PW.goal==='runner'){
+    b='<div class="lbl">'+t('psRace')+'</div>'+wch('race',RACES,PW.race,v=>t('rc_'+v))+'<p class="muted sm">'+t('psRaceP')+'</p>';
+  }else if(s===2&&(PW.goal==='hybrid'||PW.goal==='bodybuilding')){
+    b=focusBlock();
+  }else if(s===2&&PW.goal==='military'){
     b='<div class="lbl">'+t('psTest')+'</div>'+wch('test',TESTS,PW.test,v=>t('te_'+v))+'<p class="muted sm">'+t('ted_'+PW.test)+'</p>'+
       '<div class="lbl">'+t('psTw')+'</div>'+wch('tw',TW,PW.tw,v=>v?t('psTwN',v):t('psTwNone'))+
       '<div class="lbl">'+t('psFocus')+'</div>'+wchm('focus',Object.keys(FOCUS_MU),v=>t('fm_'+v),3);
@@ -551,7 +582,7 @@ function wizDraw(){
       (PW.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'')+'<p class="muted sm">'+t('psInjN')+'</p>';
   }else{
     const L=injLetters(PW.inj);
-    b='<div class="lbl">'+t('psSum')+'</div><ul class="sumul"><li>'+t('pg_'+PW.goal)+' · '+(PW.goal==='hybrid'?t('te_'+PW.test)+(PW.tw?' · '+t('psTwN',PW.tw):''):t('em_'+PW.emph))+'</li>'+
+    b='<div class="lbl">'+t('psSum')+'</div><ul class="sumul"><li>'+t('pg_'+PW.goal)+((PW.goal==='hybrid'||PW.goal==='bodybuilding')?'':' · ')+(PW.goal==='military'?t('te_'+PW.test)+(PW.tw?' · '+t('psTwN',PW.tw):''):PW.goal==='runner'?t('rc_'+PW.race):(['hybrid','bodybuilding'].indexOf(PW.goal)>=0?'':t('em_'+PW.emph)))+'</li>'+
       (PW.focus.length?'<li>'+t('planFocus',PW.focus.map(k=>t('fm_'+k)).join(', '))+' · '+t('psDaysN',PW.ff)+'</li>':'')+
       (PW.skills.length?'<li>'+t('planSkill',PW.skills.map(k=>t('sk_'+k)).join(', '))+'</li>':'')+
       '<li>'+t('psDaysN',PW.n)+' · '+t('psLenN',PW.len)+' · '+t('pl_'+PW.lvl)+'</li>'+
@@ -567,7 +598,7 @@ function focusApply(){
   const old=DATA.plan,p=genPlan(prof);p.checks=old.checks;DATA.plan=p;saveData();render();planOpen();toast(t('planReady'));
 }
 function planCreate(){
-  const prof=normProf({sex:PW.sex,goal:PW.goal,emph:PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,n:PW.n,len:PW.len,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
+  const prof=normProf({sex:PW.sex,goal:PW.goal,emph:PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
   const old=DATA.plan,p=genPlan(prof);
   if(old){p.checks=old.checks;}
   DATA.plan=p;saveData();render();

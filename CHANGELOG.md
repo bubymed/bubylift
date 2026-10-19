@@ -6,6 +6,14 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v11 — 2026-10-19
+- **Separate goals:** the plan builder now offers **Bodybuilding (max muscle)**, **Runner**, **Hybrid athlete** and **Military fitness test** next to Build muscle, Get stronger, Lose fat and General fitness. Hybrid no longer needs a test; Military keeps the Army AFT / Marines PFT-CFT / general options, test date and practice tests. Old hybrid plans that had a test become Military automatically.
+  **Metas separadas:** el armador de planes ahora ofrece **Fisicoculturismo (máximo músculo)**, **Corredor**, **Atleta híbrido** y **Prueba física militar** junto a Ganar músculo, Ganar fuerza, Bajar grasa y Estar en forma. Híbrido ya no necesita prueba; Militar conserva las opciones AFT del Ejército / PFT-CFT de los Marines / general, la fecha de la prueba y los simulacros. Los planes híbridos viejos con prueba pasan a Militar automáticamente.
+- **Runner plan:** easy, interval, tempo and long runs plus strength for runners (squat/hinge, glutes, calves, core). Choose 5K, 10K, half marathon, marathon or "just run better" to set the long-run length. Tips: add about 10% a week at most.
+  **Plan de corredor:** carreras suaves, de intervalos, tempo y largas más fuerza para corredores (sentadilla/bisagra, glúteos, pantorrillas, core). Elige 5K, 10K, medio maratón, maratón o "solo correr mejor" para definir la carrera larga. Consejo: sube como máximo un 10% por semana.
+- **Bodybuilding plan:** more exercises and sets per muscle (6–8 per day), each big muscle about twice a week (full body 2–3 days, upper/lower 4, push/pull/legs 5), 6–10 reps on main lifts, and focus muscles still work.
+  **Plan de fisicoculturismo:** más ejercicios y series por músculo (6–8 por día), cada músculo grande unas dos veces por semana (cuerpo completo 2–3 días, superior/inferior 4, empuje/jalón/piernas 5), 6–10 repeticiones en los básicos, y los músculos de enfoque siguen funcionando.
+
 ## v10 — 2026-10-19
 - **Cleaner, calmer screens:** My plan shows one day at a time (Day 1–4 tabs) with tappable exercises and an "Edit ›" label, plan options grouped below, tips folded away and Delete separated. The home plan card is now a short summary (exercise count + first three). Exercise cards have labeled buttons (Swap, Guide, Options) instead of bare icons. About and credits fold away in More.
   **Pantallas más limpias y tranquilas:** Mi plan muestra un día a la vez (pestañas Día 1–4) con ejercicios tocables y la etiqueta "Editar ›", opciones del plan agrupadas abajo, consejos plegados y Eliminar aparte. La tarjeta del plan en inicio ahora es un resumen corto (cantidad de ejercicios + los tres primeros). Las tarjetas de ejercicio tienen botones con texto (Sustituir, Guía, Opciones) en vez de íconos sueltos. Acerca de y créditos se pliegan en Más.
