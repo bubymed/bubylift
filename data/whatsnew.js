@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v35',items:[
+  {i:'✏️',en:'<b>Edit your routines</b> — in your plan you can now move an exercise up or down, send it to another day and rename any day; in My routines you can reorder exercises. Ready routines, splits and challenges stay as designed, but you can save a copy to My routines and edit that.',es:'<b>Edita tus rutinas</b> — en tu plan ahora puedes subir o bajar un ejercicio, mandarlo a otro día y renombrar cualquier día; en Mis rutinas puedes reordenar los ejercicios. Las rutinas listas, las divisiones y los retos se quedan como fueron diseñados, pero puedes guardar una copia en Mis rutinas y editar esa.'}]},
  {v:'v34',items:[
   {i:'💬',en:'<b>Send feedback</b> — new button in More → App that opens a short form (about a minute): how you like the app, what you use, what confused you and what you would like to see. Nothing is sent unless you submit it. After your first routine and first logged set you also get a one-time reminder.',es:'<b>Enviar feedback</b> — botón nuevo en Más → App que abre un formulario corto (alrededor de un minuto): qué tal te parece la app, qué usas, qué te confundió y qué te gustaría ver. No se envía nada a menos que tú lo envíes. Después de tu primera rutina y tu primer set también recibes un aviso una sola vez.'}]},
  {v:'v33',items:[

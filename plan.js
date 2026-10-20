@@ -360,6 +360,7 @@ function cleanPlan(p){
     if(!d||PDAYKEYS.indexOf(d.k)<0||!Array.isArray(d.ex))return null;
     const ex=d.ex.filter(e=>e&&ID_RE.test(String(e.eid))).slice(0,20).map(e=>({eid:String(e.eid),sets:Math.max(1,Math.min(8,Math.round(cn(e.sets)||1))),lo:cn(e.lo)||0,hi:cn(e.hi)||0,u:e.u==='m'?'m':'r',r:['m','a','c','p','e','z','y'].indexOf(e.r)>=0?e.r:'a',sec:OPT_SEC_OK.indexOf(e.sec)>=0?e.sec:undefined,tp:['sl','md','ex','ct','rp'].indexOf(e.tp)>=0?e.tp:undefined,rs:(e.rs>=0&&e.rs<=600)?Math.round(e.rs):undefined,ss:/^[A-H]$/.test(e.ss)?e.ss:undefined,cn:String(e.cn||'').replace(/[^kbsewhan]/g,'').slice(0,8),nt:NT_KEYS.indexOf(e.nt)>=0?e.nt:undefined,mn:e.mn?1:undefined,rz:/^rz[A-Za-z]{1,12}$/.test(e.rz||'')?e.rz:undefined}));
     if(!ex.length)return null;const dd=PGOALS.indexOf(d.g)>=0?{k:d.k,g:d.g,ex:ex}:{k:d.k,ex:ex};
+    if(typeof d.nm==='string'&&d.nm.trim())dd.nm=d.nm.trim().slice(0,30);
     if(Array.isArray(d.wy)){const wy=d.wy.filter(x=>typeof x==='string'&&/^wy[A-Za-z0-9]{1,14}(\|[A-Za-z0-9_-]{1,40})?$/.test(x)).slice(0,8);if(wy.length)dd.wy=wy;}
     ds.push(dd);
   }
@@ -432,6 +433,7 @@ function checkDue(){
 function dayName(i){
   const p=DATA.plan,d=p.ds[i];let same=0,idx=0;
   p.ds.forEach((x,j)=>{if(x.k===d.k){same++;if(j<i)idx++;}});
+  if(d.nm)return t('planDay',i+1)+' · '+d.nm;
   return t('planDay',i+1)+' · '+t('pd_'+d.k)+(same>1?' '+String.fromCharCode(65+idx):'');
 }
 function planExList(d,di,withEdit){
@@ -538,7 +540,7 @@ function planOpen(d){
     (pr.inj.length?'<p class="muted sm">⚠ '+t('planInj',pr.inj.map(k=>t('inj_'+k)).join(', '))+'</p>':'')+
     (pr.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'')+
     '<div class="chips wrap daytabs">'+p.ds.map((d,k)=>'<button class="chip'+(k===i?' on':'')+'" onclick="planOpen('+k+')">'+esc(dayName(k).split(' · ')[0])+'</button>').join('')+'</div>'+
-    '<h3 class="dayh">'+esc(dayName(i))+'</h3>'+(p.ds[i].g?'<p class="muted sm daytag">'+esc(t('pg_'+p.ds[i].g))+'</p>':'')+wyCard(p.ds[i])+(p.ph?optWarm(p.ds[i],p):'')+planExList(p.ds[i],i,true)+(p.ph?optWarm(p.ds[i],p,true):'')+
+    '<h3 class="dayh">'+esc(dayName(i))+' <button class="ico" onclick="dayRen('+i+')" aria-label="'+esc(t('dayRen'))+'">✎</button></h3>'+(p.ds[i].g?'<p class="muted sm daytag">'+esc(t('pg_'+p.ds[i].g))+'</p>':'')+wyCard(p.ds[i])+(p.ph?optWarm(p.ds[i],p):'')+planExList(p.ds[i],i,true)+(p.ph?optWarm(p.ds[i],p,true):'')+
     '<div class="row"><button class="btn pri" onclick="planStart('+i+')">▶ '+t('planStart')+'</button><button class="btn" onclick="planAddEx('+i+')">＋ '+t('addEx')+'</button></div>';
   let tips='';
   const gs=goalsOf(pr),hyg=gs.filter(isHy)[0];
@@ -559,6 +561,8 @@ function peDraw(){
   sheet('<div class="form"><div class="pick-h"><h3>'+esc(exName(x.eid))+'</h3><button class="ico" onclick="planOpen()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     stp('sets',x.sets,1)+stp('lo',x.lo,x.u==='m'?0.5:1)+stp('hi',x.hi,x.u==='m'?0.5:1)+
     '<p class="muted sm">'+esc(tgText(x))+'</p>'+(x.rz?'<p class="sm rz">↳ '+esc(rzText(x))+'</p>':'')+
+    '<div class="row"><button class="btn" onclick="peMove(-1)"'+(PE.e<1?' disabled':'')+'>↑ '+t('moveUp')+'</button><button class="btn" onclick="peMove(1)"'+(PE.e>=p.ds[PE.d].ex.length-1?' disabled':'')+'>↓ '+t('moveDn')+'</button></div>'+
+    '<label class="sm">'+t('moveDay')+' <select class="in" onchange="peMoveDay(this.value)"><option value="">—</option>'+p.ds.map((d,k)=>k===PE.d?'':'<option value="'+k+'">'+esc(dayName(k))+'</option>').join('')+'</select></label>'+
     '<div class="row"><button class="btn" onclick="planSwapOpen('+PE.d+','+PE.e+')">↔ '+t('swapB')+'</button><button class="btn" onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('howTo')+'</button></div>'+
     '<div class="row"><button class="btn pri" onclick="planOpen()">'+t('done')+'</button><button class="btn" onclick="peRemove()">'+t('remove')+'</button></div></div>');
 }
@@ -567,6 +571,29 @@ function peStep(f,d){
   if(f==='sets')x.sets=Math.max(1,Math.min(8,x.sets+d));
   else{x[f]=Math.max(x.u==='m'?0.5:1,Math.min(x.u==='m'?120:60,x[f]+d));if(x.lo>x.hi){if(f==='lo')x.hi=x.lo;else x.lo=x.hi;}}
   saveData();peDraw();
+}
+function peMove(d){
+  const a=DATA.plan.ds[PE.d].ex,j=PE.e+d;
+  if(j<0||j>=a.length)return;
+  const x=a[PE.e];a[PE.e]=a[j];a[j]=x;PE.e=j;saveData();peDraw();
+}
+function peMoveDay(k){
+  k=parseInt(k,10);const p=DATA.plan;
+  if(isNaN(k)||!p.ds[k]||k===PE.d)return;
+  const src=p.ds[PE.d];
+  if(src.ex.length<=1){toast(t('needOne'));peDraw();return;}
+  const x=src.ex.splice(PE.e,1)[0];p.ds[k].ex.push(x);
+  saveData();toast(t('movedTo',dayName(k)));planOpen(k);render();
+}
+function dayRen(i){
+  const d=DATA.plan.ds[i];
+  sheet('<div class="form"><h3>'+t('dayRen')+'</h3><label>'+t('name')+'<input id="dayrn" class="in wide" type="text" maxlength="30" value="'+esc(d.nm||'')+'" placeholder="'+esc(t('pd_'+d.k))+'"></label><p class="muted sm">'+t('dayRenP')+'</p>'+
+    '<div class="row"><button class="btn pri" onclick="dayRenSave('+i+')">'+t('save')+'</button><button class="btn" onclick="planOpen('+i+')">'+t('cancel')+'</button></div></div>');
+}
+function dayRenSave(i){
+  const d=DATA.plan.ds[i],v=($('dayrn').value||'').trim().slice(0,30);
+  if(v)d.nm=v;else delete d.nm;
+  saveData();planOpen(i);render();
 }
 function peRemove(){
   const d=DATA.plan.ds[PE.d];

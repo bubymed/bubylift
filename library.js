@@ -376,7 +376,7 @@ function libSplitHtml(){
     return'<div class="card spd"><b>'+esc(t('planDay',i+1)+' · '+t('pd_'+d.k))+'</b>'+
       '<ul class="optul">'+rs.map(e=>'<li>'+esc(exName(e.eid))+' <span class="muted">'+esc(tgText(e))+'</span></li>').join('')+'</ul>'+
       (d.wy&&d.wy.length?'<details class="dtl"><summary class="sm">'+t('wyT')+'</summary><ul class="optul">'+d.wy.map(s=>'<li>'+esc(wyText(s))+'</li>').join('')+'</ul></details>':'')+
-      '<div class="row"><button class="btn sm pri" onclick="libSpDay('+i+')">'+t('spStartDay')+'</button></div></div>';
+      '<div class="row"><button class="btn sm pri" onclick="libSpDay('+i+')">'+t('spStartDay')+'</button><button class="btn sm" onclick="libSpSave('+i+')">'+t('spSaveDay')+'</button></div></div>';
   }).join('');
   h+='<div class="row"><button class="btn pri" onclick="libSpUse()">'+t('spUse')+'</button></div><p class="muted sm">'+t('spUseP')+'</p>';
   return h;
@@ -386,6 +386,11 @@ function libSpDay(i){
   if(ACT){toast(t('finishFirst'));return;}
   sheetClose();
   startWorkout({name:t('spl_'+LIB.sp)+' · '+t('pd_'+p.ds[i].k),ex:p.ds[i].ex.map(e=>({eid:e.eid,sets:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u,nt:e.nt,tp:e.tp,rs:e.rs,ss:e.ss,sec:e.sec}}))});
+}
+function libSpSave(i){
+  const p=LIB.spPlan;if(!p||!p.ds[i])return;
+  DATA.routines.push({id:uid(),name:t('spl_'+LIB.sp)+' · '+t('pd_'+p.ds[i].k),ex:p.ds[i].ex.map(e=>({eid:e.eid,n:(exById(e.eid)||{}).en||e.eid,sets:e.sets}))});
+  saveData();toast(t('libSaved'));render();
 }
 function libSpUse(){
   const p=LIB.spPlan;if(!p)return;
