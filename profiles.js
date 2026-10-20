@@ -125,6 +125,17 @@ function pfRemToggle(){
   else{pfRemSet(p.id,ENC.raw,true);toast(t('pfRemOnT'));}
 }
 
+/* "Welcome back" splash: a very short opening screen so it feels like opening the app / pantalla breve de bienvenida */
+function pfSplash(p){
+  try{
+    const old=$('splash');if(old)old.remove();
+    const d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+    d.innerHTML='<img src="icons/icon-192.png" alt=""><b>'+esc(p&&!p.g?t('pfBackN',p.name):t('pfBack'))+'</b>';
+    document.body.appendChild(d);
+    setTimeout(()=>{d.classList.add('out');setTimeout(()=>{if(d.parentNode)d.remove();},350);},850);
+  }catch(e){}
+}
+
 /* ---------- boot / enter / leave ---------- */
 async function boot(){
   pfLoad();
@@ -137,9 +148,9 @@ async function boot(){
   }
   let pick=null;try{pick=sessionStorage.getItem('bl_pick');sessionStorage.removeItem('bl_pick');}catch(e){}
   const lp=pfGet(last);
-  if(!pick&&lp&&lp.enc){const rk=pfRemKey(lp.id);if(rk){await pfEnter(lp.id,rk);return;}}
+  if(!pick&&lp&&lp.enc){const rk=pfRemKey(lp.id);if(rk){await pfEnter(lp.id,rk,null,false,1);return;}}
   if(!PFS.length)gWelcome();
-  else if(PFS.length===1&&!PFS[0].pw){await pfEnter(PFS[0].id,null);}
+  else if(PFS.length===1&&!PFS[0].pw){await pfEnter(PFS[0].id,null,null,false,1);}
   else gPick();
 }
 /* language/theme before sign-in (kept in plain, non-sensitive keys) / idioma y tema antes de entrar (claves simples, no sensibles) */
@@ -149,7 +160,7 @@ function pfPrefs(){
   document.documentElement.lang=LANG;applyTheme();
 }
 /* raw = unlocked master key (32 bytes) for encrypted profiles; seed = {storageKey:jsonString} to write first / raw = llave maestra desbloqueada; seed = datos iniciales */
-async function pfEnter(id,raw,seed,noBoot){
+async function pfEnter(id,raw,seed,noBoot,spl){
   const p=pfGet(id);if(!p){gPick();return;}
   const k=pfKeys(id);
   try{
@@ -171,6 +182,7 @@ async function pfEnter(id,raw,seed,noBoot){
   PFID=id;K_DATA=k.d;K_SET=k.s;K_ACT=k.a;
   try{sessionStorage.setItem('bl_sess',id);localStorage.setItem('bl_last',id);}catch(e){}
   if(noBoot)return;
+  if(spl)pfSplash(p);
   gateHide();pfRenderAv();bootApp();
   if(ENC)pfPump();
   try{if(sessionStorage.getItem('bl_up')){sessionStorage.removeItem('bl_up');setTimeout(()=>toast(t('pfUpDone')),700);}}catch(e){}
@@ -232,6 +244,7 @@ function guestNag(){
 function gPick(edit){
   GS={redraw:function(){gPick(edit);}};
   const tiles=PFS.map(p=>'<button class="pf-tile" onclick="'+(edit?(p.g?'gDelete':'gEdit')+'(\''+p.id+'\')':'gPw(\''+p.id+'\')')+'">'+avHtml(p.av,edit?84:92)+(edit?'<i class="pf-pen">'+(p.g?'🗑':'✎')+'</i>':'')+'<b>'+esc(pfName(p))+'</b></button>').join('')+
+    (PFS.length<PF_MAX&&!edit&&!PFS.some(x=>x.g)?'<button class="pf-tile wrap" onclick="pfGuest()"><span class="av av-add" style="width:92px;height:92px">👤</span><b>'+t('pfGuestB')+'</b></button>':'')+
     (PFS.length<PF_MAX&&!edit?'<button class="pf-tile" onclick="gAdd()"><span class="av av-add" style="width:92px;height:92px">＋</span><b>'+t('pfAdd')+'</b></button>':'');
   gateShow('<div class="g-top"><span></span><button class="g-link" onclick="gPick('+(edit?'false':'true')+')">'+(edit?t('done'):t('edit'))+'</button></div><h1 class="lt g-h">'+t('pfWho')+'</h1><div class="pf-grid">'+tiles+'</div>'+gLang());
 }
@@ -244,8 +257,8 @@ function gAdd(){
 /* password prompt / contraseña */
 function gPw(id){
   const p=pfGet(id);if(!p)return gPick();
-  if(!p.pw){pfEnter(id,null);return;}
-  const rk=p.enc&&pfRemKey(id);if(rk){pfEnter(id,rk);return;}
+  if(!p.pw){pfEnter(id,null,null,false,1);return;}
+  const rk=p.enc&&pfRemKey(id);if(rk){pfEnter(id,rk,null,false,1);return;}
   GS={redraw:function(){gPw(id);}};
   const w=pfWait('p',id);
   gateShow('<div class="g-top"><button class="g-link" onclick="gPick()">‹ '+t('pfSwitch')+'</button><span></span></div><div class="g-c">'+avHtml(p.av,96)+'<h2 class="g-n">'+esc(p.name)+'</h2></div>'+
@@ -270,7 +283,7 @@ async function pfLogin(id){
       else if(hasCrypto()){raw=pfNewKey();p.enc={wp:await pfWrap(pw,raw),wq:null};p.qs=[];p.rm=0;pfSave();mig=true;} // upgrade older profile / actualizar perfil anterior
     }catch(e){m.textContent=t('pfDataBad');return;}
     if(p.enc)pfRemSet(id,raw,rmOn);
-    await pfEnter(id,raw);
+    await pfEnter(id,raw,null,false,1);
     if(mig)setTimeout(function(){toast(t('pfMig'));gQuest(id);},400);
     return;
   }

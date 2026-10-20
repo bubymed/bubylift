@@ -723,6 +723,8 @@ const STR={
  pfRemOff:['Stay signed in on this device: on (turn off)','Mantener sesión en este dispositivo: encendido (apagar)'],
  pfRemOnT:['Done: the password will not be asked on this device','Listo: no se pedirá la contraseña en este dispositivo'],
  pfRemOffT:['Done: the password will be asked next time','Listo: se pedirá la contraseña la próxima vez'],
+ pfBack:['Welcome back','Bienvenido de nuevo'],
+ pfBackN:['Welcome back, {0}','Bienvenido de nuevo, {0}'],
  pfSwitch:['Switch profile','Cambiar de perfil'],
  pfNeedPw:['Type your password','Escribe tu contraseña'],
  pfWrong:['Wrong password. {0} tries before a pause.','Contraseña incorrecta. {0} intentos antes de una pausa.'],
