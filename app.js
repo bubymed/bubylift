@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v36';
+const APP_VER='v37';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -124,15 +124,27 @@ function autoUpd(){
 let instEvt=null;
 function isStandalone(){return(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}
 function isIOS(){return/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);}
-function canInstall(){return!isStandalone()&&!!(instEvt||isIOS()||/android/i.test(navigator.userAgent));}
+function canInstall(){return!isStandalone();}
 function instUpd(){const b=$('instBtn');if(b){b.style.display=canInstall()?'':'none';b.textContent='📲 '+t('install');}}
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();instEvt=e;instUpd();});
 window.addEventListener('appinstalled',()=>{instEvt=null;instUpd();toast(t('installed'));});
-async function installApp(){
-  if(instEvt){instEvt.prompt();try{await instEvt.userChoice;}catch(e){}instEvt=null;instUpd();return;}
-  const ios=isIOS();
-  const steps=ios?['iosS1','iosS2','iosS3','iosS4']:['andS1','andS2','andS3','andS4'];
-  sheet('<div class="inst"><img src="icons/icon-192.png" alt="" class="inst-ic"><h3>'+t('instT')+'</h3><p class="muted">'+t('instP')+'</p><ol>'+steps.map(k=>'<li>'+t(k)+'</li>').join('')+'</ol>'+(ios?'<p class="note">'+t('iosNote')+'</p>':'')+'<button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>');
+let INST_TAB='';
+function instPlat(){return isIOS()?'ios':(/android/i.test(navigator.userAgent)?'and':'pc');}
+function installApp(tab){
+  const cur=(tab==='ios'||tab==='and'||tab==='pc')?tab:(INST_TAB||instPlat());INST_TAB=cur;
+  const steps={ios:['iosS1','iosS2','iosS3','iosS4'],and:['andS1','andS2','andS3','andS4'],pc:['pcS1','pcS2','pcS3']}[cur];
+  const tabs=[['ios','tabIos'],['and','tabAnd'],['pc','tabPc']].map(x=>'<button class="chip'+(x[0]===cur?' on':'')+'" onclick="installApp(\''+x[0]+'\')">'+t(x[1])+'</button>').join('');
+  sheet('<div class="inst"><div class="pick-h"><div class="inst-top"><img src="icons/icon-192.png" alt="" class="inst-ic"><h3>'+t('ginT')+'</h3></div><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+    '<p class="muted">'+t('instP')+'</p>'+
+    '<div class="card"><b>'+t('whyT')+'</b><ul class="why">'+[t('why1'),t('why2'),t('why3'),t('why4')].map(x=>'<li>'+x+'</li>').join('')+'</ul></div>'+
+    '<div class="lbl">'+t('howT')+'</div><div class="chips">'+tabs+'</div>'+
+    (instEvt&&cur===instPlat()?'<button class="btn pri wide" onclick="instNative()">📲 '+t('installNow')+'</button><p class="muted sm">'+t('orSteps')+'</p>':'')+
+    '<ol>'+steps.map(k=>'<li>'+t(k)+'</li>').join('')+'</ol>'+(cur==='ios'?'<p class="note">'+t('iosNote')+'</p>':'')+
+    '<button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>');
+}
+async function instNative(){
+  if(!instEvt)return;
+  sheetClose();instEvt.prompt();try{await instEvt.userChoice;}catch(e){}instEvt=null;instUpd();
 }
 
 /* ---------- What's new (data/whatsnew.js): once per version, and from More → What's new ---------- */

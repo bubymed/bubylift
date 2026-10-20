@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v37 — 2026-10-20
+- **Install guide:** the Install button is always visible in the header (and in More) until the app is installed. It opens a guide with why to install and the steps for iPhone/iPad, Android and computers (the matching tab opens first; a one-tap "Install now" appears when the browser supports it).
+  **Guía de instalación:** el botón Instalar siempre está visible arriba (y en Más) hasta que la app esté instalada. Abre una guía con por qué instalarla y los pasos para iPhone/iPad, Android y computadoras (se abre primero la pestaña que corresponde; aparece un "Instalar ahora" de un toque cuando el navegador lo permite).
+
 ## v36 — 2026-10-20
 - **Tablet and desktop layouts:** from 720 px the start options become columns, rank buttons fit one row and windows open centered instead of from the bottom; from 1100 px the tab bar becomes a left side menu and content is centered. Phones are unchanged.
   **Vistas para tableta y computadora:** desde 720 px las opciones de inicio pasan a columnas, los rangos caben en una fila y las ventanas se abren al centro en vez de desde abajo; desde 1100 px la barra de pestañas se vuelve un menú lateral izquierdo y el contenido queda centrado. El teléfono no cambia.
