@@ -526,3 +526,5 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
   #main{display:block}
 }
 @media(min-width:720px) and (hover:hover){.pk:hover,.spc:hover,.rk:hover{border-color:var(--accent)}}
+
+.inst-top{display:flex;align-items:center;gap:12px}.inst-top .inst-ic{margin:0}.why{list-style:none;margin:8px 0 0;padding:0}.why li{margin:8px 0;line-height:1.35}
