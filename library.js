@@ -1,7 +1,7 @@
 /* Ready routines and challenges (v28): focused routines by muscle and level, and timed challenges.
    Rutinas listas y retos (v28): rutinas enfocadas por músculo y nivel, y retos con tiempo. */
 const LIB_FILT=['all','pt','cf','hy','run','mil','bw'];
-let LIB={tab:'focus',area:'chest',lv:1,sel:null,clv:1,flt:'all',eq:false};
+let LIB={tab:'focus',area:'chest',lv:1,sel:null,clv:1,flt:'all',eq:false,sp:'ppl',spn:3,spl:null,spsd:0};
 let CHR=null,CHT=null; // challenge being run, and its timer / reto en curso y su temporizador
 NT_KEYS.push('lz_std','lz_rom','lz_uni','lz_prof','lz_inst','lz_lever','lz_mom'); // notes shown while training / notas durante el entrenamiento
 
@@ -135,10 +135,10 @@ function libEqHtml(){
     '<div class="row"><button class="btn sm" onclick="libPreset(\'gym\')">'+t('eqp_gym')+'</button><button class="btn sm" onclick="libPreset(\'db\')">'+t('eqp_db')+'</button><button class="btn sm" onclick="libPreset(\'home\')">'+t('eqp_home')+'</button><button class="btn sm" onclick="libPreset(\'none\')">'+t('eqp_none')+'</button></div></details>';
 }
 function libDraw(){
-  let h='<div class="form lib"><div class="pick-h"><h3>'+t(LIB.tab==='focus'?'pkMusT':'pkChT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>';
-  h+='<div class="seg"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">💪 '+t('libFocusT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">⏱️ '+t('libChT')+'</button></div>';
+  let h='<div class="form lib"><div class="pick-h"><h3>'+t(LIB.tab==='focus'?'pkMusT':(LIB.tab==='split'?'pkSpT':'pkChT'))+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>';
+  h+='<div class="seg"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">💪 '+t('libFocusT')+'</button><button class="'+(LIB.tab==='split'?'on':'')+'" onclick="libTab(\'split\')">🔀 '+t('libSplitT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">⏱️ '+t('libChT')+'</button></div>';
   h+=libEqHtml();
-  h+=LIB.tab==='focus'?libFocusHtml():(LIB.sel?libChDetail():libChList());
+  h+=LIB.tab==='focus'?libFocusHtml():(LIB.tab==='split'?libSplitHtml():(LIB.sel?libChDetail():libChList()));
   h+='</div>';
   sheet(h);
 }
@@ -349,6 +349,49 @@ function xdHtml(){
   const p=DATA.plan;if(!p||!p.xd||!p.xd.length)return'';
   return'<div class="lbl">'+t('xdT')+'</div><p class="muted sm">'+t('xdP')+'</p>'+p.xd.map((k,i)=>'<div class="plex"><span><b>'+esc(xdName(k))+'</b></span><button class="btn sm" onclick="xdStart('+i+')">'+t('libStart')+'</button><button class="ico" aria-label="'+esc(t('delete'))+'" onclick="xdDel('+i+')">🗑</button></div>').join('');
 }
+/* ---------- famous splits, straight to the point / divisiones famosas, directo ---------- */
+function libSp(id){LIB.sp=id;if(!splitOk(id,LIB.spn))LIB.spn=[3,4,5,2].find(n=>splitOk(id,n))||3;libDraw();}
+function libSpN(n){LIB.spn=+n;libDraw();}
+function libSpL(k){LIB.spl=k;libDraw();}
+function libSpProf(){
+  const p=DATA.plan,base=p?p.prof:{goal:'muscle',len:60,inj:[],avoid:[],fav:[]};
+  if(!LIB.spsd)LIB.spsd=(Math.random()*1e6|0)+1;
+  const lvl=LIB.spl||(p?p.lvl:'some');
+  return Object.assign({},base,{n:LIB.spn,lvl:lvl,have:libHave().slice(),split:LIB.sp,sd:LIB.spsd,rt:0,ph:0,no:[]});
+}
+function libSpPlan(){try{return genPlan(libSpProf());}catch(e){return null;}}
+function libSplitHtml(){
+  if(!splitOk(LIB.sp,LIB.spn))LIB.spn=[3,4,5,2].find(n=>splitOk(LIB.sp,n))||3;
+  const p=libSpPlan(),lvl=LIB.spl||(DATA.plan?DATA.plan.lvl:'some');
+  let h='<p class="muted sm">'+t('libSplitP')+'</p>'+
+    libStep(1,'spStep1')+'<div class="spl">'+SPLIT_IDS.map(id=>'<button class="card spc'+(id===LIB.sp?' on':'')+'" onclick="libSp(\''+id+'\')"><b>'+t('spl_'+id)+'</b><small>'+t('spd_'+id)+'</small></button>').join('')+'</div>'+
+    libStep(2,'spStep2')+libChips(['new','some','adv'],lvl,'libSpL',k=>t('pl_'+k),1)+
+    libStep(3,'spStep3')+libChips([2,3,4,5].filter(n=>splitOk(LIB.sp,n)),LIB.spn,'libSpN',n=>t('spDays',n),1)+
+    libStep(4,'spStep4');
+  if(!p||!p.ds||!p.ds.length)return h+'<p class="muted">'+t('libNone')+'</p>';
+  LIB.spPlan=p;
+  h+='<p class="muted sm">'+t('spNote')+'</p>';
+  h+=p.ds.map((d,i)=>{
+    const rs=d.ex.filter(e=>e.sec==='rs');
+    return'<div class="card spd"><b>'+esc(t('planDay',i+1)+' · '+t('pd_'+d.k))+'</b>'+
+      '<ul class="optul">'+rs.map(e=>'<li>'+esc(exName(e.eid))+' <span class="muted">'+esc(tgText(e))+'</span></li>').join('')+'</ul>'+
+      (d.wy&&d.wy.length?'<details class="dtl"><summary class="sm">'+t('wyT')+'</summary><ul class="optul">'+d.wy.map(s=>'<li>'+esc(wyText(s))+'</li>').join('')+'</ul></details>':'')+
+      '<div class="row"><button class="btn sm pri" onclick="libSpDay('+i+')">'+t('spStartDay')+'</button></div></div>';
+  }).join('');
+  h+='<div class="row"><button class="btn pri" onclick="libSpUse()">'+t('spUse')+'</button></div><p class="muted sm">'+t('spUseP')+'</p>';
+  return h;
+}
+function libSpDay(i){
+  const p=LIB.spPlan;if(!p||!p.ds[i])return;
+  if(ACT){toast(t('finishFirst'));return;}
+  sheetClose();
+  startWorkout({name:t('spl_'+LIB.sp)+' · '+t('pd_'+p.ds[i].k),ex:p.ds[i].ex.map(e=>({eid:e.eid,sets:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u,nt:e.nt,tp:e.tp,rs:e.rs,ss:e.ss,sec:e.sec}}))});
+}
+function libSpUse(){
+  const p=LIB.spPlan;if(!p)return;
+  const go=function(){DATA.plan=p;saveData();sheetClose();render();toast(t('planReady'));};
+  if(DATA.plan)ask(t('spReplace'),t('spUse'),go);else go();
+}
 function libGo(tab){if(!LIB.set){LIB.lv=LIB.clv=libDefaultRank();LIB.set=1;}LIB.tab=tab;LIB.sel=null;libDraw();}
 /* the four ways to train, in one clear list / las cuatro formas de entrenar, en una lista clara */
 function startChooser(){
@@ -356,6 +399,7 @@ function startChooser(){
   return'<div class="pks">'+
     (DATA.plan?'':c('🧭','pkPlanT','pkPlanP','planSetup()','pri'))+
     c('💪','pkMusT','pkMusP',"libGo('focus')")+
+    c('🔀','pkSpT','pkSpP',"libGo('split')")+
     c('⏱️','pkChT','pkChP',"libGo('ch')")+
     c('✍️','pkOwnT','pkOwnP','startWorkout()')+
   '</div>';

@@ -490,3 +490,11 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .rk i{font-style:normal;font-size:.7rem;color:var(--dim);font-weight:600}
 .rk.on{border-color:var(--accent);color:var(--accent)}
 .rk.on i{color:var(--accent)}
+
+/* v33 splits tab / pestaña de divisiones */
+.seg button{font-size:.88rem;padding:10px 2px}
+.spl{display:flex;flex-direction:column;gap:8px}
+.spc{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;margin:0;padding:10px 12px;border:2px solid transparent}
+.spc small{color:var(--dim);font-size:.8rem;line-height:1.3}
+.spc.on{border-color:var(--accent)}
+.spd{margin:8px 0}

@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v33 — 2026-10-20
+- **Famous splits, straight to the point:** a new "Famous splits" button on the Workout tab (and a "Splits" tab next to muscle routines and challenges) goes directly to Upper/Lower, Push/Pull/Legs, Arnold, body-part and Upper/Lower + PPL. Pick the split, your experience and the days per week, see each day's exercises with the reasons, train a single day right away, or use it as your plan (it asks before replacing an existing plan). It uses your equipment, injuries and avoided styles when you already have a plan.
+  **Divisiones famosas, directo:** un botón nuevo "Divisiones famosas" en la pestaña Entrenar (y una pestaña "Divisiones" junto a las rutinas por músculo y los retos) lleva directo a Torso/Pierna, Empuje/Jalón/Piernas, Arnold, un músculo por día y Torso/Pierna + PPL. Elige la división, tu experiencia y los días por semana, mira los ejercicios de cada día con sus razones, entrena un solo día de inmediato o úsala como tu plan (pregunta antes de reemplazar un plan existente). Usa tu equipo, lesiones y estilos que evitas cuando ya tienes un plan.
+
 ## v32 — 2026-10-20
 - **Clearer library screens:** the "By muscle" and "Challenges" tabs are a switch with icons, and each screen is split into numbered steps with titles (1 Choose a muscle, 2 Choose your rank, 3 Your routine; for challenges: filter, pick, rank, how it works). Ranks are numbered cards in a grid, so they no longer look like the muscle buttons.
   **Pantallas de la biblioteca más claras:** las pestañas "Por músculo" y "Retos" son un interruptor con íconos, y cada pantalla se divide en pasos numerados con título (1 Elige un músculo, 2 Elige tu rango, 3 Tu rutina; en retos: filtro, elegir, rango, cómo funciona). Los rangos son tarjetas numeradas en cuadrícula, así que ya no se parecen a los botones de músculo.
