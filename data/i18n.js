@@ -9,7 +9,7 @@ const STR={
  name:['Name','Nombre'],note:['Note','Nota'],date:['Date','Fecha'],all:['All','Todos'],options:['Options','Opciones'],discard:['Discard','Descartar'],
  saveFail:['Could not save — your device storage may be full.','No se pudo guardar — puede que el almacenamiento del dispositivo esté lleno.'],
  install:['Install','Instalar'],installed:['Installed ✓ — open it from your home screen','Instalada ✓ — ábrela desde tu pantalla de inicio'],
- updating:['Updating to {0}…','Actualizando a {0}…'],updated:['UPDATED','ACTUALIZADA'],whatsNew:['What\'s new','Novedades'],gotIt:['Got it','Entendido'],
+ updating:['Updating to {0}…','Actualizando a {0}…'],updated:['UPDATED','ACTUALIZADA'],whatsNew:['What\'s new','Novedades'],fbPopT:['How is Bubylift going?','¿Cómo te va con Bubylift?'],fbPopP:['You made your first routine and logged your first set. Tell us what works and what does not — it takes about a minute and nothing is sent unless you submit it.','Ya tienes tu primera rutina y registraste tu primer set. Cuéntanos qué funciona y qué no: toma alrededor de un minuto y no se envía nada a menos que lo envíes tú.'],fbPopYes:['Give feedback','Dar feedback'],fbPopNo:['Not now','Ahora no'],fbT:['Send feedback','Enviar feedback'],fbP:['Opens a short form (about 1 minute). Nothing is sent from the app unless you submit it; your training data stays on this device.','Abre un formulario corto (alrededor de 1 minuto). Nada se envía desde la app a menos que lo envíes tú; tus datos de entrenamiento se quedan en este dispositivo.'],gotIt:['Got it','Entendido'],
  copied:['Copied ✓','Copiado ✓'],copyFail:['Could not copy','No se pudo copiar'],
  // install help
  instT:['Add Bubylift to your Home Screen','Agrega Bubylift a tu pantalla de inicio'],
