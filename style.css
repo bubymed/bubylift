@@ -478,3 +478,15 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .pk-t b{font-size:1.05rem}
 .pk-t small{color:var(--muted);font-size:.84rem;line-height:1.3}
 .pk-a{font-size:1.6rem;color:var(--muted)}
+
+/* v32 library layout: tabs, steps and rank cards that do not look alike / pestañas, pasos y rangos que no se parecen */
+.seg{display:flex;gap:4px;padding:4px;border-radius:14px;background:var(--panel2);margin:6px 0 10px}
+.seg button{flex:1;padding:10px 6px;border-radius:11px;font-weight:700;font-size:.95rem;color:var(--dim)}
+.seg button.on{background:var(--accent);color:var(--on-accent)}
+.lstep{display:flex;align-items:center;gap:10px;margin:20px 0 8px;padding-top:14px;border-top:1px solid var(--line);font-weight:800;font-size:1.02rem}
+.lstep b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.rkg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 10px}
+.rk{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;border-radius:12px;background:var(--panel2);border:2px solid transparent;font-weight:700;font-size:.82rem;line-height:1.15;text-align:center}
+.rk i{font-style:normal;font-size:.7rem;color:var(--dim);font-weight:600}
+.rk.on{border-color:var(--accent);color:var(--accent)}
+.rk.on i{color:var(--accent)}

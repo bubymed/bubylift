@@ -123,6 +123,11 @@ function libCLv(i){LIB.clv=+i;libDraw();}
 function libEq(){LIB.eq=!LIB.eq;libDraw();}
 function libHow(id){howOpen(id,'libDraw');}
 function libChips(arr,cur,fn,lab,wrap){return'<div class="chips'+(wrap?' wrap':'')+'">'+arr.map((k,i)=>{const v=typeof k==='number'?k:k;return'<button class="chip'+(String(v)===String(cur)?' on':'')+'" onclick="'+fn+'(\''+v+'\')">'+lab(v)+'</button>';}).join('')+'</div>';}
+/* a numbered rank card grid, different from the pill buttons / cuadrícula de rangos numerados, distinta de los botones de píldora */
+function libRanks(kind,cur,fn){
+  return'<div class="rkg">'+[0,1,2,3,4,5].map(i=>'<button class="rk'+(i===cur?' on':'')+'" onclick="'+fn+'('+i+')"><i>'+(i+1)+'</i><span>'+esc(rk(kind,i))+'</span></button>').join('')+'</div>';
+}
+function libStep(n,key){return'<div class="lstep"><b>'+n+'</b><span>'+t(key)+'</span></div>';}
 function libEqHtml(){
   const have=libHave();
   return'<details class="dtl" '+(LIB.eq?'open ':'')+'ontoggle="LIB.eq=this.open"><summary><b>'+t('libEq')+'</b> <span class="muted sm">'+have.length+'</span></summary>'+
@@ -131,7 +136,7 @@ function libEqHtml(){
 }
 function libDraw(){
   let h='<div class="form lib"><div class="pick-h"><h3>'+t(LIB.tab==='focus'?'pkMusT':'pkChT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>';
-  h+='<div class="chips"><button class="chip'+(LIB.tab==='focus'?' on':'')+'" onclick="libTab(\'focus\')">'+t('libFocusT')+'</button><button class="chip'+(LIB.tab==='ch'?' on':'')+'" onclick="libTab(\'ch\')">'+t('libChT')+'</button></div>';
+  h+='<div class="seg"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">💪 '+t('libFocusT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">⏱️ '+t('libChT')+'</button></div>';
   h+=libEqHtml();
   h+=LIB.tab==='focus'?libFocusHtml():(LIB.sel?libChDetail():libChList());
   h+='</div>';
@@ -140,9 +145,10 @@ function libDraw(){
 function libFocusHtml(){
   const li=LIB.lv,items=libFocus(LIB.area,li,libHave());
   let h='<p class="muted sm">'+t('libFocusP')+'</p>'+
-    libChips(LIB_AREAS,LIB.area,'libArea',k=>t('lib_'+k))+
-    libChips([0,1,2,3,4,5],li,'libLv',i=>rk(LIB.area,i),1)+
+    libStep(1,'libStep1')+libChips(LIB_AREAS,LIB.area,'libArea',k=>t('lib_'+k),1)+
+    libStep(2,'libStep2')+libRanks(LIB.area,li,'libLv')+
     '<div class="card optb"><b>'+rk(LIB.area,li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
+  h+=libStep(3,'libStep3');
   if(!items.length)return h+'<p class="muted">'+t('libNone')+'</p>';
   h+=items.map(e=>'<div class="plex"><span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgLine(e))+' · '+esc(t('rsSec',e.rs))+(e.cn?' · ⚠ '+esc(t('caution')):'')+'</small><small class="rz">'+esc(t('lz_'+e.lever))+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="libHow(\''+e.eid+'\')">ⓘ</button></div>').join('');
   if(items.length<4)h+='<p class="muted sm">'+t('libFew')+'</p>';
@@ -153,11 +159,11 @@ function libFocusHtml(){
 }
 function libChList(){
   const have=libHave();
-  let h='<p class="muted sm">'+t('libChP')+'</p>'+libChips(LIB_FILT,LIB.flt,'libFlt',k=>t('chf_'+k));
+  let h='<p class="muted sm">'+t('libChP')+'</p>'+libStep(1,'libStepF')+libChips(LIB_FILT,LIB.flt,'libFlt',k=>t('chf_'+k),1)+libStep(2,'libStepP');
   const list=CHALLENGES.filter(c=>LIB.flt==='all'||c.tg.indexOf(LIB.flt)>=0);
   h+=list.map(c=>{
     const b=chBuild(c,LIB.clv,have),best=chBest(c.id,LIB.clv,c.ty);
-    return'<button class="card chc" onclick="libSel(\''+c.id+'\')"><b>'+esc(t('ch_'+c.id))+'</b><div class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+c.tg.map(k=>t('chf_'+k)).join(' · ')+'</div><div class="muted sm">'+(b.exact?t('chExact'):t('chAdapt'))+(best?' · 🏆 '+esc(chScoreTxt(c.ty,best.sc)):'')+'</div></button>';
+    return'<button class="card chc" onclick="libSel(\''+c.id+'\')"><b>'+esc(t('ch_'+c.id))+'</b><div class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+c.tg.map(k=>t('chf_'+k)).join(' · ')+'</div><div class="muted sm">'+t('rankOf',LIB.clv+1)+' · '+esc(rk(chCat(c),LIB.clv))+' · '+(b.exact?t('chExact'):t('chAdapt'))+(best?' · 🏆 '+esc(chScoreTxt(c.ty,best.sc)):'')+'</div></button>';
   }).join('');
   return h;
 }
@@ -167,9 +173,10 @@ function libChDetail(){
   let h='<button class="btn sm" onclick="libBack()">← '+t('back')+'</button><h3>'+esc(t('ch_'+c.id))+'</h3>'+
     '<p class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+c.tg.map(k=>t('chf_'+k)).join(' · ')+'</p>'+
     '<p>'+esc(t('chd_'+c.id))+'</p>'+
-    libChips([0,1,2,3,4,5],li,'libCLv',i=>rk(chCat(c),i),1)+
+    libStep(1,'libStepR')+libRanks(chCat(c),li,'libCLv')+
     '<p class="sm"><b>'+rk(chCat(c),li)+'</b> <span class="muted">'+t('rankOf',li+1)+'</span> · '+t('lvd_'+li)+'</p>'+
-    '<div class="card optb"><b>'+t('chFormat')+'</b><p class="sm">'+esc(t('chfx_'+c.ty,c.cap,b.w||0,c.r||0,b.rd||0))+'</p>'+
+    libStep(2,'libStepW')+
+    '<div class="card optb"><p class="sm">'+esc(t('chfx_'+c.ty,c.cap,b.w||0,c.r||0,b.rd||0))+'</p>'+
     '<ol class="how">'+chDetailRows(b).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>'+
     (c.rest?'<p class="muted sm">'+t('chRest',c.rest)+'</p>':'')+
     '<p class="muted sm">'+(b.exact?t('chExact'):t('chAdaptP'))+'</p>'+

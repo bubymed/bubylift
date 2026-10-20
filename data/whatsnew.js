@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v32',items:[
+  {i:'🧩',en:'<b>Clearer routines and challenges screens</b> — the two sections are now a switch at the top, and each screen is split into numbered steps (muscle, rank, your routine) with rank cards that look different from the muscle buttons.',es:'<b>Pantallas de rutinas y retos más claras</b> — las dos secciones ahora son un interruptor arriba, y cada pantalla se divide en pasos numerados (músculo, rango, tu rutina) con tarjetas de rango que se ven distintas de los botones de músculo.'}]},
  {v:'v31',items:[
   {i:'🏅',en:'<b>Six ranks instead of easy, medium, hard</b> — with names that follow what you train (Pigeon to Mammoth for chest, Foal to Pegasus for legs, Recruit to Warlord for military challenges, and more), for muscle routines and challenges. You start at the rank that fits your level, and each rank adds volume or difficulty with its reason.',es:'<b>Seis rangos en vez de fácil, medio y difícil</b> — con nombres que siguen lo que entrenas (de Paloma a Mamut en pecho, de Potrillo a Pegaso en piernas, de Recluta a Señor de la guerra en los retos militares y más), para las rutinas por músculo y los retos. Empiezas en el rango que corresponde a tu nivel, y cada rango suma volumen o dificultad con su razón.'}]},
  {v:'v30',items:[
