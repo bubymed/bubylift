@@ -473,19 +473,23 @@ function pfEditSave(id,inApp){
   p.name=n.slice(0,20);p.av=pfAv(GS.av);pfSave();pfRenderAv();
   if(inApp){gateHide();toast(t('saved'));}else gPick(true);
 }
-function gDelete(id){
+function gDelete(id,inApp){
   const p=pfGet(id);if(!p)return;
-  GS={redraw:function(){gDelete(id);}};
-  gateShow('<div class="g-top"><button class="g-link" onclick="'+(p.g?'gPick(true)':'gEdit(\''+id+'\')')+'">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('pfDel')+'</h1><p class="muted">'+t('pfDelP',esc(pfName(p)))+'</p><div class="g-form">'+
+  GS={redraw:function(){gDelete(id,inApp);}};
+  gateShow('<div class="g-top"><button class="g-link" onclick="'+(inApp?'gateHide()':(p.g?'gPick(true)':'gEdit(\''+id+'\')'))+'">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('pfDel')+'</h1><p class="muted">'+t('pfDelP',esc(pfName(p)))+'</p><div class="g-form">'+
     (p.pw?'<label>'+t('pfPw')+'<input id="gpw" class="in wide" type="password" autocomplete="current-password"></label>':'')+'<p id="gmsg" class="g-msg"></p><button class="btn danger big wide" onclick="pfDelete(\''+id+'\')">🗑 '+t('pfDel')+'</button></div>');
 }
 async function pfDelete(id){
   const p=pfGet(id),m=$('gmsg');if(!p)return;
   const w=pfWait('p',id);if(w){m.textContent=t('pfWait',pfWaitTxt(w));return;}
   try{if(p.pw&&!(await pfCheck(gv('gpw'),p.pw))){const x=pfFail('p',id);m.textContent=x.u>Date.now()?t('pfWait',pfWaitTxt(pfWait('p',id))):t('pfWrong',Math.max(0,3-x.n));return;}}catch(e){m.textContent=t('pfNoCrypto');return;}
+  const cur=id===PFID;
+  if(cur&&ENC){try{await pfFlush();}catch(e){}}
+  if(cur){ENC=null;}
   const k=pfKeys(id);try{[k.d,k.s,k.a,'bl_thrp_'+id,'bl_thrq_'+id,'bl_rk_'+id].forEach(x=>localStorage.removeItem(x));}catch(e){}
   PFS=PFS.filter(x=>x.id!==id);pfSave();
   try{if(localStorage.getItem('bl_last')===id)localStorage.removeItem('bl_last');}catch(e){}
+  if(cur){try{sessionStorage.removeItem('bl_sess');sessionStorage.removeItem('bl_sk');sessionStorage.setItem('bl_pick','1');}catch(e){}location.replace(location.pathname);return;}
   if(!PFS.length){GS={};gWelcome();}else gPick(true);
 }
 
@@ -493,7 +497,7 @@ async function pfDelete(id){
 function pfMenu(){
   const p=pfCur();if(!p)return;
   if(p.g){
-    sheet('<div class="form"><div class="g-c">'+avHtml(p.av,76)+'<h3 class="g-n">'+esc(pfName(p))+'</h3></div><div class="menu"><button class="pri" onclick="sheetClose();gSave()">💾 '+t('pfGuestSave')+'</button><button onclick="sheetClose();pfLeave()">⇄ '+t('pfSwitch')+'</button></div>'+
+    sheet('<div class="form"><div class="g-c">'+avHtml(p.av,76)+'<h3 class="g-n">'+esc(pfName(p))+'</h3></div><div class="menu"><button class="pri" onclick="sheetClose();gSave()">💾 '+t('pfGuestSave')+'</button><button onclick="sheetClose();pfLeave()">⇄ '+t('pfSwitch')+'</button><button onclick="sheetClose();gDelete(\''+p.id+'\',true)">🗑 '+t('pfDelIn')+'</button></div>'+
       '<p class="muted sm">'+t('gnP')+'</p><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
     return;
   }
@@ -501,7 +505,7 @@ function pfMenu(){
     '<button onclick="sheetClose();pfLeave()">⇄ '+t('pfSwitch')+'</button><button onclick="sheetClose();gEdit(\''+p.id+'\',true)">✎ '+t('pfEditT')+'</button>'+
     (p.pw?'<button onclick="sheetClose();gSetPw(\''+p.id+'\',true)">🔑 '+t('pfChange')+'</button><button onclick="sheetClose();gQuest(\''+p.id+'\')">❓ '+t('pfQT')+'</button>':'')+
     (p.enc?'<button onclick="sheetClose();pfRemToggle()">'+(pfRemKey(p.id)?'🔓 '+t('pfRemOff'):'🔒 '+t('pfRemOn'))+'</button>':'')+
-    '<button onclick="sheetClose();gSend()">📲 '+t('pfTx')+'</button></div><p class="muted sm">'+t('pfNote')+'</p><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
+    '<button onclick="sheetClose();gSend()">📲 '+t('pfTx')+'</button><button onclick="sheetClose();gDelete(\''+p.id+'\',true)">🗑 '+t('pfDelIn')+'</button></div><p class="muted sm">'+t('pfNote')+'</p><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
 }
 /* change security questions (needs the password) / cambiar preguntas (pide la contraseña) */
 function gQuest(id){

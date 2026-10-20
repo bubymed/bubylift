@@ -539,3 +539,12 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 @keyframes splpop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
 @keyframes splin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){#splash img,#splash b{animation:none}}
+
+.faq details{background:var(--panel);border-radius:12px;margin:8px 0;padding:0 14px}
+.faq summary{color:var(--txt);cursor:pointer;font-weight:600;padding:13px 22px 13px 0;list-style:none;position:relative;line-height:1.3}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';position:absolute;right:0;top:11px;color:var(--accent);font-size:1.3rem;font-weight:700}
+.faq details[open] summary::after{content:'−'}
+.faq details p{margin:0 0 14px;color:var(--dim);line-height:1.45;font-size:.93rem}
+.faqbox{margin-top:16px}
+.faqbox textarea{width:100%;margin:8px 0;resize:vertical}
