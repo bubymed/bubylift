@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v33',items:[
+  {i:'🔀',en:'<b>Go straight to the famous splits</b> — Push/Pull/Legs, Upper/Lower, Arnold, body-part and Upper/Lower + PPL now have their own button on the Workout tab. Pick the split, your experience and the days, see every day with its reasons, train one day right away or make it your plan.',es:'<b>Directo a las divisiones famosas</b> — Empuje/Jalón/Piernas, Torso/Pierna, Arnold, un músculo por día y Torso/Pierna + PPL ahora tienen su propio botón en la pestaña Entrenar. Elige la división, tu experiencia y los días, mira cada día con sus razones, entrena un día de inmediato o conviértela en tu plan.'}]},
  {v:'v32',items:[
   {i:'🧩',en:'<b>Clearer routines and challenges screens</b> — the two sections are now a switch at the top, and each screen is split into numbered steps (muscle, rank, your routine) with rank cards that look different from the muscle buttons.',es:'<b>Pantallas de rutinas y retos más claras</b> — las dos secciones ahora son un interruptor arriba, y cada pantalla se divide en pasos numerados (músculo, rango, tu rutina) con tarjetas de rango que se ven distintas de los botones de músculo.'}]},
  {v:'v31',items:[
