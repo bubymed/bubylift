@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v36',items:[
+  {i:'🖥️',en:'<b>Made for tablets and computers too</b> — on a tablet the start options and cards use two or three columns and windows open centered; on a computer the tabs move to a side menu and the content stays comfortably centered. Phones look the same as before.',es:'<b>Ahora también para tabletas y computadoras</b> — en tableta las opciones de inicio y las tarjetas usan dos o tres columnas y las ventanas se abren al centro; en computadora las pestañas pasan a un menú lateral y el contenido queda centrado y cómodo. En el teléfono todo se ve igual que antes.'}]},
  {v:'v35',items:[
   {i:'✏️',en:'<b>Edit your routines</b> — in your plan you can now move an exercise up or down, send it to another day and rename any day; in My routines you can reorder exercises. Ready routines, splits and challenges stay as designed, but you can save a copy to My routines and edit that.',es:'<b>Edita tus rutinas</b> — en tu plan ahora puedes subir o bajar un ejercicio, mandarlo a otro día y renombrar cualquier día; en Mis rutinas puedes reordenar los ejercicios. Las rutinas listas, las divisiones y los retos se quedan como fueron diseñados, pero puedes guardar una copia en Mis rutinas y editar esa.'}]},
  {v:'v34',items:[
