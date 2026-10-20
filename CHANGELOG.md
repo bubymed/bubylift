@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v30 — 2026-10-20
+- **Clear start screen:** the Workout tab now opens with separate, visible buttons for each way to train: make my plan with the app (shown first when you have no plan, for people who are starting), routines by muscle, challenges, and my own workout (empty start plus saved routines, for people who know what they want). With a plan, "Up next" stays on top and the choices follow. The routines and challenges screens open straight on their own tab.
+  **Pantalla de inicio clara:** la pestaña Entrenar ahora abre con botones separados y visibles para cada forma de entrenar: armar mi plan con la app (primero si no tienes plan, para quien empieza), rutinas por músculo, retos y mi propio entrenamiento (inicio vacío y rutinas guardadas, para quien ya sabe lo que quiere). Con un plan, "Lo que sigue" queda arriba y las opciones van después. Las pantallas de rutinas y retos abren directo en su propia pestaña.
+
 ## v29 — 2026-10-20
 - **Challenges no longer repeat movements:** when you lack the equipment, a swapped movement could duplicate another in the same round (for example two push-up lines or two squat lines). The swap now skips movements already in the round, and the fallbacks are different patterns (glute bridge, Superman, hand-release push-up). A test checks every challenge, level and equipment set.
   **Los retos ya no repiten movimientos:** cuando faltaba equipo, un movimiento cambiado podía duplicar otro de la misma ronda (por ejemplo dos líneas de flexiones o dos de sentadillas). Ahora el cambio omite los movimientos que ya están en la ronda y los reemplazos son patrones distintos (puente de glúteo, Superman, flexión con soltada de manos). Una prueba revisa cada reto, nivel y conjunto de equipo.

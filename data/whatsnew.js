@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v30',items:[
+  {i:'🧭',en:'<b>Pick how you want to train</b> — the Workout tab now starts with clear choices: let the app make your plan (great if you are new), routines by muscle, challenges, or your own workout if you already know what you want.',es:'<b>Elige cómo quieres entrenar</b> — la pestaña Entrenar ahora empieza con opciones claras: que la app arme tu plan (ideal si estás empezando), rutinas por músculo, retos, o tu propio entrenamiento si ya sabes lo que quieres.'}]},
  {v:'v29',items:[
   {i:'🔧',en:'<b>Challenges no longer repeat movements</b> — when you do not have the equipment, a swapped movement can no longer duplicate another one in the same round (two push-up lines, two squat lines). Swaps now pick a different movement, like glute bridges or Superman holds.',es:'<b>Los retos ya no repiten movimientos</b> — cuando no tienes el equipo, un movimiento cambiado ya no puede duplicar otro de la misma ronda (dos líneas de flexiones, dos de sentadillas). Los cambios ahora usan un movimiento distinto, como puentes de glúteo o el Superman.'}]},
  {v:'v28',items:[
