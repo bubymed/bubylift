@@ -55,7 +55,7 @@ const WQ=[
  {id:'tw',ic:'📅',title:()=>t('psTw'),sub:()=>t('wzTwS'),show:()=>goalsOf(PW).indexOf('military')>=0,body:()=>wzOne('tw',TW,PW.tw,v=>v?t('psTwN',v):t('psTwNone'),v=>v?'📅':'🚫')},
  {id:'focus',ic:'🔍',title:()=>t('psFocus'),sub:()=>t('psFocusP'),multi:1,body:()=>wzMany('focus',Object.keys(FOCUS_MU),v=>t('fm_'+v),v=>WZ_IC.focus[v],3)},
  {id:'ff',ic:'🔁',title:()=>t('psFreq'),sub:()=>t('psFreqP'),show:()=>PW.focus.length>0,body:()=>wzOne('ff',[1,2,3,4],PW.ff,v=>t('psDaysN',v),()=>'')},
- {id:'skills',ic:'⚡',title:()=>t('psSkill'),sub:()=>t('psSkillP'),multi:1,body:()=>wzMany('skills',SKILLS,v=>t('sk_'+v),v=>WZ_IC.skill[v],2)},
+ {id:'skills',ic:'⚡',title:()=>t('psSkill'),sub:()=>t('psSkillP'),multi:1,show:()=>false,body:()=>wzMany('skills',SKILLS,v=>t('sk_'+v),v=>WZ_IC.skill[v],2)},
  {id:'n',ic:'📆',title:()=>t('psDays'),sub:()=>t('wzDaysS'),body:()=>wzOne('n',[2,3,4,5],PW.n,v=>t('psDaysN',v),()=>'')},
  {id:'split',ic:'🗂️',title:()=>t('psSplit'),sub:()=>t('wzSplitS'),show:()=>optOn(PW),body:()=>{
     const cur=splitOk(PW.split,PW.n)?PW.split:'auto';
