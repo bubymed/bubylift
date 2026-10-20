@@ -118,7 +118,7 @@ function libEqHtml(){
     '<div class="row"><button class="btn sm" onclick="libPreset(\'gym\')">'+t('eqp_gym')+'</button><button class="btn sm" onclick="libPreset(\'db\')">'+t('eqp_db')+'</button><button class="btn sm" onclick="libPreset(\'home\')">'+t('eqp_home')+'</button><button class="btn sm" onclick="libPreset(\'none\')">'+t('eqp_none')+'</button></div></details>';
 }
 function libDraw(){
-  let h='<div class="form lib"><div class="pick-h"><h3>'+t('libT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>';
+  let h='<div class="form lib"><div class="pick-h"><h3>'+t(LIB.tab==='focus'?'pkMusT':'pkChT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>';
   h+='<div class="chips"><button class="chip'+(LIB.tab==='focus'?' on':'')+'" onclick="libTab(\'focus\')">'+t('libFocusT')+'</button><button class="chip'+(LIB.tab==='ch'?' on':'')+'" onclick="libTab(\'ch\')">'+t('libChT')+'</button></div>';
   h+=libEqHtml();
   h+=LIB.tab==='focus'?libFocusHtml():(LIB.sel?libChDetail():libChList());
@@ -329,6 +329,14 @@ function xdHtml(){
   const p=DATA.plan;if(!p||!p.xd||!p.xd.length)return'';
   return'<div class="lbl">'+t('xdT')+'</div><p class="muted sm">'+t('xdP')+'</p>'+p.xd.map((k,i)=>'<div class="plex"><span><b>'+esc(xdName(k))+'</b></span><button class="btn sm" onclick="xdStart('+i+')">'+t('libStart')+'</button><button class="ico" aria-label="'+esc(t('delete'))+'" onclick="xdDel('+i+')">🗑</button></div>').join('');
 }
-function libEntry(){
-  return'<button class="card libent" onclick="libOpen()"><b>📚 '+t('libEntryT')+'</b><div class="muted sm">'+t('libEntryP')+'</div></button>';
+function libGo(tab){LIB.tab=tab;LIB.sel=null;libDraw();}
+/* the four ways to train, in one clear list / las cuatro formas de entrenar, en una lista clara */
+function startChooser(){
+  const c=(ic,tt,pp,fn,cls)=>'<button class="card pk'+(cls?' '+cls:'')+'" onclick="'+fn+'"><span class="pk-i">'+ic+'</span><span class="pk-t"><b>'+t(tt)+'</b><small>'+t(pp)+'</small></span><span class="pk-a">›</span></button>';
+  return'<div class="pks">'+
+    (DATA.plan?'':c('🧭','pkPlanT','pkPlanP','planSetup()','pri'))+
+    c('💪','pkMusT','pkMusP',"libGo('focus')")+
+    c('⏱️','pkChT','pkChP',"libGo('ch')")+
+    c('✍️','pkOwnT','pkOwnP','startWorkout()')+
+  '</div>';
 }

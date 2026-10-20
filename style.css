@@ -467,3 +467,14 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .chseg small{flex-basis:100%;color:var(--muted);font-weight:700}
 .chseg.now{outline:2px solid var(--accent);font-weight:700}
 .chseg.done{opacity:.6}.chseg i{font-style:normal;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* v30 start screen: four clear ways to train / pantalla de inicio: cuatro formas claras de entrenar */
+.pkh{margin:14px 0 8px;font-size:1.15rem}
+.pks{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.pk{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:14px 16px;margin:0}
+.pk.pri{outline:2px solid var(--accent)}
+.pk-i{font-size:1.9rem;flex:none}
+.pk-t{flex:1;display:flex;flex-direction:column;gap:2px}
+.pk-t b{font-size:1.05rem}
+.pk-t small{color:var(--muted);font-size:.84rem;line-height:1.3}
+.pk-a{font-size:1.6rem;color:var(--muted)}
