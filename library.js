@@ -1,7 +1,7 @@
 /* Ready routines and challenges (v28): focused routines by muscle and level, and timed challenges.
    Rutinas listas y retos (v28): rutinas enfocadas por músculo y nivel, y retos con tiempo. */
 const LIB_FILT=['all','pt','cf','hy','run','mil','bw'];
-let LIB={tab:'focus',area:'chest',lv:1,sel:null,clv:1,flt:'all',eq:false,sp:'ppl',spn:3,spl:null,spsd:0};
+let LIB={tab:'focus',area:'chest',lv:1,sel:null,clv:1,flt:'all',eq:false,sp:'ppl',spn:3,spl:null,spsd:0,pg:'sl'};
 let CHR=null,CHT=null; // challenge being run, and its timer / reto en curso y su temporizador
 NT_KEYS.push('lz_std','lz_rom','lz_uni','lz_prof','lz_inst','lz_lever','lz_mom'); // notes shown while training / notas durante el entrenamiento
 
@@ -135,10 +135,10 @@ function libEqHtml(){
     '<div class="row"><button class="btn sm" onclick="libPreset(\'gym\')">'+t('eqp_gym')+'</button><button class="btn sm" onclick="libPreset(\'db\')">'+t('eqp_db')+'</button><button class="btn sm" onclick="libPreset(\'home\')">'+t('eqp_home')+'</button><button class="btn sm" onclick="libPreset(\'none\')">'+t('eqp_none')+'</button></div></details>';
 }
 function libDraw(){
-  let h='<div class="form lib"><div class="pick-h"><h3>'+t(LIB.tab==='focus'?'pkMusT':(LIB.tab==='split'?'pkSpT':'pkChT'))+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>';
-  h+='<div class="seg"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">💪 '+t('libFocusT')+'</button><button class="'+(LIB.tab==='split'?'on':'')+'" onclick="libTab(\'split\')">🔀 '+t('libSplitT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">⏱️ '+t('libChT')+'</button></div>';
+  let h='<div class="form lib"><div class="pick-h"><h3>'+t(LIB.tab==='focus'?'pkMusT':(LIB.tab==='split'?'pkSpT':(LIB.tab==='prog'?'pkPrT':'pkChT')))+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>';
+  h+='<div class="seg"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">💪 '+t('libFocusT')+'</button><button class="'+(LIB.tab==='split'?'on':'')+'" onclick="libTab(\'split\')">🔀 '+t('libSplitT')+'</button><button class="'+(LIB.tab==='prog'?'on':'')+'" onclick="libTab(\'prog\')">🏆 '+t('libProgT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">⏱️ '+t('libChT')+'</button></div>';
   h+=libEqHtml();
-  h+=LIB.tab==='focus'?libFocusHtml():(LIB.tab==='split'?libSplitHtml():(LIB.sel?libChDetail():libChList()));
+  h+=LIB.tab==='focus'?libFocusHtml():(LIB.tab==='split'?libSplitHtml():(LIB.tab==='prog'?libProgHtml():(LIB.sel?libChDetail():libChList())));
   h+='</div>';
   sheet(h);
 }
@@ -397,6 +397,74 @@ function libSpUse(){
   const go=function(){DATA.plan=p;saveData();sheetClose();render();toast(t('planReady'));};
   if(DATA.plan)ask(t('spReplace'),t('spUse'),go);else go();
 }
+/* ---------- classic programs / programas clásicos ---------- */
+function p531St(){const s=SET.p531||{};return{w:(s.w>=0&&s.w<4)?s.w:0,tm:(s.tm&&typeof s.tm==='object')?s.tm:{}};}
+function p531Set(f){const s=p531St();f(s);SET.p531=s;saveSet();libDraw();}
+function libPrW(i){p531Set(s=>{s.w=+i;});}
+function p531Tm(k,v){const kg=wParse(v);p531Set(s=>{if(kg!=null&&kg>=10&&kg<=500)s.tm[k]=kg;else delete s.tm[k];});}
+function p531Auto(){
+  p531Set(s=>{W531_MAIN.forEach(k=>{
+    let b=0;DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{if(x.eid===k)x.sets.forEach(z=>{b=Math.max(b,setScore('wr',z));});}));
+    if(b>0)s.tm[k]=wRound(b*0.9);
+  });});
+}
+function p531Line(di,w){
+  const k=W531_MAIN[di],tm=p531St().tm[k];
+  if(!tm)return t('p531NoTm');
+  return W531[w].map((r,i)=>r[0]+'% × '+r[1]+((i===2&&w<3)?'+':'')+' = '+wShow(wRound(tm*r[0]/100))+' '+wUnit()).join(' · ');
+}
+function progRows(pid,di,have){
+  const used=[],out=[],w=p531St().w;
+  PROGRAMS[pid].days[di].forEach(sp=>{
+    const a=sp.split('|'),eid=a[0].split(',').find(id=>exById(id)&&avail(id,have)&&used.indexOf(id)<0);
+    if(!eid)return;used.push(eid);
+    if(a[1]==='M'){out.push({eid:eid,main:1,sets:3,lo:Math.min.apply(null,W531[w].map(r=>r[1])),hi:Math.max.apply(null,W531[w].map(r=>r[1])),rs:180,u:'r',ln:p531Line(di,w)});return;}
+    out.push({eid:eid,sets:+a[1],lo:+a[2],hi:+a[3],rs:+a[4],u:a[5]==='m'?'m':'r'});
+  });
+  return out;
+}
+function progItems(pid,di){
+  return progRows(pid,di,libHave()).map(e=>({eid:e.eid,sets:e.sets,tg:Object.assign({lo:e.lo,hi:e.hi,u:e.u,rs:e.rs},e.ln?{ln:e.ln,fx:1}:{})}));
+}
+function progDayName(pid,di){return t('prg_'+pid)+' · '+t('prgday_'+pid+'_'+di);}
+function libPg(id){LIB.pg=id;libDraw();}
+function progStart(pid,di){
+  if(ACT){toast(t('finishFirst'));return;}
+  const ex=progItems(pid,di);if(!ex.length)return;
+  sheetClose();startWorkout({name:progDayName(pid,di),ex:ex});
+}
+function progSave(pid,di){
+  const ex=progItems(pid,di);if(!ex.length)return;
+  DATA.routines.push({id:uid(),name:progDayName(pid,di),ex:ex.map(e=>({eid:e.eid,n:(exById(e.eid)||{}).en||e.eid,sets:e.sets}))});
+  saveData();toast(t('libSaved'));render();
+}
+function progRowTxt(e){
+  const rg=e.lo===e.hi?fmtNum(e.hi,1):fmtNum(e.lo,1)+'–'+fmtNum(e.hi,1);
+  return e.main?t('p531Main'):(e.sets+' × '+rg+(e.u==='m'?' '+t('minU'):'')+' · '+t('rsSec',e.rs));
+}
+function libProgHtml(){
+  if(!PROGRAMS[LIB.pg])LIB.pg='sl';
+  const pid=LIB.pg,P=PROGRAMS[pid],have=libHave();
+  let h='<p class="muted sm">'+t('libProgP')+'</p>'+
+    libStep(1,'prStep1')+'<div class="spl">'+PROG_IDS.map(id=>'<button class="card spc'+(id===pid?' on':'')+'" onclick="libPg(\''+id+'\')"><b>'+t('prg_'+id)+'</b><small>'+t('prgd_'+id)+'</small></button>').join('')+'</div>'+
+    '<div class="card optb"><b>'+t('prg_'+pid)+' <span class="muted sm">'+t('prgWk',P.wk)+'</span></b><p class="sm">'+t('prgw_'+pid)+'</p><p class="sm"><b>'+t('prgProg')+':</b> '+t('prgp_'+pid)+'</p></div>';
+  let n=2;
+  if(pid==='w531'){
+    const st=p531St();
+    h+=libStep(n++,'prStep531')+libChips([0,1,2,3],st.w,'libPrW',i=>t('p531W'+i),1)+
+      '<p class="muted sm">'+t('p531TmP')+'</p>'+
+      W531_MAIN.map(k=>'<label class="rbx"><b>'+esc(exName(k))+'</b><input class="in" type="text" inputmode="decimal" style="max-width:110px" value="'+(st.tm[k]?wShow(st.tm[k]):'')+'" placeholder="'+wUnit()+'" onchange="p531Tm(\''+k+'\',this.value)"></label>').join('')+
+      '<div class="row"><button class="btn sm" onclick="p531Auto()">'+t('p531Auto')+'</button></div>';
+  }
+  h+=libStep(n,'prStepDays')+'<p class="muted sm">'+t('prgNote')+'</p>';
+  h+=P.days.map((d,di)=>{
+    const rows=progRows(pid,di,have);
+    return'<div class="card spd"><b>'+esc(t('prgday_'+pid+'_'+di))+'</b>'+
+      (rows.length?'<ul class="optul">'+rows.map(e=>'<li>'+esc(exName(e.eid))+' <span class="muted">'+esc(progRowTxt(e))+'</span>'+(e.ln?'<br><span class="muted sm">'+esc(e.ln)+'</span>':'')+' <button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="libHow(\''+e.eid+'\')">ⓘ</button></li>').join('')+'</ul>':'<p class="muted">'+t('libNone')+'</p>')+
+      (rows.length?'<div class="row"><button class="btn sm pri" onclick="progStart(\''+pid+'\','+di+')">'+t('spStartDay')+'</button><button class="btn sm" onclick="progSave(\''+pid+'\','+di+')">'+t('spSaveDay')+'</button></div>':'')+'</div>';
+  }).join('');
+  return h;
+}
 function libGo(tab){if(!LIB.set){LIB.lv=LIB.clv=libDefaultRank();LIB.set=1;}LIB.tab=tab;LIB.sel=null;libDraw();}
 /* the four ways to train, in one clear list / las cuatro formas de entrenar, en una lista clara */
 function startChooser(){
@@ -405,6 +473,7 @@ function startChooser(){
     (DATA.plan?'':c('🧭','pkPlanT','pkPlanP','planSetup()','pri'))+
     c('💪','pkMusT','pkMusP',"libGo('focus')")+
     c('🔀','pkSpT','pkSpP',"libGo('split')")+
+    c('🏆','pkPrT','pkPrP',"libGo('prog')")+
     c('⏱️','pkChT','pkChP',"libGo('ch')")+
     c('✍️','pkOwnT','pkOwnP','startWorkout()')+
   '</div>';

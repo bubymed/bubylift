@@ -386,7 +386,7 @@ function wInc(){return imp()?5/KG_LB:2.5;}
 function wRound(kg){const s=wInc();return Math.max(s,Math.round(kg/s)*s);}
 /* progressive overload from the last session / sobrecarga progresiva según la última sesión */
 function sugg(eid,tg){
-  if(!tg||tg.u==='m')return null;
+  if(!tg||tg.u==='m'||tg.fx)return null;
   const m=exMode(eid),le=lastEx(eid);
   if(m==='bw'){
     if(!le)return{key:'sgFirstBw'};
@@ -412,6 +412,7 @@ function suggLine(x){
     const s=sugg(x.eid,x.tg);
     h='<div class="goalln">'+((x.tg.lo||x.tg.hi)?'<b>'+t('target')+':</b> '+esc(tgText({sets:x.sets.length,lo:x.tg.lo,hi:x.tg.hi,u:x.tg.u})):'');
     if(s)h+='<br><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span>';
+    if(typeof x.tg.ln==='string'&&x.tg.ln)h+='<br><span class="sg">'+esc(x.tg.ln.slice(0,200))+'</span>';
     if(x.tg.nt&&NT_KEYS.indexOf(x.tg.nt)>=0)h+='<br><span class="muted">'+esc(t(x.tg.nt))+'</span>';
     if(x.tg.tp){const ss=x.tg.ss?optSsLabelAct(x):'';h+='<br><span class="muted">'+(ss?'<i class="ssl">'+ss+'</i> ':'')+esc(optLine(x.tg))+'</span>'+(ss?'<br><span class="muted">'+esc(t('ssHint'))+'</span>':'');}
     h+='</div>';
