@@ -45,13 +45,21 @@ function chScale(q,u,m){
   return Math.max(1,Math.round(q*m));
 }
 /* one movement: first option the person can do; the last one is bodyweight / un movimiento: la primera opción posible */
-function chMove(spec,have,L,m,a){
+function chMove(spec,have,L,m,a,used){
   const opts=spec.split('|').map(o=>{
     const p=o.split(':'),mm=/^(\d+|max|\{a\})(m|s)?$/.exec(p[1]||'');
     return{id:p[0],q:mm?mm[1]:'1',u:mm&&mm[2]?mm[2]:'r'};
   });
-  let k=0;
-  for(let i=0;i<opts.length;i++){if(avail(opts[i].id,have)&&stressLvl(opts[i].id,L)<2){k=i;break;}if(i===opts.length-1)k=i;}
+  // first option the person can do that is not already in this round; if every option repeats, take the first one they can do
+  // primera opción posible que no esté ya en esta ronda; si todas se repiten, la primera posible
+  let k=-1,k2=-1;
+  for(let i=0;i<opts.length;i++){
+    if(!avail(opts[i].id,have)||stressLvl(opts[i].id,L)>=2)continue;
+    if(k2<0)k2=i;
+    if(!used||!used[opts[i].id]){k=i;break;}
+  }
+  if(k<0)k=k2>=0?k2:opts.length-1;
+  if(used)used[opts[k].id]=1;
   const o=opts[k];let q=o.q;
   if(q==='{a}')q=a;
   if(q==='max')return{id:o.id,q:0,u:'max',first:k===0};
@@ -60,10 +68,13 @@ function chMove(spec,have,L,m,a){
 function chBuild(c,li,have){
   const L=curInjL(),m=c.lv[li],segs=[];
   const rounds=c.ty==='time'?(c.rd||1):1;
-  for(let r=0;r<rounds;r++)c.mv.forEach(sp=>{
-    const a=c.rr?Math.max(1,Math.round(c.rr[r]*m)):0;
-    const s=chMove(sp,have,L,c.rr?1:m,a);s.r=r;segs.push(s);
-  });
+  for(let r=0;r<rounds;r++){
+    const used=c.rep?null:{}; // movements already in this round / movimientos ya usados en esta ronda
+    c.mv.forEach(sp=>{
+      const a=c.rr?Math.max(1,Math.round(c.rr[r]*m)):0;
+      const s=chMove(sp,have,L,c.rr?1:m,a,used);s.r=r;segs.push(s);
+    });
+  }
   return{c:c,li:li,segs:segs,exact:segs.every(s=>s.first),cap:c.cap,rd:c.ty==='interval'?Math.max(1,Math.round(c.rd*m)):0,w:(c.ty==='interval'&&li===2&&c.hw)?c.hw:c.w};
 }
 function chQty(s){
