@@ -7,8 +7,8 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Nothing yet. / Nada todavía.
 
 ## v47 — 2026-10-20
-- **Fix:** the Ab Wheel Rollout was suggested to everyone because it counted as "no equipment". There is now an "Ab wheel" item in the equipment list; the exercise only appears when it is marked (gym preset includes it). Saved equipment lists without it stop getting the exercise until they add it.
-  **Arreglo:** la Rueda abdominal se sugería a todos porque contaba como "sin equipo". Ahora hay un elemento "Rueda abdominal" en la lista de equipo; el ejercicio solo aparece si está marcado (el preajuste de gimnasio lo incluye). Las listas de equipo guardadas sin ella dejan de recibir el ejercicio hasta que la agreguen.
+- **Fix:** the Ab Wheel Rollout, Balance Pad Single-Leg Stance, Half-Ball Squat, Ammo Can Overhead Press and Weighted Lunge (sandbag or pack) were suggested to everyone because they counted as "no equipment". The equipment list now has "Ab wheel", "Balance pad or half ball" and "Sandbag, loaded pack or ammo can"; each exercise only appears when its item is marked (gym preset includes them). Saved equipment lists without it stop getting the exercise until they add it.
+  **Arreglo:** la Rueda abdominal, el equilibrio sobre almohadilla, la sentadilla en media pelota, el press con caja de municiones y la zancada con peso (saco o mochila) se sugerían a todos porque contaban como "sin equipo". La lista de equipo ahora tiene "Rueda abdominal", "Almohadilla de equilibrio o media pelota" y "Saco de arena, mochila con peso o caja de municiones"; cada ejercicio solo aparece si su elemento está marcado (el preajuste de gimnasio los incluye). Las listas de equipo guardadas sin ella dejan de recibir el ejercicio hasta que la agreguen.
 
 ## v46 — 2026-10-20
 - **Full body routine:** "Full body" is now the first option in Routines by muscle (six ranks, Seed to Titan): one lower-body push, one horizontal push, one pull, one hinge, a shoulder or single-leg move and a core move per session, built from your equipment and injuries. Can be trained now, saved as a routine or added to your plan.

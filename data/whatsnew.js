@@ -3,7 +3,7 @@
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
  {v:'v47',items:[
-  {i:'🛞',en:'<b>Ab wheel is now equipment you mark</b> — the Ab Wheel Rollout is only suggested if you say you have an ab wheel. Add it in your equipment list (plan setup, Adjust my plan or the equipment box in routines).',es:'<b>La rueda abdominal ahora es equipo que marcas</b> — la Rueda abdominal solo se sugiere si dices que tienes una. Agrégala en tu lista de equipo (configuración del plan, Ajustar mi plan o el cuadro de equipo en las rutinas).'}]},
+  {i:'🛞',en:'<b>More equipment you mark</b> — the Ab Wheel Rollout, balance pad and half-ball moves, and sandbag or ammo-can moves are only suggested if you say you have them. Add them in your equipment list (plan setup, Adjust my plan or the equipment box in routines).',es:'<b>Más equipo que marcas</b> — la rueda abdominal, los ejercicios con almohadilla o media pelota y los de saco de arena o caja de municiones solo se sugieren si dices que los tienes. Agrégalos en tu lista de equipo (configuración del plan, Ajustar mi plan o el cuadro de equipo en las rutinas).'}]},
  {v:'v46',items:[
   {i:'🧍',en:'<b>Full body today</b> — Workout → Routines by muscle now starts with "Full body": squat, push, pull, hinge, shoulders and core in one session, at six levels, with your equipment. Train it now or save it as a routine.',es:'<b>Cuerpo completo hoy</b> — Entrenar → Rutinas por músculo ahora empieza con "Cuerpo completo": sentadilla, empuje, jalón, bisagra, hombros y core en una sola sesión, en seis niveles, con tu equipo. Entrénala ya o guárdala como rutina.'}]},
  {v:'v45',items:[

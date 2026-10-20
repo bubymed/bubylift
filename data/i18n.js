@@ -359,6 +359,8 @@ const STR={
  hyOfficial:['Events and scoring tables change. Always check the official standards for your branch and MOS.','Los eventos y las tablas de puntos cambian. Revisa siempre los estándares oficiales de tu rama y MOS.'],
  hv_sled:['Sled / drag weight','Trineo / peso para arrastrar'],
  hv_wheel:['Ab wheel','Rueda abdominal'],
+ hv_pad:['Balance pad or half ball','Almohadilla de equilibrio o media pelota'],
+ hv_pack:['Sandbag, loaded pack or ammo can','Saco de arena, mochila con peso o caja de municiones'],
  pd_hyStr:['Strength (full body)','Fuerza (cuerpo completo)'],
  pd_hyStrL:['Strength: lower','Fuerza: parte inferior'],
  pd_hyStrU:['Strength: upper','Fuerza: parte superior'],
