@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v46',items:[
+  {i:'🧍',en:'<b>Full body today</b> — Workout → Routines by muscle now starts with "Full body": squat, push, pull, hinge, shoulders and core in one session, at six levels, with your equipment. Train it now or save it as a routine.',es:'<b>Cuerpo completo hoy</b> — Entrenar → Rutinas por músculo ahora empieza con "Cuerpo completo": sentadilla, empuje, jalón, bisagra, hombros y core en una sola sesión, en seis niveles, con tu equipo. Entrénala ya o guárdala como rutina.'}]},
  {v:'v45',items:[
   {i:'❓',en:'<b>Help & FAQ</b> — new button in More with answers to the most common questions and a box at the bottom for questions, complaints or comments.',es:'<b>Ayuda y preguntas frecuentes</b> — botón nuevo en Más con las respuestas a las dudas más comunes y un recuadro abajo para dudas, quejas o comentarios.'},
   {i:'🗑️',en:'<b>Delete a profile from the app</b> — tap your avatar and choose Delete profile (the password is asked; guests too).',es:'<b>Eliminar un perfil desde la app</b> — toca tu avatar y elige Eliminar perfil (se pide la contraseña; también para el invitado).'}]},
