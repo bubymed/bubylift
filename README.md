@@ -15,6 +15,7 @@ Un registro gratis de entrenamientos, progreso y cuerpo que vive en tu teléfono
 - **History / Historial:** every workout by month; repeat, share or delete. / cada entrenamiento por mes; repetir, compartir o eliminar.
 - **Progress / Progreso:** charts per exercise (estimated 1RM, top weight, volume, reps, time) and workouts per week. / gráficas por ejercicio (1RM estimado, peso máximo, volumen, repeticiones, tiempo) y entrenamientos por semana.
 - **Body / Cuerpo:** weight, body fat and measurements with a trend chart and optional goal. / peso, grasa corporal y medidas con gráfica de tendencia y meta opcional.
+- **Any screen / Cualquier pantalla:** designed for phones, with tablet (two/three columns, centered windows) and computer (side menu) layouts. / diseñada para teléfonos, con vistas para tableta (dos/tres columnas, ventanas al centro) y computadora (menú lateral).
 - **More / Más:** EN / ES, dark / light, lb · in · mi or kg · cm · km, profiles with password, backup export / import (.json), workouts export (.csv), and a **Send feedback** button. / EN / ES, oscuro / claro, lb · in · mi o kg · cm · km, perfiles con contraseña, exportar / importar respaldo (.json), exportar entrenamientos (.csv) y un botón **Enviar feedback**.
 
 ## Install on your phone / Instalar en tu teléfono
