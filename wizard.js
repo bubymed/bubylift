@@ -63,7 +63,7 @@ const WQ=[
  {id:'vol',ic:'📊',title:()=>t('psVol'),sub:()=>t('wzVolS'),body:()=>wzOne('vol',['lo','md','hi'],PW.vol,v=>t('vol_'+v),v=>WZ_IC.vol[v],v=>t('vold_'+v),'c1')},
  {id:'lvl',ic:'📈',title:()=>t('psLvl'),sub:()=>t('wzLvlS'),body:()=>wzOne('lvl',PLVLS,PW.lvl,v=>t('pl_'+v),v=>WZ_IC.lvl[v],v=>t('pld_'+v),'c1')},
  {id:'pu',ic:'🤸',title:()=>t('psPu'),sub:()=>(PW.pu&&lvlEff(PW)!==PW.lvl?t('puAdj',t('pl_'+lvlEff(PW))):t('psPuP')),body:()=>wzOne('pu',['',].concat(PUS),PW.pu,v=>t('pu_'+(v||'none')),v=>WZ_IC.pu[v])},
- {id:'ph',ic:'🎯',title:()=>t('phT'),sub:()=>t('wzPhS'),show:()=>optOn(PW),body:()=>{
+ {id:'ph',ic:'🎯',title:()=>t('phT'),sub:()=>t('wzPhS'),body:()=>{
     const al=optAllowed(PW),auto=optPhase(Object.assign({},PW,{ph:0}));
     return wzGrid([wzOpt("wzPick('ph',0)",!PW.ph,'🤖',t('phAuto'),t('phAutoP',auto,t('ph_'+auto)))].concat(al.map(v=>wzOpt("wzPick('ph',"+v+")",PW.ph===v,String(v),t('ph_'+v),t('phd_'+v)))),'c1');}},
  {id:'have',ic:'🏋️',title:()=>t('psEquip'),sub:()=>t('psEquipP'),multi:1,body:()=>

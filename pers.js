@@ -52,6 +52,7 @@ function pwFav(k){const a=PW.fav,i=a.indexOf(k);if(i>=0)a.splice(i,1);else if(a.
 function wyText(s){
   const a=String(s).split('|'),k=a[0];let x=a[1]||'';
   if(k==='wyMain'||k==='wyFav')x=exName(x);
+  else if(k==='wyTest')x=t('te_'+x);
   else if(k==='wyFocus')x=t('fm_'+x);
   else if(k==='wyInj')x=t('inj_'+x);
   else if(k==='wyAvoid')x=t('av_'+x);

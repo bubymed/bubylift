@@ -5,7 +5,9 @@
    Based on NASM CPT7 materials, used with permission. / Basado en materiales NASM CPT7, usados con permiso. */
 
 const OPT_GOALS=['muscle','bodybuilding','strength','fat','general'];
-const OPT_PHASES={fat:[1,2,3],general:[1,2,3],muscle:[1,2,3,4],bodybuilding:[1,2,3,4],strength:[1,2,3,4,5]};
+const OPT_PHASES={fat:[1,2,3],general:[1,2,3],muscle:[1,2,3,4],bodybuilding:[1,2,3,4],strength:[1,2,3,4,5],hybrid:[1,2,5],military:[1,2,5],runner:[1,2,5]}; // hybrid / military / runner = NASM Performance handout (1, 2, 5)
+const OPT_PERF=['hybrid','military','runner'];
+const optPerf=pr=>goalsOf(pr).some(g=>OPT_PERF.indexOf(g)>=0);
 const OPT_HEAVY=/^(barbell|dumbbell|machine|cable|kettlebell)$/;
 const OPT_WEEKS=4; // weeks per phase / semanas por fase
 const optOn=pr=>goalsOf(pr).every(g=>OPT_GOALS.indexOf(g)>=0);
@@ -17,6 +19,7 @@ function optAllowed(pr){
 function optAuto(pr){
   if(pr.cond)return 1;
   const lv=lvlEff(pr);
+  if(optPerf(pr))return lv==='new'?1:2; // performance plans start by pairing strength and stability / los planes de rendimiento empiezan emparejando fuerza y estabilidad
   return lv==='new'?1:lv==='some'?2:(goalsOf(pr).indexOf('strength')>=0?4:3);
 }
 /* the phase this profile trains in (own choice, else by level), limited by goal and equipment / la fase del perfil */
@@ -329,7 +332,7 @@ function optSsLabelAct(x){ // label for the exercise in the running workout / et
   let n=0;for(const y of ACT.ex){if(y.tg&&y.tg.ss===x.tg.ss)n++;if(y===x)break;}
   return x.tg.ss+n;
 }
-const OPT_SEC=['ac','sk','rs','cc'];
+const OPT_SEC=['ac','sk','rs','cd','cc'];
 
 /* --- phase screen: what each phase is, change phase / pantalla de fases --- */
 let PHS=0;
@@ -355,3 +358,79 @@ function phDraw(){
     '<div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
 }
 function phApply(){planRegen({ph:PHS});sheetClose();toast(t('planReady'));}
+
+
+/* --- hybrid / military / runner: keep the test-specific exercises and runs, put them in the OPT session structure ---
+   --- híbrido / militar / corredor: se conservan los ejercicios y carreras específicos, dentro de la estructura de sesión OPT --- */
+function optWrap(pl,prof){
+  const ph=optPhase(prof),vi={lo:0,md:1,hi:2}[prof.vol];
+  const sets=Math.max(2,OPT_SETS[ph][vi!=null?vi:1]),L=injLetters(prof.inj),maxLv=(prof.cond||lvlEff(prof)==='new')?1:2,have=prof.have;
+  const actPh=ph>=5?5:(ph>=2?2:1),used={},rank={ac:0,sk:1,rs:2,cd:3,cc:4};
+  pl.ds.forEach((d,di)=>{
+    const ctx={have:have,L:L,maxLv:maxLv,used:used,day:{}};
+    d.ex.forEach(e=>{ctx.day[e.eid]=1;});
+    const grp={ac:[],sk:[],rs:[],cd:[],cc:[]};
+    let main=null;
+    d.ex.forEach(e=>{
+      const mu=muOf(e.eid),m=exMode(e.eid);
+      if(e.eid==='run'){e.sec='cd';e.rz='rzRun';grp.cd.push(e);}
+      else if(mu==='K'||mu==='D'||e.r==='e'){e.sec='cd';e.rz=mu==='D'?'rzTest':'rzCap';grp.cd.push(e);}
+      else if(mu==='W'||mu==='V'||e.r==='p'){e.sec='sk';e.rz=mu==='V'?'rzSaq':'rzSk';e.tp='rp';e.rs=60;grp.sk.push(e);}
+      else if(mu==='Z'){e.sec='ac';e.rz='rzBal';e.tp='sl';e.rs=60;grp.ac.push(e);}
+      else if(mu==='A'||e.r==='c'){e.sec='cc';e.rz='rzCc';e.tp='sl';e.rs=60;grp.cc.push(e);}
+      else{
+        e.sec='rs';
+        if(m!=='t'){
+          const rr=optReps(ph,e.r==='m'?'m':'a',prof.goal,false),pu=/pullup|chinup|assistpu/.test(e.eid);
+          if(!pu){e.lo=rr.lo;e.hi=rr.hi;}
+          e.sets=Math.min(6,sets);
+        }
+        e.tp=ph===1?'sl':(ph===5?'ex':'md');e.rs=ph===1?0:(ph===5?120:60);
+        if(!main&&e.r==='m'){main=e;e.mn=1;e.rz='rzMain';}else e.rz=e.r==='m'?'rzMus':'rzAcc';
+        grp.rs.push(e);
+      }
+    });
+    // phases 2 and 5: pair the big lifts with a stable or explosive partner / fases 2 y 5: se emparejan los ejercicios grandes
+    if((ph===2||ph===5)&&prof.len>=45){
+      const out=[];let gi=0,np=0;
+      grp.rs.forEach(e=>{
+        out.push(e);
+        const mu=muOf(e.eid),lst=(ph===5?PAIR_PW:PAIR_ST)[mu];
+        if(e.r==='m'&&lst&&np<3&&exMode(e.eid)!=='t'&&!e.ss){
+          const pid=optPick(lst,ctx,'m');
+          if(pid){
+            optTake(pid,ctx);const gl=String.fromCharCode(65+gi++);np++;
+            e.ss=gl;e.rs=0;
+            const pit=optItem(pid,{sets:e.sets,lo:ph===5?8:e.lo,hi:ph===5?10:e.hi,r:e.r,sec:'rs',tp:ph===5?'ex':'sl',rs:ph===5?120:60,ss:gl,rz:ph===5?'rzPairPw':'rzPair'},ctx);
+            out.push(pit);
+          }
+        }
+      });
+      grp.rs=out;
+    }
+    // activation: core + balance / activación
+    const hasRs=grp.rs.length>0,nCore=hasRs?(prof.len===30?1:2):1,add=[];
+    for(let i=0;i<nCore;i++){
+      const id=optPick(OACT_CORE[actPh],ctx,'c');if(!id)break;optTake(id,ctx);
+      add.push(optItem(id,{sets:ph===1?[1,2,2][vi!=null?vi:1]:(vi===0?1:2),lo:ph===1?12:10,hi:ph===1?15:12,r:'c',sec:'ac',tp:ph<=1||ph===5?'sl':'md',rs:0,rz:'rzCore'},ctx));
+    }
+    if(hasRs&&!grp.ac.length){
+      const id=optPick(OACT_BAL[actPh],ctx,'z');
+      if(id){optTake(id,ctx);add.push(optItem(id,{sets:2,lo:10,hi:12,r:'z',sec:'ac',tp:ph===1?'sl':'md',rs:ph===1?90:60,nt:'ntBal',rz:'rzBal'},ctx));}
+    }
+    d.ex=add.concat(grp.ac,grp.sk,grp.rs,grp.cd,grp.cc);
+    // why this day / por qué este día
+    const wy=['wyPerf','wyPh'+ph];
+    if(main)wy.push('wyMain|'+main.eid);
+    if(prof.test!=='gen'&&grp.cd.some(e=>muOf(e.eid)==='D'))wy.push('wyTest|'+prof.test);
+    if(grp.cd.some(e=>e.eid==='run'))wy.push('wyRun');
+    const dm=grp.rs.map(e=>muOf(e.eid)).join('');let nf=0;
+    prof.focus.forEach(fk=>{if(nf<2&&FOCUS_MU[fk].some(m=>dm.indexOf(m)>=0)){wy.push('wyFocus|'+fk);nf++;}});
+    if(prof.inj.length)wy.push('wyInj|'+prof.inj[0]);
+    if(prof.avoid.length)wy.push('wyAvoid|'+prof.avoid[0]);
+    wy.push('wyOrd');
+    d.wy=wy.slice(0,8);
+  });
+  pl.ph=ph;pl.pt=Date.now();
+  return pl;
+}

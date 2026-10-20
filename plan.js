@@ -97,7 +97,7 @@ const PGOALS=['muscle','bodybuilding','strength','fat','general','hybrid','milit
 /* short coaching notes shown under an exercise / notas cortas bajo un ejercicio */
 const SKILLS=['strength','power','speed','endurance','balance'];
 const isHy=g=>g==='hybrid'||g==='military'; // hybrid athlete (no test) and military test prep share the engine / híbrido (sin prueba) y militar comparten el motor
-const OPT_SEC_OK=['ac','sk','rs','cc'];
+const OPT_SEC_OK=['ac','sk','rs','cd','cc'];
 const NT_KEYS=['ntIntR','ntLong','ntInt','ntEasy','ntTempo','ntSdc','ntMdl','ntHrp','ntPlk','ntSim','ntBal','ntLand'];
 const NTEID={hexdl:'ntMdl',hrpushup:'ntHrp',plank:'ntPlk',sdcdrill:'ntSdc',sleddrag:'ntSdc'};
 const PDAYKEYS=Object.keys(DAYSPEC).concat(['fullA','fullB','fullC','up1','up2','low1','low2','oCB','oLeg']); // old keys stay valid / las claves viejas siguen válidas
@@ -155,13 +155,15 @@ function volFactor(prof){
   return gs.every(lowv)?0.6:gs.some(lowv)?0.8:(gs[0]==='strength'?0.85:1);
 }
 function volRange(mu,vol,prof,ph){
-  const c='QHGPB'.indexOf(mu)>=0?'M':mu==='A'?'A':'m',r=(VOLR[vol]||VOLR.md)[c],vf=volFactor(prof);
+  const c='QHGPB'.indexOf(mu)>=0?'M':mu==='A'?'A':'m',r=(VOLR[vol]||VOLR.md)[c],vf=(ph&&optPerf(prof))?1:volFactor(prof);
   if(ph){ // OPT: core is trained every session as activation / el core se entrena en cada sesión como activación
     const n=prof.n||3,vi={lo:0,md:1,hi:2}[vol]!=null?{lo:0,md:1,hi:2}[vol]:1;
-    if(mu==='A')return[[1,2,3][vi]*n,[4,6,8][vi]*n];
+    if(mu==='A')return[[1,2,3][vi]*n,Math.round([4,6,8][vi]*n*(optPerf(prof)?1.5:1))];
     const o=OPT_VF[ph]||[1,1],fq=n>=4?(ph===3||ph===4?(n>=5?2.4:1.8):1.7):1; // more days = more weekly sets / más días = más series semanales
     const lw=('HGIT'.indexOf(mu)>=0?0.5:1)*(n<=2?0.45:1),up=mu==='S'?1.6:(mu==='G'?1.6:1); // hamstrings/glutes also work in squats; shoulders appear in every pair day / isquios y glúteos trabajan en otras; el hombro aparece en todos los días
-    return[Math.max(2,Math.round(r[0]*vf*o[0]*lw)),Math.max(3,Math.round(r[1]*vf*o[1]*fq*up))];
+    // performance plans are built around running or a test: strength only needs a base, so the floor is low / los planes de rendimiento giran en torno a la carrera o la prueba: la fuerza solo necesita una base
+    const lo=optPerf(prof)?1:Math.max(2,Math.round(r[0]*vf*o[0]*lw));
+    return[lo,Math.max(3,Math.round(r[1]*vf*o[1]*fq*up))];
   }
   const f=vf;
   return[Math.max(2,Math.round(r[0]*f)),Math.max(3,Math.round(r[1]*f))];
@@ -346,7 +348,8 @@ function genPlan(prof0){
       if(!best)break;best.sets--;tot--;
     }
   });
-  return{goal:prof.goal,n:prof.n,lvl:prof.lvl,t0:Date.now(),ct:0,cur:0,ds:ds,wd:defaultWd(ds),wu:0,checks:[],prof:prof};
+  const res={goal:prof.goal,n:prof.n,lvl:prof.lvl,t0:Date.now(),ct:0,cur:0,ds:ds,wd:defaultWd(ds),wu:0,checks:[],prof:prof};
+  return optPerf(prof)?optWrap(res,prof):res; // NASM OPT structure for performance plans / estructura OPT para planes de rendimiento
 }
 function cleanPlan(p){
   if(!p||typeof p!=='object'||PGOALS.indexOf(p.goal)<0||PLVLS.indexOf(p.lvl)<0||!(p.n>=2&&p.n<=5)||typeof p.t0!=='number'||!Array.isArray(p.ds)||p.ds.length!==p.n)return null;
