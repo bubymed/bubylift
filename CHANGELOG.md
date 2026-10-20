@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v42 — 2026-10-20
+- **Plan questions:** tapping an option no longer moves to the next question automatically; it only selects it and you continue with Next (required questions keep Next disabled until answered). Avoids skipping a question by accident.
+  **Preguntas del plan:** tocar una opción ya no avanza solo a la siguiente pregunta; solo la selecciona y continúas con Siguiente (las preguntas obligatorias mantienen Siguiente desactivado hasta responder). Evita saltarse una pregunta por accidente.
+
 ## v41 — 2026-10-20
 - **Fix:** the plan-question screens (e.g. training split) did not scroll smoothly on iPhone; the step container no longer shrinks to the sheet height, so the sheet scrolls as a whole and the Next button stays sticky at the bottom.
   **Arreglo:** las pantallas de preguntas del plan (p. ej. la división de entrenamiento) no se deslizaban bien en iPhone; el contenedor del paso ya no se encoge a la altura de la ventana, así la ventana entera se desliza y el botón Siguiente queda fijo abajo.

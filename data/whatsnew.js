@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v42',items:[
+  {i:'👆',en:'<b>No more accidental skips</b> — in the plan questions, tapping an option now only selects it. You move on with the Next button, so you can read, change your answer and go back without losing your place.',es:'<b>Sin saltos por accidente</b> — en las preguntas del plan, tocar una opción ahora solo la selecciona. Avanzas con el botón Siguiente, así puedes leer, cambiar tu respuesta y volver sin perder el lugar.'}]},
  {v:'v41',items:[
   {i:'📜',en:'<b>Smooth scrolling in the plan questions</b> — on iPhone the long option lists (like the training split) now scroll normally, and the Next button stays at the bottom.',es:'<b>Deslizar sin trabas en las preguntas del plan</b> — en iPhone las listas largas de opciones (como la división de entrenamiento) ahora se deslizan normal, y el botón Siguiente se queda abajo.'}]},
  {v:'v40',items:[
