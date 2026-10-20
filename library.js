@@ -27,7 +27,10 @@ function libFocus(area,rank,have){
   });
   return out;
 }
-function libFocusName(area,li){return t('lib_'+area)+' · '+t('lvn_'+li);}
+/* rank names follow what you are training: one ladder per muscle area and per kind of challenge / los nombres de rango siguen lo que entrenas */
+function chCat(c){const o=['hy','mil','run','cf','pt'];for(let i=0;i<o.length;i++)if(c.tg.indexOf(o[i])>=0)return o[i];return'pt';}
+function rk(kind,i){return t('rk_'+kind+'_'+i);}
+function libFocusName(area,li){return t('lib_'+area)+' · '+rk(area,li);}
 function libFocusStart(area,li){
   if(ACT){toast(t('finishFirst'));return;}
   const items=libFocus(area,li,libHave());if(!items.length){toast(t('libNone'));return;}
@@ -138,8 +141,8 @@ function libFocusHtml(){
   const li=LIB.lv,items=libFocus(LIB.area,li,libHave());
   let h='<p class="muted sm">'+t('libFocusP')+'</p>'+
     libChips(LIB_AREAS,LIB.area,'libArea',k=>t('lib_'+k))+
-    libChips([0,1,2,3,4,5],li,'libLv',i=>t('lvn_'+i),1)+
-    '<div class="card optb"><b>'+t('lvn_'+li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
+    libChips([0,1,2,3,4,5],li,'libLv',i=>rk(LIB.area,i),1)+
+    '<div class="card optb"><b>'+rk(LIB.area,li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
   if(!items.length)return h+'<p class="muted">'+t('libNone')+'</p>';
   h+=items.map(e=>'<div class="plex"><span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgLine(e))+' · '+esc(t('rsSec',e.rs))+(e.cn?' · ⚠ '+esc(t('caution')):'')+'</small><small class="rz">'+esc(t('lz_'+e.lever))+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="libHow(\''+e.eid+'\')">ⓘ</button></div>').join('');
   if(items.length<4)h+='<p class="muted sm">'+t('libFew')+'</p>';
@@ -164,7 +167,8 @@ function libChDetail(){
   let h='<button class="btn sm" onclick="libBack()">← '+t('back')+'</button><h3>'+esc(t('ch_'+c.id))+'</h3>'+
     '<p class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+c.tg.map(k=>t('chf_'+k)).join(' · ')+'</p>'+
     '<p>'+esc(t('chd_'+c.id))+'</p>'+
-    libChips([0,1,2,3,4,5],li,'libCLv',i=>t('lvn_'+i),1)+
+    libChips([0,1,2,3,4,5],li,'libCLv',i=>rk(chCat(c),i),1)+
+    '<p class="sm"><b>'+rk(chCat(c),li)+'</b> <span class="muted">'+t('rankOf',li+1)+'</span> · '+t('lvd_'+li)+'</p>'+
     '<div class="card optb"><b>'+t('chFormat')+'</b><p class="sm">'+esc(t('chfx_'+c.ty,c.cap,b.w||0,c.r||0,b.rd||0))+'</p>'+
     '<ol class="how">'+chDetailRows(b).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>'+
     (c.rest?'<p class="muted sm">'+t('chRest',c.rest)+'</p>':'')+
@@ -233,7 +237,7 @@ function chDraw(){
   const b=CHR.b,c=b.c,li=b.li;
   let h='<div class="form lib"><div class="pick-h"><h3>'+esc(t('ch_'+c.id))+'</h3><button class="ico" onclick="chAskQuit()" aria-label="'+esc(t('close'))+'">✕</button></div>';
   if(!CHR.run){
-    h+='<p class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+t('lvn_'+li)+'</p><div class="card optb"><ol class="how">'+chDetailRows(b).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>'+
+    h+='<p class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+rk(chCat(c),li)+'</p><div class="card optb"><ol class="how">'+chDetailRows(b).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>'+
       '<p class="muted sm">'+t('chReady')+'</p><div class="row"><button class="btn pri big wide" onclick="chStartRun()">'+t('chGo')+'</button></div></div>';
     sheet(h);return;
   }
@@ -307,7 +311,7 @@ function chSave(sc){
   });
   if(!ex.length)ex.push({eid:b.segs[0].id,n:exName(b.segs[0].id),sets:[{w:null,r:1,t:null,d:null}]});
   const txt=chScoreTxt(c.ty,sc),better=!prev||chKey(sc,c.ty)>prev.k;
-  DATA.workouts.push({id:uid(),t:CHR.t0||now,end:now,name:t('ch_'+c.id)+' · '+t('lvn_'+b.li),note:t('chNote',txt),ex:ex,ch:{id:c.id,lv:b.li,v:2,sc:sc}});
+  DATA.workouts.push({id:uid(),t:CHR.t0||now,end:now,name:t('ch_'+c.id)+' · '+rk(chCat(c),b.li),note:t('chNote',txt),ex:ex,ch:{id:c.id,lv:b.li,v:2,sc:sc}});
   DATA.workouts.sort((a,x)=>x.t-a.t);saveData();
   const pr=prev&&better;
   CHR=null;
@@ -319,7 +323,7 @@ function chSave(sc){
 function xdParse(k){const p=String(k).split(':');return p.length===3?{ty:p[0],id:p[1],li:+p[2]}:null;}
 function xdName(k){
   const x=xdParse(k);if(!x)return'';
-  return x.ty==='f'?libFocusName(x.id,x.li):t('ch_'+x.id)+' · '+t('lvn_'+x.li);
+  return x.ty==='f'?libFocusName(x.id,x.li):t('ch_'+x.id)+' · '+rk(chCat(CHALLENGES.find(q=>q.id===x.id)||{tg:[]}),x.li);
 }
 function xdAdd(k){
   const p=DATA.plan;if(!p)return;
