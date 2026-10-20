@@ -63,6 +63,7 @@ function needBackup(){
 function vStart(){
   let h='';
   if(needBackup())h+='<div class="card warn"><b>'+t('bkT')+'</b><p>'+t('bkP')+'</p><div class="row"><button class="btn pri sm" onclick="exportJSON()">'+t('exportBackup')+'</button><button class="btn sm" onclick="bkLater()">'+t('later')+'</button></div></div>';
+  if(typeof inApp==='function'&&inApp())h+='<div class="card warn"><b>'+t('inappT')+'</b><p>'+t(isIOS()?'inappIos':'inappAnd')+'</p><div class="row"><button class="btn sm" onclick="installApp()">'+t('inappBtn')+'</button></div></div>';
   h+=DATA.plan?planCard():'';
   h+='<h2 class="pkh">'+t(DATA.plan?'chooseT2':'chooseT')+'</h2>'+startChooser();
   h+='<div class="sec"><h2>'+t('routines')+'</h2><button class="btn sm" onclick="rbOpen()">＋ '+t('newRoutine')+'</button></div>';

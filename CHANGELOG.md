@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v38 — 2026-10-20
+- **Shorter plan setup:** the "physical skill" question is no longer in the first questionnaire (it was the most technical one and changes little); it stays under Adjust my plan.
+  **Configuración del plan más corta:** la pregunta de "habilidad física" ya no está en el primer cuestionario (era la más técnica y cambia poco); sigue en Ajustar mi plan.
+- **In-app browser notice:** inside Instagram, Facebook, TikTok or Snapchat browsers a notice (home and install guide) explains how to open the app in Safari/Chrome to install it.
+  **Aviso de navegador interno:** dentro de los navegadores de Instagram, Facebook, TikTok o Snapchat, un aviso (inicio y guía de instalación) explica cómo abrir la app en Safari/Chrome para instalarla.
+
 ## v37 — 2026-10-20
 - **Install guide:** the Install button is always visible in the header (and in More) until the app is installed. It opens a guide with why to install and the steps for iPhone/iPad, Android and computers (the matching tab opens first; a one-tap "Install now" appears when the browser supports it).
   **Guía de instalación:** el botón Instalar siempre está visible arriba (y en Más) hasta que la app esté instalada. Abre una guía con por qué instalarla y los pasos para iPhone/iPad, Android y computadoras (se abre primero la pestaña que corresponde; aparece un "Instalar ahora" de un toque cuando el navegador lo permite).

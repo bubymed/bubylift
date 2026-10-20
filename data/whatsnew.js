@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v38',items:[
+  {i:'🧭',en:'<b>Shorter plan questions</b> — the "physical skill" question is gone from the first setup; you can still add power, speed, balance or endurance later from Adjust my plan.',es:'<b>Preguntas del plan más cortas</b> — la pregunta de "habilidad física" ya no está en la configuración inicial; puedes agregar potencia, velocidad, equilibrio o resistencia después desde Ajustar mi plan.'},
+  {i:'📲',en:'<b>Opening from Instagram?</b> If you open the app inside Instagram, Facebook or TikTok, a notice now shows how to open it in Safari or Chrome, where it can be installed.',es:'<b>¿La abriste desde Instagram?</b> Si abres la app dentro de Instagram, Facebook o TikTok, ahora un aviso te explica cómo abrirla en Safari o Chrome, donde sí se puede instalar.'}]},
  {v:'v37',items:[
   {i:'📲',en:'<b>Install guide for everyone</b> — the Install button is now always at the top while you use the app in a browser. It explains why to install (one tap, works offline, safer log, free) and shows the exact steps for iPhone, Android and computers.',es:'<b>Guía de instalación para todos</b> — el botón Instalar ahora siempre está arriba mientras usas la app en un navegador. Explica por qué instalarla (un toque, funciona sin internet, registro más seguro, gratis) y muestra los pasos exactos para iPhone, Android y computadoras.'}]},
  {v:'v36',items:[

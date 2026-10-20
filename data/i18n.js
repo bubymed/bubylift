@@ -13,6 +13,7 @@ const STR={
  copied:['Copied ✓','Copiado ✓'],copyFail:['Could not copy','No se pudo copiar'],
  // install help
  instT:['Add Bubylift to your Home Screen','Agrega Bubylift a tu pantalla de inicio'],
+ inappT:['Open it in your browser to install','Ábrela en tu navegador para instalarla'],inappIos:['You are inside another app (Instagram, Facebook…), which cannot install apps. Tap <b>⋯</b> (or the share icon) and choose <b>Open in Safari</b>, then install from there.','Estás dentro de otra app (Instagram, Facebook…), que no permite instalar. Toca <b>⋯</b> (o el ícono de compartir) y elige <b>Abrir en Safari</b>; instálala desde ahí.'],inappAnd:['You are inside another app (Instagram, Facebook…), which cannot install apps. Tap <b>⋮</b> and choose <b>Open in Chrome</b> (or Open in browser), then install from there.','Estás dentro de otra app (Instagram, Facebook…), que no permite instalar. Toca <b>⋮</b> y elige <b>Abrir en Chrome</b> (o Abrir en el navegador); instálala desde ahí.'],inappBtn:['How to install','Cómo instalarla'],
  ginT:['Install Bubylift','Instala Bubylift'],whyT:['Why install it?','¿Por qué instalarla?'],howT:['How to install it','Cómo instalarla'],
  why1:['⚡ <b>One tap</b> from your home screen, full screen, like any other app.','⚡ <b>Un toque</b> desde tu pantalla de inicio, en pantalla completa, como cualquier app.'],
  why2:['📶 <b>Works with no signal</b> — even in a gym basement.','📶 <b>Funciona sin señal</b> — incluso en el sótano de un gimnasio.'],
