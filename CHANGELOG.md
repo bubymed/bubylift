@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v29 — 2026-10-20
+- **Challenges no longer repeat movements:** when you lack the equipment, a swapped movement could duplicate another in the same round (for example two push-up lines or two squat lines). The swap now skips movements already in the round, and the fallbacks are different patterns (glute bridge, Superman, hand-release push-up). A test checks every challenge, level and equipment set.
+  **Los retos ya no repiten movimientos:** cuando faltaba equipo, un movimiento cambiado podía duplicar otro de la misma ronda (por ejemplo dos líneas de flexiones o dos de sentadillas). Ahora el cambio omite los movimientos que ya están en la ronda y los reemplazos son patrones distintos (puente de glúteo, Superman, flexión con soltada de manos). Una prueba revisa cada reto, nivel y conjunto de equipo.
+
 ## v28 — 2026-10-20
 - **Ready routines by muscle:** a new "Ready routines & challenges" screen on the Workout tab offers chest, back, shoulders, arms, legs, glutes and core routines at three levels (Foundation, Intermediate, Advanced). Difficulty rises with a larger range of motion, one-side-at-a-time work, resistance profiles, unstable tools, harder leverage and removing momentum, and each exercise says which one it uses. They follow your equipment, injuries and avoided styles; start them, save them as routines or add them to your plan as an extra day.
   **Rutinas listas por músculo:** una pantalla nueva "Rutinas listas y retos" en la pestaña Entrenar ofrece rutinas de pecho, espalda, hombros, brazos, piernas, glúteos y abdomen en tres niveles (Base, Intermedio, Avanzado). La dificultad sube con más rango de movimiento, trabajo de un lado a la vez, perfiles de resistencia, herramientas inestables, palancas más difíciles y sin impulso, y cada ejercicio dice cuál usa. Siguen tu equipo, lesiones y estilos que evitas; puedes empezarlas, guardarlas como rutinas o agregarlas a tu plan como día extra.
