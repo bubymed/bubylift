@@ -240,6 +240,15 @@ const EXLIB=[
  ['lowcrawl','Low Crawl','Arrastre bajo (gateo en el piso)','full','bodyweight','t'],
  ['dbrdl','Dumbbell Romanian Deadlift','Peso muerto rumano con mancuernas','legs','dumbbell'],
  ['bwstepup','Bodyweight Step-Up','Subida al cajón con peso corporal','legs','bodyweight','bw'],
+ // v28: challenge movements / movimientos de los retos
+ ['skierg','SkiErg','SkiErg (máquina de esquí)','cardio','machine','t'],
+ ['wallball','Wall Ball','Wall ball (lanzamiento a la pared)','full','medball','bw'],
+ ['bbj','Burpee Broad Jump','Burpee con salto largo','full','bodyweight','bw'],
+ ['sandlunge','Weighted Lunge (sandbag or pack)','Zancada con peso (saco o mochila)','legs','other','bw'],
+ ['situp','Sit-Up','Abdominal completo (sit-up)','core','bodyweight','bw'],
+ ['dbthruster','Dumbbell Thruster','Thruster con mancuernas','full','dumbbell'],
+ ['jjack','Jumping Jacks','Saltos de tijera','power','bodyweight','bw'],
+ ['decpush','Feet-Elevated Push-Up','Flexión con pies elevados','chest','bodyweight','bw'],
  // cardio
  ['run','Running','Correr','cardio','other','t'],
  ['treadmill','Treadmill','Caminadora','cardio','machine','t'],

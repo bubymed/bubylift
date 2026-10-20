@@ -38,6 +38,7 @@ const EXM={
  clean:'F2b1w1s1k1',kbswing:'F2b1',thruster:'F2s1k1',burpee:'F1w1s1k1b1',farmer:'F1',dbsnatch:'F2s1b1',getup:'F2s1',mbslam:'F1b1',battleropes:'F1s1',bearcrawl:'F1w1s1',inchworm:'F1w1s1',manmaker:'F2w1s1b1',kbclean:'F2w1b1',ballcombo:'S1',
  // balance
  balsl:'Z1a1',balslreach:'Z1a1',balsqtd:'Z1k1a1',balstepup:'Z1k1',ballunge:'Z1k1h1',balwind:'Z1b1',balhop:'Z2k1a2',balfoam:'Z1a1',balrdl:'Z1b1',baltoe:'Z1b1',balcurl:'Z1',balyoga:'Z1',balbosu:'Z1k1',baltandem:'Z1',
+ skierg:'K1b1s1',wallball:'F1k1s1',bbj:'F2k1w1s1b1',sandlunge:'Q1k1h1',situp:'A1b1n1',dbthruster:'F2s1k1',jjack:'W1a1',decpush:'P2w1s1',
  // cardio
  walk:'K1',treadmill:'K1',run:'K1k1a1',jumprope:'K1k1a1',hike:'K1k1a1',stairs:'K1k1',statbike:'K1',bike:'K1',rower:'K1b1',elliptical:'K1',swim:'K1s1'
 };
@@ -45,7 +46,7 @@ const EXM={
    Cosas extra que necesita un ejercicio además de su equipo principal: 'bench' (banco o cajón firme) o 'bar' (barra de dominadas / paralelas). */
 const NEED={pullup:'bar',chinup:'bar',assistpu:'machine',legraise:'bar',kneeup:'bar',dip:'bar',invrow:'bar',
  bench:'bench',incbench:'bench',declbench:'bench',dbbench:'bench',dbinc:'bench',decldb:'bench',cgbp:'bench',skull:'bench',lyingext:'bench',benchdip:'bench',hipthrust:'bench',
- bulgsplit:'bench',stepup:'bench',latstep:'bench',bwstepup:'bench',boxjump:'bench',boxdrop:'bench',powerstep:'bench',balstepup:'bench',inccurl:'bench',concurl:'bench',seatpress:'bench',seatdbcurl:'bench',pullover:'bench',preacher:'machine',sledpush:'sled',sleddrag:'sled',dbfly:'bench',ballpress:'ball'};
+ bulgsplit:'bench',stepup:'bench',latstep:'bench',bwstepup:'bench',boxjump:'bench',boxdrop:'bench',powerstep:'bench',balstepup:'bench',inccurl:'bench',concurl:'bench',seatpress:'bench',seatdbcurl:'bench',pullover:'bench',preacher:'machine',sledpush:'sled',decpush:'bench',sleddrag:'sled',dbfly:'bench',ballpress:'ball'};
 /* Equipment the person can say they have. / Equipo que la persona puede decir que tiene. */
 const HAVE_KEYS=['barbell','dumbbell','cable','machine','kettlebell','band','ball','medball','suspension','bench','bar','sled'];
 const HAVE_PRESETS={gym:HAVE_KEYS.slice(),db:['dumbbell','bench'],home:['band'],none:[]};
