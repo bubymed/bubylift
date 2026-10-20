@@ -414,3 +414,42 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .optd{margin:10px 0}
 .optd summary{font-weight:700;cursor:pointer}
 .optd .optul{margin-top:8px}
+
+/* v25: one-question wizard, personalization / asistente de una pregunta, personalización */
+#sheet.wzs{max-height:96vh;max-height:96dvh;min-height:70vh;min-height:70dvh;display:flex;flex-direction:column}
+.wz{display:flex;flex-direction:column;flex:1;min-height:0}
+.wz-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.wz-top .ico[disabled]{opacity:.25}
+.wz-bar{flex:1;height:6px;border-radius:3px;background:var(--panel2);overflow:hidden}
+.wz-bar i{display:block;height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
+.wz-in{flex:1}
+.wz-in.fresh{animation:wzin .28s ease}
+@keyframes wzin{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.wz-ic{font-size:2.6rem;text-align:center;margin:10px 0 2px}
+.wz-q{text-align:center;font-size:1.35rem;line-height:1.2;margin:4px 0}
+.wz-s{text-align:center;color:var(--muted);font-size:.9rem;margin:0 0 14px}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wgrid.c1{grid-template-columns:1fr}
+.wgrid.c3{grid-template-columns:1fr 1fr 1fr}
+.wopt{position:relative;display:flex;align-items:center;gap:10px;text-align:left;padding:14px 12px;border-radius:16px;background:var(--panel2);border:2px solid transparent;color:var(--txt);transition:transform .12s,border-color .12s,background .12s}
+.wopt:active{transform:scale(.97)}
+.wopt.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel2))}
+.wopt .wi{font-size:1.6rem;line-height:1}
+.wopt .wt{display:flex;flex-direction:column;min-width:0}
+.wopt .wt b{font-size:.95rem}
+.wopt .wt small{color:var(--muted);font-size:.78rem;margin-top:2px}
+.wopt .wck{display:none;position:absolute;top:8px;right:10px;font-style:normal;color:var(--accent);font-weight:700}
+.wopt.on .wck{display:block}
+.wgrid.c3 .wopt{flex-direction:column;text-align:center;padding:12px 6px}
+.wgrid.c3 .wopt .wt{align-items:center}
+.wz-body .lbl{margin-top:16px;text-align:center}
+.wz-foot{position:sticky;bottom:0;padding:12px 0 2px;background:linear-gradient(transparent,var(--bg) 30%)}
+.wsum{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.wsum li{display:flex;gap:10px;align-items:flex-start;background:var(--panel2);border-radius:14px;padding:10px 12px}
+.wsum .wi{font-size:1.3rem}
+.why .optul{margin:6px 0 0}
+.mnl{color:var(--accent);font-style:normal}
+.adrow{display:flex;gap:10px;align-items:flex-start;padding:8px 0;font-size:.9rem}
+.rz{color:var(--muted);font-style:italic}
+.plex small.rz{font-size:.74rem}
+.whyp{margin:8px 0}
