@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v41 — 2026-10-20
+- **Fix:** the plan-question screens (e.g. training split) did not scroll smoothly on iPhone; the step container no longer shrinks to the sheet height, so the sheet scrolls as a whole and the Next button stays sticky at the bottom.
+  **Arreglo:** las pantallas de preguntas del plan (p. ej. la división de entrenamiento) no se deslizaban bien en iPhone; el contenedor del paso ya no se encoge a la altura de la ventana, así la ventana entera se desliza y el botón Siguiente queda fijo abajo.
+
 ## v40 — 2026-10-20
 - **Classic programs:** new Programs tab (Workout → Programs) with Full body, StrongLifts 5×5, Starting Strength, 5/3/1 (Wendler), PHUL and German Volume Training (10×10). Each day picks the first exercise your equipment allows; train the day or save it as a routine. 5/3/1 has a week selector (5s, 3s, 5/3/1, deload) and training-max boxes (can be estimated from your history) and shows the weight of each set.
   **Programas clásicos:** nueva pestaña Programas (Entrenar → Programas) con Cuerpo completo, StrongLifts 5×5, Starting Strength, 5/3/1 (Wendler), PHUL y Volumen Alemán (10×10). Cada día toma el primer ejercicio que permita tu equipo; entrena el día o guárdalo como rutina. El 5/3/1 tiene selector de semana (5s, 3s, 5/3/1, descarga) y casillas de máximo de entrenamiento (se pueden estimar con tu historial) y muestra el peso de cada serie.

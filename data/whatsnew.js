@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v41',items:[
+  {i:'📜',en:'<b>Smooth scrolling in the plan questions</b> — on iPhone the long option lists (like the training split) now scroll normally, and the Next button stays at the bottom.',es:'<b>Deslizar sin trabas en las preguntas del plan</b> — en iPhone las listas largas de opciones (como la división de entrenamiento) ahora se deslizan normal, y el botón Siguiente se queda abajo.'}]},
  {v:'v40',items:[
   {i:'🏆',en:'<b>Classic programs</b> — Full body, StrongLifts 5×5, Starting Strength, 5/3/1, PHUL and German Volume (10×10) are now in Workout → Programs. Each day uses your equipment; train it or save it as a routine. 5/3/1 calculates the weights from your training max.',es:'<b>Programas clásicos</b> — Cuerpo completo, StrongLifts 5×5, Starting Strength, 5/3/1, PHUL y Volumen Alemán (10×10) ya están en Entrenar → Programas. Cada día usa tu equipo; entrénalo o guárdalo como rutina. El 5/3/1 calcula los pesos desde tu máximo de entrenamiento.'}]},
  {v:'v39',items:[
