@@ -1,6 +1,6 @@
 /* Ready routines and challenges (v28): focused routines by muscle and level, and timed challenges.
    Rutinas listas y retos (v28): rutinas enfocadas por músculo y nivel, y retos con tiempo. */
-const LIB_FILT=['all','pt','cf','hy','run'];
+const LIB_FILT=['all','pt','cf','hy','run','mil','bw'];
 let LIB={tab:'focus',area:'chest',lv:1,sel:null,clv:1,flt:'all',eq:false};
 let CHR=null,CHT=null; // challenge being run, and its timer / reto en curso y su temporizador
 NT_KEYS.push('lz_std','lz_rom','lz_uni','lz_prof','lz_inst','lz_lever','lz_mom'); // notes shown while training / notas durante el entrenamiento
