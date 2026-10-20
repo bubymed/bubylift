@@ -319,12 +319,13 @@ function rbDraw(){
   const r=UI.rb;
   sheet('<div class="form"><h3>'+t(r.id?'editRoutine':'newRoutine')+'</h3><label>'+t('name')+'<input class="in wide" type="text" maxlength="60" value="'+esc(r.name)+'" oninput="UI.rb.name=this.value"></label>'+
     '<div class="lbl">'+t('exercises')+'</div>'+
-    (r.ex.length?r.ex.map((x,i)=>'<div class="rbx"><b>'+esc(exName(x.eid,x.n))+'</b><span class="rbs"><button class="ico" onclick="rbSets('+i+',-1)">−</button><span>'+t('nSets',x.sets)+'</span><button class="ico" onclick="rbSets('+i+',1)">＋</button></span><button class="ico" onclick="rbDel('+i+')" aria-label="'+esc(t('rmEx'))+'">✕</button></div>').join(''):'<p class="muted">'+t('noEx')+'</p>')+
+    (r.ex.length?r.ex.map((x,i)=>'<div class="rbx"><b>'+esc(exName(x.eid,x.n))+'</b><span class="rbs"><button class="ico" onclick="rbSets('+i+',-1)">−</button><span>'+t('nSets',x.sets)+'</span><button class="ico" onclick="rbSets('+i+',1)">＋</button></span><button class="ico" onclick="rbMove('+i+',-1)" aria-label="'+esc(t('moveUp'))+'"'+(i<1?' disabled':'')+'>↑</button><button class="ico" onclick="rbMove('+i+',1)" aria-label="'+esc(t('moveDn'))+'"'+(i>=r.ex.length-1?' disabled':'')+'>↓</button><button class="ico" onclick="rbDel('+i+')" aria-label="'+esc(t('rmEx'))+'">✕</button></div>').join(''):'<p class="muted">'+t('noEx')+'</p>')+
     '<button class="btn wide" onclick="rbAdd()">＋ '+t('addEx')+'</button>'+
     '<div class="row"><button class="btn pri" onclick="rbSave()">'+t('save')+'</button><button class="btn" onclick="UI.rb=null;sheetClose()">'+t('cancel')+'</button>'+(r.id?'<button class="btn danger" onclick="rbRemove()">'+t('delete')+'</button>':'')+'</div></div>');
 }
 function rbAdd(){pickEx(function(eid){const e=exById(eid);UI.rb.ex.push({eid:eid,n:e?e.en:eid,sets:3});rbDraw();});}
 function rbSets(i,d){const x=UI.rb.ex[i];x.sets=Math.max(1,Math.min(20,x.sets+d));rbDraw();}
+function rbMove(i,d){const a=UI.rb.ex,j=i+d;if(j<0||j>=a.length)return;const x=a[i];a[i]=a[j];a[j]=x;rbDraw();}
 function rbDel(i){UI.rb.ex.splice(i,1);rbDraw();}
 function rbSave(){
   const r=UI.rb;if(!r.name.trim()){toast(t('needName'));return;}

@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v35 — 2026-10-20
+- **Edit what is yours:** in your plan, move an exercise up/down, move it to another day, and rename any day (empty name restores the original). In My routines, reorder exercises with ↑/↓. Split days can now be saved as your own routine (ready routines already could). Presets (ready routines, splits, challenges) are not changed, only copied.
+  **Edita lo que es tuyo:** en tu plan, sube o baja un ejercicio, muévelo a otro día y renombra cualquier día (nombre vacío restaura el original). En Mis rutinas, reordena ejercicios con ↑/↓. Los días de una división ahora se pueden guardar como rutina propia (las rutinas listas ya se podían). Los presets (rutinas listas, divisiones, retos) no cambian, solo se copian.
+
 ## v34 — 2026-10-20
 - **Send feedback:** new "Send feedback" button in More → App that opens a short bilingual Tally form (satisfaction, what you use, what confused you, feature wishes, device, optional email). Nothing is sent from the app itself.
   **Enviar feedback:** botón nuevo "Enviar feedback" en Más → App que abre un formulario corto bilingüe de Tally (satisfacción, qué usas, qué te confundió, funciones que quieres, dispositivo, correo opcional). La app misma no envía nada.

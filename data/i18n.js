@@ -39,7 +39,7 @@ const STR={
  colSet:['SET','SERIE'],colPrev:['PREV','ANT.'],colReps:['REPS','REPS'],colMin:['MIN','MIN'],doneSet:['Mark set done','Marcar serie hecha'],
  needWR:['Enter weight and reps first','Escribe primero peso y repeticiones'],needReps:['Enter the reps first','Escribe primero las repeticiones'],needTime:['Enter the time first','Escribe primero el tiempo'],
  newPR:['🏆 New personal record!','🏆 ¡Nuevo récord personal!'],
- moveUp:['Move up','Subir'],moveDown:['Move down','Bajar'],rmLastSet:['Remove last set','Quitar última serie'],rmEx:['Remove exercise','Quitar ejercicio'],
+ moveDn:['Move down','Bajar'],moveDay:['Move to another day','Mover a otro día'],movedTo:['Moved to {0}','Movido a {0}'],dayRen:['Rename day','Renombrar día'],dayRenP:['Leave it empty to go back to the original name.','Déjalo vacío para volver al nombre original.'],spSaveDay:['Save as my routine','Guardar como mi rutina'],moveUp:['Move up','Subir'],moveDown:['Move down','Bajar'],rmLastSet:['Remove last set','Quitar última serie'],rmEx:['Remove exercise','Quitar ejercicio'],
  noDone:['No sets are completed. Discard this workout?','No hay series completadas. ¿Descartar este entrenamiento?'],
  undone:['{0} sets are not completed and will be dropped. Finish the workout?','{0} series no están completadas y se descartarán. ¿Terminar el entrenamiento?'],
  cancelAsk:['Discard this workout? Nothing will be saved.','¿Descartar este entrenamiento? No se guardará nada.'],
