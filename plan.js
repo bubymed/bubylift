@@ -100,7 +100,7 @@ const isHy=g=>g==='hybrid'||g==='military'; // hybrid athlete (no test) and mili
 const OPT_SEC_OK=['ac','sk','rs','cd','cc'];
 const NT_KEYS=['ntIntR','ntLong','ntInt','ntEasy','ntTempo','ntSdc','ntMdl','ntHrp','ntPlk','ntSim','ntBal','ntLand'];
 const NTEID={hexdl:'ntMdl',hrpushup:'ntHrp',plank:'ntPlk',sdcdrill:'ntSdc',sleddrag:'ntSdc'};
-const PDAYKEYS=Object.keys(DAYSPEC).concat(['fullA','fullB','fullC','up1','up2','low1','low2','oCB','oLeg']); // old keys stay valid / las claves viejas siguen válidas
+const PDAYKEYS=Object.keys(DAYSPEC).concat(['fullA','fullB','fullC','up1','up2','low1','low2','oCB','oLeg','oPush','oPull','oLow','oChest','oBack','oSho']); // old keys stay valid / las claves viejas siguen válidas
 const LENMAX={30:4,45:5,60:6,75:7};
 
 function planScheme(goal,lvl,role,skills){
@@ -162,8 +162,9 @@ function volRange(mu,vol,prof,ph){
     const o=OPT_VF[ph]||[1,1],fq=n>=4?(ph===3||ph===4?(n>=5?2.4:1.8):1.7):1; // more days = more weekly sets / más días = más series semanales
     const lw=('HGIT'.indexOf(mu)>=0?0.5:1)*(n<=2?0.45:1),up=mu==='S'?1.6:(mu==='G'?1.6:1); // hamstrings/glutes also work in squats; shoulders appear in every pair day / isquios y glúteos trabajan en otras; el hombro aparece en todos los días
     // performance plans are built around running or a test: strength only needs a base, so the floor is low / los planes de rendimiento giran en torno a la carrera o la prueba: la fuerza solo necesita una base
-    const lo=optPerf(prof)?1:Math.max(2,Math.round(r[0]*vf*o[0]*lw));
-    return[lo,Math.max(3,Math.round(r[1]*vf*o[1]*fq*up))];
+    const spl=prof.split&&prof.split!=='auto'; // a chosen split trains some muscles once a week, others twice / una división elegida entrena algunos músculos una vez y otros dos
+    const lo=optPerf(prof)?1:Math.max(2,Math.round(r[0]*vf*o[0]*lw*(spl?0.5:1)));
+    return[lo,Math.max(3,Math.round(r[1]*vf*o[1]*fq*up*(spl?1.6:1)))];
   }
   const f=vf;
   return[Math.max(2,Math.round(r[0]*f)),Math.max(3,Math.round(r[1]*f))];
@@ -199,6 +200,7 @@ function normProf(p){
   o.work=WORKS.indexOf(o.work)>=0?o.work:'';
   o.sh=Math.max(0,Math.min(Math.min(2,o.n-1),Math.round(o.sh)||0));
   o.pu=PUS.indexOf(o.pu)>=0?o.pu:'';
+  o.split=(typeof splitOk==='function'&&splitOk(o.split,o.n))?o.split:'auto';
   o.sd=(Number.isInteger(o.sd)&&o.sd>0&&o.sd<1e9)?o.sd:0;
   o.rt=(Number.isInteger(o.rt)&&o.rt>=0&&o.rt<1000)?o.rt:0;
   o.no=(Array.isArray(o.no)?o.no:[]).filter((k,i,a)=>typeof k==='string'&&ID_RE.test(k)&&a.indexOf(k)===i).slice(-40);
@@ -687,7 +689,7 @@ function focusApply(){
   const old=DATA.plan,p=genPlan(prof);p.checks=old.checks;DATA.plan=p;saveData();render();planOpen();toast(t('planReady'));
 }
 function planCreate(){
-  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,avoid:PW.avoid,fav:PW.fav,work:PW.work,sh:PW.sh,pu:PW.pu,sd:PW.sd||((Math.random()*1e6|0)+1),rt:PW.rt,no:PW.no,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
+  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,avoid:PW.avoid,fav:PW.fav,work:PW.work,sh:PW.sh,pu:PW.pu,split:PW.split,sd:PW.sd||((Math.random()*1e6|0)+1),rt:PW.rt,no:PW.no,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
   const old=DATA.plan,p=genPlan(prof);
   if(old){p.checks=old.checks;}
   DATA.plan=p;saveData();render();
@@ -788,7 +790,7 @@ function volApply(){
 
 /* ---------- weekly schedule: put each training day on a weekday, with advice / horario semanal: cada día de entrenamiento en un día de la semana, con consejos ---------- */
 // l = loads the legs · u = upper body · R = hard run or work-capacity day · r = easy run / l = piernas · u = tren superior · R = carrera dura o capacidad · r = carrera suave
-const WD_DT={full:'lu',fullL:'lu',fullA:'lu',fullB:'lu',fullC:'lu',up:'u',up1:'u',up2:'u',upLite:'u',push:'u',pull:'u',arms:'u',lowQ:'l',lowG:'l',low1:'l',low2:'l',hyStr:'lu',hyStrL:'l',hyStrU:'u',hyRunI:'R',hyRunE:'r',hyCap:'R',runT:'R',runL:'R',runS:'l',bbFull:'lu',bbUp:'u',bbLow:'l',bbLow2:'l',bbPush:'u',bbPull:'u',oCB:'u',oLeg:'l'};
+const WD_DT={full:'lu',fullL:'lu',fullA:'lu',fullB:'lu',fullC:'lu',up:'u',up1:'u',up2:'u',upLite:'u',push:'u',pull:'u',arms:'u',lowQ:'l',lowG:'l',low1:'l',low2:'l',hyStr:'lu',hyStrL:'l',hyStrU:'u',hyRunI:'R',hyRunE:'r',hyCap:'R',runT:'R',runL:'R',runS:'l',bbFull:'lu',bbUp:'u',bbLow:'l',bbLow2:'l',bbPush:'u',bbPull:'u',oCB:'u',oLeg:'l',oPush:'u',oPull:'u',oLow:'l',oChest:'u',oBack:'u',oSho:'u'};
 const wdHas=(k,c)=>(WD_DT[k]||'').indexOf(c)>=0;
 const wdName=(w,short)=>new Date(2023,0,1+w).toLocaleDateString(LANG==='es'?'es':'en-US',{weekday:short?'short':'long'});
 function wdAt(wd){const at=[-1,-1,-1,-1,-1,-1,-1];wd.forEach((w,i)=>{at[w]=i;});return at;}

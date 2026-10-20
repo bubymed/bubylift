@@ -68,6 +68,7 @@ function wyText(s){
   const a=String(s).split('|'),k=a[0];let x=a[1]||'';
   if(k==='wyMain'||k==='wyFav')x=exName(x);
   else if(k==='wyTest')x=t('te_'+x);
+  else if(k==='wySplit')x=t('spl_'+x);
   else if(k==='wyFocus')x=t('fm_'+x);
   else if(k==='wyInj')x=t('inj_'+x);
   else if(k==='wyAvoid')x=t('av_'+x);
@@ -148,6 +149,10 @@ function planWhyCard(p){
   let why;
   if(pr.ph)why='wpOwn';else if(pr.cond)why='wpCond';else if(!heavy&&optAuto(pr)>2)why='wpEq';else why=lv==='new'?'wpNew':(lv==='some'?'wpSome':'wpAdv');
   li.push(t('wpGoal',goalTxt(pr),t('ph_'+p.ph))+' '+t(why));
+  if(pr.split&&pr.split!=='auto'){
+    const f=mu=>p.ds.filter(d=>d.ex.some(e=>e.sec==='rs'&&muOf(e.eid)===mu)).length;
+    li.push(t('wpSplit',t('spl_'+pr.split),f('P'),f('B'),f('Q'))+(p.ph<3||p.ph===5?' '+t('wpSplitPh'):''));
+  }
   li.push(t('wpDays',pr.n,pr.len)+(pr.sh?' '+t('wpShort',pr.sh):''));
   li.push(t('wpVol',t('vol_'+pr.vol)));
   if(pr.focus.length)li.push(t('wpFocus',pr.focus.map(k=>t('fm_'+k)).join(', ')));

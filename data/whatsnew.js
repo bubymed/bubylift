@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v27',items:[
+  {i:'🏋️',en:'<b>Choose a famous split</b> — Upper/Lower, Push/Pull/Legs, Arnold split, a classic body-part week or Upper/Lower + PPL. The plan keeps your phase\'s sets, reps, tempo and rest, and every day says why it is built that way.',es:'<b>Elige una división famosa</b> — Torso/Pierna, Empuje/Tirón/Pierna, split Arnold, una semana clásica por músculo o Torso/Pierna + PPL. El plan conserva las series, repeticiones, tempo y descanso de tu fase, y cada día dice por qué está armado así.'}]},
  {v:'v26',items:[
   {i:'🎖️',en:'<b>Hybrid, military and running plans now follow the NASM OPT model too</b> — your test drills and runs stay, and every session now has a warm-up, core and balance activation, strength in the OPT performance phases (with stable and explosive pairs), conditioning and a cool-down, each with its reason.',es:'<b>Los planes híbrido, militar y de carrera también siguen el modelo OPT del NASM</b> — se mantienen tus ejercicios de la prueba y tus carreras, y cada sesión ahora tiene calentamiento, activación de core y equilibrio, fuerza en las fases de rendimiento del OPT (con pares estables y explosivos), acondicionamiento y enfriamiento, cada uno con su razón.'}]},
  {v:'v25',items:[
