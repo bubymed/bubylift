@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v45',items:[
+  {i:'❓',en:'<b>Help & FAQ</b> — new button in More with answers to the most common questions and a box at the bottom for questions, complaints or comments.',es:'<b>Ayuda y preguntas frecuentes</b> — botón nuevo en Más con las respuestas a las dudas más comunes y un recuadro abajo para dudas, quejas o comentarios.'},
+  {i:'🗑️',en:'<b>Delete a profile from the app</b> — tap your avatar and choose Delete profile (the password is asked; guests too).',es:'<b>Eliminar un perfil desde la app</b> — toca tu avatar y elige Eliminar perfil (se pide la contraseña; también para el invitado).'}]},
  {v:'v44',items:[
   {i:'👋',en:'<b>Welcome back</b> — opening your profile now shows a very short welcome screen with the app icon, like opening the app again.',es:'<b>Bienvenido de nuevo</b> — al abrir tu perfil ahora sale una pantalla de bienvenida muy corta con el icono de la app, como si abrieras la app otra vez.'},
   {i:'👤',en:'<b>Guest on the profile screen</b> — "Continue as guest" is now right there next to Add profile.',es:'<b>Invitado en la pantalla de perfiles</b> — "Continuar como invitado" ahora está ahí mismo junto a Añadir perfil.'}]},

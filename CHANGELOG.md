@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v45 — 2026-10-20
+- **Help & FAQ:** new More → Help & FAQ screen with 16 common questions (expandable) and, below, a box for questions, complaints or comments. The message opens a short Tally form with the text prefilled (plus app version and language); email is optional. Nothing from the log is sent.
+  **Ayuda y preguntas frecuentes:** pantalla nueva Más → Ayuda con 16 preguntas comunes (desplegables) y, abajo, un recuadro para dudas, quejas o comentarios. El mensaje abre un formulario corto de Tally con el texto ya escrito (más versión y idioma); el correo es opcional. No se envía nada del registro.
+- **Delete profile in-app:** the avatar menu now has Delete profile (guests too); deleting the current profile returns to the profile list.
+  **Eliminar perfil dentro de la app:** el menú del avatar ahora tiene Eliminar perfil (también el invitado); al borrar el perfil actual se vuelve a la lista de perfiles.
+
 ## v44 — 2026-10-20
 - **Welcome-back splash:** entering a profile (auto sign-in, picking a profile, password sign-in) shows the app icon and "Welcome back, name" for under a second, then fades out. Not shown when creating a profile or on a plain reload.
   **Pantalla "Bienvenido de nuevo":** al entrar a un perfil (entrada automática, elegir perfil, contraseña) sale el icono de la app y "Bienvenido de nuevo, nombre" menos de un segundo y se desvanece. No sale al crear un perfil ni en una recarga normal.
