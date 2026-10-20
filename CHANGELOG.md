@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v46 — 2026-10-20
+- **Full body routine:** "Full body" is now the first option in Routines by muscle (six ranks, Seed to Titan): one lower-body push, one horizontal push, one pull, one hinge, a shoulder or single-leg move and a core move per session, built from your equipment and injuries. Can be trained now, saved as a routine or added to your plan.
+  **Rutina de cuerpo completo:** "Cuerpo completo" es ahora la primera opción en Rutinas por músculo (seis rangos, de Semilla a Titán): una sentadilla, un empuje, un jalón, una bisagra, un hombro o movimiento a una pierna y un core por sesión, armados con tu equipo y lesiones. Se puede entrenar ya, guardar como rutina o agregar a tu plan.
+
 ## v45 — 2026-10-20
 - **Help & FAQ:** new More → Help & FAQ screen with 16 common questions (expandable) and, below, a box for questions, complaints or comments. The message opens a short Tally form with the text prefilled (plus app version and language); email is optional. Nothing from the log is sent.
   **Ayuda y preguntas frecuentes:** pantalla nueva Más → Ayuda con 16 preguntas comunes (desplegables) y, abajo, un recuadro para dudas, quejas o comentarios. El mensaje abre un formulario corto de Tally con el texto ya escrito (más versión y idioma); el correo es opcional. No se envía nada del registro.

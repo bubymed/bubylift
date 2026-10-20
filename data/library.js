@@ -2,8 +2,12 @@
    FOCUS[area][level] = list of slots "alt1,alt2,alt3|lever|sets|lo|hi" (first one the person can do is used; hold exercises use seconds).
    lever = what makes it harder (std standard, rom range of motion, uni one side, prof resistance profile, inst instability, lever longer lever, mom no momentum).
    FOCUS[área][nivel] = lista de espacios "alt1,alt2,alt3|palanca|series|min|max" (se usa el primero que la persona pueda hacer). */
-const LIB_AREAS=['chest','back','shoulders','arms','legs','glutes','core'];
+const LIB_AREAS=['full','chest','back','shoulders','arms','legs','glutes','core'];
 const FOCUS={
+ full:[
+  ['legpress,gobsq,bodysq|std|3|10|12','chestpress,dbbench,kneepush|std|3|10|12','machrow,cablerow,bandrow|std|3|10|12','dbrdl,kbdl,bandrdl,glutebr|std|3|10|12','machsp,dbohp,seatpress,bandohp,pikepush|std|3|10|12','plank,deadbug,birddog|std|3|20|30'],
+  ['squat,frontsq,gobsq,legpress|rom|4|6|10','bench,dbbench,chestpress,pushup|rom|4|8|10','pullup,chinup,assistpu,latpd|rom|4|6|10','rdl,dbrdl,bandrdl|std|4|8|10','dbohp,arnold,machsp,pikepush|rom|3|8|12','revlunge,lunge,fwdlunge,bwlunge|uni|3|8|12','hollow,plank|std|3|30|40'],
+  ['squat,hacksq,legpress,gobsq|mom|4|4|6','bench,dbbench,chestpress|mom|4|5|8','bbrow,tbar,bentrow|mom|4|5|8','rdl,sldl,dbrdl|mom|4|6|8','ohp,dbohp,machsp|mom|3|5|8','bulgsplit,splitsq,revlunge,bwlunge|uni|3|6|10','abwheel,ballroll,hollow|lever|3|8|12']],
  chest:[
   ['chestpress,dbbench,kneepush|std|3|10|12','dbinc,incpush,kneepush|std|3|10|12','pecdeck,cablefly,dbfly|std|3|12|15','cablepress,bandpress,ballpress|std|2|12|15','pushdown,ropepd,bandpd,kickback|std|3|12|15'],
   ['dbbench,bench,chestpress|rom|4|8|10','dbinc,incbench,incpush|std|4|8|10','cablefly,dbfly,pecdeck|prof|3|10|12','pushup,hrpushup|std|3|8|15','dip,benchdip|std|3|8|12','pushdown,cgbp,ropepd|std|3|10|12'],
