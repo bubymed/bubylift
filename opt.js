@@ -153,7 +153,7 @@ function optItem(eid,o,ctx){
   if(o.ss)it.ss=o.ss;
   if(o.nt)it.nt=o.nt;
   if(m==='t'){it.u='m';it.lo=o.hold?o.hold[0]:0.5;it.hi=o.hold?o.hold[1]:1;}
-  return it;
+  return PREFPROF?bwFix(it,PREFPROF):it;
 }
 
 function genOpt(prof){
@@ -382,7 +382,7 @@ function optWrap(pl,prof){
         e.sec='rs';
         if(m!=='t'){
           const rr=optReps(ph,e.r==='m'?'m':'a',prof.goal,false),pu=/pullup|chinup|assistpu/.test(e.eid);
-          if(!pu){e.lo=rr.lo;e.hi=rr.hi;}
+          if(!pu){e.lo=rr.lo;e.hi=rr.hi;bwFix(e,prof);}
           e.sets=Math.min(6,sets);
         }
         e.tp=ph===1?'sl':(ph===5?'ex':'md');e.rs=ph===1?0:(ph===5?120:60);

@@ -130,7 +130,7 @@ function planItem(eid,role,prof,extra){
     it={eid:eid,sets:Math.min(6,sc.sets+(extra?1:0)),lo:sc.lo+(en?4:0),hi:sc.hi+(en?5:0),u:'r',r:role,cn:cn};
   }
   if(nt)it.nt=nt;
-  return it;
+  return bwFix(it,prof);
 }
 function runItem(kind,prof){
   const N=prof.lvl==='new',cn=stressJoints('run',injLetters(prof.inj),1),rn=prof.goal==='runner';

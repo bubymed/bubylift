@@ -48,6 +48,21 @@ function lvlEff(pr){
 
 /* ---------- wizard step "About you" / paso del asistente "Sobre ti" ---------- */
 function pwFav(k){const a=PW.fav,i=a.indexOf(k);if(i>=0)a.splice(i,1);else if(a.length<4)a.push(k);wizDraw();}
+/* bodyweight moves are not loaded lifts: reps go by what the person can do, not by a strength rep range
+   los movimientos con peso corporal no son levantamientos con carga: las repeticiones dependen de lo que la persona puede hacer */
+const BW_PULL=/pullup|chinup|assistpu/;
+function bwReps(eid,pr){
+  const lv=lvlEff(pr),low='QHGC'.indexOf(muOf(eid))>=0;
+  let r=lv==='new'?[8,12]:(lv==='some'?[12,20]:[15,25]);
+  if(pr.pu==='p0')r=[5,8];else if(pr.pu==='p1')r=[8,12];else if(pr.pu==='p2')r=[12,20];else if(pr.pu==='p3')r=[20,30];
+  if(low&&!pr.pu)r=lv==='new'?[12,15]:(lv==='some'?[15,25]:[20,30]);
+  return{lo:r[0],hi:r[1]};
+}
+function bwFix(it,pr){
+  if(!it||it.u==='m'||exMode(it.eid)!=='bw'||BW_PULL.test(it.eid)||(it.r!=='m'&&it.r!=='a'))return it;
+  const r=bwReps(it.eid,pr);it.lo=r.lo;it.hi=r.hi;return it;
+}
+
 /* ---------- why each day looks like this / por qué cada día es así ---------- */
 function wyText(s){
   const a=String(s).split('|'),k=a[0];let x=a[1]||'';
