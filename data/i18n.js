@@ -358,6 +358,7 @@ const STR={
  hyRun:['Running: add no more than about 10% time or distance per week, and keep easy runs really easy.','Carrera: sube como máximo un 10% de tiempo o distancia por semana y mantén las carreras suaves de verdad.'],
  hyOfficial:['Events and scoring tables change. Always check the official standards for your branch and MOS.','Los eventos y las tablas de puntos cambian. Revisa siempre los estándares oficiales de tu rama y MOS.'],
  hv_sled:['Sled / drag weight','Trineo / peso para arrastrar'],
+ hv_wheel:['Ab wheel','Rueda abdominal'],
  pd_hyStr:['Strength (full body)','Fuerza (cuerpo completo)'],
  pd_hyStrL:['Strength: lower','Fuerza: parte inferior'],
  pd_hyStrU:['Strength: upper','Fuerza: parte superior'],

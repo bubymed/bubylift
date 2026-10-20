@@ -10,7 +10,7 @@ const WZ_IC={
   skill:{strength:'🏋️',power:'⚡',speed:'💨',endurance:'🫀',balance:'🧘'},
   vol:{lo:'🌱',md:'🌿',hi:'🌳'},
   lvl:{new:'🌱',some:'🌿',adv:'🔥'},
-  have:{barbell:'🏋️',dumbbell:'💪',cable:'🔗',machine:'⚙️',kettlebell:'🔔',band:'🟢',ball:'⚽',medball:'🏐',suspension:'➰',bench:'🛋️',bar:'🧗',sled:'🛷'},
+  have:{barbell:'🏋️',dumbbell:'💪',cable:'🔗',machine:'⚙️',kettlebell:'🔔',band:'🟢',ball:'⚽',medball:'🏐',suspension:'➰',bench:'🛋️',bar:'🧗',sled:'🛷',wheel:'🛞'},
   avoid:{jump:'🦘',floor:'🧎',barbell:'🏋️',machine:'⚙️',ball:'⚽',overhead:'🙌'},
   work:{'':'🤷',sit:'🪑',stand:'🧍'},
   split:{auto:'🤖',ul:'↕️',ppl:'🔁',arn:'🏆',bro:'🧱',ulppl:'🧬'},

@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v47 — 2026-10-20
+- **Fix:** the Ab Wheel Rollout was suggested to everyone because it counted as "no equipment". There is now an "Ab wheel" item in the equipment list; the exercise only appears when it is marked (gym preset includes it). Saved equipment lists without it stop getting the exercise until they add it.
+  **Arreglo:** la Rueda abdominal se sugería a todos porque contaba como "sin equipo". Ahora hay un elemento "Rueda abdominal" en la lista de equipo; el ejercicio solo aparece si está marcado (el preajuste de gimnasio lo incluye). Las listas de equipo guardadas sin ella dejan de recibir el ejercicio hasta que la agreguen.
+
 ## v46 — 2026-10-20
 - **Full body routine:** "Full body" is now the first option in Routines by muscle (six ranks, Seed to Titan): one lower-body push, one horizontal push, one pull, one hinge, a shoulder or single-leg move and a core move per session, built from your equipment and injuries. Can be trained now, saved as a routine or added to your plan.
   **Rutina de cuerpo completo:** "Cuerpo completo" es ahora la primera opción en Rutinas por músculo (seis rangos, de Semilla a Titán): una sentadilla, un empuje, un jalón, una bisagra, un hombro o movimiento a una pierna y un core por sesión, armados con tu equipo y lesiones. Se puede entrenar ya, guardar como rutina o agregar a tu plan.
