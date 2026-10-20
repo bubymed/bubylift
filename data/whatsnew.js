@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v40',items:[
+  {i:'🏆',en:'<b>Classic programs</b> — Full body, StrongLifts 5×5, Starting Strength, 5/3/1, PHUL and German Volume (10×10) are now in Workout → Programs. Each day uses your equipment; train it or save it as a routine. 5/3/1 calculates the weights from your training max.',es:'<b>Programas clásicos</b> — Cuerpo completo, StrongLifts 5×5, Starting Strength, 5/3/1, PHUL y Volumen Alemán (10×10) ya están en Entrenar → Programas. Cada día usa tu equipo; entrénalo o guárdalo como rutina. El 5/3/1 calcula los pesos desde tu máximo de entrenamiento.'}]},
  {v:'v39',items:[
   {i:'🧪',en:'<b>A real starting test</b> — instead of only push-ups, the plan now asks seven quick questions (plank, one-leg balance, squat check, push-ups, pulling, leg strength and training history). They decide your starting level and OPT phase, and the plan tells you why. “Not sure” is always an option and makes the plan start more carefully.',es:'<b>Una prueba de inicio de verdad</b> — en vez de solo flexiones, el plan ahora hace siete preguntas rápidas (plancha, equilibrio en una pierna, sentadilla de control, flexiones, jalón, fuerza de piernas e historial). Fijan tu nivel de inicio y tu fase OPT, y el plan te explica por qué. “No estoy seguro” siempre es una opción y hace que el plan empiece con más cuidado.'}]},
  {v:'v38',items:[
