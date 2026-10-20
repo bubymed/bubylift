@@ -22,6 +22,21 @@ function wzOpt(onclick,on,ic,label,desc){
 }
 const wzV=v=>typeof v==='number'?v:"'"+v+"'";
 function wzGrid(items,cls){return'<div class="wgrid'+(cls?' '+cls:'')+'">'+items.join('')+'</div>';}
+/* start assessment: required, with a "not sure" option / prueba de inicio: obligatoria, con opción "no estoy seguro" */
+const WZ_AS={pl:['p0','p1','p2','p3'],bal:['b0','b1','b2'],sq:['q2','q1','q0'],pu:['p0','p1','p2','p3'],pull:['r0','r1','r2','r3'],leg:['l0','l1','l2','l3'],hist:['h0','h1','h2']};
+function wzAs(k){
+  const vals=WZ_AS[k].concat(['x']);
+  return wzGrid(vals.map(v=>{
+    const stored=(k==='pu'&&v==='x')?'':v,on=!!(PW.a&&PW.a[k])&&PW[k]===stored;
+    return wzOpt("wzAs_('"+k+"','"+v+"')",on,v==='x'?'🤷':'',t(v==='x'?'as_x':(k==='pu'?'pu_'+v:'as_'+k+'_'+v)),'');
+  }),'c1');
+}
+function wzAs_(k,v){PW[k]=(k==='pu'&&v==='x')?'':v;PW.a=PW.a||{};PW.a[k]=1;wizDraw();clearTimeout(_wzT);_wzT=setTimeout(()=>wzGo(1),230);}
+function wzAsNote(){
+  if(!AS_KEYS.every(k=>PW.a&&PW.a[k]))return'';
+  const lv=lvlEff(Object.assign({},PW,{as:1}));
+  return'<div class="card"><p>'+t('asNote',t('pl_'+lv))+'</p><p class="muted sm">'+t('asNoteP')+'</p></div>';
+}
 /* single choice: tap = pick and move on / una opción: al tocar elige y avanza */
 function wzOne(key,vals,cur,lab,ic,desc,cls){
   return wzGrid(vals.map(v=>wzOpt("wzPick('"+key+"',"+wzV(v)+")",cur===v,ic?ic(v):'',lab(v),desc?desc(v):'')),cls);
@@ -66,7 +81,13 @@ const WQ=[
     return wzOne('sh',a,PW.sh|0,v=>t('shN',v),()=>'');}},
  {id:'vol',ic:'📊',title:()=>t('psVol'),sub:()=>t('wzVolS'),body:()=>wzOne('vol',['lo','md','hi'],PW.vol,v=>t('vol_'+v),v=>WZ_IC.vol[v],v=>t('vold_'+v),'c1')},
  {id:'lvl',ic:'📈',title:()=>t('psLvl'),sub:()=>t('wzLvlS'),body:()=>wzOne('lvl',PLVLS,PW.lvl,v=>t('pl_'+v),v=>WZ_IC.lvl[v],v=>t('pld_'+v),'c1')},
- {id:'pu',ic:'🤸',title:()=>t('psPu'),sub:()=>(PW.pu&&lvlEff(PW)!==PW.lvl?t('puAdj',t('pl_'+lvlEff(PW))):t('psPuP')),body:()=>wzOne('pu',['',].concat(PUS),PW.pu,v=>t('pu_'+(v||'none')),v=>WZ_IC.pu[v])},
+ {id:'pl',req:1,ic:'🧱',title:()=>t('as_pl'),sub:()=>t('as_pl_s'),body:()=>wzAs('pl')},
+ {id:'bal',req:1,ic:'🧘',title:()=>t('as_bal'),sub:()=>t('as_bal_s'),body:()=>wzAs('bal')},
+ {id:'sq',req:1,ic:'🦵',title:()=>t('as_sq'),sub:()=>t('as_sq_s'),body:()=>wzAs('sq')},
+ {id:'pu',req:1,ic:'🤸',title:()=>t('as_pu'),sub:()=>t('as_pu_s'),body:()=>wzAs('pu')},
+ {id:'pull',req:1,ic:'🧗',title:()=>t('as_pull'),sub:()=>t('as_pull_s'),body:()=>wzAs('pull')},
+ {id:'leg',req:1,ic:'🏋️',title:()=>t('as_leg'),sub:()=>t('as_leg_s'),body:()=>wzAs('leg')},
+ {id:'hist',req:1,ic:'📆',title:()=>t('as_hist'),sub:()=>t('as_hist_s'),body:()=>wzAs('hist')+wzAsNote()},
  {id:'ph',ic:'🎯',title:()=>t('phT'),sub:()=>t('wzPhS'),body:()=>{
     const al=optAllowed(PW),auto=optPhase(Object.assign({},PW,{ph:0}));
     return wzGrid([wzOpt("wzPick('ph',0)",!PW.ph,'🤖',t('phAuto'),t('phAutoP',auto,t('ph_'+auto)))].concat(al.map(v=>wzOpt("wzPick('ph',"+v+")",PW.ph===v,String(v),t('ph_'+v),t('phd_'+v)))),'c1');}},
@@ -83,6 +104,8 @@ const WQ=[
 const wzList=()=>WQ.filter(q=>!q.show||q.show());
 function wzIdx(l){const i=l.findIndex(q=>q.id===PW.q);return i<0?0:i;}
 function wzGo(d){
+  const l0=wzList(),q0=l0[wzIdx(l0)];
+  if(d>0&&q0.req&&!(PW.a&&PW.a[q0.id])){toast(t('asNeed'));return;}
   const l=wzList(),i=wzIdx(l),j=Math.max(0,Math.min(l.length-1,i+d));
   PW.q=l[j].id;wizDraw();
 }
@@ -115,6 +138,6 @@ function wzDraw(){
     '<div class="wz-bar"><i style="width:'+pct+'%"></i></div><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<div class="wz-in'+(fresh?' fresh':'')+'"><div class="wz-ic">'+q.ic+'</div><h2 class="wz-q">'+esc(q.title())+'</h2><p class="wz-s">'+esc(q.sub())+'</p>'+
     '<div class="wz-body">'+q.body()+'</div></div>'+
-    '<div class="wz-foot"><button class="btn pri wide" onclick="'+(last?'planCreate()':'wzGo(1)')+'">'+nextLbl+'</button></div></div>');
+    '<div class="wz-foot"><button class="btn pri wide"'+((q.req&&!(PW.a&&PW.a[q.id]))?' disabled':'')+' onclick="'+(last?'planCreate()':'wzGo(1)')+'">'+nextLbl+'</button></div></div>');
   $('sheet').classList.add('wzs');if(!fresh)$('sheet').scrollTop=st;
 }

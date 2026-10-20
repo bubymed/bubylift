@@ -317,7 +317,7 @@ function genOpt(prof){
     if(prof.avoid.length)wy.push('wyAvoid|'+prof.avoid[0]);
     if(short)wy.push('wyShort');
     wy.push('wyOrd');
-    if(di===0&&lve!==prof.lvl&&prof.pu)wy.push('wyLvl|'+lve);
+    if(di===0&&lve!==prof.lvl&&(prof.pu||prof.as))wy.push((prof.as&&asStabFail(prof)?'wyStab|':'wyLvl|')+lve);
     const exs=ac.concat(skl,out,cc);
     const dd=prof.mix?{k:k,g:g,ex:exs}:{k:k,ex:exs};dd.wy=wy.slice(0,8);return dd;
   });
