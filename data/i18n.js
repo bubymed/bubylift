@@ -557,6 +557,13 @@ const STR={
  wpNote:['A training guide based on NASM CPT7 materials. It does not replace a doctor if you have a medical condition.','Una guía de entrenamiento basada en materiales NASM CPT7. No sustituye a un médico si tienes una condición médica.'],
  wyPh3:['Phase 3: 6–12 reps with short rests (about 30 s) keep the muscle under tension, the classic way to build size.','Fase 3: 6–12 repeticiones con descansos cortos (unos 30 s) mantienen el músculo bajo tensión, la forma clásica de ganar tamaño.'],
  wyPh4:['Phase 4: heavy, fast sets of 1–5 reps with long rests (3 minutes or more) let you recover fully, so every set is truly heavy.','Fase 4: series pesadas y rápidas de 1–5 repeticiones con descansos largos (3 minutos o más) te dejan recuperar del todo, así cada serie es realmente pesada.'],
+ sec_cd:['Conditioning','Acondicionamiento'],
+ rzRun:['Running trains the engine your event needs, at the effort shown in the notes.','Correr entrena el motor que tu evento necesita, al esfuerzo indicado en las notas.'],
+ rzCap:['Conditioning: work capacity and heart rate, placed after the strength work so your lifts stay strong.','Acondicionamiento: capacidad de trabajo y pulso, después de la fuerza para que tus levantamientos se mantengan fuertes.'],
+ rzTest:['Specific to your test: it practices the movement you will be graded on.','Específico de tu prueba: practica el movimiento en el que te van a calificar.'],
+ wyPerf:['This plan mixes strength with running and conditioning. The strength work follows the NASM OPT performance phases.','Este plan mezcla fuerza con carrera y acondicionamiento. El trabajo de fuerza sigue las fases de rendimiento del NASM OPT.'],
+ wyTest:['Includes drills from your test ({0}) so the movements feel familiar on test day.','Incluye ejercicios de tu prueba ({0}) para que los movimientos te resulten familiares el día de la prueba.'],
+ wyRun:['The run is placed on purpose: effort and length match your level and event.','La carrera está puesta a propósito: el esfuerzo y la duración corresponden a tu nivel y evento.'],
  // v23 updates
  updChk:['Check for updates','Buscar actualizaciones'],
  updChecking:['Checking…','Buscando…'],
