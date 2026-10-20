@@ -13,6 +13,7 @@ const WZ_IC={
   have:{barbell:'🏋️',dumbbell:'💪',cable:'🔗',machine:'⚙️',kettlebell:'🔔',band:'🟢',ball:'⚽',medball:'🏐',suspension:'➰',bench:'🛋️',bar:'🧗',sled:'🛷'},
   avoid:{jump:'🦘',floor:'🧎',barbell:'🏋️',machine:'⚙️',ball:'⚽',overhead:'🙌'},
   work:{'':'🤷',sit:'🪑',stand:'🧍'},
+  split:{auto:'🤖',ul:'↕️',ppl:'🔁',arn:'🏆',bro:'🧱',ulppl:'🧬'},
   pu:{'':'⏭️',p0:'1️⃣',p1:'5️⃣',p2:'🔟',p3:'💯'}
 };
 /* card builders / constructores de tarjetas */
@@ -56,6 +57,9 @@ const WQ=[
  {id:'ff',ic:'🔁',title:()=>t('psFreq'),sub:()=>t('psFreqP'),show:()=>PW.focus.length>0,body:()=>wzOne('ff',[1,2,3,4],PW.ff,v=>t('psDaysN',v),()=>'')},
  {id:'skills',ic:'⚡',title:()=>t('psSkill'),sub:()=>t('psSkillP'),multi:1,body:()=>wzMany('skills',SKILLS,v=>t('sk_'+v),v=>WZ_IC.skill[v],2)},
  {id:'n',ic:'📆',title:()=>t('psDays'),sub:()=>t('wzDaysS'),body:()=>wzOne('n',[2,3,4,5],PW.n,v=>t('psDaysN',v),()=>'')},
+ {id:'split',ic:'🗂️',title:()=>t('psSplit'),sub:()=>t('wzSplitS'),show:()=>optOn(PW),body:()=>{
+    const cur=splitOk(PW.split,PW.n)?PW.split:'auto';
+    return wzOne('split',['auto'].concat(SPLIT_IDS.filter(id=>splitOk(id,PW.n))),cur,v=>t('spl_'+v),v=>WZ_IC.split[v],v=>t('spld_'+v),'c1');}},
  {id:'len',ic:'⏱️',title:()=>t('psLen'),sub:()=>t('psLenP'),body:()=>wzOne('len',[30,45,60,75],PW.len,v=>t('psLenN',v),()=>'')},
  {id:'sh',ic:'⚡',title:()=>t('psShort'),sub:()=>t('psShortP'),show:()=>optOn(PW),body:()=>{
     const mx=Math.min(2,PW.n-1),a=[];for(let i=0;i<=mx;i++)a.push(i);if(PW.sh>mx)PW.sh=mx;
@@ -91,6 +95,7 @@ function wzSummary(){
     row('🎯',goalTxt(PW)+(det.length?' · '+det.join(' · '):''))+
     (PW.focus.length?row('🔍',t('planFocus',PW.focus.map(k=>t('fm_'+k)).join(', '))+' · '+t('psDaysN',PW.ff)):'')+
     (PW.skills.length?row('⚡',t('planSkill',PW.skills.map(k=>t('sk_'+k)).join(', '))):'')+
+    (optOn(PW)&&splitOk(PW.split,PW.n)?row('🗂️',t('spl_'+PW.split)):'')+
     row('📆',t('psDaysN',PW.n)+' · '+t('psLenN',PW.len)+(optOn(PW)&&PW.sh?' · '+t('shN',PW.sh):''))+
     row('📈',t('pl_'+lvlEff(PW))+' · '+t('psVol')+': '+t('vol_'+PW.vol))+
     (auto?row('🧭',t('phNow',auto,t('ph_'+auto))):'')+

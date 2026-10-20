@@ -115,8 +115,19 @@ const OCC=['plank','sideplank','hollow','birddog'];
 const OCARDIO=['treadmill','bike','rower','statbike','elliptical','walk'];
 
 /* --- day layout by phase / reparto de días por fase --- */
+/* famous splits, adapted: id -> days by number of days a week / divisiones famosas adaptadas */
+const SPLITS_FAM={
+  ul:{2:['up','oLow'],3:['up','oLow','up'],4:['up','oLow','up','oLow'],5:['up','oLow','up','oLow','up']},
+  ppl:{3:['oPush','oPull','oLeg'],4:['oPush','oPull','oLeg','up'],5:['oPush','oPull','oLeg','up','oLow']},
+  arn:{3:['oCB','arms','oLeg'],4:['oCB','arms','oLeg','oCB'],5:['oCB','arms','oLeg','oCB','arms']},
+  bro:{5:['oChest','oBack','oSho','arms','oLeg']},
+  ulppl:{5:['up','oLow','oPush','oPull','oLeg']}
+};
+const SPLIT_IDS=Object.keys(SPLITS_FAM);
+const splitOk=(id,n)=>!!(SPLITS_FAM[id]&&SPLITS_FAM[id][n]);
 function optDays(ph,pr){
   const n=pr.n;
+  if(pr.split&&splitOk(pr.split,n))return SPLITS_FAM[pr.split][n].slice();
   if(ph<=2||ph===5)return days0('full',n);
   const em=pr.em0||pr.emph;
   const base={2:['up','oLeg'],3:['oCB','oLeg','arms'],4:['oCB','oLeg','up','lowG'],5:['oCB','oLeg','arms','oCB','lowG']}[n].slice();
@@ -129,7 +140,13 @@ const OSLOTS={ // phase 3 / 4 slots, most important first, alternating muscles /
  oLeg:[['Q','m'],['H','m'],['Q','a'],['C','a'],['G','a']],
  arms:[['S','m'],['S','a'],['I','a'],['T','a'],['S','a'],['I','a'],['T','a']],
  lowG:[['G','m'],['H','m'],['Q','a'],['G','a'],['C','a']],
- up:[['P','m'],['B','m'],['S','m'],['P','a'],['B','a'],['I','a'],['T','a']]
+ up:[['P','m'],['B','m'],['S','m'],['P','a'],['B','a'],['I','a'],['T','a']],
+ oPush:[['P','m'],['S','m'],['P','a'],['T','m'],['S','a'],['T','a'],['P','a']],
+ oPull:[['B','m'],['B','m'],['B','a'],['I','m'],['S','a'],['I','a'],['B','a']],
+ oLow:[['Q','m'],['H','m'],['G','a'],['Q','a'],['H','a'],['C','a'],['G','a']],
+ oChest:[['P','m'],['P','m'],['P','a'],['P','a'],['P','a'],['P','a']],
+ oBack:[['B','m'],['B','m'],['B','a'],['B','a'],['B','a'],['B','a']],
+ oSho:[['S','m'],['S','m'],['S','a'],['S','a'],['S','a'],['S','a']]
 };
 const OCAP={ // resistance exercises per session length (30/45/60/75 min) / ejercicios de resistencia según duración
  1:[3,4,5,5],2:[4,6,8,8],3:[3,5,6,7],4:[2,3,4,5],5:[4,6,8,8]
@@ -161,7 +178,7 @@ function genOpt(prof){
   const L=injLetters(prof.inj),lve=lvlEff(prof),maxLv=(prof.cond||lve==='new')?1:2,have=prof.have;
   const dp=dayPlan(prof),dgoal=dp.goals,days=optDays(ph,prof);
   const LIX={30:0,45:1,60:2,75:3};
-  const sets=OPT_SETS[ph][vi],used={};
+  const sets=(prof.split&&splitOk(prof.split,prof.n)&&ph===1)?Math.max(2,OPT_SETS[ph][vi]):OPT_SETS[ph][vi],used={};
   const fm=[];prof.focus.forEach(k=>FOCUS_MU[k].forEach(m=>{if(fm.indexOf(m)<0)fm.push(m);}));
   const sk=prof.skills||[],em=prof.em0||prof.emph;
   const lowerL='QHGC',upperL='PBSIT';
@@ -173,7 +190,11 @@ function genOpt(prof){
     const g=dgoal[di],ctx={have:have,L:L,maxLv:maxLv,used:used,day:{},fav:ph>=2?prof.fav:[]},res=[],wyx={};
     const alt=di%2===1; // alternate legs: squat day / hinge day / alterna piernas: sentadilla / bisagra
     let slots=[]; // [muscle, role]
-    if(ph===1){
+    const famDay=!!(prof.split&&splitOk(prof.split,prof.n)&&OSLOTS[k]);
+    if(famDay){ // chosen split: its day layout in every phase / división elegida: su reparto en todas las fases
+      const np=ph===1||ph>=3?cap:Math.max(1,Math.floor(cap/2));
+      slots=OSLOTS[k].slice(0,np).map(s=>s.slice());
+    }else if(ph===1){
       const ord=alt?['H','P','B','Q','S']:['Q','P','B','H','S'],keep=ord.slice(0,cap);
       slots=['Q','H','P','B','S'].filter(x=>keep.indexOf(x)>=0).map(x=>[x,'m']);
     }else if(ph===2||ph===5){
@@ -189,8 +210,8 @@ function genOpt(prof){
       slots=base.slice(0,cap).map(s=>s.slice());
     }
     // emphasis in full-body phases: swap shoulders for a lower-body slot / énfasis en fases de cuerpo completo
-    if((ph<=2||ph===5)&&em==='low'&&slots.length>=4&&slots.some(s=>s[0]==='S')){slots=slots.filter(s=>s[0]!=='S');slots.push([alt?'Q':'H','m']);}
-    if((ph<=2||ph===5)&&em==='up'&&slots.length>=4&&slots.filter(s=>s[0]==='Q'||s[0]==='H').length>1){const i=slots.map(s=>s[0]).lastIndexOf(alt?'Q':'H');if(i>=0)slots.splice(i,1);}
+    if(!famDay&&(ph<=2||ph===5)&&em==='low'&&slots.length>=4&&slots.some(s=>s[0]==='S')){slots=slots.filter(s=>s[0]!=='S');slots.push([alt?'Q':'H','m']);}
+    if(!famDay&&(ph<=2||ph===5)&&em==='up'&&slots.length>=4&&slots.filter(s=>s[0]==='Q'||s[0]==='H').length>1){const i=slots.map(s=>s[0]).lastIndexOf(alt?'Q':'H');if(i>=0)slots.splice(i,1);}
     // extras: emphasis and focus muscles / extras: énfasis y músculos de enfoque
     const ex=[];
     const has=m=>slots.some(s=>s[0]===m);
@@ -210,7 +231,7 @@ function genOpt(prof){
       const half=lowerL.indexOf(m)>=0?'l':'u';
       if(has(m)){focusDays[m]++;slots.forEach(s=>{if(s[0]===m)s[2]=1;});return;}
       const hasHalf=slots.some(s=>(half==='l'?lowerL:upperL).indexOf(s[0])>=0);
-      if(focusDays[m]<want&&(hasHalf||ph<=2||ph===5)){focusDays[m]++;ex.push([m,'a',1]);}
+      if(focusDays[m]<want&&(hasHalf||(!famDay&&(ph<=2||ph===5)))){focusDays[m]++;ex.push([m,'a',1]);}
     });
     const slotsAll=slots.concat(ex);
     // -- activation (core + balance) / activación
@@ -283,7 +304,8 @@ function genOpt(prof){
     }
     const mi=out.find(e=>e.r==='m');if(mi){mi.mn=1;mi.rz=(ctx.fav&&ctx.fav.indexOf(mi.eid)>=0)?'rzFav':'rzMain';}
     // why this day looks like this / por qué el día es así
-    const wy=ph===3||ph===4?['wyK'+k,'wyPh'+ph]:['wyPh'+ph];
+    const wy=famDay||ph===3||ph===4?['wyK'+k,'wyPh'+ph]:['wyPh'+ph];
+    if(famDay)wy.splice(1,0,'wySplit|'+prof.split);
     if(mi)wy.push('wyMain|'+mi.eid);
     if(ctx.fav&&ctx.fav.length){const f=out.find(e=>ctx.fav.indexOf(e.eid)>=0&&e!==mi);if(f)wy.push('wyFav|'+f.eid);else if(mi&&ctx.fav.indexOf(mi.eid)>=0)wy.splice(wy.indexOf('wyMain|'+mi.eid),1,'wyFav|'+mi.eid);}
     const dm=out.map(e=>muOf(e.eid)).join('');
