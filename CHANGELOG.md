@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v44 — 2026-10-20
+- **Welcome-back splash:** entering a profile (auto sign-in, picking a profile, password sign-in) shows the app icon and "Welcome back, name" for under a second, then fades out. Not shown when creating a profile or on a plain reload.
+  **Pantalla "Bienvenido de nuevo":** al entrar a un perfil (entrada automática, elegir perfil, contraseña) sale el icono de la app y "Bienvenido de nuevo, nombre" menos de un segundo y se desvanece. No sale al crear un perfil ni en una recarga normal.
+- **Guest tile:** "Continue as guest" appears on the "Who's training?" screen (when there is no guest yet), next to Add profile.
+  **Invitado en la lista:** "Continuar como invitado" aparece en "¿Quién entrena?" (si aún no hay invitado), junto a Añadir perfil.
+
 ## v43 — 2026-10-20
 - **Stay signed in:** the sign-in screen has "Keep me signed in on this device" (on by default) and new profiles are remembered too; the app then opens straight into the last profile. The profile menu has a switch to turn it off; Switch profile still shows the picker. The unlocked key is stored on this device only (opt-in, removable), so use it only on your own phone.
   **Mantener sesión:** la pantalla de entrada tiene "Mantener mi sesión en este dispositivo" (encendido por defecto) y los perfiles nuevos también se recuerdan; la app abre directo en el último perfil. El menú del perfil tiene un interruptor para apagarlo; Cambiar de perfil sigue mostrando la lista. La llave desbloqueada se guarda solo en este dispositivo (opcional y removible), úsalo solo en tu propio teléfono.

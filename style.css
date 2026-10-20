@@ -530,3 +530,12 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 @media(min-width:720px) and (hover:hover){.pk:hover,.spc:hover,.rk:hover{border-color:var(--accent)}}
 
 .inst-top{display:flex;align-items:center;gap:12px}.inst-top .inst-ic{margin:0}.why{list-style:none;margin:8px 0 0;padding:0}.why li{margin:8px 0;line-height:1.35}
+
+.pf-tile.wrap b{white-space:normal;text-align:center;line-height:1.25}
+#splash{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .3s}
+#splash.out{opacity:0;pointer-events:none}
+#splash img{width:96px;height:96px;border-radius:22px;animation:splpop .5s cubic-bezier(.2,.9,.3,1.2)}
+#splash b{font-size:1.25rem;font-weight:700;animation:splin .5s .1s both}
+@keyframes splpop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+@keyframes splin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#splash img,#splash b{animation:none}}
