@@ -370,7 +370,7 @@ function cleanPlan(p){
   if(Number.isInteger(p.cur)&&p.cur>=0&&p.cur<p.n)o.cur=p.cur;
   const okWd=Array.isArray(p.wd)&&p.wd.length===p.n&&p.wd.every((w,i)=>Number.isInteger(w)&&w>=0&&w<=6&&p.wd.indexOf(w)===i);
   o.wd=okWd?p.wd.slice():defaultWd(ds);o.wu=okWd&&p.wu?1:0;
-  if(Array.isArray(p.xd)){const xd=p.xd.filter(k=>typeof k==='string'&&/^[fc]:[a-z0-9]{2,12}:[0-2]$/.test(k)).slice(0,6);if(xd.length)o.xd=xd;}
+  if(Array.isArray(p.xd)){const xd=p.xd.filter(k=>typeof k==='string'&&/^[fc]:[a-z0-9]{2,12}:[0-5]$/.test(k)).slice(0,6);if(xd.length)o.xd=xd;}
   return o;
 }
 

@@ -49,8 +49,8 @@ const CHALLENGES=[
  {id:'carry',ty:'amrap',cap:12,tg:['cf','hy'],lv:[0.6,1,1.4],mv:['boxjump:10|squatjump:10','kbswing:12|dbrdl:12|bodysq:15','farmer:100m|firecarry:50m|lowcrawl:20m']},
  {id:'row5',ty:'time',cap:30,tg:['cf','hy'],lv:[0.6,1,1.4],rd:5,mv:['rower:500m|skierg:500m|run:400m|jumprope:150s','wallball:15|dbthruster:15|bodysq:20','burpee:10']},
  {id:'iron',ty:'time',cap:40,tg:['cf'],lv:[0.5,1,1.4],rd:4,mv:['run:400m','thruster:10|dbthruster:10|bodysq:15']},
- {id:'mini',ty:'time',cap:45,tg:['hy','cf'],lv:[0.6,1,1.4],rd:1,mv:['run:400m','skierg:500m|rower:500m|jumprope:150s|jjack:60','run:400m','sledpush:25m|sandlunge:25m|bwlunge:30','run:400m','bbj:40m|burpee:15','run:400m','wallball:50|dbthruster:30|bodysq:50']},
- {id:'hyrox',ty:'time',cap:120,tg:['hy'],lv:[0.4,0.7,1],rd:1,mv:['run:1000m','skierg:1000m|rower:1000m|jumprope:300s|burpee:40','run:1000m','sledpush:50m|sandlunge:50m|bwlunge:60','run:1000m','sleddrag:50m|firecarry:50m|lowcrawl:30m','run:1000m','bbj:80m|burpee:30','run:1000m','rower:1000m|skierg:1000m|jumprope:300s|burpee:40','run:1000m','farmer:200m|firecarry:100m|bearcrawl:50m','run:1000m','sandlunge:100m|bwlunge:100','run:1000m','wallball:100|dbthruster:60|bodysq:100']},
+ {id:'mini',fx:1,ty:'time',cap:45,tg:['hy','cf'],lv:[0.6,1,1.4],rd:1,mv:['run:400m','skierg:500m|rower:500m|jumprope:150s|jjack:60','run:400m','sledpush:25m|sandlunge:25m|bwlunge:30','run:400m','bbj:40m|burpee:15','run:400m','wallball:50|dbthruster:30|bodysq:50']},
+ {id:'hyrox',fx:1,ty:'time',cap:120,tg:['hy'],lv:[0.4,0.7,1],rd:1,mv:['run:1000m','skierg:1000m|rower:1000m|jumprope:300s|burpee:40','run:1000m','sledpush:50m|sandlunge:50m|bwlunge:60','run:1000m','sleddrag:50m|firecarry:50m|lowcrawl:30m','run:1000m','bbj:80m|burpee:30','run:1000m','rower:1000m|skierg:1000m|jumprope:300s|burpee:40','run:1000m','farmer:200m|firecarry:100m|bearcrawl:50m','run:1000m','sandlunge:100m|bwlunge:100','run:1000m','wallball:100|dbthruster:60|bodysq:100']},
  {id:'engine',ty:'amrap',cap:30,tg:['hy','pt'],lv:[0.6,1,1.4],mv:['run:400m','wallball:15|dbthruster:10|bodysq:15','farmer:50m|firecarry:25m|lowcrawl:15m','bbj:20m|burpee:8']},
  {id:'ruck',ty:'time',cap:50,tg:['pt','mil','run'],lv:[0.5,1,1.5],rd:1,mv:['ruck:1600m|run:1600m|walk:1600m','pushup:40','bodysq:60','situp:40','ruck:1600m|run:1600m|walk:1600m']},
  {id:'primer',ty:'amrap',cap:15,tg:['pt','mil'],lv:[0.6,1,1.4],mv:['deadlift:6|dbrdl:8|bodysq:12','hrpushup:6|pushup:8|kneepush:8','legraise:6|situp:10']},
@@ -67,6 +67,6 @@ const CHALLENGES=[
  {id:'sledr',ty:'time',cap:35,tg:['hy','mil'],lv:[0.5,1,1.5],rd:4,mv:['sledpush:25m|sandlunge:25m|bwlunge:30','sleddrag:25m|firecarry:25m|lowcrawl:15m','run:400m']},
  {id:'wallc',rep:1,ty:'time',cap:35,tg:['hy','cf'],lv:[0.5,1,1.5],rd:1,mv:['run:400m','wallball:50|dbthruster:30|bodysq:50','run:400m','wallball:50|dbthruster:30|bodysq:50','run:400m']},
  {id:'finish',ty:'time',cap:30,tg:['hy'],lv:[0.5,1,1.5],rd:1,mv:['farmer:200m|firecarry:100m','sandlunge:100m|bwlunge:100','bbj:40m|burpee:15','wallball:50|dbthruster:30|bodysq:50']},
- {id:'mile',ty:'time',cap:20,tg:['run','pt'],lv:[0.5,1,1],rd:1,mv:['run:1600m|walk:1600m']},
- {id:'fivek',ty:'time',cap:60,tg:['run'],lv:[0.5,1,1],rd:1,mv:['run:5000m|walk:5000m']}
+ {id:'mile',fx:1,ty:'time',cap:20,tg:['run','pt'],lv:[0.5,1,1],rd:1,mv:['run:1600m|walk:1600m']},
+ {id:'fivek',fx:1,ty:'time',cap:60,tg:['run'],lv:[0.5,1,1],rd:1,mv:['run:5000m|walk:5000m']}
 ];

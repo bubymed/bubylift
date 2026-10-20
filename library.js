@@ -10,8 +10,11 @@ function libTogHave(k){const a=libHave().slice(),i=a.indexOf(k);if(i>=0)a.splice
 function libPreset(k){SET.libHave=HAVE_PRESETS[k].slice();saveSet();libDraw();}
 
 /* ---------- focused routines / rutinas enfocadas ---------- */
-function libFocus(area,li,have){
-  const prof=profNow(),L=curInjL(),used={},out=[];
+/* 6 ranks over 3 content levels: even ranks are the level itself, odd ranks add a set / 6 rangos sobre 3 niveles de contenido: los pares son el nivel, los impares suman una serie */
+const RANK_BASE=[0,0,1,1,2,2],RANK_SETS=[0,1,0,1,0,2];
+function libDefaultRank(){const p=profNow();return p?({new:0,some:2,adv:4}[p.lvl]||1):1;}
+function libFocus(area,rank,have){
+  const li=RANK_BASE[rank]||0,prof=profNow(),L=curInjL(),used={},out=[];
   (FOCUS[area]&&FOCUS[area][li]||[]).forEach(s=>{
     const p=s.split('|'),alts=p[0].split(','),lever=p[1],sets=+p[2],lo=+p[3],hi=+p[4];
     let id=null;
@@ -20,11 +23,14 @@ function libFocus(area,li,have){
     if(!id)return;
     used[id]=1;
     const hold=exMode(id)==='t',secs=hold&&lo>=20;
-    out.push({eid:id,sets:sets,lo:hold?(secs?lo/60:0.5):lo,hi:hold?(secs?hi/60:1):hi,u:hold?'m':'r',lever:lever,rs:li===0?75:(li===1?90:(lever==='mom'?150:105)),cn:stressJoints(id,L,1)});
+    out.push({eid:id,sets:Math.min(6,sets+RANK_SETS[rank]),lo:hold?(secs?lo/60:0.5):lo,hi:hold?(secs?hi/60:1):hi,u:hold?'m':'r',lever:lever,rs:Math.max(45,(li===0?75:(li===1?90:(lever==='mom'?150:105)))-(rank===5?15:0)),cn:stressJoints(id,L,1)});
   });
   return out;
 }
-function libFocusName(area,li){return t('lib_'+area)+' · '+t('lvn_'+li);}
+/* rank names follow what you are training: one ladder per muscle area and per kind of challenge / los nombres de rango siguen lo que entrenas */
+function chCat(c){const o=['hy','mil','run','cf','pt'];for(let i=0;i<o.length;i++)if(c.tg.indexOf(o[i])>=0)return o[i];return'pt';}
+function rk(kind,i){return t('rk_'+kind+'_'+i);}
+function libFocusName(area,li){return t('lib_'+area)+' · '+rk(area,li);}
 function libFocusStart(area,li){
   if(ACT){toast(t('finishFirst'));return;}
   const items=libFocus(area,li,libHave());if(!items.length){toast(t('libNone'));return;}
@@ -65,8 +71,13 @@ function chMove(spec,have,L,m,a,used){
   if(q==='max')return{id:o.id,q:0,u:'max',first:k===0};
   return{id:o.id,q:chScale(+q,o.u,m),u:o.u,first:k===0};
 }
+/* rank multiplier: between the three levels, and a little above the hardest (never above the real distance when fx) / multiplicador por rango */
+function chMult(c,li){
+  const a=c.lv[0],b=c.lv[1],h=c.lv[2],top=c.fx?h:h*1.15;
+  return[a,(a+b)/2,b,(b+h)/2,h,top][li];
+}
 function chBuild(c,li,have){
-  const L=curInjL(),m=c.lv[li],segs=[];
+  const L=curInjL(),m=chMult(c,li),segs=[];
   const rounds=c.ty==='time'?(c.rd||1):1;
   for(let r=0;r<rounds;r++){
     const used=c.rep?null:{}; // movements already in this round / movimientos ya usados en esta ronda
@@ -75,7 +86,7 @@ function chBuild(c,li,have){
       const s=chMove(sp,have,L,c.rr?1:m,a,used);s.r=r;segs.push(s);
     });
   }
-  return{c:c,li:li,segs:segs,exact:segs.every(s=>s.first),cap:c.cap,rd:c.ty==='interval'?Math.max(1,Math.round(c.rd*m)):0,w:(c.ty==='interval'&&li===2&&c.hw)?c.hw:c.w};
+  return{c:c,li:li,segs:segs,exact:segs.every(s=>s.first),cap:c.cap,rd:c.ty==='interval'?Math.max(1,Math.round(c.rd*m)):0,w:(c.ty==='interval'&&li>=4&&c.hw)?c.hw:c.w};
 }
 function chQty(s){
   if(s.u==='max')return t('chMax');
@@ -93,14 +104,15 @@ function chScoreTxt(ty,sc){
 }
 function fmtClock(sec){sec=Math.max(0,Math.round(sec));const m=Math.floor(sec/60),s=sec%60;return m+':'+String(s).padStart(2,'0');}
 function chKey(sc,ty){return ty==='time'?-sc.v:(ty==='amrap'?sc.r*1000+(sc.x||0):sc.v);}
+function chLvOf(ch){return ch.v===2?ch.lv:[0,2,4][ch.lv];} // results saved before the ranks / resultados anteriores a los rangos
 function chBest(id,li,ty){
   let b=null;
-  DATA.workouts.forEach(w=>{if(w.ch&&w.ch.id===id&&w.ch.lv===li&&w.ch.sc){const k=chKey(w.ch.sc,ty);if(b===null||k>b.k)b={k:k,sc:w.ch.sc};}});
+  DATA.workouts.forEach(w=>{if(w.ch&&w.ch.id===id&&chLvOf(w.ch)===li&&w.ch.sc){const k=chKey(w.ch.sc,ty);if(b===null||k>b.k)b={k:k,sc:w.ch.sc};}});
   return b;
 }
 
 /* ---------- library screen / pantalla de la biblioteca ---------- */
-function libOpen(){LIB.sel=null;libDraw();}
+function libOpen(){if(!LIB.set){LIB.lv=LIB.clv=libDefaultRank();LIB.set=1;}LIB.sel=null;libDraw();}
 function libTab(k){LIB.tab=k;LIB.sel=null;libDraw();}
 function libArea(k){LIB.area=k;libDraw();}
 function libLv(i){LIB.lv=+i;libDraw();}
@@ -110,7 +122,7 @@ function libBack(){LIB.sel=null;libDraw();}
 function libCLv(i){LIB.clv=+i;libDraw();}
 function libEq(){LIB.eq=!LIB.eq;libDraw();}
 function libHow(id){howOpen(id,'libDraw');}
-function libChips(arr,cur,fn,lab){return'<div class="chips">'+arr.map((k,i)=>{const v=typeof k==='number'?k:k;return'<button class="chip'+(String(v)===String(cur)?' on':'')+'" onclick="'+fn+'(\''+v+'\')">'+lab(v)+'</button>';}).join('')+'</div>';}
+function libChips(arr,cur,fn,lab,wrap){return'<div class="chips'+(wrap?' wrap':'')+'">'+arr.map((k,i)=>{const v=typeof k==='number'?k:k;return'<button class="chip'+(String(v)===String(cur)?' on':'')+'" onclick="'+fn+'(\''+v+'\')">'+lab(v)+'</button>';}).join('')+'</div>';}
 function libEqHtml(){
   const have=libHave();
   return'<details class="dtl" '+(LIB.eq?'open ':'')+'ontoggle="LIB.eq=this.open"><summary><b>'+t('libEq')+'</b> <span class="muted sm">'+have.length+'</span></summary>'+
@@ -129,8 +141,8 @@ function libFocusHtml(){
   const li=LIB.lv,items=libFocus(LIB.area,li,libHave());
   let h='<p class="muted sm">'+t('libFocusP')+'</p>'+
     libChips(LIB_AREAS,LIB.area,'libArea',k=>t('lib_'+k))+
-    libChips([0,1,2],li,'libLv',i=>t('lvn_'+i))+
-    '<div class="card optb"><b>'+t('lvn_'+li)+'</b><p class="sm">'+t('lvd_'+li)+'</p></div>';
+    libChips([0,1,2,3,4,5],li,'libLv',i=>rk(LIB.area,i),1)+
+    '<div class="card optb"><b>'+rk(LIB.area,li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
   if(!items.length)return h+'<p class="muted">'+t('libNone')+'</p>';
   h+=items.map(e=>'<div class="plex"><span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgLine(e))+' · '+esc(t('rsSec',e.rs))+(e.cn?' · ⚠ '+esc(t('caution')):'')+'</small><small class="rz">'+esc(t('lz_'+e.lever))+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="libHow(\''+e.eid+'\')">ⓘ</button></div>').join('');
   if(items.length<4)h+='<p class="muted sm">'+t('libFew')+'</p>';
@@ -155,7 +167,8 @@ function libChDetail(){
   let h='<button class="btn sm" onclick="libBack()">← '+t('back')+'</button><h3>'+esc(t('ch_'+c.id))+'</h3>'+
     '<p class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+c.tg.map(k=>t('chf_'+k)).join(' · ')+'</p>'+
     '<p>'+esc(t('chd_'+c.id))+'</p>'+
-    libChips([0,1,2],li,'libCLv',i=>t('chl_'+i))+
+    libChips([0,1,2,3,4,5],li,'libCLv',i=>rk(chCat(c),i),1)+
+    '<p class="sm"><b>'+rk(chCat(c),li)+'</b> <span class="muted">'+t('rankOf',li+1)+'</span> · '+t('lvd_'+li)+'</p>'+
     '<div class="card optb"><b>'+t('chFormat')+'</b><p class="sm">'+esc(t('chfx_'+c.ty,c.cap,b.w||0,c.r||0,b.rd||0))+'</p>'+
     '<ol class="how">'+chDetailRows(b).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>'+
     (c.rest?'<p class="muted sm">'+t('chRest',c.rest)+'</p>':'')+
@@ -224,7 +237,7 @@ function chDraw(){
   const b=CHR.b,c=b.c,li=b.li;
   let h='<div class="form lib"><div class="pick-h"><h3>'+esc(t('ch_'+c.id))+'</h3><button class="ico" onclick="chAskQuit()" aria-label="'+esc(t('close'))+'">✕</button></div>';
   if(!CHR.run){
-    h+='<p class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+t('chl_'+li)+'</p><div class="card optb"><ol class="how">'+chDetailRows(b).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>'+
+    h+='<p class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+rk(chCat(c),li)+'</p><div class="card optb"><ol class="how">'+chDetailRows(b).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>'+
       '<p class="muted sm">'+t('chReady')+'</p><div class="row"><button class="btn pri big wide" onclick="chStartRun()">'+t('chGo')+'</button></div></div>';
     sheet(h);return;
   }
@@ -298,7 +311,7 @@ function chSave(sc){
   });
   if(!ex.length)ex.push({eid:b.segs[0].id,n:exName(b.segs[0].id),sets:[{w:null,r:1,t:null,d:null}]});
   const txt=chScoreTxt(c.ty,sc),better=!prev||chKey(sc,c.ty)>prev.k;
-  DATA.workouts.push({id:uid(),t:CHR.t0||now,end:now,name:t('ch_'+c.id)+' · '+t('chl_'+b.li),note:t('chNote',txt),ex:ex,ch:{id:c.id,lv:b.li,sc:sc}});
+  DATA.workouts.push({id:uid(),t:CHR.t0||now,end:now,name:t('ch_'+c.id)+' · '+rk(chCat(c),b.li),note:t('chNote',txt),ex:ex,ch:{id:c.id,lv:b.li,v:2,sc:sc}});
   DATA.workouts.sort((a,x)=>x.t-a.t);saveData();
   const pr=prev&&better;
   CHR=null;
@@ -310,7 +323,7 @@ function chSave(sc){
 function xdParse(k){const p=String(k).split(':');return p.length===3?{ty:p[0],id:p[1],li:+p[2]}:null;}
 function xdName(k){
   const x=xdParse(k);if(!x)return'';
-  return x.ty==='f'?libFocusName(x.id,x.li):t('ch_'+x.id)+' · '+t('chl_'+x.li);
+  return x.ty==='f'?libFocusName(x.id,x.li):t('ch_'+x.id)+' · '+rk(chCat(CHALLENGES.find(q=>q.id===x.id)||{tg:[]}),x.li);
 }
 function xdAdd(k){
   const p=DATA.plan;if(!p)return;
@@ -329,7 +342,7 @@ function xdHtml(){
   const p=DATA.plan;if(!p||!p.xd||!p.xd.length)return'';
   return'<div class="lbl">'+t('xdT')+'</div><p class="muted sm">'+t('xdP')+'</p>'+p.xd.map((k,i)=>'<div class="plex"><span><b>'+esc(xdName(k))+'</b></span><button class="btn sm" onclick="xdStart('+i+')">'+t('libStart')+'</button><button class="ico" aria-label="'+esc(t('delete'))+'" onclick="xdDel('+i+')">🗑</button></div>').join('');
 }
-function libGo(tab){LIB.tab=tab;LIB.sel=null;libDraw();}
+function libGo(tab){if(!LIB.set){LIB.lv=LIB.clv=libDefaultRank();LIB.set=1;}LIB.tab=tab;LIB.sel=null;libDraw();}
 /* the four ways to train, in one clear list / las cuatro formas de entrenar, en una lista clara */
 function startChooser(){
   const c=(ic,tt,pp,fn,cls)=>'<button class="card pk'+(cls?' '+cls:'')+'" onclick="'+fn+'"><span class="pk-i">'+ic+'</span><span class="pk-t"><b>'+t(tt)+'</b><small>'+t(pp)+'</small></span><span class="pk-a">›</span></button>';
