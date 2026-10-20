@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v34',items:[
+  {i:'💬',en:'<b>Send feedback</b> — new button in More → App that opens a short form (about a minute): how you like the app, what you use, what confused you and what you would like to see. Nothing is sent unless you submit it. After your first routine and first logged set you also get a one-time reminder.',es:'<b>Enviar feedback</b> — botón nuevo en Más → App que abre un formulario corto (alrededor de un minuto): qué tal te parece la app, qué usas, qué te confundió y qué te gustaría ver. No se envía nada a menos que tú lo envíes. Después de tu primera rutina y tu primer set también recibes un aviso una sola vez.'}]},
  {v:'v33',items:[
   {i:'🔀',en:'<b>Go straight to the famous splits</b> — Push/Pull/Legs, Upper/Lower, Arnold, body-part and Upper/Lower + PPL now have their own button on the Workout tab. Pick the split, your experience and the days, see every day with its reasons, train one day right away or make it your plan.',es:'<b>Directo a las divisiones famosas</b> — Empuje/Jalón/Piernas, Torso/Pierna, Arnold, un músculo por día y Torso/Pierna + PPL ahora tienen su propio botón en la pestaña Entrenar. Elige la división, tu experiencia y los días, mira cada día con sus razones, entrena un día de inmediato o conviértela en tu plan.'}]},
  {v:'v32',items:[

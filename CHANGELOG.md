@@ -6,6 +6,11 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v34 — 2026-10-20
+- **Send feedback:** new "Send feedback" button in More → App that opens a short bilingual Tally form (satisfaction, what you use, what confused you, feature wishes, device, optional email). Nothing is sent from the app itself.
+  **Enviar feedback:** botón nuevo "Enviar feedback" en Más → App que abre un formulario corto bilingüe de Tally (satisfacción, qué usas, qué te confundió, funciones que quieres, dispositivo, correo opcional). La app misma no envía nada.
+  Also a one-time pop up after the first routine/plan and first finished workout with a logged set. / También un aviso de una sola vez después de la primera rutina o plan y el primer entrenamiento con un set registrado.
+
 ## v33 — 2026-10-20
 - **Famous splits, straight to the point:** a new "Famous splits" button on the Workout tab (and a "Splits" tab next to muscle routines and challenges) goes directly to Upper/Lower, Push/Pull/Legs, Arnold, body-part and Upper/Lower + PPL. Pick the split, your experience and the days per week, see each day's exercises with the reasons, train a single day right away, or use it as your plan (it asks before replacing an existing plan). It uses your equipment, injuries and avoided styles when you already have a plan.
   **Divisiones famosas, directo:** un botón nuevo "Divisiones famosas" en la pestaña Entrenar (y una pestaña "Divisiones" junto a las rutinas por músculo y los retos) lleva directo a Torso/Pierna, Empuje/Jalón/Piernas, Arnold, un músculo por día y Torso/Pierna + PPL. Elige la división, tu experiencia y los días por semana, mira los ejercicios de cada día con sus razones, entrena un solo día de inmediato o úsala como tu plan (pregunta antes de reemplazar un plan existente). Usa tu equipo, lesiones y estilos que evitas cuando ya tienes un plan.

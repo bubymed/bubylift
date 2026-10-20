@@ -6,11 +6,16 @@ Un registro gratis de entrenamientos, progreso y cuerpo que vive en tu teléfono
 **[▶ Open the app / Abrir la app](https://bubymed.github.io/bubylift/)**
 
 ## What it does / Qué hace
-- **Workout / Entrenar:** log weight × reps, bodyweight reps or time & distance; see last time's numbers; rest timer; 🏆 for new records; routines. / registra peso × repeticiones, repeticiones con peso corporal o tiempo y distancia; mira los números de la vez anterior; temporizador de descanso; 🏆 en récords nuevos; rutinas.
+- **Workout / Entrenar:** start by choosing how you want to train: let the app build your plan (great if you are new), pick a ready routine by muscle, jump straight to the famous splits, take a challenge, or log your own workout. Log weight × reps, bodyweight reps or time & distance; see last time's numbers; rest timer; 🏆 for new records. / empieza eligiendo cómo quieres entrenar: que la app arme tu plan (ideal si empiezas), una rutina lista por músculo, directo a las divisiones famosas, un reto, o tu propio entrenamiento. Registra peso × repeticiones, repeticiones con peso corporal o tiempo y distancia; mira los números de la vez anterior; temporizador de descanso; 🏆 en récords nuevos.
+- **Your plan / Tu plan:** a weekly plan built from your goal, experience, days, equipment, injuries and preferences, using the NASM OPT phases. Every exercise and every number comes with the reason it was chosen. Hybrid, military and running goals included. / un plan semanal armado con tu meta, experiencia, días, equipo, lesiones y preferencias, con las fases OPT de NASM. Cada ejercicio y cada número trae la razón por la que se eligió. Incluye metas híbridas, militares y de carrera.
+- **Famous splits / Divisiones famosas:** Upper/Lower, Push/Pull/Legs, Arnold, one muscle per day and Upper/Lower + PPL. Train a single day right away or use the split as your plan. / Torso/Pierna, Empuje/Jalón/Piernas, Arnold, un músculo por día y Torso/Pierna + PPL. Entrena un día de inmediato o úsala como tu plan.
+- **Ready routines by muscle / Rutinas listas por músculo:** chest, back, shoulders, arms, legs, glutes and core, in six ranks with their own names. Higher ranks use more range of motion, single-side work, resistance profiles, instability, harder leverage and no momentum, and each exercise says which one it uses. / pecho, espalda, hombros, brazos, piernas, glúteos y abdomen, en seis rangos con nombres propios. Los rangos altos usan más rango de movimiento, trabajo unilateral, perfiles de resistencia, inestabilidad, palancas más difíciles y nada de impulso, y cada ejercicio dice cuál usa.
+- **Challenges / Retos:** 30 morning-PT, CrossFit-style and Hyrox-style sessions with a built-in timer (AMRAP, EMOM, intervals, for time). Mark the equipment you have and each challenge adapts; your best result is saved. Any routine or challenge can be added to your plan as an extra day. / 30 sesiones de PT de la mañana, estilo CrossFit y estilo Hyrox con temporizador incluido (AMRAP, EMOM, intervalos, por tiempo). Marca el equipo que tienes y cada reto se adapta; tu mejor marca se guarda. Cualquier rutina o reto se puede agregar a tu plan como día extra.
+- **Exercise library / Biblioteca de ejercicios:** 230+ exercises in English and Spanish with technique guides. / más de 230 ejercicios en español e inglés con guías de técnica.
 - **History / Historial:** every workout by month; repeat, share or delete. / cada entrenamiento por mes; repetir, compartir o eliminar.
 - **Progress / Progreso:** charts per exercise (estimated 1RM, top weight, volume, reps, time) and workouts per week. / gráficas por ejercicio (1RM estimado, peso máximo, volumen, repeticiones, tiempo) y entrenamientos por semana.
 - **Body / Cuerpo:** weight, body fat and measurements with a trend chart and optional goal. / peso, grasa corporal y medidas con gráfica de tendencia y meta opcional.
-- **More / Más:** EN / ES, dark / light, lb · in · mi or kg · cm · km, backup export / import (.json), workouts export (.csv).
+- **More / Más:** EN / ES, dark / light, lb · in · mi or kg · cm · km, profiles with password, backup export / import (.json), workouts export (.csv), and a **Send feedback** button. / EN / ES, oscuro / claro, lb · in · mi o kg · cm · km, perfiles con contraseña, exportar / importar respaldo (.json), exportar entrenamientos (.csv) y un botón **Enviar feedback**.
 
 ## Install on your phone / Instalar en tu teléfono
 - **Android (Chrome):** open the link → **📲 Install** (or menu ⋮ → Install app).
@@ -21,7 +26,7 @@ The app updates itself when a new version is published and shows what's new once
 La app se actualiza sola cuando se publica una versión nueva y muestra las novedades una vez.
 
 ## Privacy / Privacidad
-- Everything runs in your browser. **Nothing is sent to any server.** / Todo corre en tu navegador. **No se envía nada a ningún servidor.**
+- Everything runs in your browser. **Your training data is never sent to any server.** The only thing that leaves the app is what you type in the optional feedback form, and only if you submit it. / Todo corre en tu navegador. **Tus datos de entrenamiento nunca se envían a ningún servidor.** Lo único que sale de la app es lo que escribas en el formulario opcional de feedback, y solo si lo envías.
 - Your log is stored in the phone's local storage. If you clear browser data or delete the app it is gone — **export a backup now and then** (More → Export backup). / Tu registro se guarda en el almacenamiento local del teléfono. Si borras los datos del navegador o eliminas la app se pierde — **exporta un respaldo de vez en cuando** (Más → Exportar respaldo).
 
 ## Use it / Úsala
@@ -33,10 +38,17 @@ La app se actualiza sola cuando se publica una versión nueva y muestra las nove
 index.html          page shell / estructura de la página
 style.css           styles, dark + light / estilos, oscuro + claro
 app.js              core: storage, units, language, theme, install, auto-update, what's new
-workout.js          Workout tab: logging, rest timer, finish, routines, exercise picker
+workout.js          Workout tab: start chooser, logging, rest timer, finish, routines, exercise picker
+plan.js, opt.js     plan engines (legacy and NASM OPT), famous splits / motores de plan y divisiones famosas
+pers.js             personalization: injuries, preferences, reasons / personalización: lesiones, preferencias, razones
+library.js          ready routines by muscle, ranks, challenges and timer / rutinas por músculo, rangos, retos y temporizador
+wizard.js           plan questionnaire / cuestionario del plan
+profiles.js         profiles, password, encryption, QR transfer / perfiles, contraseña, cifrado, transferencia QR
 history.js          History and Progress tabs, SVG charts
 body.js             Body and More tabs, export / import
 data/exercises.js   built-in exercise library (EN/ES) / biblioteca de ejercicios (EN/ES)
+data/library.js     muscle routines and challenges / rutinas por músculo y retos
+data/howto*.js      technique guides / guías de técnica
 data/i18n.js        interface strings EN/ES / textos de la interfaz EN/ES
 data/whatsnew.js    "What's new" cards / tarjetas de "Novedades"
 manifest.json, sw.js, version.json   install, offline and auto-update / instalación, offline y auto-actualización
@@ -59,7 +71,8 @@ Bubylift is a logging tool, not medical or coaching advice. Exercise carries ris
 Bubylift es una herramienta de registro, no un consejo médico ni de entrenamiento. El ejercicio tiene riesgos; usa tu criterio y consulta a un profesional si tienes dudas.
 
 ## License
-Source-available, all rights reserved. You may view the code and use the app personally. Copying, modifying or redistributing it requires written permission from the author. See `LICENSE`.
+Source-available, all rights reserved (same terms as the Sick Call tool). Everyone may view the code and use the app for personal, non-commercial use. Copying, modifying, redistributing, hosting or using it commercially requires written permission from the author. See `LICENSE`.
+Código visible, todos los derechos reservados (mismos términos que la herramienta Sick Call). Cualquiera puede ver el código y usar la app para uso personal no comercial. Copiarla, modificarla, redistribuirla, alojarla o usarla comercialmente requiere permiso por escrito del autor. Ver `LICENSE`.
 
 ## Credits / Créditos
 Workout structure, training phases (OPT model), exercise categories and training concepts are based on NASM-CPT7 materials, used with permission. Bubylift is independent and not endorsed by NASM. / La estructura de los entrenamientos, las fases (modelo OPT), las categorías de ejercicios y los conceptos están basados en los materiales NASM-CPT7, usados con permiso. Bubylift es independiente y no está avalada por NASM.
