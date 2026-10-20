@@ -114,6 +114,17 @@ function avHtml(av,sz){
 }
 function pfRenderAv(){const b=$('avBtn');if(!b)return;const p=pfCur();if(!p){b.hidden=true;return;}b.hidden=false;b.innerHTML=avHtml(p.av,32);b.setAttribute('aria-label',pfName(p));}
 
+/* ---------- stay signed in on this device / mantener sesión en este dispositivo ----------
+   Opt-in: the unlocked key is kept on this device so the password is not asked every time. Turn it off in the profile menu.
+   Opcional: la llave desbloqueada se guarda en este dispositivo para no pedir la contraseña cada vez. Se apaga en el menú del perfil. */
+function pfRemKey(id){try{const v=localStorage.getItem('bl_rk_'+id);if(!v||!B64_RE.test(v))return null;const r=unb64(v);return r.length===32?r:null;}catch(e){return null;}}
+function pfRemSet(id,raw,on){try{if(on&&raw&&raw.length===32)localStorage.setItem('bl_rk_'+id,b64(raw));else localStorage.removeItem('bl_rk_'+id);}catch(e){}}
+function pfRemToggle(){
+  const p=pfCur();if(!p||!p.enc||!ENC)return;
+  if(pfRemKey(p.id)){pfRemSet(p.id,null,false);toast(t('pfRemOffT'));}
+  else{pfRemSet(p.id,ENC.raw,true);toast(t('pfRemOnT'));}
+}
+
 /* ---------- boot / enter / leave ---------- */
 async function boot(){
   pfLoad();
@@ -124,7 +135,9 @@ async function boot(){
   if(p&&p.enc&&sk){
     try{const raw=unb64(sk);if(raw.length===32){await pfEnter(p.id,raw);return;}}catch(e){}
   }
+  let pick=null;try{pick=sessionStorage.getItem('bl_pick');sessionStorage.removeItem('bl_pick');}catch(e){}
   const lp=pfGet(last);
+  if(!pick&&lp&&lp.enc){const rk=pfRemKey(lp.id);if(rk){await pfEnter(lp.id,rk);return;}}
   if(!PFS.length)gWelcome();
   else if(PFS.length===1&&!PFS[0].pw){await pfEnter(PFS[0].id,null);}
   else gPick();
@@ -152,7 +165,7 @@ async function pfEnter(id,raw,seed,noBoot){
       try{sessionStorage.setItem('bl_sk',b64(raw));}catch(e){}
     }else ENC=null;
   }catch(e){
-    ENC=null;try{sessionStorage.removeItem('bl_sk');sessionStorage.removeItem('bl_sess');}catch(x){}
+    ENC=null;pfRemSet(id,null,false);try{sessionStorage.removeItem('bl_sk');sessionStorage.removeItem('bl_sess');}catch(x){}
     gPick();toast(t('pfDataBad'));return;
   }
   PFID=id;K_DATA=k.d;K_SET=k.s;K_ACT=k.a;
@@ -164,7 +177,7 @@ async function pfEnter(id,raw,seed,noBoot){
 }
 function pfLeave(){
   const go=function(){
-    try{sessionStorage.removeItem('bl_sess');sessionStorage.removeItem('bl_sk');}catch(e){}
+    try{sessionStorage.removeItem('bl_sess');sessionStorage.removeItem('bl_sk');sessionStorage.setItem('bl_pick','1');}catch(e){}
     location.replace(location.pathname);
   };
   try{stopRest();unwake();}catch(e){}
@@ -224,7 +237,7 @@ function gPick(edit){
 }
 function gAdd(){
   gateShow('<div class="g-top"><button class="g-link" onclick="gPick()">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('pfAdd')+'</h1>'+
-    '<div class="menu"><button onclick="gNew(1,{})">✨ '+t('pfNew')+'</button><button onclick="gRecv()">📲 '+t('pfBring')+'</button></div>'+gLang());
+    '<div class="menu"><button onclick="gNew(1,{})">✨ '+t('pfNew')+'</button>'+(PFS.some(x=>x.g)?'':'<button onclick="pfGuest()">👤 '+t('pfGuestB')+'</button>')+'<button onclick="gRecv()">📲 '+t('pfBring')+'</button></div>'+(PFS.some(x=>x.g)?'':'<p class="muted sm g-c">'+t('pfGuestP')+'</p>')+gLang());
   GS={redraw:gAdd};
 }
 
@@ -232,11 +245,13 @@ function gAdd(){
 function gPw(id){
   const p=pfGet(id);if(!p)return gPick();
   if(!p.pw){pfEnter(id,null);return;}
+  const rk=p.enc&&pfRemKey(id);if(rk){pfEnter(id,rk);return;}
   GS={redraw:function(){gPw(id);}};
   const w=pfWait('p',id);
   gateShow('<div class="g-top"><button class="g-link" onclick="gPick()">‹ '+t('pfSwitch')+'</button><span></span></div><div class="g-c">'+avHtml(p.av,96)+'<h2 class="g-n">'+esc(p.name)+'</h2></div>'+
     '<div class="g-form"><label>'+t('pfPw')+'<span class="pw-w"><input id="gpw" class="in wide" type="password" autocomplete="current-password" onkeydown="if(event.key===\'Enter\')pfLogin(\''+id+'\')"><button class="pw-eye" type="button" onclick="pfEye(\'gpw\',this)">'+t('pfShow')+'</button></span></label>'+
     '<p id="gmsg" class="g-msg">'+(w?t('pfWait',pfWaitTxt(w)):'')+'</p>'+
+    '<label class="chk-l"><input id="grm" type="checkbox" checked><span>'+t('pfRemChk')+'<small class="muted" style="display:block">'+t('pfRemP')+'</small></span></label>'+
     '<button class="btn pri big wide" onclick="pfLogin(\''+id+'\')">'+t('pfSignIn')+'</button>'+
     '<button class="btn wide" onclick="gForgot(\''+id+'\')">'+t('pfForgot')+'</button></div>'+gLang());
 }
@@ -244,7 +259,7 @@ function pfEye(id,b){const e=$(id);if(!e)return;const h=e.type==='password';e.ty
 async function pfLogin(id){
   const p=pfGet(id),m=$('gmsg');if(!p||!m)return;
   const w=pfWait('p',id);if(w){m.textContent=t('pfWait',pfWaitTxt(w));return;}
-  const pw=gv('gpw');
+  const pw=gv('gpw'),rmOn=!!($('grm')&&$('grm').checked);
   if(!pw){m.textContent=t('pfNeedPw');return;}
   m.textContent='…';let ok=false;
   try{ok=await pfCheck(pw,p.pw);}catch(e){m.textContent=t('pfNoCrypto');return;}
@@ -254,6 +269,7 @@ async function pfLogin(id){
       if(p.enc)raw=await pfUnwrap(pw,p.enc.wp);
       else if(hasCrypto()){raw=pfNewKey();p.enc={wp:await pfWrap(pw,raw),wq:null};p.qs=[];p.rm=0;pfSave();mig=true;} // upgrade older profile / actualizar perfil anterior
     }catch(e){m.textContent=t('pfDataBad');return;}
+    if(p.enc)pfRemSet(id,raw,rmOn);
     await pfEnter(id,raw);
     if(mig)setTimeout(function(){toast(t('pfMig'));gQuest(id);},400);
     return;
@@ -418,6 +434,7 @@ async function gNewDone(){
     if(!lg.map[k.s])lg.map[k.s]=JSON.stringify({lang:LANG});
     GS={};
     if(prof.enc){
+      pfRemSet(prof.id,raw,true);
       await pfEnter(prof.id,raw,lg.map,!!gid);await pfFlush();
       try{lg.del.forEach(x=>localStorage.removeItem(x));}catch(e){} // plain copies removed only after the encrypted ones are written / se borran los originales solo después de guardar los cifrados
     }else{
@@ -453,7 +470,7 @@ async function pfDelete(id){
   const p=pfGet(id),m=$('gmsg');if(!p)return;
   const w=pfWait('p',id);if(w){m.textContent=t('pfWait',pfWaitTxt(w));return;}
   try{if(p.pw&&!(await pfCheck(gv('gpw'),p.pw))){const x=pfFail('p',id);m.textContent=x.u>Date.now()?t('pfWait',pfWaitTxt(pfWait('p',id))):t('pfWrong',Math.max(0,3-x.n));return;}}catch(e){m.textContent=t('pfNoCrypto');return;}
-  const k=pfKeys(id);try{[k.d,k.s,k.a,'bl_thrp_'+id,'bl_thrq_'+id].forEach(x=>localStorage.removeItem(x));}catch(e){}
+  const k=pfKeys(id);try{[k.d,k.s,k.a,'bl_thrp_'+id,'bl_thrq_'+id,'bl_rk_'+id].forEach(x=>localStorage.removeItem(x));}catch(e){}
   PFS=PFS.filter(x=>x.id!==id);pfSave();
   try{if(localStorage.getItem('bl_last')===id)localStorage.removeItem('bl_last');}catch(e){}
   if(!PFS.length){GS={};gWelcome();}else gPick(true);
@@ -470,6 +487,7 @@ function pfMenu(){
   sheet('<div class="form"><div class="g-c">'+avHtml(p.av,76)+'<h3 class="g-n">'+esc(pfName(p))+'</h3></div><div class="menu">'+
     '<button onclick="sheetClose();pfLeave()">⇄ '+t('pfSwitch')+'</button><button onclick="sheetClose();gEdit(\''+p.id+'\',true)">✎ '+t('pfEditT')+'</button>'+
     (p.pw?'<button onclick="sheetClose();gSetPw(\''+p.id+'\',true)">🔑 '+t('pfChange')+'</button><button onclick="sheetClose();gQuest(\''+p.id+'\')">❓ '+t('pfQT')+'</button>':'')+
+    (p.enc?'<button onclick="sheetClose();pfRemToggle()">'+(pfRemKey(p.id)?'🔓 '+t('pfRemOff'):'🔒 '+t('pfRemOn'))+'</button>':'')+
     '<button onclick="sheetClose();gSend()">📲 '+t('pfTx')+'</button></div><p class="muted sm">'+t('pfNote')+'</p><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
 }
 /* change security questions (needs the password) / cambiar preguntas (pide la contraseña) */
@@ -654,6 +672,7 @@ async function pfRecvGo(){
       const raw=typeof pl.k==='string'&&B64_RE.test(pl.k)?unb64(pl.k):null;
       if(!raw||raw.length!==32){PFS.pop();pfSave();throw new Error('key');}
       const seed={};seed[k.d]=JSON.stringify(data);seed[k.s]=JSON.stringify(set);
+      pfRemSet(base.id,raw,true);
       await pfEnter(base.id,raw,seed);
     }else{
       if(!jset(k.d,data)||!jset(k.s,set)){PFS.pop();pfSave();throw new Error('save');}

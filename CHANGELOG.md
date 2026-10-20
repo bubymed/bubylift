@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v43 — 2026-10-20
+- **Stay signed in:** the sign-in screen has "Keep me signed in on this device" (on by default) and new profiles are remembered too; the app then opens straight into the last profile. The profile menu has a switch to turn it off; Switch profile still shows the picker. The unlocked key is stored on this device only (opt-in, removable), so use it only on your own phone.
+  **Mantener sesión:** la pantalla de entrada tiene "Mantener mi sesión en este dispositivo" (encendido por defecto) y los perfiles nuevos también se recuerdan; la app abre directo en el último perfil. El menú del perfil tiene un interruptor para apagarlo; Cambiar de perfil sigue mostrando la lista. La llave desbloqueada se guarda solo en este dispositivo (opcional y removible), úsalo solo en tu propio teléfono.
+- **Guest after creating a profile:** Add profile now offers "Continue as guest" (one guest at a time).
+  **Invitado tras crear perfil:** Añadir perfil ahora ofrece "Continuar como invitado" (un invitado a la vez).
+
 ## v42 — 2026-10-20
 - **Plan questions:** tapping an option no longer moves to the next question automatically; it only selects it and you continue with Next (required questions keep Next disabled until answered). Avoids skipping a question by accident.
   **Preguntas del plan:** tocar una opción ya no avanza solo a la siguiente pregunta; solo la selecciona y continúas con Siguiente (las preguntas obligatorias mantienen Siguiente desactivado hasta responder). Evita saltarse una pregunta por accidente.
