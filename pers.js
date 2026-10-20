@@ -3,6 +3,19 @@
 
 const AVOID=['jump','floor','barbell','machine','ball','overhead'];
 const WORKS=['sit','stand'];
+/* v39 start assessment: every answer also accepts 'x' = not sure (counts as the most careful tier) / prueba de inicio: 'x' = no estoy seguro */
+const AS_OPTS={pl:['p0','p1','p2','p3'],bal:['b0','b1','b2'],sq:['q0','q1','q2'],pull:['r0','r1','r2','r3'],leg:['l0','l1','l2','l3'],hist:['h0','h1','h2']};
+const AS_KEYS=['pl','bal','sq','pu','pull','leg','hist'];
+const asN=v=>(typeof v==='string'&&/^[a-z](\d)$/.test(v))?+v[1]:0; // p0..p3 → 0..3, 'x' → 0
+function asStabFail(pr){return pr.sq!=='q2'||asN(pr.pl)<1||asN(pr.bal)<1;} // movement control first (OPT phase 1) / el control del movimiento primero
+function asStr(pr){return asN(pr.pu)+asN(pr.pull)+asN(pr.leg);} // 0..9
+function asLevel(pr){
+  const ord=['new','some','adv'],d=Math.max(0,ord.indexOf(pr.lvl));
+  let a=asStabFail(pr)?0:((asStr(pr)>=6&&asN(pr.hist)>=1)?2:1);
+  if(a<d)return ord[a];                       // never start above what the tests show / nunca empezar por encima de lo que muestran las pruebas
+  if(d===0&&a>=1&&asStr(pr)>=6)return 'some'; // strong and stable beginners start one step up / principiantes fuertes y estables suben un paso
+  return ord[d];
+}
 const PUS=['p0','p1','p2','p3']; // push-ups in one set: under 5 / 5-14 / 15-29 / 30+ / flexiones seguidas
 const MAINS=['squat','deadlift','bench','dbbench','pullup','ohp','hipthrust','bbrow','bulgsplit','rdl']; // lifts a person can ask for / levantamientos que se pueden pedir
 const AVOID_T={
@@ -38,6 +51,7 @@ function persPick(c){
 }
 /* level: self-reported, adjusted by the push-up test / nivel: el declarado, ajustado por la prueba de flexiones */
 function lvlEff(pr){
+  if(pr.as)return asLevel(pr);
   const l=pr.lvl,u=pr.pu;
   if(!u)return l;
   if(l==='some'&&u==='p0')return 'new';
@@ -72,7 +86,7 @@ function wyText(s){
   else if(k==='wyFocus')x=t('fm_'+x);
   else if(k==='wyInj')x=t('inj_'+x);
   else if(k==='wyAvoid')x=t('av_'+x);
-  else if(k==='wyLvl')x=t('pl_'+x);
+  else if(k==='wyLvl'||k==='wyStab')x=t('pl_'+x);
   return t(k,x);
 }
 function wyCard(d){

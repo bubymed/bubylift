@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v39 — 2026-10-20
+- **Start assessment (OPT):** the single push-up question is replaced by seven required questions — plank, one-leg balance, bodyweight squat check, push-ups, pulling, leg strength and consistent training history — each with a "Not sure" option that counts as the most careful tier. Movement control (plank, balance, squat) decides first: any weak or unsure result starts you in the stabilization level (OPT phase 1); then strength and history decide between beginner, intermediate and advanced. The plan states which test set your level. Older plans keep working and only ask the new questions when you rebuild the plan.
+  **Prueba de inicio (OPT):** la pregunta única de flexiones se reemplaza por siete preguntas obligatorias — plancha, equilibrio en una pierna, sentadilla de control, flexiones, jalón, fuerza de piernas e historial de entrenamiento constante — cada una con "No estoy seguro", que cuenta como el nivel más cuidadoso. El control del movimiento (plancha, equilibrio, sentadilla) decide primero: cualquier resultado débil o dudoso te ubica en estabilización (fase OPT 1); luego fuerza e historial deciden entre principiante, intermedio y avanzado. El plan dice qué prueba fijó tu nivel. Los planes anteriores siguen funcionando y solo piden las preguntas nuevas cuando rehaces el plan.
+
 ## v38 — 2026-10-20
 - **Shorter plan setup:** the "physical skill" question is no longer in the first questionnaire (it was the most technical one and changes little); it stays under Adjust my plan.
   **Configuración del plan más corta:** la pregunta de "habilidad física" ya no está en el primer cuestionario (era la más técnica y cambia poco); sigue en Ajustar mi plan.

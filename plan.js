@@ -200,6 +200,8 @@ function normProf(p){
   o.work=WORKS.indexOf(o.work)>=0?o.work:'';
   o.sh=Math.max(0,Math.min(Math.min(2,o.n-1),Math.round(o.sh)||0));
   o.pu=PUS.indexOf(o.pu)>=0?o.pu:'';
+  Object.keys(AS_OPTS).forEach(k=>{o[k]=(AS_OPTS[k].indexOf(o[k])>=0||o[k]==='x')?o[k]:'x';});
+  o.as=o.as?1:0;
   o.split=(typeof splitOk==='function'&&splitOk(o.split,o.n))?o.split:'auto';
   o.sd=(Number.isInteger(o.sd)&&o.sd>0&&o.sd<1e9)?o.sd:0;
   o.rt=(Number.isInteger(o.rt)&&o.rt>=0&&o.rt<1000)?o.rt:0;
@@ -671,6 +673,7 @@ let PW={step:1};
 function planSetup(){
   const base=DATA.plan?DATA.plan.prof:normProf({});
   PW=Object.assign({step:1,touched:!!DATA.plan},JSON.parse(JSON.stringify(base)));
+  PW.a={};if(PW.as)AS_KEYS.forEach(k=>{PW.a[k]=1;});
   PW.tw=0;if(PW.td>Date.now()){const w=(PW.td-Date.now())/(7*864e5);PW.tw=TW.slice(1).reduce((a,b)=>Math.abs(b-w)<Math.abs(a-w)?b:a);}
   wizDraw();
 }
@@ -717,7 +720,7 @@ function focusApply(){
   const old=DATA.plan,p=genPlan(prof);p.checks=old.checks;DATA.plan=p;saveData();render();planOpen();toast(t('planReady'));
 }
 function planCreate(){
-  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,avoid:PW.avoid,fav:PW.fav,work:PW.work,sh:PW.sh,pu:PW.pu,split:PW.split,sd:PW.sd||((Math.random()*1e6|0)+1),rt:PW.rt,no:PW.no,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
+  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,avoid:PW.avoid,fav:PW.fav,work:PW.work,sh:PW.sh,pu:PW.pu,as:AS_KEYS.every(k=>PW.a&&PW.a[k])?1:0,pl:PW.pl,bal:PW.bal,sq:PW.sq,pull:PW.pull,leg:PW.leg,hist:PW.hist,split:PW.split,sd:PW.sd||((Math.random()*1e6|0)+1),rt:PW.rt,no:PW.no,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
   const old=DATA.plan,p=genPlan(prof);
   if(old){p.checks=old.checks;}
   DATA.plan=p;saveData();render();
