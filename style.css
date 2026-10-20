@@ -417,7 +417,9 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 
 /* v25: one-question wizard, personalization / asistente de una pregunta, personalización */
 #sheet.wzs{max-height:96vh;max-height:96dvh;min-height:70vh;min-height:70dvh;display:flex;flex-direction:column}
-.wz{display:flex;flex-direction:column;flex:1;min-height:0}
+.wz{display:flex;flex-direction:column;flex:1 0 auto}
+#sheet.wzs::before{flex:none}
+#sheet{overscroll-behavior:contain;touch-action:pan-y}
 .wz-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .wz-top .ico[disabled]{opacity:.25}
 .wz-bar{flex:1;height:6px;border-radius:3px;background:var(--panel2);overflow:hidden}
