@@ -16,7 +16,8 @@ function optAllowed(pr){
 }
 function optAuto(pr){
   if(pr.cond)return 1;
-  return pr.lvl==='new'?1:pr.lvl==='some'?2:(goalsOf(pr).indexOf('strength')>=0?4:3);
+  const lv=lvlEff(pr);
+  return lv==='new'?1:lv==='some'?2:(goalsOf(pr).indexOf('strength')>=0?4:3);
 }
 /* the phase this profile trains in (own choice, else by level), limited by goal and equipment / la fase del perfil */
 function optPhase(pr){
@@ -131,15 +132,21 @@ const OCAP={ // resistance exercises per session length (30/45/60/75 min) / ejer
  1:[3,4,5,5],2:[4,6,8,8],3:[3,5,6,7],4:[2,3,4,5],5:[4,6,8,8]
 };
 
-function optPick(list,ctx,role){
-  const c=(list||[]).filter(id=>{const m=meta(id);return exById(id)&&m&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&stressLvl(id,ctx.L)<=1;});
-  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||((ctx.used[a]||0)-(ctx.used[b]||0)));
-  return c[0]||null;
+function optPick(list,ctx,role,mu){
+  let src=list||[];
+  const fv=(ctx.fav&&mu&&role==='m')?ctx.fav.filter(id=>muOf(id)===mu):[]; // the person's favorite lifts come first / sus levantamientos favoritos van primero
+  if(fv.length)src=fv.concat(src);
+  const c=src.filter((id,i,a)=>a.indexOf(id)===i).filter(id=>{const m=meta(id);return exById(id)&&m&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=1;});
+  const isF=id=>fv.indexOf(id)>=0?0:1;
+  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(isF(a)-isF(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
+  if(c.length&&isF(c[0])===0)return c[0];
+  return persPick(c);
 }
 function optTake(id,ctx){ctx.day[id]=1;ctx.used[id]=(ctx.used[id]||0)+1;return id;}
 /* build one item / arma un ejercicio */
 function optItem(eid,o,ctx){
   const m=exMode(eid),it={eid:eid,sets:Math.max(1,Math.min(6,o.sets)),lo:o.lo,hi:o.hi,u:'r',r:o.r,cn:stressJoints(eid,ctx.L,1),sec:o.sec,tp:o.tp,rs:o.rs};
+  if(o.rz)it.rz=o.rz;
   if(o.ss)it.ss=o.ss;
   if(o.nt)it.nt=o.nt;
   if(m==='t'){it.u='m';it.lo=o.hold?o.hold[0]:0.5;it.hi=o.hold?o.hold[1]:1;}
@@ -148,10 +155,10 @@ function optItem(eid,o,ctx){
 
 function genOpt(prof){
   const ph=optPhase(prof),vi={lo:0,md:1,hi:2}[prof.vol]!=null?{lo:0,md:1,hi:2}[prof.vol]:1;
-  const L=injLetters(prof.inj),maxLv=(prof.cond||prof.lvl==='new')?1:2,have=prof.have;
+  const L=injLetters(prof.inj),lve=lvlEff(prof),maxLv=(prof.cond||lve==='new')?1:2,have=prof.have;
   const dp=dayPlan(prof),dgoal=dp.goals,days=optDays(ph,prof);
-  const li={30:0,45:1,60:2,75:3}[prof.len]!=null?{30:0,45:1,60:2,75:3}[prof.len]:2;
-  const cap=OCAP[ph][li],sets=OPT_SETS[ph][vi],used={};
+  const LIX={30:0,45:1,60:2,75:3};
+  const sets=OPT_SETS[ph][vi],used={};
   const fm=[];prof.focus.forEach(k=>FOCUS_MU[k].forEach(m=>{if(fm.indexOf(m)<0)fm.push(m);}));
   const sk=prof.skills||[],em=prof.em0||prof.emph;
   const lowerL='QHGC',upperL='PBSIT';
@@ -159,7 +166,8 @@ function genOpt(prof){
   const want=Math.min(prof.ff||2,prof.n);
   const focusDays={};fm.forEach(m=>{focusDays[m]=0;});
   const ds=days.map((k,di)=>{
-    const g=dgoal[di],ctx={have:have,L:L,maxLv:maxLv,used:used,day:{}},res=[];
+    const short=prof.sh>0&&di>=prof.n-prof.sh,dl=short?30:prof.len,cap=OCAP[ph][LIX[dl]!=null?LIX[dl]:2];
+    const g=dgoal[di],ctx={have:have,L:L,maxLv:maxLv,used:used,day:{},fav:ph>=2?prof.fav:[]},res=[],wyx={};
     const alt=di%2===1; // alternate legs: squat day / hinge day / alterna piernas: sentadilla / bisagra
     let slots=[]; // [muscle, role]
     if(ph===1){
@@ -172,7 +180,7 @@ function genOpt(prof){
         const o4=alt?['H','B',ph===2?'I':'S']:['Q','P','S'];
         slots=o4.slice(0,Math.max(2,Math.min(3,np))).map(x=>[x,'m']);
       }
-      if(prof.n<4&&ph===2&&cap>=8&&prof.len===75&&(g==='muscle'||g==='bodybuilding'))slots.push([alt?'T':'I','m']);
+      if(prof.n<4&&ph===2&&cap>=8&&dl===75&&(g==='muscle'||g==='bodybuilding'))slots.push([alt?'T':'I','m']);
     }else{
       const base=OSLOTS[k]||OSLOTS.up;
       slots=base.slice(0,cap).map(s=>s.slice());
@@ -183,9 +191,16 @@ function genOpt(prof){
     // extras: emphasis and focus muscles / extras: énfasis y músculos de enfoque
     const ex=[];
     const has=m=>slots.some(s=>s[0]===m);
-    if(prof.len>=45){
-      if(em==='low'&&(has('Q')||has('H'))&&!has('G'))ex.push(['G','a']);
-      if(em==='up'&&(has('P')||has('B'))){if(!has('I'))ex.push(['I','a']);if(!has('T'))ex.push(['T','a']);}
+    if(dl>=45){
+      if(em==='low'&&(has('Q')||has('H'))&&!has('G'))ex.push(['G','a',0,'rzEmphLow']);
+      if(em==='up'&&(has('P')||has('B'))){if(!has('I'))ex.push(['I','a',0,'rzEmphUp']);if(!has('T'))ex.push(['T','a',0,'rzEmphUp']);}
+    }
+    if(dl>=45&&prof.work){ // desk or standing job: posture and calves / trabajo sentado o de pie
+      const upD=slots.some(s=>'PBS'.indexOf(s[0])>=0),loD=slots.some(s=>'QH'.indexOf(s[0])>=0);
+      if(prof.work==='sit'){
+        if(upD&&!has('B')){ex.push(['B','a',0,'rzSit']);wyx.sit=1;}
+        else if(loD&&!has('G')){ex.push(['G','a',0,'rzSit']);wyx.sit=1;}
+      }else if(prof.work==='stand'&&loD&&!has('C')){ex.push(['C','a',0,'rzStand']);wyx.stand=1;}
     }
     fm.forEach(m=>{
       if(m==='A')return;
@@ -197,72 +212,89 @@ function genOpt(prof){
     const slotsAll=slots.concat(ex);
     // -- activation (core + balance) / activación
     const ac=[],actPh=ph>=5?5:(ph>=2?2:1);
-    const nCore=prof.len===30?1:2,nBal=sk.indexOf('balance')>=0?2:1;
+    const nCore=dl===30?1:2,nBal=sk.indexOf('balance')>=0?2:1;
     const aset=ph===1?[1,2,2][vi]:(vi===0?1:2);
     for(let i=0;i<nCore;i++){
       const id=optPick(OACT_CORE[actPh],ctx,'c');if(!id)break;optTake(id,ctx);
-      ac.push(optItem(id,{sets:aset,lo:ph===1?12:10,hi:ph===1?15:12,r:'c',sec:'ac',tp:ph===5?'sl':(ph===1?'sl':'md'),rs:0},ctx));
+      ac.push(optItem(id,{sets:aset,lo:ph===1?12:10,hi:ph===1?15:12,r:'c',sec:'ac',tp:ph===5?'sl':(ph===1?'sl':'md'),rs:0,rz:'rzCore'},ctx));
     }
     for(let i=0;i<nBal;i++){
       const id=optPick(OACT_BAL[actPh],ctx,'z');if(!id)break;optTake(id,ctx);
-      ac.push(optItem(id,{sets:aset,lo:ph===1?12:10,hi:ph===1?16:12,r:'z',sec:'ac',tp:ph===5?'ct':(ph===1?'sl':'md'),rs:ph===1?90:60,nt:'ntBal'},ctx));
+      ac.push(optItem(id,{sets:aset,lo:ph===1?12:10,hi:ph===1?16:12,r:'z',sec:'ac',tp:ph===5?'ct':(ph===1?'sl':'md'),rs:ph===1?90:60,nt:'ntBal',rz:'rzBal'},ctx));
     }
     // -- skill development (plyometric / SAQ) / habilidad
     const skl=[],lowDay=slots.some(s=>'QH'.indexOf(s[0])>=0);
-    const wantPly=ph<=3&&lowDay&&((g==='fat'||g==='general')||sk.indexOf('power')>=0)&&prof.len>=45;
+    const wantPly=ph<=3&&lowDay&&((g==='fat'||g==='general')||sk.indexOf('power')>=0)&&dl>=45;
     if(wantPly){
       const id=optPick(OSK[ph],ctx,'y');
-      if(id){optTake(id,ctx);skl.push(optItem(id,{sets:ph===1?(vi===0?1:2):2,lo:8,hi:8,r:'y',sec:'sk',tp:ph===1?'sl':'rp',rs:ph===1?90:60,nt:ph===1?'ntLand':undefined},ctx));}
+      if(id){optTake(id,ctx);skl.push(optItem(id,{sets:ph===1?(vi===0?1:2):2,lo:8,hi:8,r:'y',sec:'sk',tp:ph===1?'sl':'rp',rs:ph===1?90:60,nt:ph===1?'ntLand':undefined,rz:'rzSk'},ctx));}
     }
     if(sk.indexOf('speed')>=0&&ph<=3&&(di<2)){
       const id=optPick(OSAQ,ctx,'y');
-      if(id){optTake(id,ctx);skl.push(optItem(id,{sets:2,lo:0.5,hi:1,r:'y',sec:'sk',tp:'rp',rs:60},ctx));}
+      if(id){optTake(id,ctx);skl.push(optItem(id,{sets:2,lo:0.5,hi:1,r:'y',sec:'sk',tp:'rp',rs:60,rz:'rzSaq'},ctx));}
     }
     // -- resistance / resistencia
     const out=[];let grp=0;
     const rep=(role,power)=>optReps(ph,role,g,power);
-    const mk=(id,role,extra,tp,rs,ss,power)=>{const r=rep(role,power),s=Math.min(6,sets+(extra?1:0));return optItem(id,{sets:s,lo:r.lo,hi:r.hi,r:role,sec:'rs',tp:tp,rs:rs,ss:ss},ctx);};
+    let curRz='rzAcc';
+    const mk=(id,role,extra,tp,rs,ss,power)=>{const r=rep(role,power),s=Math.min(6,sets+(extra?1:0));return optItem(id,{sets:s,lo:r.lo,hi:r.hi,r:role,sec:'rs',tp:tp,rs:rs,ss:ss,rz:curRz},ctx);};
     const fall=(mu,role)=>pickFor(mu,role,{have:have,L:L,maxLv:maxLv,used:used,day:ctx.day,hy:false,test:'gen'});
     slotsAll.forEach((s,si)=>{
       const mu=s[0],role=s[1],extra=s[2];
+      curRz=s[3]||(extra?'rzFocus':(role==='m'?'rzMus':'rzAcc'));
       if(ph===1){
-        const id=optPick(OP1[mu],ctx,role)||fall(mu,role);if(!id)return;optTake(id,ctx);
+        const id=optPick(OP1[mu],ctx,role,mu)||fall(mu,role);if(!id)return;optTake(id,ctx);
         out.push(mk(id,role,extra,'sl',0));
       }else if(ph===2||ph===5){
-        const id=optPick(OP2S[mu],ctx,role)||fall(mu,role);if(!id)return;optTake(id,ctx);
+        const id=optPick(OP2S[mu],ctx,role,mu)||fall(mu,role);if(!id)return;optTake(id,ctx);
         const pw=ph===5,single=si>=slots.length; // extras are single exercises / los extras van solos
         const pid=single?null:optPick((pw?PAIR_PW:PAIR_ST)[mu],ctx,role);
         if(pid){
           optTake(pid,ctx);const gl=String.fromCharCode(65+grp++);
           out.push(mk(id,role,extra,ph===5?'ex':'md',0,gl));
-          const pit=mk(pid,role,extra,ph===5?'ex':'sl',ph===5?120:60,gl,pw);
+          curRz=pw?'rzPairPw':'rzPair';const pit=mk(pid,role,extra,ph===5?'ex':'sl',ph===5?120:60,gl,pw);
           if(pw){pit.sets=Math.min(6,sets+(extra?1:0));}
           out.push(pit);
         }else out.push(mk(id,role,extra,ph===5?'ex':'md',ph===5?120:60));
       }else if(ph===3){
-        const id=fall(mu,role);if(!id)return;optTake(id,ctx);
+        const id=optPick([],ctx,role,mu)||fall(mu,role);if(!id)return;optTake(id,ctx);
         out.push(mk(id,role,extra,'md',30));
       }else{
-        const id=optPick(OP4[mu],ctx,role)||fall(mu,role);if(!id)return;optTake(id,ctx);
+        const id=optPick(OP4[mu],ctx,role,mu)||fall(mu,role);if(!id)return;optTake(id,ctx);
         out.push(mk(id,role,extra,'ex',('SIT'.indexOf(mu)>=0)?300:180));
       }
     });
     // -- client's choice / elección del cliente
     const cc=[];
-    if(prof.len>=45||fm.indexOf('A')>=0){
+    if(dl>=45||fm.indexOf('A')>=0){
       const id=optPick(OCC,ctx,'c');
-      if(id){optTake(id,ctx);cc.push(optItem(id,{sets:2,lo:0.5,hi:1,r:'c',sec:'cc',tp:'sl',rs:60,hold:[0.5,1]},ctx));}
+      if(id){optTake(id,ctx);cc.push(optItem(id,{sets:2,lo:0.5,hi:1,r:'c',sec:'cc',tp:'sl',rs:60,hold:[0.5,1],rz:'rzCc'},ctx));}
     }
     if(fm.indexOf('A')>=0&&di<want+1){
       const id=optPick(OACT_CORE[2],ctx,'c');
-      if(id){optTake(id,ctx);cc.push(optItem(id,{sets:2,lo:10,hi:12,r:'c',sec:'cc',tp:'md',rs:60},ctx));}
+      if(id){optTake(id,ctx);cc.push(optItem(id,{sets:2,lo:10,hi:12,r:'c',sec:'cc',tp:'md',rs:60,rz:'rzCc'},ctx));}
     }
     if(sk.indexOf('endurance')>=0&&di<2){
       const id=optPick(OCARDIO,ctx,'e');
-      if(id){optTake(id,ctx);cc.push({eid:id,sets:1,lo:15,hi:20,u:'m',r:'e',cn:'',sec:'cc'});}
+      if(id){optTake(id,ctx);cc.push({eid:id,sets:1,lo:15,hi:20,u:'m',r:'e',cn:'',sec:'cc',rz:'rzCard'});}
     }
+    const mi=out.find(e=>e.r==='m');if(mi){mi.mn=1;mi.rz=(ctx.fav&&ctx.fav.indexOf(mi.eid)>=0)?'rzFav':'rzMain';}
+    // why this day looks like this / por qué el día es así
+    const wy=ph===3||ph===4?['wyK'+k,'wyPh'+ph]:['wyPh'+ph];
+    if(mi)wy.push('wyMain|'+mi.eid);
+    if(ctx.fav&&ctx.fav.length){const f=out.find(e=>ctx.fav.indexOf(e.eid)>=0&&e!==mi);if(f)wy.push('wyFav|'+f.eid);else if(mi&&ctx.fav.indexOf(mi.eid)>=0)wy.splice(wy.indexOf('wyMain|'+mi.eid),1,'wyFav|'+mi.eid);}
+    const dm=out.map(e=>muOf(e.eid)).join('');
+    let nf=0;prof.focus.forEach(fk=>{if(nf<2&&FOCUS_MU[fk].some(m=>dm.indexOf(m)>=0)){wy.push('wyFocus|'+fk);nf++;}});
+    if(dl>=45&&em==='low'&&dm.indexOf('G')>=0)wy.push('wyEmphlow');
+    if(dl>=45&&em==='up'&&(dm.indexOf('I')>=0||dm.indexOf('T')>=0))wy.push('wyEmphup');
+    if(wyx.sit)wy.push('wySit');if(wyx.stand)wy.push('wyStand');
+    if(prof.inj.length)wy.push('wyInj|'+prof.inj[0]);
+    if(prof.avoid.length)wy.push('wyAvoid|'+prof.avoid[0]);
+    if(short)wy.push('wyShort');
+    wy.push('wyOrd');
+    if(di===0&&lve!==prof.lvl&&prof.pu)wy.push('wyLvl|'+lve);
     const exs=ac.concat(skl,out,cc);
-    return prof.mix?{k:k,g:g,ex:exs}:{k:k,ex:exs};
+    const dd=prof.mix?{k:k,g:g,ex:exs}:{k:k,ex:exs};dd.wy=wy.slice(0,8);return dd;
   });
   return{goal:prof.goal,n:prof.n,lvl:prof.lvl,t0:Date.now(),ct:0,cur:0,ds:ds,wd:defaultWd(ds),wu:0,checks:[],prof:prof,ph:ph,pt:Date.now()};
 }
