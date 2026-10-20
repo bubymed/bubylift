@@ -370,6 +370,7 @@ function cleanPlan(p){
   if(Number.isInteger(p.cur)&&p.cur>=0&&p.cur<p.n)o.cur=p.cur;
   const okWd=Array.isArray(p.wd)&&p.wd.length===p.n&&p.wd.every((w,i)=>Number.isInteger(w)&&w>=0&&w<=6&&p.wd.indexOf(w)===i);
   o.wd=okWd?p.wd.slice():defaultWd(ds);o.wu=okWd&&p.wu?1:0;
+  if(Array.isArray(p.xd)){const xd=p.xd.filter(k=>typeof k==='string'&&/^[fc]:[a-z0-9]{2,12}:[0-2]$/.test(k)).slice(0,6);if(xd.length)o.xd=xd;}
   return o;
 }
 
@@ -547,7 +548,7 @@ function planOpen(d){
   tips+='<h4>'+t('guideT')+'</h4><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p><p class="muted sm">'+t('planNote')+'</p>';
   h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="chkOpen()">📋 '+t('chkOpen')+'</button><button class="btn" onclick="schedOpen()">📅 '+t('schBtn')+'</button><button class="btn" onclick="focusOpen()">🎯 '+t('focusT')+'</button><button class="btn" onclick="planShuffleAsk()">🔀 '+t('shufBtn')+'</button><button class="btn" onclick="planSetup()">⚙ '+t('planChange')+'</button></div>'+
     '<details class="dtl"><summary>'+t('tipsT')+'</summary>'+tips+'</details>'+
-    '<div class="dz"><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDel')+'</button></div></div>';
+    (typeof xdHtml==='function'?xdHtml():'')+'<div class="dz"><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDel')+'</button></div></div>';
   sheet(h);
 }
 let PE={d:0,e:0};
@@ -779,7 +780,7 @@ function volDraw(){
 function planRegen(patch){
   const old=DATA.plan;if(!old)return;
   const p=genPlan(Object.assign({},old.prof,patch));
-  p.checks=old.checks;p.t0=old.t0;p.ct=old.ct;
+  p.checks=old.checks;p.t0=old.t0;p.ct=old.ct;if(old.xd&&old.xd.length)p.xd=old.xd;
   if(p.n===old.n){p.wd=old.wd;p.wu=old.wu;p.cur=old.cur;}
   if(p.ph&&old.ph&&p.ph===old.ph)p.pt=old.pt;
   DATA.plan=p;saveData();render();

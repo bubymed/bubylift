@@ -136,12 +136,17 @@ function exportCSV(){
 const ID_RE=/^[A-Za-z0-9_-]{1,40}$/;
 const cn=v=>(typeof v==='number'&&isFinite(v)&&v>=0&&v<1e7)?v:null;
 function cleanSet(s){if(!s||typeof s!=='object')return null;const o={w:cn(s.w),r:cn(s.r)==null?null:Math.round(s.r),t:cn(s.t),d:cn(s.d)};if(s.pr)o.pr=1;return o;}
+function cleanCh(c){
+  if(!c||typeof c!=='object'||!/^[a-z0-9]{2,12}$/.test(String(c.id))||![0,1,2].includes(c.lv)||!c.sc||typeof c.sc!=='object')return undefined;
+  const n=v=>(typeof v==='number'&&isFinite(v)&&v>=0&&v<1e6)?v:0;
+  return{id:String(c.id),lv:c.lv,sc:{v:n(c.sc.v),r:n(c.sc.r),x:n(c.sc.x)}};
+}
 function cleanWk(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||typeof x.t!=='number'||!isFinite(x.t)||!Array.isArray(x.ex))return null;
   const ex=[];
   x.ex.forEach(e=>{if(!e||!ID_RE.test(String(e.eid))||!Array.isArray(e.sets))return;const sets=e.sets.map(cleanSet).filter(Boolean);if(sets.length)ex.push({eid:String(e.eid),n:String(e.n||e.eid).slice(0,80),sets:sets});});
   if(!ex.length)return null;
-  return{id:String(x.id),t:x.t,end:(typeof x.end==='number'&&isFinite(x.end))?x.end:0,name:String(x.name||'').slice(0,80),note:String(x.note||'').slice(0,500),ex:ex,pl:(Number.isInteger(x.pl)&&x.pl>=0&&x.pl<5)?x.pl:undefined};
+  return{id:String(x.id),t:x.t,end:(typeof x.end==='number'&&isFinite(x.end))?x.end:0,name:String(x.name||'').slice(0,80),note:String(x.note||'').slice(0,500),ex:ex,pl:(Number.isInteger(x.pl)&&x.pl>=0&&x.pl<5)?x.pl:undefined,ch:cleanCh(x.ch)};
 }
 function cleanBody(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||typeof x.t!=='number'||!isFinite(x.t))return null;
