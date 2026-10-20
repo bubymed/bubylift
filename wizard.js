@@ -31,13 +31,13 @@ function wzAs(k){
     return wzOpt("wzAs_('"+k+"','"+v+"')",on,v==='x'?'🤷':'',t(v==='x'?'as_x':(k==='pu'?'pu_'+v:'as_'+k+'_'+v)),'');
   }),'c1');
 }
-function wzAs_(k,v){PW[k]=(k==='pu'&&v==='x')?'':v;PW.a=PW.a||{};PW.a[k]=1;wizDraw();clearTimeout(_wzT);_wzT=setTimeout(()=>wzGo(1),230);}
+function wzAs_(k,v){PW[k]=(k==='pu'&&v==='x')?'':v;PW.a=PW.a||{};PW.a[k]=1;wizDraw();}
 function wzAsNote(){
   if(!AS_KEYS.every(k=>PW.a&&PW.a[k]))return'';
   const lv=lvlEff(Object.assign({},PW,{as:1}));
   return'<div class="card"><p>'+t('asNote',t('pl_'+lv))+'</p><p class="muted sm">'+t('asNoteP')+'</p></div>';
 }
-/* single choice: tap = pick and move on / una opción: al tocar elige y avanza */
+/* single choice: tap = pick (you move on with Next) / una opción: al tocar se elige (avanzas con Siguiente) */
 function wzOne(key,vals,cur,lab,ic,desc,cls){
   return wzGrid(vals.map(v=>wzOpt("wzPick('"+key+"',"+wzV(v)+")",cur===v,ic?ic(v):'',lab(v),desc?desc(v):'')),cls);
 }
@@ -45,10 +45,8 @@ function wzOne(key,vals,cur,lab,ic,desc,cls){
 function wzMany(key,vals,lab,ic,max,cls){
   return wzGrid(vals.map(v=>wzOpt("wzTogM('"+key+"','"+v+"',"+(max||0)+")",PW[key].indexOf(v)>=0,ic?ic(v):'',lab(v),'')),cls);
 }
-let _wzT=0;
 function wzPick(k,v){
   pwSet(k,v);
-  clearTimeout(_wzT);_wzT=setTimeout(()=>wzGo(1),230);
 }
 function wzTogM(k,v,max){
   const a=PW[k],i=a.indexOf(v);
