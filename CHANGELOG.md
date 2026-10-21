@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v55 — 2026-10-20
+- **Challenges and ranks with photos:** challenge cards show a thumbnail of one of their moves; rank cards use a photo background.
+  **Retos y rangos con fotos:** las tarjetas de reto muestran la miniatura de uno de sus movimientos; las tarjetas de rango usan una foto de fondo.
+
 ## v54 — 2026-10-20
 - **Library with photos:** Routines by muscle or equipment use photo tiles; Famous splits and Classic programs show a thumbnail on each card.
   **Biblioteca con fotos:** Rutinas por músculo o equipo usa fichas con foto; Divisiones famosas y Programas clásicos muestran una miniatura en cada tarjeta.
