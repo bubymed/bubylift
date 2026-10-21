@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v50 — 2026-10-20
+- **Fix:** equipment routines showed "You have not marked this equipment" when the equipment list was on Bodyweight only. They now assume the piece of equipment you picked; the rest of your list (bench, bar…) still decides which alternatives are used.
+  **Arreglo:** las rutinas por equipo mostraban "No has marcado este equipo" con la lista en solo peso corporal. Ahora dan por hecho el equipo que elegiste; el resto de tu lista (banco, barra…) sigue decidiendo qué alternativas se usan.
+- **Photos on original exercises:** 148 of the 235 original exercises now have the same two photos as the imported ones (matched by hand to the Free Exercise DB; drills, balance and challenge moves have no equivalent).
+  **Fotos en los ejercicios originales:** 148 de los 235 ejercicios originales ahora tienen las mismas dos fotos que los importados (emparejadas a mano con Free Exercise DB; los drills, el equilibrio y los movimientos de retos no tienen equivalente).
+
 ## v49 — 2026-10-20
 - **Routines by equipment:** nine new areas (kettlebell, dumbbells, barbell, cables, machines, bands, suspension, medicine ball, bodyweight) next to the muscle areas in Routines by muscle or equipment, three levels (six ranks) each, built with the imported exercises. They only use the equipment you mark; no swapping to other equipment. Also a new Stretch & mobility routine (holds, three levels) built from the mobility exercises.
   **Rutinas por equipo:** nueve áreas nuevas (pesa rusa, mancuernas, barra, poleas, máquinas, bandas, suspensión, balón medicinal, peso corporal) junto a las de músculo, tres niveles (seis rangos) cada una, hechas con los ejercicios importados. Solo usan el equipo que marcas; no cambian a otro equipo. También una rutina nueva de Estiramiento y movilidad (posiciones sostenidas, tres niveles) hecha con los ejercicios de movilidad.

@@ -1,6 +1,7 @@
 /* Routines by equipment (v49): same format as FOCUS, one area per kind of equipment. The first alternative the person can do is used; there is no swap to other equipment.
    Rutinas por equipo (v49): mismo formato que FOCUS, un área por tipo de equipo. Se usa la primera alternativa posible; no se cambia a otro equipo. */
 const LIB_EQ=['kb','db','bb','cab','mach','band','trx','mb','bw'];
+const LIB_EQKEY={kb:'kettlebell',db:'dumbbell',bb:'barbell',cab:'cable',mach:'machine',band:'band',trx:'suspension',mb:'medball'};
 LIB_AREAS.push('stretch'); // holds: stretch & mobility / posiciones sostenidas: estiramiento y movilidad
 Object.assign(FOCUS,{
  kb:[
