@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v59',items:[
+  {i:'📷',en:'<b>17 more exercises with photos</b> — hex bar deadlift, Turkish get-up, jump rope, walking, hiking, lunge jumps and more now show photos. About 75 exercises (balance drills, some stability-ball and band moves, sprints) still have none.',es:'<b>17 ejercicios más con foto</b> — peso muerto con barra hexagonal, levantamiento turco, saltar la cuerda, caminar, senderismo, saltos de zancada y más ya muestran fotos. Unos 75 ejercicios (equilibrio, algunos con pelota o bandas, sprints) todavía no tienen.'}]},
  {v:'v58',items:[
   {i:'📈',en:'<b>History, Progress and Body redesigned</b> — every workout and every exercise now shows a photo thumbnail, and the totals and your weight card use the app\'s orange accent so they stand out.',es:'<b>Historial, Progreso y Cuerpo rediseñados</b> — cada entrenamiento y cada ejercicio ahora muestra una miniatura con foto, y los totales y la tarjeta de peso usan el naranja de la app para destacar.'}]},
  {v:'v57',items:[
