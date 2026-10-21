@@ -21,7 +21,7 @@ function strMove(id,secs){
 }
 function strLine(m){return m.hold?t('strHoldS',m.secs):t('strRepsN',10);}
 function strRows(list){
-  return list.map(m=>'<div class="plex"><span><b>'+esc(exName(m.eid))+'</b><small>'+esc(strLine(m))+' · '+t(strIsDyn(m.eid)?'strDyn':'strStatic')+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="howOpen(\''+m.eid+'\')">ⓘ</button></div>').join('');
+  return list.map(m=>'<div class="plex">'+exThumb(m.eid)+'<span><b>'+esc(exName(m.eid))+'</b><small>'+esc(strLine(m))+' · '+t(strIsDyn(m.eid)?'strDyn':'strStatic')+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="howOpen(\''+m.eid+'\')">ⓘ</button></div>').join('');
 }
 function strStart(name,list){
   if(ACT){toast(t('finishFirst'));return;}

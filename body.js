@@ -85,6 +85,10 @@ function seg(opts,cur,fn){return'<div class="seg">'+opts.map(o=>'<button class="
 function setAuto(v){SET.auto=v==='1';saveSet();render();}
 function setSound(v){SET.sound=v==='1';saveSet();render();}
 function setRest(v){SET.rest=parseInt(v,10)||90;saveSet();}
+function mrow(ic,lab,act,sub){
+  const inner='<span class="mi">'+ic+'</span><span class="mt">'+lab+(sub?'<small>'+sub+'</small>':'')+'</span><span class="mc">›</span>';
+  return/^https?:/.test(act)?'<a class="mrow" href="'+act+'" target="_blank" rel="noopener">'+inner+'</a>':'<button class="mrow" onclick="'+act+'">'+inner+'</button>';
+}
 function vMore(){
   // iOS-style grouped list: one card, one row per setting / lista agrupada estilo iOS: una tarjeta, una fila por ajuste
   const row=(lab,ctl)=>'<div class="lrow"><span>'+lab+'</span>'+ctl+'</div>';
@@ -96,13 +100,21 @@ function vMore(){
     row(t('restTimer'),seg([['1',t('on')],['0',t('off')]],SET.auto?'1':'0','setAuto'))+
     row(t('restLen'),'<select class="in" onchange="setRest(this.value)">'+[30,45,60,90,120,150,180,240,300].map(s=>'<option value="'+s+'"'+(s===SET.rest?' selected':'')+'>'+fmtClock(s)+'</option>').join('')+'</select>')+
     row(t('sound'),seg([['1',t('on')],['0',t('off')]],SET.sound?'1':'0','setSound'))+'</div>';
-  h+='<div class="sec"><h2>'+t('yourData')+'</h2></div><div class="card"><p class="muted sm">'+t('dataP',DATA.workouts.length,DATA.body.length)+'</p>'+
-    '<div class="menu"><button onclick="exportJSON()">⬇ '+t('exportBackup')+'</button><button onclick="exportCSV()">⬇ '+t('exportCsv')+'</button><label class="btnl">⬆ '+t('importBackup')+'<input type="file" accept=".json,application/json" onchange="importFile(this)" hidden></label></div>'+
-    '<p class="muted sm">'+(SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+'</p></div>';
-  h+='<div class="sec"><h2>'+t('creator')+'</h2></div><div class="card creator"><div class="cr-top"><span class="cr-av">M<img src="icons/creator.jpg" alt="" onerror="this.remove()"></span><div><b>Mike</b><div class="muted sm">@bubylifts</div></div></div>'+
-    '<p class="sm">'+t('crBio')+'</p><a class="btn pri wide" href="https://www.instagram.com/bubylifts/" target="_blank" rel="noopener">📷 '+t('crFollow')+'</a></div>';
-  h+='<div class="sec"><h2>'+t('app')+'</h2></div><div class="card"><div class="menu">'+(canInstall()?'<button onclick="installApp()">📲 '+t('install')+'</button>':'')+'<button onclick="checkUpd()">🔄 '+t('updChk')+' ('+APP_VER+')</button><button onclick="shareOpen()">📤 '+t('shT')+'</button><button onclick="wnShow(true)">✨ '+t('whatsNew')+'</button><button onclick="faqOpen()">❓ '+t('faqBtn')+'</button><a class="btnl" href="https://tally.so/r/KpY5MA" target="_blank" rel="noopener">💬 '+t('fbT')+'</a></div><p class="muted sm">'+t('fbP')+'</p>'+
-    '<details class="dtl nob"><summary>'+t('about')+' · Bubylift '+APP_VER+'</summary><p class="sm">'+t('privacy')+'</p><p class="muted sm">'+t('credits')+'</p><p class="muted sm">'+t('disclaimer')+'</p>'+
+  h+='<div class="sec"><h2>'+t('yourData')+'</h2></div><div class="card grp mlist">'+
+    mrow('⬇️',t('exportBackup'),'exportJSON()',SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+
+    mrow('📄',t('exportCsv'),'exportCSV()')+
+    '<label class="mrow"><span class="mi">⬆️</span><span class="mt">'+t('importBackup')+'</span><span class="mc">›</span><input type="file" accept=".json,application/json" onchange="importFile(this)" hidden></label></div>'+
+    '<p class="muted sm mnote">'+t('dataP',DATA.workouts.length,DATA.body.length)+'</p>';
+  h+='<div class="sec"><h2>'+t('app')+'</h2></div><div class="card grp mlist">'+
+    (canInstall()?mrow('📲',t('install'),'installApp()'):'')+
+    mrow('✨',t('whatsNew'),'wnShow(true)')+
+    mrow('❓',t('faqBtn'),'faqOpen()')+
+    mrow('💬',t('fbT'),'https://tally.so/r/KpY5MA')+
+    mrow('📤',t('shT'),'shareOpen()')+
+    mrow('🔄',t('updChk'),'checkUpd()',APP_VER)+'</div>'+
+    '<div class="card creator"><div class="cr-top"><span class="cr-av">M<img src="icons/creator.jpg" alt="" onerror="this.remove()"></span><div><b>Mike</b><div class="muted sm">@bubylifts</div></div></div>'+
+    '<p class="sm">'+t('crBio')+'</p><a class="btn pri wide" href="https://www.instagram.com/bubylifts/" target="_blank" rel="noopener">📷 '+t('crFollow')+'</a></div>'+
+    '<div class="card"><details class="dtl nob"><summary>'+t('about')+' · Bubylift '+APP_VER+'</summary><p class="sm">'+t('privacy')+'</p><p class="muted sm">'+t('credits')+'</p><p class="muted sm">'+t('disclaimer')+'</p>'+
     '<p class="sm"><a href="https://github.com/bubymed/bubylift" target="_blank" rel="noopener">github.com/bubymed/bubylift</a></p></details></div>';
   h+='<div class="card"><button class="btn danger wide" onclick="eraseAsk()">'+t('eraseAll')+'</button></div>';
   return h;

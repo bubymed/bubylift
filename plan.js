@@ -451,7 +451,7 @@ function planExList(d,di,withEdit){
     if(e.sec&&e.sec!==last){h+='<div class="secl">'+t('sec_'+e.sec)+'</div>';}
     last=e.sec||last;
     const ss=optSsLabel(d,ei),ln=optLine(e);
-    return h+'<div class="plex'+(withEdit?' tap':'')+'"'+(withEdit?' role="button" tabindex="0" onclick="planEdit('+di+','+ei+')"':'')+'><span><b>'+(ss?'<i class="ssl">'+ss+'</i>':'')+(e.mn?'<i class="mnl" title="'+esc(t('mainT'))+'">★</i> ':'')+esc(exName(e.eid))+'</b><small>'+esc(tgText(e))+(ln?' · '+esc(ln):'')+'</small>'+
+    return h+'<div class="plex'+(withEdit?' tap':'')+'"'+(withEdit?' role="button" tabindex="0" onclick="planEdit('+di+','+ei+')"':'')+'>'+exThumb(e.eid)+'<span><b>'+(ss?'<i class="ssl">'+ss+'</i>':'')+(e.mn?'<i class="mnl" title="'+esc(t('mainT'))+'">★</i> ':'')+esc(exName(e.eid))+'</b><small>'+esc(tgText(e))+(ln?' · '+esc(ln):'')+'</small>'+
     (e.nt?'<small>'+esc(t(e.nt))+'</small>':'')+(e.rz?'<small class="rz">↳ '+esc(rzText(e))+'</small>':'')+(e.cn?'<small class="warnt">⚠ '+esc(t('injCare',jointNames(e.cn)))+'</small>':'')+'</span>'+
     (withEdit?'<em class="go">'+t('edit')+' ›</em>':'')+'</div>';
   }).join('');
@@ -498,9 +498,7 @@ function planCard(){
     (p.wu?'<p class="muted sm">📅 '+(p.wd.indexOf(new Date().getDay())>=0?t('schCardOn',wdName(new Date().getDay())):t('schCardRest'))+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn" onclick="planOpen()">'+t('planAll')+'</button></div>'+
     (p.ph?'<p class="muted sm">🎯 '+esc(phLine(p))+'</p>':'')+
-    '<div class="row"><button class="btn" onclick="schedOpen()">📅 '+t('schBtn')+'</button><button class="btn" onclick="volOpen()">📊 '+t('volBtn')+'</button></div>'+
-    (p.ph?'<div class="row"><button class="btn" onclick="phOpen()">🎯 '+t('phBtn')+'</button></div>':'')+
-    '<div class="row"><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDelShort')+'</button></div>'+
+    '<div class="row plsec"><button class="btn sm" onclick="schedOpen()">📅 '+t('schBtn')+'</button><button class="btn sm" onclick="volOpen()">📊 '+t('volBtn')+'</button>'+(p.ph?'<button class="btn sm" onclick="phOpen()">🎯 '+t('phBtn')+'</button>':'')+'<button class="btn sm danger" onclick="planDelAsk()">🗑 '+t('planDelShort')+'</button></div>'+
     '<p class="muted sm swhint">'+t('swHint')+'</p>'+testLine(p);
   if(checkDue())h+='<div class="pldue"><b>'+t('chkDue')+'</b><button class="btn sm" onclick="chkOpen()">'+t('chkOpen')+'</button></div>';
   return h+'</div></div>';

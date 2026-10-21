@@ -6,6 +6,11 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v51 — 2026-10-20
+- **New look:** Workout home uses large photo cards; routines show a photo thumbnail; exercise lists (picker, plan, library, stretch) show thumbnails; the plan card groups its secondary buttons in one row.
+  **Nuevo aspecto:** el inicio de Entrenar usa tarjetas grandes con fotos; las rutinas muestran miniatura; las listas de ejercicios (selector, plan, biblioteca, estirar) muestran miniaturas; la tarjeta del plan agrupa sus botones secundarios en una fila.
+- **More tab:** data and app options reorganized as icon list rows. / **Menú Más:** opciones de datos y app reorganizadas como filas con iconos.
+
 ## v50 — 2026-10-20
 - **Fix:** equipment routines showed "You have not marked this equipment" when the equipment list was on Bodyweight only. They now assume the piece of equipment you picked; the rest of your list (bench, bar…) still decides which alternatives are used.
   **Arreglo:** las rutinas por equipo mostraban "No has marcado este equipo" con la lista en solo peso corporal. Ahora dan por hecho el equipo que elegiste; el resto de tu lista (banco, barra…) sigue decidiendo qué alternativas se usan.

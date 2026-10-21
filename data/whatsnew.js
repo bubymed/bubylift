@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v51',items:[
+  {i:'🎨',en:'<b>New look</b> — Workout opens with big photo cards, your routines show a photo of their first exercise, and exercise lists everywhere (picker, plan, library, stretch) now have photo thumbnails.',es:'<b>Nuevo aspecto</b> — Entrenar abre con tarjetas grandes con fotos, tus rutinas muestran la foto de su primer ejercicio y las listas de ejercicios (selector, plan, biblioteca, estirar) ahora tienen miniaturas.'},
+  {i:'🗂️',en:'<b>More tab, organized</b> — data and app options are now clean list rows with icons, and the plan buttons are grouped in one compact row.',es:'<b>Menú Más ordenado</b> — las opciones de datos y de la app ahora son filas limpias con iconos, y los botones del plan están agrupados en una sola fila compacta.'}]},
  {v:'v50',items:[
   {i:'📷',en:'<b>Photos on the original exercises too</b> — about 150 of the exercises that were already in the app (bench press, pull-up, squat, curls…) now show two alternating photos in their technique guide, like the new ones.',es:'<b>Fotos también en los ejercicios originales</b> — unos 150 de los ejercicios que ya estaban en la app (press de banca, dominadas, sentadilla, curls…) ahora muestran dos fotos que alternan en su guía de técnica, como los nuevos.'},
   {i:'🔔',en:'<b>Equipment routines open anywhere</b> — the kettlebell, dumbbell, band… routines no longer depend on the equipment list above them; picking one shows its routine.',es:'<b>Rutinas por equipo siempre disponibles</b> — las rutinas de pesa rusa, mancuernas, bandas… ya no dependen de la lista de equipo de arriba; al elegir una se muestra su rutina.'}]},
