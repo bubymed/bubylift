@@ -661,3 +661,7 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .stats.card b{font-size:1.7rem;font-weight:800;color:var(--accent)}
 .bwhero{background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 18%,var(--panel)) 0%,var(--panel) 65%);border-radius:20px}
 .bw-in{font-weight:800}
+
+/* v59 clean placeholder when an exercise has no photo / marcador limpio cuando un ejercicio no tiene foto */
+.ex-no,.rt-no,.hv-no{background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 22%,var(--panel2)),var(--panel2))!important}
+.ex-no .ic,.rt-no .ic,.hv-no .ic{color:var(--accent)!important;opacity:.85}
