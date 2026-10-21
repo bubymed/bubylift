@@ -598,3 +598,18 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .mi .ic{width:20px;height:20px;color:var(--accent)}
 .ex-no .ic,.rt-no .ic{width:24px;height:24px;color:var(--dim)}
 .btn .ic{margin-right:2px}
+
+/* v53 equipment picker with photos / selector de equipo con fotos */
+.hvg{display:grid;grid-template-columns:1fr;gap:8px;margin:8px 0}
+.hv{position:relative;display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:8px 40px 8px 8px;border-radius:16px;background:var(--panel2);border:2px solid transparent;color:var(--txt)}
+.hv.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel2))}
+.hv-th{flex:none;width:64px;height:64px;border-radius:12px;background-size:cover;background-position:center;background-color:var(--panel)}
+.hv-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.hv-t small{color:var(--dim);font-size:.78rem;line-height:1.25}
+.hv-ck{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;border:2px solid var(--line);font-style:normal;font-size:.8rem;display:flex;align-items:center;justify-content:center;color:transparent}
+.hv.on .hv-ck{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.hvw .wopt{padding:8px 10px 8px 8px}
+.hvw .wopt .wi{width:64px;height:64px;font-size:0;flex:none}
+.hvw .hv-th{width:64px;height:64px}
+@media(min-width:720px){.hvg{grid-template-columns:1fr 1fr}}
+.wi .hv-th{display:block}

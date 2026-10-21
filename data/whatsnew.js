@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v53',items:[
+  {i:'📸',en:'<b>Equipment with photos</b> — when you choose your equipment (plan setup, routines) every item now has a photo and a one-line "what is it", so you know what a kettlebell, a sled or a suspension trainer is.',es:'<b>Equipo con fotos</b> — al elegir tu equipo (configurar el plan, rutinas) cada opción tiene una foto y una línea que explica qué es, para que sepas qué es una pesa rusa, un trineo o una suspensión.'}]},
  {v:'v52',items:[
   {i:'🧩',en:'<b>Real icons instead of emojis</b> — the home cards, More menu, plan buttons, history and exercise lists now use a clean, consistent icon set, so they look the same on every phone.',es:'<b>Iconos reales en lugar de emojis</b> — las tarjetas de inicio, el menú Más, los botones del plan, el historial y las listas de ejercicios ahora usan un conjunto de iconos limpio y consistente, así que se ven igual en cualquier teléfono.'}]},
  {v:'v51',items:[

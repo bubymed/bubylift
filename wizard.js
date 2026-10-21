@@ -42,8 +42,8 @@ function wzOne(key,vals,cur,lab,ic,desc,cls){
   return wzGrid(vals.map(v=>wzOpt("wzPick('"+key+"',"+wzV(v)+")",cur===v,ic?ic(v):'',lab(v),desc?desc(v):'')),cls);
 }
 /* several choices / varias opciones */
-function wzMany(key,vals,lab,ic,max,cls){
-  return wzGrid(vals.map(v=>wzOpt("wzTogM('"+key+"','"+v+"',"+(max||0)+")",PW[key].indexOf(v)>=0,ic?ic(v):'',lab(v),'')),cls);
+function wzMany(key,vals,lab,ic,max,cls,desc){
+  return wzGrid(vals.map(v=>wzOpt("wzTogM('"+key+"','"+v+"',"+(max||0)+")",PW[key].indexOf(v)>=0,ic?ic(v):'',lab(v),desc?desc(v):'')),cls);
 }
 function wzPick(k,v){
   pwSet(k,v);
@@ -91,7 +91,7 @@ const WQ=[
     return wzGrid([wzOpt("wzPick('ph',0)",!PW.ph,'🤖',t('phAuto'),t('phAutoP',auto,t('ph_'+auto)))].concat(al.map(v=>wzOpt("wzPick('ph',"+v+")",PW.ph===v,String(v),t('ph_'+v),t('phd_'+v)))),'c1');}},
  {id:'have',ic:'🏋️',title:()=>t('psEquip'),sub:()=>t('psEquipP'),multi:1,body:()=>
     '<div class="chips wrap">'+['gym','db','home','none'].map(k=>'<button class="chip" onclick="pwPreset(\''+k+'\')">'+t('eqp_'+k)+'</button>').join('')+'</div>'+
-    wzMany('have',HAVE_KEYS,v=>t('hv_'+v),v=>WZ_IC.have[v],0,'c3')+'<p class="muted sm">'+t('psEquipN')+'</p>'},
+    wzMany('have',HAVE_KEYS,v=>t('hv_'+v),v=>eqThumb(v),0,'c1 hvw',v=>t('hvd_'+v))+'<p class="muted sm">'+t('psEquipN')+'</p>'},
  {id:'inj',ic:'🩹',title:()=>t('psInj'),sub:()=>t('psInjP'),multi:1,body:()=>wzMany('inj',Object.keys(INJ),v=>t('inj_'+v),()=>'🩹',0,'c2')+'<p class="muted sm">'+t('psInjN')+'</p>'},
  {id:'cond',ic:'🔄',title:()=>t('psCond'),sub:()=>t('wzCondS'),body:()=>wzOne('cond',[0,1],PW.cond,v=>v?t('psCondB'):t('wzNo'),v=>v?'🔄':'👍','','c1')+(PW.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'')},
  {id:'avoid',ic:'🚫',title:()=>t('psAvoid'),sub:()=>t('psAvoidP'),multi:1,body:()=>wzMany('avoid',AVOID,v=>t('av_'+v),v=>WZ_IC.avoid[v],0,'c2')},
