@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v53 — 2026-10-20
+- **Equipment with photos:** the equipment picker (plan wizard, Adjust my plan, routines) shows a photo and a short "what is it" for each of the 15 items.
+  **Equipo con fotos:** el selector de equipo (asistente del plan, Ajustar mi plan, rutinas) muestra una foto y una frase de qué es para cada uno de los 15 elementos.
+
 ## v52 — 2026-10-20
 - **Icons:** the main UI emojis (home cards, More menu, plan and history buttons, exercise placeholders) are replaced by Tabler Icons (MIT), so they look identical on every device. Avatars, wizard choices and celebration emojis stay.
   **Iconos:** los emojis principales de la interfaz (tarjetas de inicio, menú Más, botones del plan e historial, marcadores de ejercicio) ahora son iconos Tabler (MIT), iguales en cualquier dispositivo. Los avatares, opciones del asistente y emojis de celebración se quedan.

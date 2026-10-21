@@ -670,7 +670,10 @@ function swapUse(id){
   if(n.u===it.u){n.lo=it.lo;n.hi=it.hi;}
   DATA.plan.ds[SW.d].ex[SW.e]=n;saveData();toast(t('swapped'));peDraw();
 }
-function haveChips(have,fn){return'<div class="chips wrap">'+HAVE_KEYS.map(k=>'<button class="chip'+(have.indexOf(k)>=0?' on':'')+'" onclick="'+fn+'(\''+k+'\')">'+t('hv_'+k)+'</button>').join('')+'</div>';}
+const EQ_IMG={barbell:'bench-0',dumbbell:'dbcurl-0',cable:'cablefly-0',machine:'legpress-0',kettlebell:'kbswing-0',band:'bandpull-0',ball:'ballbridge-0',medball:'mbslam-0',suspension:'suprow-0',bench:'benchdip-0',bar:'pullup-0',sled:'sledpush-0',wheel:'abwheel-1',pad:'z_bosu_ball_cable_crunch_with_side_b-0',pack:'farmer-1'};
+function eqThumb(k){return'<span class="hv-th" style="background-image:url(img/ex/'+(EQ_IMG[k]||'bench-0')+'.jpg)"></span>';}
+/* equipment picker: photo + what it is, so nobody has to guess / selector de equipo: foto y qué es, para no adivinar */
+function haveChips(have,fn){return'<div class="hvg">'+HAVE_KEYS.map(k=>'<button class="hv'+(have.indexOf(k)>=0?' on':'')+'" onclick="'+fn+'(\''+k+'\')">'+eqThumb(k)+'<span class="hv-t"><b>'+t('hv_'+k)+'</b><small>'+t('hvd_'+k)+'</small></span><i class="hv-ck">✓</i></button>').join('')+'</div>';}
 
 /* ---------- setup wizard: 7 short steps / asistente de 7 pasos ---------- */
 let PW={step:1};
