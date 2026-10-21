@@ -2,7 +2,7 @@
    [id, English, Español, group, equipment, mode]
    mode: 'wr' weight × reps (default) · 'bw' bodyweight reps (+ optional added weight) · 't' time & distance
    Never rename or reuse an id: saved workouts point to it. / Nunca cambies ni reutilices un id: los entrenamientos guardados apuntan a él. */
-const EX_GROUPS=['chest','back','shoulders','biceps','triceps','legs','glutes','core','full','balance','power','cardio'];
+const EX_GROUPS=['chest','back','shoulders','biceps','triceps','legs','glutes','core','full','balance','power','cardio','mobility'];
 const EXLIB=[
  // chest / pecho
  ['bench','Barbell Bench Press','Press de banca con barra','chest','barbell'],

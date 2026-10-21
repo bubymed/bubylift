@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v48 — 2026-10-20
+- **Exercise library x4:** 755 exercises imported from the Free Exercise DB (Unlicense), about 990 in total, each with our own short bilingual guide. New "Stretch & mobility" group (106 moves) kept out of auto-built plans and injury badges. Muscle, level and joint-stress codes for the new moves are automatic and pending CPT review. Each new move also shows the dataset's two photos (resized, ~16 MB, cached when viewed) alternating in the technique guide.
+  **Biblioteca x4:** 755 ejercicios importados de Free Exercise DB (Unlicense), cerca de 990 en total, cada uno con una guía bilingüe corta propia. Grupo nuevo "Estiramiento y movilidad" (106 movimientos) fuera de los planes automáticos y de las alertas de lesión. Los códigos de músculo, nivel y estrés articular son automáticos y están pendientes de revisión CPT. Cada movimiento nuevo muestra además las dos fotos del dataset (reducidas, ~16 MB, se guardan al verlas) alternando en la guía de técnica.
+
 ## v47 — 2026-10-20
 - **Fix:** the Ab Wheel Rollout, Balance Pad Single-Leg Stance, Half-Ball Squat, Ammo Can Overhead Press and Weighted Lunge (sandbag or pack) were suggested to everyone because they counted as "no equipment". The equipment list now has "Ab wheel", "Balance pad or half ball" and "Sandbag, loaded pack or ammo can"; each exercise only appears when its item is marked (gym preset includes them). Saved equipment lists without it stop getting the exercise until they add it.
   **Arreglo:** la Rueda abdominal, el equilibrio sobre almohadilla, la sentadilla en media pelota, el press con caja de municiones y la zancada con peso (saco o mochila) se sugerían a todos porque contaban como "sin equipo". La lista de equipo ahora tiene "Rueda abdominal", "Almohadilla de equilibrio o media pelota" y "Saco de arena, mochila con peso o caja de municiones"; cada ejercicio solo aparece si su elemento está marcado (el preajuste de gimnasio los incluye). Las listas de equipo guardadas sin ella dejan de recibir el ejercicio hasta que la agreguen.

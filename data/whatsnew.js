@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v48',items:[
+  {i:'📚',en:'<b>~750 more exercises</b> — the library now has about 990 moves, each with a short step-by-step guide in English and Spanish and two photos that alternate in the technique guide. A new "Stretch &amp; mobility" group holds stretches and mobility drills; they are not used in auto-built plans. Joint-stress tags on the new exercises are automatic, so treat them as general precautions.',es:'<b>~750 ejercicios más</b> — la biblioteca ahora tiene cerca de 990 movimientos, cada uno con una guía corta paso a paso en español e inglés y dos fotos que alternan en la guía de técnica. Un grupo nuevo "Estiramiento y movilidad" reúne estiramientos y ejercicios de movilidad; no se usan en los planes armados automáticamente. Las etiquetas de estrés articular de los nuevos ejercicios son automáticas, tómalas como precauciones generales.'}]},
  {v:'v47',items:[
   {i:'🛞',en:'<b>More equipment you mark</b> — the Ab Wheel Rollout, balance pad and half-ball moves, and sandbag or ammo-can moves are only suggested if you say you have them. Add them in your equipment list (plan setup, Adjust my plan or the equipment box in routines).',es:'<b>Más equipo que marcas</b> — la rueda abdominal, los ejercicios con almohadilla o media pelota y los de saco de arena o caja de municiones solo se sugieren si dices que los tienes. Agrégalos en tu lista de equipo (configuración del plan, Ajustar mi plan o el cuadro de equipo en las rutinas).'}]},
  {v:'v46',items:[

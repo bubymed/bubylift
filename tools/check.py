@@ -58,16 +58,16 @@ for js in ("app.js", "workout.js", "history.js", "body.js"):
         used.update(re.findall(r"'(t[A-Z][a-z]+)'", q))
     for q in re.findall(r"steps=ios\?\[(.*?)\]:\[(.*?)\]", src):
         for part in q: used.update(re.findall(r"'(\w+)'", part))
-groups = re.search(r"EX_GROUPS=\[(.*?)\]", read("data/exercises.js")).group(1)
+groups = re.search(r"EX_GROUPS=\[(.*?)\]", (read("data/exercises.js")+read("data/exercises2.js"))).group(1)
 for g in re.findall(r"'(\w+)'", groups): used.add("g_" + g)
-for row in re.findall(r"^ \['\w+','[^']*','[^']*','\w+','(\w+)'", read("data/exercises.js"), re.M): used.add("e_" + row)
+for row in re.findall(r"^ \['\w+','[^']*','[^']*','\w+','(\w+)'", (read("data/exercises.js")+read("data/exercises2.js")), re.M): used.add("e_" + row)
 used.update({"m_wr", "m_bw", "m_t"})
 used.update("me_" + k for k in re.findall(r"'(\w+)'", re.search(r"const MEAS=\[(.*?)\]", read("body.js")).group(1)))
 for k in sorted(used):
     if k not in keys: err(f"missing translation key: {k}")
 
 # 4) exercise ids unique, groups valid / ids de ejercicios únicos y grupos válidos
-rows = re.findall(r"^ \['(\w+)','[^']*','[^']*','(\w+)','(\w+)'(?:,'(\w+)')?\]", read("data/exercises.js"), re.M)
+rows = re.findall(r"^ \['(\w+)','[^']*','[^']*','(\w+)','(\w+)'(?:,'(\w+)')?\]", (read("data/exercises.js")+read("data/exercises2.js")), re.M)
 ids = [r[0] for r in rows]
 if len(ids) != len(set(ids)): err("duplicate exercise ids")
 gset = set(re.findall(r"'(\w+)'", groups))
