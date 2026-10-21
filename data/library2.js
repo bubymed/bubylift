@@ -1,6 +1,7 @@
 /* Routines by equipment (v49): same format as FOCUS, one area per kind of equipment. The first alternative the person can do is used; there is no swap to other equipment.
    Rutinas por equipo (v49): mismo formato que FOCUS, un área por tipo de equipo. Se usa la primera alternativa posible; no se cambia a otro equipo. */
 const LIB_EQ=['kb','db','bb','cab','mach','band','trx','mb','bw'];
+LIB_AREAS.push('stretch'); // holds: stretch & mobility / posiciones sostenidas: estiramiento y movilidad
 Object.assign(FOCUS,{
  kb:[
   ['kbdl,z_kettlebell_dead_clean|std|3|10|12','z_one_arm_kettlebell_floor_press,z_alternating_floor_press|std|3|8|10','z_two_arm_kettlebell_row,z_one_arm_kettlebell_row|std|3|10|12','kbswing,z_one_arm_kettlebell_swings|std|3|10|15','z_kettlebell_halo|std|2|8|10','z_kettlebell_figure_8,z_kettlebell_pass_between_the_legs|std|2|10|12'],
@@ -37,5 +38,9 @@ Object.assign(FOCUS,{
  bw:[
   ['bodysq|std|3|12|15','kneepush,z_incline_push_up_medium|std|3|8|12','supermanback|std|3|12|15','glutebr,z_butt_lift_bridge|std|3|12|15','bwlunge|std|3|8|10','plank|std|3|20|30','deadbug,birddog|std|2|8|10'],
   ['pushup|rom|4|8|12','bwlunge,z_bodyweight_walking_lunge|uni|3|10|12','z_incline_push_up_close_grip|std|3|8|12','slbridge|uni|3|10|12','mountain|std|3|20|30','z_crunches,z_cross_body_crunch|std|3|15|20','z_side_bridge|std|3|20|30'],
-  ['z_single_arm_push_up,decpush|lever|4|5|8','z_push_ups_with_feet_elevated,z_decline_push_up|lever|4|8|12','slsquat,z_single_leg_high_box_squat|uni|4|5|8','z_split_jump,z_freehand_jump_squat|mom|4|8|10','pullup,chinup,invrow|rom|4|5|8','z_plyo_push_up|mom|3|6|8','hollow|lever|3|20|30','z_jackknife_sit_up|lever|3|10|12']]
+  ['z_single_arm_push_up,decpush|lever|4|5|8','z_push_ups_with_feet_elevated,z_decline_push_up|lever|4|8|12','slsquat,z_single_leg_high_box_squat|uni|4|5|8','z_split_jump,z_freehand_jump_squat|mom|4|8|10','pullup,chinup,invrow|rom|4|5|8','z_plyo_push_up|mom|3|6|8','hollow|lever|3|20|30','z_jackknife_sit_up|lever|3|10|12']],
+ stretch:[
+  ['z_childs_pose,z_hug_knees_to_chest|std|2|20|30','z_cat_stretch|std|2|20|30','z_seated_floor_hamstring_stretch,z_hamstring_stretch|std|2|20|30','z_kneeling_hip_flexor,z_standing_hip_flexors|std|2|20|30','z_chest_and_front_of_shoulder_stretc,z_dynamic_chest_stretch|std|2|20|30','z_triceps_stretch,z_tricep_side_stretch|std|2|20|30','z_seated_calf_stretch,z_calf_stretch_hands_against_wall|std|2|20|30'],
+  ['z_worlds_greatest_stretch|std|2|30|40','z_90_90_hamstring,z_leg_up_hamstring_stretch|rom|2|30|40','z_one_knee_to_chest,z_knee_across_the_body|std|2|30|40','z_on_your_back_quad_stretch,z_quad_stretch|std|2|30|40','z_adductor_groin,z_side_lying_groin_stretch|std|2|30|40','z_upper_back_stretch,z_middle_back_stretch|std|2|30|40','z_round_the_world_shoulder_stretch,z_shoulder_stretch|std|2|30|40'],
+  ['z_worlds_greatest_stretch|lever|3|40|60','z_intermediate_hip_flexor_and_quad_s|rom|3|40|60','z_lying_hamstring,z_seated_hamstring|rom|3|40|60','z_intermediate_groin_stretch|rom|3|40|60','z_lying_glute,z_seated_glute|rom|3|40|60','z_dancers_stretch,z_spinal_stretch|rom|3|40|60','z_round_the_world_shoulder_stretch,z_shoulder_stretch|rom|3|40|60']]
 });

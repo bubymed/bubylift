@@ -19,7 +19,7 @@ function libFocus(area,rank,have){
     const p=s.split('|'),alts=p[0].split(','),lever=p[1],sets=+p[2],lo=+p[3],hi=+p[4];
     let id=null;
     for(let i=0;i<alts.length&&!id;i++){const a=alts[i];if(!used[a]&&avail(a,have)&&stressLvl(a,L)<2&&!(prof&&prefBad(a,prof)))id=a;}
-    if(!id&&LIB_EQ.indexOf(area)<0){const c=swapCands(alts[0],have,L,used,li===0?1:2).filter(x=>!(prof&&prefBad(x.id,prof)));if(c.length)id=c[0].id;}
+    if(!id&&LIB_EQ.indexOf(area)<0&&area!=='stretch'){const c=swapCands(alts[0],have,L,used,li===0?1:2).filter(x=>!(prof&&prefBad(x.id,prof)));if(c.length)id=c[0].id;}
     if(!id)return;
     used[id]=1;
     const hold=exMode(id)==='t',secs=hold&&lo>=20;
