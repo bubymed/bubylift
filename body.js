@@ -56,7 +56,7 @@ function vBody(){
   h+='<div class="sec"><h2>'+t('entries')+'</h2></div>';
   DATA.body.slice(0,40).forEach(b=>{
     const parts=[];if(b.w)parts.push(wShow(b.w)+' '+wUnit());if(b.bf)parts.push(fmtNum(b.bf,1)+'%');if(b.m)parts.push(t('nMeas',Object.keys(b.m).length));
-    h+='<div class="card bde"><div><b>'+esc(dFmt(b.t))+'</b><div class="muted sm">'+esc(parts.join(' · '))+(b.note?' — '+esc(b.note):'')+'</div></div><button class="ico" aria-label="'+esc(t('delete'))+'" onclick="bodyDel(\''+b.id+'\')">🗑</button></div>';
+    h+='<div class="card bde"><div><b>'+esc(dFmt(b.t))+'</b><div class="muted sm">'+esc(parts.join(' · '))+(b.note?' — '+esc(b.note):'')+'</div></div><button class="ico" aria-label="'+esc(t('delete'))+'" onclick="bodyDel(\''+b.id+'\')">'+ic('trash')+'</button></div>';
   });
   return h;
 }
@@ -93,7 +93,7 @@ function vMore(){
   // iOS-style grouped list: one card, one row per setting / lista agrupada estilo iOS: una tarjeta, una fila por ajuste
   const row=(lab,ctl)=>'<div class="lrow"><span>'+lab+'</span>'+ctl+'</div>';
   const gp=(typeof pfCur==='function'&&pfCur());
-  let h=(gp&&gp.g?'<div class="card tip"><b>👤 '+t('gnT')+'</b><p class="sm">'+t('gnP')+'</p><div class="row"><button class="btn pri" onclick="gSave()">'+t('gnYes')+'</button></div></div>':'')+'<div class="sec"><h2>'+t('prefs')+'</h2></div><div class="card grp">'+
+  let h=(gp&&gp.g?'<div class="card tip"><b>'+ic('user')+' '+t('gnT')+'</b><p class="sm">'+t('gnP')+'</p><div class="row"><button class="btn pri" onclick="gSave()">'+t('gnYes')+'</button></div></div>':'')+'<div class="sec"><h2>'+t('prefs')+'</h2></div><div class="card grp">'+
     row(t('language'),seg([['en','English'],['es','Español']],LANG,'setLang'))+
     row(t('appearance'),seg([['system',t('thSystem')],['dark',t('thDark')],['light',t('thLight')]],SET.theme||'system','setTheme'))+
     row(t('units'),seg([['imperial','lb·in·mi'],['metric','kg·cm·km']],SET.units,'setUnits'))+
@@ -101,19 +101,19 @@ function vMore(){
     row(t('restLen'),'<select class="in" onchange="setRest(this.value)">'+[30,45,60,90,120,150,180,240,300].map(s=>'<option value="'+s+'"'+(s===SET.rest?' selected':'')+'>'+fmtClock(s)+'</option>').join('')+'</select>')+
     row(t('sound'),seg([['1',t('on')],['0',t('off')]],SET.sound?'1':'0','setSound'))+'</div>';
   h+='<div class="sec"><h2>'+t('yourData')+'</h2></div><div class="card grp mlist">'+
-    mrow('⬇️',t('exportBackup'),'exportJSON()',SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+
-    mrow('📄',t('exportCsv'),'exportCSV()')+
-    '<label class="mrow"><span class="mi">⬆️</span><span class="mt">'+t('importBackup')+'</span><span class="mc">›</span><input type="file" accept=".json,application/json" onchange="importFile(this)" hidden></label></div>'+
+    mrow(ic('download'),t('exportBackup'),'exportJSON()',SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+
+    mrow(ic('file-text'),t('exportCsv'),'exportCSV()')+
+    '<label class="mrow"><span class="mi">'+ic('upload')+'</span><span class="mt">'+t('importBackup')+'</span><span class="mc">›</span><input type="file" accept=".json,application/json" onchange="importFile(this)" hidden></label></div>'+
     '<p class="muted sm mnote">'+t('dataP',DATA.workouts.length,DATA.body.length)+'</p>';
   h+='<div class="sec"><h2>'+t('app')+'</h2></div><div class="card grp mlist">'+
-    (canInstall()?mrow('📲',t('install'),'installApp()'):'')+
-    mrow('✨',t('whatsNew'),'wnShow(true)')+
-    mrow('❓',t('faqBtn'),'faqOpen()')+
-    mrow('💬',t('fbT'),'https://tally.so/r/KpY5MA')+
-    mrow('📤',t('shT'),'shareOpen()')+
-    mrow('🔄',t('updChk'),'checkUpd()',APP_VER)+'</div>'+
+    (canInstall()?mrow(ic('device-mobile'),t('install'),'installApp()'):'')+
+    mrow(ic('sparkles'),t('whatsNew'),'wnShow(true)')+
+    mrow(ic('help-circle'),t('faqBtn'),'faqOpen()')+
+    mrow(ic('message-circle'),t('fbT'),'https://tally.so/r/KpY5MA')+
+    mrow(ic('share'),t('shT'),'shareOpen()')+
+    mrow(ic('refresh'),t('updChk'),'checkUpd()',APP_VER)+'</div>'+
     '<div class="card creator"><div class="cr-top"><span class="cr-av">M<img src="icons/creator.jpg" alt="" onerror="this.remove()"></span><div><b>Mike</b><div class="muted sm">@bubylifts</div></div></div>'+
-    '<p class="sm">'+t('crBio')+'</p><a class="btn pri wide" href="https://www.instagram.com/bubylifts/" target="_blank" rel="noopener">📷 '+t('crFollow')+'</a></div>'+
+    '<p class="sm">'+t('crBio')+'</p><a class="btn pri wide" href="https://www.instagram.com/bubylifts/" target="_blank" rel="noopener">'+ic('brand-instagram')+' '+t('crFollow')+'</a></div>'+
     '<div class="card"><details class="dtl nob"><summary>'+t('about')+' · Bubylift '+APP_VER+'</summary><p class="sm">'+t('privacy')+'</p><p class="muted sm">'+t('credits')+'</p><p class="muted sm">'+t('disclaimer')+'</p>'+
     '<p class="sm"><a href="https://github.com/bubymed/bubylift" target="_blank" rel="noopener">github.com/bubymed/bubylift</a></p></details></div>';
   h+='<div class="card"><button class="btn danger wide" onclick="eraseAsk()">'+t('eraseAll')+'</button></div>';
@@ -212,8 +212,8 @@ function eraseAll(){
 /* share the app with a QR code / compartir la app con un código QR */
 const APP_URL='https://bubymed.github.io/bubylift/';
 async function shareOpen(){
-  sheet('<div class="form"><div class="pick-h"><h3>📤 '+t('shT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted">'+t('shP')+'</p><div class="qrbox" id="shqr" style="cursor:default"></div><p class="g-c"><b>'+APP_URL.replace('https://','')+'</b></p>'+
-    '<div class="row">'+(navigator.share?'<button class="btn pri" onclick="shareNative()">📤 '+t('shSend')+'</button>':'')+'<button class="btn" onclick="shareCopy()">🔗 '+t('shCopy')+'</button></div><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
+  sheet('<div class="form"><div class="pick-h"><h3>'+ic('share')+' '+t('shT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted">'+t('shP')+'</p><div class="qrbox" id="shqr" style="cursor:default"></div><p class="g-c"><b>'+APP_URL.replace('https://','')+'</b></p>'+
+    '<div class="row">'+(navigator.share?'<button class="btn pri" onclick="shareNative()">'+ic('share')+' '+t('shSend')+'</button>':'')+'<button class="btn" onclick="shareCopy()">'+ic('link')+' '+t('shCopy')+'</button></div><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
   try{await pfLib('lib/qrcode.min.js');const e=$('shqr');if(e)e.innerHTML=pfQrSvg(APP_URL);}catch(e){const x=$('shqr');if(x)x.remove();}
 }
 function shareNative(){try{navigator.share({title:'Bubylift',text:t('shMsg'),url:APP_URL}).catch(function(){});}catch(e){}}

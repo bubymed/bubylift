@@ -42,7 +42,7 @@ function wkDur(wk){return(wk.end&&wk.end>wk.t)?(wk.end-wk.t)/1000:0;}
 function wkPRs(wk){let n=0;wk.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr)n++;}));return n;}
 function wkCard(wk){
   const d=wkDur(wk),pr=wkPRs(wk),vol=wkVol(wk);
-  return'<button class="card wkc" onclick="openWk(\''+wk.id+'\')"><div class="wkc-d"><b>'+esc(dFmt(wk.t,{weekday:'short',month:'short',day:'numeric'}))+'</b>'+(pr?' <span class="pr">🏆 '+pr+'</span>':'')+'</div>'+
+  return'<button class="card wkc" onclick="openWk(\''+wk.id+'\')"><div class="wkc-d"><b>'+esc(dFmt(wk.t,{weekday:'short',month:'short',day:'numeric'}))+'</b>'+(pr?' <span class="pr">'+ic('trophy')+' '+pr+'</span>':'')+'</div>'+
     '<div class="wkc-n">'+esc(wk.name||'')+'</div>'+
     '<div class="muted sm">'+(d?fmtDur(d)+' · ':'')+t('nSetsT',wkSets(wk))+(vol?' · '+wShow(vol)+' '+wUnit():'')+'</div>'+
     '<div class="muted sm">'+wk.ex.slice(0,3).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(wk.ex.length>3?' …':'')+'</div></button>';
@@ -73,10 +73,10 @@ function openWk(id){
     '<div class="stats">'+(d?'<div><b>'+fmtDur(d)+'</b><span>'+t('duration')+'</span></div>':'')+'<div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
   wk.ex.forEach(x=>{
     const m=exMode(x.eid);
-    h+='<div class="wkd-ex"><b>'+esc(exName(x.eid,x.n))+'</b>'+x.sets.map((s,i)=>'<div class="wkd-s"><span>'+(i+1)+'</span><span>'+esc(fmtSet(m,s))+'</span>'+(s.pr?'<i class="pr">🏆</i>':'')+'</div>').join('')+'</div>';
+    h+='<div class="wkd-ex"><b>'+esc(exName(x.eid,x.n))+'</b>'+x.sets.map((s,i)=>'<div class="wkd-s"><span>'+(i+1)+'</span><span>'+esc(fmtSet(m,s))+'</span>'+(s.pr?'<i class="pr">'+ic('trophy')+'</i>':'')+'</div>').join('')+'</div>';
   });
   if(wk.note)h+='<p class="wkd-note">'+esc(wk.note)+'</p>';
-  h+='<div class="menu"><button onclick="repeatWk(\''+id+'\')">↻ '+t('repeat')+'</button><button onclick="saveWkAsRoutine(\''+id+'\')">☰ '+t('saveRoutineS')+'</button><button onclick="shareWk(\''+id+'\')">⇪ '+t('share')+'</button><button class="danger" onclick="delWkAsk(\''+id+'\')">🗑 '+t('delete')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>';
+  h+='<div class="menu"><button onclick="repeatWk(\''+id+'\')">↻ '+t('repeat')+'</button><button onclick="saveWkAsRoutine(\''+id+'\')">☰ '+t('saveRoutineS')+'</button><button onclick="shareWk(\''+id+'\')">⇪ '+t('share')+'</button><button class="danger" onclick="delWkAsk(\''+id+'\')">'+ic('trash')+' '+t('delete')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>';
   sheet(h);
 }
 function repeatWk(id){

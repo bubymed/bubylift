@@ -76,7 +76,7 @@ function vStart(){
 }
 function rtThumb(r){
   const x=r.ex.find(e=>typeof EXPHOTO!=='undefined'&&EXPHOTO.has(e.eid));
-  return x?'<span class="rt-th" style="background-image:url(img/ex/'+x.eid+'-0.jpg)"></span>':'<span class="rt-th rt-no">🏋️</span>';
+  return x?'<span class="rt-th" style="background-image:url(img/ex/'+x.eid+'-0.jpg)"></span>':'<span class="rt-th rt-no">'+ic('barbell')+'</span>';
 }
 function bkLater(){SET.bkSnooze=Date.now()+14*864e5;saveSet();render();}
 
@@ -129,7 +129,7 @@ function exCard(i,x){
     const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
     const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+(d<0?'−':'+')+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
     const inp=(k,v,p,mode)=>m==='t'?inp0(k,v,p,mode):'<span class="stc">'+stb(k,-1)+inp0(k,v,p,mode)+stb(k,1)+'</span>';
-    h+='<div class="srow'+(s.done?' done':'')+'"><span class="sn">'+(j+1)+(s.pr?'<i class="pr" title="PR">🏆</i>':'')+'</span><span class="sp">'+esc(fmtPrev(m,pv[j]))+'</span>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('doneSet'))+'" onclick="tgSet('+i+','+j+')">✓</button><button class="clr'+((s.w!=null||s.r!=null||s.t!=null||s.d||s.done)?'':' off')+'" aria-label="'+esc(t('clrSet'))+'" title="'+esc(t('clrSet'))+'" onclick="clrSet('+i+','+j+')">✕</button></div>';
+    h+='<div class="srow'+(s.done?' done':'')+'"><span class="sn">'+(j+1)+(s.pr?'<i class="pr" title="PR">'+ic('trophy')+'</i>':'')+'</span><span class="sp">'+esc(fmtPrev(m,pv[j]))+'</span>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('doneSet'))+'" onclick="tgSet('+i+','+j+')">✓</button><button class="clr'+((s.w!=null||s.r!=null||s.t!=null||s.d||s.done)?'':' off')+'" aria-label="'+esc(t('clrSet'))+'" title="'+esc(t('clrSet'))+'" onclick="clrSet('+i+','+j+')">✕</button></div>';
   });
   h+='<button class="btn sm wide" onclick="addSet('+i+')">＋ '+t('addSet')+'</button></section>';
   return h;
@@ -212,7 +212,7 @@ function finishWk(){
   const prs=[];wk.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr&&prs.indexOf(x.eid)<0)prs.push(x.eid);}));
   sheet('<div class="sum"><div class="sum-e">🎉</div><h3>'+t('wkSaved')+'</h3><p class="muted">'+esc(wk.name)+'</p>'+
     '<div class="stats"><div><b>'+fmtDur((end-wk.t)/1000)+'</b><span>'+t('duration')+'</span></div><div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>'+
-    (prs.length?'<p class="prs">🏆 '+t('prsT')+': '+prs.map(e=>esc(exName(e))).join(', ')+'</p>':'')+
+    (prs.length?'<p class="prs">'+ic('trophy')+' '+t('prsT')+': '+prs.map(e=>esc(exName(e))).join(', ')+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="sumDone()">'+t('done')+'</button><button class="btn" onclick="saveWkAsRoutine(\''+wk.id+'\')">'+t('saveRoutineS')+'</button></div></div>');
 }
 /* one-time feedback pop up: after the first routine/plan AND the first logged set / pop up de feedback una sola vez */
@@ -276,7 +276,7 @@ function recentIds(){
   for(const wk of DATA.workouts){for(const x of wk.ex){if(r.indexOf(x.eid)<0)r.push(x.eid);if(r.length>=6)return r;}}
   return r;
 }
-function exThumb(id){return typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id)?'<span class="ex-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>':'<span class="ex-th ex-no">🏋️</span>';}
+function exThumb(id){return typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id)?'<span class="ex-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>':'<span class="ex-th ex-no">'+ic('barbell')+'</span>';}
 function exRow(e){return'<button class="exrow exth" onclick="pickDone(\''+e.id+'\')">'+exThumb(e.id)+'<span class="ex-tx"><b>'+esc(LANG==='es'?e.es:e.en)+'</b><small>'+t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+esc(injBadge(e.id))+'</small></span></button>';}
 function exListHtml(){
   const q=norm(UI.q.trim()),all=EXLIB.map(a=>exById(a[0])).concat(DATA.custom.map(c=>exById(c.id)));
