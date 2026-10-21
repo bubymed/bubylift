@@ -185,6 +185,11 @@ function pickFor(mu,role,ctx){
   const list=first.concat(role==='m'?P.m.concat(P.a):P.a.concat(P.m)).filter((x,i,a)=>a.indexOf(x)===i);
   const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&(!TESTONLY[id]||TESTONLY[id]===ctx.test)&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
   c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||((ctx.used[a]||0)-(ctx.used[b]||0)));
+  // v49: on every third accessory pick, prefer an imported exercise that ties with the best one / cada tercera opción de accesorio prefiere un ejercicio importado empatado con la mejor
+  if(c.length>1&&role!=='m'&&role!=='p'&&Object.keys(ctx.used).length%2===0){
+    const k=x=>stressLvl(x,ctx.L)+'/'+(ctx.used[x]||0),j=c.findIndex(x=>x.slice(0,2)==='z_'&&k(x)===k(c[0]));
+    if(j>0)c.unshift(c.splice(j,1)[0]);
+  }
   return persPick(c);
 }
 function normProf(p){
