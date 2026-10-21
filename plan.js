@@ -776,6 +776,7 @@ function howOpen(eid,back){
   const L=curInjL(),inj=L&&stressLvl(eid,L)?'<div class="card warn"><p>⚠ '+esc(t(stressLvl(eid,L)>=2?'injNo':'injCare',jointNames(stressJoints(eid,L,1))))+'</p></div>':'';
   sheet('<div class="form"><div class="pick-h"><h3>'+esc(es?e.es:e.en)+'</h3><button class="ico" onclick="'+(back||'sheetClose')+'()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<p class="muted sm">'+t('g_'+e.g)+' · '+t('e_'+e.e)+'</p>'+inj+
+    (eid.slice(0,2)==='z_'?'<div class="eximg"><img src="img/ex/'+eid+'-0.jpg" alt="" onerror="this.parentNode.remove()"><img class="b" src="img/ex/'+eid+'-1.jpg" alt="" onerror="this.remove()"></div>':'')+
     '<div class="lbl">'+t('howSteps')+'</div><ol class="how">'+steps.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>'+
     (mis?'<div class="lbl">'+t('howMis')+'</div><p>'+esc(mis)+'</p>':(src?'':'<p class="muted sm">'+t('howGen')+'</p>'))+
     '<p class="muted sm">'+esc(HOWSAFE[es?1:0])+'</p>'+
