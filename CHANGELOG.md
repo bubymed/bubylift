@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v59 — 2026-10-20
+- **More photos:** 17 more original exercises get Free Exercise DB photos (closest equivalent movements). About 75 still have none because the open database has no equivalent.
+  **Más fotos:** 17 ejercicios originales más reciben fotos de Free Exercise DB (los movimientos equivalentes más cercanos). Unos 75 siguen sin foto porque la base abierta no tiene equivalente.
+
 ## v58 — 2026-10-20
 - **History, Progress and Body:** workout and exercise cards show a photo thumbnail; totals and the weight card use the orange accent with a soft gradient.
   **Historial, Progreso y Cuerpo:** las tarjetas de entrenamiento y de ejercicio muestran una miniatura con foto; los totales y la tarjeta de peso usan el naranja con un degradado suave.
