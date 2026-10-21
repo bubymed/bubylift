@@ -131,8 +131,14 @@ function photoTh(id){return'<span class="hv-th" style="background-image:url(img/
 function libTiles(arr,cur,fn){return'<div class="lat">'+arr.map(k=>'<button class="lt-i'+(k===cur?' on':'')+'" onclick="'+fn+'(\''+k+'\')" style="background-image:url(img/ex/'+(LIB_IMG[k]||'bench')+'-0.jpg)"><span>'+t('lib_'+k)+'</span></button>').join('')+'</div>';}
 function libChips(arr,cur,fn,lab,wrap){return'<div class="chips'+(wrap?' wrap':'')+'">'+arr.map((k,i)=>{const v=typeof k==='number'?k:k;return'<button class="chip'+(String(v)===String(cur)?' on':'')+'" onclick="'+fn+'(\''+v+'\')">'+lab(v)+'</button>';}).join('')+'</div>';}
 /* a numbered rank card grid, different from the pill buttons / cuadrícula de rangos numerados, distinta de los botones de píldora */
+const CH_IMG={pt:'pushup',cf:'kbswing',hy:'squat',mil:'pullup',run:'sledpush'};
+function chImg(c){
+  for(const m of c.mv){for(const a of m.split('|')){const id=a.split(':')[0];if(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id))return id;}}
+  return CH_IMG[chCat(c)]||'pushup';
+}
 function libRanks(kind,cur,fn){
-  return'<div class="rkg">'+[0,1,2,3,4,5].map(i=>'<button class="rk'+(i===cur?' on':'')+'" onclick="'+fn+'('+i+')"><i>'+(i+1)+'</i><span>'+esc(rk(kind,i))+'</span></button>').join('')+'</div>';
+  const img='img/ex/'+(LIB_IMG[kind]||CH_IMG[kind]||'bench')+'-0.jpg';
+  return'<div class="rkg">'+[0,1,2,3,4,5].map(i=>'<button class="rk rkp'+(i===cur?' on':'')+'" style="background-image:url('+img+')" onclick="'+fn+'('+i+')"><i>'+(i+1)+'</i><span>'+esc(rk(kind,i))+'</span></button>').join('')+'</div>';
 }
 function libStep(n,key){return'<div class="lstep"><b>'+n+'</b><span>'+t(key)+'</span></div>';}
 function libEqHtml(){
@@ -170,7 +176,7 @@ function libChList(){
   const list=CHALLENGES.filter(c=>LIB.flt==='all'||c.tg.indexOf(LIB.flt)>=0);
   h+=list.map(c=>{
     const b=chBuild(c,LIB.clv,have),best=chBest(c.id,LIB.clv,c.ty);
-    return'<button class="card chc" onclick="libSel(\''+c.id+'\')"><b>'+esc(t('ch_'+c.id))+'</b><div class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+c.tg.map(k=>t('chf_'+k)).join(' · ')+'</div><div class="muted sm">'+t('rankOf',LIB.clv+1)+' · '+esc(rk(chCat(c),LIB.clv))+' · '+(b.exact?t('chExact'):t('chAdapt'))+(best?' · '+ic('trophy')+' '+esc(chScoreTxt(c.ty,best.sc)):'')+'</div></button>';
+    return'<button class="card chc chp" onclick="libSel(\''+c.id+'\')">'+photoTh(chImg(c))+'<span class="chp-t"><b>'+esc(t('ch_'+c.id))+'</b><div class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+c.tg.map(k=>t('chf_'+k)).join(' · ')+'</div><div class="muted sm">'+t('rankOf',LIB.clv+1)+' · '+esc(rk(chCat(c),LIB.clv))+' · '+(b.exact?t('chExact'):t('chAdapt'))+(best?' · '+ic('trophy')+' '+esc(chScoreTxt(c.ty,best.sc)):'')+'</div></button>';
   }).join('');
   return h;
 }

@@ -625,3 +625,13 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .spc .hv-th{width:56px;height:56px}
 .spc-t{display:flex;flex-direction:column;gap:2px;min-width:0}
 @media(min-width:720px){.lat{grid-template-columns:repeat(5,1fr)}}
+
+/* v55 challenges and ranks with photos / retos y rangos con fotos */
+.chp{display:flex;align-items:center;gap:12px}
+.chp .hv-th{width:64px;height:64px}
+.chp-t{flex:1;min-width:0}
+.rk.rkp{position:relative;overflow:hidden;color:#fff;background-size:cover;background-position:center;min-height:64px;justify-content:flex-end;isolation:isolate;text-align:left;align-items:flex-start;padding:8px}
+.rk.rkp::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.8))}
+.rk.rkp i{color:rgba(255,255,255,.8)}
+.rk.rkp.on{color:#fff;border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.rk.rkp.on i{color:var(--accent);background:#fff;border-radius:6px;padding:0 5px}
