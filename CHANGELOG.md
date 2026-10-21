@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v54 — 2026-10-20
+- **Library with photos:** Routines by muscle or equipment use photo tiles; Famous splits and Classic programs show a thumbnail on each card.
+  **Biblioteca con fotos:** Rutinas por músculo o equipo usa fichas con foto; Divisiones famosas y Programas clásicos muestran una miniatura en cada tarjeta.
+
 ## v53 — 2026-10-20
 - **Equipment with photos:** the equipment picker (plan wizard, Adjust my plan, routines) shows a photo and a short "what is it" for each of the 15 items.
   **Equipo con fotos:** el selector de equipo (asistente del plan, Ajustar mi plan, rutinas) muestra una foto y una frase de qué es para cada uno de los 15 elementos.
