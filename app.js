@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v51';
+const APP_VER='v52';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -128,7 +128,7 @@ function isIOS(){return/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator
 function canInstall(){return!isStandalone();}
 /* Instagram, Facebook, TikTok… open links in their own browser, where installing is impossible / los navegadores internos no permiten instalar */
 function inApp(){return/Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly|Snapchat|Line\//i.test(navigator.userAgent||'');}
-function instUpd(){const b=$('instBtn');if(b){b.style.display=canInstall()?'':'none';b.textContent='📲 '+t('install');}}
+function instUpd(){const b=$('instBtn');if(b){b.style.display=canInstall()?'':'none';b.innerHTML=ic('device-mobile')+' '+t('install');}}
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();instEvt=e;instUpd();});
 window.addEventListener('appinstalled',()=>{instEvt=null;instUpd();toast(t('installed'));});
 let INST_TAB='';
@@ -142,7 +142,7 @@ function installApp(tab){
     '<p class="muted">'+t('instP')+'</p>'+
     '<div class="card"><b>'+t('whyT')+'</b><ul class="why">'+[t('why1'),t('why2'),t('why3'),t('why4')].map(x=>'<li>'+x+'</li>').join('')+'</ul></div>'+
     '<div class="lbl">'+t('howT')+'</div><div class="chips">'+tabs+'</div>'+
-    (instEvt&&cur===instPlat()?'<button class="btn pri wide" onclick="instNative()">📲 '+t('installNow')+'</button><p class="muted sm">'+t('orSteps')+'</p>':'')+
+    (instEvt&&cur===instPlat()?'<button class="btn pri wide" onclick="instNative()">'+ic('device-mobile')+' '+t('installNow')+'</button><p class="muted sm">'+t('orSteps')+'</p>':'')+
     '<ol>'+steps.map(k=>'<li>'+t(k)+'</li>').join('')+'</ol>'+(cur==='ios'?'<p class="note">'+t('iosNote')+'</p>':'')+
     '<button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>');
 }

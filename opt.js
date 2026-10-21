@@ -371,7 +371,7 @@ function phSet(v){PHS=v;phDraw();}
 function phDraw(){
   const p=DATA.plan;if(!p)return;
   const al=optAllowed(p.prof),heavy=p.prof.have.some(k=>OPT_HEAVY.test(k));
-  sheet('<div class="form"><div class="pick-h"><h3>🎯 '+t('phT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+  sheet('<div class="form"><div class="pick-h"><h3>'+ic('target')+' '+t('phT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<p class="muted sm">'+t('phP')+'</p><p class="sm"><b>'+phLine(p)+'</b></p>'+
     '<div class="chips wrap">'+al.map(v=>'<button class="chip'+(PHS===v?' on':'')+'"'+(!heavy&&v>2?' disabled':'')+' onclick="phSet('+v+')">'+t('phShort',v)+'</button>').join('')+'</div>'+
     '<div class="card tip"><b>'+t('ph_'+PHS)+'</b><p class="sm">'+t('phd_'+PHS)+'</p><p class="muted sm">'+t('phv_'+PHS)+'</p></div>'+

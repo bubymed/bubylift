@@ -138,7 +138,7 @@ function libEqHtml(){
 }
 function libDraw(){
   let h='<div class="form lib"><div class="pick-h"><h3>'+t(LIB.tab==='focus'?'pkMusT':(LIB.tab==='split'?'pkSpT':(LIB.tab==='prog'?'pkPrT':'pkChT')))+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>';
-  h+='<div class="seg"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">💪 '+t('libFocusT')+'</button><button class="'+(LIB.tab==='split'?'on':'')+'" onclick="libTab(\'split\')">🔀 '+t('libSplitT')+'</button><button class="'+(LIB.tab==='prog'?'on':'')+'" onclick="libTab(\'prog\')">🏆 '+t('libProgT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">⏱️ '+t('libChT')+'</button></div>';
+  h+='<div class="seg"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">'+ic('barbell')+' '+t('libFocusT')+'</button><button class="'+(LIB.tab==='split'?'on':'')+'" onclick="libTab(\'split\')">'+ic('arrows-shuffle')+' '+t('libSplitT')+'</button><button class="'+(LIB.tab==='prog'?'on':'')+'" onclick="libTab(\'prog\')">'+ic('trophy')+' '+t('libProgT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">'+ic('stopwatch')+' '+t('libChT')+'</button></div>';
   h+=libEqHtml();
   h+=LIB.tab==='focus'?libFocusHtml():(LIB.tab==='split'?libSplitHtml():(LIB.tab==='prog'?libProgHtml():(LIB.sel?libChDetail():libChList())));
   h+='</div>';
@@ -165,7 +165,7 @@ function libChList(){
   const list=CHALLENGES.filter(c=>LIB.flt==='all'||c.tg.indexOf(LIB.flt)>=0);
   h+=list.map(c=>{
     const b=chBuild(c,LIB.clv,have),best=chBest(c.id,LIB.clv,c.ty);
-    return'<button class="card chc" onclick="libSel(\''+c.id+'\')"><b>'+esc(t('ch_'+c.id))+'</b><div class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+c.tg.map(k=>t('chf_'+k)).join(' · ')+'</div><div class="muted sm">'+t('rankOf',LIB.clv+1)+' · '+esc(rk(chCat(c),LIB.clv))+' · '+(b.exact?t('chExact'):t('chAdapt'))+(best?' · 🏆 '+esc(chScoreTxt(c.ty,best.sc)):'')+'</div></button>';
+    return'<button class="card chc" onclick="libSel(\''+c.id+'\')"><b>'+esc(t('ch_'+c.id))+'</b><div class="muted sm">'+esc(t('chty_'+c.ty,c.cap))+' · '+c.tg.map(k=>t('chf_'+k)).join(' · ')+'</div><div class="muted sm">'+t('rankOf',LIB.clv+1)+' · '+esc(rk(chCat(c),LIB.clv))+' · '+(b.exact?t('chExact'):t('chAdapt'))+(best?' · '+ic('trophy')+' '+esc(chScoreTxt(c.ty,best.sc)):'')+'</div></button>';
   }).join('');
   return h;
 }
@@ -182,7 +182,7 @@ function libChDetail(){
     '<ol class="how">'+chDetailRows(b).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>'+
     (c.rest?'<p class="muted sm">'+t('chRest',c.rest)+'</p>':'')+
     '<p class="muted sm">'+(b.exact?t('chExact'):t('chAdaptP'))+'</p>'+
-    (best?'<p><b>🏆 '+t('chBest')+':</b> '+esc(chScoreTxt(c.ty,best.sc))+'</p>':'')+
+    (best?'<p><b>'+ic('trophy')+' '+t('chBest')+':</b> '+esc(chScoreTxt(c.ty,best.sc))+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="chGo(\''+c.id+'\','+li+')">'+t('chStart')+'</button>'+(DATA.plan?'<button class="btn" onclick="xdAdd(\'c:'+c.id+':'+li+'\')">'+t('libAddPlan')+'</button>':'')+'</div>'+
     '<p class="muted sm">'+t('chSafe')+'</p>';
   return h;
@@ -324,7 +324,7 @@ function chSave(sc){
   DATA.workouts.sort((a,x)=>x.t-a.t);saveData();
   const pr=prev&&better;
   CHR=null;
-  sheet('<div class="form lib"><h3>'+(pr?'🏆 '+t('chNewPR'):t('chDone'))+'</h3><div class="chclk">'+esc(txt)+'</div>'+(prev&&!pr?'<p class="center muted">'+t('chBest')+': '+esc(chScoreTxt(c.ty,prev.sc))+'</p>':'')+'<div class="row"><button class="btn pri" onclick="sheetClose();render()">'+t('done')+'</button></div></div>');
+  sheet('<div class="form lib"><h3>'+(pr?''+ic('trophy')+' '+t('chNewPR'):t('chDone'))+'</h3><div class="chclk">'+esc(txt)+'</div>'+(prev&&!pr?'<p class="center muted">'+t('chBest')+': '+esc(chScoreTxt(c.ty,prev.sc))+'</p>':'')+'<div class="row"><button class="btn pri" onclick="sheetClose();render()">'+t('done')+'</button></div></div>');
   render();
 }
 
@@ -349,7 +349,7 @@ function xdStart(i){
 }
 function xdHtml(){
   const p=DATA.plan;if(!p||!p.xd||!p.xd.length)return'';
-  return'<div class="lbl">'+t('xdT')+'</div><p class="muted sm">'+t('xdP')+'</p>'+p.xd.map((k,i)=>'<div class="plex"><span><b>'+esc(xdName(k))+'</b></span><button class="btn sm" onclick="xdStart('+i+')">'+t('libStart')+'</button><button class="ico" aria-label="'+esc(t('delete'))+'" onclick="xdDel('+i+')">🗑</button></div>').join('');
+  return'<div class="lbl">'+t('xdT')+'</div><p class="muted sm">'+t('xdP')+'</p>'+p.xd.map((k,i)=>'<div class="plex"><span><b>'+esc(xdName(k))+'</b></span><button class="btn sm" onclick="xdStart('+i+')">'+t('libStart')+'</button><button class="ico" aria-label="'+esc(t('delete'))+'" onclick="xdDel('+i+')">'+ic('trash')+'</button></div>').join('');
 }
 /* ---------- famous splits, straight to the point / divisiones famosas, directo ---------- */
 function libSp(id){LIB.sp=id;if(!splitOk(id,LIB.spn))LIB.spn=[3,4,5,2].find(n=>splitOk(id,n))||3;libDraw();}
@@ -472,11 +472,11 @@ function libGo(tab){if(!LIB.set){LIB.lv=LIB.clv=libDefaultRank();LIB.set=1;}LIB.
 function startChooser(){
   const c=(ic,tt,pp,fn,img,cls)=>'<button class="card pk pkt'+(cls?' '+cls:'')+'" onclick="'+fn+'"><span class="pkt-img" style="background-image:url(img/ex/'+img+'-0.jpg)"></span><span class="pk-i">'+ic+'</span><span class="pk-t"><b>'+t(tt)+'</b><small>'+t(pp)+'</small></span></button>';
   return'<div class="pks">'+
-    (DATA.plan?'':c('🧭','pkPlanT','pkPlanP','planSetup()','z_worlds_greatest_stretch','pri wide'))+
-    c('💪','pkMusT','pkMusP',"libGo('focus')",'bench')+
-    c('🔀','pkSpT','pkSpP',"libGo('split')",'squat')+
-    c('🏆','pkPrT','pkPrP',"libGo('prog')",'deadlift')+
-    c('⏱️','pkChT','pkChP',"libGo('ch')",'kbswing')+
-    c('✍️','pkOwnT','pkOwnP','startWorkout()','ohp','wide')+
+    (DATA.plan?'':c(ic('compass'),'pkPlanT','pkPlanP','planSetup()','z_worlds_greatest_stretch','pri wide'))+
+    c(ic('barbell'),'pkMusT','pkMusP',"libGo('focus')",'bench')+
+    c(ic('arrows-shuffle'),'pkSpT','pkSpP',"libGo('split')",'squat')+
+    c(ic('trophy'),'pkPrT','pkPrP',"libGo('prog')",'deadlift')+
+    c(ic('stopwatch'),'pkChT','pkChP',"libGo('ch')",'kbswing')+
+    c(ic('pencil'),'pkOwnT','pkOwnP','startWorkout()','ohp','wide')+
   '</div>';
 }

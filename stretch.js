@@ -44,7 +44,7 @@ function strAreaGo(save){
 }
 function vStretch(){
   let h='<p class="muted sm">'+t('strIntro')+'</p>'+
-    '<div class="seg"><button class="'+(STX.sec==='sess'?'on':'')+'" onclick="strSet(\'sec\',\'sess\')">⏱ '+t('strSess')+'</button><button class="'+(STX.sec==='area'?'on':'')+'" onclick="strSet(\'sec\',\'area\')">🧍 '+t('strArea')+'</button></div>';
+    '<div class="seg"><button class="'+(STX.sec==='sess'?'on':'')+'" onclick="strSet(\'sec\',\'sess\')">'+ic('stopwatch')+' '+t('strSess')+'</button><button class="'+(STX.sec==='area'?'on':'')+'" onclick="strSet(\'sec\',\'area\')">'+ic('yoga')+' '+t('strArea')+'</button></div>';
   if(STX.sec==='sess'){
     const l=strItems(STX.type,STX.min),secs=strSecs();
     h+=libStep(1,'strStep1')+libChips(['full','lower','upper','back','warm','cool'],STX.type,'strType',k=>t('strT_'+k),1)+

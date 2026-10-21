@@ -81,6 +81,7 @@ Código visible, todos los derechos reservados (mismos términos que la herramie
 
 ## Credits / Créditos
 Exercise names, steps and photos (`img/ex/`) of the imported moves are adapted from the Free Exercise DB (https://github.com/yuhonas/free-exercise-db, Unlicense), rewritten and translated. / Los nombres y pasos de `data/exercises2.js` están adaptados de Free Exercise DB (Unlicense), reescritos y traducidos.
+Icons are from Tabler Icons (https://tabler.io/icons, MIT license), embedded in `data/icons.js`. / Los iconos son de Tabler Icons (MIT), incluidos en `data/icons.js`.
 Workout structure, training phases (OPT model), exercise categories and training concepts are based on NASM-CPT7 materials, used with permission. Bubylift is independent and not endorsed by NASM. / La estructura de los entrenamientos, las fases (modelo OPT), las categorías de ejercicios y los conceptos están basados en los materiales NASM-CPT7, usados con permiso. Bubylift es independiente y no está avalada por NASM.
 
 ## Profiles, password, encryption & transfer / Perfiles, contraseña, cifrado y transferencia

@@ -495,10 +495,10 @@ function planCard(){
   if(!p)return'<div class="card tip"><b>'+t('planT')+'</b><p>'+t('planP')+'</p><div class="row"><button class="btn pri" onclick="planSetup()">'+t('planMake')+'</button></div></div>';
   const i=planNext(),d=p.ds[i];
   let h='<div class="swp"><div class="swp-h swp-hl">'+t('swSkip')+'</div><div class="swp-h swp-hr">'+t('swChange')+'</div><div class="card plan swp-in" data-l="planSkipAsk" data-r="planPickDay"><div class="plh"><b>'+t('planToday')+'</b><span class="muted sm">'+t('planWeek',planWeek(),p.n)+'</span></div><h3>'+esc(dayName(i))+'</h3>'+planBrief(d)+
-    (p.wu?'<p class="muted sm">📅 '+(p.wd.indexOf(new Date().getDay())>=0?t('schCardOn',wdName(new Date().getDay())):t('schCardRest'))+'</p>':'')+
+    (p.wu?'<p class="muted sm">'+ic('calendar')+' '+(p.wd.indexOf(new Date().getDay())>=0?t('schCardOn',wdName(new Date().getDay())):t('schCardRest'))+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn" onclick="planOpen()">'+t('planAll')+'</button></div>'+
-    (p.ph?'<p class="muted sm">🎯 '+esc(phLine(p))+'</p>':'')+
-    '<div class="row plsec"><button class="btn sm" onclick="schedOpen()">📅 '+t('schBtn')+'</button><button class="btn sm" onclick="volOpen()">📊 '+t('volBtn')+'</button>'+(p.ph?'<button class="btn sm" onclick="phOpen()">🎯 '+t('phBtn')+'</button>':'')+'<button class="btn sm danger" onclick="planDelAsk()">🗑 '+t('planDelShort')+'</button></div>'+
+    (p.ph?'<p class="muted sm">'+ic('target')+' '+esc(phLine(p))+'</p>':'')+
+    '<div class="row plsec"><button class="btn sm" onclick="schedOpen()">'+ic('calendar')+' '+t('schBtn')+'</button><button class="btn sm" onclick="volOpen()">'+ic('chart-bar')+' '+t('volBtn')+'</button>'+(p.ph?'<button class="btn sm" onclick="phOpen()">'+ic('target')+' '+t('phBtn')+'</button>':'')+'<button class="btn sm danger" onclick="planDelAsk()">'+ic('trash')+' '+t('planDelShort')+'</button></div>'+
     '<p class="muted sm swhint">'+t('swHint')+'</p>'+testLine(p);
   if(checkDue())h+='<div class="pldue"><b>'+t('chkDue')+'</b><button class="btn sm" onclick="chkOpen()">'+t('chkOpen')+'</button></div>';
   return h+'</div></div>';
@@ -507,7 +507,7 @@ function testLine(p){
   const pr=p.prof;if(goalsOf(pr).indexOf('military')<0||!pr.td)return'';
   const left=pr.td-Date.now();if(left<=0)return'<p class="sm testln">'+t('testDone')+'</p>';
   const wk=Math.ceil(left/(7*864e5));
-  return'<p class="sm testln">🎯 '+t('testIn',t('te_'+pr.test),wk)+(left<=7*864e5?'<br>'+t('taperNote'):'')+'</p>';
+  return'<p class="sm testln">'+ic('target')+' '+t('testIn',t('te_'+pr.test),wk)+(left<=7*864e5?'<br>'+t('taperNote'):'')+'</p>';
 }
 function simStart(k){
   if(ACT){toast(t('finishFirst'));return;}
@@ -540,7 +540,7 @@ function planOpen(d){
   const pr=p.prof,i=PV;
   let h='<div class="form"><div class="pick-h"><h3>'+t('planMine')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<p class="muted sm">'+t('planInfo',goalTxt(p.prof),p.n,t('pl_'+p.lvl))+'</p>'+
-    (p.ph?'<p class="sm"><b>'+esc(phLine(p))+'</b> <button class="btn sm" onclick="phOpen()">🎯 '+t('phBtn')+'</button></p>':'')+planWhyCard(p)+
+    (p.ph?'<p class="sm"><b>'+esc(phLine(p))+'</b> <button class="btn sm" onclick="phOpen()">'+ic('target')+' '+t('phBtn')+'</button></p>':'')+planWhyCard(p)+
     (pr.focus.length?'<p class="muted sm">'+t('planFocus',pr.focus.map(k=>t('fm_'+k)).join(', '))+'</p>':'')+
     (pr.skills.length?'<p class="muted sm">'+t('planSkill',pr.skills.map(k=>t('sk_'+k)).join(', '))+'</p>':'')+
     (pr.inj.length?'<p class="muted sm">⚠ '+t('planInj',pr.inj.map(k=>t('inj_'+k)).join(', '))+'</p>':'')+
@@ -554,9 +554,9 @@ function planOpen(d){
   if(gs.indexOf('bodybuilding')>=0)tips+='<h4>'+t('bbT')+'</h4><p class="sm">'+t('bbTips1')+'</p><p class="sm">'+t('bbTips2')+'</p>';
   if(hyg)tips+='<h4>'+t(hyg==='military'?'hyT':'hyT2')+'</h4>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
   tips+='<h4>'+t('guideT')+'</h4><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p><p class="muted sm">'+t('planNote')+'</p>';
-  h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="chkOpen()">📋 '+t('chkOpen')+'</button><button class="btn" onclick="schedOpen()">📅 '+t('schBtn')+'</button><button class="btn" onclick="focusOpen()">🎯 '+t('focusT')+'</button><button class="btn" onclick="planShuffleAsk()">🔀 '+t('shufBtn')+'</button><button class="btn" onclick="planSetup()">⚙ '+t('planChange')+'</button></div>'+
+  h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="chkOpen()">'+ic('clipboard-list')+' '+t('chkOpen')+'</button><button class="btn" onclick="schedOpen()">'+ic('calendar')+' '+t('schBtn')+'</button><button class="btn" onclick="focusOpen()">'+ic('target')+' '+t('focusT')+'</button><button class="btn" onclick="planShuffleAsk()">'+ic('arrows-shuffle')+' '+t('shufBtn')+'</button><button class="btn" onclick="planSetup()">'+ic('settings')+' '+t('planChange')+'</button></div>'+
     '<details class="dtl"><summary>'+t('tipsT')+'</summary>'+tips+'</details>'+
-    (typeof xdHtml==='function'?xdHtml():'')+'<div class="dz"><button class="btn danger" onclick="planDelAsk()">🗑 '+t('planDel')+'</button></div></div>';
+    (typeof xdHtml==='function'?xdHtml():'')+'<div class="dz"><button class="btn danger" onclick="planDelAsk()">'+ic('trash')+' '+t('planDel')+'</button></div></div>';
   sheet(h);
 }
 let PE={d:0,e:0};
@@ -802,7 +802,7 @@ function volDraw(){
       '<div class="vbar"><i class="vz" style="left:'+(a[0]/mx*100)+'%;width:'+((a[1]-a[0])/mx*100)+'%"></i><i class="vf" style="width:'+Math.min(100,dn/mx*100)+'%"></i><i class="vp" style="left:'+Math.min(99,pl/mx*100)+'%"></i></div>'+
       '<div class="muted sm">'+t('volLine',dn,pl,a[0]+'–'+a[1])+'</div></div>';
   }).join('');
-  sheet('<div class="form"><div class="pick-h"><h3>📊 '+t('volT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+  sheet('<div class="form"><div class="pick-h"><h3>'+ic('chart-bar')+' '+t('volT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<p class="sm"><b>'+t('volWeek',sd,sp)+'</b></p>'+
     '<div class="card tip"><b>'+t('volWhyT')+'</b><p class="sm">'+t('volWhy')+'</p></div>'+
     '<div class="lbl">'+t('psVol')+'</div><div class="chips wrap">'+['lo','md','hi'].map(v=>'<button class="chip'+(VS===v?' on':'')+'" onclick="volSet(\''+v+'\')">'+t('vol_'+v)+'</button>').join('')+'</div><p class="muted sm">'+t('vold_'+VS)+'</p>'+
