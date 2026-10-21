@@ -67,7 +67,7 @@ for k in sorted(used):
     if k not in keys: err(f"missing translation key: {k}")
 
 # 4) exercise ids unique, groups valid / ids de ejercicios únicos y grupos válidos
-rows = re.findall(r"^ \['(\w+)','[^']*','[^']*','(\w+)','(\w+)'(?:,'(\w+)')?\]", (read("data/exercises.js")+read("data/exercises2.js")), re.M)
+rows = re.findall(r"^ \['(\w+)','(?:[^'\\]|\\.)*','(?:[^'\\]|\\.)*','(\w+)','(\w+)'(?:,'(\w+)')?\]", (read("data/exercises.js")+read("data/exercises2.js")), re.M)
 ids = [r[0] for r in rows]
 if len(ids) != len(set(ids)): err("duplicate exercise ids")
 gset = set(re.findall(r"'(\w+)'", groups))

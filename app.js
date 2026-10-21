@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v48';
+const APP_VER='v49';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -86,9 +86,10 @@ const TAB_ICONS={
   history:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
   progress:'<path d="M4 4v16h16M8 15l4-4 3 3 5-6"/>',
   body:'<circle cx="12" cy="5.5" r="2.5"/><path d="M12 8.5V15M8 21l4-6 4 6M6.5 11h11"/>',
+  stretch:'<circle cx="12" cy="4.5" r="2"/><path d="M12 7v7M5 5l7 3 7-3M9 21l3-7 3 7"/>',
   more:'<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>'
 };
-const TAB_KEYS=[['workout','tWorkout'],['history','tHistory'],['progress','tProgress'],['body','tBody'],['more','tMore']];
+const TAB_KEYS=[['workout','tWorkout'],['history','tHistory'],['progress','tProgress'],['body','tBody'],['stretch','tStretch'],['more','tMore']];
 function renderHeader(){
   const be=$('lEN'),bs=$('lES');if(be)be.classList.toggle('on',LANG==='en');if(bs)bs.classList.toggle('on',LANG==='es');
   instUpd();
@@ -98,7 +99,7 @@ function renderTabs(){
 }
 function go(x){tab=x;UI.prog=null;renderTabs();render();window.scrollTo(0,0);}
 function render(){
-  const v={workout:vWorkout,history:vHistory,progress:vProgress,body:vBody,more:vMore}[tab];
+  const v={workout:vWorkout,history:vHistory,progress:vProgress,body:vBody,stretch:vStretch,more:vMore}[tab];
   const tk=TAB_KEYS.find(a=>a[0]===tab);
   $('main').innerHTML=(ACT&&tab==='workout'?'':'<h1 class="lt">'+t(tk?tk[1]:'tWorkout')+'</h1>')+v();
 }

@@ -52,6 +52,7 @@ body.js             Body and More tabs, export / import
 data/exercises.js   built-in exercise library (EN/ES) / biblioteca de ejercicios (EN/ES)
 data/exercises2.js  imported exercises (Free Exercise DB) / ejercicios importados (Free Exercise DB)
 data/library.js     muscle routines and challenges / rutinas por músculo y retos
+stretch.js          Stretch tab / pestaña Estirar
 data/howto*.js      technique guides / guías de técnica
 data/i18n.js        interface strings EN/ES / textos de la interfaz EN/ES
 data/whatsnew.js    "What's new" cards / tarjetas de "Novedades"

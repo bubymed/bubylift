@@ -19,7 +19,7 @@ function libFocus(area,rank,have){
     const p=s.split('|'),alts=p[0].split(','),lever=p[1],sets=+p[2],lo=+p[3],hi=+p[4];
     let id=null;
     for(let i=0;i<alts.length&&!id;i++){const a=alts[i];if(!used[a]&&avail(a,have)&&stressLvl(a,L)<2&&!(prof&&prefBad(a,prof)))id=a;}
-    if(!id){const c=swapCands(alts[0],have,L,used,li===0?1:2).filter(x=>!(prof&&prefBad(x.id,prof)));if(c.length)id=c[0].id;}
+    if(!id&&LIB_EQ.indexOf(area)<0&&area!=='stretch'){const c=swapCands(alts[0],have,L,used,li===0?1:2).filter(x=>!(prof&&prefBad(x.id,prof)));if(c.length)id=c[0].id;}
     if(!id)return;
     used[id]=1;
     const hold=exMode(id)==='t',secs=hold&&lo>=20;
@@ -29,7 +29,7 @@ function libFocus(area,rank,have){
 }
 /* rank names follow what you are training: one ladder per muscle area and per kind of challenge / los nombres de rango siguen lo que entrenas */
 function chCat(c){const o=['hy','mil','run','cf','pt'];for(let i=0;i<o.length;i++)if(c.tg.indexOf(o[i])>=0)return o[i];return'pt';}
-function rk(kind,i){return t('rk_'+kind+'_'+i);}
+function rk(kind,i){return t('rk_'+(LIB_EQ.indexOf(kind)>=0?'eq':kind)+'_'+i);}
 function libFocusName(area,li){return t('lib_'+area)+' · '+rk(area,li);}
 function libFocusStart(area,li){
   if(ACT){toast(t('finishFirst'));return;}
@@ -145,11 +145,11 @@ function libDraw(){
 function libFocusHtml(){
   const li=LIB.lv,items=libFocus(LIB.area,li,libHave());
   let h='<p class="muted sm">'+t('libFocusP')+'</p>'+
-    libStep(1,'libStep1')+libChips(LIB_AREAS,LIB.area,'libArea',k=>t('lib_'+k),1)+
+    libStep(1,'libStep1')+libChips(LIB_AREAS,LIB.area,'libArea',k=>t('lib_'+k),1)+'<p class="muted sm">'+t('libOrEq')+'</p>'+libChips(LIB_EQ,LIB.area,'libArea',k=>t('lib_'+k),1)+
     libStep(2,'libStep2')+libRanks(LIB.area,li,'libLv')+
     '<div class="card optb"><b>'+rk(LIB.area,li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
   h+=libStep(3,'libStep3');
-  if(!items.length)return h+'<p class="muted">'+t('libNone')+'</p>';
+  if(!items.length)return h+'<p class="muted">'+t(LIB_EQ.indexOf(LIB.area)>=0?'libNoEq':'libNone')+'</p>';
   h+=items.map(e=>'<div class="plex"><span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgLine(e))+' · '+esc(t('rsSec',e.rs))+(e.cn?' · ⚠ '+esc(t('caution')):'')+'</small><small class="rz">'+esc(t('lz_'+e.lever))+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="libHow(\''+e.eid+'\')">ⓘ</button></div>').join('');
   if(items.length<4)h+='<p class="muted sm">'+t('libFew')+'</p>';
   h+='<div class="row"><button class="btn pri" onclick="libFocusStart(\''+LIB.area+'\','+li+')">'+t('libStart')+'</button><button class="btn" onclick="libFocusSave(\''+LIB.area+'\','+li+')">'+t('libSave')+'</button>'+
