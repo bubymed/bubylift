@@ -68,11 +68,15 @@ function vStart(){
   h+='<h2 class="pkh">'+t(DATA.plan?'chooseT2':'chooseT')+'</h2>'+startChooser();
   h+='<div class="sec"><h2>'+t('routines')+'</h2><button class="btn sm" onclick="rbOpen()">＋ '+t('newRoutine')+'</button></div>';
   if(!DATA.routines.length)h+='<p class="muted">'+t('noRoutines')+'</p>';
-  else h+=DATA.routines.map(r=>'<div class="swp"><div class="swp-h swp-hl">'+t('swDelete')+'</div><div class="swp-h swp-hr">'+t('swEdit')+'</div><div class="card rt swp-in" data-l="rtDelAsk" data-r="rtEdit" data-a="'+r.id+'"><div class="rt-main"><b>'+esc(r.name)+'</b><div class="muted sm">'+r.ex.slice(0,4).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(r.ex.length>4?' …':'')+'</div></div><div class="rt-b"><button class="btn pri sm" onclick="startRoutine(\''+r.id+'\')">'+t('start')+'</button><button class="btn sm" onclick="rbOpen(\''+r.id+'\')">'+t('edit')+'</button></div></div></div>').join('');
+  else h+=DATA.routines.map(r=>'<div class="swp"><div class="swp-h swp-hl">'+t('swDelete')+'</div><div class="swp-h swp-hr">'+t('swEdit')+'</div><div class="card rt swp-in" data-l="rtDelAsk" data-r="rtEdit" data-a="'+r.id+'">'+rtThumb(r)+'<div class="rt-main"><b>'+esc(r.name)+'</b><div class="muted sm">'+r.ex.slice(0,4).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(r.ex.length>4?' …':'')+'</div></div><div class="rt-b"><button class="btn pri sm" onclick="startRoutine(\''+r.id+'\')">'+t('start')+'</button><button class="btn sm" onclick="rbOpen(\''+r.id+'\')">'+t('edit')+'</button></div></div></div>').join('');
   const lw=DATA.workouts[0];
   if(lw)h+='<div class="sec"><h2>'+t('lastWorkout')+'</h2></div>'+wkCard(lw);
   else h+='<div class="card tip"><b>'+t('welcomeT')+'</b><p>'+t('welcomeP')+'</p></div>';
   return h;
+}
+function rtThumb(r){
+  const x=r.ex.find(e=>typeof EXPHOTO!=='undefined'&&EXPHOTO.has(e.eid));
+  return x?'<span class="rt-th" style="background-image:url(img/ex/'+x.eid+'-0.jpg)"></span>':'<span class="rt-th rt-no">🏋️</span>';
 }
 function bkLater(){SET.bkSnooze=Date.now()+14*864e5;saveSet();render();}
 
@@ -272,7 +276,8 @@ function recentIds(){
   for(const wk of DATA.workouts){for(const x of wk.ex){if(r.indexOf(x.eid)<0)r.push(x.eid);if(r.length>=6)return r;}}
   return r;
 }
-function exRow(e){return'<button class="exrow" onclick="pickDone(\''+e.id+'\')"><b>'+esc(LANG==='es'?e.es:e.en)+'</b><small>'+t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+esc(injBadge(e.id))+'</small></button>';}
+function exThumb(id){return typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id)?'<span class="ex-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>':'<span class="ex-th ex-no">🏋️</span>';}
+function exRow(e){return'<button class="exrow exth" onclick="pickDone(\''+e.id+'\')">'+exThumb(e.id)+'<span class="ex-tx"><b>'+esc(LANG==='es'?e.es:e.en)+'</b><small>'+t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+esc(injBadge(e.id))+'</small></span></button>';}
 function exListHtml(){
   const q=norm(UI.q.trim()),all=EXLIB.map(a=>exById(a[0])).concat(DATA.custom.map(c=>exById(c.id)));
   let h='';

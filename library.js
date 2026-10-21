@@ -152,7 +152,7 @@ function libFocusHtml(){
     '<div class="card optb"><b>'+rk(LIB.area,li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
   h+=libStep(3,'libStep3');
   if(!items.length)return h+'<p class="muted">'+t('libNone')+'</p>';
-  h+=items.map(e=>'<div class="plex"><span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgLine(e))+' · '+esc(t('rsSec',e.rs))+(e.cn?' · ⚠ '+esc(t('caution')):'')+'</small><small class="rz">'+esc(t('lz_'+e.lever))+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="libHow(\''+e.eid+'\')">ⓘ</button></div>').join('');
+  h+=items.map(e=>'<div class="plex">'+exThumb(e.eid)+'<span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgLine(e))+' · '+esc(t('rsSec',e.rs))+(e.cn?' · ⚠ '+esc(t('caution')):'')+'</small><small class="rz">'+esc(t('lz_'+e.lever))+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="libHow(\''+e.eid+'\')">ⓘ</button></div>').join('');
   if(items.length<4)h+='<p class="muted sm">'+t('libFew')+'</p>';
   h+='<div class="row"><button class="btn pri" onclick="libFocusStart(\''+LIB.area+'\','+li+')">'+t('libStart')+'</button><button class="btn" onclick="libFocusSave(\''+LIB.area+'\','+li+')">'+t('libSave')+'</button>'+
     (DATA.plan?'<button class="btn" onclick="xdAdd(\'f:'+LIB.area+':'+li+'\')">'+t('libAddPlan')+'</button>':'')+'</div>'+
@@ -470,13 +470,13 @@ function libProgHtml(){
 function libGo(tab){if(!LIB.set){LIB.lv=LIB.clv=libDefaultRank();LIB.set=1;}LIB.tab=tab;LIB.sel=null;libDraw();}
 /* the four ways to train, in one clear list / las cuatro formas de entrenar, en una lista clara */
 function startChooser(){
-  const c=(ic,tt,pp,fn,cls)=>'<button class="card pk'+(cls?' '+cls:'')+'" onclick="'+fn+'"><span class="pk-i">'+ic+'</span><span class="pk-t"><b>'+t(tt)+'</b><small>'+t(pp)+'</small></span><span class="pk-a">›</span></button>';
+  const c=(ic,tt,pp,fn,img,cls)=>'<button class="card pk pkt'+(cls?' '+cls:'')+'" onclick="'+fn+'"><span class="pkt-img" style="background-image:url(img/ex/'+img+'-0.jpg)"></span><span class="pk-i">'+ic+'</span><span class="pk-t"><b>'+t(tt)+'</b><small>'+t(pp)+'</small></span></button>';
   return'<div class="pks">'+
-    (DATA.plan?'':c('🧭','pkPlanT','pkPlanP','planSetup()','pri'))+
-    c('💪','pkMusT','pkMusP',"libGo('focus')")+
-    c('🔀','pkSpT','pkSpP',"libGo('split')")+
-    c('🏆','pkPrT','pkPrP',"libGo('prog')")+
-    c('⏱️','pkChT','pkChP',"libGo('ch')")+
-    c('✍️','pkOwnT','pkOwnP','startWorkout()')+
+    (DATA.plan?'':c('🧭','pkPlanT','pkPlanP','planSetup()','z_worlds_greatest_stretch','pri wide'))+
+    c('💪','pkMusT','pkMusP',"libGo('focus')",'bench')+
+    c('🔀','pkSpT','pkSpP',"libGo('split')",'squat')+
+    c('🏆','pkPrT','pkPrP',"libGo('prog')",'deadlift')+
+    c('⏱️','pkChT','pkChP',"libGo('ch')",'kbswing')+
+    c('✍️','pkOwnT','pkOwnP','startWorkout()','ohp','wide')+
   '</div>';
 }
