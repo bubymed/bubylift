@@ -12,7 +12,7 @@ Un registro gratis de entrenamientos, progreso y cuerpo que vive en tu teléfono
 - **Classic programs / Programas clásicos:** Full body, StrongLifts 5×5, Starting Strength, 5/3/1 (Wendler), PHUL and German Volume (10×10), built with your equipment; 5/3/1 calculates each set's weight from your training max. / Cuerpo completo, StrongLifts 5×5, Starting Strength, 5/3/1 (Wendler), PHUL y Volumen Alemán (10×10), armados con tu equipo; el 5/3/1 calcula el peso de cada serie desde tu máximo de entrenamiento.
 - **Ready routines by muscle / Rutinas listas por músculo:** chest, back, shoulders, arms, legs, glutes and core, in six ranks with their own names. Higher ranks use more range of motion, single-side work, resistance profiles, instability, harder leverage and no momentum, and each exercise says which one it uses. / pecho, espalda, hombros, brazos, piernas, glúteos y abdomen, en seis rangos con nombres propios. Los rangos altos usan más rango de movimiento, trabajo unilateral, perfiles de resistencia, inestabilidad, palancas más difíciles y nada de impulso, y cada ejercicio dice cuál usa.
 - **Challenges / Retos:** 30 morning-PT, CrossFit-style and Hyrox-style sessions with a built-in timer (AMRAP, EMOM, intervals, for time). Mark the equipment you have and each challenge adapts; your best result is saved. Any routine or challenge can be added to your plan as an extra day. / 30 sesiones de PT de la mañana, estilo CrossFit y estilo Hyrox con temporizador incluido (AMRAP, EMOM, intervalos, por tiempo). Marca el equipo que tienes y cada reto se adapta; tu mejor marca se guarda. Cualquier rutina o reto se puede agregar a tu plan como día extra.
-- **Exercise library / Biblioteca de ejercicios:** 230+ exercises in English and Spanish with technique guides. / más de 230 ejercicios en español e inglés con guías de técnica.
+- **Exercise library / Biblioteca de ejercicios:** 990 exercises in English and Spanish with technique guides. / cerca de 990 ejercicios en español e inglés con guías de técnica.
 - **History / Historial:** every workout by month; repeat, share or delete. / cada entrenamiento por mes; repetir, compartir o eliminar.
 - **Progress / Progreso:** charts per exercise (estimated 1RM, top weight, volume, reps, time) and workouts per week. / gráficas por ejercicio (1RM estimado, peso máximo, volumen, repeticiones, tiempo) y entrenamientos por semana.
 - **Body / Cuerpo:** weight, body fat and measurements with a trend chart and optional goal. / peso, grasa corporal y medidas con gráfica de tendencia y meta opcional.
@@ -50,6 +50,7 @@ profiles.js         profiles, password, encryption, QR transfer / perfiles, cont
 history.js          History and Progress tabs, SVG charts
 body.js             Body and More tabs, export / import
 data/exercises.js   built-in exercise library (EN/ES) / biblioteca de ejercicios (EN/ES)
+data/exercises2.js  imported exercises (Free Exercise DB) / ejercicios importados (Free Exercise DB)
 data/library.js     muscle routines and challenges / rutinas por músculo y retos
 data/howto*.js      technique guides / guías de técnica
 data/i18n.js        interface strings EN/ES / textos de la interfaz EN/ES
@@ -78,6 +79,7 @@ Source-available, all rights reserved (same terms as the Sick Call tool). Everyo
 Código visible, todos los derechos reservados (mismos términos que la herramienta Sick Call). Cualquiera puede ver el código y usar la app para uso personal no comercial. Copiarla, modificarla, redistribuirla, alojarla o usarla comercialmente requiere permiso por escrito del autor. Ver `LICENSE`.
 
 ## Credits / Créditos
+Exercise names and steps in `data/exercises2.js` are adapted from the Free Exercise DB (https://github.com/yuhonas/free-exercise-db, Unlicense), rewritten and translated. / Los nombres y pasos de `data/exercises2.js` están adaptados de Free Exercise DB (Unlicense), reescritos y traducidos.
 Workout structure, training phases (OPT model), exercise categories and training concepts are based on NASM-CPT7 materials, used with permission. Bubylift is independent and not endorsed by NASM. / La estructura de los entrenamientos, las fases (modelo OPT), las categorías de ejercicios y los conceptos están basados en los materiales NASM-CPT7, usados con permiso. Bubylift es independiente y no está avalada por NASM.
 
 ## Profiles, password, encryption & transfer / Perfiles, contraseña, cifrado y transferencia

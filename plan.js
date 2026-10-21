@@ -13,7 +13,7 @@ function meta(eid){
   if(s){r={mu:s[0],lv:+s[1],st:{}};s.slice(2).replace(/([kbsewhan])(\d)/g,function(m,a,b){r.st[a]=+b;return m;});}
   _MC[eid]=r;return r;
 }
-const G2MU={chest:'P',back:'B',shoulders:'S',biceps:'I',triceps:'T',legs:'Q',glutes:'G',core:'A',full:'F',balance:'Z',power:'W',cardio:'K'};
+const G2MU={chest:'P',back:'B',shoulders:'S',biceps:'I',triceps:'T',legs:'Q',glutes:'G',core:'A',full:'F',balance:'Z',power:'W',cardio:'K',mobility:'F'};
 function muOf(eid){const m=meta(eid);if(m)return m.mu;const e=exById(eid);return e?(G2MU[e.g]||'F'):'F';}
 function injLetters(inj){return(inj||[]).map(k=>INJ[k]||'').join('');}
 /* worst stress level (0/1/2) of an exercise for the given injury letters / peor nivel de estrés (0/1/2) */

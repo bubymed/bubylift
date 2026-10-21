@@ -67,6 +67,7 @@ const HOWGEN={
  full:['Warm up first and start light.|Keep your back flat and your core tight.|Quality over speed.','Calienta primero y empieza ligero.|Espalda recta y abdomen firme.|Calidad antes que velocidad.'],
  balance:['Stand tall and pick a spot to look at.|Move slowly and keep your core tight.|Hold a wall or rail nearby if you need it.','Párate erguido y mira un punto fijo.|Muévete despacio con el abdomen firme.|Ten una pared o barra cerca por si la necesitas.'],
  power:['Warm up well before jumping or sprinting.|Land softly, knees bent and in line with your toes.|Stop when you get tired — quality reps only.','Calienta bien antes de saltar o correr.|Aterriza suave, rodillas dobladas y en línea con las puntas.|Para cuando te canses — solo repeticiones de calidad.'],
+ mobility:['Move slowly into the stretch until you feel gentle tension, never pain.|Hold 10–20 seconds and keep breathing steadily.|Don\'t bounce; repeat on the other side.','Entra despacio al estiramiento hasta sentir tensión suave, nunca dolor.|Mantén 10–20 segundos y respira con calma.|No rebotes; repite del otro lado.'],
  cardio:['Warm up for 3–5 minutes.|Hold a pace where you can still talk in short sentences.|Cool down at the end.','Calienta 3–5 minutos.|Mantén un ritmo en el que aún puedas hablar con frases cortas.|Enfría al final.']
 };
 const HOWSAFE=['Start light and stop if you feel sharp pain (not normal effort). Ask a professional if unsure.','Empieza ligero y para si sientes dolor agudo (no el esfuerzo normal). Consulta a un profesional si tienes dudas.'];
