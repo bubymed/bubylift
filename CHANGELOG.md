@@ -9,6 +9,8 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## v56 — 2026-10-20
 - **Compact tiles:** library muscle and equipment photo tiles are smaller (4 per row) so less scrolling.
   **Fichas compactas:** las fichas con foto de músculo y equipo en la biblioteca son más pequeñas (4 por fila) para desplazarse menos.
+- **Scroll fix:** redrawing the same sheet (tapping a tile, chip or rank) keeps your scroll position instead of jumping to the top.
+  **Arreglo de desplazamiento:** al volver a dibujar la misma hoja (tocar una ficha, opción o rango) se conserva la posición en vez de saltar arriba.
 
 ## v55 — 2026-10-20
 - **Challenges and ranks with photos:** challenge cards show a thumbnail of one of their moves; rank cards use a photo background.
