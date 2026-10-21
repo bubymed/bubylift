@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v57 — 2026-10-20
+- **Readable sub-heading:** "…or train with a piece of equipment" is now a bold heading with a divider instead of small grey text.
+  **Subtítulo legible:** "…o entrena con un equipo" ahora es un encabezado en negritas con línea divisoria en vez de texto pequeño y gris.
+
 ## v56 — 2026-10-20
 - **Compact tiles:** library muscle and equipment photo tiles are smaller (4 per row) so less scrolling.
   **Fichas compactas:** las fichas con foto de músculo y equipo en la biblioteca son más pequeñas (4 por fila) para desplazarse menos.

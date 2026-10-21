@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v57',items:[
+  {i:'🔤',en:'<b>Clearer sub-heading</b> — "…or train with a piece of equipment" is now a bold, easy-to-read heading with a divider line.',es:'<b>Subtítulo más claro</b> — "…o entrena con un equipo" ahora es un encabezado en negritas, fácil de leer y con una línea divisoria.'}]},
  {v:'v56',items:[
   {i:'📐',en:'<b>Smaller photo tiles</b> — the muscle and equipment tiles in the library are about half the size, so you see more at once.',es:'<b>Fichas con foto más pequeñas</b> — las fichas de músculo y equipo en la biblioteca son como la mitad de grandes, así ves más a la vez.'},
   {i:'📍',en:'<b>No more jumping to the top</b> — when you tap a tile, chip or rank inside a sheet, it stays where you are instead of scrolling back up.',es:'<b>Ya no salta hacia arriba</b> — al tocar una ficha, opción o rango dentro de una hoja, se queda donde estás en vez de volver al inicio.'}]},
