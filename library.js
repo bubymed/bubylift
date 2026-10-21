@@ -124,6 +124,11 @@ function libBack(){LIB.sel=null;libDraw();}
 function libCLv(i){LIB.clv=+i;libDraw();}
 function libEq(){LIB.eq=!LIB.eq;libDraw();}
 function libHow(id){howOpen(id,'libDraw');}
+/* photos for the library pickers / fotos para los selectores de la biblioteca */
+const LIB_IMG={full:'deadlift',chest:'bench',back:'bbrow',shoulders:'ohp',arms:'dbcurl',legs:'squat',glutes:'hipthrust',core:'plank',stretch:'z_worlds_greatest_stretch',kb:'kbswing',db:'dbcurl',bb:'bench',cab:'cablefly',mach:'legpress',band:'bandpull',trx:'suprow',mb:'mbslam',bw:'pushup'};
+const SP_IMG={ul:'pullup',ppl:'bench',arn:'dbcurl',bro:'latpd',ulppl:'deadlift',fb:'squat',sl:'bbrow',ss:'deadlift',w531:'ohp',phul:'dbbench',gvt:'legpress'};
+function photoTh(id){return'<span class="hv-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>';}
+function libTiles(arr,cur,fn){return'<div class="lat">'+arr.map(k=>'<button class="lt-i'+(k===cur?' on':'')+'" onclick="'+fn+'(\''+k+'\')" style="background-image:url(img/ex/'+(LIB_IMG[k]||'bench')+'-0.jpg)"><span>'+t('lib_'+k)+'</span></button>').join('')+'</div>';}
 function libChips(arr,cur,fn,lab,wrap){return'<div class="chips'+(wrap?' wrap':'')+'">'+arr.map((k,i)=>{const v=typeof k==='number'?k:k;return'<button class="chip'+(String(v)===String(cur)?' on':'')+'" onclick="'+fn+'(\''+v+'\')">'+lab(v)+'</button>';}).join('')+'</div>';}
 /* a numbered rank card grid, different from the pill buttons / cuadrícula de rangos numerados, distinta de los botones de píldora */
 function libRanks(kind,cur,fn){
@@ -147,7 +152,7 @@ function libDraw(){
 function libFocusHtml(){
   const li=LIB.lv,items=libFocus(LIB.area,li,libHave());
   let h='<p class="muted sm">'+t('libFocusP')+'</p>'+
-    libStep(1,'libStep1')+libChips(LIB_AREAS,LIB.area,'libArea',k=>t('lib_'+k),1)+'<p class="muted sm">'+t('libOrEq')+'</p>'+libChips(LIB_EQ,LIB.area,'libArea',k=>t('lib_'+k),1)+
+    libStep(1,'libStep1')+libTiles(LIB_AREAS,LIB.area,'libArea')+'<p class="muted sm">'+t('libOrEq')+'</p>'+libTiles(LIB_EQ,LIB.area,'libArea')+
     libStep(2,'libStep2')+libRanks(LIB.area,li,'libLv')+
     '<div class="card optb"><b>'+rk(LIB.area,li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
   h+=libStep(3,'libStep3');
@@ -366,7 +371,7 @@ function libSplitHtml(){
   if(!splitOk(LIB.sp,LIB.spn))LIB.spn=[3,4,5,2].find(n=>splitOk(LIB.sp,n))||3;
   const p=libSpPlan(),lvl=LIB.spl||(DATA.plan?DATA.plan.lvl:'some');
   let h='<p class="muted sm">'+t('libSplitP')+'</p>'+
-    libStep(1,'spStep1')+'<div class="spl">'+SPLIT_IDS.map(id=>'<button class="card spc'+(id===LIB.sp?' on':'')+'" onclick="libSp(\''+id+'\')"><b>'+t('spl_'+id)+'</b><small>'+t('spd_'+id)+'</small></button>').join('')+'</div>'+
+    libStep(1,'spStep1')+'<div class="spl">'+SPLIT_IDS.map(id=>'<button class="card spc'+(id===LIB.sp?' on':'')+'" onclick="libSp(\''+id+'\')">'+photoTh(SP_IMG[id]||'bench')+'<span class="spc-t"><b>'+t('spl_'+id)+'</b><small>'+t('spd_'+id)+'</small></span></button>').join('')+'</div>'+
     libStep(2,'spStep2')+libChips(['new','some','adv'],lvl,'libSpL',k=>t('pl_'+k),1)+
     libStep(3,'spStep3')+libChips([2,3,4,5].filter(n=>splitOk(LIB.sp,n)),LIB.spn,'libSpN',n=>t('spDays',n),1)+
     libStep(4,'spStep4');
@@ -448,7 +453,7 @@ function libProgHtml(){
   if(!PROGRAMS[LIB.pg])LIB.pg='sl';
   const pid=LIB.pg,P=PROGRAMS[pid],have=libHave();
   let h='<p class="muted sm">'+t('libProgP')+'</p>'+
-    libStep(1,'prStep1')+'<div class="spl">'+PROG_IDS.map(id=>'<button class="card spc'+(id===pid?' on':'')+'" onclick="libPg(\''+id+'\')"><b>'+t('prg_'+id)+'</b><small>'+t('prgd_'+id)+'</small></button>').join('')+'</div>'+
+    libStep(1,'prStep1')+'<div class="spl">'+PROG_IDS.map(id=>'<button class="card spc'+(id===pid?' on':'')+'" onclick="libPg(\''+id+'\')">'+photoTh(SP_IMG[id]||'bench')+'<span class="spc-t"><b>'+t('prg_'+id)+'</b><small>'+t('prgd_'+id)+'</small></span></button>').join('')+'</div>'+
     '<div class="card optb"><b>'+t('prg_'+pid)+' <span class="muted sm">'+t('prgWk',P.wk)+'</span></b><p class="sm">'+t('prgw_'+pid)+'</p><p class="sm"><b>'+t('prgProg')+':</b> '+t('prgp_'+pid)+'</p></div>';
   let n=2;
   if(pid==='w531'){

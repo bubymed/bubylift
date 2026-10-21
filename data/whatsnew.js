@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v54',items:[
+  {i:'🖼️',en:'<b>Photos in the library</b> — pick a muscle or a piece of equipment from photo tiles, and the famous splits and classic programs now have a photo too.',es:'<b>Fotos en la biblioteca</b> — elige un músculo o un equipo en fichas con foto, y las divisiones famosas y los programas clásicos también tienen foto.'}]},
  {v:'v53',items:[
   {i:'📸',en:'<b>Equipment with photos</b> — when you choose your equipment (plan setup, routines) every item now has a photo and a one-line "what is it", so you know what a kettlebell, a sled or a suspension trainer is.',es:'<b>Equipo con fotos</b> — al elegir tu equipo (configurar el plan, rutinas) cada opción tiene una foto y una línea que explica qué es, para que sepas qué es una pesa rusa, un trineo o una suspensión.'}]},
  {v:'v52',items:[
