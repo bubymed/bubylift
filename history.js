@@ -42,10 +42,11 @@ function wkDur(wk){return(wk.end&&wk.end>wk.t)?(wk.end-wk.t)/1000:0;}
 function wkPRs(wk){let n=0;wk.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr)n++;}));return n;}
 function wkCard(wk){
   const d=wkDur(wk),pr=wkPRs(wk),vol=wkVol(wk);
-  return'<button class="card wkc" onclick="openWk(\''+wk.id+'\')"><div class="wkc-d"><b>'+esc(dFmt(wk.t,{weekday:'short',month:'short',day:'numeric'}))+'</b>'+(pr?' <span class="pr">'+ic('trophy')+' '+pr+'</span>':'')+'</div>'+
+  const fx=wk.ex.find(x=>typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid));
+  return'<button class="card wkc wkp" onclick="openWk(\''+wk.id+'\')">'+(fx?photoTh(fx.eid):'<span class="hv-th hv-no">'+ic('barbell')+'</span>')+'<span class="wkp-t"><div class="wkc-d"><b>'+esc(dFmt(wk.t,{weekday:'short',month:'short',day:'numeric'}))+'</b>'+(pr?' <span class="pr">'+ic('trophy')+' '+pr+'</span>':'')+'</div>'+
     '<div class="wkc-n">'+esc(wk.name||'')+'</div>'+
     '<div class="muted sm">'+(d?fmtDur(d)+' · ':'')+t('nSetsT',wkSets(wk))+(vol?' · '+wShow(vol)+' '+wUnit():'')+'</div>'+
-    '<div class="muted sm">'+wk.ex.slice(0,3).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(wk.ex.length>3?' …':'')+'</div></button>';
+    '<div class="muted sm">'+wk.ex.slice(0,3).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(wk.ex.length>3?' …':'')+'</div></span></button>';
 }
 function vHistory(){
   if(!DATA.workouts.length)return'<div class="card tip"><b>'+t('emptyHistT')+'</b><p>'+t('emptyHistP')+'</p></div>';
@@ -131,7 +132,7 @@ function vProgress(){
   h+='<div class="sec"><h2>'+t('exercises')+'</h2></div>';
   loggedEx().forEach(o=>{
     const m=exMode(o.eid),b=bestSet(o.eid);
-    h+='<button class="card exp" onclick="openProg(\''+o.eid+'\')"><b>'+esc(exName(o.eid,o.n))+'</b><div class="muted sm">'+t('sessions',o.cnt)+(b?' · '+t(m==='t'?'longest':'best')+': '+esc(fmtSet(m,b)):'')+'</div></button>';
+    h+='<button class="card exp wkp" onclick="openProg(\''+o.eid+'\')">'+(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(o.eid)?photoTh(o.eid):'<span class="hv-th hv-no">'+ic('barbell')+'</span>')+'<span class="wkp-t"><b>'+esc(exName(o.eid,o.n))+'</b><div class="muted sm">'+t('sessions',o.cnt)+(b?' · '+t(m==='t'?'longest':'best')+': '+esc(fmtSet(m,b)):'')+'</div></span></button>';
   });
   return h;
 }

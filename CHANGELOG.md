@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v58 — 2026-10-20
+- **History, Progress and Body:** workout and exercise cards show a photo thumbnail; totals and the weight card use the orange accent with a soft gradient.
+  **Historial, Progreso y Cuerpo:** las tarjetas de entrenamiento y de ejercicio muestran una miniatura con foto; los totales y la tarjeta de peso usan el naranja con un degradado suave.
+
 ## v57 — 2026-10-20
 - **Readable sub-heading:** "…or train with a piece of equipment" is now a bold heading with a divider instead of small grey text.
   **Subtítulo legible:** "…o entrena con un equipo" ahora es un encabezado en negritas con línea divisoria en vez de texto pequeño y gris.

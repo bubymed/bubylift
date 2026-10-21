@@ -648,3 +648,16 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .lsub::before,.lsub::after{content:"";flex:1;height:1px;background:var(--line)}
 .lsub::before{flex:0 0 14px}
 .lsub span{font-size:1.05rem;font-weight:700;color:var(--txt)}
+
+/* v58 history, progress and body with photos and accent / historial, progreso y cuerpo con fotos y acento */
+.wkp{display:flex!important;align-items:center;gap:12px;text-align:left}
+.wkp .hv-th{width:60px;height:60px;border-radius:14px}
+.hv-no{display:flex;align-items:center;justify-content:center;color:var(--dim)}
+.hv-no .ic{width:26px;height:26px}
+.wkp-t{flex:1;min-width:0;display:block}
+.wkp-t .muted:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.wkp::after{float:none!important;margin-left:auto}
+.stats.card{background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 18%,var(--panel)) 0%,var(--panel) 70%);border-radius:20px}
+.stats.card b{font-size:1.7rem;font-weight:800;color:var(--accent)}
+.bwhero{background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 18%,var(--panel)) 0%,var(--panel) 65%);border-radius:20px}
+.bw-in{font-weight:800}
