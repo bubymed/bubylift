@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v56',items:[
+  {i:'📐',en:'<b>Smaller photo tiles</b> — the muscle and equipment tiles in the library are about half the size, so you see more at once.',es:'<b>Fichas con foto más pequeñas</b> — las fichas de músculo y equipo en la biblioteca son como la mitad de grandes, así ves más a la vez.'}]},
  {v:'v55',items:[
   {i:'🏁',en:'<b>Photos on challenges and ranks</b> — every challenge shows a photo of one of its moves, and the six rank cards (Seed to Titan) now have a photo background.',es:'<b>Fotos en retos y rangos</b> — cada reto muestra la foto de uno de sus movimientos, y las seis tarjetas de rango (Semilla a Titán) ahora tienen foto de fondo.'}]},
  {v:'v54',items:[

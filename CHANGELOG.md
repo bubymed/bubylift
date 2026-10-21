@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v56 — 2026-10-20
+- **Compact tiles:** library muscle and equipment photo tiles are smaller (4 per row) so less scrolling.
+  **Fichas compactas:** las fichas con foto de músculo y equipo en la biblioteca son más pequeñas (4 por fila) para desplazarse menos.
+
 ## v55 — 2026-10-20
 - **Challenges and ranks with photos:** challenge cards show a thumbnail of one of their moves; rank cards use a photo background.
   **Retos y rangos con fotos:** las tarjetas de reto muestran la miniatura de uno de sus movimientos; las tarjetas de rango usan una foto de fondo.
