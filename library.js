@@ -158,7 +158,7 @@ function libDraw(){
 function libFocusHtml(){
   const li=LIB.lv,items=libFocus(LIB.area,li,libHave());
   let h='<p class="muted sm">'+t('libFocusP')+'</p>'+
-    libStep(1,'libStep1')+libTiles(LIB_AREAS,LIB.area,'libArea')+'<p class="muted sm">'+t('libOrEq')+'</p>'+libTiles(LIB_EQ,LIB.area,'libArea')+
+    libStep(1,'libStep1')+libTiles(LIB_AREAS,LIB.area,'libArea')+'<div class="lsub"><span>'+t('libOrEq')+'</span></div>'+libTiles(LIB_EQ,LIB.area,'libArea')+
     libStep(2,'libStep2')+libRanks(LIB.area,li,'libLv')+
     '<div class="card optb"><b>'+rk(LIB.area,li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
   h+=libStep(3,'libStep3');
