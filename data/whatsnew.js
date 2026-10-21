@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v58',items:[
+  {i:'📈',en:'<b>History, Progress and Body redesigned</b> — every workout and every exercise now shows a photo thumbnail, and the totals and your weight card use the app\'s orange accent so they stand out.',es:'<b>Historial, Progreso y Cuerpo rediseñados</b> — cada entrenamiento y cada ejercicio ahora muestra una miniatura con foto, y los totales y la tarjeta de peso usan el naranja de la app para destacar.'}]},
  {v:'v57',items:[
   {i:'🔤',en:'<b>Clearer sub-heading</b> — "…or train with a piece of equipment" is now a bold, easy-to-read heading with a divider line.',es:'<b>Subtítulo más claro</b> — "…o entrena con un equipo" ahora es un encabezado en negritas, fácil de leer y con una línea divisoria.'}]},
  {v:'v56',items:[
