@@ -13,7 +13,9 @@ function libPreset(k){SET.libHave=HAVE_PRESETS[k].slice();saveSet();libDraw();}
 /* 6 ranks over 3 content levels: even ranks are the level itself, odd ranks add a set / 6 rangos sobre 3 niveles de contenido: los pares son el nivel, los impares suman una serie */
 const RANK_BASE=[0,0,1,1,2,2],RANK_SETS=[0,1,0,1,0,2];
 function libDefaultRank(){const p=profNow();return p?({new:0,some:2,adv:4}[p.lvl]||1):1;}
-function libFocus(area,rank,have){
+function libFocus(area,rank,have0){
+  // equipment routines assume the piece of equipment; the rest of your list still counts (bench, bar…) / las rutinas por equipo dan por hecho el equipo; el resto de tu lista cuenta
+  const have=LIB_EQ.indexOf(area)>=0&&LIB_EQKEY[area]?have0.concat([LIB_EQKEY[area]]):have0;
   const li=RANK_BASE[rank]||0,prof=profNow(),L=curInjL(),used={},out=[];
   (FOCUS[area]&&FOCUS[area][li]||[]).forEach(s=>{
     const p=s.split('|'),alts=p[0].split(','),lever=p[1],sets=+p[2],lo=+p[3],hi=+p[4];
@@ -149,7 +151,7 @@ function libFocusHtml(){
     libStep(2,'libStep2')+libRanks(LIB.area,li,'libLv')+
     '<div class="card optb"><b>'+rk(LIB.area,li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
   h+=libStep(3,'libStep3');
-  if(!items.length)return h+'<p class="muted">'+t(LIB_EQ.indexOf(LIB.area)>=0?'libNoEq':'libNone')+'</p>';
+  if(!items.length)return h+'<p class="muted">'+t('libNone')+'</p>';
   h+=items.map(e=>'<div class="plex"><span><b>'+esc(exName(e.eid))+'</b><small>'+esc(tgLine(e))+' · '+esc(t('rsSec',e.rs))+(e.cn?' · ⚠ '+esc(t('caution')):'')+'</small><small class="rz">'+esc(t('lz_'+e.lever))+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="libHow(\''+e.eid+'\')">ⓘ</button></div>').join('');
   if(items.length<4)h+='<p class="muted sm">'+t('libFew')+'</p>';
   h+='<div class="row"><button class="btn pri" onclick="libFocusStart(\''+LIB.area+'\','+li+')">'+t('libStart')+'</button><button class="btn" onclick="libFocusSave(\''+LIB.area+'\','+li+')">'+t('libSave')+'</button>'+
