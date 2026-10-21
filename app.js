@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v55';
+const APP_VER='v56';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -58,7 +58,14 @@ function fmtClock(sec){sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/36
 /* ---------- UI plumbing: toast, sheet, confirm ---------- */
 let toastT=null;
 function toast(msg){const e=$('toast');if(!e)return;e.textContent=msg;e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),2600);}
-function sheet(html){$('sheet').className='';$('sheet').innerHTML=html;$('sheetov').hidden=false;document.body.classList.add('noscroll');$('sheet').scrollTop=0;}
+/* redrawing the same sheet (a tap on a chip or tile) keeps the scroll position; a different sheet starts at the top
+   volver a dibujar la misma hoja (tocar una ficha) conserva el desplazamiento; otra hoja empieza arriba */
+function sheetKey(){const h=$('sheet').querySelector('h3,.wz-top');return h?h.textContent:'';}
+function sheet(html){
+  const el=$('sheet'),was=!$('sheetov').hidden,st=el.scrollTop,k0=was?sheetKey():'';
+  el.className='';el.innerHTML=html;$('sheetov').hidden=false;document.body.classList.add('noscroll');
+  const k1=sheetKey();el.scrollTop=(was&&k0&&k0===k1)?st:0;
+}
 function sheetClose(){$('sheetov').hidden=true;$('sheet').innerHTML='';document.body.classList.remove('noscroll');}
 let _askFn=null;
 function ask(msg,okTxt,fn,danger){_askFn=fn;sheet('<div class="dlg"><p>'+esc(msg)+'</p><div class="dlg-b"><button class="btn" onclick="askNo()">'+t('cancel')+'</button><button class="btn '+(danger?'danger':'pri')+'" onclick="askOk()">'+esc(okTxt)+'</button></div></div>');}
