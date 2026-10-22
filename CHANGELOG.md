@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v60 — 2026-10-21
+- **Famous splits are classic:** the Famous splits screen builds days from barbell, dumbbell, cable, machine, bench and bar lifts only (no stability ball, bands, suspension, kettlebell, sled or other special gear) unless you have none of the main gym equipment. Checked on 4,462 generated split exercises: none use special gear.
+  **Las divisiones famosas son clásicas:** la pantalla de Divisiones famosas arma los días solo con ejercicios de barra, mancuernas, poleas, máquinas, banco y barra de dominadas (sin pelota, bandas, suspensión, pesa rusa, trineo ni otro equipo especial), salvo que no tengas ningún equipo principal de gimnasio. Revisado en 4,462 ejercicios generados: ninguno usa equipo especial.
+
 ## v59 — 2026-10-20
 - **More photos:** 17 more original exercises get Free Exercise DB photos (closest equivalent movements). About 75 still have none because the open database has no equivalent.
   **Más fotos:** 17 ejercicios originales más reciben fotos de Free Exercise DB (los movimientos equivalentes más cercanos). Unos 75 siguen sin foto porque la base abierta no tiene equivalente.
