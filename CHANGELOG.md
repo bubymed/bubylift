@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v61 — 2026-10-21
+- **Conventional gear first:** the default equipment for new plans is now the standard gym set (barbell, dumbbells, cable, machine, bench, bar); the "Standard gym" preset matches it. Special gear (ball, bands, suspension, kettlebell, medicine ball, sled, wheel, pad, pack) is opt-in, and when it is marked the plan still prefers conventional lifts. Checked on 3,204 generated exercises: 0 special-gear exercises with the default equipment (580 before this change with everything marked, 328 now).
+  **Primero lo convencional:** el equipo predeterminado de los planes nuevos ahora es el de gimnasio estándar (barra, mancuernas, poleas, máquinas, banco, barra); el preajuste "Gimnasio convencional" coincide. El equipo especial (pelota, bandas, suspensión, pesa rusa, balón medicinal, trineo, rueda, almohadilla, carga) es opcional, y si lo marcas el plan sigue prefiriendo ejercicios convencionales. Revisado en 3,204 ejercicios generados: 0 con equipo especial con el equipo predeterminado (580 antes con todo marcado, 328 ahora).
+- **Fix:** the plan-adjust scan could hide the "lower volume" suggestion when six other suggestions were found; it now goes first.
+  **Arreglo:** el ajuste del plan podía ocultar la sugerencia de "bajar volumen" si había otras seis sugerencias; ahora va primero.
+
 ## v60 — 2026-10-21
 - **Famous splits are classic:** the Famous splits screen builds days from barbell, dumbbell, cable, machine, bench and bar lifts only (no stability ball, bands, suspension, kettlebell, sled or other special gear) unless you have none of the main gym equipment. Checked on 4,462 generated split exercises: none use special gear.
   **Las divisiones famosas son clásicas:** la pantalla de Divisiones famosas arma los días solo con ejercicios de barra, mancuernas, poleas, máquinas, banco y barra de dominadas (sin pelota, bandas, suspensión, pesa rusa, trineo ni otro equipo especial), salvo que no tengas ningún equipo principal de gimnasio. Revisado en 4,462 ejercicios generados: ninguno usa equipo especial.

@@ -220,7 +220,7 @@ const STR={
  swapT:['No equipment? Swap it','¿No tienes el equipo? Sustitúyelo'],
  swapP:['Options for {0} using what you have:','Opciones para {0} con lo que tienes:'],
  equipHave:['What do you have here?','¿Qué tienes aquí?'],
- eqp_gym:['Full gym','Gimnasio completo'],
+ eqp_gym:['Standard gym','Gimnasio convencional'],
  eqp_db:['Dumbbells + bench','Mancuernas + banco'],
  eqp_home:['Home + bands','Casa + bandas'],
  eqp_none:['Bodyweight only','Solo peso corporal'],

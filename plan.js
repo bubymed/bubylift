@@ -26,7 +26,7 @@ function avail(eid,have){
   return(q==='bodyweight'||q==='other'||have.indexOf(q)>=0)&&(!nd||have.indexOf(nd)>=0);
 }
 function profNow(){return DATA.plan&&DATA.plan.prof?DATA.plan.prof:null;}
-function curHave(){const p=profNow();return p?p.have:(Array.isArray(SET.have)?SET.have:HAVE_KEYS);}
+function curHave(){const p=profNow();return p?p.have:(Array.isArray(SET.have)?SET.have:HAVE_CONV);}
 function curInjL(){const p=profNow();return p?injLetters(p.inj):'';}
 /* badge shown in lists for the person's injuries / aviso en listas según las lesiones */
 function injBadge(eid){
@@ -179,12 +179,14 @@ function volDone(){
 /* pick the best available exercise for a muscle slot / elige el mejor ejercicio disponible para un hueco */
 /* test-specific drills only appear for that test / los ejercicios propios de una prueba solo salen con esa prueba */
 const TESTONLY={sdcdrill:'aft',firecarry:'usmc',ammolift:'usmc'};
+/* conventional gear first: ball, bands, suspension... only fill in when nothing conventional is left / equipo convencional primero: pelota, bandas, suspensión... solo si no queda nada convencional */
+function isSpecial(id){const q=exById(id);return(q&&HAVE_SPECIAL.indexOf(q.e)>=0)||(NEED[id]&&HAVE_SPECIAL.indexOf(NEED[id])>=0)?1:0;}
 function pickFor(mu,role,ctx){
   const P=POOL[mu];if(!P)return null;
   const first=(ctx.hy&&HYFIRST[ctx.test]&&HYFIRST[ctx.test][mu+role])||[];
   const list=first.concat(role==='m'?P.m.concat(P.a):P.a.concat(P.m)).filter((x,i,a)=>a.indexOf(x)===i);
   const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&(!TESTONLY[id]||TESTONLY[id]===ctx.test)&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
-  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||((ctx.used[a]||0)-(ctx.used[b]||0)));
+  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
   // v49: on every third accessory pick, prefer an imported exercise that ties with the best one / cada tercera opción de accesorio prefiere un ejercicio importado empatado con la mejor
   if(c.length>1&&role!=='m'&&role!=='p'&&Object.keys(ctx.used).length%2===0){
     const k=x=>stressLvl(x,ctx.L)+'/'+(ctx.used[x]||0),j=c.findIndex(x=>x.slice(0,2)==='z_'&&k(x)===k(c[0]));
@@ -372,7 +374,7 @@ function cleanPlan(p){
     ds.push(dd);
   }
   const checks=(Array.isArray(p.checks)?p.checks:[]).slice(-40).filter(c=>c&&typeof c.t==='number').map(c=>({t:c.t,bw:cn(c.bw)||null,feel:['easy','right','hard'].indexOf(c.feel)>=0?c.feel:'right'}));
-  const prof=normProf(p.prof&&typeof p.prof==='object'?Object.assign({},p.prof,{n:p.n,goal:p.goal,lvl:p.lvl}):{n:p.n,goal:p.goal,lvl:p.lvl,have:HAVE_KEYS.slice()});
+  const prof=normProf(p.prof&&typeof p.prof==='object'?Object.assign({},p.prof,{n:p.n,goal:p.goal,lvl:p.lvl}):{n:p.n,goal:p.goal,lvl:p.lvl,have:HAVE_CONV.slice()});
   const o={goal:prof.goal,n:p.n,lvl:p.lvl,t0:p.t0,ct:cn(p.ct)||0,ds:ds,checks:checks,prof:prof};
   if(Number.isInteger(p.ph)&&p.ph>=1&&p.ph<=5){o.ph=p.ph;o.pt=(typeof p.pt==='number'&&p.pt>0&&p.pt<4e12)?p.pt:p.t0;}
   if(Number.isInteger(p.cur)&&p.cur>=0&&p.cur<p.n)o.cur=p.cur;

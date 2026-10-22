@@ -123,7 +123,7 @@ function adaptScan(p){
       }
     });
   });
-  if(rsN>=3&&shortN/rsN>=0.5&&p.prof.vol!=='lo')out.push({k:'vol',kind:'vol',to:p.prof.vol==='hi'?'md':'lo'});
+  if(rsN>=3&&shortN/rsN>=0.5&&p.prof.vol!=='lo')out.unshift({k:'vol',kind:'vol',to:p.prof.vol==='hi'?'md':'lo'}); // first, so the cap below never hides it / primero, para que el límite no lo oculte
   return out.slice(0,6);
 }
 function adaptApply(p,list){
