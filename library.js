@@ -366,11 +366,18 @@ function xdHtml(){
 function libSp(id){LIB.sp=id;if(!splitOk(id,LIB.spn))LIB.spn=[3,4,5,2].find(n=>splitOk(id,n))||3;libDraw();}
 function libSpN(n){LIB.spn=+n;libDraw();}
 function libSpL(k){LIB.spl=k;libDraw();}
+/* famous splits use classic gym lifts: no stability ball, bands, suspension, sled or other special gear, unless that would leave only bodyweight
+   las divisiones famosas usan ejercicios clásicos de gimnasio: sin pelota, bandas, suspensión, trineo ni otro equipo especial, salvo que quede solo peso corporal */
+function splitHave(have){
+  const classic=have.filter(k=>['barbell','dumbbell','cable','machine','bench','bar'].indexOf(k)>=0);
+  if(classic.some(k=>['barbell','dumbbell','cable','machine'].indexOf(k)>=0))return classic;
+  return have.filter(k=>['ball','medball','suspension','pad','wheel','sled','pack'].indexOf(k)<0);
+}
 function libSpProf(){
   const p=DATA.plan,base=p?p.prof:{goal:'muscle',len:60,inj:[],avoid:[],fav:[]};
   if(!LIB.spsd)LIB.spsd=(Math.random()*1e6|0)+1;
   const lvl=LIB.spl||(p?p.lvl:'some');
-  return Object.assign({},base,{n:LIB.spn,lvl:lvl,have:libHave().slice(),split:LIB.sp,sd:LIB.spsd,rt:0,ph:0,no:[]});
+  return Object.assign({},base,{n:LIB.spn,lvl:lvl,have:splitHave(libHave()),split:LIB.sp,sd:LIB.spsd,rt:0,ph:0,no:[]});
 }
 function libSpPlan(){try{return genPlan(libSpProf());}catch(e){return null;}}
 function libSplitHtml(){

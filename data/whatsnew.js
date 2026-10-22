@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v60',items:[
+  {i:'🏛️',en:'<b>Famous splits are classic now</b> — Push/Pull/Legs, Upper/Lower, Arnold and the other famous splits use classic gym lifts only: no stability ball, bands, suspension or special gear, and no NASM phases.',es:'<b>Las divisiones famosas ahora son clásicas</b> — Empuje/Jalón/Piernas, Superior/Inferior, Arnold y las demás divisiones famosas usan solo ejercicios clásicos de gimnasio: sin pelota, bandas, suspensión ni equipo especial, y sin fases NASM.'}]},
  {v:'v59',items:[
   {i:'📷',en:'<b>17 more exercises with photos</b> — hex bar deadlift, Turkish get-up, jump rope, walking, hiking, lunge jumps and more now show photos. About 75 exercises (balance drills, some stability-ball and band moves, sprints) still show a clean icon tile instead of a photo.',es:'<b>17 ejercicios más con foto</b> — peso muerto con barra hexagonal, levantamiento turco, saltar la cuerda, caminar, senderismo, saltos de zancada y más ya muestran fotos. Unos 75 ejercicios (equilibrio, algunos con pelota o bandas, sprints) todavía muestran un icono limpio en vez de foto.'}]},
  {v:'v58',items:[
