@@ -432,6 +432,7 @@ const STR={
  textSize:['Text size','Tamaño de letra'],
  myPlanS:['My plan','Mi plan'],
  moreOpts:['More options','Más opciones'],
+ emStart:['Start a workout','Empezar un entrenamiento'],
  psEquipN:['Bodyweight exercises are always available.','Los ejercicios con peso corporal siempre están disponibles.'],
  psInj:['Any injuries or pain?','¿Alguna lesión o dolor?'],
  psInjP:['Pick the areas. The plan avoids exercises that stress them and flags others to do lightly.','Escoge las zonas. El plan evita ejercicios que las cargan y marca otros para hacerlos con poco peso.'],

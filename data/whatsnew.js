@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v74',items:[
+  {i:'✨',en:'<b>A more polished look</b> — clearer section titles, more breathing room, a consistent corner radius, larger small text, better contrast, a little motion (set checks, records, cards) and friendly empty screens with one clear button.',es:'<b>Un aspecto más pulido</b> — títulos de sección más claros, más espacio, esquinas consistentes, texto pequeño más grande, mejor contraste, un poco de movimiento (series, récords, tarjetas) y pantallas vacías amigables con un botón claro.'}
+ ]},
  {v:'v73',items:[
   {i:'🧹',en:'<b>A cleaner home</b> — the plan card on Home now keeps only the main actions (Start, Today\'s mode, Short on time, More options). Volume, schedule and the rest moved to the plan options and to a new "My plan" section in More. New Text size setting (A, A+, A++).',es:'<b>Un inicio más limpio</b> — la tarjeta del plan en Inicio ahora conserva solo lo principal (Empezar, Modo de hoy, Poco tiempo, Más opciones). Volumen, horario y lo demás pasaron a las opciones del plan y a una nueva sección "Mi plan" en Más. Nuevo ajuste de tamaño de letra (A, A+, A++).'}
  ]},

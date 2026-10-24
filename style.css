@@ -715,3 +715,30 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 #restT{font-size:1.6rem;font-variant-numeric:tabular-nums}
 #restT.rdone{color:#1f9d55;animation:rdp .6s ease 3}
 @keyframes rdp{50%{transform:scale(1.12)}}
+
+/* v74 visual polish: type scale, spacing, radius, small-text floor, motion, empty states */
+:root{--radius:16px;--dim:#A8A8B3}
+:root[data-mode="light"]{--dim:#5C5C66}
+main>*+*{margin-top:14px}
+.card{padding:16px}
+.sec h2{font-size:1.2rem;font-weight:800;letter-spacing:-.01em}
+h3{letter-spacing:-.01em}
+#tabbar button{font-size:.68rem}
+.srow.hd{font-size:.72rem}
+.secl,.sty-l,.vs,.rk i,.lt-i span{font-size:.74rem}
+.schtd,.lt-i.on::after{font-size:.7rem}
+.stats span,.hv-t small,.exrow small,.schb small,.wopt .wt small{font-size:.82rem}
+.lbl{font-size:.8rem}
+@keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes bump{0%,100%{transform:none}40%{transform:translateY(-4px) rotate(-8deg) scale(1.2)}}
+.srow.done .chk{animation:pop .3s ease-out}
+.srow .pr{display:inline-block;animation:bump .7s ease-out 1}
+main>.card,main>.stats{animation:rise .25s ease-out}
+@media (prefers-reduced-motion:reduce){.srow.done .chk,.srow .pr,main>.card,main>.stats{animation:none}}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:28px 18px}
+.empty .em-i{width:60px;height:60px;border-radius:50%;background:color-mix(in srgb,var(--accent) 14%,var(--panel2));color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.empty .em-i .ic{width:30px;height:30px}
+.empty b{font-size:1.1rem}
+.empty p{color:var(--dim);max-width:30ch}
+.empty .btn{margin-top:8px}
