@@ -2,6 +2,8 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v61',items:[
+  {i:'🏋️',en:'<b>Conventional gear first</b> — new plans start with standard gym equipment only (barbell, dumbbells, cables, machines, bench, pull-up bar). Stability ball, bands, suspension, kettlebell, sled and the rest are opt-in: turn them on in your equipment list. Even when they are on, the plan picks conventional lifts first.',es:'<b>Primero el equipo convencional</b> — los planes nuevos empiezan solo con equipo de gimnasio estándar (barra, mancuernas, poleas, máquinas, banco, barra de dominadas). La pelota, bandas, suspensión, pesa rusa, trineo y lo demás son opcionales: actívalos en tu lista de equipo. Aun si están activados, el plan elige primero los ejercicios convencionales.'}]},
  {v:'v60',items:[
   {i:'🏛️',en:'<b>Famous splits are classic now</b> — Push/Pull/Legs, Upper/Lower, Arnold and the other famous splits use classic gym lifts only: no stability ball, bands, suspension or special gear, and no NASM phases.',es:'<b>Las divisiones famosas ahora son clásicas</b> — Empuje/Jalón/Piernas, Superior/Inferior, Arnold y las demás divisiones famosas usan solo ejercicios clásicos de gimnasio: sin pelota, bandas, suspensión ni equipo especial, y sin fases NASM.'}]},
  {v:'v59',items:[

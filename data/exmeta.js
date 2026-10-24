@@ -49,6 +49,9 @@ const NEED={pullup:'bar',chinup:'bar',assistpu:'machine',legraise:'bar',kneeup:'
  bulgsplit:'bench',stepup:'bench',latstep:'bench',bwstepup:'bench',boxjump:'bench',boxdrop:'bench',powerstep:'bench',balstepup:'bench',inccurl:'bench',concurl:'bench',seatpress:'bench',seatdbcurl:'bench',pullover:'bench',preacher:'machine',sledpush:'sled',abwheel:'wheel',balfoam:'pad',balbosu:'pad',ammolift:'pack',sandlunge:'pack',decpush:'bench',sleddrag:'sled',dbfly:'bench',ballpress:'ball'};
 /* Equipment the person can say they have. / Equipo que la persona puede decir que tiene. */
 const HAVE_KEYS=['barbell','dumbbell','cable','machine','kettlebell','band','ball','medball','suspension','bench','bar','sled','wheel','pad','pack'];
-const HAVE_PRESETS={gym:HAVE_KEYS.slice(),db:['dumbbell','bench'],home:['band'],none:[]};
+/* conventional gym gear is the default; special gear (ball, bands, suspension, sled...) is opt-in / el equipo de gimnasio convencional es lo predeterminado; el equipo especial se activa solo si lo marcas */
+const HAVE_CONV=['barbell','dumbbell','cable','machine','bench','bar'];
+const HAVE_SPECIAL=['kettlebell','band','ball','medball','suspension','sled','wheel','pad','pack'];
+const HAVE_PRESETS={gym:HAVE_CONV.slice(),db:['dumbbell','bench'],home:['band'],none:[],all:HAVE_KEYS.slice()};
 /* Which injuries exist in the app: key → joint letters. / Lesiones disponibles: clave → letras de articulación. */
 const INJ={knee:'k',back:'b',shoulder:'s',elbow:'e',wrist:'w',hip:'h',ankle:'a',neck:'n'};
