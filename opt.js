@@ -159,7 +159,7 @@ function optPick(list,ctx,role,mu){
   if(fv.length)src=fv.concat(src);
   const c=src.filter((id,i,a)=>a.indexOf(id)===i).filter(id=>{const m=meta(id);return exById(id)&&m&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=1;});
   const isF=id=>fv.indexOf(id)>=0?0:1;
-  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(isF(a)-isF(b))||(own&&mu?styFit(own,a)-styFit(own,b):0)||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
+  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(isF(a)-isF(b))||(persLike(a)-persLike(b))||(own&&mu?styFit(own,a)-styFit(own,b):0)||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
   if(c.length&&isF(c[0])===0)return c[0];
   const pk=persPick(c);if(mu&&role!=='c'&&role!=='z'&&role!=='y')styNote(pk,own);return pk;
 }

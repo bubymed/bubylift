@@ -55,6 +55,8 @@ function wzTogM(k,v,max){
 }
 
 const WQ=[
+ {id:'mode',ic:'⚡',title:()=>t('qsT'),sub:()=>t('qsS'),show:()=>PW.fresh&&!PW.mini,body:()=>wzGrid([
+   wzOpt('pwQuick(1)',PW.quick===1,'⚡',t('qsFast'),t('qsFastD')),wzOpt('pwQuick(0)',PW.quick===0,'🎛️',t('qsFull'),t('qsFullD'))],'c1')},
  {id:'goal',ic:'🎯',title:()=>t('psGoal'),sub:()=>t('wzGoalS'),body:()=>wzOne('goal',PGOALS,PW.goal,v=>t('pg_'+v),v=>WZ_IC.goal[v],v=>t('pgd_'+v),'c1')},
  {id:'mix',ic:'🧩',title:()=>t('psMix'),sub:()=>t('psMixH'),multi:1,body:()=>{
     const opts=PGOALS.filter(g=>g!==PW.goal&&!(isHy(g)&&isHy(PW.goal)));
@@ -115,7 +117,11 @@ const WQ=[
  {id:'work',ic:'🪑',title:()=>t('psWork'),sub:()=>t('psWorkP'),body:()=>wzOne('work',['','sit','stand'],PW.work,v=>t('wk_'+(v||'none')),v=>WZ_IC.work[v],()=>'','c1')},
  {id:'sum',ic:'✅',title:()=>t('psSum'),sub:()=>t('wzSumS'),body:()=>wzSummary()}
 ];
-const wzList=()=>WQ.filter(q=>!q.show||q.show());
+/* quick start: only the questions that matter most / arranque rápido: solo lo más importante */
+const QK=['mode','goal','race','test','sty','n','lvl','sum'];
+const wzList=()=>WQ.filter(q=>(!q.show||q.show())&&(!PW.quick||QK.indexOf(q.id)>=0));
+function pwQuick(v){PW.quick=v;wzGo(1);}
+function pwFull(){PW.quick=0;PW.q='sex';wizDraw();}
 function wzIdx(l){const i=l.findIndex(q=>q.id===PW.q);return i<0?0:i;}
 function wzGo(d){
   const l0=wzList(),q0=l0[wzIdx(l0)];
@@ -140,7 +146,7 @@ function wzSummary(){
     (PW.inj.length?row('🩹',t('planInj',PW.inj.map(k=>t('inj_'+k)).join(', '))):'')+
     (PW.avoid.length?row('🚫',t('sumAvoid',PW.avoid.map(k=>t('av_'+k)).join(', '))):'')+
     (optOn(PW)&&PW.fav.length?row('⭐',t('sumFav',PW.fav.map(k=>exName(k)).join(', '))):'')+
-    (PW.work?row(WZ_IC.work[PW.work],t('wk_'+PW.work)):'')+'</ul><p class="muted sm">'+t('planNote')+'</p>';
+    (PW.work?row(WZ_IC.work[PW.work],t('wk_'+PW.work)):'')+'</ul><p class="muted sm">'+t('planNote')+'</p>'+(PW.quick?'<p class="muted sm">'+t('qsNote')+'</p><div class="row"><button class="btn" onclick="pwFull()">🎛️ '+t('qsMore')+'</button></div>':'');
 }
 function wzDraw(){
   const l=wzList(),i=wzIdx(l),q=l[i];PW.q=q.id;

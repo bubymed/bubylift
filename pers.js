@@ -37,6 +37,8 @@ function prefBad(eid,pr){
   for(let i=0;i<a.length;i++){const f=AVOID_T[a[i]];if(f&&f(eid,e))return true;}
   return false;
 }
+/* liked exercises come first / los ejercicios que le gustan van primero */
+function persLike(id){const pr=PREFPROF;return pr&&pr.lk&&pr.lk.indexOf(id)>=0?0:1;}
 /* small stable hash so every person gets their own mix / hash estable: cada persona recibe su propia mezcla */
 function ohash(sd,rt,s){
   let h=2166136261;const str=sd+':'+rt+':'+s;

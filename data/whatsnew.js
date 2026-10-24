@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v63',items:[
+  {i:'⚡',en:'<b>Faster and more yours</b> — the plan setup now starts with Quick (4 questions) or Custom. In any exercise you can tap "I like this" (shows up more) or "I don\'t like this" (swapped now and never suggested again). Manage them in Plan → Your tastes.',es:'<b>Más rápido y más tuyo</b> — al crear tu plan eliges Rápido (4 preguntas) o Personalizado. En cualquier ejercicio puedes tocar "Me gusta" (sale más) o "No me gusta" (se cambia al instante y no se vuelve a sugerir). Los administras en Plan → Tus gustos.'}
+ ]},
  {v:'v62',items:[
   {i:'💪',en:'<b>Pick how you like to train</b> — the plan setup now asks "How do you like to train?" instead of a gear list. Choose up to two styles (gym weights, heavy strength, calisthenics, Olympic lifting, CrossFit, athletic, home, military) and mix them 50/50 or 75/25. Each card shows what it includes and example exercises. "I don\'t have all of this" opens the equipment list.',es:'<b>Elige cómo te gusta entrenar</b> — al crear tu plan ahora se pregunta "¿Cómo te gusta entrenar?" en vez de una lista de equipo. Elige hasta dos estilos (pesas de gimnasio, fuerza pesada, calistenia, halterofilia, CrossFit, atlético, casa, militar) y mézclalos 50/50 o 75/25. Cada tarjeta muestra qué incluye y ejercicios de ejemplo. "No tengo todo esto" abre la lista de equipo.'}
  ]},
