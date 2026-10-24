@@ -748,3 +748,15 @@ main>.card,main>.stats{animation:rise .25s ease-out}
 .sn.tyb.ty-w{background:color-mix(in srgb,var(--warn) 25%,var(--panel2));color:var(--warn)}
 .sn.tyb.ty-d{background:color-mix(in srgb,#8e5cf7 25%,var(--panel2));color:#a98bff}
 .sn.tyb.ty-f{background:color-mix(in srgb,var(--red) 25%,var(--panel2));color:var(--red)}
+/* v77 cleaner active workout: one menu per exercise, quiet secondary actions */
+.exh{align-items:center}
+.exh-t{flex:1}
+.exmore{flex:none;width:38px;height:38px;border-radius:50%;background:var(--panel2);font-size:1.3rem;font-weight:800;line-height:1;color:var(--dim)}
+.cue{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.exsub{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0 4px}
+.exsub span{min-width:0}
+.lnk-d{color:var(--accent);font-weight:600;font-size:.85rem;padding:6px 2px;white-space:nowrap}
+.wk-head .wk-act{margin-top:8px}
+.wk-head .wk-act .btn{width:100%}
+
+main>.lnk-d{display:block;margin:12px auto 0;color:var(--dim)}
