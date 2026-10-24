@@ -68,7 +68,7 @@ function vStart(){
   h+=DATA.plan?planCard():'';
   h+='<h2 class="pkh">'+t(DATA.plan?'chooseT2':'chooseT')+'</h2>'+startChooser();
   h+='<div class="sec"><h2>'+t('routines')+'</h2><button class="btn sm" onclick="rbOpen()">＋ '+t('newRoutine')+'</button></div>';
-  if(!DATA.routines.length)h+='<p class="muted">'+t('noRoutines')+'</p>';
+  if(!DATA.routines.length)h+=emptyState('clipboard-list',t('routines'),t('noRoutines'),t('newRoutine'),'rbOpen()');
   else h+=DATA.routines.map(r=>'<div class="swp"><div class="swp-h swp-hl">'+t('swDelete')+'</div><div class="swp-h swp-hr">'+t('swEdit')+'</div><div class="card rt swp-in" data-l="rtDelAsk" data-r="rtEdit" data-a="'+r.id+'">'+rtThumb(r)+'<div class="rt-main"><b>'+esc(r.name)+'</b><div class="muted sm">'+r.ex.slice(0,4).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(r.ex.length>4?' …':'')+'</div></div><div class="rt-b"><button class="btn pri sm" onclick="startRoutine(\''+r.id+'\')">'+t('start')+'</button><button class="btn sm" onclick="rbOpen(\''+r.id+'\')">'+t('edit')+'</button></div></div></div>').join('');
   const lw=DATA.workouts[0];
   if(lw)h+='<div class="sec"><h2>'+t('lastWorkout')+'</h2></div>'+wkCard(lw);

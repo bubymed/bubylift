@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v74 — 2026-10-24
+- **A more polished look** — clearer section titles, more breathing room, a consistent corner radius, larger small text, better contrast, a little motion (set checks, records, cards) and friendly empty screens with one clear button.
+  **Un aspecto más pulido** — títulos de sección más claros, más espacio, esquinas consistentes, texto pequeño más grande, mejor contraste, un poco de movimiento (series, récords, tarjetas) y pantallas vacías amigables con un botón claro.
+
 ## v73 — 2026-10-24
 - **A cleaner home** — the plan card on Home now keeps only the main actions (Start, Today's mode, Short on time, More options). Volume, schedule and the rest moved to the plan options and to a new "My plan" section in More. New Text size setting (A, A+, A++).
   **Un inicio más limpio** — la tarjeta del plan en Inicio ahora conserva solo lo principal (Empezar, Modo de hoy, Poco tiempo, Más opciones). Volumen, horario y lo demás pasaron a las opciones del plan y a una nueva sección "Mi plan" en Más. Nuevo ajuste de tamaño de letra (A, A+, A++).

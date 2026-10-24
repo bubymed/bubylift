@@ -49,7 +49,7 @@ function wkCard(wk){
     '<div class="muted sm">'+wk.ex.slice(0,3).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(wk.ex.length>3?' …':'')+'</div></span></button>';
 }
 function vHistory(){
-  if(!DATA.workouts.length)return'<div class="card tip"><b>'+t('emptyHistT')+'</b><p>'+t('emptyHistP')+'</p></div>';
+  if(!DATA.workouts.length)return emptyState('clipboard-list',t('emptyHistT'),t('emptyHistP'),t('emStart'),"go('workout')");
   const now=new Date(),ws=weekStart(now.getTime()),ms=new Date(now.getFullYear(),now.getMonth(),1).getTime();
   const wn=DATA.workouts.filter(w=>w.t>=ws).length,mn=DATA.workouts.filter(w=>w.t>=ms).length;
   let h='<div class="stats card"><div><b>'+wn+'</b><span>'+t('thisWeek')+'</span></div><div><b>'+mn+'</b><span>'+t('thisMonth')+'</span></div><div><b>'+DATA.workouts.length+'</b><span>'+t('total')+'</span></div></div>';
@@ -122,7 +122,7 @@ function setPm(k){UI.pm=k;render();}
 function closeProg(){UI.prog=null;render();window.scrollTo(0,0);}
 
 function vProgress(){
-  if(!DATA.workouts.length)return goalsCard()+'<div class="card tip"><b>'+t('emptyProgT')+'</b><p>'+t('emptyProgP')+'</p></div>';
+  if(!DATA.workouts.length)return goalsCard()+emptyState('chart-bar',t('emptyProgT'),t('emptyProgP'),t('emStart'),"go('workout')");
   if(UI.prog)return vExProg(UI.prog);
   const now=Date.now(),ws=weekStart(now),vals=[],labels=[];
   for(let i=7;i>=0;i--){const a=ws-i*7*864e5,b=a+7*864e5;vals.push(DATA.workouts.filter(w=>w.t>=a&&w.t<b).length);labels.push(dFmt(a,{month:'numeric',day:'numeric'}));}

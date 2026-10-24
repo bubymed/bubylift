@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v73';
+const APP_VER='v74';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -81,6 +81,10 @@ function applyTheme(){
   const mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',m==='light'?'#F2F2F7':'#0B0B0F');
 }
 try{matchMedia('(prefers-color-scheme: light)').addEventListener('change',()=>{if(SET.theme==='system')applyTheme();});}catch(e){}
+/* friendly empty state: icon, title, short text and one clear button / estado vacío: icono, título, texto corto y un botón claro */
+function emptyState(icn,title,text,btnLbl,btnFn){
+  return'<div class="card empty"><span class="em-i">'+ic(icn)+'</span><b>'+title+'</b><p>'+text+'</p>'+(btnLbl?'<button class="btn pri" onclick="'+btnFn+'">'+btnLbl+'</button>':'')+'</div>';
+}
 function setFs(v){SET.fs=v;saveSet();applyTheme();render();}
 function setTheme(m){SET.theme=m;saveSet();applyTheme();render();}
 function setLang(l){
