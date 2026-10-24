@@ -12,7 +12,7 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{color-scheme:dark}
 :root[data-mode="light"]{color-scheme:light}
-body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:16px;line-height:1.35;min-height:100vh;min-height:100dvh;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:1rem;line-height:1.35;min-height:100vh;min-height:100dvh;-webkit-text-size-adjust:100%}
 body.noscroll{overflow:hidden}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 a{color:var(--accent)}

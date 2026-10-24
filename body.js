@@ -95,11 +95,15 @@ function vMore(){
   const gp=(typeof pfCur==='function'&&pfCur());
   let h=(gp&&gp.g?'<div class="card tip"><b>'+ic('user')+' '+t('gnT')+'</b><p class="sm">'+t('gnP')+'</p><div class="row"><button class="btn pri" onclick="gSave()">'+t('gnYes')+'</button></div></div>':'')+'<div class="sec"><h2>'+t('prefs')+'</h2></div><div class="card grp">'+
     row(t('language'),seg([['en','English'],['es','Español']],LANG,'setLang'))+
+    row(t('textSize'),seg([['s','A'],['m','A+'],['l','A++']],SET.fs||'s','setFs'))+
     row(t('appearance'),seg([['system',t('thSystem')],['dark',t('thDark')],['light',t('thLight')]],SET.theme||'system','setTheme'))+
     row(t('units'),seg([['imperial','lb·in·mi'],['metric','kg·cm·km']],SET.units,'setUnits'))+
     row(t('restTimer'),seg([['1',t('on')],['0',t('off')]],SET.auto?'1':'0','setAuto'))+
     row(t('restLen'),'<select class="in" onchange="setRest(this.value)">'+[30,45,60,90,120,150,180,240,300].map(s=>'<option value="'+s+'"'+(s===SET.rest?' selected':'')+'>'+fmtClock(s)+'</option>').join('')+'</select>')+
     row(t('sound'),seg([['1',t('on')],['0',t('off')]],SET.sound?'1':'0','setSound'))+'</div>';
+  if(DATA.plan)h+='<div class="sec"><h2>'+t('myPlanS')+'</h2></div><div class="card grp mlist">'+
+    mrow(ic('calendar'),t('rmT'),'remOpen()')+mrow(ic('heart'),t('tkBtn'),'tasteOpen()')+mrow(ic('calendar'),t('schBtn'),'schedOpen()')+mrow(ic('chart-bar'),t('volBtn'),'volOpen()')+
+    (DATA.plan.prof&&DATA.plan.prof.test==='aft'?mrow(ic('target'),t('afT'),'aftOpen()'):'')+mrow(ic('compass'),t('planAll'),'planOpen()')+'</div>';
   h+='<div class="sec"><h2>'+t('yourData')+'</h2></div><div class="card grp mlist">'+
     mrow(ic('download'),t('exportBackup'),'exportJSON()',SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+
     mrow(ic('file-text'),t('exportCsv'),'exportCSV()')+

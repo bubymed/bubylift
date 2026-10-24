@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v73 — 2026-10-24
+- **A cleaner home** — the plan card on Home now keeps only the main actions (Start, Today's mode, Short on time, More options). Volume, schedule and the rest moved to the plan options and to a new "My plan" section in More. New Text size setting (A, A+, A++).
+  **Un inicio más limpio** — la tarjeta del plan en Inicio ahora conserva solo lo principal (Empezar, Modo de hoy, Poco tiempo, Más opciones). Volumen, horario y lo demás pasaron a las opciones del plan y a una nueva sección "Mi plan" en Más. Nuevo ajuste de tamaño de letra (A, A+, A++).
+
 ## v72 — 2026-10-24
 - **Share your workout** — a picture card of any workout (name, time, sets, volume, records and top exercises) to post or send, a CSV import so you can bring your workouts back, and backups now keep your goals and AFT targets.
   **Comparte tu entrenamiento** — una tarjeta con imagen de cualquier entrenamiento (nombre, tiempo, series, volumen, récords y ejercicios principales) para publicar o enviar, importación de CSV para recuperar tus entrenamientos, y los respaldos ahora conservan tus metas y objetivos del AFT.
