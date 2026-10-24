@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v70',items:[
+  {i:'👆',en:'<b>Easier to log</b> — each exercise shows a small animated demo and a one-line tip, "Same as last time" fills your sets in one tap, and the rest timer is bigger and flashes green when it ends.',es:'<b>Más fácil de registrar</b> — cada ejercicio muestra una mini demostración animada y una pista de una línea, "Igual que la última vez" llena tus series en un toque, y el cronómetro de descanso es más grande y se pone verde al terminar.'}
+ ]},
  {v:'v69',items:[
   {i:'🧭',en:'<b>Your day, your way</b> — before a workout the app asks how you feel (tired = an easier version), "Today\'s mode" swaps to hotel, home or dumbbells-only versions, "Another plan like this" mixes the exercises up, and swaps now prefer your training style.',es:'<b>Tu día, a tu manera</b> — antes de entrenar la app pregunta cómo te sientes (cansado = versión más suave), "Modo de hoy" cambia a versiones de hotel, casa o solo mancuernas, "Otro plan parecido" mezcla los ejercicios de nuevo, y los cambios ahora prefieren tu estilo de entrenamiento.'}
  ]},
