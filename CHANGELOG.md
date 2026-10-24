@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v67 — 2026-10-24
+- **Pick the library by style** — in the routine library, tap a training style (gym weights, calisthenics, home, military…) and the equipment list adjusts to it, so the routines match how you like to train.
+  **La biblioteca por estilo** — en la biblioteca de rutinas, toca un estilo de entrenamiento (pesas de gimnasio, calistenia, casa, militar…) y el equipo se ajusta, para que las rutinas encajen con cómo te gusta entrenar.
+
 ## v66 — 2026-10-24
 - **Plain words** — training phases now have clear names (Base, Strength with control, Build muscle, Heavy strength, Power), less jargon on screen, and a new Help entry that explains set, rep, superset, pace, phase and estimated max.
   **Palabras simples** — las fases de entrenamiento ahora tienen nombres claros (Base, Fuerza con control, Ganar músculo, Fuerza máxima, Potencia), menos jerga en pantalla, y una nueva entrada en Ayuda que explica serie, repetición, superset, ritmo, fase y máximo estimado.

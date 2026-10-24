@@ -6,8 +6,13 @@ let CHR=null,CHT=null; // challenge being run, and its timer / reto en curso y s
 NT_KEYS.push('lz_std','lz_rom','lz_uni','lz_prof','lz_inst','lz_lever','lz_mom'); // notes shown while training / notas durante el entrenamiento
 
 function libHave(){return Array.isArray(SET.libHave)?SET.libHave:curHave();}
-function libTogHave(k){const a=libHave().slice(),i=a.indexOf(k);if(i>=0)a.splice(i,1);else a.push(k);SET.libHave=a;saveSet();libDraw();}
-function libPreset(k){SET.libHave=HAVE_PRESETS[k].slice();saveSet();libDraw();}
+function libTogHave(k){SET.libSty='';const a=libHave().slice(),i=a.indexOf(k);if(i>=0)a.splice(i,1);else a.push(k);SET.libHave=a;saveSet();libDraw();}
+/* style shortcut: sets the equipment list to what that style uses / atajo por estilo: pone el equipo de ese estilo */
+function libSty(k){
+  if(SET.libSty===k){SET.libSty='';SET.libHave=null;}else{SET.libSty=k;SET.libHave=styHave([k]);}
+  saveSet();libDraw();
+}
+function libPreset(k){SET.libSty='';SET.libHave=HAVE_PRESETS[k].slice();saveSet();libDraw();}
 
 /* ---------- focused routines / rutinas enfocadas ---------- */
 /* 6 ranks over 3 content levels: even ranks are the level itself, odd ranks add a set / 6 rangos sobre 3 niveles de contenido: los pares son el nivel, los impares suman una serie */
@@ -144,7 +149,8 @@ function libStep(n,key){return'<div class="lstep"><b>'+n+'</b><span>'+t(key)+'</
 function libEqHtml(){
   const have=libHave();
   return'<details class="dtl" '+(LIB.eq?'open ':'')+'ontoggle="LIB.eq=this.open"><summary><b>'+t('libEq')+'</b> <span class="muted sm">'+have.length+'</span></summary>'+
-    haveChips(have,'libTogHave')+
+    '<div class="lbl">'+t('libStyT')+'</div><div class="chips wrap">'+STY_IDS.map(k=>'<button class="chip'+(SET.libSty===k?' on':'')+'" onclick="libSty(\''+k+'\')">'+t('sty_'+k)+'</button>').join('')+'</div>'+
+    '<div class="lbl">'+t('equipHave')+'</div>'+haveChips(have,'libTogHave')+
     '<div class="row"><button class="btn sm" onclick="libPreset(\'gym\')">'+t('eqp_gym')+'</button><button class="btn sm" onclick="libPreset(\'db\')">'+t('eqp_db')+'</button><button class="btn sm" onclick="libPreset(\'home\')">'+t('eqp_home')+'</button><button class="btn sm" onclick="libPreset(\'none\')">'+t('eqp_none')+'</button></div></details>';
 }
 function libDraw(){

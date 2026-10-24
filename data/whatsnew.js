@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v67',items:[
+  {i:'🏷️',en:'<b>Pick the library by style</b> — in the routine library, tap a training style (gym weights, calisthenics, home, military…) and the equipment list adjusts to it, so the routines match how you like to train.',es:'<b>La biblioteca por estilo</b> — en la biblioteca de rutinas, toca un estilo de entrenamiento (pesas de gimnasio, calistenia, casa, militar…) y el equipo se ajusta, para que las rutinas encajen con cómo te gusta entrenar.'}
+ ]},
  {v:'v66',items:[
   {i:'💬',en:'<b>Plain words</b> — training phases now have clear names (Base, Strength with control, Build muscle, Heavy strength, Power), less jargon on screen, and a new Help entry that explains set, rep, superset, pace, phase and estimated max.',es:'<b>Palabras simples</b> — las fases de entrenamiento ahora tienen nombres claros (Base, Fuerza con control, Ganar músculo, Fuerza máxima, Potencia), menos jerga en pantalla, y una nueva entrada en Ayuda que explica serie, repetición, superset, ritmo, fase y máximo estimado.'}
  ]},

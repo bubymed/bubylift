@@ -356,6 +356,7 @@ const STR={
  gNowReps:['Your best so far: {0} reps','Tu mejor marca hasta ahora: {0} repeticiones'],
  gTarget:['Target','Meta'],
  gBad:['Enter a valid target.','Escribe una meta válida.'],
+ libStyT:['Quick pick by style','Elegir rápido por estilo'],
  psEquipN:['Bodyweight exercises are always available.','Los ejercicios con peso corporal siempre están disponibles.'],
  psInj:['Any injuries or pain?','¿Alguna lesión o dolor?'],
  psInjP:['Pick the areas. The plan avoids exercises that stress them and flags others to do lightly.','Escoge las zonas. El plan evita ejercicios que las cargan y marca otros para hacerlos con poco peso.'],
