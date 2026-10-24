@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v68',items:[
+  {i:'🔥',en:'<b>Keep the habit going</b> — a weekly streak (a week counts with about two thirds of your workouts, and one missed week is forgiven), a summary of your last week, and calendar reminders on your training days (Plan → Reminders).',es:'<b>Mantén el hábito</b> — una racha semanal (una semana cuenta con cerca de dos tercios de tus entrenamientos, y se perdona una semana perdida), un resumen de tu semana pasada y recordatorios en el calendario en tus días de entrenamiento (Plan → Recordatorios).'}
+ ]},
  {v:'v67',items:[
   {i:'🏷️',en:'<b>Pick the library by style</b> — in the routine library, tap a training style (gym weights, calisthenics, home, military…) and the equipment list adjusts to it, so the routines match how you like to train.',es:'<b>La biblioteca por estilo</b> — en la biblioteca de rutinas, toca un estilo de entrenamiento (pesas de gimnasio, calistenia, casa, militar…) y el equipo se ajusta, para que las rutinas encajen con cómo te gusta entrenar.'}
  ]},

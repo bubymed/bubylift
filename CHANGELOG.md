@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v68 — 2026-10-24
+- **Keep the habit going** — a weekly streak (a week counts with about two thirds of your workouts, and one missed week is forgiven), a summary of your last week, and calendar reminders on your training days (Plan → Reminders).
+  **Mantén el hábito** — una racha semanal (una semana cuenta con cerca de dos tercios de tus entrenamientos, y se perdona una semana perdida), un resumen de tu semana pasada y recordatorios en el calendario en tus días de entrenamiento (Plan → Recordatorios).
+
 ## v67 — 2026-10-24
 - **Pick the library by style** — in the routine library, tap a training style (gym weights, calisthenics, home, military…) and the equipment list adjusts to it, so the routines match how you like to train.
   **La biblioteca por estilo** — en la biblioteca de rutinas, toca un estilo de entrenamiento (pesas de gimnasio, calistenia, casa, militar…) y el equipo se ajusta, para que las rutinas encajen con cómo te gusta entrenar.

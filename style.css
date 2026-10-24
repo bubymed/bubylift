@@ -695,3 +695,10 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .gl-bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
 .gl-r{display:flex;align-items:center;gap:8px;margin-top:6px}.gl-r .gl-bar{flex:1;margin-top:0}.gl-p{font-weight:700;font-size:.85rem;color:var(--accent);min-width:2.6em;text-align:right}
 .gl.done{opacity:.75}
+
+/* v68 habit */
+.streak{display:flex;align-items:center;gap:14px}
+.st-n{display:flex;align-items:center;gap:4px;font-size:1.8rem;font-weight:800;color:var(--accent)}
+.st-n .ic{width:26px;height:26px}
+.st-t{display:flex;flex-direction:column;gap:2px}
+.st-t small{color:var(--dim);font-size:.82rem;line-height:1.25}
