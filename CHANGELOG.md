@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v75 — 2026-10-24
+- **Rep ranges that are easy to follow** — every target is now a range with easy numbers (5–8, 10–12, 15–20) instead of odd single numbers like 13 or 17. Famous programs with fixed schemes, like 5×5, keep their exact numbers.
+  **Rangos de repeticiones fáciles de seguir** — cada meta ahora es un rango con números fáciles (5–8, 10–12, 15–20) en lugar de números impares sueltos como 13 o 17. Los programas famosos con esquemas fijos, como 5×5, conservan sus números exactos.
+
 ## v74 — 2026-10-24
 - **A more polished look** — clearer section titles, more breathing room, a consistent corner radius, larger small text, better contrast, a little motion (set checks, records, cards) and friendly empty screens with one clear button.
   **Un aspecto más pulido** — títulos de sección más claros, más espacio, esquinas consistentes, texto pequeño más grande, mejor contraste, un poco de movimiento (series, récords, tarjetas) y pantallas vacías amigables con un botón claro.

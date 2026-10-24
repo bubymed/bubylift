@@ -30,7 +30,7 @@ function libFocus(area,rank,have0){
     if(!id)return;
     used[id]=1;
     const hold=exMode(id)==='t',secs=hold&&lo>=20;
-    out.push({eid:id,sets:Math.min(6,sets+RANK_SETS[rank]),lo:hold?(secs?lo/60:0.5):lo,hi:hold?(secs?hi/60:1):hi,u:hold?'m':'r',lever:lever,rs:Math.max(45,(li===0?75:(li===1?90:(lever==='mom'?150:105)))-(rank===5?15:0)),cn:stressJoints(id,L,1)});
+    out.push(friendlyReps({eid:id,sets:Math.min(6,sets+RANK_SETS[rank]),lo:hold?(secs?lo/60:0.5):lo,hi:hold?(secs?hi/60:1):hi,u:hold?'m':'r',lever:lever,rs:Math.max(45,(li===0?75:(li===1?90:(lever==='mom'?150:105)))-(rank===5?15:0)),cn:stressJoints(id,L,1)}));
   });
   return out;
 }

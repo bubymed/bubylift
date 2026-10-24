@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v75',items:[
+  {i:'🔢',en:'<b>Rep ranges that are easy to follow</b> — every target is now a range with easy numbers (5–8, 10–12, 15–20) instead of odd single numbers like 13 or 17. Famous programs with fixed schemes, like 5×5, keep their exact numbers.',es:'<b>Rangos de repeticiones fáciles de seguir</b> — cada meta ahora es un rango con números fáciles (5–8, 10–12, 15–20) en lugar de números impares sueltos como 13 o 17. Los programas famosos con esquemas fijos, como 5×5, conservan sus números exactos.'}
+ ]},
  {v:'v74',items:[
   {i:'✨',en:'<b>A more polished look</b> — clearer section titles, more breathing room, a consistent corner radius, larger small text, better contrast, a little motion (set checks, records, cards) and friendly empty screens with one clear button.',es:'<b>Un aspecto más pulido</b> — títulos de sección más claros, más espacio, esquinas consistentes, texto pequeño más grande, mejor contraste, un poco de movimiento (series, récords, tarjetas) y pantallas vacías amigables con un botón claro.'}
  ]},

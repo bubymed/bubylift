@@ -171,7 +171,7 @@ function optItem(eid,o,ctx){
   if(o.ss)it.ss=o.ss;
   if(o.nt)it.nt=o.nt;
   if(m==='t'){it.u='m';it.lo=o.hold?o.hold[0]:0.5;it.hi=o.hold?o.hold[1]:1;}
-  return PREFPROF?bwFix(it,PREFPROF):it;
+  return friendlyReps(PREFPROF?bwFix(it,PREFPROF):it);
 }
 
 function genOpt(prof){
