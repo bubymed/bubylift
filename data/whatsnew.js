@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v64',items:[
+  {i:'⏱️',en:'<b>Back after a break, or short on time</b> — after 14+ days without training the home card offers an easy restart (one set fewer, about 15% less weight). The new "Short on time" button builds a 20, 30 or 45 minute version of today\'s workout, keeping the main lifts.',es:'<b>Volver tras una pausa, o poco tiempo</b> — tras 14+ días sin entrenar, la tarjeta de inicio ofrece retomar suave (una serie menos, cerca de 15 % menos peso). El botón nuevo "Poco tiempo" arma una versión de 20, 30 o 45 minutos del entrenamiento de hoy, conservando lo principal.'}
+ ]},
  {v:'v63',items:[
   {i:'⚡',en:'<b>Faster and more yours</b> — the plan setup now starts with Quick (4 questions) or Custom. In any exercise you can tap "I like this" (shows up more) or "I don\'t like this" (swapped now and never suggested again). Manage them in Plan → Your tastes.',es:'<b>Más rápido y más tuyo</b> — al crear tu plan eliges Rápido (4 preguntas) o Personalizado. En cualquier ejercicio puedes tocar "Me gusta" (sale más) o "No me gusta" (se cambia al instante y no se vuelve a sugerir). Los administras en Plan → Tus gustos.'}
  ]},
