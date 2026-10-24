@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v66',items:[
+  {i:'💬',en:'<b>Plain words</b> — training phases now have clear names (Base, Strength with control, Build muscle, Heavy strength, Power), less jargon on screen, and a new Help entry that explains set, rep, superset, pace, phase and estimated max.',es:'<b>Palabras simples</b> — las fases de entrenamiento ahora tienen nombres claros (Base, Fuerza con control, Ganar músculo, Fuerza máxima, Potencia), menos jerga en pantalla, y una nueva entrada en Ayuda que explica serie, repetición, superset, ritmo, fase y máximo estimado.'}
+ ]},
  {v:'v65',items:[
   {i:'🎯',en:'<b>Goals with a progress bar</b> — in Progress, set a concrete goal: more reps in an exercise (10 pull-ups), more weight (bench 225 lb), your body weight, or workouts per month. The bar fills as you train and you get a message when you reach it.',es:'<b>Metas con barra de progreso</b> — en Progreso, pon una meta concreta: más repeticiones en un ejercicio (10 dominadas), más peso (banca con 225 lb), tu peso corporal o entrenamientos al mes. La barra se llena mientras entrenas y te avisa cuando la logras.'}
  ]},
