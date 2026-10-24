@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v65 — 2026-10-24
+- **Goals with a progress bar** — in Progress, set a concrete goal: more reps in an exercise (10 pull-ups), more weight (bench 225 lb), your body weight, or workouts per month. The bar fills as you train and you get a message when you reach it.
+  **Metas con barra de progreso** — en Progreso, pon una meta concreta: más repeticiones en un ejercicio (10 dominadas), más peso (banca con 225 lb), tu peso corporal o entrenamientos al mes. La barra se llena mientras entrenas y te avisa cuando la logras.
+
 ## v64 — 2026-10-24
 - **Back after a break, or short on time** — after 14+ days without training the home card offers an easy restart (one set fewer, about 15% less weight). The new "Short on time" button builds a 20, 30 or 45 minute version of today's workout, keeping the main lifts.
   **Volver tras una pausa, o poco tiempo** — tras 14+ días sin entrenar, la tarjeta de inicio ofrece retomar suave (una serie menos, cerca de 15 % menos peso). El botón nuevo "Poco tiempo" arma una versión de 20, 30 o 45 minutos del entrenamiento de hoy, conservando lo principal.

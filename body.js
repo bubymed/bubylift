@@ -71,7 +71,7 @@ function bodySave(){
   if(o.w==null&&o.bf==null&&!o.m){toast(t('needBody'));return;}
   const day=dInput(o.t),ex=DATA.body.find(b=>dInput(b.t)===day); // one entry per day: update it / una entrada por día: se actualiza
   if(ex){if(o.w!=null)ex.w=o.w;if(o.bf!=null)ex.bf=o.bf;if(o.m)ex.m=Object.assign({},ex.m,o.m);if(o.note)ex.note=o.note;saveData();toast(t('bwUpd'));render();return;}
-  DATA.body.push(o);DATA.body.sort((a,b)=>b.t-a.t);saveData();toast(t('saved'));render();
+  DATA.body.push(o);DATA.body.sort((a,b)=>b.t-a.t);goalsCheck();saveData();toast(t('saved'));render();
 }
 function bodyDel(id){ask(t('delEntry'),t('delete'),function(){DATA.body=DATA.body.filter(b=>b.id!==id);saveData();render();},true);}
 function goalSet(){
