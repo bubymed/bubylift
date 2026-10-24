@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v73',items:[
+  {i:'🧹',en:'<b>A cleaner home</b> — the plan card on Home now keeps only the main actions (Start, Today\'s mode, Short on time, More options). Volume, schedule and the rest moved to the plan options and to a new "My plan" section in More. New Text size setting (A, A+, A++).',es:'<b>Un inicio más limpio</b> — la tarjeta del plan en Inicio ahora conserva solo lo principal (Empezar, Modo de hoy, Poco tiempo, Más opciones). Volumen, horario y lo demás pasaron a las opciones del plan y a una nueva sección "Mi plan" en Más. Nuevo ajuste de tamaño de letra (A, A+, A++).'}
+ ]},
  {v:'v72',items:[
   {i:'📸',en:'<b>Share your workout</b> — a picture card of any workout (name, time, sets, volume, records and top exercises) to post or send, a CSV import so you can bring your workouts back, and backups now keep your goals and AFT targets.',es:'<b>Comparte tu entrenamiento</b> — una tarjeta con imagen de cualquier entrenamiento (nombre, tiempo, series, volumen, récords y ejercicios principales) para publicar o enviar, importación de CSV para recuperar tus entrenamientos, y los respaldos ahora conservan tus metas y objetivos del AFT.'}
  ]},

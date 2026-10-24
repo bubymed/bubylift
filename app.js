@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v72';
+const APP_VER='v73';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -77,9 +77,11 @@ function applyTheme(){
   let m=SET.theme;
   if(m!=='light'&&m!=='dark')m=(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';
   document.documentElement.setAttribute('data-mode',m);
+  document.documentElement.style.fontSize=({s:'16px',m:'17.5px',l:'19px'}[SET.fs]||'16px');
   const mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',m==='light'?'#F2F2F7':'#0B0B0F');
 }
 try{matchMedia('(prefers-color-scheme: light)').addEventListener('change',()=>{if(SET.theme==='system')applyTheme();});}catch(e){}
+function setFs(v){SET.fs=v;saveSet();applyTheme();render();}
 function setTheme(m){SET.theme=m;saveSet();applyTheme();render();}
 function setLang(l){
   LANG=l==='es'?'es':'en';SET.lang=LANG;saveSet();document.documentElement.lang=LANG;
