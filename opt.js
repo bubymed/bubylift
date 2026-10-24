@@ -153,14 +153,15 @@ const OCAP={ // resistance exercises per session length (30/45/60/75 min) / ejer
 };
 
 function optPick(list,ctx,role,mu){
-  let src=list||[];
+  let src=list||[];const own=styOwner();
+  if(own&&mu&&role!=='c'&&role!=='z'&&role!=='y')src=src.concat(styExtras(own,mu));
   const fv=(ctx.fav&&mu&&role==='m')?ctx.fav.filter(id=>muOf(id)===mu):[]; // the person's favorite lifts come first / sus levantamientos favoritos van primero
   if(fv.length)src=fv.concat(src);
   const c=src.filter((id,i,a)=>a.indexOf(id)===i).filter(id=>{const m=meta(id);return exById(id)&&m&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=1;});
   const isF=id=>fv.indexOf(id)>=0?0:1;
-  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(isF(a)-isF(b))||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
+  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(isF(a)-isF(b))||(own&&mu?styFit(own,a)-styFit(own,b):0)||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
   if(c.length&&isF(c[0])===0)return c[0];
-  return persPick(c);
+  const pk=persPick(c);if(mu&&role!=='c'&&role!=='z'&&role!=='y')styNote(pk,own);return pk;
 }
 function optTake(id,ctx){ctx.day[id]=1;ctx.used[id]=(ctx.used[id]||0)+1;return id;}
 /* build one item / arma un ejercicio */
@@ -248,9 +249,9 @@ function genOpt(prof){
     }
     // -- skill development (plyometric / SAQ) / habilidad
     const skl=[],lowDay=slots.some(s=>'QH'.indexOf(s[0])>=0);
-    const wantPly=ph<=3&&lowDay&&((g==='fat'||g==='general')||sk.indexOf('power')>=0)&&dl>=45;
+    const oly=prof.sty&&prof.sty.indexOf('oly')>=0,wantPly=ph<=3&&lowDay&&((g==='fat'||g==='general')||sk.indexOf('power')>=0||oly)&&dl>=45;
     if(wantPly){
-      const id=optPick(OSK[ph],ctx,'y');
+      const id=optPick(oly?STY.oly.x.W:OSK[ph],ctx,'y');
       if(id){optTake(id,ctx);skl.push(optItem(id,{sets:ph===1?(vi===0?1:2):2,lo:8,hi:8,r:'y',sec:'sk',tp:ph===1?'sl':'rp',rs:ph===1?90:60,nt:ph===1?'ntLand':undefined,rz:'rzSk'},ctx));}
     }
     if(sk.indexOf('speed')>=0&&ph<=3&&(di<2)){
