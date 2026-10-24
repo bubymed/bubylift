@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v64 — 2026-10-24
+- **Back after a break, or short on time** — after 14+ days without training the home card offers an easy restart (one set fewer, about 15% less weight). The new "Short on time" button builds a 20, 30 or 45 minute version of today's workout, keeping the main lifts.
+  **Volver tras una pausa, o poco tiempo** — tras 14+ días sin entrenar, la tarjeta de inicio ofrece retomar suave (una serie menos, cerca de 15 % menos peso). El botón nuevo "Poco tiempo" arma una versión de 20, 30 o 45 minutos del entrenamiento de hoy, conservando lo principal.
+
 ## v63 — 2026-10-24
 - **Faster and more yours** — the plan setup now starts with Quick (4 questions) or Custom. In any exercise you can tap "I like this" (shows up more) or "I don't like this" (swapped now and never suggested again). Manage them in Plan → Your tastes.
   **Más rápido y más tuyo** — al crear tu plan eliges Rápido (4 preguntas) o Personalizado. En cualquier ejercicio puedes tocar "Me gusta" (sale más) o "No me gusta" (se cambia al instante y no se vuelve a sugerir). Los administras en Plan → Tus gustos.
