@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v69 — 2026-10-24
+- **Your day, your way** — before a workout the app asks how you feel (tired = an easier version), "Today's mode" swaps to hotel, home or dumbbells-only versions, "Another plan like this" mixes the exercises up, and swaps now prefer your training style.
+  **Tu día, a tu manera** — antes de entrenar la app pregunta cómo te sientes (cansado = versión más suave), "Modo de hoy" cambia a versiones de hotel, casa o solo mancuernas, "Otro plan parecido" mezcla los ejercicios de nuevo, y los cambios ahora prefieren tu estilo de entrenamiento.
+
 ## v68 — 2026-10-24
 - **Keep the habit going** — a weekly streak (a week counts with about two thirds of your workouts, and one missed week is forgiven), a summary of your last week, and calendar reminders on your training days (Plan → Reminders).
   **Mantén el hábito** — una racha semanal (una semana cuenta con cerca de dos tercios de tus entrenamientos, y se perdona una semana perdida), un resumen de tu semana pasada y recordatorios en el calendario en tus días de entrenamiento (Plan → Recordatorios).

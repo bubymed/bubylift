@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v69',items:[
+  {i:'🧭',en:'<b>Your day, your way</b> — before a workout the app asks how you feel (tired = an easier version), "Today\'s mode" swaps to hotel, home or dumbbells-only versions, "Another plan like this" mixes the exercises up, and swaps now prefer your training style.',es:'<b>Tu día, a tu manera</b> — antes de entrenar la app pregunta cómo te sientes (cansado = versión más suave), "Modo de hoy" cambia a versiones de hotel, casa o solo mancuernas, "Otro plan parecido" mezcla los ejercicios de nuevo, y los cambios ahora prefieren tu estilo de entrenamiento.'}
+ ]},
  {v:'v68',items:[
   {i:'🔥',en:'<b>Keep the habit going</b> — a weekly streak (a week counts with about two thirds of your workouts, and one missed week is forgiven), a summary of your last week, and calendar reminders on your training days (Plan → Reminders).',es:'<b>Mantén el hábito</b> — una racha semanal (una semana cuenta con cerca de dos tercios de tus entrenamientos, y se perdona una semana perdida), un resumen de tu semana pasada y recordatorios en el calendario en tus días de entrenamiento (Plan → Recordatorios).'}
  ]},
