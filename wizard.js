@@ -89,9 +89,25 @@ const WQ=[
  {id:'ph',ic:'🎯',title:()=>t('phT'),sub:()=>t('wzPhS'),body:()=>{
     const al=optAllowed(PW),auto=optPhase(Object.assign({},PW,{ph:0}));
     return wzGrid([wzOpt("wzPick('ph',0)",!PW.ph,'🤖',t('phAuto'),t('phAutoP',auto,t('ph_'+auto)))].concat(al.map(v=>wzOpt("wzPick('ph',"+v+")",PW.ph===v,String(v),t('ph_'+v),t('phd_'+v)))),'c1');}},
- {id:'have',ic:'🏋️',title:()=>t('psEquip'),sub:()=>t('psEquipP'),multi:1,body:()=>
-    '<div class="chips wrap">'+['gym','db','home','none'].map(k=>'<button class="chip" onclick="pwPreset(\''+k+'\')">'+t('eqp_'+k)+'</button>').join('')+'</div>'+
-    wzMany('have',HAVE_KEYS,v=>t('hv_'+v),v=>eqThumb(v),0,'c1 hvw',v=>t('hvd_'+v))+'<p class="muted sm">'+t('psEquipN')+'</p>'},
+ {id:'sty',ic:'🏋️',title:()=>t('psSty'),sub:()=>t('psStyP'),multi:1,body:()=>{
+    const card=k=>{
+      const s=STY[k],on=PW.sty.indexOf(k)>=0,i=PW.sty.indexOf(k);
+      return'<button class="sty'+(on?' on':'')+'" onclick="pwSty(\''+k+'\')"><span class="sty-img" style="background-image:url(img/ex/'+s.img+'-0.jpg)"></span>'+
+        '<span class="sty-t"><b>'+t('sty_'+k)+(on&&PW.sty.length>1?' <i class="sty-n">'+(i+1)+'</i>':'')+'</b><small>'+t('styd_'+k)+'</small>'+
+        '<span class="sty-l">'+t('styInc')+'</span><span class="sty-c">'+s.have.map(h=>'<em>'+t('hv_'+h)+'</em>').join('')+'</span>'+
+        '<span class="sty-l">'+t('styDo')+'</span><span class="sty-d">'+s.ex.filter(x=>exById(x)).map(x=>esc(exName(x))).join(' · ')+'</span></span><i class="wck">✓</i></button>';
+    };
+    let h='<div class="stys">'+STY_IDS.map(card).join('')+'</div>';
+    if(PW.sty.length===2){
+      const A=t('sty_'+PW.sty[0]),B=t('sty_'+PW.sty[1]);
+      h+='<div class="lbl">'+t('styMix')+'</div>'+wzGrid([75,50,25].map(p=>wzOpt('pwStp('+p+')',PW.stp===p,'',p+' / '+(100-p),'')),'c3')+'<p class="muted sm">'+t('styMixP',PW.stp,A,100-PW.stp,B)+'</p>';
+    }
+    h+='<div class="row"><button class="btn sm" onclick="pwEqToggle()">'+(PW.eqOpen?'▲ ':'▼ ')+t('styNoAll')+'</button></div>';
+    if(PW.eqOpen)h+='<p class="muted sm">'+t('styNoAllP')+'</p><div class="chips wrap">'+['gym','db','home','none'].map(k=>'<button class="chip" onclick="pwPreset(\''+k+'\')">'+t('eqp_'+k)+'</button>').join('')+'</div>'+
+      wzMany('have',HAVE_KEYS,v=>t('hv_'+v),v=>eqThumb(v),0,'c1 hvw',v=>t('hvd_'+v))+'<p class="muted sm">'+t('psEquipN')+'</p>';
+    else h+='<p class="muted sm">'+t('styUses',PW.have.length?PW.have.map(k=>t('hv_'+k)).join(', '):t('eqp_none'))+'</p>';
+    return h+'<p class="muted sm">'+t('styN')+'</p>';
+  }},
  {id:'inj',ic:'🩹',title:()=>t('psInj'),sub:()=>t('psInjP'),multi:1,body:()=>wzMany('inj',Object.keys(INJ),v=>t('inj_'+v),()=>'🩹',0,'c2')+'<p class="muted sm">'+t('psInjN')+'</p>'},
  {id:'cond',ic:'🔄',title:()=>t('psCond'),sub:()=>t('wzCondS'),body:()=>wzOne('cond',[0,1],PW.cond,v=>v?t('psCondB'):t('wzNo'),v=>v?'🔄':'👍','','c1')+(PW.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'')},
  {id:'avoid',ic:'🚫',title:()=>t('psAvoid'),sub:()=>t('psAvoidP'),multi:1,body:()=>wzMany('avoid',AVOID,v=>t('av_'+v),v=>WZ_IC.avoid[v],0,'c2')},
@@ -120,7 +136,7 @@ function wzSummary(){
     row('📆',t('psDaysN',PW.n)+' · '+t('psLenN',PW.len)+(optOn(PW)&&PW.sh?' · '+t('shN',PW.sh):''))+
     row('📈',t('pl_'+lvlEff(PW))+' · '+t('psVol')+': '+t('vol_'+PW.vol))+
     (auto?row('🧭',t('phNow',auto,t('ph_'+auto))):'')+
-    row('🏋️',PW.have.length?PW.have.map(k=>t('hv_'+k)).join(', '):t('eqp_none'))+
+    (PW.sty.length?row('💪',styTxt(PW)):'')+row('🏋️',PW.have.length?PW.have.map(k=>t('hv_'+k)).join(', '):t('eqp_none'))+
     (PW.inj.length?row('🩹',t('planInj',PW.inj.map(k=>t('inj_'+k)).join(', '))):'')+
     (PW.avoid.length?row('🚫',t('sumAvoid',PW.avoid.map(k=>t('av_'+k)).join(', '))):'')+
     (optOn(PW)&&PW.fav.length?row('⭐',t('sumFav',PW.fav.map(k=>exName(k)).join(', '))):'')+
@@ -130,7 +146,7 @@ function wzDraw(){
   const l=wzList(),i=wzIdx(l),q=l[i];PW.q=q.id;
   const last=i===l.length-1,pct=Math.round(i/(l.length-1)*100);
   const has=q.id==='mix'?(PW.mix?1:0):(Array.isArray(PW[q.id])?PW[q.id].length:1);
-  const nextLbl=last?t('planCreate'):((q.multi&&!has&&q.id!=='have')?t('wzSkip'):t('next'))+' ›';
+  const nextLbl=last?t('planCreate'):((q.multi&&!has&&q.id!=='sty')?t('wzSkip'):t('next'))+' ›';
   const fresh=PW._lq!==q.id,st=$('sheet').scrollTop;PW._lq=q.id;
   sheet('<div class="wz"><div class="wz-top"><button class="ico" '+(i>0?'onclick="wzGo(-1)" aria-label="'+esc(t('back'))+'"':'disabled')+'>‹</button>'+
     '<div class="wz-bar"><i style="width:'+pct+'%"></i></div><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+

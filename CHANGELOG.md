@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v62 — 2026-10-24
+- **Training styles:** the plan wizard asks "How do you like to train?" (gym weights, heavy strength, calisthenics, Olympic lifting, CrossFit/functional, athletic, home, military). Up to two styles, mixed 50/50, 75/25 or 25/75; each card shows photo, description, equipment and example exercises. "I don't have all of this" opens the equipment picker.
+  **Estilos de entrenamiento:** el asistente pregunta "¿Cómo te gusta entrenar?" (pesas de gimnasio, fuerza pesada, calistenia, halterofilia, CrossFit/funcional, atlético, casa, militar). Hasta dos estilos, mezclados 50/50, 75/25 o 25/75; cada tarjeta muestra foto, descripción, equipo y ejercicios de ejemplo. "No tengo todo esto" abre el selector de equipo.
+
 ## v61 — 2026-10-21
 - **Conventional gear first:** the default equipment for new plans is now the standard gym set (barbell, dumbbells, cable, machine, bench, bar); the "Standard gym" preset matches it. Special gear (ball, bands, suspension, kettlebell, medicine ball, sled, wheel, pad, pack) is opt-in, and when it is marked the plan still prefers conventional lifts. Checked on 3,204 generated exercises: 0 special-gear exercises with the default equipment (580 before this change with everything marked, 328 now).
   **Primero lo convencional:** el equipo predeterminado de los planes nuevos ahora es el de gimnasio estándar (barra, mancuernas, poleas, máquinas, banco, barra); el preajuste "Gimnasio convencional" coincide. El equipo especial (pelota, bandas, suspensión, pesa rusa, balón medicinal, trineo, rueda, almohadilla, carga) es opcional, y si lo marcas el plan sigue prefiriendo ejercicios convencionales. Revisado en 3,204 ejercicios generados: 0 con equipo especial con el equipo predeterminado (580 antes con todo marcado, 328 ahora).

@@ -183,16 +183,16 @@ const TESTONLY={sdcdrill:'aft',firecarry:'usmc',ammolift:'usmc'};
 function isSpecial(id){const q=exById(id);return(q&&HAVE_SPECIAL.indexOf(q.e)>=0)||(NEED[id]&&HAVE_SPECIAL.indexOf(NEED[id])>=0)?1:0;}
 function pickFor(mu,role,ctx){
   const P=POOL[mu];if(!P)return null;
-  const first=(ctx.hy&&HYFIRST[ctx.test]&&HYFIRST[ctx.test][mu+role])||[];
-  const list=first.concat(role==='m'?P.m.concat(P.a):P.a.concat(P.m)).filter((x,i,a)=>a.indexOf(x)===i);
+  const first=(ctx.hy&&HYFIRST[ctx.test]&&HYFIRST[ctx.test][mu+role])||[],own=styOwner();
+  const list=first.concat(role==='m'?P.m.concat(P.a):P.a.concat(P.m),styExtras(own,mu)).filter((x,i,a)=>a.indexOf(x)===i);
   const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&(!TESTONLY[id]||TESTONLY[id]===ctx.test)&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
-  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
+  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(own?styFit(own,a)-styFit(own,b):0)||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
   // v49: on every third accessory pick, prefer an imported exercise that ties with the best one / cada tercera opción de accesorio prefiere un ejercicio importado empatado con la mejor
   if(c.length>1&&role!=='m'&&role!=='p'&&Object.keys(ctx.used).length%2===0){
     const k=x=>stressLvl(x,ctx.L)+'/'+(ctx.used[x]||0),j=c.findIndex(x=>x.slice(0,2)==='z_'&&k(x)===k(c[0]));
     if(j>0)c.unshift(c.splice(j,1)[0]);
   }
-  return persPick(c);
+  const pk=persPick(c);styNote(pk,own);return pk;
 }
 function normProf(p){
   const o=Object.assign({sex:'x',goal:'muscle',emph:'bal',focus:[],n:3,len:60,lvl:'new',have:HAVE_PRESETS.gym.slice(),inj:[],cond:0},p||{});
@@ -223,6 +223,8 @@ function normProf(p){
   const mx=o.mix;o.mix=null;
   if(mx&&typeof mx==='object'&&PGOALS.indexOf(mx.g)>=0&&mx.g!==o.goal&&!(isHy(mx.g)&&isHy(o.goal)))o.mix={g:mx.g,p:mx.p===70?70:50};
   if(o.mix&&o.goal==='hybrid')o.test='gen';
+  // training styles: up to two, with a share for the first (25, 50 or 75 %) / estilos: hasta dos, con un porcentaje para el primero
+  o.sty=(Array.isArray(o.sty)?o.sty:[]).filter((k,i,a)=>STY[k]&&a.indexOf(k)===i).slice(0,2);o.stp=o.sty.length===2&&[25,50,75].indexOf(o.stp)>=0?o.stp:50;
   if(PEMPH.indexOf(o.emph)>=0)o.em0=o.emph;else if(PEMPH.indexOf(o.em0)<0)o.em0='bal'; // the person's own balance / low / up choice / elección propia
   if(isHy(o.goal))o.emph='hy';else if(o.goal==='runner')o.emph='run';else if(o.goal==='bodybuilding')o.emph='bb';else if(['hy','run','bb'].indexOf(o.emph)>=0)o.emph='bal';
   if(o.goal!=='military'&&!(o.mix&&o.mix.g==='military'))o.td=0;
@@ -290,7 +292,7 @@ function genPlan(prof0){
     });
   };
   const lowerDay=sp=>sp.some(s=>'QHG'.indexOf(s[0])>=0)&&!sp.some(s=>s[0]==='R');
-  if(prof.skills.indexOf('power')>=0)addSk('W','p',2,lowerDay);
+  if(prof.skills.indexOf('power')>=0||prof.sty.some(k=>k==='oly'||k==='ath'))addSk('W','p',2,lowerDay);
   if(prof.skills.indexOf('speed')>=0)addSk('V','p',2,lowerDay);
   if(prof.skills.indexOf('balance')>=0)addSk('Z','a',2,sp=>!sp.some(s=>s[0]==='R'));
   if(prof.skills.indexOf('endurance')>=0)addSk('K','e',2,sp=>!sp.some(s=>s[0]==='R'||s[0]==='K'));
@@ -697,6 +699,16 @@ function pwSet(k,v){
 }
 /* second goal and split / segunda meta y reparto */
 function pwMix(g){PW.mix=g?{g:g,p:PW.mix?PW.mix.p:50}:null;if(g==='military'&&PW.test==='gen')PW.test='aft';wizDraw();}
+/* training styles: pick up to two, then the equipment follows / estilos: elige hasta dos y el equipo se ajusta solo */
+function pwSty(k){
+  const i=PW.sty.indexOf(k);
+  if(i>=0)PW.sty.splice(i,1);else if(PW.sty.length<2)PW.sty.push(k);else{PW.sty.shift();PW.sty.push(k);}
+  if(PW.sty.length<2)PW.stp=50;else if([25,50,75].indexOf(PW.stp)<0)PW.stp=50;
+  if(PW.sty.length)PW.have=styHave(PW.sty);
+  wizDraw();
+}
+function pwStp(p){PW.stp=p;wizDraw();}
+function pwEqToggle(){PW.eqOpen=!PW.eqOpen;wizDraw();}
 function pwMixP(p){if(PW.mix){PW.mix.p=p;wizDraw();}}
 function pwTog(k,v,max){
   const a=PW[k],i=a.indexOf(v);
@@ -729,7 +741,7 @@ function focusApply(){
   const old=DATA.plan,p=genPlan(prof);p.checks=old.checks;DATA.plan=p;saveData();render();planOpen();toast(t('planReady'));
 }
 function planCreate(){
-  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,avoid:PW.avoid,fav:PW.fav,work:PW.work,sh:PW.sh,pu:PW.pu,as:AS_KEYS.every(k=>PW.a&&PW.a[k])?1:0,pl:PW.pl,bal:PW.bal,sq:PW.sq,pull:PW.pull,leg:PW.leg,hist:PW.hist,split:PW.split,sd:PW.sd||((Math.random()*1e6|0)+1),rt:PW.rt,no:PW.no,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
+  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,sty:PW.sty,stp:PW.stp,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,avoid:PW.avoid,fav:PW.fav,work:PW.work,sh:PW.sh,pu:PW.pu,as:AS_KEYS.every(k=>PW.a&&PW.a[k])?1:0,pl:PW.pl,bal:PW.bal,sq:PW.sq,pull:PW.pull,leg:PW.leg,hist:PW.hist,split:PW.split,sd:PW.sd||((Math.random()*1e6|0)+1),rt:PW.rt,no:PW.no,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
   const old=DATA.plan,p=genPlan(prof);
   if(old){p.checks=old.checks;}
   DATA.plan=p;saveData();render();
