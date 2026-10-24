@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v79 — 2026-10-24
+- **Charts for your main lifts** — Progress now shows a chart for your top 3 lifts right at the top, plus a 1-rep max calculator with training weights (95%–60%).
+  **Gráficas de tus ejercicios principales** — Progreso muestra al inicio la gráfica de tus 3 ejercicios principales y una calculadora de máximo (1 repetición) con pesos de entrenamiento (95%–60%).
+
 ## v78 — 2026-10-24
 - **Bring your history from Hevy or Strong** — More → Import workouts (.csv) now reads Hevy and Strong exports too, keeping warm-ups, drop sets and dates. Unknown exercises are added as your own.
   **Trae tu historial de Hevy o Strong** — Más → Importar entrenamientos (.csv) ahora lee también los archivos de Hevy y Strong, con calentamientos, drop sets y fechas. Los ejercicios desconocidos se agregan como propios.
