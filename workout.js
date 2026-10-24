@@ -115,10 +115,21 @@ function vActive(){
   if(ACT.ex.length)h+='<button class="btn wide" onclick="saveAsRoutine()">'+t('saveRoutine')+'</button>';
   return h;
 }
+/* first tip of the how-to as a one-line cue / primer consejo de la guía como pista de una línea */
+function cueOf(eid){const s=HOWTO&&HOWTO[eid];if(!s)return'';const st=(s[LANG==='es'?1:0]||'').split('|')[0]||'';return st.length>90?st.slice(0,87)+'…':st;}
+/* fill the empty sets with what you did last time, in one tap / llena las series vacías con lo de la última vez, en un toque */
+function fillLast(i){
+  const x=ACT.ex[i],le=lastEx(x.eid);if(!le)return;const ps=le.x.sets,m=exMode(x.eid);
+  x.sets.forEach((s,j)=>{if(s.done)return;const p=ps[j]||ps[ps.length-1];if(!p)return;
+    if(m==='t'){if(s.t==null)s.t=p.t;if(s.d==null)s.d=p.d;}else{if(s.w==null)s.w=p.w;if(s.r==null)s.r=p.r;}});
+  saveAct();render();toast(t('flDone'));
+}
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
-  let h='<section class="exc"><div class="exh"><b>'+esc(exName(x.eid,x.n))+'</b></div><div class="exb"><button class="btn sm" onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button><button class="btn sm" onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button><button class="btn sm" onclick="exMenu('+i+')">⋯ '+t('options')+'</button></div>';
+  const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'"><img src="img/ex/'+x.eid+'-0.jpg" alt=""><img class="b" src="img/ex/'+x.eid+'-1.jpg" alt="" onerror="this.remove()"></button>':'';
+  let h='<section class="exc"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span></div><div class="exb"><button class="btn sm" onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button><button class="btn sm" onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button><button class="btn sm" onclick="exMenu('+i+')">⋯ '+t('options')+'</button></div>';
   h+=suggLine(x);
+  if(le&&x.sets.some(s=>!s.done))h+='<button class="btn sm fl" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>';
   h+='<div class="exsub muted sm">'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
   h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+t('colPrev')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span><span></span></div>';
@@ -257,11 +268,11 @@ function drawRest(){
   const left=Math.ceil((REST.end-Date.now())/1000),T=$('restT'),F=$('restF');
   if(left<=0){
     if(!REST.done){REST.done=true;beep();}
-    if(T)T.textContent=t('restOver');if(F)F.style.width='100%';
+    if(T){T.textContent=t('restOver');T.classList.add('rdone');}if(F)F.style.width='100%';
     if(Date.now()-REST.end>5000)stopRest();
     return;
   }
-  if(T)T.textContent=fmtClock(left);
+  if(T){T.textContent=fmtClock(left);T.classList.remove('rdone');}
   if(F)F.style.width=Math.max(0,Math.min(100,100*(1-left/REST.tot)))+'%';
 }
 function restAdd(d){if(!REST)return;REST.end+=d*1000;REST.tot=Math.max(5,REST.tot+d);REST.done=false;drawRest();}

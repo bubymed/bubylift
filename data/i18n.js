@@ -404,6 +404,8 @@ const STR={
  md_none:['Hotel','Hotel'],
  md_home:['Home','Casa'],
  md_db:['Dumbbells','Mancuernas'],
+ flBtn:['Same as last time','Igual que la última vez'],
+ flDone:['Filled with your last numbers.','Llenado con tus números de la última vez.'],
  psEquipN:['Bodyweight exercises are always available.','Los ejercicios con peso corporal siempre están disponibles.'],
  psInj:['Any injuries or pain?','¿Alguna lesión o dolor?'],
  psInjP:['Pick the areas. The plan avoids exercises that stress them and flags others to do lightly.','Escoge las zonas. El plan evita ejercicios que las cargan y marca otros para hacerlos con poco peso.'],

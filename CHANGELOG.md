@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v70 — 2026-10-24
+- **Easier to log** — each exercise shows a small animated demo and a one-line tip, "Same as last time" fills your sets in one tap, and the rest timer is bigger and flashes green when it ends.
+  **Más fácil de registrar** — cada ejercicio muestra una mini demostración animada y una pista de una línea, "Igual que la última vez" llena tus series en un toque, y el cronómetro de descanso es más grande y se pone verde al terminar.
+
 ## v69 — 2026-10-24
 - **Your day, your way** — before a workout the app asks how you feel (tired = an easier version), "Today's mode" swaps to hotel, home or dumbbells-only versions, "Another plan like this" mixes the exercises up, and swaps now prefer your training style.
   **Tu día, a tu manera** — antes de entrenar la app pregunta cómo te sientes (cansado = versión más suave), "Modo de hoy" cambia a versiones de hotel, casa o solo mancuernas, "Otro plan parecido" mezcla los ejercicios de nuevo, y los cambios ahora prefieren tu estilo de entrenamiento.
