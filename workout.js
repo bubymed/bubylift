@@ -12,7 +12,7 @@ function newSet(){return{w:null,r:null,t:null,d:null,done:false};}
 
 /* ---------- scoring / PR logic ---------- */
 function e1rm(w,r){if(!w||!r||r<1)return 0;return r===1?w:w*(1+Math.min(r,30)/30);}
-function setScore(m,s){if(m==='t')return s.t||0;if(m==='bw')return s.w?e1rm(s.w,s.r):(s.r||0);return e1rm(s.w,s.r);}
+function setScore(m,s){if(s.ty==='w')return 0;if(m==='t')return s.t||0;if(m==='bw')return s.w?e1rm(s.w,s.r):(s.r||0);return e1rm(s.w,s.r);}
 function bestScore(eid,m,skip){
   let b=0;
   DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{if(x.eid===eid)x.sets.forEach(s=>{b=Math.max(b,setScore(m,s));});}));
@@ -23,7 +23,10 @@ function lastEx(eid,beforeT){
   for(const wk of DATA.workouts){if(beforeT&&wk.t>=beforeT)continue;const x=wk.ex.find(y=>y.eid===eid);if(x&&x.sets.length)return{wk:wk,x:x};}
   return null;
 }
-function setVol(s){return(s.w||0)*(s.r||0);}
+function setVol(s){return s.ty==='w'?0:(s.w||0)*(s.r||0);}
+/* set type: warm-up (W), drop set (D) or failure (F); tap the set number to change / tipo de serie: calentamiento, drop set o fallo */
+const SET_TY=['','w','d','f'];
+function cycTy(i,j){const s=ACT.ex[i].sets[j];if(!s)return;const k=(SET_TY.indexOf(s.ty||'')+1)%SET_TY.length;if(SET_TY[k])s.ty=SET_TY[k];else delete s.ty;if(s.ty==='w'){delete s.pr;}saveAct();render();}
 function wkVol(wk){let v=0;wk.ex.forEach(x=>x.sets.forEach(s=>{v+=setVol(s);}));return v;}
 function wkSets(wk){let n=0;wk.ex.forEach(x=>{n+=x.sets.length;});return n;}
 function fmtSet(m,s){
@@ -129,6 +132,7 @@ function exCard(i,x){
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'"><img src="img/ex/'+x.eid+'-0.jpg" alt=""><img class="b" src="img/ex/'+x.eid+'-1.jpg" alt="" onerror="this.remove()"></button>':'';
   let h='<section class="exc"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span></div><div class="exb"><button class="btn sm" onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button><button class="btn sm" onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button><button class="btn sm" onclick="exMenu('+i+')">⋯ '+t('options')+'</button></div>';
   h+=suggLine(x);
+  if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
   if(le&&x.sets.some(s=>!s.done))h+='<button class="btn sm fl" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>';
   h+='<div class="exsub muted sm">'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
@@ -141,7 +145,7 @@ function exCard(i,x){
     const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
     const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+(d<0?'−':'+')+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
     const inp=(k,v,p,mode)=>m==='t'?inp0(k,v,p,mode):'<span class="stc">'+stb(k,-1)+inp0(k,v,p,mode)+stb(k,1)+'</span>';
-    h+='<div class="srow'+(s.done?' done':'')+'"><span class="sn">'+(j+1)+(s.pr?'<i class="pr" title="PR">'+ic('trophy')+'</i>':'')+'</span><span class="sp">'+esc(fmtPrev(m,pv[j]))+'</span>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('doneSet'))+'" onclick="tgSet('+i+','+j+')">✓</button><button class="clr'+((s.w!=null||s.r!=null||s.t!=null||s.d||s.done)?'':' off')+'" aria-label="'+esc(t('clrSet'))+'" title="'+esc(t('clrSet'))+'" onclick="clrSet('+i+','+j+')">✕</button></div>';
+    h+='<div class="srow'+(s.done?' done':'')+'"><button class="sn tyb'+(s.ty?' ty-'+s.ty:'')+'" aria-label="'+esc(t('tyAria'))+'" onclick="cycTy('+i+','+j+')">'+(s.ty?s.ty.toUpperCase():(j+1))+(s.pr?'<i class="pr" title="PR">'+ic('trophy')+'</i>':'')+'</button><span class="sp">'+esc(fmtPrev(m,pv[j]))+'</span>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('doneSet'))+'" onclick="tgSet('+i+','+j+')">✓</button><button class="clr'+((s.w!=null||s.r!=null||s.t!=null||s.d||s.done)?'':' off')+'" aria-label="'+esc(t('clrSet'))+'" title="'+esc(t('clrSet'))+'" onclick="clrSet('+i+','+j+')">✕</button></div>';
   });
   h+='<button class="btn sm wide" onclick="addSet('+i+')">＋ '+t('addSet')+'</button></section>';
   return h;
@@ -215,7 +219,7 @@ function finishAsk(){
 }
 function finishWk(){
   const end=Date.now();
-  const ex=ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;return o;})})).filter(x=>x.sets.length);
+  const ex=ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})})).filter(x=>x.sets.length);
   const wk={id:ACT.id,t:ACT.t0,end:end,name:(ACT.name||'').trim()||autoName(ACT.t0),note:(ACT.note||'').trim(),ex:ex};
   if(ACT.pl!=null){wk.pl=ACT.pl;if(DATA.plan)DATA.plan.cur=(ACT.pl+1)%DATA.plan.n;}
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
