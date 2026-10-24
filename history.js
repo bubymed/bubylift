@@ -127,7 +127,7 @@ function vProgress(){
   const now=Date.now(),ws=weekStart(now),vals=[],labels=[];
   for(let i=7;i>=0;i--){const a=ws-i*7*864e5,b=a+7*864e5;vals.push(DATA.workouts.filter(w=>w.t>=a&&w.t<b).length);labels.push(dFmt(a,{month:'numeric',day:'numeric'}));}
   let vol=0,sets=0;DATA.workouts.forEach(w=>{vol+=wkVol(w);sets+=wkSets(w);});
-  let h=goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
+  let h=streakCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
   h+='<div class="card"><b>'+t('perWeek')+'</b>'+barSvg(vals,labels)+'</div>';
   h+='<div class="sec"><h2>'+t('exercises')+'</h2></div>';
   loggedEx().forEach(o=>{
