@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v72 — 2026-10-24
+- **Share your workout** — a picture card of any workout (name, time, sets, volume, records and top exercises) to post or send, a CSV import so you can bring your workouts back, and backups now keep your goals and AFT targets.
+  **Comparte tu entrenamiento** — una tarjeta con imagen de cualquier entrenamiento (nombre, tiempo, series, volumen, récords y ejercicios principales) para publicar o enviar, importación de CSV para recuperar tus entrenamientos, y los respaldos ahora conservan tus metas y objetivos del AFT.
+
 ## v71 — 2026-10-24
 - **Army fitness test panel and field mode** — in your plan, the AFT panel shows your best result in each event, your own target and the weakest event, with a short workout to train it. "Today's mode" now has Field / deployed: a 30 minute workout with only a pack, a pull-up bar and bodyweight.
   **Panel de la prueba física del Ejército y modo campo** — en tu plan, el panel AFT muestra tu mejor resultado en cada evento, tu propia meta y el evento más débil, con un entrenamiento corto para trabajarlo. "Modo de hoy" ahora tiene Campo / despliegue: un entrenamiento de 30 minutos solo con mochila, barra de dominadas y peso corporal.

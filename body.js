@@ -103,6 +103,7 @@ function vMore(){
   h+='<div class="sec"><h2>'+t('yourData')+'</h2></div><div class="card grp mlist">'+
     mrow(ic('download'),t('exportBackup'),'exportJSON()',SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+
     mrow(ic('file-text'),t('exportCsv'),'exportCSV()')+
+    '<label class="mrow"><span class="mi">'+ic('upload')+'</span><span class="mt">'+t('importCsv')+'</span><span class="mc">›</span><input type="file" accept=".csv,text/csv" onchange="importCsv(this)" hidden></label>'+
     '<label class="mrow"><span class="mi">'+ic('upload')+'</span><span class="mt">'+t('importBackup')+'</span><span class="mc">›</span><input type="file" accept=".json,application/json" onchange="importFile(this)" hidden></label></div>'+
     '<p class="muted sm mnote">'+t('dataP',DATA.workouts.length,DATA.body.length)+'</p>';
   h+='<div class="sec"><h2>'+t('app')+'</h2></div><div class="card grp mlist">'+
@@ -177,6 +178,17 @@ function cleanCx(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||!x.n)return null;
   return{id:String(x.id),n:String(x.n).slice(0,60),g:EX_GROUPS.indexOf(x.g)>=0?x.g:'full',e:'other',m:['wr','bw','t'].indexOf(x.m)>=0?x.m:'wr'};
 }
+function cleanGoals(a){
+  if(!Array.isArray(a))return[];
+  return a.map(g=>{
+    if(!g||typeof g!=='object'||!ID_RE.test(String(g.id))||['reps','lift','bw','ses'].indexOf(g.k)<0||!(cn(g.tg)>0))return null;
+    const o={id:String(g.id),k:g.k,t:cn(g.t)||Date.now(),tg:g.tg};
+    if((g.k==='reps'||g.k==='lift')){if(typeof g.eid!=='string'||!ID_RE.test(g.eid))return null;o.eid=String(g.eid);}
+    if(g.k==='bw')o.st=cn(g.st)||g.tg;
+    if(cn(g.done)>0)o.done=g.done;
+    return o;
+  }).filter(Boolean).slice(0,40);
+}
 function importFile(inp){
   const f=inp.files&&inp.files[0];inp.value='';if(!f)return;
   if(f.size>20e6){toast(t('impBad'));return;}
@@ -186,12 +198,15 @@ function importFile(inp){
     if(!o||o.app!=='bubylift'||!o.data||typeof o.data!=='object'){toast(t('impBad'));return;}
     const d=o.data,arr=k=>Array.isArray(d[k])?d[k]:[];
     const have=k=>{const s={};DATA[k].forEach(x=>{s[x.id]=1;});return s;};
-    const nw=arr('workouts').map(cleanWk).filter(Boolean),nb=arr('body').map(cleanBody).filter(Boolean),nr=arr('routines').map(cleanRt).filter(Boolean),nc=arr('custom').map(cleanCx).filter(Boolean),np=(!DATA.plan&&d.plan)?cleanPlan(d.plan):null;
+    const nw=arr('workouts').map(cleanWk).filter(Boolean),nb=arr('body').map(cleanBody).filter(Boolean),nr=arr('routines').map(cleanRt).filter(Boolean),nc=arr('custom').map(cleanCx).filter(Boolean),np=(!DATA.plan&&d.plan)?cleanPlan(d.plan):null,ng=cleanGoals(d.goals),na=(d.aft&&typeof d.aft==='object')?d.aft:null;
     const hw=have('workouts'),hb=have('body'),hr=have('routines'),hc=have('custom');
     const aw=nw.filter(x=>!hw[x.id]),ab=nb.filter(x=>!hb[x.id]),ar=nr.filter(x=>!hr[x.id]),ac=nc.filter(x=>!hc[x.id]);
-    if(!aw.length&&!ab.length&&!ar.length&&!ac.length&&!np){toast(t('impNone'));return;}
+    const gAdd=ng.filter(g=>!(DATA.goals||[]).some(x=>x.id===g.id));
+    if(!aw.length&&!ab.length&&!ar.length&&!ac.length&&!np&&!gAdd.length){toast(t('impNone'));return;}
     ask(t('impAsk',aw.length,ab.length),t('import'),function(){
       aw.forEach(x=>DATA.workouts.push(x));ab.forEach(x=>DATA.body.push(x));ar.forEach(x=>DATA.routines.push(x));ac.forEach(x=>DATA.custom.push(x));if(np)DATA.plan=np;
+      if(gAdd.length){DATA.goals=(DATA.goals||[]).concat(gAdd);}
+      if(na&&!DATA.aft){DATA.aft={};['mdl','hrp','sdc','plk','run'].forEach(k=>{if(cn(na[k])>0)DATA.aft[k]=na[k];});}
       DATA.workouts.sort((a,b)=>b.t-a.t);DATA.body.sort((a,b)=>b.t-a.t);
       saveData();toast(t('imported'));render();
     });

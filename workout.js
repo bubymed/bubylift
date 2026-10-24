@@ -227,7 +227,7 @@ function finishWk(){
   sheet('<div class="sum"><div class="sum-e">🎉</div><h3>'+t('wkSaved')+'</h3><p class="muted">'+esc(wk.name)+'</p>'+
     '<div class="stats"><div><b>'+fmtDur((end-wk.t)/1000)+'</b><span>'+t('duration')+'</span></div><div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>'+
     (prs.length?'<p class="prs">'+ic('trophy')+' '+t('prsT')+': '+prs.map(e=>esc(exName(e))).join(', ')+'</p>':'')+
-    '<div class="row"><button class="btn pri" onclick="sumDone()">'+t('done')+'</button><button class="btn" onclick="saveWkAsRoutine(\''+wk.id+'\')">'+t('saveRoutineS')+'</button></div></div>');
+    '<div class="row"><button class="btn pri" onclick="sumDone()">'+t('done')+'</button><button class="btn" onclick="saveWkAsRoutine(\''+wk.id+'\')">'+t('saveRoutineS')+'</button><button class="btn" onclick="wkPic(\''+wk.id+'\')">'+ic('share')+' '+t('cdBtn')+'</button></div></div>');
 }
 /* one-time feedback pop up: after the first routine/plan AND the first logged set / pop up de feedback una sola vez */
 function fbDue(){return !SET.fbAsked&&DATA.workouts.some(w=>wkSets(w)>0)&&!!(DATA.plan||DATA.routines.length||DATA.workouts.some(w=>w.pl!=null));}
