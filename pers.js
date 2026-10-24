@@ -74,6 +74,20 @@ function bwReps(eid,pr){
   if(low&&!pr.pu)r=lv==='new'?[12,15]:(lv==='some'?[15,25]:[20,30]);
   return{lo:r[0],hi:r[1]};
 }
+/* reps are shown as easy ranges (5–8, 10–12, 15–20), never odd single numbers like 13 or 17
+   las repeticiones se muestran como rangos fáciles (5–8, 10–12, 15–20), nunca números impares sueltos como 13 o 17 */
+const FRIENDLY=[1,2,3,4,5,6,8,10,12,15,20,25,30,40,50];
+function frSnap(n,up){
+  let b=FRIENDLY[0],bd=1e9;
+  FRIENDLY.forEach(f=>{const d=Math.abs(f-n);if(d<bd||(d===bd&&((up&&f>b)||(!up&&f<b)))){bd=d;b=f;}});
+  return b;
+}
+function friendlyReps(it){
+  if(!it||it.u!=='r'||typeof it.lo!=='number'||typeof it.hi!=='number')return it;
+  let lo=frSnap(it.lo,false),hi=frSnap(Math.max(it.hi,it.lo),true);
+  if(hi<=lo){const k=FRIENDLY.indexOf(lo);hi=FRIENDLY[Math.min(FRIENDLY.length-1,k+1)];}
+  it.lo=lo;it.hi=hi;return it;
+}
 function bwFix(it,pr){
   if(!it||it.u==='m'||exMode(it.eid)!=='bw'||BW_PULL.test(it.eid)||(it.r!=='m'&&it.r!=='a'))return it;
   const r=bwReps(it.eid,pr);it.lo=r.lo;it.hi=r.hi;return it;
