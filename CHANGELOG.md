@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v77 — 2026-10-24
+- **Cleaner workout screen** — each exercise now has a single ⋯ menu (swap, guide, notes, remove) and Cancel moved out of the way.
+  **Pantalla de entrenamiento más limpia** — cada ejercicio tiene un solo menú ⋯ (sustituir, guía, notas, quitar) y Cancelar quedó más apartado.
+
 ## v76 — 2026-10-24
 - **Mark warm-ups, drop sets and failure** — tap the set number to mark a set as warm-up (W), drop set (D) or failure (F). Warm-ups do not count for records or volume. The types are saved and included in CSV export and import.
   **Marca calentamiento, drop sets y fallo** — toca el número de la serie para marcarla como calentamiento (W), drop set (D) o fallo (F). Los calentamientos no cuentan para récords ni volumen. Los tipos se guardan y se incluyen al exportar e importar CSV.

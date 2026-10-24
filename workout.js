@@ -102,7 +102,7 @@ function updTop(){const e=$('wkstats');if(e)e.innerHTML=statsLine();}
 function vActive(){
   let h='<div class="wk-head"><input id="wkName" class="wkname" type="text" maxlength="60" placeholder="'+esc(t('wkNamePh'))+'" value="'+esc(ACT.name)+'" oninput="ACT.name=this.value;saveAct()">'+
     '<div class="muted" id="wkstats">'+statsLine()+'</div>'+
-    '<div class="row"><button class="btn pri" onclick="finishAsk()">'+t('finish')+'</button><button class="btn" onclick="cancelAsk()">'+t('cancelWk')+'</button></div></div>';
+    '<div class="row wk-act"><button class="btn pri" onclick="finishAsk()">'+t('finish')+'</button></div></div>';
   const pl=(ACT.pl!=null&&DATA.plan&&DATA.plan.ph&&DATA.plan.ds[ACT.pl])?DATA.plan:null;
   if(pl)h+='<details class="card optd"><summary>'+t('optWu')+'</summary>'+optWarm(pl.ds[ACT.pl],pl).replace(/^<div class="card optb"><b>[^<]*<\/b>/,'<div>')+'</details>';
   let lastSec='';
@@ -114,6 +114,7 @@ function vActive(){
   });
   if(pl)h+='<details class="card optd"><summary>'+t('optCd')+'</summary>'+optWarm(pl.ds[ACT.pl],pl,true).replace(/^<div class="card optb"><b>[^<]*<\/b>/,'<div>')+'</details>';
   h+='<button class="btn wide" onclick="pickEx()">＋ '+t('addEx')+'</button>';
+  h+='<button class="lnk-d" onclick="cancelAsk()">'+t('cancelWk')+'</button>';
   h+='<textarea class="note-in" rows="2" maxlength="500" placeholder="'+esc(t('wkNotePh'))+'" oninput="ACT.note=this.value;saveAct()">'+esc(ACT.note)+'</textarea>';
   if(ACT.ex.length)h+='<button class="btn wide" onclick="saveAsRoutine()">'+t('saveRoutine')+'</button>';
   return h;
@@ -130,11 +131,10 @@ function fillLast(i){
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'"><img src="img/ex/'+x.eid+'-0.jpg" alt=""><img class="b" src="img/ex/'+x.eid+'-1.jpg" alt="" onerror="this.remove()"></button>':'';
-  let h='<section class="exc"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span></div><div class="exb"><button class="btn sm" onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button><button class="btn sm" onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button><button class="btn sm" onclick="exMenu('+i+')">⋯ '+t('options')+'</button></div>';
+  let h='<section class="exc"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span><button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
   h+=suggLine(x);
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
-  if(le&&x.sets.some(s=>!s.done))h+='<button class="btn sm fl" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>';
-  h+='<div class="exsub muted sm">'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</div>';
+  h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'</div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
   h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+t('colPrev')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span><span></span></div>';
   x.sets.forEach((s,j)=>{
@@ -200,6 +200,7 @@ function tgSet(i,j){
 function exMenu(i){
   const x=ACT.ex[i];
   sheet('<h3>'+esc(exName(x.eid,x.n))+'</h3><div class="menu">'+
+    '<button onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button><button onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button>'+
     (i>0?'<button onclick="exMove('+i+',-1)">↑ '+t('moveUp')+'</button>':'')+
     (i<ACT.ex.length-1?'<button onclick="exMove('+i+',1)">↓ '+t('moveDown')+'</button>':'')+
     '<button onclick="tasteLike(\''+x.eid+'\');exMenu('+i+')">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button onclick="tasteDis(\'act\','+i+')">'+ic('ban')+' '+t('tkDis')+'</button>'+
