@@ -742,3 +742,9 @@ main>.card,main>.stats{animation:rise .25s ease-out}
 .empty b{font-size:1.1rem}
 .empty p{color:var(--dim);max-width:30ch}
 .empty .btn{margin-top:8px}
+
+/* v76 set types */
+.sn.tyb{border-radius:8px;font-weight:800;min-width:2rem;height:2rem;background:var(--panel2);color:var(--txt);display:inline-flex;align-items:center;justify-content:center;gap:2px}
+.sn.tyb.ty-w{background:color-mix(in srgb,var(--warn) 25%,var(--panel2));color:var(--warn)}
+.sn.tyb.ty-d{background:color-mix(in srgb,#8e5cf7 25%,var(--panel2));color:#a98bff}
+.sn.tyb.ty-f{background:color-mix(in srgb,var(--red) 25%,var(--panel2));color:var(--red)}

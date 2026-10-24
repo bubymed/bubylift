@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v76 — 2026-10-24
+- **Mark warm-ups, drop sets and failure** — tap the set number to mark a set as warm-up (W), drop set (D) or failure (F). Warm-ups do not count for records or volume. The types are saved and included in CSV export and import.
+  **Marca calentamiento, drop sets y fallo** — toca el número de la serie para marcarla como calentamiento (W), drop set (D) o fallo (F). Los calentamientos no cuentan para récords ni volumen. Los tipos se guardan y se incluyen al exportar e importar CSV.
+
 ## v75 — 2026-10-24
 - **Rep ranges that are easy to follow** — every target is now a range with easy numbers (5–8, 10–12, 15–20) instead of odd single numbers like 13 or 17. Famous programs with fixed schemes, like 5×5, keep their exact numbers.
   **Rangos de repeticiones fáciles de seguir** — cada meta ahora es un rango con números fáciles (5–8, 10–12, 15–20) en lugar de números impares sueltos como 13 o 17. Los programas famosos con esquemas fijos, como 5×5, conservan sus números exactos.

@@ -70,7 +70,7 @@ function csvToWorkouts(txt){
     const lb=/lb/i.test(r[ix('weight_unit')]||''),mi=/mi/i.test(r[ix('distance_unit')]||'');
     const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isFinite(n)?n:null;};
     const w=num(r[ix('weight')]),rp=num(r[ix('reps')]),mn=num(r[ix('minutes')]),dd=num(r[ix('distance')]);
-    const s={w:w==null?null:(lb?w/KG_LB:w),r:rp==null?null:Math.round(rp),t:mn,d:dd?(mi?dd/KM_MI:dd):null};if(r[ix('pr')])s.pr=1;
+    const s={w:w==null?null:(lb?w/KG_LB:w),r:rp==null?null:Math.round(rp),t:mn,d:dd?(mi?dd/KM_MI:dd):null};if(r[ix('pr')])s.pr=1;const ty=String(r[ix('set_type')]||'').toLowerCase();if(ty==='w'||ty==='d'||ty==='f')s.ty=ty;
     x.sets.push(s);
   });
   return{wks:out.map(cleanWk).filter(Boolean),skip:skip};
