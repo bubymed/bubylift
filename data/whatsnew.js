@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v77',items:[
+  {i:'🧼',en:'<b>Cleaner workout screen</b> — each exercise now has a single ⋯ menu (swap, guide, notes, remove) and Cancel moved out of the way.',es:'<b>Pantalla de entrenamiento más limpia</b> — cada ejercicio tiene un solo menú ⋯ (sustituir, guía, notas, quitar) y Cancelar quedó más apartado.'}
+ ]},
  {v:'v76',items:[
   {i:'🏷️',en:'<b>Mark warm-ups, drop sets and failure</b> — tap the set number to mark a set as warm-up (W), drop set (D) or failure (F). Warm-ups do not count for records or volume. The types are saved and included in CSV export and import.',es:'<b>Marca calentamiento, drop sets y fallo</b> — toca el número de la serie para marcarla como calentamiento (W), drop set (D) o fallo (F). Los calentamientos no cuentan para récords ni volumen. Los tipos se guardan y se incluyen al exportar e importar CSV.'}
  ]},
