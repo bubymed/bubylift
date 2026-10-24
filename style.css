@@ -684,3 +684,14 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 /* v63 tastes */
 .btn.on{border-color:var(--accent);color:var(--accent)}
 .menu button .ic,.btn .ic{vertical-align:-3px}
+
+/* v65 goals */
+.goals .gl-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.gl{position:relative;padding:8px 0;border-top:1px solid var(--line)}
+.gl-t{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.gl-t span{display:flex;flex-direction:column;gap:2px}
+.gl-t small{color:var(--dim);font-size:.8rem}
+.gl-bar{height:10px;border-radius:99px;background:var(--panel2);overflow:hidden;margin-top:6px}
+.gl-bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+.gl-r{display:flex;align-items:center;gap:8px;margin-top:6px}.gl-r .gl-bar{flex:1;margin-top:0}.gl-p{font-weight:700;font-size:.85rem;color:var(--accent);min-width:2.6em;text-align:right}
+.gl.done{opacity:.75}

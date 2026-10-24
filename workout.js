@@ -207,6 +207,7 @@ function finishWk(){
   const wk={id:ACT.id,t:ACT.t0,end:end,name:(ACT.name||'').trim()||autoName(ACT.t0),note:(ACT.note||'').trim(),ex:ex};
   if(ACT.pl!=null){wk.pl=ACT.pl;if(DATA.plan)DATA.plan.cur=(ACT.pl+1)%DATA.plan.n;}
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
+  goalsCheck();
   saveData();
   ACT=null;saveAct();stopRest();unwake();
   render();
