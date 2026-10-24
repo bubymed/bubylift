@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v66 — 2026-10-24
+- **Plain words** — training phases now have clear names (Base, Strength with control, Build muscle, Heavy strength, Power), less jargon on screen, and a new Help entry that explains set, rep, superset, pace, phase and estimated max.
+  **Palabras simples** — las fases de entrenamiento ahora tienen nombres claros (Base, Fuerza con control, Ganar músculo, Fuerza máxima, Potencia), menos jerga en pantalla, y una nueva entrada en Ayuda que explica serie, repetición, superset, ritmo, fase y máximo estimado.
+
 ## v65 — 2026-10-24
 - **Goals with a progress bar** — in Progress, set a concrete goal: more reps in an exercise (10 pull-ups), more weight (bench 225 lb), your body weight, or workouts per month. The bar fills as you train and you get a message when you reach it.
   **Metas con barra de progreso** — en Progreso, pon una meta concreta: más repeticiones en un ejercicio (10 dominadas), más peso (banca con 225 lb), tu peso corporal o entrenamientos al mes. La barra se llena mientras entrenas y te avisa cuando la logras.

@@ -1,7 +1,7 @@
 'use strict';
 /* Help & FAQ: common questions on top, a box for questions, complaints or comments below (sent through a Tally form).
    Ayuda y preguntas frecuentes: arriba las dudas comunes, abajo un recuadro para dudas, quejas o comentarios (se envía con un formulario de Tally). */
-const FAQ_N=15,FAQ_FORM='https://tally.so/r/KpYVek';
+const FAQ_N=16,FAQ_FORM='https://tally.so/r/KpYVek';
 function faqOpen(){
   let h='<div class="form"><div class="pick-h"><h3>'+t('faqT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted sm">'+t('faqIntro')+'</p><div class="faq">';
   for(let i=1;i<=FAQ_N;i++)h+='<details><summary>'+esc(t('faqQ'+i))+'</summary><p>'+esc(t('faqA'+i))+'</p></details>';
