@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v78 — 2026-10-24
+- **Bring your history from Hevy or Strong** — More → Import workouts (.csv) now reads Hevy and Strong exports too, keeping warm-ups, drop sets and dates. Unknown exercises are added as your own.
+  **Trae tu historial de Hevy o Strong** — Más → Importar entrenamientos (.csv) ahora lee también los archivos de Hevy y Strong, con calentamientos, drop sets y fechas. Los ejercicios desconocidos se agregan como propios.
+
 ## v77 — 2026-10-24
 - **Cleaner workout screen** — each exercise now has a single ⋯ menu (swap, guide, notes, remove) and Cancel moved out of the way.
   **Pantalla de entrenamiento más limpia** — cada ejercicio tiene un solo menú ⋯ (sustituir, guía, notas, quitar) y Cancelar quedó más apartado.

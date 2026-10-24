@@ -58,22 +58,58 @@ function eidByName(nm){
   const hit=EXLIB.find(r=>String(r[1]).toLowerCase()===nm||String(r[2]).toLowerCase()===nm);if(hit)return hit[0];
   const cx=(DATA.custom||[]).find(c=>String(c.n).toLowerCase()===nm);return cx?cx.id:null;
 }
+function exMatch(nm){
+  nm=String(nm||'').trim();let id=eidByName(nm);if(id)return id;
+  const m=nm.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+  if(m){id=eidByName(m[2]+' '+m[1])||eidByName(m[1]);if(id)return id;}
+  return null;
+}
+/* Normalise Bubylift / Hevy / Strong rows to one shape / normaliza filas de Bubylift, Hevy y Strong */
+function csvNorm(rows){
+  const H=rows[0].map(h=>String(h).trim().toLowerCase().replace(/^﻿/,'')),body=rows.slice(1);
+  const fi=p=>H.findIndex(h=>h.indexOf(p)===0),has=k=>H.indexOf(k)>=0;
+  const num=v=>{const n=parseFloat(String(v==null?'':v).replace(',','.'));return isFinite(n)?n:null;};
+  const tyOf=v=>{v=String(v||'').toLowerCase();return(v==='w'||v==='warmup'||v==='warm up')?'w':(v==='d'||v==='dropset'||v==='drop set')?'d':(v==='f'||v==='failure')?'f':'';};
+  const out=[];
+  if(has('date')&&has('exercise')){
+    const ix=k=>H.indexOf(k);
+    body.forEach(r=>{const lb=/lb/i.test(r[ix('weight_unit')]||''),mi=/mi/i.test(r[ix('distance_unit')]||'');
+      const w=num(r[ix('weight')]),d=num(r[ix('distance')]);
+      out.push({t:new Date(r[ix('date')]+'T12:00:00').getTime(),end:0,wk:r[ix('workout')],ex:r[ix('exercise')],w:w==null?null:(lb?w/KG_LB:w),r:num(r[ix('reps')]),m:num(r[ix('minutes')]),d:d?(mi?d/KM_MI:d):null,ty:tyOf(r[ix('set_type')]),pr:!!r[ix('pr')]});});
+    return out;
+  }
+  if(has('exercise_title')&&has('start_time')){
+    const iw=fi('weight_'),lbW=/lb/.test(H[iw]||''),idd=fi('distance_'),miD=/mi/.test(H[idd]||''),k=n=>H.indexOf(n);
+    body.forEach(r=>{const w=num(r[iw]),d=num(r[idd]),sc=num(r[k('duration_seconds')]);
+      out.push({t:new Date(r[k('start_time')]).getTime(),end:new Date(r[k('end_time')]).getTime()||0,wk:r[k('title')],ex:r[k('exercise_title')],w:w==null?null:(lbW?w/KG_LB:w),r:num(r[k('reps')]),m:sc?sc/60:null,d:d?(miD?d/KM_MI:d):null,ty:tyOf(r[k('set_type')]),pr:false});});
+    return out;
+  }
+  if(has('workout name')&&has('exercise name')){
+    const iw=fi('weight'),lbW=/lb/.test(H[iw]||'')||(H[iw]==='weight'&&imp()),idd=fi('distance'),k=n=>H.indexOf(n);
+    body.forEach(r=>{const w=num(r[iw]),d=num(r[idd]),sc=num(r[k('seconds')]);
+      out.push({t:new Date(String(r[k('date')]).replace(' ','T')).getTime(),end:0,wk:r[k('workout name')],ex:r[k('exercise name')],w:w==null?null:(lbW?w/KG_LB:w),r:num(r[k('reps')]),m:sc?sc/60:null,d:d?d/1000:null,ty:tyOf(r[k('set order')]),pr:false});});
+    return out;
+  }
+  return null;
+}
 function csvToWorkouts(txt){
-  const rows=csvParse(txt);if(rows.length<2||rows[0][0]!=='date'||rows[0].indexOf('exercise')<0)return null;
-  const H=rows[0],ix=k=>H.indexOf(k),by={},out=[];let skip=0;
-  rows.slice(1).forEach(r=>{
-    const eid=eidByName(r[ix('exercise')]),dt=new Date(r[ix('date')]+'T12:00:00');
-    if(!eid||isNaN(dt)){skip++;return;}
-    const key=r[ix('date')]+'|'+r[ix('workout')];
-    let wk=by[key];if(!wk){wk=by[key]={id:'i'+dt.getTime().toString(36)+out.length,t:dt.getTime(),end:0,name:String(r[ix('workout')]||'').slice(0,80),note:'',ex:[]};out.push(wk);}
-    let x=wk.ex.find(y=>y.eid===eid);if(!x){x={eid:eid,n:exName(eid),sets:[]};wk.ex.push(x);}
-    const lb=/lb/i.test(r[ix('weight_unit')]||''),mi=/mi/i.test(r[ix('distance_unit')]||'');
-    const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isFinite(n)?n:null;};
-    const w=num(r[ix('weight')]),rp=num(r[ix('reps')]),mn=num(r[ix('minutes')]),dd=num(r[ix('distance')]);
-    const s={w:w==null?null:(lb?w/KG_LB:w),r:rp==null?null:Math.round(rp),t:mn,d:dd?(mi?dd/KM_MI:dd):null};if(r[ix('pr')])s.pr=1;const ty=String(r[ix('set_type')]||'').toLowerCase();if(ty==='w'||ty==='d'||ty==='f')s.ty=ty;
+  const rows=csvParse(txt);if(rows.length<2)return null;
+  const nr=csvNorm(rows);if(!nr)return null;
+  const by={},out=[],cx={};let skip=0;
+  nr.forEach(r=>{
+    if(!isFinite(r.t)||!String(r.ex||'').trim()){skip++;return;}
+    let eid=exMatch(r.ex);
+    if(!eid){const key=String(r.ex).trim().toLowerCase();
+      if(!cx[key])cx[key]={id:'c_'+uid(),n:String(r.ex).trim().slice(0,60),g:'full',e:'other',m:(r.w==null&&r.r==null&&r.m)?'t':(r.w==null&&r.r!=null)?'bw':'wr'};
+      eid=cx[key].id;}
+    const nm=String(r.wk||'').slice(0,80),key=new Date(r.t).toDateString()+'|'+nm;
+    let wk=by[key];if(!wk){wk=by[key]={id:'i'+r.t.toString(36)+out.length,t:r.t,end:r.end>r.t?r.end:0,name:nm,note:'',ex:[]};out.push(wk);}
+    let x=wk.ex.find(y=>y.eid===eid);if(!x){x={eid:eid,n:cx&&Object.keys(cx).some(k=>cx[k].id===eid)?String(r.ex).trim().slice(0,80):exName(eid),sets:[]};wk.ex.push(x);}
+    const s={w:r.w,r:r.r==null?null:Math.round(r.r),t:r.m,d:r.d};if(r.pr)s.pr=1;if(r.ty)s.ty=r.ty;
     x.sets.push(s);
   });
-  return{wks:out.map(cleanWk).filter(Boolean),skip:skip};
+  const wks=out.map(cleanWk).filter(Boolean),used={};wks.forEach(w=>w.ex.forEach(e=>used[e.eid]=1));
+  return{wks:wks,skip:skip,cx:Object.keys(cx).map(k=>cx[k]).filter(c=>used[c.id])};
 }
 function importCsv(inp){
   const f=inp.files&&inp.files[0];inp.value='';if(!f)return;
@@ -84,7 +120,7 @@ function importCsv(inp){
     const have={};DATA.workouts.forEach(w=>{have[Math.round(w.t/864e5)+'|'+w.name]=1;});
     const add=o.wks.filter(w=>!have[Math.round(w.t/864e5)+'|'+w.name]);
     if(!add.length){toast(t('impNone'));return;}
-    ask(t('impCsvAsk',add.length),t('import'),function(){add.forEach(w=>DATA.workouts.push(w));DATA.workouts.sort((a,b)=>b.t-a.t);saveData();toast(t('imported'));render();});
+    ask(t('impCsvAsk',add.length),t('import'),function(){const uc={};add.forEach(w=>w.ex.forEach(e=>uc[e.eid]=1));(o.cx||[]).forEach(c=>{if(uc[c.id])DATA.custom.push(c);});add.forEach(w=>DATA.workouts.push(w));DATA.workouts.sort((a,b)=>b.t-a.t);saveData();toast(t('imported'));render();});
   };
   r.onerror=function(){toast(t('impBad'));};r.readAsText(f);
 }

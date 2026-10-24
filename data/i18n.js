@@ -427,7 +427,7 @@ const STR={
  md_field:['Field','Campo'],
  cdBtn:['Share card','Tarjeta para compartir'],
  cdSaved:['Picture saved','Imagen guardada'],
- importCsv:['Import workouts (.csv)','Importar entrenamientos (.csv)'],
+ importCsv:['Import workouts (.csv · Bubylift, Hevy, Strong)','Importar entrenamientos (.csv · Bubylift, Hevy, Strong)'],
  impCsvAsk:['Import {0} workouts from this file?','¿Importar {0} entrenamientos de este archivo?'],
  textSize:['Text size','Tamaño de letra'],
  myPlanS:['My plan','Mi plan'],

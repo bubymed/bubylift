@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v78',items:[
+  {i:'📥',en:'<b>Bring your history from Hevy or Strong</b> — More → Import workouts (.csv) now reads Hevy and Strong exports too, keeping warm-ups, drop sets and dates. Unknown exercises are added as your own.',es:'<b>Trae tu historial de Hevy o Strong</b> — Más → Importar entrenamientos (.csv) ahora lee también los archivos de Hevy y Strong, con calentamientos, drop sets y fechas. Los ejercicios desconocidos se agregan como propios.'}
+ ]},
  {v:'v77',items:[
   {i:'🧼',en:'<b>Cleaner workout screen</b> — each exercise now has a single ⋯ menu (swap, guide, notes, remove) and Cancel moved out of the way.',es:'<b>Pantalla de entrenamiento más limpia</b> — cada ejercicio tiene un solo menú ⋯ (sustituir, guía, notas, quitar) y Cancelar quedó más apartado.'}
  ]},
