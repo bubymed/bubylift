@@ -143,16 +143,16 @@ function csvCell(v){
   return/[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;
 }
 function exportCSV(){
-  const rows=[['date','workout','exercise','set','weight','weight_unit','reps','minutes','distance','distance_unit','pr']];
+  const rows=[['date','workout','exercise','set','weight','weight_unit','reps','minutes','distance','distance_unit','pr','set_type']];
   DATA.workouts.slice().reverse().forEach(wk=>wk.ex.forEach(x=>x.sets.forEach((s,i)=>{
-    rows.push([dInput(wk.t),wk.name,exName(x.eid,x.n),i+1,s.w!=null?wShow(s.w):'',wUnit(),s.r!=null?s.r:'',s.t!=null?s.t:'',s.d?dShow(s.d):'',dUnit(),s.pr?1:'']);
+    rows.push([dInput(wk.t),wk.name,exName(x.eid,x.n),i+1,s.w!=null?wShow(s.w):'',wUnit(),s.r!=null?s.r:'',s.t!=null?s.t:'',s.d?dShow(s.d):'',dUnit(),s.pr?1:'',s.ty||'']);
   })));
   fileOut('bubylift-workouts-'+dInput(Date.now())+'.csv','﻿'+rows.map(r=>r.map(csvCell).join(',')).join('\n'),'text/csv');
   toast(t('exported'));
 }
 const ID_RE=/^[A-Za-z0-9_-]{1,40}$/;
 const cn=v=>(typeof v==='number'&&isFinite(v)&&v>=0&&v<1e7)?v:null;
-function cleanSet(s){if(!s||typeof s!=='object')return null;const o={w:cn(s.w),r:cn(s.r)==null?null:Math.round(s.r),t:cn(s.t),d:cn(s.d)};if(s.pr)o.pr=1;return o;}
+function cleanSet(s){if(!s||typeof s!=='object')return null;const o={w:cn(s.w),r:cn(s.r)==null?null:Math.round(s.r),t:cn(s.t),d:cn(s.d)};if(s.pr)o.pr=1;if(s.ty==='w'||s.ty==='d'||s.ty==='f')o.ty=s.ty;return o;}
 function cleanCh(c){
   if(!c||typeof c!=='object'||!/^[a-z0-9]{2,12}$/.test(String(c.id))||![0,1,2,3,4,5].includes(c.lv)||!c.sc||typeof c.sc!=='object')return undefined;
   const n=v=>(typeof v==='number'&&isFinite(v)&&v>=0&&v<1e6)?v:0;
