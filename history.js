@@ -129,12 +129,33 @@ function vProgress(){
   let vol=0,sets=0;DATA.workouts.forEach(w=>{vol+=wkVol(w);sets+=wkSets(w);});
   let h=streakCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
   h+='<div class="card"><b>'+t('perWeek')+'</b>'+barSvg(vals,labels)+'</div>';
+  h+=featCharts()+rmCalc();
   h+='<div class="sec"><h2>'+t('exercises')+'</h2></div>';
   loggedEx().forEach(o=>{
     const m=exMode(o.eid),b=bestSet(o.eid);
     h+='<button class="card exp wkp" onclick="openProg(\''+o.eid+'\')">'+(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(o.eid)?photoTh(o.eid):'<span class="hv-th hv-no">'+ic('barbell')+'</span>')+'<span class="wkp-t"><b>'+esc(exName(o.eid,o.n))+'</b><div class="muted sm">'+t('sessions',o.cnt)+(b?' · '+t(m==='t'?'longest':'best')+': '+esc(fmtSet(m,b)):'')+'</div></span></button>';
   });
   return h;
+}
+/* Top lifts with a chart right on the Progress home / las ejercicios principales con gráfica en Progreso */
+function featCharts(){
+  const c=loggedEx().filter(o=>exMode(o.eid)==='wr').slice().sort((a,b)=>b.cnt-a.cnt),out=[];
+  for(let i=0;i<c.length&&out.length<3;i++){const ss=exSessions(c[i].eid),pts=ss.map(o=>({t:o.t,y:o.e1})).filter(p=>p.y>0);if(pts.length>=2)out.push({o:c[i],pts:pts});}
+  if(!out.length)return'';
+  let h='<div class="sec"><h2>'+t('topLifts')+'</h2></div>';
+  out.forEach(x=>{const a=x.pts[0].y,b=x.pts[x.pts.length-1].y,d=b-a;
+    h+='<button class="card tl" onclick="openProg(\''+x.o.eid+'\')"><div class="tl-h"><b>'+esc(exName(x.o.eid,x.o.n))+'</b><span class="tl-d '+(d>=0?'up':'dn')+'">'+(d>=0?'▲ +':'▼ ')+wShow(Math.abs(d)*(d>=0?1:-1)).replace(/^-/,'')+' '+wUnit()+'</span></div><div class="muted sm">'+t('mEst1rm')+': '+wShow(b)+' '+wUnit()+'</div>'+lineSvg(x.pts,v=>wShow(v))+'</button>';});
+  return h;
+}
+/* Visible 1RM calculator / calculadora de 1RM a la vista */
+const RM_PCT=[95,90,85,80,75,70,65,60];
+function rmCalc(){
+  return '<div class="card rmc"><b>'+t('rmCalc')+'</b><div class="muted sm">'+t('rmHint')+'</div><div class="rmc-in"><label>'+t('rmW')+' ('+wUnit()+')<input id="rmw" class="in wide" inputmode="decimal" oninput="rmUpdate()"></label><label>'+t('rmR')+'<input id="rmr" class="in wide" inputmode="numeric" oninput="rmUpdate()"></label></div><div id="rmout" class="rmc-out"></div></div>';
+}
+function rmUpdate(){
+  const o=$('rmout');if(!o)return;const w=wParse($('rmw').value),r=parseInt($('rmr').value,10),m=(w>0&&r>0&&r<=30)?e1rm(w,r):0;
+  if(!m){o.innerHTML='';return;}
+  o.innerHTML='<div class="rmc-big"><b>'+wShow(m)+' '+wUnit()+'</b><span>'+t('mEst1rm')+'</span></div><div class="rmc-grid">'+RM_PCT.map(p=>'<div><b>'+wShow(m*p/100)+'</b><span>'+p+'%</span></div>').join('')+'</div>';
 }
 function vExProg(eid){
   const m=exMode(eid),ss=exSessions(eid),mets=METRICS[m],cur=mets.find(a=>a[0]===UI.pm)||mets[0],k=cur[0],f=metricFmt(k);
@@ -149,6 +170,7 @@ function vExProg(eid){
   else if(m==='bw')cards='<div><b>'+esc(b?fmtSet(m,b):'—')+'</b><span>'+t('bestSet')+'</span></div><div><b>'+tr+'</b><span>'+t('mTotReps')+'</span></div><div><b>'+ss.length+'</b><span>'+t('sessionsL')+'</span></div>';
   else cards='<div><b>'+esc(b?fmtSet(m,b):'—')+'</b><span>'+t('longest')+'</span></div><div><b>'+fmtNum(tt,0)+'</b><span>'+t('mTime')+'</span></div><div><b>'+dShow(td)+' '+dUnit()+'</b><span>'+t('mDist')+'</span></div><div><b>'+ss.length+'</b><span>'+t('sessionsL')+'</span></div>';
   h+='<div class="stats card grid2">'+cards+'</div>';
+  if(m==='wr'&&e1>0){h+='<div class="card rmc"><b>'+t('rmTable')+'</b><div class="rmc-grid">'+RM_PCT.map(p=>'<div><b>'+wShow(e1*p/100)+'</b><span>'+p+'%</span></div>').join('')+'</div></div>';}
   h+='<div class="sec"><h2>'+t('recentSessions')+'</h2></div>';
   ss.slice(-6).reverse().forEach(o=>{h+='<div class="card sm-card"><b>'+esc(dFmt(o.t))+'</b><div class="muted sm">'+o.sets.map(s=>esc(fmtSet(m,s))).join(' · ')+'</div></div>';});
   return h;
