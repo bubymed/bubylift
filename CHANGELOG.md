@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v71 — 2026-10-24
+- **Army fitness test panel and field mode** — in your plan, the AFT panel shows your best result in each event, your own target and the weakest event, with a short workout to train it. "Today's mode" now has Field / deployed: a 30 minute workout with only a pack, a pull-up bar and bodyweight.
+  **Panel de la prueba física del Ejército y modo campo** — en tu plan, el panel AFT muestra tu mejor resultado en cada evento, tu propia meta y el evento más débil, con un entrenamiento corto para trabajarlo. "Modo de hoy" ahora tiene Campo / despliegue: un entrenamiento de 30 minutos solo con mochila, barra de dominadas y peso corporal.
+
 ## v70 — 2026-10-24
 - **Easier to log** — each exercise shows a small animated demo and a one-line tip, "Same as last time" fills your sets in one tap, and the rest timer is bigger and flashes green when it ends.
   **Más fácil de registrar** — cada ejercicio muestra una mini demostración animada y una pista de una línea, "Igual que la última vez" llena tus series en un toque, y el cronómetro de descanso es más grande y se pone verde al terminar.
