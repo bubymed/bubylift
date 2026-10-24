@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v72',items:[
+  {i:'📸',en:'<b>Share your workout</b> — a picture card of any workout (name, time, sets, volume, records and top exercises) to post or send, a CSV import so you can bring your workouts back, and backups now keep your goals and AFT targets.',es:'<b>Comparte tu entrenamiento</b> — una tarjeta con imagen de cualquier entrenamiento (nombre, tiempo, series, volumen, récords y ejercicios principales) para publicar o enviar, importación de CSV para recuperar tus entrenamientos, y los respaldos ahora conservan tus metas y objetivos del AFT.'}
+ ]},
  {v:'v71',items:[
   {i:'🎖️',en:'<b>Army fitness test panel and field mode</b> — in your plan, the AFT panel shows your best result in each event, your own target and the weakest event, with a short workout to train it. "Today\'s mode" now has Field / deployed: a 30 minute workout with only a pack, a pull-up bar and bodyweight.',es:'<b>Panel de la prueba física del Ejército y modo campo</b> — en tu plan, el panel AFT muestra tu mejor resultado en cada evento, tu propia meta y el evento más débil, con un entrenamiento corto para trabajarlo. "Modo de hoy" ahora tiene Campo / despliegue: un entrenamiento de 30 minutos solo con mochila, barra de dominadas y peso corporal.'}
  ]},
