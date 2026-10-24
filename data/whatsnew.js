@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v79',items:[
+  {i:'📈',en:'<b>Charts for your main lifts</b> — Progress now shows a chart for your top 3 lifts right at the top, plus a 1-rep max calculator with training weights (95%–60%).',es:'<b>Gráficas de tus ejercicios principales</b> — Progreso muestra al inicio la gráfica de tus 3 ejercicios principales y una calculadora de máximo (1 repetición) con pesos de entrenamiento (95%–60%).'}
+ ]},
  {v:'v78',items:[
   {i:'📥',en:'<b>Bring your history from Hevy or Strong</b> — More → Import workouts (.csv) now reads Hevy and Strong exports too, keeping warm-ups, drop sets and dates. Unknown exercises are added as your own.',es:'<b>Trae tu historial de Hevy o Strong</b> — Más → Importar entrenamientos (.csv) ahora lee también los archivos de Hevy y Strong, con calentamientos, drop sets y fechas. Los ejercicios desconocidos se agregan como propios.'}
  ]},
