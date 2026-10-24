@@ -98,7 +98,7 @@ const PGOALS=['muscle','bodybuilding','strength','fat','general','hybrid','milit
 const SKILLS=['strength','power','speed','endurance','balance'];
 const isHy=g=>g==='hybrid'||g==='military'; // hybrid athlete (no test) and military test prep share the engine / híbrido (sin prueba) y militar comparten el motor
 const OPT_SEC_OK=['ac','sk','rs','cd','cc'];
-const NT_KEYS=['ntIntR','ntLong','ntInt','ntEasy','ntTempo','ntSdc','ntMdl','ntHrp','ntPlk','ntSim','ntBal','ntLand','ntSoft'];
+const NT_KEYS=['ntTired','ntIntR','ntLong','ntInt','ntEasy','ntTempo','ntSdc','ntMdl','ntHrp','ntPlk','ntSim','ntBal','ntLand','ntSoft'];
 const NTEID={hexdl:'ntMdl',hrpushup:'ntHrp',plank:'ntPlk',sdcdrill:'ntSdc',sleddrag:'ntSdc'};
 const PDAYKEYS=Object.keys(DAYSPEC).concat(['fullA','fullB','fullC','up1','up2','low1','low2','oCB','oLeg','oPush','oPull','oLow','oChest','oBack','oSho']); // old keys stay valid / las claves viejas siguen válidas
 const LENMAX={30:4,45:5,60:6,75:7};
@@ -502,9 +502,9 @@ function planCard1(){
   const i=planNext(),d=p.ds[i];
   let h='<div class="swp"><div class="swp-h swp-hl">'+t('swSkip')+'</div><div class="swp-h swp-hr">'+t('swChange')+'</div><div class="card plan swp-in" data-l="planSkipAsk" data-r="planPickDay"><div class="plh"><b>'+t('planToday')+'</b><span class="muted sm">'+t('planWeek',planWeek(),p.n)+'</span></div><h3>'+esc(dayName(i))+'</h3>'+planBrief(d)+
     (p.wu?'<p class="muted sm">'+ic('calendar')+' '+(p.wd.indexOf(new Date().getDay())>=0?t('schCardOn',wdName(new Date().getDay())):t('schCardRest'))+'</p>':'')+
-    '<div class="row"><button class="btn pri" onclick="planStart('+i+')">'+t('planStart')+'</button><button class="btn" onclick="planOpen()">'+t('planAll')+'</button></div>'+
+    '<div class="row"><button class="btn pri" onclick="planGo('+i+')">'+t('planStart')+'</button><button class="btn" onclick="planOpen()">'+t('planAll')+'</button></div>'+
     (p.ph?'<p class="muted sm">'+ic('target')+' '+esc(phLine(p))+'</p>':'')+
-    '<div class="row plsec"><button class="btn sm" onclick="shortOpen()">'+ic('stopwatch')+' '+t('shBtn')+'</button><button class="btn sm" onclick="schedOpen()">'+ic('calendar')+' '+t('schBtn')+'</button><button class="btn sm" onclick="volOpen()">'+ic('chart-bar')+' '+t('volBtn')+'</button>'+(p.ph?'<button class="btn sm" onclick="phOpen()">'+ic('target')+' '+t('phBtn')+'</button>':'')+'<button class="btn sm danger" onclick="planDelAsk()">'+ic('trash')+' '+t('planDelShort')+'</button></div>'+
+    '<div class="row plsec"><button class="btn sm" onclick="modeOpen()">'+ic('refresh')+' '+t('mdBtn')+'</button><button class="btn sm" onclick="shortOpen()">'+ic('stopwatch')+' '+t('shBtn')+'</button><button class="btn sm" onclick="schedOpen()">'+ic('calendar')+' '+t('schBtn')+'</button><button class="btn sm" onclick="volOpen()">'+ic('chart-bar')+' '+t('volBtn')+'</button>'+(p.ph?'<button class="btn sm" onclick="phOpen()">'+ic('target')+' '+t('phBtn')+'</button>':'')+'<button class="btn sm danger" onclick="planDelAsk()">'+ic('trash')+' '+t('planDelShort')+'</button></div>'+
     '<p class="muted sm swhint">'+t('swHint')+'</p>'+testLine(p);
   if(checkDue())h+='<div class="pldue"><b>'+t('chkDue')+'</b><button class="btn sm" onclick="chkOpen()">'+t('chkOpen')+'</button></div>';
   return h+'</div></div>';
@@ -517,12 +517,41 @@ function awayHtml(p){
 }
 function awayHide(){const p=DATA.plan;if(!p)return;p.rs=Date.now();saveData();render();}
 /* easy restart: one set fewer on the bigger lifts and about 15% less weight / retomar suave: una serie menos y ~15 % menos peso */
-function planStartSoft(i){
+function planStartSoft(i,mode){
   const p=DATA.plan;if(!p)return;
   sheetClose();
-  startWorkout({name:dayName(i),pl:i,ex:p.ds[i].ex.map(e=>({eid:e.eid,sets:e.sets>=3?e.sets-1:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u,nt:'ntSoft',tp:e.tp,rs:e.rs,ss:e.ss,sec:e.sec}}))});
-  if(ACT){ACT.ex.forEach(x=>{if(x.sg)x.sg=Math.round(x.sg*0.85*2)/2;});saveAct();render();}
-  p.rs=Date.now();saveData();
+  startWorkout({name:dayName(i),pl:i,ex:p.ds[i].ex.map(e=>({eid:e.eid,sets:e.sets>=3?e.sets-1:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u,nt:mode==='tired'?'ntTired':'ntSoft',tp:e.tp,rs:e.rs,ss:e.ss,sec:e.sec}}))});
+  if(ACT){ACT.ex.forEach(x=>{if(x.sg)x.sg=Math.round(x.sg*(mode==='tired'?0.9:0.85)*2)/2;});saveAct();render();}
+  if(mode!=='tired'){p.rs=Date.now();saveData();}
+}
+/* how do you feel today? tired = easy version / ¿cómo te sientes hoy? cansado = versión suave */
+function planGo(i){
+  if(SET.noEnergy){planStart(i);return;}
+  sheet('<div class="form"><div class="pick-h"><h3>'+t('enT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted sm">'+t('enP')+'</p>'+
+    ['good','ok','tired'].map(k=>'<button class="exrow" onclick="enPick('+i+',\''+k+'\')"><b>'+t('en_'+k)+'</b><small>'+t('end_'+k)+'</small></button>').join('')+
+    '<label class="sm"><input type="checkbox" onchange="SET.noEnergy=this.checked?1:0;saveSet()"> '+t('enNo')+'</label></div>');
+}
+function enPick(i,k){if(k==='tired')planStartSoft(i,'tired');else planStart(i);}
+/* another plan like this: same profile, new exercise mix / otro plan parecido: mismo perfil, otra mezcla */
+function planAnother(){ask(t('anAsk'),t('anGo'),function(){const p=DATA.plan;if(!p)return;planRegen({rt:((p.prof.rt|0)+1)%1000,sd:(Math.random()*1e6|0)+1});sheetClose();toast(t('anDone'));});}
+/* today's mode: hotel, home, dumbbells only, short / modo de hoy: hotel, casa, solo mancuernas, corto */
+function modeOpen(){
+  const p=DATA.plan;if(!p)return;
+  sheet('<div class="form"><div class="pick-h"><h3>'+t('mdT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted sm">'+t('mdP')+'</p>'+
+    [['none','mdHotel'],['home','mdHome'],['db','mdDb']].map(a=>'<button class="exrow" onclick="planStartAlt('+planNext()+',\''+a[0]+'\')"><b>'+t(a[1])+'</b><small>'+t(a[1]+'D')+'</small></button>').join('')+
+    '<button class="exrow" onclick="shortOpen()"><b>'+t('mdBusy')+'</b><small>'+t('mdBusyD')+'</small></button></div>');
+}
+function planStartAlt(i,k){
+  const p=DATA.plan;if(!p)return;sheetClose();
+  const have=HAVE_PRESETS[k],L=curInjL(),skip={},maxLv=lvlEff(p.prof)==='new'?1:2;
+  p.ds[i].ex.forEach(e=>{skip[e.eid]=1;});
+  const ex=p.ds[i].ex.map(e=>{
+    let id=e.eid;
+    if(!avail(id,have)){const c=swapCands(id,have,L,skip,maxLv).filter(x=>!prefBad(x.id,p.prof));if(c.length){id=c[0].id;skip[id]=1;}else return null;}
+    return{eid:id,sets:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u,nt:e.nt,tp:e.tp,rs:e.rs,ss:e.ss,sec:e.sec}};
+  }).filter(Boolean);
+  if(!ex.length){toast(t('tkNoAlt'));return;}
+  startWorkout({name:dayName(i)+' · '+t('md_'+k),pl:i,ex:ex});
 }
 function exMins(e){return e.sets*(((e.rs||60)/60)+0.9)+0.5;}
 /* keep the main lifts first and stop when the time is used / deja primero lo principal y para cuando se acaba el tiempo */
@@ -594,7 +623,7 @@ function planOpen(d){
   if(gs.indexOf('bodybuilding')>=0)tips+='<h4>'+t('bbT')+'</h4><p class="sm">'+t('bbTips1')+'</p><p class="sm">'+t('bbTips2')+'</p>';
   if(hyg)tips+='<h4>'+t(hyg==='military'?'hyT':'hyT2')+'</h4>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
   tips+='<h4>'+t('guideT')+'</h4><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p><p class="muted sm">'+t('planNote')+'</p>';
-  h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="remOpen()">'+ic('calendar')+' '+t('rmT')+'</button><button class="btn" onclick="tasteOpen()">'+ic('heart')+' '+t('tkBtn')+'</button><button class="btn" onclick="chkOpen()">'+ic('clipboard-list')+' '+t('chkOpen')+'</button><button class="btn" onclick="schedOpen()">'+ic('calendar')+' '+t('schBtn')+'</button><button class="btn" onclick="focusOpen()">'+ic('target')+' '+t('focusT')+'</button><button class="btn" onclick="planShuffleAsk()">'+ic('arrows-shuffle')+' '+t('shufBtn')+'</button><button class="btn" onclick="planSetup()">'+ic('settings')+' '+t('planChange')+'</button></div>'+
+  h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="planAnother()">'+ic('arrows-shuffle')+' '+t('anBtn')+'</button><button class="btn" onclick="remOpen()">'+ic('calendar')+' '+t('rmT')+'</button><button class="btn" onclick="tasteOpen()">'+ic('heart')+' '+t('tkBtn')+'</button><button class="btn" onclick="chkOpen()">'+ic('clipboard-list')+' '+t('chkOpen')+'</button><button class="btn" onclick="schedOpen()">'+ic('calendar')+' '+t('schBtn')+'</button><button class="btn" onclick="focusOpen()">'+ic('target')+' '+t('focusT')+'</button><button class="btn" onclick="planShuffleAsk()">'+ic('arrows-shuffle')+' '+t('shufBtn')+'</button><button class="btn" onclick="planSetup()">'+ic('settings')+' '+t('planChange')+'</button></div>'+
     '<details class="dtl"><summary>'+t('tipsT')+'</summary>'+tips+'</details>'+
     (typeof xdHtml==='function'?xdHtml():'')+'<div class="dz"><button class="btn danger" onclick="planDelAsk()">'+ic('trash')+' '+t('planDel')+'</button></div></div>';
   sheet(h);
@@ -697,7 +726,8 @@ function swapCands(eid,have,L,skip,maxLv){
     const sl=stressLvl(id,L);if(sl>=2)return;
     out.push({id:id,sl:sl,same:(r[3]===g0?0:1)+(exMode(id)===m0?0:1)});
   });
-  out.sort((a,b)=>(a.sl-b.sl)||(a.same-b.same));
+  const sty=DATA.plan&&DATA.plan.prof&&DATA.plan.prof.sty&&DATA.plan.prof.sty[0]&&STY[DATA.plan.prof.sty[0]]?DATA.plan.prof.sty[0]:'';
+  out.sort((a,b)=>(a.sl-b.sl)||(sty?styFit(sty,a.id)-styFit(sty,b.id):0)||(a.same-b.same));
   return out.slice(0,14);
 }
 function swapOpen(i){
