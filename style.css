@@ -680,3 +680,7 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 .sty-n{font-style:normal;display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-size:.7rem;align-items:center;justify-content:center;margin-left:4px}
 .sty .wck{position:absolute;right:12px;top:14px;width:22px;height:22px;border-radius:50%;border:2px solid var(--line);font-style:normal;font-size:.8rem;display:flex;align-items:center;justify-content:center;color:transparent}
 .sty.on .wck{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+
+/* v63 tastes */
+.btn.on{border-color:var(--accent);color:var(--accent)}
+.menu button .ic,.btn .ic{vertical-align:-3px}

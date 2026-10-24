@@ -186,7 +186,7 @@ function pickFor(mu,role,ctx){
   const first=(ctx.hy&&HYFIRST[ctx.test]&&HYFIRST[ctx.test][mu+role])||[],own=styOwner();
   const list=first.concat(role==='m'?P.m.concat(P.a):P.a.concat(P.m),styExtras(own,mu)).filter((x,i,a)=>a.indexOf(x)===i);
   const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&(!TESTONLY[id]||TESTONLY[id]===ctx.test)&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
-  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(own?styFit(own,a)-styFit(own,b):0)||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
+  c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(persLike(a)-persLike(b))||(own?styFit(own,a)-styFit(own,b):0)||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
   // v49: on every third accessory pick, prefer an imported exercise that ties with the best one / cada tercera opción de accesorio prefiere un ejercicio importado empatado con la mejor
   if(c.length>1&&role!=='m'&&role!=='p'&&Object.keys(ctx.used).length%2===0){
     const k=x=>stressLvl(x,ctx.L)+'/'+(ctx.used[x]||0),j=c.findIndex(x=>x.slice(0,2)==='z_'&&k(x)===k(c[0]));
@@ -212,6 +212,7 @@ function normProf(p){
   o.split=(typeof splitOk==='function'&&splitOk(o.split,o.n))?o.split:'auto';
   o.sd=(Number.isInteger(o.sd)&&o.sd>0&&o.sd<1e9)?o.sd:0;
   o.rt=(Number.isInteger(o.rt)&&o.rt>=0&&o.rt<1000)?o.rt:0;
+  o.lk=(Array.isArray(o.lk)?o.lk:[]).filter((k,i,a)=>typeof k==='string'&&ID_RE.test(k)&&a.indexOf(k)===i).slice(-30);
   o.no=(Array.isArray(o.no)?o.no:[]).filter((k,i,a)=>typeof k==='string'&&ID_RE.test(k)&&a.indexOf(k)===i).slice(-40);
   o.ph=(o.ph>=1&&o.ph<=5)?Math.round(o.ph):0; // 0 = chosen by level / 0 = según el nivel
   if(TESTS.indexOf(o.test)<0)o.test='gen';
@@ -558,11 +559,43 @@ function planOpen(d){
   if(gs.indexOf('bodybuilding')>=0)tips+='<h4>'+t('bbT')+'</h4><p class="sm">'+t('bbTips1')+'</p><p class="sm">'+t('bbTips2')+'</p>';
   if(hyg)tips+='<h4>'+t(hyg==='military'?'hyT':'hyT2')+'</h4>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
   tips+='<h4>'+t('guideT')+'</h4><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p><p class="muted sm">'+t('planNote')+'</p>';
-  h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="chkOpen()">'+ic('clipboard-list')+' '+t('chkOpen')+'</button><button class="btn" onclick="schedOpen()">'+ic('calendar')+' '+t('schBtn')+'</button><button class="btn" onclick="focusOpen()">'+ic('target')+' '+t('focusT')+'</button><button class="btn" onclick="planShuffleAsk()">'+ic('arrows-shuffle')+' '+t('shufBtn')+'</button><button class="btn" onclick="planSetup()">'+ic('settings')+' '+t('planChange')+'</button></div>'+
+  h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="tasteOpen()">'+ic('heart')+' '+t('tkBtn')+'</button><button class="btn" onclick="chkOpen()">'+ic('clipboard-list')+' '+t('chkOpen')+'</button><button class="btn" onclick="schedOpen()">'+ic('calendar')+' '+t('schBtn')+'</button><button class="btn" onclick="focusOpen()">'+ic('target')+' '+t('focusT')+'</button><button class="btn" onclick="planShuffleAsk()">'+ic('arrows-shuffle')+' '+t('shufBtn')+'</button><button class="btn" onclick="planSetup()">'+ic('settings')+' '+t('planChange')+'</button></div>'+
     '<details class="dtl"><summary>'+t('tipsT')+'</summary>'+tips+'</details>'+
     (typeof xdHtml==='function'?xdHtml():'')+'<div class="dz"><button class="btn danger" onclick="planDelAsk()">'+ic('trash')+' '+t('planDel')+'</button></div></div>';
   sheet(h);
 }
+/* ---------- tastes: like / dislike an exercise / gustos: me gusta / no me gusta ---------- */
+function tastePr(){return DATA.plan?DATA.plan.prof:null;}
+function tasteOf(id){const pr=tastePr();if(!pr)return'';return(pr.lk||[]).indexOf(id)>=0?'lk':((pr.no||[]).indexOf(id)>=0?'no':'');}
+function tasteLike(id){
+  const pr=tastePr();if(!pr){toast(t('tkNeed'));return;}
+  pr.lk=pr.lk||[];pr.no=(pr.no||[]).filter(k=>k!==id);
+  const i=pr.lk.indexOf(id);if(i>=0){pr.lk.splice(i,1);toast(t('tkUnliked'));}else{pr.lk=pr.lk.concat([id]).slice(-30);toast(t('tkLikedT'));}
+  saveData();
+}
+/* "I don't like this": never again, and swap it for the closest one now / "no me gusta": nunca más, y cambia por el más parecido */
+function tasteDis(mode,a,b){
+  const pr=tastePr(),eid=mode==='plan'?DATA.plan.ds[a].ex[b].eid:ACT.ex[a].eid;
+  if(!pr){toast(t('tkNeed'));return;}
+  if(mode==='act'&&ACT.ex[a].sets.some(s=>s.done)){toast(t('swapDone'));return;}
+  pr.no=(pr.no||[]).filter(k=>k!==eid).concat([eid]).slice(-40);pr.lk=(pr.lk||[]).filter(k=>k!==eid);
+  const skip={};
+  (mode==='plan'?DATA.plan.ds[a].ex:ACT.ex).forEach(e=>{skip[e.eid]=1;});(pr.no||[]).forEach(k=>{skip[k]=1;});
+  const cs=swapCands(eid,pr.have||curHave(),curInjL(),skip,lvlEff(pr)==='new'?1:2).filter(c=>!prefBad(c.id,pr));
+  saveData();
+  if(!cs.length){toast(t('tkNoAlt'));if(mode==='plan')peDraw();else sheetClose();return;}
+  SW=mode==='plan'?{mode:'plan',d:a,e:b,eid:eid,have:(pr.have||curHave()).slice()}:{mode:'act',i:a,eid:eid,have:(pr.have||curHave()).slice()};
+  swapUse(cs[0].id);toast(t('tkSwapped',exName(eid),exName(cs[0].id)));
+}
+function tasteOpen(){
+  const pr=tastePr();if(!pr){sheetClose();return;}
+  const row=(id,k)=>'<div class="plex"><span><b>'+esc(exName(id))+'</b></span><button class="btn sm" onclick="tasteDel(\''+k+'\',\''+id+'\')">✕</button></div>';
+  sheet('<div class="form"><div class="pick-h"><h3>'+t('tkBtn')+'</h3><button class="ico" onclick="planOpen()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted sm">'+t('tkP')+'</p>'+
+    '<div class="lbl">'+ic('heart')+' '+t('tkLikeH')+'</div>'+((pr.lk||[]).length?pr.lk.map(i=>row(i,'lk')).join(''):'<p class="muted sm">'+t('tkNone')+'</p>')+
+    '<div class="lbl">'+ic('ban')+' '+t('tkDisH')+'</div>'+((pr.no||[]).length?pr.no.map(i=>row(i,'no')).join(''):'<p class="muted sm">'+t('tkNone')+'</p>')+
+    '<div class="row"><button class="btn pri" onclick="planOpen()">'+t('done')+'</button></div></div>');
+}
+function tasteDel(k,id){const pr=tastePr();if(!pr)return;pr[k]=(pr[k]||[]).filter(x=>x!==id);saveData();tasteOpen();}
 let PE={d:0,e:0};
 function planEdit(d,e){PE={d:d,e:e};peDraw();}
 function peDraw(){
@@ -573,6 +606,7 @@ function peDraw(){
     '<p class="muted sm">'+esc(tgText(x))+'</p>'+(x.rz?'<p class="sm rz">↳ '+esc(rzText(x))+'</p>':'')+
     '<div class="row"><button class="btn" onclick="peMove(-1)"'+(PE.e<1?' disabled':'')+'>↑ '+t('moveUp')+'</button><button class="btn" onclick="peMove(1)"'+(PE.e>=p.ds[PE.d].ex.length-1?' disabled':'')+'>↓ '+t('moveDn')+'</button></div>'+
     '<label class="sm">'+t('moveDay')+' <select class="in" onchange="peMoveDay(this.value)"><option value="">—</option>'+p.ds.map((d,k)=>k===PE.d?'':'<option value="'+k+'">'+esc(dayName(k))+'</option>').join('')+'</select></label>'+
+    '<div class="row"><button class="btn'+(tasteOf(x.eid)==='lk'?' on':'')+'" onclick="tasteLike(\''+x.eid+'\');peDraw()">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button class="btn" onclick="tasteDis(\'plan\','+PE.d+','+PE.e+')">'+ic('ban')+' '+t('tkDis')+'</button></div>'+
     '<div class="row"><button class="btn" onclick="planSwapOpen('+PE.d+','+PE.e+')">↔ '+t('swapB')+'</button><button class="btn" onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('howTo')+'</button></div>'+
     '<div class="row"><button class="btn pri" onclick="planOpen()">'+t('done')+'</button><button class="btn" onclick="peRemove()">'+t('remove')+'</button></div></div>');
 }
@@ -683,7 +717,7 @@ function haveChips(have,fn){return'<div class="hvg">'+HAVE_KEYS.map(k=>'<button 
 let PW={step:1};
 function planSetup(){
   const base=DATA.plan?DATA.plan.prof:normProf({});
-  PW=Object.assign({step:1,touched:!!DATA.plan},JSON.parse(JSON.stringify(base)));
+  PW=Object.assign({step:1,touched:!!DATA.plan,fresh:!DATA.plan},JSON.parse(JSON.stringify(base)));
   PW.a={};if(PW.as)AS_KEYS.forEach(k=>{PW.a[k]=1;});
   PW.tw=0;if(PW.td>Date.now()){const w=(PW.td-Date.now())/(7*864e5);PW.tw=TW.slice(1).reduce((a,b)=>Math.abs(b-w)<Math.abs(a-w)?b:a);}
   wizDraw();
@@ -741,7 +775,7 @@ function focusApply(){
   const old=DATA.plan,p=genPlan(prof);p.checks=old.checks;DATA.plan=p;saveData();render();planOpen();toast(t('planReady'));
 }
 function planCreate(){
-  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,sty:PW.sty,stp:PW.stp,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,avoid:PW.avoid,fav:PW.fav,work:PW.work,sh:PW.sh,pu:PW.pu,as:AS_KEYS.every(k=>PW.a&&PW.a[k])?1:0,pl:PW.pl,bal:PW.bal,sq:PW.sq,pull:PW.pull,leg:PW.leg,hist:PW.hist,split:PW.split,sd:PW.sd||((Math.random()*1e6|0)+1),rt:PW.rt,no:PW.no,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
+  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,sty:PW.sty,stp:PW.stp,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,avoid:PW.avoid,fav:PW.fav,work:PW.work,sh:PW.sh,pu:PW.pu,as:AS_KEYS.every(k=>PW.a&&PW.a[k])?1:0,pl:PW.pl,bal:PW.bal,sq:PW.sq,pull:PW.pull,leg:PW.leg,hist:PW.hist,split:PW.split,sd:PW.sd||((Math.random()*1e6|0)+1),rt:PW.rt,no:PW.no,lk:PW.lk,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
   const old=DATA.plan,p=genPlan(prof);
   if(old){p.checks=old.checks;}
   DATA.plan=p;saveData();render();
@@ -783,7 +817,7 @@ function chkSave(){
   p.ct=now;
   const ap=ADP.filter(a=>a.on);let adj=0;if(ap.length)adj=adaptApply(p,ap);ADP=[];
   const nx=p.ph&&CK.adv?optNext(p):0;
-  if(nx){planRegen({ph:nx,rt:((p.prof.rt|0)+1)%1000,no:p.prof.no,vol:p.prof.vol});toast(t('phMoved',nx));sheetClose();return;}
+  if(nx){planRegen({ph:nx,rt:((p.prof.rt|0)+1)%1000,no:p.prof.no,lk:p.prof.lk,vol:p.prof.vol});toast(t('phMoved',nx));sheetClose();return;}
   saveData();sheetClose();render();toast(adj?t('adDone',adj):t('chkSaved'));
 }
 

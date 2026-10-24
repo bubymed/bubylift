@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v63 — 2026-10-24
+- **Faster and more yours** — the plan setup now starts with Quick (4 questions) or Custom. In any exercise you can tap "I like this" (shows up more) or "I don't like this" (swapped now and never suggested again). Manage them in Plan → Your tastes.
+  **Más rápido y más tuyo** — al crear tu plan eliges Rápido (4 preguntas) o Personalizado. En cualquier ejercicio puedes tocar "Me gusta" (sale más) o "No me gusta" (se cambia al instante y no se vuelve a sugerir). Los administras en Plan → Tus gustos.
+
 ## v62 — 2026-10-24
 - **Training styles:** the plan wizard asks "How do you like to train?" (gym weights, heavy strength, calisthenics, Olympic lifting, CrossFit/functional, athletic, home, military). Up to two styles, mixed 50/50, 75/25 or 25/75; each card shows photo, description, equipment and example exercises. "I don't have all of this" opens the equipment picker.
   **Estilos de entrenamiento:** el asistente pregunta "¿Cómo te gusta entrenar?" (pesas de gimnasio, fuerza pesada, calistenia, halterofilia, CrossFit/funcional, atlético, casa, militar). Hasta dos estilos, mezclados 50/50, 75/25 o 25/75; cada tarjeta muestra foto, descripción, equipo y ejercicios de ejemplo. "No tengo todo esto" abre el selector de equipo.
