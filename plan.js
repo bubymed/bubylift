@@ -538,12 +538,13 @@ function planAnother(){ask(t('anAsk'),t('anGo'),function(){const p=DATA.plan;if(
 function modeOpen(){
   const p=DATA.plan;if(!p)return;
   sheet('<div class="form"><div class="pick-h"><h3>'+t('mdT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted sm">'+t('mdP')+'</p>'+
-    [['none','mdHotel'],['home','mdHome'],['db','mdDb']].map(a=>'<button class="exrow" onclick="planStartAlt('+planNext()+',\''+a[0]+'\')"><b>'+t(a[1])+'</b><small>'+t(a[1]+'D')+'</small></button>').join('')+
+    [['none','mdHotel'],['home','mdHome'],['db','mdDb'],['field','mdField']].map(a=>'<button class="exrow" onclick="planStartAlt('+planNext()+',\''+a[0]+'\')"><b>'+t(a[1])+'</b><small>'+t(a[1]+'D')+'</small></button>').join('')+
     '<button class="exrow" onclick="shortOpen()"><b>'+t('mdBusy')+'</b><small>'+t('mdBusyD')+'</small></button></div>');
 }
+const MODE_HAVE={none:[],home:['dumbbell','band','bench'],db:['dumbbell','bench'],field:['pack','bar']};
 function planStartAlt(i,k){
   const p=DATA.plan;if(!p)return;sheetClose();
-  const have=HAVE_PRESETS[k],L=curInjL(),skip={},maxLv=lvlEff(p.prof)==='new'?1:2;
+  const have=MODE_HAVE[k],L=curInjL(),skip={},maxLv=lvlEff(p.prof)==='new'?1:2;
   p.ds[i].ex.forEach(e=>{skip[e.eid]=1;});
   const ex=p.ds[i].ex.map(e=>{
     let id=e.eid;
@@ -551,7 +552,8 @@ function planStartAlt(i,k){
     return{eid:id,sets:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u,nt:e.nt,tp:e.tp,rs:e.rs,ss:e.ss,sec:e.sec}};
   }).filter(Boolean);
   if(!ex.length){toast(t('tkNoAlt'));return;}
-  startWorkout({name:dayName(i)+' · '+t('md_'+k),pl:i,ex:ex});
+  const fin=k==='field'?shortDay(ex.map(e=>Object.assign({r:(p.ds[i].ex.find(y=>y.eid===e.eid)||{}).r},e,e.tg)),30):ex;
+  startWorkout({name:dayName(i)+' · '+t('md_'+k),pl:i,ex:k==='field'?ex.filter(e=>fin.some(f=>f.eid===e.eid)):ex});
 }
 function exMins(e){return e.sets*(((e.rs||60)/60)+0.9)+0.5;}
 /* keep the main lifts first and stop when the time is used / deja primero lo principal y para cuando se acaba el tiempo */
@@ -621,7 +623,7 @@ function planOpen(d){
   const gs=goalsOf(pr),hyg=gs.filter(isHy)[0];
   if(gs.indexOf('runner')>=0)tips+='<h4>'+t('runT')+'</h4><p class="sm">'+t('runTips1')+'</p><p class="sm">'+t('runTips2')+'</p>';
   if(gs.indexOf('bodybuilding')>=0)tips+='<h4>'+t('bbT')+'</h4><p class="sm">'+t('bbTips1')+'</p><p class="sm">'+t('bbTips2')+'</p>';
-  if(hyg)tips+='<h4>'+t(hyg==='military'?'hyT':'hyT2')+'</h4>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
+  if(hyg)tips+='<h4>'+t(hyg==='military'?'hyT':'hyT2')+'</h4>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="aftOpen()">'+t('afT')+'</button><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
   tips+='<h4>'+t('guideT')+'</h4><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p><p class="muted sm">'+t('planNote')+'</p>';
   h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="planAnother()">'+ic('arrows-shuffle')+' '+t('anBtn')+'</button><button class="btn" onclick="remOpen()">'+ic('calendar')+' '+t('rmT')+'</button><button class="btn" onclick="tasteOpen()">'+ic('heart')+' '+t('tkBtn')+'</button><button class="btn" onclick="chkOpen()">'+ic('clipboard-list')+' '+t('chkOpen')+'</button><button class="btn" onclick="schedOpen()">'+ic('calendar')+' '+t('schBtn')+'</button><button class="btn" onclick="focusOpen()">'+ic('target')+' '+t('focusT')+'</button><button class="btn" onclick="planShuffleAsk()">'+ic('arrows-shuffle')+' '+t('shufBtn')+'</button><button class="btn" onclick="planSetup()">'+ic('settings')+' '+t('planChange')+'</button></div>'+
     '<details class="dtl"><summary>'+t('tipsT')+'</summary>'+tips+'</details>'+
