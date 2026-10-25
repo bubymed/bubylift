@@ -388,4 +388,4 @@ function rbSave(){
   if(k>=0)DATA.routines[k]=o;else DATA.routines.push(o);
   saveData();UI.rb=null;sheetClose();toast(t('saved'));render();
 }
-function rbRemove(){const id=UI.rb.id;ask(t('delRoutine'),t('delete'),function(){DATA.routines=DATA.routines.filter(x=>x.id!==id);UI.rb=null;saveData();render();},true);}
+function rbRemove(){const id=UI.rb.id;ask(t('delRoutine'),t('delete'),function(){DATA.routines=DATA.routines.filter(x=>x.id!==id);clTomb(id);UI.rb=null;saveData();render();},true);}

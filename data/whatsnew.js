@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v88',items:[
+  {i:'☁️',en:'<b>Your progress on any phone</b> — create a free account and your workouts follow you: sign in on another phone and everything is there.',es:'<b>Tu progreso en cualquier teléfono</b> — crea una cuenta gratis y tus entrenamientos te siguen: entra desde otro teléfono y todo está ahí.'}
+ ]},
  {v:'v87',items:[
   {i:'🧘',en:'<b>Mobility up front</b> — Mobility is now its own tab and has a card on Train, with a big button to start 10 minutes of mobility. Settings moved to the gear icon at the top.',es:'<b>La movilidad al frente</b> — Movilidad ahora tiene su propia pestaña y una tarjeta en Entrenar, con un botón grande para empezar 10 minutos de movilidad. Los ajustes pasaron al icono de engranaje arriba.'}
  ]},

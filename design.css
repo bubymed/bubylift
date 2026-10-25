@@ -158,3 +158,9 @@ main>.sec{margin-top:28px;margin-bottom:-4px}
 .avbtn.gear{width:36px;height:36px;border-radius:50%;background:var(--panel);color:var(--txt);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
 .avbtn.gear .ic{width:20px;height:20px}.avbtn.gear.on{color:var(--accent)}
 #tabbar button{min-width:0}
+
+/* v88 cloud account */
+.cloudc{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center}
+.cloudc .row{grid-column:1/-1;margin-top:2px}.cloudc .row .btn{flex:1}
+.cl-t p{margin-top:2px}
+.clmsg{background:color-mix(in srgb,var(--red) 12%,var(--panel2));color:var(--red);border-radius:10px;padding:8px 12px;margin:8px 0;font-weight:600;font-size:.9rem}

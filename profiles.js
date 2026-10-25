@@ -184,6 +184,7 @@ async function pfEnter(id,raw,seed,noBoot,spl){
   if(noBoot)return;
   if(spl)pfSplash(p);
   gateHide();pfRenderAv();bootApp();
+  if(typeof clInit==='function')clInit();
   if(ENC)pfPump();
   try{if(sessionStorage.getItem('bl_up')){sessionStorage.removeItem('bl_up');setTimeout(()=>toast(t('pfUpDone')),700);}}catch(e){}
 }

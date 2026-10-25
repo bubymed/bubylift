@@ -852,7 +852,7 @@ function planCreate(){
 
 /* ---------- routines: swipe to delete / edit ---------- */
 function planDelAsk(){ask(t('delPlan'),t('delete'),function(){DATA.plan=null;saveData();render();toast(t('planDeleted'));},true);}
-function rtDelAsk(id){ask(t('delRoutine'),t('delete'),function(){DATA.routines=DATA.routines.filter(x=>x.id!==id);saveData();render();},true);}
+function rtDelAsk(id){ask(t('delRoutine'),t('delete'),function(){DATA.routines=DATA.routines.filter(x=>x.id!==id);clTomb(id);saveData();render();},true);}
 function rtEdit(id){rbOpen(id);}
 
 /* ---------- periodic check-in / evaluación periódica ---------- */

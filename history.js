@@ -91,7 +91,7 @@ function shareWk(id){
   if(navigator.share){navigator.share({text:txt}).catch(()=>{});return;}
   try{navigator.clipboard.writeText(txt).then(()=>toast(t('copied')),()=>toast(t('copyFail')));}catch(e){toast(t('copyFail'));}
 }
-function delWkAsk(id){ask(t('delWk'),t('delete'),function(){DATA.workouts=DATA.workouts.filter(w=>w.id!==id);saveData();render();},true);}
+function delWkAsk(id){ask(t('delWk'),t('delete'),function(){DATA.workouts=DATA.workouts.filter(w=>w.id!==id);clTomb(id);saveData();render();},true);}
 
 /* ---------- progress ---------- */
 function loggedEx(){
