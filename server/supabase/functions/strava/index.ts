@@ -99,5 +99,31 @@ Deno.serve(async (req) => {
     const d = dr.ok ? await dr.json() : best;
     return json({ found: true, id: best.id, avg_hr: d.average_heartrate ?? null, max_hr: d.max_heartrate ?? null, kcal: d.calories ?? null, seconds: d.elapsed_time ?? null });
   }
+  if (a === "recent") {
+    // New activities since a moment, with the numbers Bubylift shows (max 15, newest first).
+    // Actividades nuevas desde un momento, con los números que muestra Bubylift (máx. 15, la más reciente primero).
+    const b = await req.json().catch(() => ({}));
+    const after = Math.floor(Number(b.after));
+    const now = Math.floor(Date.now() / 1000);
+    if (!isFinite(after) || after < now - 60 * 86400 || after > now) return json({ error: "range" }, 400);
+    const t = await tokens(uid);
+    if (!t) return json({ error: "not_connected" }, 409);
+    const lr = await fetch(`https://www.strava.com/api/v3/athlete/activities?after=${after}&per_page=15`, { headers: { Authorization: "Bearer " + t.access } });
+    if (lr.status === 401) return json({ error: "not_connected" }, 409);
+    if (!lr.ok) return json({ error: "strava" }, 502);
+    const list = (await lr.json()) as any[];
+    const out: unknown[] = [];
+    for (const x of list.slice(0, 15)) {
+      let d: any = x;
+      const dr = await fetch(`https://www.strava.com/api/v3/activities/${x.id}`, { headers: { Authorization: "Bearer " + t.access } });
+      if (dr.ok) d = await dr.json();
+      out.push({
+        id: String(x.id), start: Math.floor(Date.parse(x.start_date) / 1000), seconds: d.elapsed_time ?? x.elapsed_time ?? 0,
+        name: String(x.name ?? "").slice(0, 80), type: String(x.sport_type ?? x.type ?? "").slice(0, 30),
+        avg_hr: d.average_heartrate ?? null, max_hr: d.max_heartrate ?? null, kcal: d.calories ?? null,
+      });
+    }
+    return json({ activities: out });
+  }
   return json({ error: "unknown" }, 404);
 });

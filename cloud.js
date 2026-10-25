@@ -125,8 +125,8 @@ function clInit(){
   if(!cloudOn())return;
   clLoad();clHash();
   if(window.__clGo){const m=window.__clGo;window.__clGo=null;setTimeout(()=>clAuthOpen(m),400);}
-  if(CL&&!CL.bad){setTimeout(()=>cloudSync(false),800);if(stravaOn()&&CL.sv==null)setTimeout(stravaStatus,1500);}
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&CL&&!CL.bad&&Date.now()-(CL.last||0)>120000)cloudSync(false);});
+  if(CL&&!CL.bad){setTimeout(()=>cloudSync(false).then(()=>stravaSync(false)),800);if(stravaOn()&&CL.sv==null)setTimeout(stravaStatus,1500);}
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&CL&&!CL.bad&&Date.now()-(CL.last||0)>120000)cloudSync(false).then(()=>stravaSync(false));});
 }
 /* links from the e-mail (confirm account / reset password) / enlaces del correo */
 (function(){try{const h=location.hash||'';if(/access_token=/.test(h)&&/refresh_token=/.test(h)){sessionStorage.setItem('bl_clh',h.slice(1));history.replaceState(null,'',location.pathname+location.search);}
@@ -152,7 +152,7 @@ function cloudCard(){
   if(!CL||CL.bad||!CL.dek)return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+t('clT')+'</b><p class="muted sm">'+t(CL&&CL.bad?'clExpired':'clP')+'</p></div><div class="row"><button class="btn pri" onclick="clAuthOpen(\'up\')">'+t('clCreate')+'</button><button class="btn" onclick="clAuthOpen(\'in\')">'+t('clIn')+'</button></div></div>';
   const ago=CL.last?Math.max(0,Math.round((Date.now()-CL.last)/60000)):null;
   const st=CL.err==='key'?t('clKeyBad'):CL.err==='off'?t('clOff'):CL.err?t('clFail'):(ago==null?t('clNever'):(ago<1?t('clJust'):t('clAgo',ago>=60?Math.round(ago/60)+' h':ago+' min')));
-  return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+esc(CL.email)+'</b><p class="muted sm">'+st+'</p></div><div class="row"><button class="btn pri" onclick="cloudSync(true)">'+t('clSyncNow')+'</button><button class="btn" onclick="clAcctOpen()">'+t('clManage')+'</button></div>'+stravaRow()+'</div>';
+  return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+esc(CL.email)+'</b><p class="muted sm">'+st+'</p></div><div class="row"><button class="btn pri" onclick="cloudSync(true).then(function(){stravaSync(true)})">'+t('clSyncNow')+'</button><button class="btn" onclick="clAcctOpen()">'+t('clManage')+'</button></div>'+stravaRow()+'</div>';
 }
 function clAuthOpen(mode,msg,email){
   const up=mode==='up';
@@ -311,6 +311,36 @@ async function stravaConnect(){
   toast(t('clFail'));
 }
 function stravaOff(){ask(t('svOffAsk'),t('svOff'),async function(){try{await clFn('disconnect');CL.sv=false;clSave();toast(t('svOffDone'));render();}catch(e){toast(t('clFail'));}},false);}
+/* Automatic import: on open, look for new Strava activities. Match them to workouts (add heart rate + calories) or create watch-only workouts.
+   Importación automática: al abrir busca actividades nuevas en Strava; las une a tus entrenamientos o crea los que solo hiciste con el reloj. */
+let SVB=false;
+async function stravaSync(manual){
+  if(!stravaOn()||!CL||!CL.sv||CL.bad||!CL.dek||SVB)return;
+  SVB=true;
+  try{
+    const now=Math.floor(Date.now()/1000),after=Math.max((CL.svLast||0)-3600,now-14*86400);
+    const r=await clFn('recent',{after:after});
+    if(r.s===409){CL.sv=false;clSave();if(tab==='more')render();return;}
+    if(!r.ok||!r.j||!Array.isArray(r.j.activities))throw 0;
+    const known={};DATA.workouts.forEach(w=>{if(w.sid)known[w.sid]=1;});DATA.tomb=DATA.tomb||{};
+    let att=0,add=0;
+    r.j.activities.slice().sort((x,y)=>x.start-y.start).forEach(a=>{
+      if(!a||!/^\d{1,15}$/.test(String(a.id))||known[a.id]||DATA.tomb['sv'+a.id])return;
+      const st=+a.start*1000,sec=Math.round(+a.seconds);
+      if(!isFinite(st)||st<=0||!(sec>=60&&sec<172800))return;
+      const en=st+sec*1000,hr0=Math.round(+a.avg_hr),mx=Math.round(+a.max_hr),k=Math.round(+a.kcal);
+      const hr=(hr0>=30&&hr0<=230)?{a:hr0,m:(mx>=hr0&&mx<=250)?mx:hr0}:undefined,kc=(k>0&&k<=10000)?k:undefined;
+      const m=DATA.workouts.find(w=>!w.sid&&w.ex&&w.ex.length&&Math.min(w.end>w.t?w.end:w.t+3*3600000,en)-Math.max(w.t,st)>=300000);
+      if(m){if(hr)m.hr=hr;if(kc)m.kcal=kc;m.sv=1;m.sid=String(a.id);m.sp=String(a.type||'').slice(0,30);att++;}
+      else{DATA.workouts.push({id:'sv'+a.id,t:st,end:en,name:String(a.name||'').slice(0,80),note:'',ex:[],hr:hr,kcal:kc,sv:1,sid:String(a.id),sp:String(a.type||'').slice(0,30),sec:sec});add++;}
+      known[a.id]=1;
+    });
+    CL.svLast=now;clSave();
+    if(att||add){DATA.workouts.sort((x,y)=>y.t-x.t);saveData();toast(t('svAuto',att+add));if(typeof render==='function')render();}
+    else if(manual)toast(t('svNothing'));
+  }catch(e){if(manual)toast(t('clFail'));}
+  SVB=false;
+}
 async function stravaGet(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk||!stravaOn())return;
   if(!CL.sv){sheetClose();go('more');toast(t('svNeed'));return;}

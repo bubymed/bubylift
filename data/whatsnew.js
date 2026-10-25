@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v91',items:[
+  {i:'❤️',en:'<b>Your watch, automatically</b> — every time you open the app it checks Strava: new activities add heart rate and calories to matching workouts, and watch-only workouts show up in History.',es:'<b>Tu reloj, en automático</b> — cada vez que abres la app revisa Strava: las actividades nuevas agregan frecuencia cardíaca y calorías a los entrenamientos que coinciden, y los entrenamientos solo del reloj aparecen en Historial.'}
+ ]},
  {v:'v90',items:[
   {i:'🔐',en:'<b>Private by design</b> — your cloud data is now encrypted on your phone. Not even the app\\\'s creator can read it. You get a recovery key when you create your account.',es:'<b>Privado por diseño</b> — tus datos en la nube ahora se cifran en tu teléfono. Ni siquiera el creador de la app puede leerlos. Recibes una clave de recuperación al crear tu cuenta.'},
   {i:'👤',en:'<b>Pick a profile photo</b> — a new Suggested gallery of round pictures to make your profile yours.',es:'<b>Elige tu foto de perfil</b> — una galería nueva de imágenes redondas sugeridas para hacer tu perfil más tuyo.'},

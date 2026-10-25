@@ -163,8 +163,9 @@ function cleanWk(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||typeof x.t!=='number'||!isFinite(x.t)||!Array.isArray(x.ex))return null;
   const ex=[];
   x.ex.forEach(e=>{if(!e||!ID_RE.test(String(e.eid))||!Array.isArray(e.sets))return;const sets=e.sets.map(cleanSet).filter(Boolean);if(sets.length)ex.push({eid:String(e.eid),n:String(e.n||e.eid).slice(0,80),sets:sets});});
-  if(!ex.length)return null;
-  return{id:String(x.id),t:x.t,end:(typeof x.end==='number'&&isFinite(x.end))?x.end:0,name:String(x.name||'').slice(0,80),note:String(x.note||'').slice(0,500),ex:ex,hr:cleanHr(x.hr),kcal:(isFinite(x.kcal)&&x.kcal>0&&x.kcal<=10000)?Math.round(x.kcal):undefined,sv:x.sv?1:undefined,pl:(Number.isInteger(x.pl)&&x.pl>=0&&x.pl<5)?x.pl:undefined,ch:cleanCh(x.ch)};
+  const sid=/^\d{1,15}$/.test(String(x.sid||''))?String(x.sid):'';
+  if(!ex.length&&!sid)return null; // watch-only workouts come from Strava / los entrenamientos solo-reloj vienen de Strava
+  return{id:String(x.id),t:x.t,end:(typeof x.end==='number'&&isFinite(x.end))?x.end:0,name:String(x.name||'').slice(0,80),note:String(x.note||'').slice(0,500),ex:ex,hr:cleanHr(x.hr),kcal:(isFinite(x.kcal)&&x.kcal>0&&x.kcal<=10000)?Math.round(x.kcal):undefined,sv:x.sv?1:undefined,pl:(Number.isInteger(x.pl)&&x.pl>=0&&x.pl<5)?x.pl:undefined,ch:cleanCh(x.ch),sid:sid||undefined,sp:sid?String(x.sp||'').slice(0,30):undefined,sec:(sid&&isFinite(x.sec)&&x.sec>0&&x.sec<172800)?Math.round(x.sec):undefined};
 }
 function cleanBody(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||typeof x.t!=='number'||!isFinite(x.t))return null;

@@ -22,11 +22,12 @@ function drawWkCard(wk){
   let nm=d.name;while(g.measureText(nm).width>W-160&&nm.length>4)nm=nm.slice(0,-2);if(nm!==d.name)nm+='…';
   g.fillText(nm,80,290);
   g.fillStyle='#b9b9c2';g.font=cardFont(40,'500');g.fillText(d.date,80,350);
-  const stats=[[d.dur||'—',t('duration')],[String(d.sets),t('sets')],[d.vol,t('volume')]];
+  const wo=!wk.ex.length; // watch-only workout (from Strava) / entrenamiento solo del reloj
+  const stats=wo?[[d.dur||'—',t('duration')],[d.hr?d.hr.a+' bpm':'—',t('cdHr')],[d.kcal?d.kcal+' kcal':'—',t('cdKcal')]]:[[d.dur||'—',t('duration')],[String(d.sets),t('sets')],[d.vol,t('volume')]];
   stats.forEach((s,i)=>{const x=80+i*320;g.fillStyle='rgba(255,255,255,.07)';g.beginPath();g.roundRect?g.roundRect(x,420,290,170,26):g.rect(x,420,290,170);g.fill();
     g.fillStyle='#fff';g.font=cardFont(s[0].length>9?38:54,'800');g.fillText(s[0],x+24,508);g.fillStyle='#b9b9c2';g.font=cardFont(30,'500');g.fillText(s[1],x+24,558);});
-  const ex0=(d.hr||d.kcal)?70:0;
-  if(d.hr||d.kcal){g.fillStyle='#ffffff';g.font=cardFont(40,'700');const tx=[d.hr?d.hr.a+' avg · '+d.hr.m+' max':'',d.kcal?d.kcal+' kcal':''].filter(Boolean).join('   ·   ');if(d.hr){cardIcon(g,'heart',80,624,44,'#ffffff');g.fillText(tx,140,660);}else g.fillText(tx,80,660);}
+  const ex0=(!wo&&(d.hr||d.kcal))?70:0;
+  if(!wo&&(d.hr||d.kcal)){g.fillStyle='#ffffff';g.font=cardFont(40,'700');const tx=[d.hr?d.hr.a+' avg · '+d.hr.m+' max':'',d.kcal?d.kcal+' kcal':''].filter(Boolean).join('   ·   ');if(d.hr){cardIcon(g,'heart',80,624,44,'#ffffff');g.fillText(tx,140,660);}else g.fillText(tx,80,660);}
   if(d.prs){g.fillStyle=acc;g.font=cardFont(44,'800');cardIcon(g,'trophy',80,642+ex0,48,acc);g.fillText(d.prs+' PR',142,680+ex0);}
   let y=(d.prs?770:700)+ex0;
   d.top.slice(0,ex0?4:5).forEach(x=>{
