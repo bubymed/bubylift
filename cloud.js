@@ -12,7 +12,7 @@ function cloudOn(){const c=window.CLOUD_CFG;return !!(c&&c.url&&c.key&&/^https:\
 /* the session lives inside the profile's settings, so password-protected profiles keep it encrypted / la sesión vive dentro de los ajustes del perfil */
 function clLoad(){const o=SET&&SET.cl;CL=(o&&typeof o==='object'&&typeof o.uid==='string'&&typeof o.rt==='string')?o:null;CLK=null;try{const p=pfCur();if(CL&&CL.dek&&p&&!p.acct){p.acct=1;pfSave();}}catch(e){}}
 /* a guest that signs in becomes a normal profile named after the e-mail / el invitado que inicia sesión pasa a perfil normal */
-function clAdopt(){try{const q=pfCur();if(q&&!q.acct&&CL&&CL.email){q.acct=1;pfSave();}const p=pfCur();if(p&&p.g&&CL&&CL.email){p.g=0;p.tmp=0;p.name=(CL.email.split('@')[0]||'Me').slice(0,20);pfSave();if(typeof renderTabs==='function')renderTabs();}}catch(e){}}
+function clAdopt(){try{const q=pfCur();if(q&&!q.acct&&CL&&CL.email){q.acct=1;pfSave();}const p=pfCur();if(p&&p.g&&CL&&CL.email){p.g=0;p.tmp=0;const pr=window.__clProf;window.__clProf=null;const mine=pr&&pr.id===p.id;p.name=((mine&&pr.name)||CL.email.split('@')[0]||'Me').slice(0,20);if(mine&&pr.av)p.av=pfAv(pr.av);pfSave();if(typeof pfRenderAv==='function')pfRenderAv();if(typeof renderTabs==='function')renderTabs();}}catch(e){}}
 function clSave(){if(CL){SET.cl=CL;saveSet();}}
 function clUnlink(){CL=null;CLK=null;if(SET&&SET.cl){delete SET.cl;saveSet();}}
 /* tombstones: remember deletions so another phone does not bring the item back / lápidas: recuerdan lo borrado */
@@ -166,6 +166,7 @@ function clAuthBack(){
 async function clEmailKnown(em){try{const r=await clReq('/rest/v1/rpc/email_registered','POST',{p_email:em});return r.ok&&typeof r.j==='boolean'?r.j:null;}catch(e){return null;}}
 function clAuthOpen(mode,msg,email){
   const up=mode==='up',tmp=!!(pfCur()&&pfCur().tmp);
+  if(up&&typeof gSignup==='function'&&(!pfCur()||pfCur().g)){sheetClose();gSignup(1,{upg:!!pfCur(),em:email||''});return;} // creating an account is a full screen, not a pop-up / crear cuenta es una pantalla completa
   sheet('<div class="form"><div class="pick-h"><h3>'+t(up?'clCreate':'clIn')+'</h3><button class="ico" onclick="'+(tmp?'clAuthBack()':'sheetClose()')+'" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<p class="muted sm">'+t(up?'clUpP':'clInP')+'</p>'+(msg?'<p class="clmsg">'+esc(msg)+'</p>':'')+
     '<label>'+t('clEmail')+'<input id="cle" class="in wide" type="email" autocomplete="email" inputmode="email" value="'+esc(email||'')+'"></label>'+
@@ -174,29 +175,30 @@ function clAuthOpen(mode,msg,email){
     '<div class="row"><button class="btn pri wide" id="clgo" onclick="clSubmit(\''+mode+'\')">'+t(up?'clCreate':'clIn')+'</button></div>'+
     '<button class="lnk-d" onclick="clAuthOpen(\''+(up?'in':'up')+'\')">'+t(up?'clHave':'clNo')+'</button></div>');
 }
-async function clSubmit(mode){
-  const em=gv('cle').trim().toLowerCase(),pw=gv('clp');
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)||!pw){toast(t('clBadEmail'));return;}
-  if(mode==='up'&&!pfRulesOk(pfRules(pw,em))){toast(t('clWeak'));return;}
+async function clSubmit(mode,pre){
+  const em=pre?pre.em:gv('cle').trim().toLowerCase(),pw=pre?pre.pw:gv('clp');
+  const fail=function(m,md){if(pre)pre.err(m);else clAuthOpen(md||mode,m,em);};
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)||!pw){if(pre)pre.err(t('clBadEmail'));else toast(t('clBadEmail'));return;}
+  if(mode==='up'&&!pfRulesOk(pfRules(pw,em))){if(pre)pre.err(t('clWeak'));else toast(t('clWeak'));return;}
   const b=$('clgo');if(b){b.disabled=true;b.textContent=t('clWait');}
   try{
     const ap=await clAuthPw(em,pw);
     const r=await clReq(mode==='up'?'/auth/v1/signup?'+clBack():'/auth/v1/token?grant_type=password','POST',{email:em,password:ap});
     if(!r.ok){
       const m=String((r.j&&(r.j.msg||r.j.error_description||r.j.message))||'');
-      if(mode==='in'&&/invalid|credentials/i.test(m)&&(await clEmailKnown(em))===false){clAuthOpen(mode,t('clNoAcct'),em);return;}
-      clAuthOpen(mode,/already|registered/i.test(m)?t('clExists'):(/invalid|credentials/i.test(m)?t('clWrong'):t('clFail')),em);return;
+      if(mode==='in'&&/invalid|credentials/i.test(m)&&(await clEmailKnown(em))===false){fail(t('clNoAcct'));return;}
+      fail(/already|registered/i.test(m)?t('clExists'):(/invalid|credentials/i.test(m)?t('clWrong'):t('clFail')));return;
     }
-    if(mode==='up'&&!(r.j&&r.j.access_token)){sheetClose();ask(t('clCheckMail',em),t('done'),function(){},false);return;}
-    CL=null;if(!clSession(r.j)){clAuthOpen(mode,t('clFail'),em);return;}
+    if(mode==='up'&&!(r.j&&r.j.access_token)){if(pre){pre.err(t('clCheckMail',em));return;}sheetClose();ask(t('clCheckMail',em),t('done'),function(){},false);return;}
+    CL=null;if(!clSession(r.j)){fail(t('clFail'));return;}
     // existing account: unlock the data key with the password; new account: make one / cuenta existente: abrir la llave; nueva: crear
     const tok=CL.at,g=await clReq('/rest/v1/user_data?select=vault&user_id=eq.'+encodeURIComponent(CL.uid),'GET',null,tok);
     if(!g.ok||!Array.isArray(g.j)){clUnlink();throw new Error('user_data '+g.s+' '+String(g.j&&(g.j.message||g.j.msg||g.j.hint||g.j.error||g.j.code)||'').slice(0,90));}
     if(g.j.length&&g.j[0].vault&&g.j[0].vault.wp){
-      let dek;try{dek=await pfUnwrap('p:'+pw,g.j[0].vault.wp);}catch(e){clUnlink();clAuthOpen(mode,t('clKeyBad'),em);return;}
+      let dek;try{dek=await pfUnwrap('p:'+pw,g.j[0].vault.wp);}catch(e){clUnlink();fail(t('clKeyBad'));return;}
       CL.dek=b64(dek);CLK=null;clSave();clAdopt();sheetClose();toast(t('clWelcome'));await cloudSync(false);render();
     }else{await clSetup(pw);}
-  }catch(e){const em2=String(e&&e.message||e);try{console.warn('bubylift cloud',e);}catch(x){}clAuthOpen(mode==='up'&&/^user_data/.test(em2)?'in':mode,t(/^user_data/.test(em2)?'clHalf':'clOff')+' ['+em2.slice(0,110)+']',em);}
+  }catch(e){const em2=String(e&&e.message||e);try{console.warn('bubylift cloud',e);}catch(x){}fail(t(/^user_data/.test(em2)?'clHalf':'clOff')+' ['+em2.slice(0,110)+']',mode==='up'&&/^user_data/.test(em2)?'in':mode);}
 }
 /* brand-new data key + recovery key; the person must see the recovery key before we continue / llave nueva + clave de recuperación */
 async function clSetup(pw){
@@ -206,14 +208,16 @@ async function clSetup(pw){
 }
 function clRecShow(rec,done){
   window.__clRec=rec;window.__clDone=done||function(){};
-  sheet('<div class="form"><h3>'+t('clRecT')+'</h3><p class="muted">'+t('clRecP')+'</p><div class="clrec" id="clrec">'+esc(rec)+'</div>'+
+  const body='<p class="muted">'+t('clRecP')+'</p><div class="clrec" id="clrec">'+esc(rec)+'</div>'+
     '<div class="row"><button class="btn" onclick="clRecCopy()">'+ic('link')+' '+t('copy')+'</button><button class="btn" onclick="clRecSave()">'+ic('download')+' '+t('clRecFile')+'</button></div>'+
     '<label class="clchk"><input type="checkbox" id="clsaved" onchange="$(\'clrecgo\').disabled=!this.checked"> '+t('clRecSaved')+'</label>'+
-    '<div class="row"><button class="btn pri wide" id="clrecgo" disabled onclick="clRecDone()">'+t('clRecGo')+'</button></div></div>');
+    '<div class="row"><button class="btn pri wide" id="clrecgo" disabled onclick="clRecDone()">'+t('clRecGo')+'</button></div>';
+  if(window.__clGate)gateShow('<div class="g-top"><span></span><span class="muted sm">'+t('psStep',3,3)+'</span></div><h1 class="lt g-h">'+t('clRecT')+'</h1><div class="g-form">'+body+'</div>');
+  else sheet('<div class="form"><h3>'+t('clRecT')+'</h3>'+body+'</div>');
 }
 function clRecCopy(){try{navigator.clipboard.writeText(window.__clRec).then(()=>toast(t('copied')),()=>toast(t('copyFail')));}catch(e){toast(t('copyFail'));}}
 function clRecSave(){fileOut('bubylift-recovery-key.txt','Bubylift — '+t('clRecT')+'\n\n'+window.__clRec+'\n\n'+t('clRecP')+'\n','text/plain');}
-function clRecDone(){const f=window.__clDone;window.__clRec=null;window.__clDone=null;sheetClose();if(f)f();}
+function clRecDone(){const f=window.__clDone,gt=window.__clGate;window.__clRec=null;window.__clDone=null;window.__clGate=0;window.__gKeep=0;if(f)f();if(gt)gateHide();else sheetClose();}
 async function clForgot(){
   const em=gv('cle').trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){toast(t('clBadEmail'));return;}
   try{const r=await clReq('/auth/v1/recover?'+clBack(),'POST',{email:em});toast(t(r.ok?'clResetSent':'clFail'));}catch(e){toast(t('clOff'));}
@@ -260,7 +264,7 @@ async function clFreshGo(){
 /* manage account */
 function clAcctOpen(){
   sheet('<div class="form"><div class="pick-h"><h3>'+t('clManage')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted">'+esc((CL&&CL.email)||'')+'</p>'+
-    '<div class="menu"><button onclick="clChPwOpen()">'+t('clChPw')+'</button><button onclick="clNewRecAsk()">'+t('clNewRec')+'</button><button onclick="sheetClose();clOutAsk()">'+t('clOut')+'</button></div>'+
+    '<div class="menu"><button onclick="sheetClose();gEdit(PFID,true)">✎ '+t('pfEditT')+'</button><button onclick="clChPwOpen()">'+t('clChPw')+'</button><button onclick="clNewRecAsk()">'+t('clNewRec')+'</button><button onclick="sheetClose();clOutAsk()">'+t('clOut')+'</button></div>'+
     '<div class="row"><button class="btn danger wide" onclick="sheetClose();clDelAsk()">'+t('clDel')+'</button></div><p class="muted sm">'+t('clDelP')+'</p></div>');
 }
 function clChPwOpen(){

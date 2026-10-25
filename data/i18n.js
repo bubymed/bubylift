@@ -919,6 +919,7 @@ const STR={
  pfAdd:['Add profile','Añadir perfil'],
  pfNew:['Create a new profile','Crear un perfil nuevo'],
  pfBring:['Bring a profile from another phone','Traer un perfil de otro teléfono'],
+ suT:['Create your account','Crea tu cuenta'],suE:['Email and password','Correo y contraseña'],suEP:['You\'ll use them to sign in from any phone.','Los usarás para entrar desde cualquier teléfono.'],
  pfNewT:['New profile','Perfil nuevo'],
  pfName:['Name','Nombre'],
 pfSug:['Suggested','Sugeridas'],
