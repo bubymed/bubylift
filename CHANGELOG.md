@@ -11,6 +11,8 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
   **Privado por diseño** — tus datos en la nube ahora se cifran en tu teléfono. Ni siquiera el creador de la app puede leerlos. Recibes una clave de recuperación al crear tu cuenta.
 - **A cleaner look** — phone emoji replaced with line icons on every screen and the share card.
   **Un look más limpio** — los emojis del teléfono se reemplazaron por iconos de línea en todas las pantallas y en la tarjeta para compartir.
+- **Suggested profile photos** — a gallery of round pictures in the avatar picker; avatars are now circles.
+  **Fotos de perfil sugeridas** — una galería de imágenes redondas en el selector de avatar; los avatares ahora son círculos.
 
 ## v89 — 2026-10-24
 - **Watch data from Strava** — connect Strava and bring the heart rate and calories from your watch into any workout, and onto your share card.

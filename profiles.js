@@ -14,6 +14,7 @@ let PFS=[],PFID=null,GS={};
 function pfKeys(id){return{d:'bl_d_'+id,s:'bl_s_'+id,a:'bl_a_'+id};}
 function pfAv(a){
   if(a&&a.k==='i'&&typeof a.d==='string'&&a.d.length<60000&&/^data:image\/(jpeg|png);base64,[A-Za-z0-9+/=]+$/.test(a.d))return{k:'i',d:a.d};
+  if(a&&a.k==='p'&&typeof AVP!=='undefined'&&AVP.indexOf(a.p)>=0)return{k:'p',p:a.p};
   return{k:'e',e:PF_AVE.indexOf(a&&a.e)>=0?a.e:PF_AVE[0],c:Math.max(0,Math.min(PF_AVC.length-1,(a&&a.c)|0))};
 }
 const pfWrapOk=r=>r&&typeof r.s==='string'&&typeof r.i==='string'&&typeof r.c==='string'&&r.s.length===24&&r.i.length===16&&r.c.length===64&&B64_RE.test(r.s)&&B64_RE.test(r.i)&&B64_RE.test(r.c)?{s:r.s,i:r.i,c:r.c}:null;
@@ -108,6 +109,7 @@ const pfWaitTxt=s=>s>=60?Math.ceil(s/60)+' min':s+' s';
 /* ---------- avatars ---------- */
 function avHtml(av,sz){
   av=pfAv(av);const st='width:'+sz+'px;height:'+sz+'px';
+  if(av.k==='p')return'<span class="av av-p" style="'+st+'"><img alt="" loading="lazy" src="img/av/'+av.p+'.webp"></span>';
   if(av.k==='i')return'<span class="av" style="'+st+'"><img alt="" src="'+av.d+'"></span>';
   const c=PF_AVC[av.c];
   return'<span class="av" style="'+st+';background:linear-gradient(135deg,'+c[0]+','+c[1]+');font-size:'+Math.round(sz*0.5)+'px">'+av.e+'</span>';
@@ -386,11 +388,13 @@ function qBlock(i,cur){
   return'<div class="qb"><select id="gq'+i+'" class="in wide">'+Array.from({length:PF_QN},(_,k)=>'<option value="'+k+'"'+(k===cur.i?' selected':'')+'>'+esc(t('pfQ'+k))+'</option>').join('')+'</select><input id="ga'+i+'" class="in wide" placeholder="'+esc(t('pfAns'))+'" autocomplete="off" autocapitalize="off" value="'+esc(cur.a||'')+'"></div>';
 }
 function avPicker(){
-  return'<div class="lbl">'+t('pfAvatar')+'</div><div class="chips wrap av-ch">'+PF_AVE.map(e=>'<button class="chip av-e'+(GS.av.k==='e'&&GS.av.e===e?' on':'')+'" onclick="pfPickAv(\''+e+'\')">'+e+'</button>').join('')+'</div>'+
+  return'<div class="lbl">'+t('pfSug')+'</div><div class="av-sug">'+AVP.map(n=>'<button class="av-s'+(GS.av.k==='p'&&GS.av.p===n?' on':'')+'" onclick="pfPickPre(\''+n+'\')" aria-label="'+t('pfAvatar')+' '+n+'"><img alt="" loading="lazy" src="img/av/'+n+'.webp"></button>').join('')+'</div>'+
+    '<div class="lbl">'+t('pfAvatar')+'</div><div class="chips wrap av-ch">'+PF_AVE.map(e=>'<button class="chip av-e'+(GS.av.k==='e'&&GS.av.e===e?' on':'')+'" onclick="pfPickAv(\''+e+'\')">'+e+'</button>').join('')+'</div>'+
     '<div class="chips wrap av-ch">'+PF_AVC.map((c,i)=>'<button class="av-c'+(GS.av.k==='e'&&GS.av.c===i?' on':'')+'" style="background:linear-gradient(135deg,'+c[0]+','+c[1]+')" aria-label="'+t('pfColor')+' '+(i+1)+'" onclick="pfPickCol('+i+')"></button>').join('')+'</div>'+
     '<label class="btn wide" style="margin-top:10px">📷 '+t('pfPhoto')+'<input type="file" accept="image/*" hidden onchange="pfPhoto(this)"></label>';
 }
 function pfAvRedraw(){const n=$('gname');if(n)GS.name=n.value;if(GS.redraw)GS.redraw();}
+function pfPickPre(n){GS.av={k:'p',p:n};pfAvRedraw();}
 function pfPickAv(e){GS.av=GS.av.k==='e'?{k:'e',e:e,c:GS.av.c}:{k:'e',e:e,c:0};pfAvRedraw();}
 function pfPickCol(c){GS.av={k:'e',e:GS.av.k==='e'?GS.av.e:PF_AVE[0],c:c};pfAvRedraw();}
 /* own photo: center-crop to a small square JPEG / foto propia: recorte cuadrado pequeño */
