@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v92',items:[
+  {i:'👤',en:'<b>Create your account</b> — as a guest, a friendly pop-up now invites you to create a free account or sign in. And Switch profile takes you straight to the start screen when there\'s no other profile.',es:'<b>Crea tu cuenta</b> — si estás como invitado, un aviso amable te invita a crear una cuenta gratis o iniciar sesión. Y Cambiar de perfil te lleva directo a la pantalla de inicio cuando no hay otro perfil.'}
+ ]},
  {v:'v91',items:[
   {i:'❤️',en:'<b>Your watch, automatically</b> — every time you open the app it checks Strava: new activities add heart rate and calories to matching workouts, and watch-only workouts show up in History.',es:'<b>Tu reloj, en automático</b> — cada vez que abres la app revisa Strava: las actividades nuevas agregan frecuencia cardíaca y calorías a los entrenamientos que coinciden, y los entrenamientos solo del reloj aparecen en Historial.'}
  ]},
