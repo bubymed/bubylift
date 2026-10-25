@@ -24,7 +24,7 @@ function pfClean(p){
   if(!p||typeof p!=='object'||typeof p.id!=='string'||!/^[a-z0-9]{3,24}$/.test(p.id))return null;
   const qs=(Array.isArray(p.qs)?p.qs:[]).map(q=>{if(!q||!((q.i|0)>=0&&(q.i|0)<PF_QN))return null;const r=pfRec(q);return r?Object.assign(r,{i:q.i|0}):{i:q.i|0};}).filter(Boolean).slice(0,3);
   const enc=pfEncRec(p.enc);
-  return{id:p.id,name:String(p.name||'').trim().slice(0,20)||'Profile',av:pfAv(p.av),pw:pfRec(p.pw),qs:qs,enc:enc,rm:enc?0:(p.rm?1:0),t:+p.t||Date.now(),g:(!enc&&!pfRec(p.pw)&&p.g)?1:0};
+  return{id:p.id,name:String(p.name||'').trim().slice(0,20)||'Profile',av:pfAv(p.av),pw:pfRec(p.pw),qs:qs,enc:enc,rm:enc?0:(p.rm?1:0),t:+p.t||Date.now(),g:(!enc&&!pfRec(p.pw)&&p.g)?1:0,tmp:(!enc&&!pfRec(p.pw)&&p.g&&p.tmp)?1:0};
 }
 function pfLoad(){const a=jget('bl_profiles',[]);PFS=(Array.isArray(a)?a:[]).map(pfClean).filter(Boolean).slice(0,PF_MAX);return PFS;}
 function pfSave(){jset('bl_profiles',PFS);}
@@ -136,8 +136,16 @@ function pfSplash(p){
 }
 
 /* ---------- boot / enter / leave ---------- */
+/* a temporary profile exists only while someone is signing in from the start screen; if they never finished, it is removed
+   un perfil temporal existe solo mientras alguien inicia sesión desde la pantalla de inicio; si no terminó, se elimina */
+function pfDropTmp(){
+  const bad=PFS.filter(p=>{if(!p.tmp)return false;let s=null;try{s=JSON.parse(localStorage.getItem(pfKeys(p.id).s)||'null');}catch(e){}return!(s&&s.cl&&s.cl.dek);});
+  bad.forEach(p=>{const k=pfKeys(p.id);try{[k.d,k.s,k.a].forEach(x=>localStorage.removeItem(x));}catch(e){}});
+  PFS=PFS.filter(p=>bad.indexOf(p)<0);const dirty=bad.length||PFS.some(p=>p.tmp);PFS.forEach(p=>{p.tmp=0;});
+  if(dirty)pfSave();
+}
 async function boot(){
-  pfLoad();
+  pfLoad();pfDropTmp();
   let sess=null,sk=null,last=null;try{sess=sessionStorage.getItem('bl_sess');sk=sessionStorage.getItem('bl_sk');last=localStorage.getItem('bl_last');}catch(e){}
   pfPrefs();
   const p=pfGet(sess);
@@ -226,13 +234,14 @@ function gWelcome(back){
 }
 function gBack(){const q=PFS[0];if(PFS.length===1&&q&&!q.pw&&!q.enc)pfEnter(q.id,null,null,false,1);else gPick();}
 /* create account / sign in from the first screen: start as a guest, then open the account sheet / cuenta desde la primera pantalla */
-function gAcct(mode){window.__clGo=mode;pfGuest();}
-function pfGuest(){
+function gAcct(mode){window.__clGo=mode;pfGuest(true);}
+function pfGuest(tmp){
   const eg=PFS.find(x=>x.g);
   if(eg){pfEnter(eg.id,null);return;}
   if(PFS.length>=PF_MAX)return;
   const prof={id:'g'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:'Guest',av:pfRandAv(),pw:null,qs:[],enc:null,rm:0,t:Date.now(),g:1};
   const k=pfKeys(prof.id),lg=PFS.length?{map:{},del:[]}:pfLegacy(prof.id);
+  prof.tmp=(tmp===true&&!lg.del.length)?1:0; // never throw away an old log: only an empty profile is temporary / nunca se descarta un registro viejo
   if(!lg.map[k.s])lg.map[k.s]=JSON.stringify({lang:LANG});
   try{for(const kk in lg.map)localStorage.setItem(kk,lg.map[kk]);}catch(e){const m=$('gmsg');if(m)m.textContent=t('pfTxBad');return;}
   PFS.push(prof);pfSave();GS={};
@@ -240,7 +249,7 @@ function pfGuest(){
   pfEnter(prof.id,null);
 }
 /* a guest turns into a real profile: same data, now protected / el invitado pasa a perfil real: mismos datos, ahora protegidos */
-function gSave(){const p=pfCur();if(!p||!p.g)return;GS={};gNew(1,{upg:p.id});}
+function gSave(){const p=pfCur();if(!p||!p.g)return;GS={};if(typeof cloudOn==='function'&&cloudOn()){clAuthOpen('up');return;}gNew(1,{upg:p.id});}
 function guestNag(){
   const p=pfCur();if(!p||!p.g||(typeof CL!=='undefined'&&CL&&CL.dek))return;
   const cl=typeof cloudOn==='function'&&cloudOn();
@@ -264,10 +273,11 @@ function gPick(edit){
   GS={redraw:function(){gPick(edit);}};
   const tiles=PFS.map(p=>'<button class="pf-tile" onclick="'+(edit?(p.g?'gDelete':'gEdit')+'(\''+p.id+'\')':'gPw(\''+p.id+'\')')+'">'+avHtml(p.av,edit?84:92)+(edit?'<i class="pf-pen">'+(p.g?'🗑':'✎')+'</i>':'')+'<b>'+esc(pfName(p))+'</b></button>').join('')+
     (PFS.length<PF_MAX&&!edit&&!PFS.some(x=>x.g)?'<button class="pf-tile wrap" onclick="pfGuest()"><span class="av av-add" style="width:92px;height:92px">👤</span><b>'+t('pfGuestB')+'</b></button>':'')+
-    (PFS.length<PF_MAX&&!edit?'<button class="pf-tile" onclick="gAdd()"><span class="av av-add" style="width:92px;height:92px">＋</span><b>'+t('pfAdd')+'</b></button>':'');
+    (PFS.length<PF_MAX&&!edit?'<button class="pf-tile" onclick="gAdd()"><span class="av av-add" style="width:92px;height:92px">＋</span><b>'+t(typeof cloudOn==='function'&&cloudOn()?'wAcctTile':'pfAdd')+'</b></button>':'');
   gateShow('<div class="g-top"><span></span><button class="g-link" onclick="gPick('+(edit?'false':'true')+')">'+(edit?t('done'):t('edit'))+'</button></div><h1 class="lt g-h">'+t('pfWho')+'</h1><div class="pf-grid">'+tiles+'</div>'+gLang());
 }
 function gAdd(){
+  if(typeof cloudOn==='function'&&cloudOn()){gWelcome(1);return;} // accounts only: sign in or create one / solo cuentas
   gateShow('<div class="g-top"><button class="g-link" onclick="gPick()">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('pfAdd')+'</h1>'+
     '<div class="menu"><button onclick="gNew(1,{})">✨ '+t('pfNew')+'</button>'+(PFS.some(x=>x.g)?'':'<button onclick="pfGuest()">👤 '+t('pfGuestB')+'</button>')+'<button onclick="gRecv()">📲 '+t('pfBring')+'</button></div>'+(PFS.some(x=>x.g)?'':'<p class="muted sm g-c">'+t('pfGuestP')+'</p>')+gLang());
   GS={redraw:gAdd};
@@ -491,7 +501,7 @@ async function pfDelete(id){
 function pfMenu(){
   const p=pfCur();if(!p)return;
   if(p.g){
-    sheet('<div class="form"><div class="g-c">'+avHtml(p.av,76)+'<h3 class="g-n">'+esc(pfName(p))+'</h3></div><div class="menu"><button class="pri" onclick="sheetClose();gSave()">💾 '+t('pfGuestSave')+'</button><button onclick="sheetClose();pfLeave()">⇄ '+t('pfSwitch')+'</button><button onclick="sheetClose();gDelete(\''+p.id+'\',true)">🗑 '+t('pfDelIn')+'</button></div>'+
+    sheet('<div class="form"><div class="g-c">'+avHtml(p.av,76)+'<h3 class="g-n">'+esc(pfName(p))+'</h3></div><div class="menu">'+(typeof cloudOn==='function'&&cloudOn()?'<button class="pri" onclick="clAuthOpen(\'up\')">☁ '+t('clCreate')+'</button><button onclick="clAuthOpen(\'in\')">'+t('wIn')+'</button>':'<button class="pri" onclick="sheetClose();gSave()">💾 '+t('pfGuestSave')+'</button>')+'<button onclick="sheetClose();pfLeave()">⇄ '+t('pfSwitch')+'</button><button onclick="sheetClose();gDelete(\''+p.id+'\',true)">🗑 '+t('pfDelIn')+'</button></div>'+
       '<p class="muted sm">'+t('gnP')+'</p><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
     return;
   }

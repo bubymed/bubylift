@@ -865,6 +865,8 @@ const STR={
  csBgNone:['Transparent','Transparente'],csBgPhoto:['Photo','Foto'],csBgDark:['Dark','Oscuro'],
  csFmtStory:['Story 9:16','Historia 9:16'],csFmtPost:['Post 4:5','Publicación 4:5'],
  csSave:['Save image','Guardar imagen'],csShare:['Share','Compartir'],
+ clNoAcct:['This email is not registered. Check it, or create an account.','Este correo no está registrado. Revísalo o crea una cuenta.'],
+ wAcctTile:['Sign in or create account','Iniciar sesión o crear cuenta'],
  gnCT:["You don't have an account yet",'Aún no tienes una cuenta'],
  gnCP:['You are using Bubylift as a guest, so your workouts live only on this phone. Create a free account to back them up, encrypted, and open them from any phone.','Estás usando Bubylift como invitado, así que tus entrenamientos solo viven en este teléfono. Crea una cuenta gratis para respaldarlos cifrados y abrirlos desde cualquier teléfono.'],
  wBack:['Back to {0}','Volver a {0}'],

@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.96 — 2026-10-24
+- **Accounts only** — with cloud on, the only ways in are your cloud account or guest. Every create-account button now makes a cloud account, sign-in tells you if an email isn't registered, and guests can't create local profiles.
+  **Solo cuentas** — con la nube activa, solo se entra con tu cuenta en la nube o como invitado. Todos los botones de crear cuenta crean una cuenta en la nube, el inicio de sesión avisa si un correo no está registrado, y los invitados ya no crean perfiles locales.
+
 ## v0.95 — 2026-10-24
 - **Share cards, your way** — 7 transparent card styles with the Bubylift logo: save the PNG and drop it over any photo or story, or add a photo right in the app. Pick the color and Story or Post size.
   **Tarjetas a tu manera** — 7 estilos de tarjeta transparente con el logo de Bubylift: guarda el PNG y ponlo encima de cualquier foto o historia, o agrega una foto dentro de la app. Elige el color y el tamaño Historia o Publicación.
