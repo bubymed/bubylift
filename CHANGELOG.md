@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v90 — 2026-10-24
+- **Private by design** — your cloud data is now encrypted on your phone. Not even the app\'s creator can read it. You get a recovery key when you create your account.
+  **Privado por diseño** — tus datos en la nube ahora se cifran en tu teléfono. Ni siquiera el creador de la app puede leerlos. Recibes una clave de recuperación al crear tu cuenta.
+
 ## v89 — 2026-10-24
 - **Watch data from Strava** — connect Strava and bring the heart rate and calories from your watch into any workout, and onto your share card.
   **Datos de tu reloj con Strava** — conecta Strava y trae la frecuencia cardíaca y las calorías de tu reloj a cualquier entrenamiento, y a tu tarjeta para compartir.

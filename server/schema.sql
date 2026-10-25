@@ -3,7 +3,8 @@
 
 create table if not exists public.user_data (
   user_id    uuid primary key references auth.users(id) on delete cascade,
-  data       jsonb       not null default '{}'::jsonb,
+  data       jsonb       not null default '{}'::jsonb,   -- ciphertext only / solo texto cifrado
+  vault      jsonb,                                       -- data key wrapped by password + recovery key / llave envuelta
   rev        integer     not null default 1,
   updated_at timestamptz not null default now(),
   constraint user_data_size check (octet_length(data::text) < 10000000)
@@ -20,6 +21,9 @@ create policy "own select" on public.user_data for select to authenticated using
 create policy "own insert" on public.user_data for insert to authenticated with check (auth.uid() = user_id);
 create policy "own update" on public.user_data for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "own delete" on public.user_data for delete to authenticated using (auth.uid() = user_id);
+
+-- if you ran an older version of this file / si ejecutaste una versión anterior:
+alter table public.user_data add column if not exists vault jsonb;
 
 -- "Delete my account" button / botón "Eliminar mi cuenta"
 create or replace function public.delete_my_account() returns void
