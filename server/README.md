@@ -42,3 +42,6 @@ Requiere que ya funcionen las cuentas (arriba). Es opcional. / Needs accounts wo
 
 > v91: the Strava function has a new action (`recent`). Redeploy it: `supabase functions deploy strava --no-verify-jwt`.
 > v91: la función de Strava tiene una acción nueva (`recent`). Vuelve a desplegarla: `supabase functions deploy strava --no-verify-jwt`.
+
+> v0.96: run `server/schema.sql` again in the SQL Editor (safe to repeat). It adds `email_registered`, so sign-in can say "this email is not registered".
+> v0.96: vuelve a ejecutar `server/schema.sql` en el SQL Editor (es seguro repetirlo). Agrega `email_registered` para que el inicio de sesión diga "este correo no está registrado".

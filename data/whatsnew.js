@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.96',items:[
+  {i:'☁️',en:'<b>Accounts only</b> — with cloud on, the only ways in are your cloud account or guest. Every create-account button now makes a cloud account, sign-in tells you if an email isn\'t registered, and guests can\'t create local profiles.',es:'<b>Solo cuentas</b> — con la nube activa, solo se entra con tu cuenta en la nube o como invitado. Todos los botones de crear cuenta crean una cuenta en la nube, el inicio de sesión avisa si un correo no está registrado, y los invitados ya no crean perfiles locales.'}
+ ]},
  {v:'v0.95',items:[
   {i:'🖼️',en:'<b>Share cards, your way</b> — 7 transparent card styles with the Bubylift logo: save the PNG and drop it over any photo or story, or add a photo right in the app. Pick the color and Story or Post size.',es:'<b>Tarjetas a tu manera</b> — 7 estilos de tarjeta transparente con el logo de Bubylift: guarda el PNG y ponlo encima de cualquier foto o historia, o agrega una foto dentro de la app. Elige el color y el tamaño Historia o Publicación.'}
  ]},

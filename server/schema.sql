@@ -51,3 +51,11 @@ create table if not exists public.strava_state (
   created_at timestamptz not null default now()
 );
 alter table public.strava_state enable row level security;
+
+-- v0.96: lets the sign-in screen say "this e-mail is not registered" / permite decir "este correo no está registrado"
+create or replace function public.email_registered(p_email text) returns boolean
+language sql security definer set search_path = public, auth stable as $$
+  select exists(select 1 from auth.users where lower(email) = lower(p_email));
+$$;
+revoke all on function public.email_registered(text) from public;
+grant execute on function public.email_registered(text) to anon, authenticated;

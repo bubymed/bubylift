@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v0.95';
+const APP_VER='v0.96';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -221,7 +221,7 @@ async function checkUpd(){
 function bootApp(){
   loadAll();document.documentElement.lang=LANG;applyTheme();
   if(!SET.wnSeen){SET.wnSeen=APP_VER;saveSet();} // first run: nothing "new" to show
-  $('sheetov').onclick=e=>{if(e.target===$('sheetov'))sheetClose();};
+  $('sheetov').onclick=e=>{if(e.target!==$('sheetov'))return;const q=pfCur();if(q&&q.tmp)return;sheetClose();}; // signing in from the start screen: no dismissing by accident / iniciando sesión desde el inicio: no se cierra sin querer
   renderHeader();renderTabs();render();
   if(ACT)wake();
   setInterval(tickElapsed,1000);

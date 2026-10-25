@@ -12,7 +12,7 @@ function cloudOn(){const c=window.CLOUD_CFG;return !!(c&&c.url&&c.key&&/^https:\
 /* the session lives inside the profile's settings, so password-protected profiles keep it encrypted / la sesión vive dentro de los ajustes del perfil */
 function clLoad(){const o=SET&&SET.cl;CL=(o&&typeof o==='object'&&typeof o.uid==='string'&&typeof o.rt==='string')?o:null;CLK=null;}
 /* a guest that signs in becomes a normal profile named after the e-mail / el invitado que inicia sesión pasa a perfil normal */
-function clAdopt(){try{const p=pfCur();if(p&&p.g&&CL&&CL.email){p.g=0;p.name=(CL.email.split('@')[0]||'Me').slice(0,20);pfSave();if(typeof renderTabs==='function')renderTabs();}}catch(e){}}
+function clAdopt(){try{const p=pfCur();if(p&&p.g&&CL&&CL.email){p.g=0;p.tmp=0;p.name=(CL.email.split('@')[0]||'Me').slice(0,20);pfSave();if(typeof renderTabs==='function')renderTabs();}}catch(e){}}
 function clSave(){if(CL){SET.cl=CL;saveSet();}}
 function clUnlink(){CL=null;CLK=null;if(SET&&SET.cl){delete SET.cl;saveSet();}}
 /* tombstones: remember deletions so another phone does not bring the item back / lápidas: recuerdan lo borrado */
@@ -154,9 +154,17 @@ function cloudCard(){
   const st=CL.err==='key'?t('clKeyBad'):CL.err==='off'?t('clOff'):CL.err?t('clFail'):(ago==null?t('clNever'):(ago<1?t('clJust'):t('clAgo',ago>=60?Math.round(ago/60)+' h':ago+' min')));
   return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+esc(CL.email)+'</b><p class="muted sm">'+st+'</p></div><div class="row"><button class="btn pri" onclick="cloudSync(true).then(function(){stravaSync(true)})">'+t('clSyncNow')+'</button><button class="btn" onclick="clAcctOpen()">'+t('clManage')+'</button></div>'+stravaRow()+'</div>';
 }
+function clAuthBack(){
+  const p=pfCur();
+  if(p&&p.tmp){const k=pfKeys(p.id);try{[k.d,k.s,k.a].forEach(x=>localStorage.removeItem(x));}catch(e){}PFS=PFS.filter(x=>x.id!==p.id);pfSave();}
+  try{sessionStorage.removeItem('bl_sess');sessionStorage.removeItem('bl_sk');sessionStorage.setItem('bl_pick','1');}catch(e){}
+  location.replace(location.pathname);
+}
+/* is this e-mail registered? (asks the database; null if it cannot tell) / ¿está registrado este correo? */
+async function clEmailKnown(em){try{const r=await clReq('/rest/v1/rpc/email_registered','POST',{p_email:em});return r.ok&&typeof r.j==='boolean'?r.j:null;}catch(e){return null;}}
 function clAuthOpen(mode,msg,email){
-  const up=mode==='up';
-  sheet('<div class="form"><div class="pick-h"><h3>'+t(up?'clCreate':'clIn')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+  const up=mode==='up',tmp=!!(pfCur()&&pfCur().tmp);
+  sheet('<div class="form"><div class="pick-h"><h3>'+t(up?'clCreate':'clIn')+'</h3><button class="ico" onclick="'+(tmp?'clAuthBack()':'sheetClose()')+'" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<p class="muted sm">'+t(up?'clUpP':'clInP')+'</p>'+(msg?'<p class="clmsg">'+esc(msg)+'</p>':'')+
     '<label>'+t('clEmail')+'<input id="cle" class="in wide" type="email" autocomplete="email" inputmode="email" value="'+esc(email||'')+'"></label>'+
     '<label>'+t('clPw')+'<input id="clp" class="in wide" type="password" autocomplete="'+(up?'new-password':'current-password')+'"></label>'+
@@ -174,6 +182,7 @@ async function clSubmit(mode){
     const r=await clReq(mode==='up'?'/auth/v1/signup':'/auth/v1/token?grant_type=password','POST',{email:em,password:ap});
     if(!r.ok){
       const m=String((r.j&&(r.j.msg||r.j.error_description||r.j.message))||'');
+      if(mode==='in'&&/invalid|credentials/i.test(m)&&(await clEmailKnown(em))===false){clAuthOpen(mode,t('clNoAcct'),em);return;}
       clAuthOpen(mode,/already|registered/i.test(m)?t('clExists'):(/invalid|credentials/i.test(m)?t('clWrong'):t('clFail')),em);return;
     }
     if(mode==='up'&&!(r.j&&r.j.access_token)){sheetClose();ask(t('clCheckMail',em),t('done'),function(){},false);return;}
