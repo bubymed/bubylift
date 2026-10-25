@@ -129,3 +129,22 @@ main>.sec{margin-top:28px;margin-bottom:-4px}
 .mlist{padding:0;overflow:hidden}
 .card.grp{padding:6px 0}
 .seg,.seg button{border:0!important;outline:0}.mlist .lrow+.lrow,.mrow+.mrow{border-top:.5px solid var(--line)}
+
+/* v83 active workout */
+.wk-head{background:var(--panel);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.wkname{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;background:none;border:0;color:var(--txt);width:100%;padding:0;outline:0}
+#wkstats{font-variant-numeric:tabular-nums;margin:2px 0 12px}
+.wk-act .btn{min-height:50px;font-size:1.05rem}
+.exc{background:var(--panel);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.exh-t b{font-size:1.1rem;font-weight:750;letter-spacing:-.015em}
+.srow .in{min-height:46px;font-size:1.15rem;font-weight:650;border-radius:12px}
+.srow .sn{font-size:1.05rem}
+.srow .chk{min-height:46px;border-radius:12px;background:var(--panel2)}
+.srow.done .chk{background:var(--green);color:#fff}
+.srow .in+button,.srow button.st{border-radius:12px}
+.exc .btn.sm,.exc .btn.wide{background:color-mix(in srgb,var(--accent) 12%,var(--panel2))}
+.note-in{background:var(--panel);border:0;border-radius:var(--radius);padding:14px;color:var(--txt);width:100%}
+#restbar{background:color-mix(in srgb,var(--panel) 88%,transparent);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:0;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.28)}
+/* sheets */
+#sheet{border-radius:24px 24px 0 0;background:var(--panel)}
+.form h3{font-size:1.4rem;font-weight:800;letter-spacing:-.02em}

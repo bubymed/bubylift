@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v83 — 2026-10-24
+- **A clearer workout screen** — bigger fields, a clear green check when a set is done, and a floating rest timer.
+  **Pantalla de entrenamiento más clara** — campos más grandes, un check verde claro al completar una serie y un temporizador de descanso flotante.
+
 ## v82 — 2026-10-24
 - **Body, Stretch and More, redesigned** — iPhone-style switches, flatter cards and tidier lists across the rest of the app.
   **Cuerpo, Estirar y Más, rediseñados** — selectores estilo iPhone, tarjetas más planas y listas más ordenadas en el resto de la app.
