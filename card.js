@@ -1,3 +1,10 @@
+/* draws a line icon on the canvas / dibuja un icono de línea en el canvas */
+function cardIcon(g,n,x,y,sz,col){
+  const src=ICONS[n];if(!src||typeof Path2D==='undefined')return;
+  g.save();g.translate(x,y);g.scale(sz/24,sz/24);g.strokeStyle=col;g.lineWidth=1.9;g.lineCap='round';g.lineJoin='round';
+  (src.match(/ d="([^"]+)"/g)||[]).forEach(m=>{try{g.stroke(new Path2D(m.slice(4,-1)));}catch(e){}});
+  g.restore();
+}
 /* Share card (v72): a picture of a workout to post or send; and CSV import / tarjeta para compartir (v72) e importar CSV. */
 function cardFont(px,w){return(w||'700')+' '+px+'px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';}
 function wkCardData(wk){
@@ -19,8 +26,8 @@ function drawWkCard(wk){
   stats.forEach((s,i)=>{const x=80+i*320;g.fillStyle='rgba(255,255,255,.07)';g.beginPath();g.roundRect?g.roundRect(x,420,290,170,26):g.rect(x,420,290,170);g.fill();
     g.fillStyle='#fff';g.font=cardFont(s[0].length>9?38:54,'800');g.fillText(s[0],x+24,508);g.fillStyle='#b9b9c2';g.font=cardFont(30,'500');g.fillText(s[1],x+24,558);});
   const ex0=(d.hr||d.kcal)?70:0;
-  if(d.hr||d.kcal){g.fillStyle='#ffffff';g.font=cardFont(40,'700');g.fillText([d.hr?'♥ '+d.hr.a+' avg · '+d.hr.m+' max':'',d.kcal?d.kcal+' kcal':''].filter(Boolean).join('   ·   '),80,660);}
-  if(d.prs){g.fillStyle=acc;g.font=cardFont(44,'800');g.fillText('🏆 '+d.prs+' PR',80,680+ex0);}
+  if(d.hr||d.kcal){g.fillStyle='#ffffff';g.font=cardFont(40,'700');const tx=[d.hr?d.hr.a+' avg · '+d.hr.m+' max':'',d.kcal?d.kcal+' kcal':''].filter(Boolean).join('   ·   ');if(d.hr){cardIcon(g,'heart',80,624,44,'#ffffff');g.fillText(tx,140,660);}else g.fillText(tx,80,660);}
+  if(d.prs){g.fillStyle=acc;g.font=cardFont(44,'800');cardIcon(g,'trophy',80,642+ex0,48,acc);g.fillText(d.prs+' PR',142,680+ex0);}
   let y=(d.prs?770:700)+ex0;
   d.top.slice(0,ex0?4:5).forEach(x=>{
     g.fillStyle='#fff';g.font=cardFont(44,'700');

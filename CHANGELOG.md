@@ -9,6 +9,8 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## v90 — 2026-10-24
 - **Private by design** — your cloud data is now encrypted on your phone. Not even the app\'s creator can read it. You get a recovery key when you create your account.
   **Privado por diseño** — tus datos en la nube ahora se cifran en tu teléfono. Ni siquiera el creador de la app puede leerlos. Recibes una clave de recuperación al crear tu cuenta.
+- **A cleaner look** — phone emoji replaced with line icons on every screen and the share card.
+  **Un look más limpio** — los emojis del teléfono se reemplazaron por iconos de línea en todas las pantallas y en la tarjeta para compartir.
 
 ## v89 — 2026-10-24
 - **Watch data from Strava** — connect Strava and bring the heart rate and calories from your watch into any workout, and onto your share card.

@@ -3,7 +3,8 @@
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
  {v:'v90',items:[
-  {i:'🔐',en:'<b>Private by design</b> — your cloud data is now encrypted on your phone. Not even the app\\\'s creator can read it. You get a recovery key when you create your account.',es:'<b>Privado por diseño</b> — tus datos en la nube ahora se cifran en tu teléfono. Ni siquiera el creador de la app puede leerlos. Recibes una clave de recuperación al crear tu cuenta.'}
+  {i:'🔐',en:'<b>Private by design</b> — your cloud data is now encrypted on your phone. Not even the app\\\'s creator can read it. You get a recovery key when you create your account.',es:'<b>Privado por diseño</b> — tus datos en la nube ahora se cifran en tu teléfono. Ni siquiera el creador de la app puede leerlos. Recibes una clave de recuperación al crear tu cuenta.'},
+  {i:'✨',en:'<b>A cleaner look</b> — phone emoji are gone: every screen now uses the same set of line icons.',es:'<b>Un look más limpio</b> — se acabaron los emojis del teléfono: todas las pantallas usan el mismo set de iconos de línea.'}
  ]},
  {v:'v89',items:[
   {i:'❤️',en:'<b>Watch data from Strava</b> — connect Strava and bring the heart rate and calories from your watch into any workout, and onto your share card.',es:'<b>Datos de tu reloj con Strava</b> — conecta Strava y trae la frecuencia cardíaca y las calorías de tu reloj a cualquier entrenamiento, y a tu tarjeta para compartir.'}
