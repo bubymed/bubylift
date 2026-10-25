@@ -14,8 +14,8 @@ function csOpen(id){
   const chip=(k,v,lbl,extra)=>'<button class="chip'+(CS[k]===v?' on':'')+'" data-k="'+k+'" data-v="'+v+'" onclick="'+(extra||'csSet(\''+k+'\',\''+v+'\')')+'">'+lbl+'</button>';
   const acc=csAcc();
   sheet('<div class="form cs"><div class="pick-h"><h3>'+t('cdBtn')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
-    '<div class="cs-pv"><canvas id="csv"></canvas></div><p class="muted sm g-c">'+t('csHint')+'</p>'+
-    '<div class="cs-l">'+t('csStyleL')+'</div><div class="chips cs-row">'+CS_STYLES.map(s=>chip('style',s,t('csS_'+s))).join('')+'</div>'+
+    '<p class="muted sm g-c">'+t('csHint')+'</p>'+
+    '<div class="cs-th">'+CS_STYLES.map(k=>'<button class="cs-t'+(CS.style===k?' on':'')+'" data-k="style" data-v="'+k+'" onclick="csSet(\'style\',\''+k+'\')"><canvas data-s="'+k+'"></canvas><span>'+t('csS_'+k)+'</span></button>').join('')+'</div>'+
     '<div class="cs-l">'+t('csBgL')+'</div><div class="chips cs-row">'+chip('bg','none',t('csBgNone'))+chip('bg','photo',t('csBgPhoto'),'csBgPhoto()')+chip('bg','dark',t('csBgDark'))+'</div>'+
     '<div class="cs-l">'+t('csFmtL')+'</div><div class="chips cs-row">'+chip('fmt','story',t('csFmtStory'))+chip('fmt','post',t('csFmtPost'))+'</div>'+
     '<div class="cs-l">'+t('csColL')+'</div><div class="cs-sw">'+['#ffffff','#111111',acc].map(c=>'<button class="cs-c'+(CS.col===c?' on':'')+'" data-k="col" data-v="'+c+'" style="background:'+c+'" aria-label="'+c+'" onclick="csSet(\'col\',\''+c+'\')"></button>').join('')+'</div>'+
@@ -26,7 +26,7 @@ function csOpen(id){
 function csSet(k,v){
   if(!CS)return;CS[k]=v;
   document.querySelectorAll('#sheet [data-k="'+k+'"]').forEach(b=>b.classList.toggle('on',b.dataset.v===String(v)));
-  csDraw();
+  if(k!=='style')csDraw();
 }
 function csBgPhoto(){
   if(!CS)return;
@@ -40,10 +40,13 @@ function csPhoto(inp){
   im.onerror=function(){URL.revokeObjectURL(url);toast(t('copyFail'));};
   im.src=url;inp.value='';
 }
+/* every style is drawn small, side by side, so you can compare them at a glance / cada estilo se dibuja pequeño, lado a lado, para compararlos de un vistazo */
 function csDraw(){
-  const v=$('csv');if(!v||!CS)return;
-  let c;try{c=csRender(CS);}catch(e){return;}
-  v.width=c.width;v.height=c.height;v.getContext('2d').drawImage(c,0,0);
+  if(!CS)return;
+  document.querySelectorAll('#sheet canvas[data-s]').forEach(v=>{
+    let c;try{c=csRender(Object.assign({},CS,{style:v.dataset.s}),.22);}catch(e){return;}
+    v.width=c.width;v.height=c.height;v.getContext('2d').drawImage(c,0,0);
+  });
 }
 function csOut(share){
   if(!CS)return;
@@ -82,9 +85,9 @@ function csStats(wk,d){
   else{a.push({v:String(d.sets),l:t('sets'),i:'clipboard-list'});a.push({v:d.vol,l:t('volume'),i:'barbell'});}
   return a;
 }
-function csRender(o){
-  const wk=o.wk,d=wkCardData(wk),W=1080,H=o.fmt==='post'?1350:1920,c=document.createElement('canvas');c.width=W;c.height=H;
-  const g=c.getContext('2d'),acc=csAcc(),ink=o.col,light=ink!=='#111111';
+function csRender(o,sc){
+  const wk=o.wk,d=wkCardData(wk),W=1080,H=o.fmt==='post'?1350:1920,c=document.createElement('canvas');sc=sc||1;c.width=Math.round(W*sc);c.height=Math.round(H*sc);
+  const g=c.getContext('2d');g.scale(sc,sc);const acc=csAcc(),ink=o.col,light=ink!=='#111111';
   const sub=csRgba(ink,.82),line=csRgba(ink,.35),stats=csStats(wk,d),wo=!wk.ex.length;
   const name=(wk.name||(wo?spName(wk.sp):'')).trim()||spName(wk.sp);
   const B=H-(o.fmt==='post'?100:150); // bottom edge of the block / borde inferior del bloque
