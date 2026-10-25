@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99.5',items:[
+  {i:'📌',en:'Tapping something no longer throws you back to the top: the page, sheets and sign-in screens keep your place when they refresh.',es:'Tocar algo ya no te manda al inicio: la página, las hojas y las pantallas de acceso conservan tu lugar al actualizarse.'}
+ ]},
  {v:'v0.99.4',items:[
   {i:'👆',en:'Picking an avatar no longer jumps back to the top of the list.',es:'Elegir un avatar ya no te regresa al inicio de la lista.'}
  ]},

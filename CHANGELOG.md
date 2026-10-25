@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.5 — 2026-10-24
+- Tapping something no longer throws you back to the top: the page, sheets and sign-in screens keep your place when they refresh.
+  Tocar algo ya no te manda al inicio: la página, las hojas y las pantallas de acceso conservan tu lugar al actualizarse.
+
 ## v0.99.4 — 2026-10-24
 - Picking an avatar no longer jumps back to the top of the list.
   Elegir un avatar ya no te regresa al inicio de la lista.

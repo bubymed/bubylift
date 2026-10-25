@@ -235,11 +235,11 @@ const pfHasLegacy=()=>{try{return localStorage.getItem('bl_data')!=null;}catch(e
 
 /* ---------- gate (full-screen sign-in area) ---------- */
 let PFSTOP=null;function pfStopAll(){if(PFSTOP){try{PFSTOP();}catch(e){}PFSTOP=null;}}
-function gateShow(html){pfStopAll();const g=$('gate');g.innerHTML='<div class="gate-in">'+html+'</div>';g.hidden=false;document.body.classList.add('noscroll');g.scrollTop=0;}
+function gateShow(html){pfStopAll();const g=$('gate'),was=!g.hidden,st=g.scrollTop,h0=was&&g.querySelector('h1')?g.querySelector('h1').textContent:null;g.innerHTML='<div class="gate-in">'+html+'</div>';g.hidden=false;document.body.classList.add('noscroll');const h1=g.querySelector('h1');g.scrollTop=(was&&(window.__gSame||(h0!==null&&h1&&h1.textContent===h0)))?st:0;}
 function gateHide(){pfStopAll();const g=$('gate');if(!g.hidden&&typeof ghostOut==='function')ghostOut(g);g.hidden=true;g.innerHTML='';document.body.classList.remove('noscroll');}
 const gv=id=>{const e=$(id);return e?e.value:'';};
 function gLang(){return'<div class="g-lang"><button onclick="pfSetLang(\'en\')"'+(LANG==='en'?' class="on"':'')+'>English</button><button onclick="pfSetLang(\'es\')"'+(LANG==='es'?' class="on"':'')+'>Español</button></div>';}
-function pfSetLang(l){LANG=l==='es'?'es':'en';try{localStorage.setItem('bl_lang',LANG);}catch(e){}document.documentElement.lang=LANG;const f=GS.redraw;if(f)f();else gPick();}
+function pfSetLang(l){LANG=l==='es'?'es':'en';try{localStorage.setItem('bl_lang',LANG);}catch(e){}document.documentElement.lang=LANG;const f=GS.redraw;window.__gSame=1;try{if(f)f();else gPick();}finally{window.__gSame=0;}}
 
 /* first screen: create a profile or just try it as a guest / primera pantalla: crear perfil o probar como invitado */
 function gWelcome(back){
