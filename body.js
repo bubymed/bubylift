@@ -73,7 +73,7 @@ function bodySave(){
   if(ex){if(o.w!=null)ex.w=o.w;if(o.bf!=null)ex.bf=o.bf;if(o.m)ex.m=Object.assign({},ex.m,o.m);if(o.note)ex.note=o.note;saveData();toast(t('bwUpd'));render();return;}
   DATA.body.push(o);DATA.body.sort((a,b)=>b.t-a.t);goalsCheck();saveData();toast(t('saved'));render();
 }
-function bodyDel(id){ask(t('delEntry'),t('delete'),function(){DATA.body=DATA.body.filter(b=>b.id!==id);saveData();render();},true);}
+function bodyDel(id){ask(t('delEntry'),t('delete'),function(){DATA.body=DATA.body.filter(b=>b.id!==id);clTomb(id);saveData();render();},true);}
 function goalSet(){
   const v=$('bg').value.trim();
   if(!v){SET.goal=null;}else{const g=wParse(v);if(g==null||g<=0||g>700){toast(t('needBody'));return;}SET.goal=g;}
@@ -93,7 +93,7 @@ function vMore(){
   // iOS-style grouped list: one card, one row per setting / lista agrupada estilo iOS: una tarjeta, una fila por ajuste
   const row=(lab,ctl)=>'<div class="lrow"><span>'+lab+'</span>'+ctl+'</div>';
   const gp=(typeof pfCur==='function'&&pfCur());
-  let h=(gp&&gp.g?'<div class="card tip"><b>'+ic('user')+' '+t('gnT')+'</b><p class="sm">'+t('gnP')+'</p><div class="row"><button class="btn pri" onclick="gSave()">'+t('gnYes')+'</button></div></div>':'')+'<div class="sec"><h2>'+t('prefs')+'</h2></div><div class="card grp">'+
+  let h=cloudCard()+(gp&&gp.g?'<div class="card tip"><b>'+ic('user')+' '+t('gnT')+'</b><p class="sm">'+t('gnP')+'</p><div class="row"><button class="btn pri" onclick="gSave()">'+t('gnYes')+'</button></div></div>':'')+'<div class="sec"><h2>'+t('prefs')+'</h2></div><div class="card grp">'+
     row(t('language'),seg([['en','English'],['es','Español']],LANG,'setLang'))+
     row(t('textSize'),seg([['s','A'],['m','A+'],['l','A++']],SET.fs||'s','setFs'))+
     row(t('appearance'),seg([['system',t('thSystem')],['dark',t('thDark')],['light',t('thLight')]],SET.theme||'system','setTheme'))+
@@ -109,7 +109,7 @@ function vMore(){
     mrow(ic('file-text'),t('exportCsv'),'exportCSV()')+
     '<label class="mrow"><span class="mi">'+ic('upload')+'</span><span class="mt">'+t('importCsv')+'</span><span class="mc">›</span><input type="file" accept=".csv,text/csv" onchange="importCsv(this)" hidden></label>'+
     '<label class="mrow"><span class="mi">'+ic('upload')+'</span><span class="mt">'+t('importBackup')+'</span><span class="mc">›</span><input type="file" accept=".json,application/json" onchange="importFile(this)" hidden></label></div>'+
-    '<p class="muted sm mnote">'+t('dataP',DATA.workouts.length,DATA.body.length)+'</p>';
+    '<p class="muted sm mnote">'+t((typeof CL!=='undefined'&&CL&&!CL.bad)?'dataPc':'dataP',DATA.workouts.length,DATA.body.length)+'</p>';
   h+='<div class="sec"><h2>'+t('app')+'</h2></div><div class="card grp mlist">'+
     (canInstall()?mrow(ic('device-mobile'),t('install'),'installApp()'):'')+
     mrow(ic('sparkles'),t('whatsNew'),'wnShow(true)')+
@@ -222,7 +222,7 @@ function importFile(inp){
 /* ---------- erase everything ---------- */
 function eraseAsk(){ask(t('eraseAsk'),t('continue'),function(){ask(t('eraseAsk2'),t('eraseAll'),eraseAll,true);},true);}
 function eraseAll(){
-  [K_DATA,K_SET,K_ACT].forEach(jdel);
+  [K_DATA,K_SET,K_ACT].forEach(jdel);try{localStorage.removeItem(clKey());}catch(e){}
   stopRest();unwake();
   const go=function(){location.replace(location.pathname);};
   if(ENC)pfFlush().then(go,go);else go();
