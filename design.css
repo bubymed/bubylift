@@ -168,3 +168,10 @@ main>.sec{margin-top:28px;margin-bottom:-4px}
 .sv-t{display:flex;flex-direction:column}.sv-t small{color:var(--dim);font-size:.82rem}
 .sv-pw{grid-column:1/-1;color:var(--dim);font-size:.72rem}
 .svst{margin-top:8px}
+
+/* cloud account sheets / hojas de la cuenta en la nube */
+.clwarn{font-size:13px;line-height:1.4;color:var(--text);background:color-mix(in srgb,var(--warn) 14%,transparent);border-radius:12px;padding:10px 12px;margin:8px 0}
+.clmsg{font-size:14px;color:var(--red);margin:6px 0}
+.clrec{font:700 17px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em;text-align:center;background:var(--panel);border-radius:14px;padding:16px 10px;margin:12px 0;user-select:all;-webkit-user-select:all}
+.clchk{display:flex;gap:10px;align-items:center;font-size:15px;margin:12px 0}
+.clchk input{width:22px;height:22px;accent-color:var(--accent)}
