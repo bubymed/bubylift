@@ -4,18 +4,18 @@
    Perfiles ("¿quién entrena?"), contraseña, preguntas de recuperación, avatares y transferencia entre teléfonos por QR.
    Todo se queda en este dispositivo. La contraseña impide que otros entren a la app; no cifra los datos guardados. */
 const PF_MAX=5,PF_ITER=150000,PF_QN=8;
-const PF_AVE=['🏋️','🏃','🚴','🥊','🧘','💪','🦁','🐺','🦅','🔥','⚡','🎯','🏆','🧗','🏊','⚽'];
-const PF_AVC=[['#FF7A3D','#FF3D6E'],['#FFB340','#FF7A3D'],['#30D158','#0A84FF'],['#0A84FF','#5E5CE6'],['#BF5AF2','#FF375F'],['#64D2FF','#30D158'],['#8E8E93','#48484A'],['#FF453A','#FF9F0A']];
 const PF_COMMON=['password','password1','passw0rd','12345678','123456789','1234567890','qwerty123','qwertyui','iloveyou','letmein1','welcome1','admin123','abc12345','11111111','contraseña','contrasena1','bubylift1','gimnasio1'];
 const B64_RE=/^[A-Za-z0-9+/]+={0,2}$/;
 let PFS=[],PFID=null,GS={};
 
 /* ---------- storage ---------- */
 function pfKeys(id){return{d:'bl_d_'+id,s:'bl_s_'+id,a:'bl_a_'+id};}
+/* a random suggested photo for new profiles / foto sugerida al azar para perfiles nuevos */
+function pfRandAv(){return{k:'p',p:AVP[Math.floor(Math.random()*AVP.length)]};}
 function pfAv(a){
-  if(a&&a.k==='i'&&typeof a.d==='string'&&a.d.length<60000&&/^data:image\/(jpeg|png);base64,[A-Za-z0-9+/=]+$/.test(a.d))return{k:'i',d:a.d};
-  if(a&&a.k==='p'&&typeof AVP!=='undefined'&&AVP.indexOf(a.p)>=0)return{k:'p',p:a.p};
-  return{k:'e',e:PF_AVE.indexOf(a&&a.e)>=0?a.e:PF_AVE[0],c:Math.max(0,Math.min(PF_AVC.length-1,(a&&a.c)|0))};
+  if(a&&a.k==='p'&&AVP.indexOf(a.p)>=0)return{k:'p',p:a.p};
+  let h=0;const s=JSON.stringify(a||0);for(let k=0;k<s.length;k++)h=(h*31+s.charCodeAt(k))>>>0; // old emoji / photo avatars → a stable suggested photo / avatares viejos → una foto sugerida fija
+  return{k:'p',p:AVP[h%AVP.length]};
 }
 const pfWrapOk=r=>r&&typeof r.s==='string'&&typeof r.i==='string'&&typeof r.c==='string'&&r.s.length===24&&r.i.length===16&&r.c.length===64&&B64_RE.test(r.s)&&B64_RE.test(r.i)&&B64_RE.test(r.c)?{s:r.s,i:r.i,c:r.c}:null;
 function pfEncRec(e){const wp=e&&pfWrapOk(e.wp);return wp?{wp:wp,wq:pfWrapOk(e.wq)}:null;}
@@ -108,11 +108,8 @@ const pfWaitTxt=s=>s>=60?Math.ceil(s/60)+' min':s+' s';
 
 /* ---------- avatars ---------- */
 function avHtml(av,sz){
-  av=pfAv(av);const st='width:'+sz+'px;height:'+sz+'px';
-  if(av.k==='p')return'<span class="av av-p" style="'+st+'"><img alt="" loading="lazy" src="img/av/'+av.p+'.webp"></span>';
-  if(av.k==='i')return'<span class="av" style="'+st+'"><img alt="" src="'+av.d+'"></span>';
-  const c=PF_AVC[av.c];
-  return'<span class="av" style="'+st+';background:linear-gradient(135deg,'+c[0]+','+c[1]+');font-size:'+Math.round(sz*0.5)+'px">'+av.e+'</span>';
+  av=pfAv(av);
+  return'<span class="av av-p" style="width:'+sz+'px;height:'+sz+'px"><img alt="" src="img/av/'+av.p+'.webp"></span>';
 }
 function pfRenderAv(){const b=$('avBtn');if(!b)return;const p=pfCur();if(!p){b.hidden=true;return;}b.hidden=false;b.innerHTML=avHtml(p.av,32);b.setAttribute('aria-label',pfName(p));}
 
@@ -230,7 +227,7 @@ function gWelcome(){
 function gAcct(mode){window.__clGo=mode;pfGuest();}
 function pfGuest(){
   if(PFS.some(x=>x.g)||PFS.length>=PF_MAX)return;
-  const prof={id:'g'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:'Guest',av:{k:'e',e:PF_AVE[0],c:3},pw:null,qs:[],enc:null,rm:0,t:Date.now(),g:1};
+  const prof={id:'g'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:'Guest',av:pfRandAv(),pw:null,qs:[],enc:null,rm:0,t:Date.now(),g:1};
   const k=pfKeys(prof.id),lg=PFS.length?{map:{},del:[]}:pfLegacy(prof.id);
   if(!lg.map[k.s])lg.map[k.s]=JSON.stringify({lang:LANG});
   try{for(const kk in lg.map)localStorage.setItem(kk,lg.map[kk]);}catch(e){const m=$('gmsg');if(m)m.textContent=t('pfTxBad');return;}
@@ -365,7 +362,7 @@ function pfPwLive(name){
 /* create profile: 1 name+avatar · 2 password · 3 recovery questions / crear perfil */
 function gNew(step,o){
   if(o)GS=Object.assign(GS.step?GS:{},o);
-  if(!GS.av)GS.av={k:'e',e:PF_AVE[0],c:0};
+  if(!GS.av)GS.av=pfRandAv();
   if(GS.name===undefined)GS.name='';
   GS.step=step;GS.redraw=function(){gNew(GS.step);};
   const first=!!GS.first,back='<button class="g-link" onclick="'+(step===1?(first?'gWelcome()':GS.upg?'gateHide()':'gAdd()'):'gNew('+(step-1)+')')+'">‹ '+t('back')+'</button>';
@@ -388,37 +385,10 @@ function qBlock(i,cur){
   return'<div class="qb"><select id="gq'+i+'" class="in wide">'+Array.from({length:PF_QN},(_,k)=>'<option value="'+k+'"'+(k===cur.i?' selected':'')+'>'+esc(t('pfQ'+k))+'</option>').join('')+'</select><input id="ga'+i+'" class="in wide" placeholder="'+esc(t('pfAns'))+'" autocomplete="off" autocapitalize="off" value="'+esc(cur.a||'')+'"></div>';
 }
 function avPicker(){
-  return'<div class="lbl">'+t('pfSug')+'</div><div class="av-sug">'+AVP.map(n=>'<button class="av-s'+(GS.av.k==='p'&&GS.av.p===n?' on':'')+'" onclick="pfPickPre(\''+n+'\')" aria-label="'+t('pfAvatar')+' '+n+'"><img alt="" loading="lazy" src="img/av/'+n+'.webp"></button>').join('')+'</div>'+
-    '<div class="lbl">'+t('pfAvatar')+'</div><div class="chips wrap av-ch">'+PF_AVE.map(e=>'<button class="chip av-e'+(GS.av.k==='e'&&GS.av.e===e?' on':'')+'" onclick="pfPickAv(\''+e+'\')">'+e+'</button>').join('')+'</div>'+
-    '<div class="chips wrap av-ch">'+PF_AVC.map((c,i)=>'<button class="av-c'+(GS.av.k==='e'&&GS.av.c===i?' on':'')+'" style="background:linear-gradient(135deg,'+c[0]+','+c[1]+')" aria-label="'+t('pfColor')+' '+(i+1)+'" onclick="pfPickCol('+i+')"></button>').join('')+'</div>'+
-    '<label class="btn wide" style="margin-top:10px">📷 '+t('pfPhoto')+'<input type="file" accept="image/*" hidden onchange="pfPhoto(this)"></label>';
+  return'<div class="lbl">'+t('pfAvatar')+'</div><div class="av-sug">'+AVP.map(n=>'<button class="av-s'+(GS.av.k==='p'&&GS.av.p===n?' on':'')+'" onclick="pfPickPre(\''+n+'\')" aria-label="'+t('pfAvatar')+' '+n+'"><img alt="" loading="lazy" src="img/av/'+n+'.webp"></button>').join('')+'</div>';
 }
 function pfAvRedraw(){const n=$('gname');if(n)GS.name=n.value;if(GS.redraw)GS.redraw();}
 function pfPickPre(n){GS.av={k:'p',p:n};pfAvRedraw();}
-function pfPickAv(e){GS.av=GS.av.k==='e'?{k:'e',e:e,c:GS.av.c}:{k:'e',e:e,c:0};pfAvRedraw();}
-function pfPickCol(c){GS.av={k:'e',e:GS.av.k==='e'?GS.av.e:PF_AVE[0],c:c};pfAvRedraw();}
-/* own photo: center-crop to a small square JPEG / foto propia: recorte cuadrado pequeño */
-function pfPhoto(inp){
-  const f=inp.files&&inp.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=function(){
-    const im=new Image();
-    im.onload=function(){
-      try{
-        const S=192,c=document.createElement('canvas');c.width=c.height=S;
-        const m=Math.min(im.width,im.height),sx=(im.width-m)/2,sy=(im.height-m)/2;
-        c.getContext('2d').drawImage(im,sx,sy,m,m,0,0,S,S);
-        GS.av={k:'i',d:c.toDataURL('image/jpeg',0.82)};
-        if(GS.edit&&GS.edit.live){/* editor keeps same flow */}
-        pfAvRedraw();
-      }catch(e){toast(t('pfPhotoBad'));}
-    };
-    im.onerror=function(){toast(t('pfPhotoBad'));};
-    im.src=r.result;
-  };
-  r.onerror=function(){toast(t('pfPhotoBad'));};
-  r.readAsDataURL(f);
-}
 function gNewNext1(){
   const n=gv('gname').trim();GS.name=n;
   if(!n){$('gmsg').textContent=t('pfNeedName');return;}
