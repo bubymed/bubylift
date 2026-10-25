@@ -869,6 +869,7 @@ const STR={
  legP:['Bubylift now uses cloud accounts. To keep your workouts, open your profile and create a free account — your data moves with it. Or delete the profile.','Bubylift ahora usa cuentas en la nube. Para conservar tus entrenamientos, abre tu perfil y crea una cuenta gratis: tus datos se van con ella. O elimina el perfil.'],
  legKeep:['Keep my data (create account)','Conservar mis datos (crear cuenta)'],legDel:['Delete profile','Eliminar perfil'],legDelAll:['Delete all local profiles','Eliminar todos los perfiles locales'],legSkip:['Not now','Ahora no'],
  legDelP:['{0}: its workouts on this phone will be gone for good. This cannot be undone.','{0}: sus entrenamientos en este teléfono se perderán para siempre. No se puede deshacer.'],
+ clHalf:['Your account exists, but we could not finish setting it up. Sign in to try again.','Tu cuenta existe, pero no pudimos terminar de prepararla. Inicia sesión para intentarlo de nuevo.'],
  clNoAcct:['This email is not registered. Check it, or create an account.','Este correo no está registrado. Revísalo o crea una cuenta.'],
  wAcctTile:['Sign in or create account','Iniciar sesión o crear cuenta'],
  gnCT:["You don't have an account yet",'Aún no tienes una cuenta'],

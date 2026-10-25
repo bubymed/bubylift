@@ -45,3 +45,6 @@ Requiere que ya funcionen las cuentas (arriba). Es opcional. / Needs accounts wo
 
 > v0.96: run `server/schema.sql` again in the SQL Editor (safe to repeat). It adds `email_registered`, so sign-in can say "this email is not registered".
 > v0.96: vuelve a ejecutar `server/schema.sql` en el SQL Editor (es seguro repetirlo). Agrega `email_registered` para que el inicio de sesión diga "este correo no está registrado".
+
+> v0.99.1: if sign-up says `[user_data 401/403 … permission denied]`, run `server/schema.sql` again: it now includes the `grant` lines new Supabase projects need.
+> v0.99.1: si el registro dice `[user_data 401/403 … permission denied]`, vuelve a ejecutar `server/schema.sql`: ahora incluye las líneas `grant` que necesitan los proyectos nuevos de Supabase.

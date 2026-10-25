@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.1 — 2026-10-24
+- **Sign-up fix** — if your account is created but the last setup step fails, the app now says so and tells you to sign in, and shows the exact reason.
+  **Arreglo del registro** — si tu cuenta se crea pero falla el último paso de preparación, la app lo dice, te pide iniciar sesión y muestra el motivo exacto.
+
 ## v0.99 — 2026-10-24
 - **E-mail links land in the app** — confirm and reset-password e-mails now send you straight to Bubylift instead of the bare web address.
   **Los enlaces del correo llegan a la app** — los correos de confirmar y de recuperar contraseña ahora te llevan directo a Bubylift y no a la dirección web sin ruta.

@@ -191,12 +191,12 @@ async function clSubmit(mode){
     CL=null;if(!clSession(r.j)){clAuthOpen(mode,t('clFail'),em);return;}
     // existing account: unlock the data key with the password; new account: make one / cuenta existente: abrir la llave; nueva: crear
     const tok=CL.at,g=await clReq('/rest/v1/user_data?select=vault&user_id=eq.'+encodeURIComponent(CL.uid),'GET',null,tok);
-    if(!g.ok||!Array.isArray(g.j))throw new Error('get');
+    if(!g.ok||!Array.isArray(g.j)){clUnlink();throw new Error('user_data '+g.s+' '+String(g.j&&(g.j.message||g.j.msg||g.j.hint||g.j.error||g.j.code)||'').slice(0,90));}
     if(g.j.length&&g.j[0].vault&&g.j[0].vault.wp){
       let dek;try{dek=await pfUnwrap('p:'+pw,g.j[0].vault.wp);}catch(e){clUnlink();clAuthOpen(mode,t('clKeyBad'),em);return;}
       CL.dek=b64(dek);CLK=null;clSave();clAdopt();sheetClose();toast(t('clWelcome'));await cloudSync(false);render();
     }else{await clSetup(pw);}
-  }catch(e){try{console.warn('bubylift cloud',e);}catch(x){}clAuthOpen(mode,t('clOff')+' ['+String(e&&e.message||e).slice(0,110)+']',em);}
+  }catch(e){const em2=String(e&&e.message||e);try{console.warn('bubylift cloud',e);}catch(x){}clAuthOpen(mode==='up'&&/^user_data/.test(em2)?'in':mode,t(/^user_data/.test(em2)?'clHalf':'clOff')+' ['+em2.slice(0,110)+']',em);}
 }
 /* brand-new data key + recovery key; the person must see the recovery key before we continue / llave nueva + clave de recuperación */
 async function clSetup(pw){
