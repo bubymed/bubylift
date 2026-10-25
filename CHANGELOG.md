@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.2 — 2026-10-24
+- Create account is now a full screen: name and avatar, e-mail and password, recovery key, then you're in. You can also edit your name and photo from Manage account and as a guest.
+  Crear cuenta ahora es una pantalla completa: nombre y avatar, correo y contraseña, clave de recuperación y listo. También puedes editar tu nombre y foto desde Administrar cuenta y como invitado.
+
 ## v0.99.1 — 2026-10-24
 - **Sign-up fix** — if your account is created but the last setup step fails, the app now says so and tells you to sign in, and shows the exact reason.
   **Arreglo del registro** — si tu cuenta se crea pero falla el último paso de preparación, la app lo dice, te pide iniciar sesión y muestra el motivo exacto.

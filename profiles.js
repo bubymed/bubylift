@@ -212,7 +212,7 @@ async function pfEnter(id,raw,seed,noBoot,spl){
   try{sessionStorage.setItem('bl_sess',id);localStorage.setItem('bl_last',id);}catch(e){}
   if(noBoot)return;
   if(spl)pfSplash(p);
-  gateHide();pfRenderAv();bootApp();
+  if(!window.__gKeep)gateHide();pfRenderAv();bootApp();
   if(typeof clInit==='function')clInit();
   if(ENC)pfPump();
   try{if(sessionStorage.getItem('bl_up')){sessionStorage.removeItem('bl_up');setTimeout(()=>toast(t('pfUpDone')),700);}}catch(e){}
@@ -255,7 +255,7 @@ function gWelcome(back){
 }
 function gBack(){const q=PFS[0];if(PFS.length===1&&q&&!q.pw&&!q.enc)pfEnter(q.id,null,null,false,1);else gPick();}
 /* create account / sign in from the first screen: start as a guest, then open the account sheet / cuenta desde la primera pantalla */
-function gAcct(mode){window.__clGo=mode;pfGuest(true);}
+function gAcct(mode){if(mode==='up'){gSignup(1,{});return;}window.__clGo=mode;pfGuest(true);}
 function pfGuest(tmp){
   const eg=PFS.find(x=>x.g);
   if(eg){pfEnter(eg.id,null);return;}
@@ -269,8 +269,50 @@ function pfGuest(tmp){
   try{lg.del.forEach(x=>localStorage.removeItem(x));}catch(e){}
   pfEnter(prof.id,null);
 }
+/* create account = one full-screen flow: name + avatar → e-mail + password → recovery key → in / crear cuenta = un flujo de pantalla completa */
+function gSignup(step,o){
+  if(o)GS=Object.assign({},o);
+  if(!GS.av)GS.av=pfRandAv();
+  if(GS.name===undefined)GS.name='';
+  GS.step=step;GS.redraw=function(){gSignup(GS.step);};
+  const top='<div class="g-top"><button class="g-link" onclick="suBack()">‹ '+t('back')+'</button><span class="muted sm">'+t('psStep',step,3)+'</span></div>';
+  let b;
+  if(step===1){
+    b='<h1 class="lt g-h">'+t('suT')+'</h1><div class="g-c" id="avprev">'+avHtml(GS.av,104)+'</div><div class="g-form"><label>'+t('pfName')+'<input id="gname" class="in wide" maxlength="20" autocomplete="off" value="'+esc(GS.name)+'"></label>'+avPicker()+
+      '<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="suNext1()">'+t('next')+' ›</button></div>';
+  }else{
+    b='<h1 class="lt g-h">'+t('suE')+'</h1><p class="muted">'+t('suEP')+'</p><div class="g-form"><label>'+t('clEmail')+'<input id="sue" class="in wide" type="email" autocomplete="email" inputmode="email" value="'+esc(GS.em||'')+'"></label>'+
+      pfPwFields(GS.name)+'<p class="clwarn">'+t('clE2eP')+'</p><p id="gmsg" class="g-msg"></p><button class="btn pri big wide" id="sugo" onclick="suGo()">'+t('clCreate')+'</button>'+
+      '<button class="lnk-d g-c" onclick="clAuthBackIn()">'+t('clHave')+'</button></div>';
+  }
+  gateShow(top+b+gLang());
+  if(step===2)pfPwLive(GS.name);
+}
+function suBack(){
+  if(GS.step===2){const e=$('sue');if(e)GS.em=e.value;gSignup(1);return;}
+  const c=pfCur();
+  if(c&&c.tmp)clAuthBack();else if(GS.upg)gateHide();else gWelcome();
+}
+function clAuthBackIn(){const e=$('sue');const em=e?e.value:'';if(GS.upg){gateHide();clAuthOpen('in','',em);}else{window.__clGo='in';gateHide();pfGuest(true);}}
+function suNext1(){
+  const n=gv('gname').trim();GS.name=n;
+  if(!n){$('gmsg').textContent=t('pfNeedName');return;}
+  gSignup(2);
+}
+async function suGo(){
+  const m=$('gmsg'),em=gv('sue').trim().toLowerCase(),pw=gv('npw'),c=gv('npw2');
+  GS.em=em;
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){m.textContent=t('clBadEmail');return;}
+  if(!pfRulesOk(pfRules(pw,em))||!pfRulesOk(pfRules(pw,GS.name||''))){m.textContent=t('pfWeak');return;}
+  if(pw!==c){m.textContent=t('pfNoMatch');return;}
+  const b=$('sugo');if(b)b.disabled=true;m.textContent=t('clWait');
+  let cur=pfCur();
+  if(!cur){window.__gKeep=1;pfGuest(true);cur=pfCur();if(!cur){window.__gKeep=0;gSignup(2);$('gmsg').textContent=t('pfMax');return;}}
+  window.__gKeep=1;window.__clGate=1;window.__clProf={id:cur.id,name:GS.name,av:GS.av};
+  clSubmit('up',{em:em,pw:pw,err:function(msg){window.__gKeep=0;window.__clGate=0;gSignup(2);const x=$('gmsg');if(x)x.textContent=msg;}});
+}
 /* a guest turns into a real profile: same data, now protected / el invitado pasa a perfil real: mismos datos, ahora protegidos */
-function gSave(){const p=pfCur();if(!p||!p.g)return;GS={};if(typeof cloudOn==='function'&&cloudOn()){clAuthOpen('up');return;}gNew(1,{upg:p.id});}
+function gSave(){const p=pfCur();if(!p||!p.g)return;GS={};if(typeof cloudOn==='function'&&cloudOn()){sheetClose();gSignup(1,{upg:true});return;}gNew(1,{upg:p.id});}
 function guestNag(){
   const p=pfCur();if(!p||!p.g||(typeof CL!=='undefined'&&CL&&CL.dek))return;
   const cl=typeof cloudOn==='function'&&cloudOn();
@@ -283,7 +325,7 @@ function guestNag(){
     if(Date.now()-last<(cl?864e5:7*864e5))return;
     if(!cl&&!(DATA&&DATA.workouts&&DATA.workouts.length))return;
     try{localStorage.setItem('bl_gn',String(Date.now()));}catch(e){}
-    if(cl)sheet('<div class="sum"><div class="sum-e">☁️</div><h3>'+t('gnCT')+'</h3><p class="muted">'+t('gnCP')+'</p><div class="row"><button class="btn pri wide" onclick="clAuthOpen(\'up\')">'+t('clCreate')+'</button></div><div class="row"><button class="btn wide" onclick="clAuthOpen(\'in\')">'+t('wIn')+'</button></div><button class="lnk-d" onclick="sheetClose()">'+t('gnNo')+'</button></div>');
+    if(cl)sheet('<div class="sum"><div class="sum-e">☁️</div><h3>'+t('gnCT')+'</h3><p class="muted">'+t('gnCP')+'</p><div class="row"><button class="btn pri wide" onclick="sheetClose();gSignup(1,{upg:true})">'+t('clCreate')+'</button></div><div class="row"><button class="btn wide" onclick="clAuthOpen(\'in\')">'+t('wIn')+'</button></div><button class="lnk-d" onclick="sheetClose()">'+t('gnNo')+'</button></div>');
     else sheet('<div class="sum"><div class="sum-e">💾</div><h3>'+t('gnT')+'</h3><p class="muted">'+t('gnP')+'</p><div class="row"><button class="btn" onclick="sheetClose()">'+t('gnNo')+'</button><button class="btn pri" onclick="sheetClose();gSave()">'+t('gnYes')+'</button></div></div>');
   };
   window.__gnT=setTimeout(function(){show(0);},cl?25000:0);
@@ -522,7 +564,7 @@ async function pfDelete(id){
 function pfMenu(){
   const p=pfCur();if(!p)return;
   if(p.g){
-    sheet('<div class="form"><div class="g-c">'+avHtml(p.av,76)+'<h3 class="g-n">'+esc(pfName(p))+'</h3></div><div class="menu">'+(typeof cloudOn==='function'&&cloudOn()?'<button class="pri" onclick="clAuthOpen(\'up\')">☁ '+t('clCreate')+'</button><button onclick="clAuthOpen(\'in\')">'+t('wIn')+'</button>':'<button class="pri" onclick="sheetClose();gSave()">💾 '+t('pfGuestSave')+'</button>')+'<button onclick="sheetClose();pfLeave()">⇄ '+t('pfSwitch')+'</button><button onclick="sheetClose();gDelete(\''+p.id+'\',true)">🗑 '+t('pfDelIn')+'</button></div>'+
+    sheet('<div class="form"><div class="g-c">'+avHtml(p.av,76)+'<h3 class="g-n">'+esc(pfName(p))+'</h3></div><div class="menu">'+(typeof cloudOn==='function'&&cloudOn()?'<button class="pri" onclick="sheetClose();gSignup(1,{upg:true})">☁ '+t('clCreate')+'</button><button onclick="clAuthOpen(\'in\')">'+t('wIn')+'</button><button onclick="sheetClose();gEdit(\''+p.id+'\',true)">✎ '+t('pfEditT')+'</button>':'<button class="pri" onclick="sheetClose();gSave()">💾 '+t('pfGuestSave')+'</button>')+'<button onclick="sheetClose();pfLeave()">⇄ '+t('pfSwitch')+'</button><button onclick="sheetClose();gDelete(\''+p.id+'\',true)">🗑 '+t('pfDelIn')+'</button></div>'+
       '<p class="muted sm">'+t('gnP')+'</p><div class="row"><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div></div>');
     return;
   }
