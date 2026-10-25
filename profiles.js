@@ -215,11 +215,17 @@ function pfSetLang(l){LANG=l==='es'?'es':'en';try{localStorage.setItem('bl_lang'
 /* first screen: create a profile or just try it as a guest / primera pantalla: crear perfil o probar como invitado */
 function gWelcome(){
   GS={redraw:gWelcome};
-  gateShow('<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">🏋️</div></div><h1 class="lt g-h">'+t('pfWelT')+'</h1><p class="muted g-c">'+t('pfWelP')+'</p>'+(pfHasLegacy()?'<p class="note">'+t('pfLegacy')+'</p>':'')+
+  gateShow('<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">🏋️</div></div><h1 class="lt g-h">'+t('pfWelT')+'</h1><p class="muted g-c">'+t(typeof cloudOn==='function'&&cloudOn()?'wCP':'pfWelP')+'</p>'+(pfHasLegacy()?'<p class="note">'+t('pfLegacy')+'</p>':'')+
+    (typeof cloudOn==='function'&&cloudOn()?'<div class="g-form"><button class="btn pri big wide" onclick="gAcct(\'up\')">✨ '+t('wCreate')+'</button><p class="muted sm g-c">'+t('wCreateP')+'</p>'+
+    '<button class="btn big wide" onclick="gAcct(\'in\')">'+t('wIn')+'</button>'+
+    '<button class="btn big wide" onclick="pfGuest()">👤 '+t('wGuest')+'</button><p class="muted sm g-c">'+t('wGuestP')+'</p>'+
+    '<button class="lnk-d" onclick="gNew(1,{first:true})">'+t('wLocal')+'</button><button class="lnk-d" onclick="gRecv()">📲 '+t('pfBring')+'</button><p id="gmsg" class="g-msg"></p></div>':
     '<div class="g-form"><button class="btn pri big wide" onclick="gNew(1,{first:true})">✨ '+t('pfWelNew')+'</button><p class="muted sm g-c">'+t('pfWelNewP')+'</p>'+
     '<button class="btn big wide" onclick="pfGuest()">👤 '+t('pfGuestB')+'</button><p class="muted sm g-c">'+t('pfGuestP')+'</p>'+
-    '<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button><p id="gmsg" class="g-msg"></p></div>'+gLang());
+    '<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button><p id="gmsg" class="g-msg"></p></div>')+gLang());
 }
+/* create account / sign in from the first screen: start as a guest, then open the account sheet / cuenta desde la primera pantalla */
+function gAcct(mode){window.__clGo=mode;pfGuest();}
 function pfGuest(){
   if(PFS.some(x=>x.g)||PFS.length>=PF_MAX)return;
   const prof={id:'g'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:'Guest',av:{k:'e',e:PF_AVE[0],c:3},pw:null,qs:[],enc:null,rm:0,t:Date.now(),g:1};
@@ -233,7 +239,7 @@ function pfGuest(){
 /* a guest turns into a real profile: same data, now protected / el invitado pasa a perfil real: mismos datos, ahora protegidos */
 function gSave(){const p=pfCur();if(!p||!p.g)return;GS={};gNew(1,{upg:p.id});}
 function guestNag(){
-  const p=pfCur();if(!p||!p.g||!$('sheetov').hidden||!$('gate').hidden)return;
+  const p=pfCur();if(!p||!p.g||(typeof CL!=='undefined'&&CL&&CL.dek)||!$('sheetov').hidden||!$('gate').hidden)return;
   if(!(DATA&&DATA.workouts&&DATA.workouts.length))return;
   let last=0;try{last=+localStorage.getItem('bl_gn')||0;}catch(e){}
   if(Date.now()-last<7*864e5)return;

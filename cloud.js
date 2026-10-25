@@ -11,6 +11,8 @@ const CL_KEYS=['workouts','routines','body','custom'],CL_ITER=150000,REC_ABC='AB
 function cloudOn(){const c=window.CLOUD_CFG;return !!(c&&c.url&&c.key&&/^https:\/\//.test(c.url)&&window.crypto&&crypto.subtle);}
 /* the session lives inside the profile's settings, so password-protected profiles keep it encrypted / la sesión vive dentro de los ajustes del perfil */
 function clLoad(){const o=SET&&SET.cl;CL=(o&&typeof o==='object'&&typeof o.uid==='string'&&typeof o.rt==='string')?o:null;CLK=null;}
+/* a guest that signs in becomes a normal profile named after the e-mail / el invitado que inicia sesión pasa a perfil normal */
+function clAdopt(){try{const p=pfCur();if(p&&p.g&&CL&&CL.email){p.g=0;p.name=(CL.email.split('@')[0]||'Me').slice(0,20);pfSave();if(typeof renderTabs==='function')renderTabs();}}catch(e){}}
 function clSave(){if(CL){SET.cl=CL;saveSet();}}
 function clUnlink(){CL=null;CLK=null;if(SET&&SET.cl){delete SET.cl;saveSet();}}
 /* tombstones: remember deletions so another phone does not bring the item back / lápidas: recuerdan lo borrado */
@@ -122,6 +124,7 @@ function clSchedule(){
 function clInit(){
   if(!cloudOn())return;
   clLoad();clHash();
+  if(window.__clGo){const m=window.__clGo;window.__clGo=null;setTimeout(()=>clAuthOpen(m),400);}
   if(CL&&!CL.bad){setTimeout(()=>cloudSync(false),800);if(stravaOn()&&CL.sv==null)setTimeout(stravaStatus,1500);}
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&CL&&!CL.bad&&Date.now()-(CL.last||0)>120000)cloudSync(false);});
 }
@@ -180,7 +183,7 @@ async function clSubmit(mode){
     if(!g.ok||!Array.isArray(g.j))throw new Error('get');
     if(g.j.length&&g.j[0].vault&&g.j[0].vault.wp){
       let dek;try{dek=await pfUnwrap('p:'+pw,g.j[0].vault.wp);}catch(e){clUnlink();clAuthOpen(mode,t('clKeyBad'),em);return;}
-      CL.dek=b64(dek);CLK=null;clSave();sheetClose();toast(t('clWelcome'));await cloudSync(false);render();
+      CL.dek=b64(dek);CLK=null;clSave();clAdopt();sheetClose();toast(t('clWelcome'));await cloudSync(false);render();
     }else{await clSetup(pw);}
   }catch(e){clAuthOpen(mode,t('clOff'),em);}
 }
@@ -188,7 +191,7 @@ async function clSubmit(mode){
 async function clSetup(pw){
   const dek=crypto.getRandomValues(new Uint8Array(32)),rec=clRecKey();
   CL.dek=b64(dek);CLK=null;CL.vault=await clVault(pw,dek,rec);clSave();
-  clRecShow(rec,function(){toast(t('clWelcome'));cloudSync(false).then(render);});
+  clRecShow(rec,function(){clAdopt();toast(t('clWelcome'));cloudSync(false).then(render);});
 }
 function clRecShow(rec,done){
   window.__clRec=rec;window.__clDone=done||function(){};
