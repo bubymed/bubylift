@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v82 — 2026-10-24
+- **Body, Stretch and More, redesigned** — iPhone-style switches, flatter cards and tidier lists across the rest of the app.
+  **Cuerpo, Estirar y Más, rediseñados** — selectores estilo iPhone, tarjetas más planas y listas más ordenadas en el resto de la app.
+
 ## v81 — 2026-10-24
 - **History and Progress, redesigned** — workouts are tidy rows with the date up front, grouped by month; Progress lists your exercises in one clean list.
   **Historial y Progreso, rediseñados** — los entrenamientos son filas ordenadas con la fecha al frente, agrupadas por mes; Progreso lista tus ejercicios en una sola lista limpia.
