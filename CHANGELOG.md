@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v86 — 2026-10-24
+- **Muscle groups, named right** — where you pick what to train, the app now says muscle group (chest, back, legs…) instead of muscle.
+  **Grupos musculares, bien nombrados** — donde eliges qué entrenar, la app ahora dice grupo muscular (pecho, espalda, piernas…) en vez de músculo.
+
 ## v85 — 2026-10-24
 - **Plan setup that talks like a coach** — every question now explains why it matters and what to expect, plus friendlier challenges, programs and help.
   **Armar tu plan, como con un entrenador** — cada pregunta explica por qué importa y qué esperar, y los retos, programas y la ayuda hablan más cercano.
