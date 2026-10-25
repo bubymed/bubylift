@@ -234,6 +234,13 @@ function finishAsk(){
   if(a.done<a.tot){ask(t('undone',a.tot-a.done),t('finish'),finishWk);return;}
   finishWk();
 }
+/* a short, warm message after finishing / un mensaje corto y cálido al terminar */
+function wkCheer(wk,prs){
+  if(DATA.workouts.length===1)return t('chFirst');
+  if(prs.length)return t('chPR');
+  const s=streakInfo();if(s.n>=2)return t('chStreak',s.n);
+  return[t('chG0'),t('chG1'),t('chG2'),t('chG3')][Math.floor(wk.t/864e5)%4];
+}
 function finishWk(){
   const end=Date.now();
   const ex=ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})})).filter(x=>x.sets.length);
@@ -245,7 +252,7 @@ function finishWk(){
   ACT=null;saveAct();stopRest();unwake();
   render();
   const prs=[];wk.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr&&prs.indexOf(x.eid)<0)prs.push(x.eid);}));
-  sheet('<div class="sum"><div class="sum-e">🎉</div><h3>'+t('wkSaved')+'</h3><p class="muted">'+esc(wk.name)+'</p>'+
+  sheet('<div class="sum"><div class="sum-e">🎉</div><h3>'+t('wkSaved')+'</h3><p class="cheer">'+wkCheer(wk,prs)+'</p><p class="muted">'+esc(wk.name)+'</p>'+
     '<div class="stats"><div><b>'+fmtDur((end-wk.t)/1000)+'</b><span>'+t('duration')+'</span></div><div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>'+
     (prs.length?'<p class="prs">'+ic('trophy')+' '+t('prsT')+': '+prs.map(e=>esc(exName(e))).join(', ')+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="sumDone()">'+t('done')+'</button><button class="btn" onclick="saveWkAsRoutine(\''+wk.id+'\')">'+t('saveRoutineS')+'</button><button class="btn" onclick="wkPic(\''+wk.id+'\')">'+ic('share')+' '+t('cdBtn')+'</button></div></div>');

@@ -163,6 +163,7 @@ function vExProg(eid){
   const pts=ss.map(o=>({t:o.t,y:o[k]})).filter(p=>p.y>0);
   let h='<button class="btn sm" onclick="closeProg()">← '+t('back')+'</button><div class="sec"><h2>'+esc(exName(eid,(loggedEx().find(o=>o.eid===eid)||{}).n))+'</h2></div>';
   h+='<div class="chips">'+mets.map(a=>'<button class="chip'+(a[0]===k?' on':'')+'" onclick="setPm(\''+a[0]+'\')">'+t(a[1])+'</button>').join('')+'</div>';
+  if(k==='e1')h+='<p class="muted sm hlp">'+t('mHelp')+'</p>';
   h+='<div class="card">'+(pts.length?lineSvg(pts,f):'<p class="muted">'+t('noData')+'</p>')+'</div>';
   const b=bestSet(eid);let tv=0,tt=0,td=0,tr=0,e1=0;
   ss.forEach(o=>{tv+=o.vol;tt+=o.time;td+=o.dist;tr+=o.totr;e1=Math.max(e1,o.e1);});
