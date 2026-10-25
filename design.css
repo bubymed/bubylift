@@ -1,0 +1,93 @@
+/* Bubylift design system v80 — iPhone-style: grouped surfaces, large titles, one accent.
+   Sistema de diseño v80 — estilo iPhone: superficies agrupadas, títulos grandes, un solo acento.
+   Loaded last: it overrides the older blocks in style.css / se carga al final y reemplaza bloques anteriores. */
+:root{
+  --bg:#000;--panel:#1C1C1E;--panel2:#2C2C2E;--line:rgba(255,255,255,.12);--txt:#fff;--dim:#98989F;--muted:#98989F;
+  --accent:#FF6A2B;--on-accent:#fff;--accent2:#E8430C;--green:#32D74B;--red:#FF453A;--warn:#FFB340;
+  --radius:20px;--tab-h:56px;--shadow:none;
+}
+:root[data-mode="light"]{
+  --bg:#F2F2F7;--panel:#fff;--panel2:#EEEEF3;--line:rgba(60,60,67,.14);--txt:#000;--dim:#6C6C70;--muted:#6C6C70;
+  --accent:#E6500F;--on-accent:#fff;--accent2:#C73D05;--green:#1F9D45;--red:#D70015;--warn:#B35C00;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+}
+body{font-size:17px;letter-spacing:-.01em;background:var(--bg)}
+h2{font-size:1.2rem}
+#app{padding:0 16px calc(var(--tab-h) + 96px + env(safe-area-inset-bottom))}
+
+/* header + large title */
+#top{padding:calc(8px + env(safe-area-inset-top)) 0 4px;background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:saturate(180%) blur(18px);backdrop-filter:saturate(180%) blur(18px)}
+.brand{font-size:1.05rem;font-weight:800;letter-spacing:-.01em}
+.langsw{display:none}
+.inst-btn{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);font-weight:600;padding:6px 12px}
+h1.lt{font-size:2.15rem;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:2px 0 16px}
+
+/* tab bar */
+#tabbar{background:color-mix(in srgb,var(--panel) 80%,transparent);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);border-top:.5px solid var(--line)}
+#tabbar button{font-size:.65rem;font-weight:600;gap:3px}
+#tabbar svg{width:26px;height:26px;stroke-width:1.9}
+#tabbar button.on svg{stroke-width:2.3}
+
+/* surfaces */
+.card{border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.card.tip,.card.warn{border:0;background:var(--panel)}
+.card.warn{box-shadow:inset 0 0 0 1.5px var(--warn)}
+main>*+*{margin-top:14px}
+main>.sec{margin-top:28px;margin-bottom:-4px}
+.sec h2{font-size:1.3rem;font-weight:800;letter-spacing:-.02em}
+
+/* buttons */
+.btn{border:0;background:color-mix(in srgb,var(--accent) 13%,var(--panel));color:var(--accent);font-weight:650;border-radius:14px;min-height:46px}
+.btn.pri{background:var(--accent);color:var(--on-accent)}
+.btn.danger{background:color-mix(in srgb,var(--red) 14%,var(--panel));color:var(--red);border:0}
+.btn.big{min-height:56px;font-size:1.1rem;border-radius:16px}
+.btn.sm{min-height:34px;border-radius:999px;padding:6px 14px;font-size:.9rem}
+.emptyb{background:var(--panel);color:var(--txt);box-shadow:var(--shadow)}
+.emptyb .ic{width:20px;height:20px;color:var(--accent)}
+.in{border-radius:12px;background:var(--panel2);border:0}
+
+/* hero: today's workout */
+.card.plan,.card.hero{background:linear-gradient(150deg,var(--accent) 0%,var(--accent2) 100%);color:#fff;border:0;padding:20px;box-shadow:0 10px 28px -12px color-mix(in srgb,var(--accent) 70%,transparent)}
+.card.plan h3,.card.hero h2{font-size:1.85rem;font-weight:800;letter-spacing:-.025em;line-height:1.1;margin:6px 0 8px}
+.card.plan .muted,.card.plan .sm,.card.hero p,.card.plan p{color:rgba(255,255,255,.86)}
+.card.plan .plh b,.hero-e{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.card.plan .btn,.card.hero .btn{background:rgba(255,255,255,.2);color:#fff}
+.card.plan .btn.pri,.card.hero .btn.pri{background:#fff;color:var(--accent2);min-height:54px;font-size:1.08rem}
+.card.plan .btn.sm{background:rgba(255,255,255,.16);font-weight:600}
+.card.plan .swhint,.card.plan .testl{display:none}
+.card.plan .row{margin-top:14px}
+.card.plan .row .btn.pri{flex:1}
+.card.hero p{margin:0 0 16px;font-size:1rem;line-height:1.4}
+.card.plan .plex{border-bottom-color:rgba(255,255,255,.22);color:#fff}
+.card.plan .pldue{background:rgba(255,255,255,.14);border-radius:12px;padding:10px}
+.card.tip.away{background:var(--panel)}
+
+/* week strip */
+.wkstrip .ws-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.wkstrip .ws-top .ic{width:16px;height:16px;vertical-align:-3px;color:var(--accent)}
+.ws-days{display:flex;justify-content:space-between}
+.ws-d{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.72rem;font-weight:700;color:var(--dim)}
+.ws-d i{width:34px;height:34px;border-radius:50%;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-style:normal}
+.ws-d.on i{background:var(--accent);color:#fff}
+.ws-d i .ic{width:18px;height:18px;stroke-width:2.6}
+.ws-d.td span{color:var(--accent)}
+.ws-d.td i{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+
+/* grouped list rows (iOS inset grouped) */
+.lgrp{background:var(--panel);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.lrow{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:13px 16px}
+.lrow+.lrow{border-top:.5px solid var(--line);margin-left:0}
+.lrow:active{background:var(--panel2)}
+.li{flex:none;width:40px;height:40px;border-radius:11px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center}
+.li .ic{width:23px;height:23px}
+.lt2{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.lt2 b{font-size:1.02rem;font-weight:650}
+.lt2 small{font-size:.82rem;color:var(--dim);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc{color:var(--dim);font-size:1.5rem;line-height:1;font-weight:300}
+
+/* workout / routine cards read as list rows */
+.card.rt{padding:12px 14px}
+.wkc{padding:14px 16px}
+.card.hero h2,.card.plan h3,.card.plan h2{color:#fff;text-transform:none;letter-spacing:-.025em}
+.sec h2,main>h2,.pkh{text-transform:none;color:var(--txt);font-size:1.3rem;letter-spacing:-.02em}
+.card.plan .plsec{margin-top:10px}.card.plan .plsec .btn:not(:last-child){display:none}.card.plan .plsec .btn:last-child{width:100%}

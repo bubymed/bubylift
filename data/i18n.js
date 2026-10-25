@@ -436,6 +436,7 @@ const STR={
  tyAria:['Set number: tap to mark warm-up, drop set or failure','Número de serie: toca para marcar calentamiento, drop set o fallo'],
  tyHint:['Tip: tap the set number to mark it as warm-up (W), drop set (D) or failure (F). Warm-ups do not count for records or volume.','Consejo: toca el número de la serie para marcarla como calentamiento (W), drop set (D) o fallo (F). Los calentamientos no cuentan para récords ni volumen.'],
  rmW:['Weight','Peso'],rmR:['Reps','Repeticiones'],topLifts:['Your main lifts','Tus ejercicios principales'],rmCalc:['1-rep max calculator','Calculadora de máximo (1 repetición)'],rmHint:['Enter a set to estimate your max and training weights.','Escribe una serie para estimar tu máximo y los pesos de entrenamiento.'],rmTable:['Training weights from your max','Pesos de entrenamiento según tu máximo'],
+ hiWelcome:['Welcome','Bienvenido'],exploreT:['Explore','Explorar'],wsCount:['{0} of {1} workouts','{0} de {1} entrenamientos'],pkStrP:['Stretching and mobility sessions','Sesiones de estiramiento y movilidad'],
  psEquipN:['Bodyweight exercises are always available.','Los ejercicios con peso corporal siempre están disponibles.'],
  psInj:['Any injuries or pain?','¿Alguna lesión o dolor?'],
  psInjP:['Pick the areas. The plan avoids exercises that stress them and flags others to do lightly.','Escoge las zonas. El plan evita ejercicios que las cargan y marca otros para hacerlos con poco peso.'],

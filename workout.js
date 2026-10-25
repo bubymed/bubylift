@@ -63,19 +63,35 @@ function needBackup(){
   const n=DATA.workouts.length+DATA.body.length;
   return n>=5&&(Date.now()-(SET.lastExport||0))>30*864e5&&Date.now()>(SET.bkSnooze||0);
 }
+function weekStrip(){
+  const ws=weekStart(Date.now()),td=new Date().getDay(),days=[];
+  for(let i=0;i<7;i++){const a=ws+i*864e5,d=new Date(a+432e5);
+    days.push({l:d.toLocaleDateString(LANG==='es'?'es':'en',{weekday:'narrow'}).toUpperCase(),on:DATA.workouts.some(w=>w.t>=a&&w.t<a+864e5),today:new Date(a+432e5).toDateString()===new Date().toDateString()});}
+  const s=streakInfo(),n=days.filter(d=>d.on).length;
+  return'<div class="card wkstrip"><div class="ws-top"><b>'+t('thisWeek')+'</b><span class="muted sm">'+(s.n?ic('bolt')+' '+t(s.n===1?'stOne':'stN',s.n):t('wsCount',n,s.tg))+'</span></div><div class="ws-days">'+days.map(d=>'<div class="ws-d'+(d.on?' on':'')+(d.today?' td':'')+'"><span>'+d.l+'</span><i>'+(d.on?ic('check'):'')+'</i></div>').join('')+'</div></div>';
+}
+function hero0(){
+  return'<div class="card hero"><span class="hero-e">'+t('hiWelcome')+'</span><h2>'+t('pkPlanT')+'</h2><p>'+t('pkPlanP')+'</p><button class="btn pri big wide" onclick="planSetup()">'+t('planMake')+'</button></div>';
+}
+function exploreList(){
+  const r=(i,tt,pp,fn)=>'<button class="lrow" onclick="'+fn+'"><span class="li">'+ic(i)+'</span><span class="lt2"><b>'+t(tt)+'</b><small>'+t(pp)+'</small></span><span class="lc">›</span></button>';
+  return'<div class="sec"><h2>'+t('exploreT')+'</h2></div><div class="lgrp">'+
+    r('barbell','pkMusT','pkMusP',"libGo('focus')")+r('arrows-shuffle','pkSpT','pkSpP',"libGo('split')")+r('trophy','pkPrT','pkPrP',"libGo('prog')")+r('stopwatch','pkChT','pkChP',"libGo('ch')")+r('yoga','tStretch','pkStrP',"go('stretch')")+'</div>';
+}
 function vStart(){
   let h='';
   if(needBackup())h+='<div class="card warn"><b>'+t('bkT')+'</b><p>'+t('bkP')+'</p><div class="row"><button class="btn pri sm" onclick="exportJSON()">'+t('exportBackup')+'</button><button class="btn sm" onclick="bkLater()">'+t('later')+'</button></div></div>';
   if(typeof inApp==='function'&&inApp())h+='<div class="card warn"><b>'+t('inappT')+'</b><p>'+t(isIOS()?'inappIos':'inappAnd')+'</p><div class="row"><button class="btn sm" onclick="installApp()">'+t('inappBtn')+'</button></div></div>';
-  h+=habitCards();
-  h+=DATA.plan?planCard():'';
-  h+='<h2 class="pkh">'+t(DATA.plan?'chooseT2':'chooseT')+'</h2>'+startChooser();
+  h+=wkSumCard();
+  h+=DATA.plan?planCard():hero0();
+  h+='<button class="btn wide emptyb" onclick="startWorkout()">'+ic('pencil')+' '+t('pkOwnT')+'</button>';
+  if(DATA.workouts.length)h+=weekStrip();
   h+='<div class="sec"><h2>'+t('routines')+'</h2><button class="btn sm" onclick="rbOpen()">＋ '+t('newRoutine')+'</button></div>';
-  if(!DATA.routines.length)h+=emptyState('clipboard-list',t('routines'),t('noRoutines'),t('newRoutine'),'rbOpen()');
+  if(!DATA.routines.length)h+='<div class="card tip"><p class="muted">'+t('noRoutines')+'</p></div>';
   else h+=DATA.routines.map(r=>'<div class="swp"><div class="swp-h swp-hl">'+t('swDelete')+'</div><div class="swp-h swp-hr">'+t('swEdit')+'</div><div class="card rt swp-in" data-l="rtDelAsk" data-r="rtEdit" data-a="'+r.id+'">'+rtThumb(r)+'<div class="rt-main"><b>'+esc(r.name)+'</b><div class="muted sm">'+r.ex.slice(0,4).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(r.ex.length>4?' …':'')+'</div></div><div class="rt-b"><button class="btn pri sm" onclick="startRoutine(\''+r.id+'\')">'+t('start')+'</button><button class="btn sm" onclick="rbOpen(\''+r.id+'\')">'+t('edit')+'</button></div></div></div>').join('');
+  h+=exploreList();
   const lw=DATA.workouts[0];
   if(lw)h+='<div class="sec"><h2>'+t('lastWorkout')+'</h2></div>'+wkCard(lw);
-  else h+='<div class="card tip"><b>'+t('welcomeT')+'</b><p>'+t('welcomeP')+'</p></div>';
   return h;
 }
 function rtThumb(r){
