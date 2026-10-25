@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.4 — 2026-10-24
+- Picking an avatar no longer jumps back to the top of the list.
+  Elegir un avatar ya no te regresa al inicio de la lista.
+
 ## v0.99.3 — 2026-10-24
 - After you create your account you now see "Account created!" and go straight to sign in.
   Al crear tu cuenta ahora ves "¡Cuenta creada!" y pasas directo a iniciar sesión.
