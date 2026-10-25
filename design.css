@@ -189,3 +189,32 @@ main>.sec{margin-top:28px;margin-bottom:-4px}
 .av-s{border:0;padding:0;background:none;border-radius:50%;aspect-ratio:1;position:relative}
 .av-s img{width:100%;height:100%;border-radius:50%;display:block;object-fit:cover}
 .av-s.on{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- v93 smooth motion / movimiento suave ---------- */
+:root{--ease:cubic-bezier(.22,1,.36,1)}
+#sheetov:not([hidden]){animation:smov .22s ease-out}
+#sheetov:not([hidden]) #sheet{animation:smup .34s var(--ease)}
+#sheetov.gh{pointer-events:none;animation:smvo .2s ease-in forwards}
+#sheetov.gh #sheet{animation:smdn .22s ease-in forwards}
+#gate:not([hidden]){animation:smov .28s ease-out}
+#gate.gh{pointer-events:none;animation:smvo .22s ease-in forwards}
+main.pgin{animation:pgin .28s var(--ease)}
+main.pgin>.card,main.pgin>.stats{animation:none}
+@keyframes smov{from{opacity:0}to{opacity:1}}
+@keyframes smvo{from{opacity:1}to{opacity:0}}
+@keyframes smup{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
+@keyframes smdn{from{transform:none}to{transform:translateY(60px);opacity:.4}}
+@keyframes pgin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+button,.btn,.chip,.card,.tile,.menu button{-webkit-tap-highlight-color:transparent}
+button,.btn,.chip{transition:transform .16s var(--ease),opacity .16s,background-color .2s,color .2s,border-color .2s}
+.btn:active,.chip:active,.menu button:active{transform:scale(.97)}
+#tabbar button{transition:color .2s,background-color .2s}
+#tabbar button svg{transition:transform .25s var(--ease)}
+#tabbar button.on svg{transform:translateY(-1px) scale(1.08)}
+#tabbar button:active svg{transform:scale(.88)}
+body{transition:background-color .25s,color .25s}
+.card,.panel,.chip,.wopt,.srow{transition:background-color .2s,border-color .2s,box-shadow .2s,transform .16s var(--ease)}
+@media(prefers-reduced-motion:reduce){
+  #sheetov:not([hidden]),#sheetov:not([hidden]) #sheet,#gate:not([hidden]),main.pgin{animation:none}
+  button,.btn,.chip,.card,#tabbar button svg{transition:none}.btn:active,.chip:active{transform:none}
+}

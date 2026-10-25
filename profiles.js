@@ -207,7 +207,7 @@ const pfHasLegacy=()=>{try{return localStorage.getItem('bl_data')!=null;}catch(e
 /* ---------- gate (full-screen sign-in area) ---------- */
 let PFSTOP=null;function pfStopAll(){if(PFSTOP){try{PFSTOP();}catch(e){}PFSTOP=null;}}
 function gateShow(html){pfStopAll();const g=$('gate');g.innerHTML='<div class="gate-in">'+html+'</div>';g.hidden=false;document.body.classList.add('noscroll');g.scrollTop=0;}
-function gateHide(){pfStopAll();const g=$('gate');g.hidden=true;g.innerHTML='';document.body.classList.remove('noscroll');}
+function gateHide(){pfStopAll();const g=$('gate');if(!g.hidden&&typeof ghostOut==='function')ghostOut(g);g.hidden=true;g.innerHTML='';document.body.classList.remove('noscroll');}
 const gv=id=>{const e=$(id);return e?e.value:'';};
 function gLang(){return'<div class="g-lang"><button onclick="pfSetLang(\'en\')"'+(LANG==='en'?' class="on"':'')+'>English</button><button onclick="pfSetLang(\'es\')"'+(LANG==='es'?' class="on"':'')+'>Español</button></div>';}
 function pfSetLang(l){LANG=l==='es'?'es':'en';try{localStorage.setItem('bl_lang',LANG);}catch(e){}document.documentElement.lang=LANG;const f=GS.redraw;if(f)f();else gPick();}

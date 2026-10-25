@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v93 — 2026-10-24
+- **Smooth** — windows now slide up and fade out, tabs and screens fade in softly, and buttons give a little press feedback. Respects the reduce-motion setting.
+  **Más suave** — las ventanas ahora suben y se desvanecen al cerrar, las pestañas y pantallas aparecen con un fundido suave y los botones reaccionan al tocarlos. Respeta el ajuste de reducir movimiento.
+
 ## v92 — 2026-10-24
 - **Create your account** — as a guest, a friendly pop-up now invites you to create a free account or sign in. And Switch profile takes you straight to the start screen when there's no other profile.
   **Crea tu cuenta** — si estás como invitado, un aviso amable te invita a crear una cuenta gratis o iniciar sesión. Y Cambiar de perfil te lleva directo a la pantalla de inicio cuando no hay otro perfil.
