@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v80',items:[
+  {i:'🎨',en:'<b>A new look</b> — a cleaner, iPhone-style design: big titles, one accent color, a bold card for today\'s workout, your week at a glance and tidy lists to explore. The Stretch screen moved into Explore.',es:'<b>Un nuevo diseño</b> — más limpio, estilo iPhone: títulos grandes, un solo color de acento, una tarjeta destacada con el entrenamiento de hoy, tu semana de un vistazo y listas ordenadas para explorar. Estirar pasó a Explorar.'}
+ ]},
  {v:'v79',items:[
   {i:'📈',en:'<b>Charts for your main lifts</b> — Progress now shows a chart for your top 3 lifts right at the top, plus a 1-rep max calculator with training weights (95%–60%).',es:'<b>Gráficas de tus ejercicios principales</b> — Progreso muestra al inicio la gráfica de tus 3 ejercicios principales y una calculadora de máximo (1 repetición) con pesos de entrenamiento (95%–60%).'}
  ]},

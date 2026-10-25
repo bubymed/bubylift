@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v79';
+const APP_VER='v80';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -108,7 +108,8 @@ function renderHeader(){
   instUpd();
 }
 function renderTabs(){
-  $('tabbar').innerHTML=TAB_KEYS.map(a=>'<button class="'+(tab===a[0]?'on':'')+'" onclick="go(\''+a[0]+'\')"'+(tab===a[0]?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+TAB_ICONS[a[0]]+'</svg><span>'+t(a[1])+'</span></button>').join('');
+  const cur=tab==='stretch'?'workout':tab;
+  $('tabbar').innerHTML=TAB_KEYS.filter(a=>a[0]!=='stretch').map(a=>'<button class="'+(cur===a[0]?'on':'')+'" onclick="go(\''+a[0]+'\')"'+(cur===a[0]?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+TAB_ICONS[a[0]]+'</svg><span>'+t(a[1])+'</span></button>').join('');
 }
 function go(x){tab=x;UI.prog=null;renderTabs();render();window.scrollTo(0,0);}
 function render(){

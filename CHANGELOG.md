@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v80 — 2026-10-24
+- **A new look** — a cleaner, iPhone-style design: big titles, one accent color, a bold card for today's workout, your week at a glance and tidy lists to explore. The Stretch screen moved into Explore.
+  **Un nuevo diseño** — más limpio, estilo iPhone: títulos grandes, un solo color de acento, una tarjeta destacada con el entrenamiento de hoy, tu semana de un vistazo y listas ordenadas para explorar. Estirar pasó a Explorar.
+
 ## v79 — 2026-10-24
 - **Charts for your main lifts** — Progress now shows a chart for your top 3 lifts right at the top, plus a 1-rep max calculator with training weights (95%–60%).
   **Gráficas de tus ejercicios principales** — Progreso muestra al inicio la gráfica de tus 3 ejercicios principales y una calculadora de máximo (1 repetición) con pesos de entrenamiento (95%–60%).
