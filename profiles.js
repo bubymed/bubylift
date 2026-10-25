@@ -219,7 +219,7 @@ function gWelcome(){
     (typeof cloudOn==='function'&&cloudOn()?'<div class="g-form"><button class="btn pri big wide" onclick="gAcct(\'up\')">✨ '+t('wCreate')+'</button><p class="muted sm g-c">'+t('wCreateP')+'</p>'+
     '<button class="btn big wide" onclick="gAcct(\'in\')">'+t('wIn')+'</button>'+
     '<button class="btn big wide" onclick="pfGuest()">👤 '+t('wGuest')+'</button><p class="muted sm g-c">'+t('wGuestP')+'</p>'+
-    '<button class="lnk-d" onclick="gNew(1,{first:true})">'+t('wLocal')+'</button><button class="lnk-d" onclick="gRecv()">📲 '+t('pfBring')+'</button><p id="gmsg" class="g-msg"></p></div>':
+    '<p id="gmsg" class="g-msg"></p></div>':
     '<div class="g-form"><button class="btn pri big wide" onclick="gNew(1,{first:true})">✨ '+t('pfWelNew')+'</button><p class="muted sm g-c">'+t('pfWelNewP')+'</p>'+
     '<button class="btn big wide" onclick="pfGuest()">👤 '+t('pfGuestB')+'</button><p class="muted sm g-c">'+t('pfGuestP')+'</p>'+
     '<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button><p id="gmsg" class="g-msg"></p></div>')+gLang());

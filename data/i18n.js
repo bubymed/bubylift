@@ -842,7 +842,6 @@ const STR={
  wCreate:['Create free account','Crear cuenta gratis'],wCreateP:['Keep your training safe and open it on any phone.','Guarda tu entrenamiento a salvo y ábrelo en cualquier teléfono.'],
  wIn:['Sign in','Iniciar sesión'],wGuest:['Try it as a guest','Probar como invitado'],
  wGuestP:['A quick look around. Your data stays only on this phone until you create an account.','Un vistazo rápido. Tus datos se quedan solo en este teléfono hasta que crees una cuenta.'],
- wLocal:['Make a profile only on this phone','Crear un perfil solo en este teléfono'],
  pfWelT:['Welcome to Bubylift','Bienvenido a Bubylift'],
  pfWelP:['Log your training, follow a smart plan and see your progress. Everything stays on your phone.','Registra tu entrenamiento, sigue un plan inteligente y mira tu progreso. Todo se queda en tu teléfono.'],
  pfWelNew:['Create a profile','Crear un perfil'],
