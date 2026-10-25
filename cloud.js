@@ -17,6 +17,8 @@ function clSave(){if(CL){SET.cl=CL;saveSet();}}
 function clUnlink(){CL=null;CLK=null;if(SET&&SET.cl){delete SET.cl;saveSet();}}
 /* tombstones: remember deletions so another phone does not bring the item back / lápidas: recuerdan lo borrado */
 function clTomb(id){if(!id)return;DATA.tomb=DATA.tomb||{};DATA.tomb[id]=Date.now();}
+/* where e-mail links (confirm / reset) should land: this app's own folder, never the bare domain / adónde deben llevar los enlaces del correo: la carpeta de la app */
+const clBack=()=>'redirect_to='+encodeURIComponent(location.origin+location.pathname.replace(/[^\/]*$/,''));
 async function clReq(path,m,body,tok,extra){
   const c=window.CLOUD_CFG,h=Object.assign({apikey:c.key,'Content-Type':'application/json',Authorization:'Bearer '+(tok||c.key)},extra||{});
   let r;try{r=await fetch(c.url+path,{method:m||'GET',headers:h,body:body==null?undefined:JSON.stringify(body)});}catch(e){throw new Error('network: '+String(e&&e.message||e).slice(0,60));}
@@ -179,7 +181,7 @@ async function clSubmit(mode){
   const b=$('clgo');if(b){b.disabled=true;b.textContent=t('clWait');}
   try{
     const ap=await clAuthPw(em,pw);
-    const r=await clReq(mode==='up'?'/auth/v1/signup':'/auth/v1/token?grant_type=password','POST',{email:em,password:ap});
+    const r=await clReq(mode==='up'?'/auth/v1/signup?'+clBack():'/auth/v1/token?grant_type=password','POST',{email:em,password:ap});
     if(!r.ok){
       const m=String((r.j&&(r.j.msg||r.j.error_description||r.j.message))||'');
       if(mode==='in'&&/invalid|credentials/i.test(m)&&(await clEmailKnown(em))===false){clAuthOpen(mode,t('clNoAcct'),em);return;}
@@ -214,7 +216,7 @@ function clRecSave(){fileOut('bubylift-recovery-key.txt','Bubylift — '+t('clRe
 function clRecDone(){const f=window.__clDone;window.__clRec=null;window.__clDone=null;sheetClose();if(f)f();}
 async function clForgot(){
   const em=gv('cle').trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){toast(t('clBadEmail'));return;}
-  try{const r=await clReq('/auth/v1/recover','POST',{email:em});toast(t(r.ok?'clResetSent':'clFail'));}catch(e){toast(t('clOff'));}
+  try{const r=await clReq('/auth/v1/recover?'+clBack(),'POST',{email:em});toast(t(r.ok?'clResetSent':'clFail'));}catch(e){toast(t('clOff'));}
 }
 /* reset link from the e-mail: needs the recovery key to open the data (or a fresh start) / enlace del correo: pide la clave de recuperación (o empezar de cero) */
 function clRecoverOpen(){
