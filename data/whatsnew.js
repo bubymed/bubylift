@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v94',items:[
+  {i:'📌',en:'<b>Always in view</b> — during a workout, warm-up, mobility or stretching, the timer, sets and Finish button now stay pinned at the top while you scroll.',es:'<b>Siempre a la vista</b> — durante un entrenamiento, calentamiento, movilidad o estiramiento, el tiempo, las series y el botón Finish se quedan fijos arriba mientras te desplazas.'}
+ ]},
  {v:'v93',items:[
   {i:'✨',en:'<b>Smooth</b> — windows now slide up and fade out, tabs and screens fade in softly, and buttons give a little press feedback. Respects the reduce-motion setting.',es:'<b>Más suave</b> — las ventanas ahora suben y se desvanecen al cerrar, las pestañas y pantallas aparecen con un fundido suave y los botones reaccionan al tocarlos. Respeta el ajuste de reducir movimiento.'}
  ]},

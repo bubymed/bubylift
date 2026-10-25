@@ -218,3 +218,11 @@ body{transition:background-color .25s,color .25s}
   #sheetov:not([hidden]),#sheetov:not([hidden]) #sheet,#gate:not([hidden]),main.pgin{animation:none}
   button,.btn,.chip,.card,#tabbar button svg{transition:none}.btn:active,.chip:active{transform:none}
 }
+
+/* ---------- v94 sticky workout bar / barra fija del entrenamiento ---------- */
+.wk-head{position:sticky;top:calc(env(safe-area-inset-top) + 6px);z-index:22;display:grid;grid-template-columns:1fr auto;grid-template-areas:"n b" "s b";align-items:center;column-gap:12px;row-gap:0;padding:10px 12px 10px 16px;box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.wk-head::before{content:"";position:absolute;left:-20px;right:-20px;bottom:100%;height:120px;background:var(--bg);pointer-events:none}
+.wk-head .wkname{grid-area:n;font-size:1.15rem;min-width:0;text-overflow:ellipsis}
+.wk-head #wkstats{grid-area:s;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk-head .wk-act{grid-area:b;margin:0}
+.wk-head .wk-act .btn{width:auto;min-height:44px;padding:10px 20px}
