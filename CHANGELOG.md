@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v91 — 2026-10-24
+- **Your watch, automatically** — every time you open the app it checks Strava: new activities add heart rate and calories to matching workouts, and watch-only workouts show up in History.
+  **Tu reloj, en automático** — cada vez que abres la app revisa Strava: las actividades nuevas agregan frecuencia cardíaca y calorías a los entrenamientos que coinciden, y los entrenamientos solo del reloj aparecen en Historial.
+
 ## v90 — 2026-10-24
 - **Private by design** — your cloud data is now encrypted on your phone. Not even the app\'s creator can read it. You get a recovery key when you create your account.
   **Privado por diseño** — tus datos en la nube ahora se cifran en tu teléfono. Ni siquiera el creador de la app puede leerlos. Recibes una clave de recuperación al crear tu cuenta.

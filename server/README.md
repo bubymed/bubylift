@@ -38,3 +38,7 @@ Requiere que ya funcionen las cuentas (arriba). Es opcional. / Needs accounts wo
 4. Avísame y pongo `strava:true` en `data/cloudcfg.js`.
 
 **Ojo con las reglas de Strava** (https://developers.strava.com/guidelines/): una app nueva empieza limitada a **un solo atleta** (tú) hasta que Strava aprueba más cupo; se muestra "Powered by Strava"; y los datos de Strava solo se le muestran a la persona dueña. La tarjeta para compartir con datos de Strava es una imagen que la propia persona decide publicar; revisa que esto cumpla las reglas vigentes antes de abrirla a más gente.
+
+
+> v91: the Strava function has a new action (`recent`). Redeploy it: `supabase functions deploy strava --no-verify-jwt`.
+> v91: la función de Strava tiene una acción nueva (`recent`). Vuelve a desplegarla: `supabase functions deploy strava --no-verify-jwt`.

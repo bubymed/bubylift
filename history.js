@@ -38,14 +38,16 @@ function barSvg(vals,labels){
 }
 
 /* ---------- history ---------- */
+/* Strava activity type → friendly name / tipo de actividad de Strava → nombre */
+function spName(s){const k='sp_'+String(s||'').replace(/[^A-Za-z]/g,'');return STR[k]?t(k):(s?String(s).replace(/([a-z])([A-Z])/g,'$1 $2'):t('svWatch'));}
 function wkDur(wk){return(wk.end&&wk.end>wk.t)?(wk.end-wk.t)/1000:0;}
 function wkPRs(wk){let n=0;wk.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr)n++;}));return n;}
 function wkCard(wk){
   const d=wkDur(wk),pr=wkPRs(wk),vol=wkVol(wk),dt=new Date(wk.t);
   return'<button class="lrow wkrow" onclick="openWk(\''+wk.id+'\')"><span class="dchip"><b>'+dt.getDate()+'</b><small>'+esc(dt.toLocaleDateString(LANG==='es'?'es':'en',{month:'short'}).replace('.',''))+'</small></span>'+
     '<span class="lt2"><b>'+esc(wk.name||dFmt(wk.t,{weekday:'long'}))+(pr?' <span class="pr">'+ic('trophy')+' '+pr+'</span>':'')+'</b>'+
-    '<small>'+(d?fmtDur(d)+' · ':'')+t('nSetsT',wkSets(wk))+(vol?' · '+wShow(vol)+' '+wUnit():'')+'</small>'+
-    '<small>'+wk.ex.slice(0,3).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(wk.ex.length>3?' …':'')+'</small></span><span class="lc">›</span></button>';
+    '<small>'+(d?fmtDur(d)+(wk.ex.length?' · ':''):'')+(wk.ex.length?t('nSetsT',wkSets(wk)):'')+(vol?' · '+wShow(vol)+' '+wUnit():'')+'</small>'+
+    '<small>'+(wk.ex.length?wk.ex.slice(0,3).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(wk.ex.length>3?' …':''):esc(spName(wk.sp)))+(wk.hr?' · '+ic('heart')+' '+wk.hr.a:'')+(wk.kcal?' · '+wk.kcal+' kcal':'')+'</small></span><span class="lc">›</span></button>';
 }
 function vHistory(){
   if(!DATA.workouts.length)return emptyState('clipboard-list',t('emptyHistT'),t('emptyHistP'),t('emStart'),"go('workout')");
