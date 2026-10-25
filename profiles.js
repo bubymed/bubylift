@@ -474,7 +474,13 @@ function avPicker(){
   return'<div class="lbl">'+t('pfAvatar')+'</div><div class="av-sug">'+AVP.map(n=>'<button class="av-s'+(GS.av.k==='p'&&GS.av.p===n?' on':'')+'" onclick="pfPickPre(\''+n+'\')" aria-label="'+t('pfAvatar')+' '+n+'"><img alt="" loading="lazy" src="img/av/'+n+'.webp"></button>').join('')+'</div>';
 }
 function pfAvRedraw(){const n=$('gname');if(n)GS.name=n.value;if(GS.redraw)GS.redraw();}
-function pfPickPre(n){GS.av={k:'p',p:n};pfAvRedraw();}
+function pfPickPre(n){ // change the choice in place: no redraw, so the list keeps its scroll / cambia la selección sin redibujar: la lista no salta arriba
+  GS.av={k:'p',p:n};
+  const pv=$('avprev');
+  if(!pv){pfAvRedraw();return;}
+  pv.innerHTML=avHtml(GS.av,104);
+  document.querySelectorAll('.av-sug .av-s').forEach(function(b){const im=b.querySelector('img');b.classList.toggle('on',!!im&&im.getAttribute('src')==='img/av/'+n+'.webp');});
+}
 function gNewNext1(){
   const n=gv('gname').trim();GS.name=n;
   if(!n){$('gmsg').textContent=t('pfNeedName');return;}

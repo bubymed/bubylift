@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99.4',items:[
+  {i:'👆',en:'Picking an avatar no longer jumps back to the top of the list.',es:'Elegir un avatar ya no te regresa al inicio de la lista.'}
+ ]},
  {v:'v0.99.3',items:[
   {i:'✅',en:'After you create your account you now see "Account created!" and go straight to sign in.',es:'Al crear tu cuenta ahora ves "¡Cuenta creada!" y pasas directo a iniciar sesión.'}
  ]},
