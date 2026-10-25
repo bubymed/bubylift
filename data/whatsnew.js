@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99.3',items:[
+  {i:'✅',en:'After you create your account you now see "Account created!" and go straight to sign in.',es:'Al crear tu cuenta ahora ves "¡Cuenta creada!" y pasas directo a iniciar sesión.'}
+ ]},
  {v:'v0.99.2',items:[
   {i:'✨',en:'Create account is now a full screen: name and avatar, e-mail and password, recovery key, then you\'re in. You can also edit your name and photo from Manage account and as a guest.',es:'Crear cuenta ahora es una pantalla completa: nombre y avatar, correo y contraseña, clave de recuperación y listo. También puedes editar tu nombre y foto desde Administrar cuenta y como invitado.'}
  ]},

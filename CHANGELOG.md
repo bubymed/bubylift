@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.3 — 2026-10-24
+- After you create your account you now see "Account created!" and go straight to sign in.
+  Al crear tu cuenta ahora ves "¡Cuenta creada!" y pasas directo a iniciar sesión.
+
 ## v0.99.2 — 2026-10-24
 - Create account is now a full screen: name and avatar, e-mail and password, recovery key, then you're in. You can also edit your name and photo from Manage account and as a guest.
   Crear cuenta ahora es una pantalla completa: nombre y avatar, correo y contraseña, clave de recuperación y listo. También puedes editar tu nombre y foto desde Administrar cuenta y como invitado.

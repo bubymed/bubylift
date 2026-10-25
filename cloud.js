@@ -204,8 +204,20 @@ async function clSubmit(mode,pre){
 async function clSetup(pw){
   const dek=crypto.getRandomValues(new Uint8Array(32)),rec=clRecKey();
   CL.dek=b64(dek);CLK=null;CL.vault=await clVault(pw,dek,rec);clSave();
-  clRecShow(rec,function(){clAdopt();toast(t('clWelcome'));cloudSync(false).then(render);});
+  clRecShow(rec,function(gt){
+    clAdopt();
+    if(!gt){toast(t('clWelcome'));cloudSync(false).then(render);return;}
+    // full-screen sign-up: confirm, make sure the key reached the server, then send the person to sign in / registro en pantalla completa: confirmar y mandar a iniciar sesión
+    gateShow('<div class="g-c"><div class="wel-e">☁️</div></div><h1 class="lt g-h">'+t('clWait')+'</h1>');
+    const em=CL.email;
+    cloudSync(false).then(function(ok){
+      if(!ok){gateHide();toast(t('clWelcome'));render();return;}
+      clUnlink();window.__suEm=em;
+      gateShow('<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">✅</div></div><h1 class="lt g-h">'+t('suDoneT')+'</h1><p class="muted g-c">'+t('suDoneP')+'</p><div class="g-form"><button class="btn pri big wide" onclick="suToIn()">'+t('clIn')+'</button></div>');
+    });
+  });
 }
+function suToIn(){const em=window.__suEm||'';window.__suEm=null;gateHide();render();setTimeout(function(){clAuthOpen('in','',em);},300);}
 function clRecShow(rec,done){
   window.__clRec=rec;window.__clDone=done||function(){};
   const body='<p class="muted">'+t('clRecP')+'</p><div class="clrec" id="clrec">'+esc(rec)+'</div>'+
@@ -217,7 +229,7 @@ function clRecShow(rec,done){
 }
 function clRecCopy(){try{navigator.clipboard.writeText(window.__clRec).then(()=>toast(t('copied')),()=>toast(t('copyFail')));}catch(e){toast(t('copyFail'));}}
 function clRecSave(){fileOut('bubylift-recovery-key.txt','Bubylift — '+t('clRecT')+'\n\n'+window.__clRec+'\n\n'+t('clRecP')+'\n','text/plain');}
-function clRecDone(){const f=window.__clDone,gt=window.__clGate;window.__clRec=null;window.__clDone=null;window.__clGate=0;window.__gKeep=0;if(f)f();if(gt)gateHide();else sheetClose();}
+function clRecDone(){const f=window.__clDone,gt=!!window.__clGate;window.__clRec=null;window.__clDone=null;window.__clGate=0;window.__gKeep=0;if(!gt)sheetClose();if(f)f(gt);}
 async function clForgot(){
   const em=gv('cle').trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){toast(t('clBadEmail'));return;}
   try{const r=await clReq('/auth/v1/recover?'+clBack(),'POST',{email:em});toast(t(r.ok?'clResetSent':'clFail'));}catch(e){toast(t('clOff'));}
