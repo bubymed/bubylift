@@ -19,7 +19,7 @@ function clUnlink(){CL=null;CLK=null;if(SET&&SET.cl){delete SET.cl;saveSet();}}
 function clTomb(id){if(!id)return;DATA.tomb=DATA.tomb||{};DATA.tomb[id]=Date.now();}
 async function clReq(path,m,body,tok,extra){
   const c=window.CLOUD_CFG,h=Object.assign({apikey:c.key,'Content-Type':'application/json',Authorization:'Bearer '+(tok||c.key)},extra||{});
-  const r=await fetch(c.url+path,{method:m||'GET',headers:h,body:body==null?undefined:JSON.stringify(body)});
+  let r;try{r=await fetch(c.url+path,{method:m||'GET',headers:h,body:body==null?undefined:JSON.stringify(body)});}catch(e){throw new Error('network: '+String(e&&e.message||e).slice(0,60));}
   let j=null;try{j=await r.json();}catch(e){}
   return{ok:r.ok,s:r.status,j:j};
 }
@@ -93,7 +93,7 @@ async function cloudSync(manual){
     const tok=await clToken();
     for(let i=0;i<3&&!ok;i++){
       const g=await clReq('/rest/v1/user_data?select=data,rev&user_id=eq.'+encodeURIComponent(CL.uid),'GET',null,tok);
-      if(!g.ok||!Array.isArray(g.j))throw new Error('get');
+      if(!g.ok||!Array.isArray(g.j))throw new Error('user_data '+g.s+' '+String(g.j&&(g.j.message||g.j.msg||g.j.hint||g.j.error)||'').slice(0,80));
       const loc=clClean(DATA);loc.goals=DATA.goals||[];
       if(!g.j.length){
         if(!CL.vault)throw new Error('novault');
@@ -194,7 +194,7 @@ async function clSubmit(mode){
       let dek;try{dek=await pfUnwrap('p:'+pw,g.j[0].vault.wp);}catch(e){clUnlink();clAuthOpen(mode,t('clKeyBad'),em);return;}
       CL.dek=b64(dek);CLK=null;clSave();clAdopt();sheetClose();toast(t('clWelcome'));await cloudSync(false);render();
     }else{await clSetup(pw);}
-  }catch(e){clAuthOpen(mode,t('clOff'),em);}
+  }catch(e){try{console.warn('bubylift cloud',e);}catch(x){}clAuthOpen(mode,t('clOff')+' ['+String(e&&e.message||e).slice(0,110)+']',em);}
 }
 /* brand-new data key + recovery key; the person must see the recovery key before we continue / llave nueva + clave de recuperación */
 async function clSetup(pw){
