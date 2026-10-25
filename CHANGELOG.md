@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.97 — 2026-10-24
+- **Old local profiles retired** — password-protected profiles that only lived on one phone are no longer valid. Open yours and create a free account to keep your data, or delete it.
+  **Perfiles locales retirados** — los perfiles con contraseña que solo vivían en un teléfono ya no son válidos. Abre el tuyo y crea una cuenta gratis para conservar tus datos, o elimínalo.
+
 ## v0.96 — 2026-10-24
 - **Accounts only** — with cloud on, the only ways in are your cloud account or guest. Every create-account button now makes a cloud account, sign-in tells you if an email isn't registered, and guests can't create local profiles.
   **Solo cuentas** — con la nube activa, solo se entra con tu cuenta en la nube o como invitado. Todos los botones de crear cuenta crean una cuenta en la nube, el inicio de sesión avisa si un correo no está registrado, y los invitados ya no crean perfiles locales.
