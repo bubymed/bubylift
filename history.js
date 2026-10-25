@@ -41,12 +41,11 @@ function barSvg(vals,labels){
 function wkDur(wk){return(wk.end&&wk.end>wk.t)?(wk.end-wk.t)/1000:0;}
 function wkPRs(wk){let n=0;wk.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr)n++;}));return n;}
 function wkCard(wk){
-  const d=wkDur(wk),pr=wkPRs(wk),vol=wkVol(wk);
-  const fx=wk.ex.find(x=>typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid));
-  return'<button class="card wkc wkp" onclick="openWk(\''+wk.id+'\')">'+(fx?photoTh(fx.eid):'<span class="hv-th hv-no">'+ic('barbell')+'</span>')+'<span class="wkp-t"><div class="wkc-d"><b>'+esc(dFmt(wk.t,{weekday:'short',month:'short',day:'numeric'}))+'</b>'+(pr?' <span class="pr">'+ic('trophy')+' '+pr+'</span>':'')+'</div>'+
-    '<div class="wkc-n">'+esc(wk.name||'')+'</div>'+
-    '<div class="muted sm">'+(d?fmtDur(d)+' · ':'')+t('nSetsT',wkSets(wk))+(vol?' · '+wShow(vol)+' '+wUnit():'')+'</div>'+
-    '<div class="muted sm">'+wk.ex.slice(0,3).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(wk.ex.length>3?' …':'')+'</div></span></button>';
+  const d=wkDur(wk),pr=wkPRs(wk),vol=wkVol(wk),dt=new Date(wk.t);
+  return'<button class="lrow wkrow" onclick="openWk(\''+wk.id+'\')"><span class="dchip"><b>'+dt.getDate()+'</b><small>'+esc(dt.toLocaleDateString(LANG==='es'?'es':'en',{month:'short'}).replace('.',''))+'</small></span>'+
+    '<span class="lt2"><b>'+esc(wk.name||dFmt(wk.t,{weekday:'long'}))+(pr?' <span class="pr">'+ic('trophy')+' '+pr+'</span>':'')+'</b>'+
+    '<small>'+(d?fmtDur(d)+' · ':'')+t('nSetsT',wkSets(wk))+(vol?' · '+wShow(vol)+' '+wUnit():'')+'</small>'+
+    '<small>'+wk.ex.slice(0,3).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(wk.ex.length>3?' …':'')+'</small></span><span class="lc">›</span></button>';
 }
 function vHistory(){
   if(!DATA.workouts.length)return emptyState('clipboard-list',t('emptyHistT'),t('emptyHistP'),t('emStart'),"go('workout')");
@@ -56,10 +55,10 @@ function vHistory(){
   let last='';
   DATA.workouts.forEach(wk=>{
     const lb=dFmt(wk.t,{month:'long',year:'numeric'});
-    if(lb!==last){h+='<div class="sec"><h2>'+esc(lb)+'</h2></div>';last=lb;}
+    if(lb!==last){if(last)h+='</div>';h+='<div class="sec"><h2>'+esc(lb)+'</h2></div><div class="lgrp">';last=lb;}
     h+=wkCard(wk);
   });
-  return h;
+  return h+'</div>';
 }
 function wkText(wk){
   let s=wk.name+' — '+dFmt(wk.t)+'\n';
@@ -131,10 +130,12 @@ function vProgress(){
   h+='<div class="card"><b>'+t('perWeek')+'</b>'+barSvg(vals,labels)+'</div>';
   h+=featCharts()+rmCalc();
   h+='<div class="sec"><h2>'+t('exercises')+'</h2></div>';
+  h+='<div class="lgrp">';
   loggedEx().forEach(o=>{
     const m=exMode(o.eid),b=bestSet(o.eid);
-    h+='<button class="card exp wkp" onclick="openProg(\''+o.eid+'\')">'+(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(o.eid)?photoTh(o.eid):'<span class="hv-th hv-no">'+ic('barbell')+'</span>')+'<span class="wkp-t"><b>'+esc(exName(o.eid,o.n))+'</b><div class="muted sm">'+t('sessions',o.cnt)+(b?' · '+t(m==='t'?'longest':'best')+': '+esc(fmtSet(m,b)):'')+'</div></span></button>';
+    h+='<button class="lrow" onclick="openProg(\''+o.eid+'\')">'+(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(o.eid)?photoTh(o.eid):'<span class="li">'+ic('barbell')+'</span>')+'<span class="lt2"><b>'+esc(exName(o.eid,o.n))+'</b><small>'+t('sessions',o.cnt)+(b?' · '+t(m==='t'?'longest':'best')+': '+esc(fmtSet(m,b)):'')+'</small></span><span class="lc">›</span></button>';
   });
+  h+='</div>';
   return h;
 }
 /* Top lifts with a chart right on the Progress home / las ejercicios principales con gráfica en Progreso */

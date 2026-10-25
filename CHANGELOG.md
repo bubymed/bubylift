@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v81 — 2026-10-24
+- **History and Progress, redesigned** — workouts are tidy rows with the date up front, grouped by month; Progress lists your exercises in one clean list.
+  **Historial y Progreso, rediseñados** — los entrenamientos son filas ordenadas con la fecha al frente, agrupadas por mes; Progreso lista tus ejercicios en una sola lista limpia.
+
 ## v80 — 2026-10-24
 - **A new look** — a cleaner, iPhone-style design: big titles, one accent color, a bold card for today's workout, your week at a glance and tidy lists to explore. The Stretch screen moved into Explore.
   **Un nuevo diseño** — más limpio, estilo iPhone: títulos grandes, un solo color de acento, una tarjeta destacada con el entrenamiento de hoy, tu semana de un vistazo y listas ordenadas para explorar. Estirar pasó a Explorar.
