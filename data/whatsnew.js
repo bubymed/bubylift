@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99',items:[
+  {i:'✉️',en:'<b>E-mail links land in the app</b> — confirm and reset-password e-mails now send you straight to Bubylift instead of the bare web address.',es:'<b>Los enlaces del correo llegan a la app</b> — los correos de confirmar y de recuperar contraseña ahora te llevan directo a Bubylift y no a la dirección web sin ruta.'}
+ ]},
  {v:'v0.98',items:[
   {i:'🛠️',en:'<b>Clearer account errors</b> — when sign-in or sign-up can\'t reach the server, the message now says exactly which step failed.',es:'<b>Errores de cuenta más claros</b> — cuando el inicio de sesión o el registro no llegan al servidor, el mensaje ahora dice exactamente en qué paso falló.'}
  ]},

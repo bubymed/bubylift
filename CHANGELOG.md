@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99 — 2026-10-24
+- **E-mail links land in the app** — confirm and reset-password e-mails now send you straight to Bubylift instead of the bare web address.
+  **Los enlaces del correo llegan a la app** — los correos de confirmar y de recuperar contraseña ahora te llevan directo a Bubylift y no a la dirección web sin ruta.
+
 ## v0.98 — 2026-10-24
 - **Clearer account errors** — when sign-in or sign-up can't reach the server, the message now says exactly which step failed.
   **Errores de cuenta más claros** — cuando el inicio de sesión o el registro no llegan al servidor, el mensaje ahora dice exactamente en qué paso falló.
