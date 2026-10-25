@@ -858,6 +858,9 @@ const STR={
  gnP:['You are using Bubylift as a guest. Your data lives only in this browser: if you clear browser data or lose this phone, it is gone. Create a profile to keep it safe with a password and move it to another phone with a simple QR code. Everything you logged so far comes with you.','Estás usando Bubylift como invitado. Tus datos viven solo en este navegador: si borras los datos del navegador o pierdes este teléfono, se pierden. Crea un perfil para protegerlos con una contraseña y pasarlos a otro teléfono con un simple QR. Todo lo que registraste hasta ahora se viene contigo.'],
  gnYes:['Protect my progress','Proteger mi progreso'],
  gnNo:['Maybe later','Quizás después'],
+ gnCT:["You don't have an account yet",'Aún no tienes una cuenta'],
+ gnCP:['You are using Bubylift as a guest, so your workouts live only on this phone. Create a free account to back them up, encrypted, and open them from any phone.','Estás usando Bubylift como invitado, así que tus entrenamientos solo viven en este teléfono. Crea una cuenta gratis para respaldarlos cifrados y abrirlos desde cualquier teléfono.'],
+ wBack:['Back to {0}','Volver a {0}'],
  // v20 volume
  psVol:['How much work per session?','¿Cuánto trabajo por sesión?'],
  vol_lo:['Low','Bajo'],

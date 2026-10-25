@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v92 — 2026-10-24
+- **Create your account** — as a guest, a friendly pop-up now invites you to create a free account or sign in. And Switch profile takes you straight to the start screen when there's no other profile.
+  **Crea tu cuenta** — si estás como invitado, un aviso amable te invita a crear una cuenta gratis o iniciar sesión. Y Cambiar de perfil te lleva directo a la pantalla de inicio cuando no hay otro perfil.
+
 ## v91 — 2026-10-24
 - **Your watch, automatically** — every time you open the app it checks Strava: new activities add heart rate and calories to matching workouts, and watch-only workouts show up in History.
   **Tu reloj, en automático** — cada vez que abres la app revisa Strava: las actividades nuevas agregan frecuencia cardíaca y calorías a los entrenamientos que coinciden, y los entrenamientos solo del reloj aparecen en Historial.

@@ -149,6 +149,7 @@ async function boot(){
   const lp=pfGet(last);
   if(!pick&&lp&&lp.enc){const rk=pfRemKey(lp.id);if(rk){await pfEnter(lp.id,rk,null,false,1);return;}}
   if(!PFS.length)gWelcome();
+  else if(pick&&PFS.length===1&&typeof cloudOn==='function'&&cloudOn())gWelcome(1);
   else if(PFS.length===1&&!PFS[0].pw){await pfEnter(PFS[0].id,null,null,false,1);}
   else gPick();
 }
@@ -212,8 +213,8 @@ function gLang(){return'<div class="g-lang"><button onclick="pfSetLang(\'en\')"'
 function pfSetLang(l){LANG=l==='es'?'es':'en';try{localStorage.setItem('bl_lang',LANG);}catch(e){}document.documentElement.lang=LANG;const f=GS.redraw;if(f)f();else gPick();}
 
 /* first screen: create a profile or just try it as a guest / primera pantalla: crear perfil o probar como invitado */
-function gWelcome(){
-  GS={redraw:gWelcome};
+function gWelcome(back){
+  GS={redraw:function(){gWelcome(back);},back:!!back};
   gateShow('<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">🏋️</div></div><h1 class="lt g-h">'+t('pfWelT')+'</h1><p class="muted g-c">'+t(typeof cloudOn==='function'&&cloudOn()?'wCP':'pfWelP')+'</p>'+(pfHasLegacy()?'<p class="note">'+t('pfLegacy')+'</p>':'')+
     (typeof cloudOn==='function'&&cloudOn()?'<div class="g-form"><button class="btn pri big wide" onclick="gAcct(\'up\')">✨ '+t('wCreate')+'</button><p class="muted sm g-c">'+t('wCreateP')+'</p>'+
     '<button class="btn big wide" onclick="gAcct(\'in\')">'+t('wIn')+'</button>'+
@@ -221,12 +222,15 @@ function gWelcome(){
     '<p id="gmsg" class="g-msg"></p></div>':
     '<div class="g-form"><button class="btn pri big wide" onclick="gNew(1,{first:true})">✨ '+t('pfWelNew')+'</button><p class="muted sm g-c">'+t('pfWelNewP')+'</p>'+
     '<button class="btn big wide" onclick="pfGuest()">👤 '+t('pfGuestB')+'</button><p class="muted sm g-c">'+t('pfGuestP')+'</p>'+
-    '<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button><p id="gmsg" class="g-msg"></p></div>')+gLang());
+    '<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button><p id="gmsg" class="g-msg"></p></div>')+(GS.back&&PFS.length?'<button class="lnk-d g-c" onclick="gBack()">← '+t('wBack',esc(pfName(PFS[0])))+'</button>':'')+gLang());
 }
+function gBack(){const q=PFS[0];if(PFS.length===1&&q&&!q.pw&&!q.enc)pfEnter(q.id,null,null,false,1);else gPick();}
 /* create account / sign in from the first screen: start as a guest, then open the account sheet / cuenta desde la primera pantalla */
 function gAcct(mode){window.__clGo=mode;pfGuest();}
 function pfGuest(){
-  if(PFS.some(x=>x.g)||PFS.length>=PF_MAX)return;
+  const eg=PFS.find(x=>x.g);
+  if(eg){pfEnter(eg.id,null);return;}
+  if(PFS.length>=PF_MAX)return;
   const prof={id:'g'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:'Guest',av:pfRandAv(),pw:null,qs:[],enc:null,rm:0,t:Date.now(),g:1};
   const k=pfKeys(prof.id),lg=PFS.length?{map:{},del:[]}:pfLegacy(prof.id);
   if(!lg.map[k.s])lg.map[k.s]=JSON.stringify({lang:LANG});
@@ -238,12 +242,21 @@ function pfGuest(){
 /* a guest turns into a real profile: same data, now protected / el invitado pasa a perfil real: mismos datos, ahora protegidos */
 function gSave(){const p=pfCur();if(!p||!p.g)return;GS={};gNew(1,{upg:p.id});}
 function guestNag(){
-  const p=pfCur();if(!p||!p.g||(typeof CL!=='undefined'&&CL&&CL.dek)||!$('sheetov').hidden||!$('gate').hidden)return;
-  if(!(DATA&&DATA.workouts&&DATA.workouts.length))return;
-  let last=0;try{last=+localStorage.getItem('bl_gn')||0;}catch(e){}
-  if(Date.now()-last<7*864e5)return;
-  try{localStorage.setItem('bl_gn',String(Date.now()));}catch(e){}
-  sheet('<div class="sum"><div class="sum-e">💾</div><h3>'+t('gnT')+'</h3><p class="muted">'+t('gnP')+'</p><div class="row"><button class="btn" onclick="sheetClose()">'+t('gnNo')+'</button><button class="btn pri" onclick="sheetClose();gSave()">'+t('gnYes')+'</button></div></div>');
+  const p=pfCur();if(!p||!p.g||(typeof CL!=='undefined'&&CL&&CL.dek))return;
+  const cl=typeof cloudOn==='function'&&cloudOn();
+  if(window.__gnT)return;
+  const show=function(n){
+    window.__gnT=0;
+    const q=pfCur();if(!q||!q.g||(typeof CL!=='undefined'&&CL&&CL.dek))return;
+    if(!$('sheetov').hidden||!$('gate').hidden||(typeof ACT!=='undefined'&&ACT)){if(n<6)window.__gnT=setTimeout(function(){show(n+1);},30000);return;}
+    let last=0;try{last=+localStorage.getItem('bl_gn')||0;}catch(e){}
+    if(Date.now()-last<(cl?864e5:7*864e5))return;
+    if(!cl&&!(DATA&&DATA.workouts&&DATA.workouts.length))return;
+    try{localStorage.setItem('bl_gn',String(Date.now()));}catch(e){}
+    if(cl)sheet('<div class="sum"><div class="sum-e">☁️</div><h3>'+t('gnCT')+'</h3><p class="muted">'+t('gnCP')+'</p><div class="row"><button class="btn pri wide" onclick="clAuthOpen(\'up\')">'+t('clCreate')+'</button></div><div class="row"><button class="btn wide" onclick="clAuthOpen(\'in\')">'+t('wIn')+'</button></div><button class="lnk-d" onclick="sheetClose()">'+t('gnNo')+'</button></div>');
+    else sheet('<div class="sum"><div class="sum-e">💾</div><h3>'+t('gnT')+'</h3><p class="muted">'+t('gnP')+'</p><div class="row"><button class="btn" onclick="sheetClose()">'+t('gnNo')+'</button><button class="btn pri" onclick="sheetClose();gSave()">'+t('gnYes')+'</button></div></div>');
+  };
+  window.__gnT=setTimeout(function(){show(0);},cl?25000:0);
 }
 
 /* who's training? / ¿quién entrena? */
