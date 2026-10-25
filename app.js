@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v0.99';
+const APP_VER='v0.99.1';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -180,7 +180,7 @@ async function instNative(){
 
 /* ---------- What's new (data/whatsnew.js): once per version, and from More → What's new ---------- */
 /* v0.95 → 95, v1.0 → 1000, old 'v90' → 90 (so 1.0 sorts after 0.99) / v0.95 → 95, v1.0 → 1000, el viejo 'v90' → 90 (así 1.0 va después de 0.99) */
-function wnVnum(v){const m=String(v||'').match(/(\d+)(?:\.(\d+))?/);if(!m)return 0;return m[2]!=null?(+m[1])*1000+(+m[2]):(+m[1]);}
+function wnVnum(v){const m=String(v||'').match(/(\d+)(?:\.(\d+))?(?:\.(\d+))?/);if(!m)return 0;return m[2]!=null?(+m[1])*1e6+(+m[2])*1e3+(+m[3]||0):(+m[1])*1e3;}
 function wnPending(){
   if(typeof WHATSNEW==='undefined')return[];
   const cur=wnVnum(APP_VER),list=WHATSNEW.filter(e=>wnVnum(e.v)<=cur),seen=SET.wnSeen;
