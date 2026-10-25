@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v89',items:[
+  {i:'❤️',en:'<b>Watch data from Strava</b> — connect Strava and bring the heart rate and calories from your watch into any workout, and onto your share card.',es:'<b>Datos de tu reloj con Strava</b> — conecta Strava y trae la frecuencia cardíaca y las calorías de tu reloj a cualquier entrenamiento, y a tu tarjeta para compartir.'}
+ ]},
  {v:'v88',items:[
   {i:'☁️',en:'<b>Your progress on any phone</b> — create a free account and your workouts follow you: sign in on another phone and everything is there.',es:'<b>Tu progreso en cualquier teléfono</b> — crea una cuenta gratis y tus entrenamientos te siguen: entra desde otro teléfono y todo está ahí.'}
  ]},

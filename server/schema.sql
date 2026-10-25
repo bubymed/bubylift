@@ -28,3 +28,22 @@ language sql security definer set search_path = public, auth as $$
 $$;
 revoke all on function public.delete_my_account() from public, anon;
 grant execute on function public.delete_my_account() to authenticated;
+
+-- ---- Strava link (v89) / conexión con Strava ----
+-- Only the edge function (service role) reads these. No policies on purpose = nobody else can.
+-- Solo la función de borde (service role) las lee. Sin políticas a propósito = nadie más puede.
+create table if not exists public.strava_tokens (
+  user_id    uuid primary key references auth.users(id) on delete cascade,
+  athlete_id bigint,
+  access     text not null,
+  refresh    text not null,
+  expires_at bigint not null,
+  updated_at timestamptz not null default now()
+);
+alter table public.strava_tokens enable row level security;
+create table if not exists public.strava_state (
+  state      text primary key,
+  user_id    uuid not null references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+alter table public.strava_state enable row level security;

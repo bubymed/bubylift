@@ -97,12 +97,15 @@ function clSchedule(){
 function clInit(){
   if(!cloudOn())return;
   clLoad();clHash();
-  if(CL&&!CL.bad)setTimeout(()=>cloudSync(false),800);
+  if(CL&&!CL.bad){setTimeout(()=>cloudSync(false),800);if(stravaOn()&&CL.sv==null)setTimeout(stravaStatus,1500);}
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&CL&&!CL.bad&&Date.now()-(CL.last||0)>120000)cloudSync(false);});
 }
 /* links from the e-mail (confirm account / reset password) / enlaces del correo */
-(function(){try{const h=location.hash||'';if(/access_token=/.test(h)&&/refresh_token=/.test(h)){sessionStorage.setItem('bl_clh',h.slice(1));history.replaceState(null,'',location.pathname+location.search);}}catch(e){}})();
+(function(){try{const h=location.hash||'';if(/access_token=/.test(h)&&/refresh_token=/.test(h)){sessionStorage.setItem('bl_clh',h.slice(1));history.replaceState(null,'',location.pathname+location.search);}
+  else if(/^#strava=(ok|no)$/.test(h)){sessionStorage.setItem('bl_svh',h.slice(8));history.replaceState(null,'',location.pathname+location.search);}}catch(e){}})();
 async function clHash(){
+  let sv=null;try{sv=sessionStorage.getItem('bl_svh');sessionStorage.removeItem('bl_svh');}catch(e){}
+  if(sv&&CL){if(sv==='ok'){CL.sv=true;clSave();toast(t('svOk'));}else toast(t('svNo'));if(tab==='more')render();}
   let h=null;try{h=sessionStorage.getItem('bl_clh');sessionStorage.removeItem('bl_clh');}catch(e){}
   if(!h)return;
   const q=new URLSearchParams(h),at=q.get('access_token'),rt=q.get('refresh_token');if(!at||!rt)return;
@@ -119,7 +122,7 @@ function cloudCard(){
   if(!CL||CL.bad)return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+t('clT')+'</b><p class="muted sm">'+t(CL&&CL.bad?'clExpired':'clP')+'</p></div><div class="row"><button class="btn pri" onclick="clAuthOpen(\'up\')">'+t('clCreate')+'</button><button class="btn" onclick="clAuthOpen(\'in\')">'+t('clIn')+'</button></div></div>';
   const ago=CL.last?Math.max(0,Math.round((Date.now()-CL.last)/60000)):null;
   const st=CL.err==='off'?t('clOff'):CL.err?t('clFail'):(ago==null?t('clNever'):(ago<1?t('clJust'):t('clAgo',ago>=60?Math.round(ago/60)+' h':ago+' min')));
-  return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+esc(CL.email)+'</b><p class="muted sm">'+st+'</p></div><div class="row"><button class="btn pri" onclick="cloudSync(true)">'+t('clSyncNow')+'</button><button class="btn" onclick="clAcctOpen()">'+t('clManage')+'</button></div></div>';
+  return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+esc(CL.email)+'</b><p class="muted sm">'+st+'</p></div><div class="row"><button class="btn pri" onclick="cloudSync(true)">'+t('clSyncNow')+'</button><button class="btn" onclick="clAcctOpen()">'+t('clManage')+'</button></div>'+stravaRow()+'</div>';
 }
 function clAuthOpen(mode,msg){
   const up=mode==='up';
@@ -168,3 +171,40 @@ function clOutAsk(){ask(t('clOutAsk'),t('clOut'),function(){clUnlink();toast(t('
 function clDelAsk(){ask(t('clDelAsk'),t('clDel'),async function(){
   try{const tok=await clToken();const r=await clReq('/rest/v1/rpc/delete_my_account','POST',{},tok);if(!r.ok)throw 0;clUnlink();toast(t('clDelDone'));render();}catch(e){toast(t('clFail'));}
 },true);}
+
+/* ---- Strava (heart rate + calories from your watch, via Strava) / (frecuencia cardíaca y calorías de tu reloj, vía Strava) ---- */
+const stravaOn=()=>cloudOn()&&!!window.CLOUD_CFG.strava&&!!CL&&!CL.bad;
+async function clFn(a,body){
+  const tok=await clToken(),c=window.CLOUD_CFG;
+  const r=await fetch(c.url+'/functions/v1/strava?a='+a,{method:'POST',headers:{apikey:c.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify(body||{})});
+  let j=null;try{j=await r.json();}catch(e){}
+  return{ok:r.ok,s:r.status,j:j};
+}
+async function stravaStatus(){try{const r=await clFn('status');if(r.ok&&r.j){CL.sv=!!r.j.connected;clSave();if(tab==='more')render();}}catch(e){}}
+function stravaRow(){
+  if(!stravaOn())return'';
+  return'<div class="svrow"><span class="sv-t"><b>'+(CL.sv?t('svConnected'):t('svT'))+'</b><small>'+(CL.sv?t('svConnectedP'):t('svP'))+'</small></span>'+
+    (CL.sv?'<button class="btn sm" onclick="stravaOff()">'+t('svOff')+'</button>':'<button class="btn sm pri" onclick="stravaConnect()">'+t('svConnect')+'</button>')+'<small class="sv-pw">Powered by Strava</small></div>';
+}
+async function stravaConnect(){
+  try{const r=await clFn('start');if(r.ok&&r.j&&/^https:\/\/www\.strava\.com\//.test(r.j.url)){location.href=r.j.url;return;}}catch(e){}
+  toast(t('clFail'));
+}
+function stravaOff(){ask(t('svOffAsk'),t('svOff'),async function(){try{await clFn('disconnect');CL.sv=false;clSave();toast(t('svOffDone'));render();}catch(e){toast(t('clFail'));}},false);}
+async function stravaGet(id){
+  const wk=DATA.workouts.find(w=>w.id===id);if(!wk||!stravaOn())return;
+  if(!CL.sv){sheetClose();go('more');toast(t('svNeed'));return;}
+  toast(t('clWait'));
+  const from=Math.floor((wk.t-600000)/1000),to=Math.min(from+43200,Math.floor(((wk.end>wk.t?wk.end:wk.t+3*3600000)+600000)/1000));
+  try{
+    const r=await clFn('activity',{from:from,to:to});
+    if(r.s===409){CL.sv=false;clSave();sheetClose();go('more');toast(t('svNeed'));return;}
+    if(!r.ok||!r.j)throw 0;
+    if(!r.j.found){toast(t('svNone'));return;}
+    const a=Math.round(+r.j.avg_hr),m=Math.round(+r.j.max_hr),k=Math.round(+r.j.kcal);
+    if(a>=30&&a<=230)wk.hr={a:a,m:(m>=a&&m<=250)?m:a};
+    if(k>0&&k<=10000)wk.kcal=k;
+    if(!wk.hr&&!wk.kcal){toast(t('svNone'));return;}
+    wk.sv=1;saveData();sheetClose();openWk(id);toast(t('svGot'));
+  }catch(e){toast(t('clFail'));}
+}

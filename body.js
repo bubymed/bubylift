@@ -158,12 +158,13 @@ function cleanCh(c){
   const n=v=>(typeof v==='number'&&isFinite(v)&&v>=0&&v<1e6)?v:0;
   return{id:String(c.id),lv:c.lv,v:c.v===2?2:undefined,sc:{v:n(c.sc.v),r:n(c.sc.r),x:n(c.sc.x)}};
 }
+function cleanHr(h){return(h&&typeof h==='object'&&isFinite(h.a)&&h.a>=30&&h.a<=230)?{a:Math.round(h.a),m:(isFinite(h.m)&&h.m>=h.a&&h.m<=250)?Math.round(h.m):Math.round(h.a)}:undefined;}
 function cleanWk(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||typeof x.t!=='number'||!isFinite(x.t)||!Array.isArray(x.ex))return null;
   const ex=[];
   x.ex.forEach(e=>{if(!e||!ID_RE.test(String(e.eid))||!Array.isArray(e.sets))return;const sets=e.sets.map(cleanSet).filter(Boolean);if(sets.length)ex.push({eid:String(e.eid),n:String(e.n||e.eid).slice(0,80),sets:sets});});
   if(!ex.length)return null;
-  return{id:String(x.id),t:x.t,end:(typeof x.end==='number'&&isFinite(x.end))?x.end:0,name:String(x.name||'').slice(0,80),note:String(x.note||'').slice(0,500),ex:ex,pl:(Number.isInteger(x.pl)&&x.pl>=0&&x.pl<5)?x.pl:undefined,ch:cleanCh(x.ch)};
+  return{id:String(x.id),t:x.t,end:(typeof x.end==='number'&&isFinite(x.end))?x.end:0,name:String(x.name||'').slice(0,80),note:String(x.note||'').slice(0,500),ex:ex,hr:cleanHr(x.hr),kcal:(isFinite(x.kcal)&&x.kcal>0&&x.kcal<=10000)?Math.round(x.kcal):undefined,sv:x.sv?1:undefined,pl:(Number.isInteger(x.pl)&&x.pl>=0&&x.pl<5)?x.pl:undefined,ch:cleanCh(x.ch)};
 }
 function cleanBody(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||typeof x.t!=='number'||!isFinite(x.t))return null;
