@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.98 — 2026-10-24
+- **Clearer account errors** — when sign-in or sign-up can't reach the server, the message now says exactly which step failed.
+  **Errores de cuenta más claros** — cuando el inicio de sesión o el registro no llegan al servidor, el mensaje ahora dice exactamente en qué paso falló.
+
 ## v0.97 — 2026-10-24
 - **Old local profiles retired** — password-protected profiles that only lived on one phone are no longer valid. Open yours and create a free account to keep your data, or delete it.
   **Perfiles locales retirados** — los perfiles con contraseña que solo vivían en un teléfono ya no son válidos. Abre el tuyo y crea una cuenta gratis para conservar tus datos, o elimínalo.

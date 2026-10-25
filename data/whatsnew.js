@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.98',items:[
+  {i:'🛠️',en:'<b>Clearer account errors</b> — when sign-in or sign-up can\'t reach the server, the message now says exactly which step failed.',es:'<b>Errores de cuenta más claros</b> — cuando el inicio de sesión o el registro no llegan al servidor, el mensaje ahora dice exactamente en qué paso falló.'}
+ ]},
  {v:'v0.97',items:[
   {i:'🗑️',en:'<b>Old local profiles retired</b> — password-protected profiles that only lived on one phone are no longer valid. Open yours and create a free account to keep your data, or delete it.',es:'<b>Perfiles locales retirados</b> — los perfiles con contraseña que solo vivían en un teléfono ya no son válidos. Abre el tuyo y crea una cuenta gratis para conservar tus datos, o elimínalo.'}
  ]},
