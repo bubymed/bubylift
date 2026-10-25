@@ -911,7 +911,7 @@ const STR={
  vm_A:['Core','Core'],
  clrSet:['Clear this set','Borrar esta serie'],
  clrB:['Clear','Borrar'],
- clrDone:['Set cleared','Serie borrada'],
+ clrDone:['Set cleared','Serie borrada'],undoB:['Undo','Deshacer'],rmDone:['Removed','Quitado'],repLast:['Repeat last workout','Repetir el último entrenamiento'],
  schUp:['Move to the day before','Mover al día anterior'],schDn:['Move to the day after','Mover al día siguiente'],schDrag:['Drag to move','Arrastrar para mover'],
  pfDataBad:['This profile\'s data could not be unlocked','No se pudieron abrir los datos de este perfil'],
  pfMig:['Your data is now encrypted. Set your security questions so you can recover it.','Tus datos ahora están cifrados. Define tus preguntas de seguridad para poder recuperarlos.'],
