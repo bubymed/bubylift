@@ -59,3 +59,8 @@ language sql security definer set search_path = public, auth stable as $$
 $$;
 revoke all on function public.email_registered(text) from public;
 grant execute on function public.email_registered(text) to anon, authenticated;
+
+-- v0.99.1: new Supabase projects do not give the API roles access to tables you create, so row policies alone are not enough.
+-- v0.99.1: los proyectos nuevos de Supabase no dan acceso a las tablas nuevas, así que las políticas por fila no bastan.
+grant select, insert, update, delete on public.user_data to authenticated;
+grant select, insert, update, delete on public.user_data, public.strava_tokens, public.strava_state to service_role;
