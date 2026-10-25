@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.7 — 2026-10-24
+- One tap to repeat your last workout, and Undo after clearing a set or removing a set or exercise.
+  Un toque para repetir tu último entrenamiento, y Deshacer al borrar una serie o quitar una serie o un ejercicio.
+
 ## v0.99.6 — 2026-10-24
 - Faster logging: tapping ✓ or +/− only refreshes that exercise (no flash, no jumping), with a light vibration and a little pop, and the next set scrolls into view.
   Registro más rápido: al tocar ✓ o +/− solo se actualiza ese ejercicio (sin parpadeo ni saltos), con una vibración suave y un pequeño efecto, y la siguiente serie se muestra sola.
