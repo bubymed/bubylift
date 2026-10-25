@@ -70,13 +70,17 @@ function weekStrip(){
   const s=streakInfo(),n=days.filter(d=>d.on).length;
   return'<div class="card wkstrip"><div class="ws-top"><b>'+t('thisWeek')+'</b><span class="muted sm">'+(s.n?ic('bolt')+' '+t(s.n===1?'stOne':'stN',s.n):t('wsCount',n,s.tg))+'</span></div><div class="ws-days">'+days.map(d=>'<div class="ws-d'+(d.on?' on':'')+(d.today?' td':'')+'"><span>'+d.l+'</span><i>'+(d.on?ic('check'):'')+'</i></div>').join('')+'</div></div>';
 }
+function mobCard(){
+  return'<div class="card mobc"><button class="mobc-b" onclick="go(\'stretch\')"><span class="li">'+ic('yoga')+'</span><span class="lt2"><b>'+t('mobToday')+'</b><small>'+t('mobQuick')+'</small></span><span class="lc">›</span></button><div class="row"><button class="btn pri" onclick="mobGo(10)">'+ic('yoga')+' '+t('mobGo10')+'</button><button class="btn" onclick="mobGo(5)">'+t('mobGo5')+'</button></div></div>';
+}
+function mobGo(m){STX.type=m===5?'warm':'full';STX.min=m;strSessGo(0);}
 function hero0(){
   return'<div class="card hero"><span class="hero-e">'+t('hiWelcome')+'</span><h2>'+t('pkPlanT')+'</h2><p>'+t('pkPlanP')+'</p><button class="btn pri big wide" onclick="planSetup()">'+t('planMake')+'</button></div>';
 }
 function exploreList(){
   const r=(i,tt,pp,fn)=>'<button class="lrow" onclick="'+fn+'"><span class="li">'+ic(i)+'</span><span class="lt2"><b>'+t(tt)+'</b><small>'+t(pp)+'</small></span><span class="lc">›</span></button>';
   return'<div class="sec"><h2>'+t('exploreT')+'</h2></div><div class="lgrp">'+
-    r('barbell','pkMusT','pkMusP',"libGo('focus')")+r('arrows-shuffle','pkSpT','pkSpP',"libGo('split')")+r('trophy','pkPrT','pkPrP',"libGo('prog')")+r('stopwatch','pkChT','pkChP',"libGo('ch')")+r('yoga','tStretch','pkStrP',"go('stretch')")+'</div>';
+    r('barbell','pkMusT','pkMusP',"libGo('focus')")+r('arrows-shuffle','pkSpT','pkSpP',"libGo('split')")+r('trophy','pkPrT','pkPrP',"libGo('prog')")+r('stopwatch','pkChT','pkChP',"libGo('ch')")+'</div>';
 }
 function vStart(){
   let h='';
@@ -85,6 +89,7 @@ function vStart(){
   h+=wkSumCard();
   h+=DATA.plan?planCard():hero0();
   h+='<button class="btn wide emptyb" onclick="startWorkout()">'+ic('pencil')+' '+t('pkOwnT')+'</button>';
+  h+=mobCard();
   if(DATA.workouts.length)h+=weekStrip();
   h+='<div class="sec"><h2>'+t('routines')+'</h2><button class="btn sm" onclick="rbOpen()">＋ '+t('newRoutine')+'</button></div>';
   if(!DATA.routines.length)h+='<div class="card tip"><p class="muted">'+t('noRoutines')+'</p></div>';

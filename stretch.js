@@ -42,8 +42,12 @@ function strAreaGo(save){
   const name=t('strA_'+STX.area),l=strAreaList();
   if(save)strSave(name,l);else strStart(name,l);
 }
+function strHero(){
+  const n=strItems(STX.type,STX.min).length;
+  return'<div class="card hero"><span class="hero-e">'+t('mobToday')+'</span><h2>'+t('strT_'+STX.type)+' · '+t('strMin',STX.min)+'</h2><p>'+t('mobHeroP',n)+'</p><button class="btn pri big wide" onclick="strSessGo(0)">'+t('mobGo')+'</button></div>';
+}
 function vStretch(){
-  let h='<p class="muted sm">'+t('strIntro')+'</p>'+
+  let h=strHero()+'<div class="sec"><h2>'+t('mobCustom')+'</h2></div><p class="muted sm">'+t('strIntro')+'</p>'+
     '<div class="seg"><button class="'+(STX.sec==='sess'?'on':'')+'" onclick="strSet(\'sec\',\'sess\')">'+ic('stopwatch')+' '+t('strSess')+'</button><button class="'+(STX.sec==='area'?'on':'')+'" onclick="strSet(\'sec\',\'area\')">'+ic('yoga')+' '+t('strArea')+'</button></div>';
   if(STX.sec==='sess'){
     const l=strItems(STX.type,STX.min),secs=strSecs();

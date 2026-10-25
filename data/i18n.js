@@ -2,7 +2,7 @@
    Textos de la interfaz: clave → [English, Español]. {0}, {1} son marcadores. Los nombres de ejercicios están en data/exercises.js. */
 const STR={
  // tabs
- tWorkout:['Workout','Entrenar'],tHistory:['History','Historial'],tProgress:['Progress','Progreso'],tBody:['Body','Cuerpo'],tStretch:['Stretch','Estirar'],tMore:['More','Más'],
+ tWorkout:['Workout','Entrenar'],tHistory:['History','Historial'],tProgress:['Progress','Progreso'],tBody:['Body','Cuerpo'],tStretch:['Mobility','Movilidad'],tMore:['More','Más'],
  // generic
  cancel:['Cancel','Cancelar'],close:['Close','Cerrar'],save:['Save','Guardar'],saved:['Got it, saved ✓','Listo, guardado ✓'],delete:['Delete','Eliminar'],edit:['Edit','Editar'],
  done:['Done','Listo'],continue:['Continue','Continuar'],later:['Later','Después'],back:['Back','Atrás'],set:['Set','Fijar'],on:['On','Sí'],off:['Off','No'],
@@ -439,6 +439,7 @@ const STR={
  hiWelcome:['Welcome!','¡Bienvenido!'],exploreT:['Explore','Explorar'],wsCount:['{0} of {1} workouts','{0} de {1} entrenamientos'],pkStrP:['Stretching and mobility sessions','Sesiones de estiramiento y movilidad'],
  chFirst:['First workout done! The hardest part is showing up, and you did.','¡Primer entrenamiento listo! Lo más difícil es empezar, y ya lo hiciste.'],chPR:['New personal best! You\'re stronger than last time.','¡Nuevo récord personal! Estás más fuerte que la última vez.'],chStreak:['{0} weeks in a row. That\'s what consistency looks like.','{0} semanas seguidas. Así se ve la constancia.'],chG0:['Another one in the books. Your future self says thanks.','Uno más en el bolsillo. Tu yo del futuro te lo agradece.'],chG1:['Done. Every session adds up.','Listo. Cada sesión suma.'],chG2:['Nice work — rest up and come back strong.','Buen trabajo: descansa y vuelve con fuerza.'],chG3:['You showed up today. That\'s the win.','Hoy apareciste. Esa es la victoria.'],
  mHelp:['Estimated max: the heaviest weight you could probably lift once, worked out from your sets.','Máximo estimado: el peso más alto que probablemente podrías levantar una vez, calculado con tus series.'],
+ mobToday:['Today\'s mobility','Tu movilidad de hoy'],mobQuick:['No gym today? Ten minutes of mobility counts too.','¿Hoy no toca gimnasio? Diez minutos de movilidad también cuentan.'],mobGo10:['10-min mobility','Movilidad de 10 min'],mobGo5:['5-min warm-up','Calentar 5 min'],mobGo:['Start mobility','Empezar movilidad'],mobHeroP:['{0} moves to loosen up, feel better and move more freely.','{0} movimientos para soltarte, sentirte mejor y moverte con más libertad.'],mobCustom:['Make it yours','Hazla a tu medida'],
  psEquipN:['Bodyweight exercises are always available.','Los ejercicios con peso corporal siempre están disponibles.'],
  psInj:['Anything we should work around?','¿Algo que debamos cuidar?'],
  psInjP:['Pick the areas. We\'ll skip exercises that stress them and mark others to do lightly.','Escoge las zonas. Evitaremos los ejercicios que las cargan y marcaremos otros para hacerlos con poco peso.'],
