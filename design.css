@@ -164,3 +164,7 @@ main>.sec{margin-top:28px;margin-bottom:-4px}
 .cloudc .row{grid-column:1/-1;margin-top:2px}.cloudc .row .btn{flex:1}
 .cl-t p{margin-top:2px}
 .clmsg{background:color-mix(in srgb,var(--red) 12%,var(--panel2));color:var(--red);border-radius:10px;padding:8px 12px;margin:8px 0;font-weight:600;font-size:.9rem}
+.svrow{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;border-top:.5px solid var(--line);padding-top:12px;margin-top:4px}
+.sv-t{display:flex;flex-direction:column}.sv-t small{color:var(--dim);font-size:.82rem}
+.sv-pw{grid-column:1/-1;color:var(--dim);font-size:.72rem}
+.svst{margin-top:8px}

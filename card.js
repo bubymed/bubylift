@@ -3,7 +3,7 @@ function cardFont(px,w){return(w||'700')+' '+px+'px system-ui,-apple-system,"Seg
 function wkCardData(wk){
   const top=wk.ex.map(x=>{const m=exMode(x.eid);let b=null,bs=-1;x.sets.forEach(s=>{const sc=setScore(m,s);if(sc>bs){bs=sc;b=s;}});return{eid:x.eid,n:x.n,m:m,b:b,pr:x.sets.some(s=>s.pr),sets:x.sets.length,sc:bs};})
     .sort((a,b)=>(b.pr-a.pr)||(b.sets-a.sets)).slice(0,5);
-  return{name:wk.name,date:dFmt(wk.t,{month:'long',day:'numeric',year:'numeric'}),dur:wk.end?fmtDur((wk.end-wk.t)/1000):'',sets:wkSets(wk),vol:wShow(wkVol(wk))+' '+wUnit(),prs:wk.ex.reduce((a,x)=>a+x.sets.filter(s=>s.pr).length,0),top:top};
+  return{name:wk.name,date:dFmt(wk.t,{month:'long',day:'numeric',year:'numeric'}),dur:wk.end?fmtDur((wk.end-wk.t)/1000):'',sets:wkSets(wk),vol:wShow(wkVol(wk))+' '+wUnit(),hr:wk.hr||null,kcal:wk.kcal||0,sv:!!wk.sv,prs:wk.ex.reduce((a,x)=>a+x.sets.filter(s=>s.pr).length,0),top:top};
 }
 function drawWkCard(wk){
   const d=wkCardData(wk),W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
@@ -18,9 +18,11 @@ function drawWkCard(wk){
   const stats=[[d.dur||'—',t('duration')],[String(d.sets),t('sets')],[d.vol,t('volume')]];
   stats.forEach((s,i)=>{const x=80+i*320;g.fillStyle='rgba(255,255,255,.07)';g.beginPath();g.roundRect?g.roundRect(x,420,290,170,26):g.rect(x,420,290,170);g.fill();
     g.fillStyle='#fff';g.font=cardFont(s[0].length>9?38:54,'800');g.fillText(s[0],x+24,508);g.fillStyle='#b9b9c2';g.font=cardFont(30,'500');g.fillText(s[1],x+24,558);});
-  if(d.prs){g.fillStyle=acc;g.font=cardFont(44,'800');g.fillText('🏆 '+d.prs+' PR',80,680);}
-  let y=d.prs?770:700;
-  d.top.forEach(x=>{
+  const ex0=(d.hr||d.kcal)?70:0;
+  if(d.hr||d.kcal){g.fillStyle='#ffffff';g.font=cardFont(40,'700');g.fillText([d.hr?'♥ '+d.hr.a+' avg · '+d.hr.m+' max':'',d.kcal?d.kcal+' kcal':''].filter(Boolean).join('   ·   '),80,660);}
+  if(d.prs){g.fillStyle=acc;g.font=cardFont(44,'800');g.fillText('🏆 '+d.prs+' PR',80,680+ex0);}
+  let y=(d.prs?770:700)+ex0;
+  d.top.slice(0,ex0?4:5).forEach(x=>{
     g.fillStyle='#fff';g.font=cardFont(44,'700');
     let n=exName(x.eid,x.n);while(g.measureText(n).width>640&&n.length>4)n=n.slice(0,-2);if(n!==exName(x.eid,x.n))n+='…';
     g.fillText(n,80,y);
@@ -28,7 +30,7 @@ function drawWkCard(wk){
     g.textAlign='right';g.fillText(r.length>26?r.slice(0,26):r,W-80,y);g.textAlign='left';
     g.fillStyle='rgba(255,255,255,.1)';g.fillRect(80,y+26,W-160,2);y+=96;
   });
-  g.fillStyle='#8c8c96';g.font=cardFont(34,'500');g.fillText('bubymed.github.io/bubylift',80,H-70);
+  g.fillStyle='#8c8c96';g.font=cardFont(34,'500');g.fillText('bubymed.github.io/bubylift',80,H-70);if(d.sv){g.textAlign='right';g.fillText('Powered by Strava',W-80,H-70);g.textAlign='left';}
   return c;
 }
 function wkPic(id){

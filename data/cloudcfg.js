@@ -3,4 +3,4 @@
    the "anon" key is safe to publish because every table is protected by row-level security.
    Rellena estos dos valores al crear tu proyecto de Supabase (ver server/README.md). Ambos son PÚBLICOS por diseño:
    la clave "anon" se puede publicar porque cada tabla está protegida con seguridad por filas. */
-window.CLOUD_CFG={url:'',key:''};
+window.CLOUD_CFG={url:'',key:'',strava:false}; // strava:true after deploying the function / tras desplegar la función

@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v89 — 2026-10-24
+- **Watch data from Strava** — connect Strava and bring the heart rate and calories from your watch into any workout, and onto your share card.
+  **Datos de tu reloj con Strava** — conecta Strava y trae la frecuencia cardíaca y las calorías de tu reloj a cualquier entrenamiento, y a tu tarjeta para compartir.
+
 ## v88 — 2026-10-24
 - **Your progress on any phone** — create a free account and your workouts follow you: sign in on another phone and everything is there.
   **Tu progreso en cualquier teléfono** — crea una cuenta gratis y tus entrenamientos te siguen: entra desde otro teléfono y todo está ahí.

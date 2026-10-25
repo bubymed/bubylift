@@ -70,13 +70,14 @@ function openWk(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
   const d=wkDur(wk);
   let h='<div class="wkd"><h3>'+esc(wk.name)+'</h3><p class="muted">'+esc(dFmt(wk.t,{weekday:'long',month:'long',day:'numeric',year:'numeric'}))+'</p>'+
-    '<div class="stats">'+(d?'<div><b>'+fmtDur(d)+'</b><span>'+t('duration')+'</span></div>':'')+'<div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
+    '<div class="stats">'+(d?'<div><b>'+fmtDur(d)+'</b><span>'+t('duration')+'</span></div>':'')+'<div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>'+
+    ((wk.hr||wk.kcal)?'<div class="stats svst">'+(wk.hr?'<div><b>'+wk.hr.a+'</b><span>'+t('svAvg')+'</span></div><div><b>'+wk.hr.m+'</b><span>'+t('svMax')+'</span></div>':'')+(wk.kcal?'<div><b>'+wk.kcal+'</b><span>kcal</span></div>':'')+'</div>'+(wk.sv?'<p class="muted sm c">Powered by Strava</p>':''):'');
   wk.ex.forEach(x=>{
     const m=exMode(x.eid);
     h+='<div class="wkd-ex"><b>'+esc(exName(x.eid,x.n))+'</b>'+x.sets.map((s,i)=>'<div class="wkd-s"><span>'+(i+1)+'</span><span>'+esc(fmtSet(m,s))+'</span>'+(s.pr?'<i class="pr">'+ic('trophy')+'</i>':'')+'</div>').join('')+'</div>';
   });
   if(wk.note)h+='<p class="wkd-note">'+esc(wk.note)+'</p>';
-  h+='<div class="menu"><button onclick="repeatWk(\''+id+'\')">↻ '+t('repeat')+'</button><button onclick="saveWkAsRoutine(\''+id+'\')">☰ '+t('saveRoutineS')+'</button><button onclick="shareWk(\''+id+'\')">⇪ '+t('share')+'</button><button onclick="wkPic(\''+id+'\')">'+ic('share')+' '+t('cdBtn')+'</button><button class="danger" onclick="delWkAsk(\''+id+'\')">'+ic('trash')+' '+t('delete')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>';
+  h+='<div class="menu"><button onclick="repeatWk(\''+id+'\')">↻ '+t('repeat')+'</button><button onclick="saveWkAsRoutine(\''+id+'\')">☰ '+t('saveRoutineS')+'</button>'+(typeof stravaOn==='function'&&stravaOn()?'<button onclick="stravaGet(\''+id+'\')">♥ '+t('svGet')+'</button>':'')+'<button onclick="shareWk(\''+id+'\')">⇪ '+t('share')+'</button><button onclick="wkPic(\''+id+'\')">'+ic('share')+' '+t('cdBtn')+'</button><button class="danger" onclick="delWkAsk(\''+id+'\')">'+ic('trash')+' '+t('delete')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>';
   sheet(h);
 }
 function repeatWk(id){
