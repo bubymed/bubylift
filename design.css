@@ -91,3 +91,19 @@ main>.sec{margin-top:28px;margin-bottom:-4px}
 .card.hero h2,.card.plan h3,.card.plan h2{color:#fff;text-transform:none;letter-spacing:-.025em}
 .sec h2,main>h2,.pkh{text-transform:none;color:var(--txt);font-size:1.3rem;letter-spacing:-.02em}
 .card.plan .plsec{margin-top:10px}.card.plan .plsec .btn:not(:last-child){display:none}.card.plan .plsec .btn:last-child{width:100%}
+
+/* v81 history + progress */
+.dchip{flex:none;width:46px;height:50px;border-radius:12px;background:var(--panel2);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05}
+.dchip b{font-size:1.25rem;font-weight:800}.dchip small{font-size:.68rem;font-weight:700;text-transform:uppercase;color:var(--accent);letter-spacing:.04em}
+.wkrow .lt2 b{display:flex;align-items:center;gap:8px}
+.wkrow .pr{font-size:.78rem;font-weight:700;color:var(--accent)}
+.wkrow .pr .ic{width:14px;height:14px;vertical-align:-2px}
+.stats.card{background:var(--panel);padding:16px 8px}
+.stats b{font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
+.stats span{font-size:.78rem;font-weight:600}
+.lrow .hv-th{flex:none;width:44px;height:44px;border-radius:11px}
+.tl{padding:16px}.tl .tl-h b{font-size:1.05rem}
+.rmc{padding:16px}
+.rmc>b{font-size:1.1rem}
+.chips .chip{border-radius:999px;background:var(--panel);border:0;font-weight:600;padding:8px 14px}
+.chips .chip.on{background:var(--accent);color:#fff}
