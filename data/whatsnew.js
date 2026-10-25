@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v86',items:[
+  {i:'💪',en:'<b>Muscle groups, named right</b> — where you pick what to train, the app now says muscle group (chest, back, legs…) instead of muscle.',es:'<b>Grupos musculares, bien nombrados</b> — donde eliges qué entrenar, la app ahora dice grupo muscular (pecho, espalda, piernas…) en vez de músculo.'}
+ ]},
  {v:'v85',items:[
   {i:'🗣️',en:'<b>Plan setup that talks like a coach</b> — every question now explains why it matters and what to expect, plus friendlier challenges, programs and help.',es:'<b>Armar tu plan, como con un entrenador</b> — cada pregunta explica por qué importa y qué esperar, y los retos, programas y la ayuda hablan más cercano.'}
  ]},
