@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v94 — 2026-10-24
+- **Always in view** — during a workout, warm-up, mobility or stretching, the timer, sets and Finish button now stay pinned at the top while you scroll.
+  **Siempre a la vista** — durante un entrenamiento, calentamiento, movilidad o estiramiento, el tiempo, las series y el botón Finish se quedan fijos arriba mientras te desplazas.
+
 ## v93 — 2026-10-24
 - **Smooth** — windows now slide up and fade out, tabs and screens fade in softly, and buttons give a little press feedback. Respects the reduce-motion setting.
   **Más suave** — las ventanas ahora suben y se desvanecen al cerrar, las pestañas y pantallas aparecen con un fundido suave y los botones reaccionan al tocarlos. Respeta el ajuste de reducir movimiento.

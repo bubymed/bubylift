@@ -756,7 +756,7 @@ main>.card,main>.stats{animation:rise .25s ease-out}
 .exsub{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0 4px}
 .exsub span{min-width:0}
 .lnk-d{color:var(--accent);font-weight:600;font-size:.85rem;padding:6px 2px;white-space:nowrap}
-.wk-head .wk-act{margin-top:8px}
+.wk-head .wk-act{margin-top:0}
 .wk-head .wk-act .btn{width:100%}
 
 main>.lnk-d{display:block;margin:12px auto 0;color:var(--dim)}
