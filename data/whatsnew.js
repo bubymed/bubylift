@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v82',items:[
+  {i:'🧩',en:'<b>Body, Stretch and More, redesigned</b> — iPhone-style switches, flatter cards and tidier lists across the rest of the app.',es:'<b>Cuerpo, Estirar y Más, rediseñados</b> — selectores estilo iPhone, tarjetas más planas y listas más ordenadas en el resto de la app.'}
+ ]},
  {v:'v81',items:[
   {i:'🗓️',en:'<b>History and Progress, redesigned</b> — workouts are tidy rows with the date up front, grouped by month; Progress lists your exercises in one clean list.',es:'<b>Historial y Progreso, rediseñados</b> — los entrenamientos son filas ordenadas con la fecha al frente, agrupadas por mes; Progreso lista tus ejercicios en una sola lista limpia.'}
  ]},

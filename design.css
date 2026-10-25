@@ -107,3 +107,25 @@ main>.sec{margin-top:28px;margin-bottom:-4px}
 .rmc>b{font-size:1.1rem}
 .chips .chip{border-radius:999px;background:var(--panel);border:0;font-weight:600;padding:8px 14px}
 .chips .chip.on{background:var(--accent);color:#fff}
+
+/* v82 body, stretch, more: iOS segmented controls, flat surfaces */
+.seg{background:color-mix(in srgb,var(--txt) 9%,var(--panel));padding:2px;border-radius:10px;gap:0;margin:6px 0 10px}
+.seg button{border-radius:8px;padding:8px 6px;font-weight:600;font-size:.9rem;color:var(--txt);background:none}
+.seg button.on{background:var(--panel);color:var(--txt);box-shadow:0 1px 3px rgba(0,0,0,.22)}
+:root[data-mode="light"] .seg button.on{background:#fff}
+.lrow .seg{flex:0 1 200px}
+.chips .chip,.chip{border-radius:999px;border:0;background:var(--panel);font-weight:600}
+.chip.on{background:var(--accent);color:#fff}
+.dtl summary,details>summary{list-style:none}
+.dtl>summary{background:var(--panel);box-shadow:var(--shadow);border-radius:14px;padding:14px 16px;font-weight:650;color:var(--txt)}
+.card.wt,.card.bigw,.bodyin{background:var(--panel)}
+.mrow{border-radius:0}
+.profcard,.card.creator{border-radius:var(--radius)}
+.card .dz .btn,.dz .btn.danger{border-radius:14px}
+.step-n{background:var(--accent)}
+.card.bwhero{background:var(--panel)}
+.bw-in{font-size:3rem;font-weight:800;letter-spacing:-.03em}
+.bw-st{background:color-mix(in srgb,var(--accent) 13%,var(--panel2));color:var(--accent)}
+.mlist{padding:0;overflow:hidden}
+.card.grp{padding:6px 0}
+.seg,.seg button{border:0!important;outline:0}.mlist .lrow+.lrow,.mrow+.mrow{border-top:.5px solid var(--line)}
