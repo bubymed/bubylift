@@ -239,3 +239,10 @@ body{transition:background-color .25s,color .25s}
 .cs-c.on{outline:3px solid var(--accent);outline-offset:2px}
 
 .leg-row{display:flex;flex-direction:column;gap:8px;margin:10px 0}.leg-n{display:flex;align-items:center;gap:12px;font-size:1.1rem}
+
+/* v0.99.6 fast logging: tap feedback / registro rápido: respuesta al toque */
+.srow.pop{animation:setPop .35s ease-out}
+@keyframes setPop{0%{transform:scale(.985)}45%{transform:scale(1.015)}100%{transform:scale(1)}}
+.chk,.stp{transition:transform .08s ease}
+.chk:active,.stp:active{transform:scale(.88)}
+@media (prefers-reduced-motion:reduce){.srow.pop{animation:none}}

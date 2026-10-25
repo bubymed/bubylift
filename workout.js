@@ -147,12 +147,12 @@ function fillLast(i){
   const x=ACT.ex[i],le=lastEx(x.eid);if(!le)return;const ps=le.x.sets,m=exMode(x.eid);
   x.sets.forEach((s,j)=>{if(s.done)return;const p=ps[j]||ps[ps.length-1];if(!p)return;
     if(m==='t'){if(s.t==null)s.t=p.t;if(s.d==null)s.d=p.d;}else{if(s.w==null)s.w=p.w;if(s.r==null)s.r=p.r;}});
-  saveAct();render();toast(t('flDone'));
+  saveAct();exRedraw(i);toast(t('flDone'));
 }
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'"><img src="img/ex/'+x.eid+'-0.jpg" alt=""><img class="b" src="img/ex/'+x.eid+'-1.jpg" alt="" onerror="this.remove()"></button>':'';
-  let h='<section class="exc"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span><button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
+  let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span><button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
   h+=suggLine(x);
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
   h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'</div>';
@@ -175,7 +175,7 @@ function exCard(i,x){
 function clrSet(i,j){
   const s=ACT.ex[i].sets[j];if(!s)return;
   s.w=null;s.r=null;s.t=null;s.d=null;s.done=false;delete s.pr;
-  saveAct();render();toast(t('clrDone'));
+  saveAct();exRedraw(i);toast(t('clrDone'));
 }
 function sv(i,j,f,v){
   const s=ACT.ex[i].sets[j];v=String(v).trim();let n=null;
@@ -196,9 +196,9 @@ function stepSet(i,j,f,d){
     let b=s.r;if(b==null)b=ph&&ph.r!=null?ph.r:(x.tg&&x.tg.u==='r'?x.tg.lo:0);
     s.r=Math.max(0,Math.min(999,b+d));
   }
-  saveAct();render();
+  saveAct();exRedraw(i);buzz(6);
 }
-function addSet(i){ACT.ex[i].sets.push(newSet());saveAct();render();}
+function addSet(i){ACT.ex[i].sets.push(newSet());saveAct();exRedraw(i);}
 function tgSet(i,j){
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);
   unlockAudio();
@@ -216,7 +216,26 @@ function tgSet(i,j){
     if(prev>0&&sc>prev){s.pr=true;toast(t('newPR'));}else delete s.pr;
     startRest(x.tg&&x.tg.rs!=null?x.tg.rs:undefined);
   }else{s.done=false;delete s.pr;}
-  saveAct();render();
+  saveAct();exRedraw(i);
+  if(s.done){buzz(s.pr?[12,60,24]:12);popRow(i,j);nextInView(i,j);}
+}
+/* redraw only the exercise you touched: no flash, no jump, keeps your place / redibuja solo el ejercicio que tocaste: sin parpadeo ni saltos */
+function exRedraw(i){
+  const el=document.getElementById('exc'+i);
+  if(!el||!ACT||!ACT.ex[i]){render();return;}
+  const tmp=document.createElement('div');tmp.innerHTML=exCard(i,ACT.ex[i]);
+  el.replaceWith(tmp.firstElementChild);updTop();
+}
+function buzz(p){try{if(SET.hap!==false&&navigator.vibrate)navigator.vibrate(p);}catch(e){}}
+function popRow(i,j){const el=document.getElementById('exc'+i);if(!el)return;const r=el.querySelectorAll('.srow:not(.hd)')[j];if(r){r.classList.add('pop');}}
+/* after a set is done, bring the next one into view only if it is off screen / al terminar una serie, muestra la siguiente solo si queda fuera de pantalla */
+function nextInView(i,j){
+  const el=document.getElementById('exc'+i);if(!el)return;
+  const rows=el.querySelectorAll('.srow:not(.hd)');let nx=rows[j+1];
+  if(!nx){const e2=document.getElementById('exc'+(i+1));if(e2)nx=e2.querySelector('.srow:not(.hd)');}
+  if(!nx)return;
+  const r=nx.getBoundingClientRect();
+  if(r.bottom>window.innerHeight-170||r.top<70){try{nx.scrollIntoView({block:'center',behavior:'smooth'});}catch(e){}}
 }
 function exMenu(i){
   const x=ACT.ex[i];
