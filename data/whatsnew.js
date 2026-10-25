@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v83',items:[
+  {i:'💪',en:'<b>A clearer workout screen</b> — bigger fields, a clear green check when a set is done, and a floating rest timer.',es:'<b>Pantalla de entrenamiento más clara</b> — campos más grandes, un check verde claro al completar una serie y un temporizador de descanso flotante.'}
+ ]},
  {v:'v82',items:[
   {i:'🧩',en:'<b>Body, Stretch and More, redesigned</b> — iPhone-style switches, flatter cards and tidier lists across the rest of the app.',es:'<b>Cuerpo, Estirar y Más, rediseñados</b> — selectores estilo iPhone, tarjetas más planas y listas más ordenadas en el resto de la app.'}
  ]},
