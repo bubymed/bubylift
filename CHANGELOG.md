@@ -6,7 +6,7 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
-## v95 — 2026-10-24
+## v0.95 — 2026-10-24
 - **Share cards, your way** — 7 transparent card styles with the Bubylift logo: save the PNG and drop it over any photo or story, or add a photo right in the app. Pick the color and Story or Post size.
   **Tarjetas a tu manera** — 7 estilos de tarjeta transparente con el logo de Bubylift: guarda el PNG y ponlo encima de cualquier foto o historia, o agrega una foto dentro de la app. Elige el color y el tamaño Historia o Publicación.
 

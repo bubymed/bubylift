@@ -9,12 +9,12 @@ errors = []
 def err(m): errors.append(m)
 
 # 1) the three version numbers must match / las tres versiones deben coincidir
-app_ver = re.search(r"APP_VER\s*=\s*'(v\d+)'", read("app.js")).group(1)
+app_ver = re.search(r"APP_VER\s*=\s*'(v\d+(?:\.\d+)?)'", read("app.js")).group(1)
 ver_json = json.loads(read("version.json"))["v"]
-sw_ver = re.search(r"const C='bubylift-(v\d+)'", read("sw.js")).group(1)
+sw_ver = re.search(r"const C='bubylift-(v\d+(?:\.\d+)?)'", read("sw.js")).group(1)
 if not (app_ver == ver_json == sw_ver):
     err(f"version mismatch: app.js={app_ver} version.json={ver_json} sw.js={sw_ver}")
-wn = re.search(r"\{v:'(v\d+)'", read("data/whatsnew.js"))
+wn = re.search(r"\{v:'(v\d+(?:\.\d+)?)'", read("data/whatsnew.js"))
 if not wn or wn.group(1) != app_ver:
     err(f"top entry of data/whatsnew.js should be {app_ver}, found {wn.group(1) if wn else None}")
 if f"## {app_ver}" not in read("CHANGELOG.md") and "## Unreleased" not in read("CHANGELOG.md"):
