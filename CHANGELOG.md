@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v85 — 2026-10-24
+- **Plan setup that talks like a coach** — every question now explains why it matters and what to expect, plus friendlier challenges, programs and help.
+  **Armar tu plan, como con un entrenador** — cada pregunta explica por qué importa y qué esperar, y los retos, programas y la ayuda hablan más cercano.
+
 ## v84 — 2026-10-24
 - **Friendlier words** — messages, buttons and empty screens now talk about what you gain, with a warm note after every workout (first workout, new record, streaks) and clearer hints.
   **Textos más cercanos** — mensajes, botones y pantallas vacías ahora hablan de lo que ganas tú, con una nota cálida al terminar cada entrenamiento (primero, récord nuevo, rachas) y ayudas más claras.

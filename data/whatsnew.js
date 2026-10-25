@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v85',items:[
+  {i:'🗣️',en:'<b>Plan setup that talks like a coach</b> — every question now explains why it matters and what to expect, plus friendlier challenges, programs and help.',es:'<b>Armar tu plan, como con un entrenador</b> — cada pregunta explica por qué importa y qué esperar, y los retos, programas y la ayuda hablan más cercano.'}
+ ]},
  {v:'v84',items:[
   {i:'💬',en:'<b>Friendlier words</b> — messages, buttons and empty screens now talk about what you gain, with a warm note after every workout (first workout, new record, streaks) and clearer hints.',es:'<b>Textos más cercanos</b> — mensajes, botones y pantallas vacías ahora hablan de lo que ganas tú, con una nota cálida al terminar cada entrenamiento (primero, récord nuevo, rachas) y ayudas más claras.'}
  ]},
