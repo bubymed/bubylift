@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v87 — 2026-10-24
+- **Mobility up front** — Mobility is now its own tab and has a card on Train, with a big button to start 10 minutes of mobility. Settings moved to the gear icon at the top.
+  **La movilidad al frente** — Movilidad ahora tiene su propia pestaña y una tarjeta en Entrenar, con un botón grande para empezar 10 minutos de movilidad. Los ajustes pasaron al icono de engranaje arriba.
+
 ## v86 — 2026-10-24
 - **Muscle groups, named right** — where you pick what to train, the app now says muscle group (chest, back, legs…) instead of muscle.
   **Grupos musculares, bien nombrados** — donde eliges qué entrenar, la app ahora dice grupo muscular (pecho, espalda, piernas…) en vez de músculo.

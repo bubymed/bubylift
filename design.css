@@ -150,3 +150,11 @@ main>.sec{margin-top:28px;margin-bottom:-4px}
 .form h3{font-size:1.4rem;font-weight:800;letter-spacing:-.02em}
 .cheer{font-size:1.05rem;font-weight:600;margin:6px 0 4px;line-height:1.35}
 .hlp{margin:-4px 2px 8px}
+
+/* v87 mobility gets its own tab, a card on Train and a hero */
+.mobc{padding:14px 16px}
+.mobc-b{display:flex;align-items:center;gap:14px;width:100%;text-align:left}
+.mobc .row{margin-top:12px}.mobc .row .btn{flex:1}
+.avbtn.gear{width:36px;height:36px;border-radius:50%;background:var(--panel);color:var(--txt);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+.avbtn.gear .ic{width:20px;height:20px}.avbtn.gear.on{color:var(--accent)}
+#tabbar button{min-width:0}

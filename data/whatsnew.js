@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v87',items:[
+  {i:'🧘',en:'<b>Mobility up front</b> — Mobility is now its own tab and has a card on Train, with a big button to start 10 minutes of mobility. Settings moved to the gear icon at the top.',es:'<b>La movilidad al frente</b> — Movilidad ahora tiene su propia pestaña y una tarjeta en Entrenar, con un botón grande para empezar 10 minutos de movilidad. Los ajustes pasaron al icono de engranaje arriba.'}
+ ]},
  {v:'v86',items:[
   {i:'💪',en:'<b>Muscle groups, named right</b> — where you pick what to train, the app now says muscle group (chest, back, legs…) instead of muscle.',es:'<b>Grupos musculares, bien nombrados</b> — donde eliges qué entrenar, la app ahora dice grupo muscular (pecho, espalda, piernas…) en vez de músculo.'}
  ]},
