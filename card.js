@@ -5,52 +5,12 @@ function cardIcon(g,n,x,y,sz,col){
   (src.match(/ d="([^"]+)"/g)||[]).forEach(m=>{try{g.stroke(new Path2D(m.slice(4,-1)));}catch(e){}});
   g.restore();
 }
-/* Share card (v72): a picture of a workout to post or send; and CSV import / tarjeta para compartir (v72) e importar CSV. */
+/* Card data (v72) and CSV import; the picture itself is drawn in cardstudio.js / datos de la tarjeta (v72) e importar CSV; la imagen se dibuja en cardstudio.js */
 function cardFont(px,w){return(w||'700')+' '+px+'px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';}
 function wkCardData(wk){
   const top=wk.ex.map(x=>{const m=exMode(x.eid);let b=null,bs=-1;x.sets.forEach(s=>{const sc=setScore(m,s);if(sc>bs){bs=sc;b=s;}});return{eid:x.eid,n:x.n,m:m,b:b,pr:x.sets.some(s=>s.pr),sets:x.sets.length,sc:bs};})
     .sort((a,b)=>(b.pr-a.pr)||(b.sets-a.sets)).slice(0,5);
   return{name:wk.name,date:dFmt(wk.t,{month:'long',day:'numeric',year:'numeric'}),dur:wk.end?fmtDur((wk.end-wk.t)/1000):'',sets:wkSets(wk),vol:wShow(wkVol(wk))+' '+wUnit(),hr:wk.hr||null,kcal:wk.kcal||0,sv:!!wk.sv,prs:wk.ex.reduce((a,x)=>a+x.sets.filter(s=>s.pr).length,0),top:top};
-}
-function drawWkCard(wk){
-  const d=wkCardData(wk),W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
-  const cs=getComputedStyle(document.documentElement),acc=(cs.getPropertyValue('--accent')||'#d9480f').trim()||'#d9480f';
-  const bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#16161a');bg.addColorStop(1,'#2a1a12');g.fillStyle=bg;g.fillRect(0,0,W,H);
-  g.fillStyle=acc;g.fillRect(0,0,W,16);
-  g.fillStyle=acc;g.font=cardFont(56,'800');g.fillText('BUBYLIFT',80,140);
-  g.fillStyle='#ffffff';g.font=cardFont(84,'800');
-  let nm=d.name;while(g.measureText(nm).width>W-160&&nm.length>4)nm=nm.slice(0,-2);if(nm!==d.name)nm+='…';
-  g.fillText(nm,80,290);
-  g.fillStyle='#b9b9c2';g.font=cardFont(40,'500');g.fillText(d.date,80,350);
-  const wo=!wk.ex.length; // watch-only workout (from Strava) / entrenamiento solo del reloj
-  const stats=wo?[[d.dur||'—',t('duration')],[d.hr?d.hr.a+' bpm':'—',t('cdHr')],[d.kcal?d.kcal+' kcal':'—',t('cdKcal')]]:[[d.dur||'—',t('duration')],[String(d.sets),t('sets')],[d.vol,t('volume')]];
-  stats.forEach((s,i)=>{const x=80+i*320;g.fillStyle='rgba(255,255,255,.07)';g.beginPath();g.roundRect?g.roundRect(x,420,290,170,26):g.rect(x,420,290,170);g.fill();
-    g.fillStyle='#fff';g.font=cardFont(s[0].length>9?38:54,'800');g.fillText(s[0],x+24,508);g.fillStyle='#b9b9c2';g.font=cardFont(30,'500');g.fillText(s[1],x+24,558);});
-  const ex0=(!wo&&(d.hr||d.kcal))?70:0;
-  if(!wo&&(d.hr||d.kcal)){g.fillStyle='#ffffff';g.font=cardFont(40,'700');const tx=[d.hr?d.hr.a+' avg · '+d.hr.m+' max':'',d.kcal?d.kcal+' kcal':''].filter(Boolean).join('   ·   ');if(d.hr){cardIcon(g,'heart',80,624,44,'#ffffff');g.fillText(tx,140,660);}else g.fillText(tx,80,660);}
-  if(d.prs){g.fillStyle=acc;g.font=cardFont(44,'800');cardIcon(g,'trophy',80,642+ex0,48,acc);g.fillText(d.prs+' PR',142,680+ex0);}
-  let y=(d.prs?770:700)+ex0;
-  d.top.slice(0,ex0?4:5).forEach(x=>{
-    g.fillStyle='#fff';g.font=cardFont(44,'700');
-    let n=exName(x.eid,x.n);while(g.measureText(n).width>640&&n.length>4)n=n.slice(0,-2);if(n!==exName(x.eid,x.n))n+='…';
-    g.fillText(n,80,y);
-    g.fillStyle='#b9b9c2';g.font=cardFont(40,'500');const r=x.sets+' × '+(x.b?fmtSet(x.m,x.b):'');
-    g.textAlign='right';g.fillText(r.length>26?r.slice(0,26):r,W-80,y);g.textAlign='left';
-    g.fillStyle='rgba(255,255,255,.1)';g.fillRect(80,y+26,W-160,2);y+=96;
-  });
-  g.fillStyle='#8c8c96';g.font=cardFont(34,'500');g.fillText('bubymed.github.io/bubylift',80,H-70);if(d.sv){g.textAlign='right';g.fillText('Powered by Strava',W-80,H-70);g.textAlign='left';}
-  return c;
-}
-function wkPic(id){
-  const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
-  let c;try{c=drawWkCard(wk);}catch(e){toast(t('copyFail'));return;}
-  c.toBlob(function(b){
-    if(!b){toast(t('copyFail'));return;}
-    const f=new File([b],'bubylift-'+dInput(wk.t)+'.png',{type:'image/png'});
-    try{if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Bubylift'}).catch(()=>{});return;}}catch(e){}
-    const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();
-    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);toast(t('cdSaved'));
-  },'image/png');
 }
 /* ---- CSV import: reads the file Bubylift exports / lee el archivo que exporta Bubylift ---- */
 function csvParse(txt){

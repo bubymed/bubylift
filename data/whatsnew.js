@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v95',items:[
+  {i:'🖼️',en:'<b>Share cards, your way</b> — 7 transparent card styles with the Bubylift logo: save the PNG and drop it over any photo or story, or add a photo right in the app. Pick the color and Story or Post size.',es:'<b>Tarjetas a tu manera</b> — 7 estilos de tarjeta transparente con el logo de Bubylift: guarda el PNG y ponlo encima de cualquier foto o historia, o agrega una foto dentro de la app. Elige el color y el tamaño Historia o Publicación.'}
+ ]},
  {v:'v94',items:[
   {i:'📌',en:'<b>Always in view</b> — during a workout, warm-up, mobility or stretching, the timer, sets and Finish button now stay pinned at the top while you scroll.',es:'<b>Siempre a la vista</b> — durante un entrenamiento, calentamiento, movilidad o estiramiento, el tiempo, las series y el botón Finish se quedan fijos arriba mientras te desplazas.'}
  ]},
