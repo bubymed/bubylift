@@ -16,8 +16,8 @@ Yo los pongo en `data/cloudcfg.js`, y la tarjeta "Tu progreso, en cualquier tel�
 
 ## Qué se guarda / What is stored
 
-Una sola fila por persona (`user_data`) con sus entrenamientos, rutinas, medidas, plan y metas. Los datos no están cifrados de extremo a extremo: quien administre el proyecto de Supabase puede verlos. La política de privacidad debe decirlo.
-One row per person with their workouts, routines, body entries, plan and goals. Data is not end-to-end encrypted: whoever administers the Supabase project can see it.
+Una sola fila por persona (`user_data`) con sus datos **cifrados de extremo a extremo** en el teléfono (AES-256-GCM): quien administre el proyecto de Supabase solo ve texto cifrado, el tamaño y la fecha, más el correo. La llave de datos se guarda envuelta por la contraseña y por una clave de recuperación que solo ve la persona; la contraseña que recibe Supabase es una derivación de un solo sentido. Si se pierden la contraseña y la clave de recuperación, los datos de la nube no se pueden recuperar (los del teléfono siguen ahí). Si ya habías ejecutado `schema.sql`, vuelve a ejecutarlo: agrega la columna `vault`.
+One row per person (`user_data`) with their data **end-to-end encrypted** on the phone (AES-256-GCM): whoever administers the Supabase project only sees ciphertext, its size and timestamp, plus the e-mail. The data key is stored wrapped by the password and by a recovery key only the person sees; the password Supabase receives is a one-way derivation. If both the password and the recovery key are lost, the cloud data cannot be recovered (data on the phone stays). If you already ran `schema.sql`, run it again: it adds the `vault` column.
 
 ---
 

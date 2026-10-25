@@ -168,3 +168,24 @@ main>.sec{margin-top:28px;margin-bottom:-4px}
 .sv-t{display:flex;flex-direction:column}.sv-t small{color:var(--dim);font-size:.82rem}
 .sv-pw{grid-column:1/-1;color:var(--dim);font-size:.72rem}
 .svst{margin-top:8px}
+
+/* cloud account sheets / hojas de la cuenta en la nube */
+.clwarn{font-size:13px;line-height:1.4;color:var(--text);background:color-mix(in srgb,var(--warn) 14%,transparent);border-radius:12px;padding:10px 12px;margin:8px 0}
+.clmsg{font-size:14px;color:var(--red);margin:6px 0}
+.clrec{font:700 17px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em;text-align:center;background:var(--panel);border-radius:14px;padding:16px 10px;margin:12px 0;user-select:all;-webkit-user-select:all}
+.clchk{display:flex;gap:10px;align-items:center;font-size:15px;margin:12px 0}
+.clchk input{width:22px;height:22px;accent-color:var(--accent)}
+
+/* emoji → line icons / emojis → iconos de línea */
+.emo{display:inline-flex;align-items:center;vertical-align:-.2em;line-height:1}
+.emo .ic.ei{width:1.15em;height:1.15em;stroke-width:1.9}
+.av .emo .ic.ei{width:1em;height:1em;color:#fff;stroke-width:1.7}
+.wel-e .emo .ic.ei,.sum-e .emo .ic.ei{width:1em;height:1em;color:var(--accent);stroke-width:1.4}
+
+/* circular avatars + suggested photos / avatares circulares + fotos sugeridas */
+.av{border-radius:50%}
+.av.av-p{background:transparent}
+.av-sug{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;max-height:236px;overflow-y:auto;padding:4px;margin:6px -4px 14px;-webkit-overflow-scrolling:touch}
+.av-s{border:0;padding:0;background:none;border-radius:50%;aspect-ratio:1;position:relative}
+.av-s img{width:100%;height:100%;border-radius:50%;display:block;object-fit:cover}
+.av-s.on{outline:3px solid var(--accent);outline-offset:2px}

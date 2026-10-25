@@ -223,7 +223,7 @@ function importFile(inp){
 /* ---------- erase everything ---------- */
 function eraseAsk(){ask(t('eraseAsk'),t('continue'),function(){ask(t('eraseAsk2'),t('eraseAll'),eraseAll,true);},true);}
 function eraseAll(){
-  [K_DATA,K_SET,K_ACT].forEach(jdel);try{localStorage.removeItem(clKey());}catch(e){}
+  [K_DATA,K_SET,K_ACT].forEach(jdel);
   stopRest();unwake();
   const go=function(){location.replace(location.pathname);};
   if(ENC)pfFlush().then(go,go);else go();
