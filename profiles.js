@@ -24,7 +24,7 @@ function pfClean(p){
   if(!p||typeof p!=='object'||typeof p.id!=='string'||!/^[a-z0-9]{3,24}$/.test(p.id))return null;
   const qs=(Array.isArray(p.qs)?p.qs:[]).map(q=>{if(!q||!((q.i|0)>=0&&(q.i|0)<PF_QN))return null;const r=pfRec(q);return r?Object.assign(r,{i:q.i|0}):{i:q.i|0};}).filter(Boolean).slice(0,3);
   const enc=pfEncRec(p.enc);
-  return{id:p.id,name:String(p.name||'').trim().slice(0,20)||'Profile',av:pfAv(p.av),pw:pfRec(p.pw),qs:qs,enc:enc,rm:enc?0:(p.rm?1:0),t:+p.t||Date.now(),g:(!enc&&!pfRec(p.pw)&&p.g)?1:0,tmp:(!enc&&!pfRec(p.pw)&&p.g&&p.tmp)?1:0};
+  return{id:p.id,name:String(p.name||'').trim().slice(0,20)||'Profile',av:pfAv(p.av),pw:pfRec(p.pw),qs:qs,enc:enc,rm:enc?0:(p.rm?1:0),t:+p.t||Date.now(),g:(!enc&&!pfRec(p.pw)&&p.g)?1:0,tmp:(!enc&&!pfRec(p.pw)&&p.g&&p.tmp)?1:0,acct:p.acct?1:0};
 }
 function pfLoad(){const a=jget('bl_profiles',[]);PFS=(Array.isArray(a)?a:[]).map(pfClean).filter(Boolean).slice(0,PF_MAX);return PFS;}
 function pfSave(){jset('bl_profiles',PFS);}
@@ -144,10 +144,31 @@ function pfDropTmp(){
   PFS=PFS.filter(p=>bad.indexOf(p)<0);const dirty=bad.length||PFS.some(p=>p.tmp);PFS.forEach(p=>{p.tmp=0;});
   if(dirty)pfSave();
 }
+/* old password-protected local profiles are no longer valid when accounts are on (unless they got a cloud account)
+   los perfiles locales viejos con contraseña ya no son válidos con cuentas activas (salvo que tengan cuenta en la nube) */
+const pfIsOld=p=>!p.g&&!p.acct&&!!(p.pw||p.enc);
+function pfPurge(id){const k=pfKeys(id);try{[k.d,k.s,k.a,'bl_rk_'+id,'bl_thrp_'+id,'bl_thrq_'+id].forEach(x=>localStorage.removeItem(x));if(localStorage.getItem('bl_last')===id)localStorage.removeItem('bl_last');}catch(e){}PFS=PFS.filter(x=>x.id!==id);pfSave();}
+function gLegacy(){
+  GS={redraw:gLegacy};
+  const old=PFS.filter(pfIsOld),rest=PFS.length>old.length;
+  gateShow('<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">🏋️</div></div><h1 class="lt g-h">'+t('legT')+'</h1><p class="muted g-c">'+t('legP')+'</p>'+
+    '<div class="g-form">'+old.map(p=>'<div class="card leg-row"><div class="leg-n">'+avHtml(p.av,56)+'<b>'+esc(pfName(p))+'</b></div><button class="btn pri wide" onclick="pfLegKeep(\''+p.id+'\')">'+t('legKeep')+'</button><button class="btn wide" onclick="pfLegAsk([\''+p.id+'\'])">'+t('legDel')+'</button></div>').join('')+
+    (old.length>1?'<button class="btn danger wide" onclick="pfLegAsk(['+old.map(p=>'\''+p.id+'\'').join(',')+'])">'+t('legDelAll')+'</button>':'')+
+    (rest?'<button class="lnk-d" onclick="pfLegSkip()">'+t('legSkip')+'</button>':'')+'</div>'+gLang());
+}
+function pfLegKeep(id){window.__clGo='up';gPw(id);}
+function pfLegAsk(ids){
+  const names=ids.map(i=>{const p=pfGet(i);return p?pfName(p):'';}).filter(Boolean).join(', ');
+  gateShow('<div class="g-top"><button class="g-link" onclick="gLegacy()">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('legDel')+'</h1><p class="muted">'+t('legDelP',esc(names))+'</p>'+
+    '<div class="g-form"><button class="btn danger big wide" onclick="pfLegDo(['+ids.map(i=>'\''+i+'\'').join(',')+'])">'+t('legDel')+'</button></div>'+gLang());
+}
+function pfLegDo(ids){ids.forEach(pfPurge);try{sessionStorage.setItem('bl_pick','1');}catch(e){}location.replace(location.pathname);}
+function pfLegSkip(){try{sessionStorage.setItem('bl_legskip','1');}catch(e){}location.replace(location.pathname);}
 async function boot(){
   pfLoad();pfDropTmp();
   let sess=null,sk=null,last=null;try{sess=sessionStorage.getItem('bl_sess');sk=sessionStorage.getItem('bl_sk');last=localStorage.getItem('bl_last');}catch(e){}
   pfPrefs();
+  if(typeof cloudOn==='function'&&cloudOn()&&PFS.some(pfIsOld)){let sk2=null;try{sk2=sessionStorage.getItem('bl_legskip');}catch(e){}if(!sk2){gLegacy();return;}}
   const p=pfGet(sess);
   if(p&&!p.enc){await pfEnter(p.id,null);return;}
   if(p&&p.enc&&sk){

@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.97',items:[
+  {i:'🗑️',en:'<b>Old local profiles retired</b> — password-protected profiles that only lived on one phone are no longer valid. Open yours and create a free account to keep your data, or delete it.',es:'<b>Perfiles locales retirados</b> — los perfiles con contraseña que solo vivían en un teléfono ya no son válidos. Abre el tuyo y crea una cuenta gratis para conservar tus datos, o elimínalo.'}
+ ]},
  {v:'v0.96',items:[
   {i:'☁️',en:'<b>Accounts only</b> — with cloud on, the only ways in are your cloud account or guest. Every create-account button now makes a cloud account, sign-in tells you if an email isn\'t registered, and guests can\'t create local profiles.',es:'<b>Solo cuentas</b> — con la nube activa, solo se entra con tu cuenta en la nube o como invitado. Todos los botones de crear cuenta crean una cuenta en la nube, el inicio de sesión avisa si un correo no está registrado, y los invitados ya no crean perfiles locales.'}
  ]},

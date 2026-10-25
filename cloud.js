@@ -10,9 +10,9 @@ let CL=null,CLBUSY=false,CLT=null,CLAPPLY=false,CLMSG='',CLK=null;
 const CL_KEYS=['workouts','routines','body','custom'],CL_ITER=150000,REC_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function cloudOn(){const c=window.CLOUD_CFG;return !!(c&&c.url&&c.key&&/^https:\/\//.test(c.url)&&window.crypto&&crypto.subtle);}
 /* the session lives inside the profile's settings, so password-protected profiles keep it encrypted / la sesión vive dentro de los ajustes del perfil */
-function clLoad(){const o=SET&&SET.cl;CL=(o&&typeof o==='object'&&typeof o.uid==='string'&&typeof o.rt==='string')?o:null;CLK=null;}
+function clLoad(){const o=SET&&SET.cl;CL=(o&&typeof o==='object'&&typeof o.uid==='string'&&typeof o.rt==='string')?o:null;CLK=null;try{const p=pfCur();if(CL&&CL.dek&&p&&!p.acct){p.acct=1;pfSave();}}catch(e){}}
 /* a guest that signs in becomes a normal profile named after the e-mail / el invitado que inicia sesión pasa a perfil normal */
-function clAdopt(){try{const p=pfCur();if(p&&p.g&&CL&&CL.email){p.g=0;p.tmp=0;p.name=(CL.email.split('@')[0]||'Me').slice(0,20);pfSave();if(typeof renderTabs==='function')renderTabs();}}catch(e){}}
+function clAdopt(){try{const q=pfCur();if(q&&!q.acct&&CL&&CL.email){q.acct=1;pfSave();}const p=pfCur();if(p&&p.g&&CL&&CL.email){p.g=0;p.tmp=0;p.name=(CL.email.split('@')[0]||'Me').slice(0,20);pfSave();if(typeof renderTabs==='function')renderTabs();}}catch(e){}}
 function clSave(){if(CL){SET.cl=CL;saveSet();}}
 function clUnlink(){CL=null;CLK=null;if(SET&&SET.cl){delete SET.cl;saveSet();}}
 /* tombstones: remember deletions so another phone does not bring the item back / lápidas: recuerdan lo borrado */
