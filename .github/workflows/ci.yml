@@ -1,0 +1,25 @@
+# Runs on every PR and every push to main: translations/version check + the full app smoke test.
+# Corre en cada PR y en cada push a main: revisión de traducciones/versión + la prueba completa de la app.
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm install --no-audit --no-fund
+      - name: Translations, keys and version
+        run: python3 tools/check.py
+      - name: Smoke test (jsdom)
+        run: node tests/smoke.js
