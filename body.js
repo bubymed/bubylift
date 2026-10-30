@@ -92,8 +92,7 @@ function mrow(ic,lab,act,sub){
 function vMore(){
   // iOS-style grouped list: one card, one row per setting / lista agrupada estilo iOS: una tarjeta, una fila por ajuste
   const row=(lab,ctl)=>'<div class="lrow"><span>'+lab+'</span>'+ctl+'</div>';
-  const gp=(typeof pfCur==='function'&&pfCur());
-  let h=cloudCard()+(gp&&gp.g&&!(typeof cloudOn==='function'&&cloudOn())?'<div class="card tip"><b>'+ic('user')+' '+t('gnT')+'</b><p class="sm">'+t('gnP')+'</p><div class="row"><button class="btn pri" onclick="gSave()">'+t('gnYes')+'</button></div></div>':'')+'<div class="sec"><h2>'+t('prefs')+'</h2></div><div class="card grp">'+
+  let h=cloudCard()+'<div class="sec"><h2>'+t('prefs')+'</h2></div><div class="card grp">'+
     row(t('language'),seg([['en','English'],['es','Español']],LANG,'setLang'))+
     row(t('textSize'),seg([['s','A'],['m','A+'],['l','A++']],SET.fs||'s','setFs'))+
     row(t('appearance'),seg([['system',t('thSystem')],['dark',t('thDark')],['light',t('thLight')]],SET.theme||'system','setTheme'))+
@@ -228,7 +227,7 @@ function eraseAll(){
   [K_DATA,K_SET,K_ACT].forEach(jdel);
   stopRest();unwake();
   const go=function(){location.replace(location.pathname);};
-  if(ENC)pfFlush().then(go,go);else go();
+  go();
 }
 
 /* share the app with a QR code / compartir la app con un código QR */
