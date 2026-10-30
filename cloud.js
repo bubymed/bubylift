@@ -162,6 +162,7 @@ async function clHash(){
       if(gt.ok&&Array.isArray(gt.j)&&gt.j.length&&gt.j[0].vault){toast(t('oaPw'));return;}
       CL=null;clSession({access_token:at,refresh_token:rt,expires_in:q.get('expires_in')||3600,user:u.j});
       CL.plain=1;CL.dek='plain';CL.fresh=1;CLK=null;clSave();
+      if(gt.ok&&Array.isArray(gt.j)&&gt.j.length){SET.tourSeen=1;saveSet();}
       const md=u.j.user_metadata||{},nm=String(md.full_name||md.name||'').trim().split(/\s+/)[0];
       const cp=pfCur();if(cp&&cp.g&&nm)window.__clProf={id:cp.id,name:nm,av:null};
       clAdopt();toast(t('clWelcome'));await cloudSync(false);render();return;
@@ -185,7 +186,7 @@ function oaOr(){return(window.__clProv&&window.__clProv.google)?'<div class="oa-
 /* ---- screens ---- */
 function cloudCard(){
   if(!cloudOn())return'';
-  if(!CL||CL.bad||!CL.dek)return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+t('clT')+'</b><p class="muted sm">'+t(CL&&CL.bad?'clExpired':'clP')+'</p></div><div class="row"><button class="btn pri" onclick="clAuthOpen(\'up\')">'+t('clCreate')+'</button><button class="btn" onclick="clAuthOpen(\'in\')">'+t('clIn')+'</button></div></div>';
+  if(!CL||CL.bad||!CL.dek){const gu=pfCur()&&pfCur().g&&!(CL&&CL.bad);return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+t(gu?'gnCT':'clT')+'</b><p class="muted sm">'+t(CL&&CL.bad?'clExpired':(gu?'gnCP':'clP'))+'</p></div><div class="row"><button class="btn pri" onclick="clAuthOpen(\'up\')">'+t('wSignUp')+'</button><button class="btn" onclick="clAuthOpen(\'in\')">'+t('wLogIn')+'</button></div></div>';}
   const ago=CL.last?Math.max(0,Math.round((Date.now()-CL.last)/60000)):null;
   const st=CL.err==='key'?t('clKeyBad'):CL.err==='off'?t('clOff'):CL.err?t('clFail'):(ago==null?t('clAuto'):(ago<1?t('clJust'):t('clAgo',ago>=60?Math.round(ago/60)+' h':ago+' min')));
   return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+esc(CL.email)+'</b><p class="muted sm">'+st+'</p></div><div class="row"><button class="btn wide" onclick="clAcctOpen()">'+t('clManage')+'</button></div>'+stravaRow()+'</div>';
@@ -231,7 +232,7 @@ async function clSubmit(mode,pre){
     if(!g.ok||!Array.isArray(g.j)){clUnlink();throw new Error('user_data '+g.s+' '+String(g.j&&(g.j.message||g.j.msg||g.j.hint||g.j.error||g.j.code)||'').slice(0,90));}
     if(g.j.length&&g.j[0].vault&&g.j[0].vault.wp){
       let dek;try{dek=await pfUnwrap('p:'+pw,g.j[0].vault.wp);}catch(e){clUnlink();fail(t('clKeyBad'));return;}
-      CL.dek=b64(dek);CLK=null;CL.fresh=1;clSave();clAdopt();sheetClose();if(window.__clGate){window.__clGate=0;window.__gKeep=0;gateHide();}toast(t('clWelcome'));await cloudSync(false);render();
+      SET.tourSeen=1;saveSet();CL.dek=b64(dek);CLK=null;CL.fresh=1;clSave();clAdopt();sheetClose();if(window.__clGate){window.__clGate=0;window.__gKeep=0;gateHide();}toast(t('clWelcome'));await cloudSync(false);render();
     }else{await clSetup(pw);}
   }catch(e){const em2=String(e&&e.message||e);try{console.warn('bubylift cloud',e);}catch(x){}fail(t(/^user_data/.test(em2)?'clHalf':'clOff')+' ['+em2.slice(0,110)+']',mode==='up'&&/^user_data/.test(em2)?'in':mode);}
 }
@@ -419,4 +420,11 @@ async function stravaGet(id){
     if(!wk.hr&&!wk.kcal){toast(t('svNone'));return;}
     wk.sv=1;saveData();sheetClose();openWk(id);toast(t('svGot'));
   }catch(e){toast(t('clFail'));}
+}
+
+/* slim reminder for guests: no account exists until they sign up or log in / aviso breve para invitados */
+function guestBar(){
+  const p=typeof pfCur==='function'&&pfCur();
+  if(!cloudOn()||!p||!p.g||(CL&&CL.dek))return'';
+  return'<div class="card guestbar"><span>'+t('gbT')+'</span><div class="row"><button class="btn pri sm" onclick="clAuthOpen(\'up\')">'+t('wSignUp')+'</button><button class="btn sm" onclick="clAuthOpen(\'in\')">'+t('wLogIn')+'</button></div></div>';
 }

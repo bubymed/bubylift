@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99.13',items:[
+  {i:'🧭',en:'<b>Quick tour and clearer guest mode:</b> the first time you open Bubylift a 30-second tour walks you through the app. Skip it, switch it off in Settings or at sign-up, and replay it anytime. Guest mode now says plainly that no account exists until you sign up or log in.',es:'<b>Tour rápido y modo invitado más claro:</b> la primera vez que abres Bubylift un tour de 30 segundos te guía por la app. Sáltalo, apágalo en Ajustes o al registrarte, y repítelo cuando quieras. El modo invitado ahora dice claro que no hay cuenta hasta que te registres o inicies sesión.'}
+ ]},
  {v:'v0.99.12',items:[
   {i:'🔑',en:'<b>Continue with Google:</b> sign up or log in with one tap. Google accounts need no password, and your workouts save to your account automatically.',es:'<b>Continuar con Google:</b> regístrate o inicia sesión con un toque. Las cuentas de Google no necesitan contraseña y tus entrenamientos se guardan solos en tu cuenta.'}
  ]},

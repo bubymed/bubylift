@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.13 — 2026-10-30
+- **Quick tour and clearer guest mode:** the first time you open Bubylift a 30-second tour walks you through the app. Skip it, switch it off in Settings or at sign-up, and replay it anytime. Guest mode now says plainly that no account exists until you sign up or log in.
+  **Tour rápido y modo invitado más claro:** la primera vez que abres Bubylift un tour de 30 segundos te guía por la app. Sáltalo, apágalo en Ajustes o al registrarte, y repítelo cuando quieras. El modo invitado ahora dice claro que no hay cuenta hasta que te registres o inicies sesión.
+
 ## v0.99.12 — 2026-10-30
 - **Continue with Google:** sign up or log in with one tap. Google accounts need no password, and your workouts save to your account automatically.
   **Continuar con Google:** regístrate o inicia sesión con un toque. Las cuentas de Google no necesitan contraseña y tus entrenamientos se guardan solos en tu cuenta.
