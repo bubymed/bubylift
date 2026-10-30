@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.11 — 2026-10-30
+- **Log in like any social app:** a clean welcome screen (Sign up, Log in, Continue as guest), sign-up is now email + password first and your name and picture after, and log in is one simple full screen. Your workouts now save to your account automatically, so the Sync button is gone.
+  **Inicia sesión como en cualquier red social:** pantalla de bienvenida limpia (Registrarme, Iniciar sesión, Continuar como invitado), el registro ahora pide primero correo y contraseña y luego tu nombre y foto, e iniciar sesión es una sola pantalla sencilla. Tus entrenamientos se guardan solos en tu cuenta, así que ya no hay botón de Sincronizar.
+
 ## v0.99.10 — 2026-10-30
 - **Clearer buttons and menus:** every button now looks like a button (outlined, raised, with pressed feedback) instead of colored text, and History moved inside Progress, so the bottom bar has four tabs: Workout, Mobility, Progress and Body.
   **Botones y menús más claros:** ahora todo botón se ve como botón (con borde, relieve y efecto al presionar) en vez de texto de color, y el Historial pasó a vivir dentro de Progreso, así que la barra inferior queda con cuatro pestañas: Entrenar, Movilidad, Progreso y Cuerpo.

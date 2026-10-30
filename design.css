@@ -290,3 +290,12 @@ main>.lnk-d{display:flex;margin:14px auto 0;color:var(--txt)}
 .g-link{font-size:.95rem}
 .chip:not(.on){border:1.5px solid color-mix(in srgb,var(--txt) 28%,transparent);background:var(--panel);color:var(--txt)}
 .inst-btn{background:var(--panel)!important;color:var(--txt)!important;border:1.5px solid color-mix(in srgb,var(--accent) 55%,transparent)!important;font-weight:650}
+
+/* v0.99.11 welcome screen like a social app / pantalla de bienvenida estilo red social */
+.wel-hero{background:linear-gradient(160deg,var(--accent),color-mix(in srgb,var(--accent) 55%,#000));color:#fff;margin:calc(-14px - env(safe-area-inset-top,0px)) -20px 0;padding:calc(env(safe-area-inset-top,0px) + 80px) 24px 48px;border-radius:0 0 32px 32px;text-align:center}
+.wel-logo{width:84px;height:84px;margin:0 auto 18px;border-radius:24px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center}
+.wel-logo .ic{width:46px;height:46px;stroke:#fff}
+.wel-hero h1{font-size:2.3rem;letter-spacing:-.02em;margin:0 0 8px}
+.wel-hero p{opacity:.92;font-size:1.05rem;margin:0}
+.wel-act{margin-top:28px}
+.wel-guest{border-color:transparent!important;background:none!important;box-shadow:none!important;color:var(--dim)!important}

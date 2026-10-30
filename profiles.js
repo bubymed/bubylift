@@ -244,21 +244,24 @@ function pfSetLang(l){LANG=l==='es'?'es':'en';try{localStorage.setItem('bl_lang'
 /* first screen: create a profile or just try it as a guest / primera pantalla: crear perfil o probar como invitado */
 function gWelcome(back){
   GS={redraw:function(){gWelcome(back);},back:!!back};
-  gateShow('<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">🏋️</div></div><h1 class="lt g-h">'+t('pfWelT')+'</h1><p class="muted g-c">'+t(typeof cloudOn==='function'&&cloudOn()?'wCP':'pfWelP')+'</p>'+(pfHasLegacy()?'<p class="note">'+t('pfLegacy')+'</p>':'')+
-    (typeof cloudOn==='function'&&cloudOn()?'<div class="g-form"><button class="btn pri big wide" onclick="gAcct(\'up\')">✨ '+t('wCreate')+'</button><p class="muted sm g-c">'+t('wCreateP')+'</p>'+
-    '<button class="btn big wide" onclick="gAcct(\'in\')">'+t('wIn')+'</button>'+
-    '<button class="btn big wide" onclick="pfGuest()">👤 '+t('wGuest')+'</button><p class="muted sm g-c">'+t('wGuestP')+'</p>'+
-    '<p id="gmsg" class="g-msg"></p></div>':
+  const cl=typeof cloudOn==='function'&&cloudOn();
+  gateShow((cl?
+    '<div class="wel-hero"><div class="wel-logo">'+ic('barbell')+'</div><h1>Bubylift</h1><p>'+t('wTag')+'</p></div>'+
+    '<div class="g-form wel-act"><button class="btn pri big wide" onclick="gAcct(\'up\')">'+t('wSignUp')+'</button>'+
+    '<button class="btn big wide" onclick="gAcct(\'in\')">'+t('wLogIn')+'</button>'+
+    '<button class="btn wide wel-guest" onclick="pfGuest()">'+t('wGuestB')+'</button><p class="muted sm g-c">'+t('wGuestN')+'</p><p id="gmsg" class="g-msg"></p></div>':
+    '<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">🏋️</div></div><h1 class="lt g-h">'+t('pfWelT')+'</h1><p class="muted g-c">'+t('pfWelP')+'</p>'+(pfHasLegacy()?'<p class="note">'+t('pfLegacy')+'</p>':'')+
     '<div class="g-form"><button class="btn pri big wide" onclick="gNew(1,{first:true})">✨ '+t('pfWelNew')+'</button><p class="muted sm g-c">'+t('pfWelNewP')+'</p>'+
     '<button class="btn big wide" onclick="pfGuest()">👤 '+t('pfGuestB')+'</button><p class="muted sm g-c">'+t('pfGuestP')+'</p>'+
-    '<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button><p id="gmsg" class="g-msg"></p></div>')+(GS.back&&PFS.length?'<button class="lnk-d g-c" onclick="gBack()">← '+t('wBack',esc(pfName(PFS[0])))+'</button>':'')+gLang());
+    '<button class="btn wide" onclick="gRecv()">📲 '+t('pfBring')+'</button><p id="gmsg" class="g-msg"></p></div>')+
+    (GS.back&&PFS.length?'<button class="lnk-d g-c" onclick="gBack()">← '+t('wBack',esc(pfName(PFS[0])))+'</button>':'')+gLang());
 }
 function gBack(){const q=PFS[0];if(PFS.length===1&&q&&!q.pw&&!q.enc)pfEnter(q.id,null,null,false,1);else gPick();}
 /* create account / sign in from the first screen: start as a guest, then open the account sheet / cuenta desde la primera pantalla */
-function gAcct(mode){if(mode==='up'){gSignup(1,{});return;}window.__clGo=mode;pfGuest(true);}
+function gAcct(mode){if(mode==='up'){gSignup(1,{});return;}gSignin('','');}
 function pfGuest(tmp){
   const eg=PFS.find(x=>x.g);
-  if(eg){pfEnter(eg.id,null);return;}
+  if(eg){if(tmp!==true&&eg.tmp){eg.tmp=0;pfSave();}pfEnter(eg.id,null);return;}
   if(PFS.length>=PF_MAX)return;
   const prof={id:'g'+uid().slice(-9).replace(/[^a-z0-9]/g,'x'),name:'Guest',av:pfRandAv(),pw:null,qs:[],enc:null,rm:0,t:Date.now(),g:1};
   const k=pfKeys(prof.id),lg=PFS.length?{map:{},del:[]}:pfLegacy(prof.id);
@@ -278,39 +281,65 @@ function gSignup(step,o){
   const top='<div class="g-top"><button class="g-link" onclick="suBack()">‹ '+t('back')+'</button><span class="muted sm">'+t('psStep',step,3)+'</span></div>';
   let b;
   if(step===1){
-    b='<h1 class="lt g-h">'+t('suT')+'</h1><div class="g-c" id="avprev">'+avHtml(GS.av,104)+'</div><div class="g-form"><label>'+t('pfName')+'<input id="gname" class="in wide" maxlength="20" autocomplete="off" value="'+esc(GS.name)+'"></label>'+avPicker()+
-      '<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="suNext1()">'+t('next')+' ›</button></div>';
+    b='<h1 class="lt g-h">'+t('suT')+'</h1><p class="muted">'+t('suEP')+'</p><div class="g-form"><label>'+t('clEmail')+'<input id="sue" class="in wide" type="email" autocomplete="email" inputmode="email" value="'+esc(GS.em||'')+'"></label>'+
+      '<label>'+t('pfPw')+'<span class="pw-w"><input id="npw" class="in wide" type="password" autocomplete="new-password" value="'+esc(GS.pw||'')+'" oninput="pfPwLive(\'\')"><button class="pw-eye" type="button" onclick="pfEye(\'npw\',this)">'+t('pfShow')+'</button></span></label>'+
+      '<div class="meter"><i id="mt0"></i><i id="mt1"></i><i id="mt2"></i></div><p id="mtl" class="sm muted"></p><ul id="rl" class="rules"></ul>'+
+      '<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="suNext1()">'+t('next')+'</button>'+
+      '<p class="muted sm g-c">'+t('suSafe')+'</p><button class="btn wide" onclick="gSignin($(\'sue\').value,\'\')">'+t('wHaveAcct')+'</button></div>';
   }else{
-    b='<h1 class="lt g-h">'+t('suE')+'</h1><p class="muted">'+t('suEP')+'</p><div class="g-form"><label>'+t('clEmail')+'<input id="sue" class="in wide" type="email" autocomplete="email" inputmode="email" value="'+esc(GS.em||'')+'"></label>'+
-      pfPwFields(GS.name)+'<p class="clwarn">'+t('clE2eP')+'</p><p id="gmsg" class="g-msg"></p><button class="btn pri big wide" id="sugo" onclick="suGo()">'+t('clCreate')+'</button>'+
-      '<button class="lnk-d g-c" onclick="clAuthBackIn()">'+t('clHave')+'</button></div>';
+    b='<h1 class="lt g-h">'+t('suProfT')+'</h1><p class="muted">'+t('suProfP')+'</p><div class="g-c" id="avprev">'+avHtml(GS.av,104)+'</div><div class="g-form"><label>'+t('pfName')+'<input id="gname" class="in wide" maxlength="20" autocomplete="off" value="'+esc(GS.name)+'"></label>'+avPicker()+
+      '<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" id="sugo" onclick="suGo()">'+t('clCreate')+'</button></div>';
   }
   gateShow(top+b+gLang());
-  if(step===2)pfPwLive(GS.name);
+  if(step===1)pfPwLive('');
+}
+/* sign in: one full screen, e-mail + password, nothing else / iniciar sesión: una pantalla, correo y contraseña */
+function gSignin(em,msg){
+  GS=Object.assign({},GS,{step:'in',em:em||''});
+  const cur=pfCur(),upg=!!(cur&&cur.g&&!cur.tmp);GS.upg=upg;
+  gateShow('<div class="g-top"><button class="g-link" onclick="siBack()">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('siT')+'</h1><p class="muted">'+t('siP')+'</p><div class="g-form">'+
+    '<label>'+t('clEmail')+'<input id="cle" class="in wide" type="email" autocomplete="email" inputmode="email" value="'+esc(em||'')+'"></label>'+
+    '<label>'+t('clPw')+'<span class="pw-w"><input id="clp" class="in wide" type="password" autocomplete="current-password" onkeydown="if(event.key===\'Enter\')siGo()"><button class="pw-eye" type="button" onclick="pfEye(\'clp\',this)">'+t('pfShow')+'</button></span></label>'+
+    '<p id="gmsg" class="g-msg">'+esc(msg||'')+'</p><button class="btn pri big wide" id="sigo" onclick="siGo()">'+t('wLogIn')+'</button>'+
+    '<button class="btn wide" onclick="clForgot()">'+t('clForgot')+'</button>'+
+    '<button class="btn wide" onclick="gSignup(1,{upg:'+(upg?'true':'false')+',em:$(\'cle\').value})">'+t('wNewHere')+'</button></div>'+gLang());
+}
+function siBack(){const c=pfCur();if(c&&c.tmp)clAuthBack();else if(c)gateHide();else gWelcome();}
+async function siGo(){
+  const m=$('gmsg'),em=gv('cle').trim().toLowerCase(),pw=gv('clp');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){m.textContent=t('clBadEmail');return;}
+  if(!pw){m.textContent=t('siNoPw');return;}
+  const b=$('sigo');if(b)b.disabled=true;m.textContent=t('clWait');
+  let cur=pfCur();
+  if(!cur){window.__gKeep=1;pfGuest(true);cur=pfCur();if(!cur){window.__gKeep=0;gSignin(em,t('pfMax'));return;}}
+  window.__gKeep=1;window.__clGate=1;
+  clSubmit('in',{em:em,pw:pw,err:function(msg){window.__gKeep=0;window.__clGate=0;gSignin(em,msg);}});
 }
 function suBack(){
-  if(GS.step===2){const e=$('sue');if(e)GS.em=e.value;gSignup(1);return;}
+  if(GS.step===2){const n=$('gname');if(n)GS.name=n.value;gSignup(1);return;}
   const c=pfCur();
   if(c&&c.tmp)clAuthBack();else if(GS.upg)gateHide();else gWelcome();
 }
-function clAuthBackIn(){const e=$('sue');const em=e?e.value:'';if(GS.upg){gateHide();clAuthOpen('in','',em);}else{window.__clGo='in';gateHide();pfGuest(true);}}
 function suNext1(){
-  const n=gv('gname').trim();GS.name=n;
-  if(!n){$('gmsg').textContent=t('pfNeedName');return;}
+  const em=gv('sue').trim().toLowerCase(),pw=gv('npw'),m=$('gmsg');
+  GS.em=em;GS.pw=pw;
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){m.textContent=t('clBadEmail');return;}
+  if(!pfRulesOk(pfRules(pw,em))){m.textContent=t('pfWeak');return;}
   gSignup(2);
 }
 async function suGo(){
-  const m=$('gmsg'),em=gv('sue').trim().toLowerCase(),pw=gv('npw'),c=gv('npw2');
-  GS.em=em;
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){m.textContent=t('clBadEmail');return;}
-  if(!pfRulesOk(pfRules(pw,em))||!pfRulesOk(pfRules(pw,GS.name||''))){m.textContent=t('pfWeak');return;}
-  if(pw!==c){m.textContent=t('pfNoMatch');return;}
+  const m=$('gmsg'),n=gv('gname').trim(),em=GS.em,pw=GS.pw;
+  GS.name=n;
+  if(!n){m.textContent=t('pfNeedName');return;}
+  if(!pfRulesOk(pfRules(pw,n))){gSignup(1);$('gmsg').textContent=t('pfWeak');return;}
   const b=$('sugo');if(b)b.disabled=true;m.textContent=t('clWait');
+  const keep={name:n,av:GS.av,em:em}; // pfGuest() resets GS, so keep what was typed / pfGuest() reinicia GS
   let cur=pfCur();
-  if(!cur){window.__gKeep=1;pfGuest(true);cur=pfCur();if(!cur){window.__gKeep=0;gSignup(2);$('gmsg').textContent=t('pfMax');return;}}
-  window.__gKeep=1;window.__clGate=1;window.__clProf={id:cur.id,name:GS.name,av:GS.av};
-  clSubmit('up',{em:em,pw:pw,err:function(msg){window.__gKeep=0;window.__clGate=0;gSignup(2);const x=$('gmsg');if(x)x.textContent=msg;}});
+  if(!cur){window.__gKeep=1;pfGuest(true);cur=pfCur();if(!cur){window.__gKeep=0;gSignup(2,keep);$('gmsg').textContent=t('pfMax');return;}}
+  window.__gKeep=1;window.__clGate=1;window.__clProf={id:cur.id,name:keep.name,av:keep.av};
+  clSubmit('up',{em:em,pw:pw,err:function(msg){window.__gKeep=0;window.__clGate=0;GS=Object.assign({},keep,{pw:pw});gSignup(2);const x=$('gmsg');if(x)x.textContent=msg;}});
 }
+function clAuthBackIn(){gSignin((GS&&GS.em)||'','');}
 /* a guest turns into a real profile: same data, now protected / el invitado pasa a perfil real: mismos datos, ahora protegidos */
 function gSave(){const p=pfCur();if(!p||!p.g)return;GS={};if(typeof cloudOn==='function'&&cloudOn()){sheetClose();gSignup(1,{upg:true});return;}gNew(1,{upg:p.id});}
 function guestNag(){
@@ -543,7 +572,7 @@ function gEdit(id,inApp){
 function pfEditSave(id,inApp){
   const p=pfGet(id),n=gv('gname').trim();if(!p)return;
   if(!n){$('gmsg').textContent=t('pfNeedName');return;}
-  p.name=n.slice(0,20);p.av=pfAv(GS.av);pfSave();pfRenderAv();
+  p.name=n.slice(0,20);p.av=pfAv(GS.av);pfSave();pfRenderAv();if(typeof clSchedule==='function')clSchedule();
   if(inApp){gateHide();toast(t('saved'));}else gPick(true);
 }
 function gDelete(id,inApp){
