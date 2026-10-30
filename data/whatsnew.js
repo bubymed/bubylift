@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99.12',items:[
+  {i:'🔑',en:'<b>Continue with Google:</b> sign up or log in with one tap. Google accounts need no password, and your workouts save to your account automatically.',es:'<b>Continuar con Google:</b> regístrate o inicia sesión con un toque. Las cuentas de Google no necesitan contraseña y tus entrenamientos se guardan solos en tu cuenta.'}
+ ]},
  {v:'v0.99.11',items:[
   {i:'🔑',en:'<b>Log in like any social app:</b> a clean welcome screen (Sign up, Log in, Continue as guest), sign-up is now email + password first and your name and picture after, and log in is one simple full screen. Your workouts now save to your account automatically, so the Sync button is gone.',es:'<b>Inicia sesión como en cualquier red social:</b> pantalla de bienvenida limpia (Registrarme, Iniciar sesión, Continuar como invitado), el registro ahora pide primero correo y contraseña y luego tu nombre y foto, e iniciar sesión es una sola pantalla sencilla. Tus entrenamientos se guardan solos en tu cuenta, así que ya no hay botón de Sincronizar.'}
  ]},
