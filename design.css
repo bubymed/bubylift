@@ -299,3 +299,8 @@ main>.lnk-d{display:flex;margin:14px auto 0;color:var(--txt)}
 .wel-hero p{opacity:.92;font-size:1.05rem;margin:0}
 .wel-act{margin-top:28px}
 .wel-guest{border-color:transparent!important;background:none!important;box-shadow:none!important;color:var(--dim)!important}
+
+/* v0.99.12 Google button / botón de Google */
+.oa-g{gap:10px}
+.oa-or{display:flex;align-items:center;gap:12px;color:var(--dim);font-size:.9rem}
+.oa-or:before,.oa-or:after{content:'';flex:1;border-top:1px solid var(--line,#8884)}

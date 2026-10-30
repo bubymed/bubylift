@@ -177,7 +177,9 @@ async function boot(){
   let pick=null;try{pick=sessionStorage.getItem('bl_pick');sessionStorage.removeItem('bl_pick');}catch(e){}
   const lp=pfGet(last);
   if(!pick&&lp&&lp.enc){const rk=pfRemKey(lp.id);if(rk){await pfEnter(lp.id,rk,null,false,1);return;}}
-  if(!PFS.length)gWelcome();
+  let oh=null;try{oh=sessionStorage.getItem('bl_clh');}catch(e){}
+  if(!PFS.length&&oh&&/access_token=/.test(oh)&&typeof cloudOn==='function'&&cloudOn()){pfGuest();return;} // back from Google with no profile yet / de vuelta de Google sin perfil
+  if(!PFS.length){if(typeof clProv==='function')await clProv();gWelcome();}
   else if(pick&&PFS.length===1&&typeof cloudOn==='function'&&cloudOn())gWelcome(1);
   else if(PFS.length===1&&!PFS[0].pw){await pfEnter(PFS[0].id,null,null,false,1);}
   else gPick();
@@ -247,7 +249,7 @@ function gWelcome(back){
   const cl=typeof cloudOn==='function'&&cloudOn();
   gateShow((cl?
     '<div class="wel-hero"><div class="wel-logo">'+ic('barbell')+'</div><h1>Bubylift</h1><p>'+t('wTag')+'</p></div>'+
-    '<div class="g-form wel-act"><button class="btn pri big wide" onclick="gAcct(\'up\')">'+t('wSignUp')+'</button>'+
+    '<div class="g-form wel-act">'+(typeof oaBtn==='function'?oaBtn()+oaOr():'')+'<button class="btn pri big wide" onclick="gAcct(\'up\')">'+t('wSignUp')+'</button>'+
     '<button class="btn big wide" onclick="gAcct(\'in\')">'+t('wLogIn')+'</button>'+
     '<button class="btn wide wel-guest" onclick="pfGuest()">'+t('wGuestB')+'</button><p class="muted sm g-c">'+t('wGuestN')+'</p><p id="gmsg" class="g-msg"></p></div>':
     '<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">🏋️</div></div><h1 class="lt g-h">'+t('pfWelT')+'</h1><p class="muted g-c">'+t('pfWelP')+'</p>'+(pfHasLegacy()?'<p class="note">'+t('pfLegacy')+'</p>':'')+
@@ -281,7 +283,7 @@ function gSignup(step,o){
   const top='<div class="g-top"><button class="g-link" onclick="suBack()">‹ '+t('back')+'</button><span class="muted sm">'+t('psStep',step,3)+'</span></div>';
   let b;
   if(step===1){
-    b='<h1 class="lt g-h">'+t('suT')+'</h1><p class="muted">'+t('suEP')+'</p><div class="g-form"><label>'+t('clEmail')+'<input id="sue" class="in wide" type="email" autocomplete="email" inputmode="email" value="'+esc(GS.em||'')+'"></label>'+
+    b='<h1 class="lt g-h">'+t('suT')+'</h1><p class="muted">'+t('suEP')+'</p><div class="g-form">'+oaBtn()+oaOr()+'<label>'+t('clEmail')+'<input id="sue" class="in wide" type="email" autocomplete="email" inputmode="email" value="'+esc(GS.em||'')+'"></label>'+
       '<label>'+t('pfPw')+'<span class="pw-w"><input id="npw" class="in wide" type="password" autocomplete="new-password" value="'+esc(GS.pw||'')+'" oninput="pfPwLive(\'\')"><button class="pw-eye" type="button" onclick="pfEye(\'npw\',this)">'+t('pfShow')+'</button></span></label>'+
       '<div class="meter"><i id="mt0"></i><i id="mt1"></i><i id="mt2"></i></div><p id="mtl" class="sm muted"></p><ul id="rl" class="rules"></ul>'+
       '<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" onclick="suNext1()">'+t('next')+'</button>'+
@@ -297,7 +299,7 @@ function gSignup(step,o){
 function gSignin(em,msg){
   GS=Object.assign({},GS,{step:'in',em:em||''});
   const cur=pfCur(),upg=!!(cur&&cur.g&&!cur.tmp);GS.upg=upg;
-  gateShow('<div class="g-top"><button class="g-link" onclick="siBack()">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('siT')+'</h1><p class="muted">'+t('siP')+'</p><div class="g-form">'+
+  gateShow('<div class="g-top"><button class="g-link" onclick="siBack()">‹ '+t('back')+'</button><span></span></div><h1 class="lt g-h">'+t('siT')+'</h1><p class="muted">'+t('siP')+'</p><div class="g-form">'+oaBtn()+oaOr()+
     '<label>'+t('clEmail')+'<input id="cle" class="in wide" type="email" autocomplete="email" inputmode="email" value="'+esc(em||'')+'"></label>'+
     '<label>'+t('clPw')+'<span class="pw-w"><input id="clp" class="in wide" type="password" autocomplete="current-password" onkeydown="if(event.key===\'Enter\')siGo()"><button class="pw-eye" type="button" onclick="pfEye(\'clp\',this)">'+t('pfShow')+'</button></span></label>'+
     '<p id="gmsg" class="g-msg">'+esc(msg||'')+'</p><button class="btn pri big wide" id="sigo" onclick="siGo()">'+t('wLogIn')+'</button>'+

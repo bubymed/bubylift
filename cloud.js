@@ -45,10 +45,12 @@ const clRecNorm=s=>String(s||'').toUpperCase().replace(/[^A-Z2-9]/g,'').replace(
 const clRecFmt=s=>clRecNorm(s).replace(/(.{4})(?=.)/g,'$1-');
 async function clKeyObj(){if(!CLK){if(!CL||!CL.dek)throw new Error('nokey');CLK=await crypto.subtle.importKey('raw',unb64(CL.dek),'AES-GCM',false,['encrypt','decrypt']);}return CLK;}
 async function clSeal(obj){
+  if(CL&&CL.plain)return{v:0,p:obj}; // Google accounts: no password, no own key / cuentas de Google: sin contraseña ni llave propia
   const iv=crypto.getRandomValues(new Uint8Array(12)),ct=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv,additionalData:clEnc8(CL.uid)},await clKeyObj(),clEnc8(JSON.stringify(obj)));
   return{v:1,iv:b64(iv),ct:b64(ct)};
 }
 async function clOpen(env){
+  if(env&&env.v===0)return(env.p&&typeof env.p==='object')?env.p:null;
   if(!env||env.v!==1||typeof env.iv!=='string'||typeof env.ct!=='string')return null; // empty / vacío
   const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(env.iv),additionalData:clEnc8(CL.uid)},await clKeyObj(),unb64(env.ct));
   return JSON.parse(new TextDecoder().decode(pt));
@@ -103,7 +105,7 @@ async function cloudSync(manual){
       if(!g.ok||!Array.isArray(g.j))throw new Error('user_data '+g.s+' '+String(g.j&&(g.j.message||g.j.msg||g.j.hint||g.j.error)||'').slice(0,80));
       const loc=clClean(DATA);loc.goals=DATA.goals||[];loc.prof=clProfDoc();
       if(!g.j.length){
-        if(!CL.vault)throw new Error('novault');
+        if(!CL.vault&&!CL.plain)throw new Error('novault');
         const p=await clReq('/rest/v1/user_data','POST',{user_id:CL.uid,rev:1,vault:CL.vault,data:await clSeal(docOut(loc))},tok,{Prefer:'return=representation'});
         if(p.ok&&Array.isArray(p.j)&&p.j.length){CL.rev=1;delete CL.vault;ok=true;}else if(p.s!==409)throw new Error('post');
         continue;
@@ -154,12 +156,32 @@ async function clHash(){
   try{
     const u=await clReq('/auth/v1/user','GET',null,at);
     if(!u.ok||!u.j||!u.j.id)return;
+    const prov=(u.j.app_metadata&&u.j.app_metadata.provider)||'email';
+    if(prov!=='email'){ // signed in with Google: no password, so no own key; the person is simply in / entró con Google: sin contraseña ni llave propia
+      const gt=await clReq('/rest/v1/user_data?select=vault&user_id=eq.'+encodeURIComponent(u.j.id),'GET',null,at);
+      if(gt.ok&&Array.isArray(gt.j)&&gt.j.length&&gt.j[0].vault){toast(t('oaPw'));return;}
+      CL=null;clSession({access_token:at,refresh_token:rt,expires_in:q.get('expires_in')||3600,user:u.j});
+      CL.plain=1;CL.dek='plain';CL.fresh=1;CLK=null;clSave();
+      const md=u.j.user_metadata||{},nm=String(md.full_name||md.name||'').trim().split(/\s+/)[0];
+      const cp=pfCur();if(cp&&cp.g&&nm)window.__clProf={id:cp.id,name:nm,av:null};
+      clAdopt();toast(t('clWelcome'));await cloudSync(false);render();return;
+    }
     const keep=CL&&CL.uid===String(u.j.id)?CL.dek:null,kv=CL&&CL.vault;
     CL=null;clSession({access_token:at,refresh_token:rt,expires_in:q.get('expires_in')||3600,user:u.j});
     if(keep){CL.dek=keep;if(kv)CL.vault=kv;clSave();}
     if(q.get('type')==='recovery')clRecoverOpen();else if(!CL.dek){const em=CL.email;clUnlink();clAuthOpen('in','',em);toast(t('clConfirmed'));}else{toast(t('clWelcome'));cloudSync(false);}
   }catch(e){}
 }
+/* which sign-in providers the project has switched on (the Google button only shows when it works) / qué proveedores están activos */
+window.__clProv=window.__clProv||null;
+async function clProv(){
+  if(window.__clProv||!cloudOn())return window.__clProv||{};
+  try{const c=window.CLOUD_CFG,r=await Promise.race([fetch(c.url+'/auth/v1/settings',{headers:{apikey:c.key}}),new Promise((_,j)=>setTimeout(j,2500))]);const j=await r.json();window.__clProv={google:!!(j&&j.external&&j.external.google)};}catch(e){window.__clProv={google:false,off:1};}
+  return window.__clProv;
+}
+function clGoogle(){if(!cloudOn())return;location.href=window.CLOUD_CFG.url+'/auth/v1/authorize?provider=google&'+clBack();}
+function oaBtn(){return(window.__clProv&&window.__clProv.google)?'<button class="btn big wide oa-g" onclick="clGoogle()"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09C6.22 6.86 8.87 4.75 12 4.75z"/></svg> '+t('oaGoogle')+'</button>':'';}
+function oaOr(){return(window.__clProv&&window.__clProv.google)?'<div class="oa-or"><span>'+t('oaOr')+'</span></div>':'';}
 /* ---- screens ---- */
 function cloudCard(){
   if(!cloudOn())return'';
@@ -289,7 +311,7 @@ async function clFreshGo(){
 /* manage account */
 function clAcctOpen(){
   sheet('<div class="form"><div class="pick-h"><h3>'+t('clManage')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted">'+esc((CL&&CL.email)||'')+'</p>'+
-    '<div class="menu"><button onclick="sheetClose();gEdit(PFID,true)">✎ '+t('pfEditT')+'</button><button onclick="clChPwOpen()">'+t('clChPw')+'</button><button onclick="clNewRecAsk()">'+t('clNewRec')+'</button><button onclick="sheetClose();clOutAsk()">'+t('clOut')+'</button></div>'+
+    '<div class="menu"><button onclick="sheetClose();gEdit(PFID,true)">✎ '+t('pfEditT')+'</button>'+(CL&&CL.plain?'':'<button onclick="clChPwOpen()">'+t('clChPw')+'</button><button onclick="clNewRecAsk()">'+t('clNewRec')+'</button>')+'<button onclick="sheetClose();clOutAsk()">'+t('clOut')+'</button></div>'+
     '<div class="row"><button class="btn danger wide" onclick="sheetClose();clDelAsk()">'+t('clDel')+'</button></div><p class="muted sm">'+t('clDelP')+'</p></div>');
 }
 function clChPwOpen(){

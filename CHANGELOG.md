@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.12 — 2026-10-30
+- **Continue with Google:** sign up or log in with one tap. Google accounts need no password, and your workouts save to your account automatically.
+  **Continuar con Google:** regístrate o inicia sesión con un toque. Las cuentas de Google no necesitan contraseña y tus entrenamientos se guardan solos en tu cuenta.
+
 ## v0.99.11 — 2026-10-30
 - **Log in like any social app:** a clean welcome screen (Sign up, Log in, Continue as guest), sign-up is now email + password first and your name and picture after, and log in is one simple full screen. Your workouts now save to your account automatically, so the Sync button is gone.
   **Inicia sesión como en cualquier red social:** pantalla de bienvenida limpia (Registrarme, Iniciar sesión, Continuar como invitado), el registro ahora pide primero correo y contraseña y luego tu nombre y foto, e iniciar sesión es una sola pantalla sencilla. Tus entrenamientos se guardan solos en tu cuenta, así que ya no hay botón de Sincronizar.
