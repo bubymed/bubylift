@@ -1,6 +1,8 @@
 /* Recovery plans screen (v0.99.8): lives in the Stretch tab. Data: data/rehab.js.
    Pantalla de planes de recuperación (v0.99.8): vive en la pestaña Estirar. Datos: data/rehab.js. */
-const RH={plan:null};
+const RH={plan:null,zone:'all'};
+const RH_ZONES=['all','foot','knee','hip','spine','arm'];
+function rhZone(z){RH.zone=z;render();}
 const L2=p=>p[LANG==='es'?1:0];
 function rhPlan(id){return REHAB.find(p=>p.id===id);}
 function rhStore(){if(!SET.rh||typeof SET.rh!=='object')SET.rh={};return SET.rh;}
@@ -110,7 +112,8 @@ function vRehab(){
   const p=RH.plan&&rhPlan(RH.plan);
   if(p)return vRhPlan(p);
   let h='<p class="muted sm">'+t('rhIntro')+'</p>';
-  h+=REHAB.map(p=>{
+  h+='<div class="rh-zones">'+RH_ZONES.map(z=>'<button class="btn'+(RH.zone===z?' pri':'')+'" onclick="rhZone(\''+z+'\')">'+t('rhZ_'+z)+'</button>').join('')+'</div>';
+  h+=REHAB.filter(p=>RH.zone==='all'||p.zone===RH.zone).map(p=>{
     const st=rhSt(p.id);
     return'<button class="card rhc" onclick="rhOpen(\''+p.id+'\')"><span class="rh-em">'+p.em+'</span><span class="rhc-t"><b>'+esc(L2(p.name))+'</b><small>'+esc(L2(p.sub))+'</small><small class="rhc-s">'+(st?t('rhStatus',st.ph+1,p.phases.length,esc(L2(p.phases[st.ph].n))):t('rhNotStarted'))+'</small></span><span class="rhc-go">›</span></button>';
   }).join('');
