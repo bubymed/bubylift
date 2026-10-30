@@ -26,6 +26,14 @@ python3 tools/check.py
 It verifies that the three version numbers match, that every file the service worker caches exists, and that every translation key exists in EN and ES.
 Verifica que las tres versiones coincidan, que existan los archivos del service worker y que cada texto exista en EN y ES.
 
+For the full app test (about 30 seconds) / Para la prueba completa de la app (unos 30 segundos):
+```
+npm install
+npm test
+```
+`npm test` runs the check above plus `tests/smoke.js`, which opens the real app in a simulated browser and walks through it. GitHub runs the same thing on every pull request (`.github/workflows/ci.yml`), so a broken change shows a red mark before it is merged.
+`npm test` corre la revisión de arriba más `tests/smoke.js`, que abre la app real en un navegador simulado y la recorre. GitHub corre lo mismo en cada pull request, así que un cambio roto muestra una marca roja antes de mezclarse.
+
 ## Releasing a version / Publicar una versión
 Bump `APP_VER` in `app.js`, the cache name in `sw.js` **and** `version.json` to the same value (e.g. `v2`). Installed apps compare `version.json` with their `APP_VER` and update themselves. If you add a new file the app needs offline, add it to `FILES` in `sw.js`.
 Sube `APP_VER` en `app.js`, el nombre del caché en `sw.js` **y** `version.json` al mismo valor (ej. `v2`). Las apps instaladas comparan `version.json` con su `APP_VER` y se actualizan solas. Si agregas un archivo que la app necesita sin internet, agrégalo a `FILES` en `sw.js`.
