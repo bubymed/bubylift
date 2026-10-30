@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99.10',items:[
+  {i:'🧭',en:'<b>Clearer buttons and menus:</b> every button now looks like a button (outlined, raised, with pressed feedback) instead of colored text, and History moved inside Progress, so the bottom bar has four tabs: Workout, Mobility, Progress and Body.',es:'<b>Botones y menús más claros:</b> ahora todo botón se ve como botón (con borde, relieve y efecto al presionar) en vez de texto de color, y el Historial pasó a vivir dentro de Progreso, así que la barra inferior queda con cuatro pestañas: Entrenar, Movilidad, Progreso y Cuerpo.'}
+ ]},
  {v:'v0.99.9',items:[
   {i:'🩹',en:'<b>Nine more Recovery plans</b> (13 in total): Achilles, plantar heel pain, jumper\'s knee, outer hip, hamstring, low back, neck, shoulder and tennis elbow, each in four phases with a safety check, sources and its own exercise guides. New body-zone filter to find yours fast.',es:'<b>Nueve planes más de Recuperación</b> (13 en total): Aquiles, talón (fascitis plantar), rodilla del saltador, cadera externa, isquiotibiales, espalda baja, cuello, hombro y codo de tenista, cada uno en cuatro fases con revisión de seguridad, fuentes y sus guías de técnica. Nuevo filtro por zona del cuerpo para encontrar el tuyo rápido.'}
  ]},

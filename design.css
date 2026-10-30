@@ -278,3 +278,15 @@ body{transition:background-color .25s,color .25s}
 /* v0.99.9 recovery zone filter */
 .rh-zones{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
 .rh-zones .btn{flex:0 0 auto;min-height:40px;padding:0 14px}
+
+/* v0.99.10 buttons must look like buttons / los botones deben verse como botones */
+.btn:not(.pri):not(.danger){background:var(--panel);color:var(--txt);border:1.5px solid color-mix(in srgb,var(--accent) 55%,var(--line,#8886));box-shadow:0 1px 0 color-mix(in srgb,var(--txt) 14%,transparent)}
+.btn.danger{border:1.5px solid color-mix(in srgb,var(--red) 60%,transparent)}
+.btn.pri{box-shadow:0 2px 0 color-mix(in srgb,var(--accent) 60%,#000)}
+.btn.sm{padding:6px 14px;min-height:38px;border-radius:12px}
+.btn:active{transform:translateY(1px);box-shadow:none}
+.lnk-d,.g-link{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:40px;padding:0 14px;border-radius:12px;border:1.5px solid color-mix(in srgb,var(--txt) 28%,transparent);background:var(--panel);color:var(--txt);font-weight:650;font-size:.95rem}
+main>.lnk-d{display:flex;margin:14px auto 0;color:var(--txt)}
+.g-link{font-size:.95rem}
+.chip:not(.on){border:1.5px solid color-mix(in srgb,var(--txt) 28%,transparent);background:var(--panel);color:var(--txt)}
+.inst-btn{background:var(--panel)!important;color:var(--txt)!important;border:1.5px solid color-mix(in srgb,var(--accent) 55%,transparent)!important;font-weight:650}
