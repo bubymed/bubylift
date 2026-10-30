@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.14 — 2026-10-30
+- **Smarter workouts:** every lift now suggests what to try today based on your last session, with a one-tap Use button for the weight, and a new personal record gets a gold flash with sparks and your new estimated max.
+  **Entrenamientos más inteligentes:** cada ejercicio ahora sugiere qué probar hoy según tu última sesión, con un botón Usar para poner el peso con un toque, y un nuevo récord personal recibe un destello dorado con chispas y tu nuevo máximo estimado.
+
 ## v0.99.13 — 2026-10-30
 - **Quick tour and clearer guest mode:** the first time you open Bubylift a 30-second tour walks you through the app. Skip it, switch it off in Settings or at sign-up, and replay it anytime. Guest mode now invites you to sign up and save your progress.
   **Tour rápido y modo invitado más claro:** la primera vez que abres Bubylift un tour de 30 segundos te guía por la app. Sáltalo, apágalo en Ajustes o al registrarte, y repítelo cuando quieras. El modo invitado ahora te invita a registrarte para guardar tu progreso.

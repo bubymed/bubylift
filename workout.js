@@ -153,6 +153,20 @@ function fillLast(i){
     if(m==='t'){if(s.t==null)s.t=p.t;if(s.d==null)s.d=p.d;}else{if(s.w==null)s.w=p.w;if(s.r==null)s.r=p.r;}});
   saveAct();exRedraw(i);toast(t('flDone'));
 }
+/* one tap: put the suggested weight in the empty sets / un toque: pone el peso sugerido en las series vacías */
+function useSugg(i){
+  const x=ACT.ex[i];if(!x)return;
+  const s=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});if(!s||s.w==null)return;
+  x.sets.forEach(q=>{if(!q.done&&q.w==null)q.w=s.w;});
+  saveAct();exRedraw(i);buzz(10);
+}
+/* a personal record deserves a moment: gold flash, trophy pop and a few sparks / un récord merece su momento */
+function prBurst(i,j){
+  const el=document.getElementById('exc'+i);if(!el)return;const r=el.querySelectorAll('.srow:not(.hd)')[j];if(!r)return;
+  r.classList.add('prb');setTimeout(()=>r.classList.remove('prb'),1400);
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  for(let k=0;k<8;k++){const sp=document.createElement('span');sp.className='prp';sp.textContent=['✨','🏆','⭐'][k%3];sp.style.setProperty('--dx',(Math.cos(k/8*6.283)*46)+'px');sp.style.setProperty('--dy',(Math.sin(k/8*6.283)*46-18)+'px');r.appendChild(sp);setTimeout(()=>sp.remove(),1000);}
+}
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'"><img src="img/ex/'+x.eid+'-0.jpg" alt=""><img class="b" src="img/ex/'+x.eid+'-1.jpg" alt="" onerror="this.remove()"></button>':'';
@@ -218,11 +232,11 @@ function tgSet(i,j){
     if(!ok){toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
     const prev=bestScore(x.eid,m,s),sc=setScore(m,s);
     s.done=true;
-    if(prev>0&&sc>prev){s.pr=true;toast(t('newPR'));}else delete s.pr;
+    if(prev>0&&sc>prev){s.pr=true;toast(m==='wr'?t('newPR2',wShow(Math.round(sc))+' '+wUnit(),wShow(Math.round(sc-prev))+' '+wUnit()):t('newPR'));}else delete s.pr;
     startRest(x.tg&&x.tg.rs!=null?x.tg.rs:undefined);
   }else{s.done=false;delete s.pr;}
   saveAct();exRedraw(i);
-  if(s.done){buzz(s.pr?[12,60,24]:12);popRow(i,j);nextInView(i,j);}
+  if(s.done){buzz(s.pr?[12,60,24]:12);popRow(i,j);if(s.pr)prBurst(i,j);nextInView(i,j);}
 }
 /* redraw only the exercise you touched: no flash, no jump, keeps your place / redibuja solo el ejercicio que tocaste: sin parpadeo ni saltos */
 function exRedraw(i){
