@@ -180,3 +180,11 @@ function vExProg(eid){
   ss.slice(-6).reverse().forEach(o=>{h+='<div class="card sm-card"><b>'+esc(dFmt(o.t))+'</b><div class="muted sm">'+o.sets.map(s=>esc(fmtSet(m,s))).join(' · ')+'</div></div>';});
   return h;
 }
+
+/* v0.99.10: History lives inside Progress as a segmented control / el Historial vive dentro de Progreso */
+function psSet(k){UI.ps=k;UI.prog=null;render();}
+function vProgTab(){
+  if(UI.prog||!DATA.workouts.length)return vProgress();
+  const h=UI.ps==='hist';
+  return'<div class="seg"><button class="'+(h?'':'on')+'" onclick="psSet(\'prog\')">'+ic('chart-bar')+' '+t('tProgress')+'</button><button class="'+(h?'on':'')+'" onclick="psSet(\'hist\')">'+ic('calendar')+' '+t('tHistory')+'</button></div>'+(h?vHistory():vProgress());
+}

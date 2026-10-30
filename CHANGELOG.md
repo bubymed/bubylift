@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.10 — 2026-10-30
+- **Clearer buttons and menus:** every button now looks like a button (outlined, raised, with pressed feedback) instead of colored text, and History moved inside Progress, so the bottom bar has four tabs: Workout, Mobility, Progress and Body.
+  **Botones y menús más claros:** ahora todo botón se ve como botón (con borde, relieve y efecto al presionar) en vez de texto de color, y el Historial pasó a vivir dentro de Progreso, así que la barra inferior queda con cuatro pestañas: Entrenar, Movilidad, Progreso y Cuerpo.
+
 ## v0.99.9 — 2026-10-30
 - **Nine more Recovery plans** (13 in total): Achilles, plantar heel pain, jumper's knee, outer hip, hamstring, low back, neck, shoulder and tennis elbow, each in four phases with a safety check, sources and its own exercise guides. New body-zone filter to find yours fast.
   **Nueve planes más de Recuperación** (13 en total): Aquiles, talón (fascitis plantar), rodilla del saltador, cadera externa, isquiotibiales, espalda baja, cuello, hombro y codo de tenista, cada uno en cuatro fases con revisión de seguridad, fuentes y sus guías de técnica. Nuevo filtro por zona del cuerpo para encontrar el tuyo rápido.
