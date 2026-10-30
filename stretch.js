@@ -47,8 +47,10 @@ function strHero(){
   return'<div class="card hero"><span class="hero-e">'+t('mobToday')+'</span><h2>'+t('strT_'+STX.type)+' · '+t('strMin',STX.min)+'</h2><p>'+t('mobHeroP',n)+'</p><button class="btn pri big wide" onclick="strSessGo(0)">'+t('mobGo')+'</button></div>';
 }
 function vStretch(){
-  let h=strHero()+'<div class="sec"><h2>'+t('mobCustom')+'</h2></div><p class="muted sm">'+t('strIntro')+'</p>'+
-    '<div class="seg"><button class="'+(STX.sec==='sess'?'on':'')+'" onclick="strSet(\'sec\',\'sess\')">'+ic('stopwatch')+' '+t('strSess')+'</button><button class="'+(STX.sec==='area'?'on':'')+'" onclick="strSet(\'sec\',\'area\')">'+ic('yoga')+' '+t('strArea')+'</button></div>';
+  const rhOn=STX.sec==='rehab';
+  let h=(rhOn?'':strHero()+'<div class="sec"><h2>'+t('mobCustom')+'</h2></div><p class="muted sm">'+t('strIntro')+'</p>')+
+    '<div class="seg"><button class="'+(STX.sec==='sess'?'on':'')+'" onclick="strSet(\'sec\',\'sess\')">'+ic('stopwatch')+' '+t('strSess')+'</button><button class="'+(STX.sec==='area'?'on':'')+'" onclick="strSet(\'sec\',\'area\')">'+ic('yoga')+' '+t('strArea')+'</button><button class="'+(rhOn?'on':'')+'" onclick="strSet(\'sec\',\'rehab\')">'+ic('heart')+' '+t('rhSeg')+'</button></div>';
+  if(rhOn)return h+vRehab();
   if(STX.sec==='sess'){
     const l=strItems(STX.type,STX.min),secs=strSecs();
     h+=libStep(1,'strStep1')+libChips(['full','lower','upper','back','warm','cool'],STX.type,'strType',k=>t('strT_'+k),1)+

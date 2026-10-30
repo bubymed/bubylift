@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.8 — 2026-10-24
+- New Recovery plans in the Mobility tab: phased home programs for flat foot and inner-ankle pain, runner's knee, shin splints and ankle sprains, built from published guidelines, with a safety check, pain log and sources.
+  Nuevos planes de Recuperación en la pestaña Movilidad: programas caseros por fases para pie plano y dolor de tobillo interno, rodilla del corredor, shin splints y esguinces, basados en guías publicadas, con revisión de seguridad, registro de dolor y fuentes.
+
 ## v0.99.7 — 2026-10-24
 - One tap to repeat your last workout, and Undo after clearing a set or removing a set or exercise.
   Un toque para repetir tu último entrenamiento, y Deshacer al borrar una serie o quitar una serie o un ejercicio.
