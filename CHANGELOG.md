@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.9 — 2026-10-30
+- **Nine more Recovery plans** (13 in total): Achilles, plantar heel pain, jumper's knee, outer hip, hamstring, low back, neck, shoulder and tennis elbow, each in four phases with a safety check, sources and its own exercise guides. New body-zone filter to find yours fast.
+  **Nueve planes más de Recuperación** (13 en total): Aquiles, talón (fascitis plantar), rodilla del saltador, cadera externa, isquiotibiales, espalda baja, cuello, hombro y codo de tenista, cada uno en cuatro fases con revisión de seguridad, fuentes y sus guías de técnica. Nuevo filtro por zona del cuerpo para encontrar el tuyo rápido.
+
 ## v0.99.8 — 2026-10-24
 - New Recovery plans in the Mobility tab: phased home programs for flat foot and inner-ankle pain, runner's knee, shin splints and ankle sprains, built from published guidelines, with a safety check, pain log and sources.
   Nuevos planes de Recuperación en la pestaña Movilidad: programas caseros por fases para pie plano y dolor de tobillo interno, rodilla del corredor, shin splints y esguinces, basados en guías publicadas, con revisión de seguridad, registro de dolor y fuentes.

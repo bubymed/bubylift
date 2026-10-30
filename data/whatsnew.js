@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99.9',items:[
+  {i:'🩹',en:'<b>Nine more Recovery plans</b> (13 in total): Achilles, plantar heel pain, jumper\'s knee, outer hip, hamstring, low back, neck, shoulder and tennis elbow, each in four phases with a safety check, sources and its own exercise guides. New body-zone filter to find yours fast.',es:'<b>Nueve planes más de Recuperación</b> (13 en total): Aquiles, talón (fascitis plantar), rodilla del saltador, cadera externa, isquiotibiales, espalda baja, cuello, hombro y codo de tenista, cada uno en cuatro fases con revisión de seguridad, fuentes y sus guías de técnica. Nuevo filtro por zona del cuerpo para encontrar el tuyo rápido.'}
+ ]},
  {v:'v0.99.8',items:[
   {i:'🩹',en:'New Recovery plans in the Mobility tab: phased home programs for flat foot and inner-ankle pain, runner\'s knee, shin splints and ankle sprains, built from published guidelines, with a safety check, pain log and sources.',es:'Nuevos planes de Recuperación en la pestaña Movilidad: programas caseros por fases para pie plano y dolor de tobillo interno, rodilla del corredor, shin splints y esguinces, basados en guías publicadas, con revisión de seguridad, registro de dolor y fuentes.'}
  ]},

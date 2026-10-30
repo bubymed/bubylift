@@ -274,3 +274,7 @@ body{transition:background-color .25s,color .25s}
 .rh-tbl{display:grid;gap:4px;margin:8px 0;font-size:.82rem}
 .rh-r{display:grid;grid-template-columns:.9fr 1fr 1fr 1fr;gap:6px;align-items:center}
 .rh-r.hd{color:var(--muted);font-weight:600}
+
+/* v0.99.9 recovery zone filter */
+.rh-zones{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.rh-zones .btn{flex:0 0 auto;min-height:40px;padding:0 14px}

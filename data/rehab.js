@@ -40,7 +40,7 @@ const REHAB_RUN={
 /* ---- plans / planes ---- */
 const REHAB=[
  {
-  id:"flatfoot",em:"🦶",
+  id:"flatfoot",zone:"foot",em:"🦶",
   name:["Flat foot & inner-ankle pain","Pie plano y dolor en el tobillo interno"],
   sub:["Posterior tibial tendon / arch overload","Sobrecarga del tendón tibial posterior y del arco"],
   intro:["Flat feet are common and often painless. Pain on the inside of the ankle that builds up over time can come from the tendon that holds up the arch (the posterior tibial tendon) being overloaded. Strengthening that tendon, the calf and the small muscles of the foot is the first-line, non-surgical approach, usually together with good footwear or arch supports. It is slow: expect weeks to months, not days. The evidence for exercise here is real but limited, and the best-tested part is slow, loaded heel work.","Los pies planos son comunes y muchas veces no duelen. El dolor en el lado interno del tobillo que va aumentando con el tiempo puede venir del tendón que sostiene el arco (tibial posterior) cuando se sobrecarga. Fortalecer ese tendón, la pantorrilla y los músculos pequeños del pie es el primer tratamiento sin cirugía, normalmente junto con buen calzado o plantillas. Es lento: cuenta en semanas o meses, no en días. La evidencia del ejercicio aquí es real pero limitada, y lo mejor probado es el trabajo lento y con carga del talón."],
@@ -112,7 +112,7 @@ const REHAB=[
   src:["pttd","kulig","sfe","mtss"]
  },
  {
-  id:"knee",em:"🦵",
+  id:"knee",zone:"knee",em:"🦵",
   name:["Runner's knee (pain around the kneecap)","Rodilla del corredor (dolor alrededor de la rótula)"],
   sub:["Patellofemoral pain","Dolor patelofemoral"],
   intro:["Pain at the front of the knee around or behind the kneecap, worse with running, stairs, squatting or sitting for a long time. Current clinical guidelines say the best-supported treatment is exercise that strengthens the hips and thighs, in fairly high volume, built up gradually. You do not need complete rest: you reduce the load that flares it and train around it.","Dolor al frente de la rodilla, alrededor o detrás de la rótula, peor al correr, subir escaleras, hacer sentadillas o estar sentado mucho rato. Las guías clínicas actuales dicen que el tratamiento con mejor respaldo es el ejercicio que fortalece cadera y muslos, en buen volumen y subiendo poco a poco. No necesitas reposo total: reduces la carga que lo brota y entrenas alrededor del dolor."],
@@ -185,7 +185,7 @@ const REHAB=[
   src:["cpg","afp","rx3","mtss"]
  },
  {
-  id:"shin",em:"🦴",
+  id:"shin",zone:"knee",em:"🦴",
   name:["Shin splints (inner shin pain)","Shin splints (dolor en la espinilla interna)"],
   sub:["Medial tibial stress syndrome","Síndrome de estrés tibial medial"],
   intro:["A dull, spread-out ache along the inner edge of the shinbone that starts when you run or march and eases with rest. It is an overload problem, so treatment is relative rest from the aggravating load, then criteria-based strengthening and a gradual return to running. This plan follows a published clinical guideline: you move on when you meet the criteria, not just when the weeks are up.","Un dolor sordo y extendido a lo largo del borde interno de la tibia que empieza al correr o marchar y mejora con el reposo. Es un problema de sobrecarga, así que el tratamiento es descansar de la carga que lo provoca, después fortalecer con criterios y volver a correr poco a poco. Este plan sigue una guía clínica publicada: avanzas cuando cumples los criterios, no solo cuando pasan las semanas."],
@@ -260,7 +260,7 @@ const REHAB=[
   src:["mtss","mtss2","rx3"]
  },
  {
-  id:"sprain",em:"🩹",
+  id:"sprain",zone:"foot",em:"🩹",
   name:["Sprained or unstable ankle","Esguince o tobillo inestable"],
   sub:["Return to full ankle function","Volver a la función completa del tobillo"],
   intro:["After a sprain, or if your ankle keeps rolling, the goal is to get motion back, rebuild strength and balance, and only then add jumping and cutting. Guidelines move you forward by what you can do (walking without a limp, balance, 25 single-leg heel raises, hop tests), so the weeks are only a guide.","Después de un esguince, o si el tobillo se te sigue doblando, el objetivo es recuperar el movimiento, reconstruir fuerza y equilibrio y solo después añadir saltos y cambios de dirección. Las guías te hacen avanzar por lo que puedes hacer (caminar sin cojear, equilibrio, 25 elevaciones de talón a un pie, pruebas de salto), así que las semanas son solo una guía."],
