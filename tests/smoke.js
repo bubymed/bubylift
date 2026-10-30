@@ -944,6 +944,15 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("tourStart(true)");ok(ev("TR.on"),'replay works even when switched off');
   ev("tourEnd(false);SET.tour=undefined;SET.tourSeen=0;DATA.workouts=[{id:'wq',t:1,end:2,name:'x',ex:[]}];tourMaybe(0)");ok(ev("!TR.on"),'people with workouts never get the first-run tour');
   ev("DATA.workouts=[];SET.tourSeen=1;go('workout')");
+  console.log('suggestions + personal records');
+  ev("ACT=null;saveAct();DATA.workouts=[{id:'sg1',t:Date.now()-864e5,end:Date.now()-864e5+1,name:'p',ex:[{eid:'bench',sets:[{w:60,r:10,done:true},{w:60,r:10,done:true},{w:60,r:10,done:true}]}]}];tab='workout';render();startWorkout({name:'t',ex:[{eid:'bench',sets:3}]})");
+  ok(/class="sg"/.test(ev("exCard(0,ACT.ex[0])")),'your own workout shows a suggestion from last time');
+  ok(/sgbtn/.test(ev("exCard(0,ACT.ex[0])")),'a Use button appears while sets are empty');
+  ev("useSugg(0)");ok(ev("ACT.ex[0].sets.every(s=>s.w!=null&&s.w>=60)"),'Use fills the empty sets with the suggested weight');
+  ev("ACT.ex[0].sets.forEach(s=>{s.w=100;s.r=10});tgSet(0,0)");
+  ok(ev("ACT.ex[0].sets[0].done&&ACT.ex[0].sets[0].pr===true"),'beating the best marks a personal record');
+  ok(!/sgbtn/.test(ev("exCard(0,ACT.ex[0])")),'no Use button once every set has a weight');
+  ev("ACT=null;saveAct();DATA.workouts=[];tab='workout';render()");
   const miss=[...new Set(w.__miss)];
   ok(miss.length===0,'no missing translation keys: '+miss.join(','));
   ok(errors.length===0,'no JS errors: '+errors.slice(0,3).join(' | '));

@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99.14',items:[
+  {i:'🏆',en:'<b>Smarter workouts:</b> every lift now suggests what to try today based on your last session, with a one-tap Use button for the weight, and a new personal record gets a gold flash with sparks and your new estimated max.',es:'<b>Entrenamientos más inteligentes:</b> cada ejercicio ahora sugiere qué probar hoy según tu última sesión, con un botón Usar para poner el peso con un toque, y un nuevo récord personal recibe un destello dorado con chispas y tu nuevo máximo estimado.'}
+ ]},
  {v:'v0.99.13',items:[
   {i:'🧭',en:'<b>Quick tour and clearer guest mode:</b> the first time you open Bubylift a 30-second tour walks you through the app. Skip it, switch it off in Settings or at sign-up, and replay it anytime. Guest mode now invites you to sign up and save your progress.',es:'<b>Tour rápido y modo invitado más claro:</b> la primera vez que abres Bubylift un tour de 30 segundos te guía por la app. Sáltalo, apágalo en Ajustes o al registrarte, y repítelo cuando quieras. El modo invitado ahora te invita a registrarte para guardar tu progreso.'}
  ]},

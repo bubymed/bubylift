@@ -324,3 +324,13 @@ main>.lnk-d{display:flex;margin:14px auto 0;color:var(--txt)}
 .guestbar .row{display:flex;gap:8px}
 .guestbar .btn{flex:1}
 @media (prefers-reduced-motion:reduce){#tour,.tour-em{animation:none}.tour-spot{transition:none}}
+
+/* v0.99.14 suggested weight button + personal-record burst / botón de peso sugerido y destello de récord */
+.sgbtn{margin:2px 0 8px}
+.srow{position:relative}
+.srow.prb{animation:prGold 1.3s ease-out}
+@keyframes prGold{0%{background:color-mix(in srgb,#f5b301 55%,transparent)}100%{background:transparent}}
+.srow.prb .pr{animation:pop .6s ease-out}
+.prp{position:absolute;left:18px;top:50%;font-size:1rem;pointer-events:none;animation:prSpark 1s ease-out forwards}
+@keyframes prSpark{0%{transform:translate(0,0) scale(.4);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.2);opacity:0}}
+@media (prefers-reduced-motion:reduce){.srow.prb,.srow.prb .pr,.prp{animation:none}}

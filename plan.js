@@ -427,6 +427,16 @@ function suggLine(x){
     if(x.tg.tp){const ss=x.tg.ss?optSsLabelAct(x):'';h+='<br><span class="muted">'+(ss?'<i class="ssl">'+ss+'</i> ':'')+esc(optLine(x.tg))+'</span>'+(ss?'<br><span class="muted">'+esc(t('ssHint'))+'</span>':'');}
     h+='</div>';
   }
+  // your own workouts get a suggestion too (a normal 6-12 range) / tus propios entrenamientos también reciben sugerencia
+  if(!x.tg&&(typeof ACT!=='undefined'&&ACT)){
+    const s=sugg(x.eid,{lo:6,hi:12,u:'r'});
+    if(s&&s.key!=='sgFirst'&&s.key!=='sgFirstBw')h='<div class="goalln"><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span></div>';
+  }
+  const si=typeof ACT!=='undefined'&&ACT?ACT.ex.indexOf(x):-1;
+  if(si>=0&&exMode(x.eid)==='wr'&&x.sets.some(q=>!q.done&&q.w==null)){
+    const s2=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});
+    if(s2&&s2.w!=null)h+='<button class="btn sm sgbtn" onclick="useSugg('+si+')">'+esc(t('sgUse',wShow(s2.w)+' '+wUnit()))+'</button>';
+  }
   if(L&&stressLvl(x.eid,L))h+='<div class="goalln warnln">⚠ '+esc(t(stressLvl(x.eid,L)>=2?'injNo':'injCare',jointNames(stressJoints(x.eid,L,1))))+'</div>';
   return h;
 }
