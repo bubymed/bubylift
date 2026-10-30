@@ -62,6 +62,7 @@ function clClean(d){
   o.workouts=arr('workouts').map(cleanWk).filter(Boolean);o.routines=arr('routines').map(cleanRt).filter(Boolean);
   o.body=arr('body').map(cleanBody).filter(Boolean);o.custom=arr('custom').map(cleanCx).filter(Boolean);
   o.plan=d.plan?cleanPlan(d.plan):null;o.goals=cleanGoals(d.goals);
+  o.prof=(d.prof&&typeof d.prof==='object'&&typeof d.prof.n==='string'&&d.prof.n.trim())?{n:d.prof.n.slice(0,20),a:(d.prof.a&&typeof d.prof.a==='object')?d.prof.a:null}:null;
   if(d.aft&&typeof d.aft==='object'){o.aft={};['mdl','hrp','sdc','plk','run'].forEach(k=>{if(cn(d.aft[k])>0)o.aft[k]=d.aft[k];});}
   if(d.tomb&&typeof d.tomb==='object')Object.keys(d.tomb).slice(0,5000).forEach(k=>{if(ID_RE.test(k)&&isFinite(d.tomb[k]))o.tomb[k]=+d.tomb[k];});
   o._u=isFinite(d._u)?+d._u:0;
@@ -77,16 +78,20 @@ function clMerge(a,b){ // a = this phone, b = cloud / a = este teléfono, b = nu
   out.plan=newer?(a.plan||b.plan):(b.plan||a.plan);
   out.goals=(newer?a.goals:b.goals).length?(newer?a.goals:b.goals):(newer?b.goals:a.goals);
   out.aft=newer?(a.aft||b.aft):(b.aft||a.aft);
+  out.prof=a.prof||b.prof||null; // this phone's profile is the latest word / el perfil de este teléfono manda
   out.workouts.sort((x,y)=>y.t-x.t);out.body.sort((x,y)=>y.t-x.t);
   return out;
 }
-function clSame(a,b){return JSON.stringify([a.workouts,a.routines,a.body,a.custom,a.plan,a.goals,a.aft,a.tomb])===JSON.stringify([b.workouts,b.routines,b.body,b.custom,b.plan,b.goals,b.aft,b.tomb]);}
+function clSame(a,b){return JSON.stringify([a.workouts,a.routines,a.body,a.custom,a.plan,a.goals,a.aft,a.tomb,a.prof||null])===JSON.stringify([b.workouts,b.routines,b.body,b.custom,b.plan,b.goals,b.aft,b.tomb,b.prof||null]);}
 function clApply(m){
   CLAPPLY=true;
   CL_KEYS.forEach(k=>{DATA[k]=m[k];});DATA.plan=m.plan;DATA.goals=m.goals;DATA.aft=m.aft||undefined;DATA.tomb=m.tomb;
   saveData();CLAPPLY=false;
 }
-function docOut(m){return{workouts:m.workouts,routines:m.routines,body:m.body,custom:m.custom,plan:m.plan,goals:m.goals,aft:m.aft||null,tomb:m.tomb,_u:m._u||Date.now()};}
+function docOut(m){return{workouts:m.workouts,routines:m.routines,body:m.body,custom:m.custom,plan:m.plan,goals:m.goals,aft:m.aft||null,tomb:m.tomb,prof:m.prof||null,_u:m._u||Date.now()};}
+/* name + picture travel with the account, so logging in on a new phone feels like home / nombre y foto viajan con la cuenta */
+function clProfDoc(){const p=pfCur();return(p&&p.name&&!p.g)?{n:p.name,a:p.av&&typeof p.av==='object'?p.av:null}:null;}
+function clProfApply(pr){const p=pfCur();if(!p||!pr||!pr.n)return;p.name=pr.n.slice(0,20);if(pr.a)p.av=pfAv(pr.a);pfSave();if(typeof pfRenderAv==='function')pfRenderAv();}
 /* ---- sync ---- */
 async function cloudSync(manual){
   if(!cloudOn()||!CL||CL.bad||!CL.dek||CLBUSY)return false;
@@ -96,7 +101,7 @@ async function cloudSync(manual){
     for(let i=0;i<3&&!ok;i++){
       const g=await clReq('/rest/v1/user_data?select=data,rev&user_id=eq.'+encodeURIComponent(CL.uid),'GET',null,tok);
       if(!g.ok||!Array.isArray(g.j))throw new Error('user_data '+g.s+' '+String(g.j&&(g.j.message||g.j.msg||g.j.hint||g.j.error)||'').slice(0,80));
-      const loc=clClean(DATA);loc.goals=DATA.goals||[];
+      const loc=clClean(DATA);loc.goals=DATA.goals||[];loc.prof=clProfDoc();
       if(!g.j.length){
         if(!CL.vault)throw new Error('novault');
         const p=await clReq('/rest/v1/user_data','POST',{user_id:CL.uid,rev:1,vault:CL.vault,data:await clSeal(docOut(loc))},tok,{Prefer:'return=representation'});
@@ -104,6 +109,7 @@ async function cloudSync(manual){
         continue;
       }
       let rd;try{rd=await clOpen(g.j[0].data);}catch(e){CL.err='key';clSave();CLBUSY=false;if(manual)toast(t('clKeyBad'));if(tab==='more')render();return false;}
+      if(CL.fresh){delete CL.fresh;if(rd&&rd.prof){clProfApply(rd.prof);loc.prof=clProfDoc();}}
       const rem=clClean(rd),rev=+g.j[0].rev||1,merged=clMerge(loc,rem);
       if(!clSame(merged,loc))clApply(merged);
       if(rd&&clSame(merged,rem)){CL.rev=rev;ok=true;break;}
@@ -121,14 +127,20 @@ async function cloudSync(manual){
 }
 function clSchedule(){
   if(!CL||CL.bad||CLAPPLY||!cloudOn())return;
-  clearTimeout(CLT);CLT=setTimeout(()=>{if(!document.hidden)cloudSync(false);},5000);
+  clearTimeout(CLT);CLT=setTimeout(()=>{CLT=0;cloudSync(false);},2500);
 }
 function clInit(){
   if(!cloudOn())return;
   clLoad();clHash();
   if(window.__clGo){const m=window.__clGo;window.__clGo=null;setTimeout(()=>clAuthOpen(m),400);}
   if(CL&&!CL.bad){setTimeout(()=>cloudSync(false).then(()=>stravaSync(false)),800);if(stravaOn()&&CL.sv==null)setTimeout(stravaStatus,1500);}
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&CL&&!CL.bad&&Date.now()-(CL.last||0)>120000)cloudSync(false).then(()=>stravaSync(false));});
+  // automatic sync: on open, after every change (saveData), when you come back, when you go away, and when the connection returns / sincronía automática
+  document.addEventListener('visibilitychange',()=>{
+    if(!CL||CL.bad||!CL.dek)return;
+    if(document.hidden){if(CLT){clearTimeout(CLT);CLT=0;cloudSync(false);}return;}
+    if(Date.now()-(CL.last||0)>30000)cloudSync(false).then(()=>stravaSync(false));
+  });
+  window.addEventListener('online',()=>{if(CL&&!CL.bad&&CL.dek)cloudSync(false);});
 }
 /* links from the e-mail (confirm account / reset password) / enlaces del correo */
 (function(){try{const h=location.hash||'';if(/access_token=/.test(h)&&/refresh_token=/.test(h)){sessionStorage.setItem('bl_clh',h.slice(1));history.replaceState(null,'',location.pathname+location.search);}
@@ -153,8 +165,8 @@ function cloudCard(){
   if(!cloudOn())return'';
   if(!CL||CL.bad||!CL.dek)return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+t('clT')+'</b><p class="muted sm">'+t(CL&&CL.bad?'clExpired':'clP')+'</p></div><div class="row"><button class="btn pri" onclick="clAuthOpen(\'up\')">'+t('clCreate')+'</button><button class="btn" onclick="clAuthOpen(\'in\')">'+t('clIn')+'</button></div></div>';
   const ago=CL.last?Math.max(0,Math.round((Date.now()-CL.last)/60000)):null;
-  const st=CL.err==='key'?t('clKeyBad'):CL.err==='off'?t('clOff'):CL.err?t('clFail'):(ago==null?t('clNever'):(ago<1?t('clJust'):t('clAgo',ago>=60?Math.round(ago/60)+' h':ago+' min')));
-  return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+esc(CL.email)+'</b><p class="muted sm">'+st+'</p></div><div class="row"><button class="btn pri" onclick="cloudSync(true).then(function(){stravaSync(true)})">'+t('clSyncNow')+'</button><button class="btn" onclick="clAcctOpen()">'+t('clManage')+'</button></div>'+stravaRow()+'</div>';
+  const st=CL.err==='key'?t('clKeyBad'):CL.err==='off'?t('clOff'):CL.err?t('clFail'):(ago==null?t('clAuto'):(ago<1?t('clJust'):t('clAgo',ago>=60?Math.round(ago/60)+' h':ago+' min')));
+  return'<div class="card cloudc"><span class="li">'+ic('cloud')+'</span><div class="cl-t"><b>'+esc(CL.email)+'</b><p class="muted sm">'+st+'</p></div><div class="row"><button class="btn wide" onclick="clAcctOpen()">'+t('clManage')+'</button></div>'+stravaRow()+'</div>';
 }
 function clAuthBack(){
   const p=pfCur();
@@ -167,6 +179,7 @@ async function clEmailKnown(em){try{const r=await clReq('/rest/v1/rpc/email_regi
 function clAuthOpen(mode,msg,email){
   const up=mode==='up',tmp=!!(pfCur()&&pfCur().tmp);
   if(up&&typeof gSignup==='function'&&(!pfCur()||pfCur().g)){sheetClose();gSignup(1,{upg:!!pfCur(),em:email||''});return;} // creating an account is a full screen, not a pop-up / crear cuenta es una pantalla completa
+  if(!up&&typeof gSignin==='function'&&(!pfCur()||pfCur().g)){sheetClose();gSignin(email||'',msg||'');return;} // signing in is a full screen too / iniciar sesión también es pantalla completa
   sheet('<div class="form"><div class="pick-h"><h3>'+t(up?'clCreate':'clIn')+'</h3><button class="ico" onclick="'+(tmp?'clAuthBack()':'sheetClose()')+'" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<p class="muted sm">'+t(up?'clUpP':'clInP')+'</p>'+(msg?'<p class="clmsg">'+esc(msg)+'</p>':'')+
     '<label>'+t('clEmail')+'<input id="cle" class="in wide" type="email" autocomplete="email" inputmode="email" value="'+esc(email||'')+'"></label>'+
@@ -196,7 +209,7 @@ async function clSubmit(mode,pre){
     if(!g.ok||!Array.isArray(g.j)){clUnlink();throw new Error('user_data '+g.s+' '+String(g.j&&(g.j.message||g.j.msg||g.j.hint||g.j.error||g.j.code)||'').slice(0,90));}
     if(g.j.length&&g.j[0].vault&&g.j[0].vault.wp){
       let dek;try{dek=await pfUnwrap('p:'+pw,g.j[0].vault.wp);}catch(e){clUnlink();fail(t('clKeyBad'));return;}
-      CL.dek=b64(dek);CLK=null;clSave();clAdopt();sheetClose();toast(t('clWelcome'));await cloudSync(false);render();
+      CL.dek=b64(dek);CLK=null;CL.fresh=1;clSave();clAdopt();sheetClose();if(window.__clGate){window.__clGate=0;window.__gKeep=0;gateHide();}toast(t('clWelcome'));await cloudSync(false);render();
     }else{await clSetup(pw);}
   }catch(e){const em2=String(e&&e.message||e);try{console.warn('bubylift cloud',e);}catch(x){}fail(t(/^user_data/.test(em2)?'clHalf':'clOff')+' ['+em2.slice(0,110)+']',mode==='up'&&/^user_data/.test(em2)?'in':mode);}
 }
@@ -213,11 +226,11 @@ async function clSetup(pw){
     cloudSync(false).then(function(ok){
       if(!ok){gateHide();toast(t('clWelcome'));render();return;}
       clUnlink();window.__suEm=em;
-      gateShow('<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">✅</div></div><h1 class="lt g-h">'+t('suDoneT')+'</h1><p class="muted g-c">'+t('suDoneP')+'</p><div class="g-form"><button class="btn pri big wide" onclick="suToIn()">'+t('clIn')+'</button></div>');
+      gateShow('<div class="g-top"><span></span><span></span></div><div class="g-c"><div class="wel-e">✅</div></div><h1 class="lt g-h">'+t('suDoneT')+'</h1><p class="muted g-c">'+t('suDoneP')+'</p><div class="g-form"><button class="btn pri big wide" onclick="suToIn()">'+t('wLogIn')+'</button></div>');
     });
   });
 }
-function suToIn(){const em=window.__suEm||'';window.__suEm=null;gateHide();render();setTimeout(function(){clAuthOpen('in','',em);},300);}
+function suToIn(){const em=window.__suEm||'';window.__suEm=null;render();gSignin(em,'');}
 function clRecShow(rec,done){
   window.__clRec=rec;window.__clDone=done||function(){};
   const body='<p class="muted">'+t('clRecP')+'</p><div class="clrec" id="clrec">'+esc(rec)+'</div>'+
