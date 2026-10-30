@@ -290,7 +290,7 @@ function gSignup(step,o){
       '<p class="muted sm g-c">'+t('suSafe')+'</p><button class="btn wide" onclick="gSignin($(\'sue\').value,\'\')">'+t('wHaveAcct')+'</button></div>';
   }else{
     b='<h1 class="lt g-h">'+t('suProfT')+'</h1><p class="muted">'+t('suProfP')+'</p><div class="g-c" id="avprev">'+avHtml(GS.av,104)+'</div><div class="g-form"><label>'+t('pfName')+'<input id="gname" class="in wide" maxlength="20" autocomplete="off" value="'+esc(GS.name)+'"></label>'+avPicker()+
-      '<p id="gmsg" class="g-msg"></p><button class="btn pri big wide" id="sugo" onclick="suGo()">'+t('clCreate')+'</button></div>';
+      '<label class="clchk"><input type="checkbox" id="gtour"'+(GS.tour===false?'':' checked')+'> '+t('tourSign')+'</label><p id="gmsg" class="g-msg"></p><button class="btn pri big wide" id="sugo" onclick="suGo()">'+t('clCreate')+'</button></div>';
   }
   gateShow(top+b+gLang());
   if(step===1)pfPwLive('');
@@ -318,7 +318,7 @@ async function siGo(){
   clSubmit('in',{em:em,pw:pw,err:function(msg){window.__gKeep=0;window.__clGate=0;gSignin(em,msg);}});
 }
 function suBack(){
-  if(GS.step===2){const n=$('gname');if(n)GS.name=n.value;gSignup(1);return;}
+  if(GS.step===2){const n=$('gname');if(n)GS.name=n.value;GS.tour=!!($('gtour')&&$('gtour').checked);gSignup(1);return;}
   const c=pfCur();
   if(c&&c.tmp)clAuthBack();else if(GS.upg)gateHide();else gWelcome();
 }
@@ -335,7 +335,8 @@ async function suGo(){
   if(!n){m.textContent=t('pfNeedName');return;}
   if(!pfRulesOk(pfRules(pw,n))){gSignup(1);$('gmsg').textContent=t('pfWeak');return;}
   const b=$('sugo');if(b)b.disabled=true;m.textContent=t('clWait');
-  const keep={name:n,av:GS.av,em:em}; // pfGuest() resets GS, so keep what was typed / pfGuest() reinicia GS
+  const keep={name:n,av:GS.av,em:em,tour:!!($('gtour')&&$('gtour').checked)};
+  try{if(keep.tour)localStorage.removeItem('bl_tourpref');else localStorage.setItem('bl_tourpref','0');}catch(e){} // pfGuest() resets GS, so keep what was typed / pfGuest() reinicia GS
   let cur=pfCur();
   if(!cur){window.__gKeep=1;pfGuest(true);cur=pfCur();if(!cur){window.__gKeep=0;gSignup(2,keep);$('gmsg').textContent=t('pfMax');return;}}
   window.__gKeep=1;window.__clGate=1;window.__clProf={id:cur.id,name:keep.name,av:keep.av};
@@ -504,7 +505,7 @@ function qBlock(i,cur){
 function avPicker(){
   return'<div class="lbl">'+t('pfAvatar')+'</div><div class="av-sug">'+AVP.map(n=>'<button class="av-s'+(GS.av.k==='p'&&GS.av.p===n?' on':'')+'" onclick="pfPickPre(\''+n+'\')" aria-label="'+t('pfAvatar')+' '+n+'"><img alt="" loading="lazy" src="img/av/'+n+'.webp"></button>').join('')+'</div>';
 }
-function pfAvRedraw(){const n=$('gname');if(n)GS.name=n.value;if(GS.redraw)GS.redraw();}
+function pfAvRedraw(){const n=$('gname');if(n)GS.name=n.value;if($('gtour'))GS.tour=$('gtour').checked;if(GS.redraw)GS.redraw();}
 function pfPickPre(n){ // change the choice in place: no redraw, so the list keeps its scroll / cambia la selección sin redibujar: la lista no salta arriba
   GS.av={k:'p',p:n};
   const pv=$('avprev');
