@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.15 — 2026-10-30
+- **Simpler, lighter app:** the old on-device password profiles, security questions and phone-to-phone transfer screens are gone, now that sign-in runs through your account.
+  **App más simple y ligera:** se quitaron los perfiles con contraseña local, las preguntas de seguridad y la transferencia entre teléfonos, ahora que el acceso va por tu cuenta.
+
 ## v0.99.14 — 2026-10-30
 - **Smarter workouts:** every lift now suggests what to try today based on your last session, with a one-tap Use button for the weight, and a new personal record gets a gold flash with sparks and your new estimated max.
   **Entrenamientos más inteligentes:** cada ejercicio ahora sugiere qué probar hoy según tu última sesión, con un botón Usar para poner el peso con un toque, y un nuevo récord personal recibe un destello dorado con chispas y tu nuevo máximo estimado.

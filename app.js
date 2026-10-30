@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v0.99.14';
+const APP_VER='v0.99.15';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -11,9 +11,8 @@ const UI={ps:'prog',q:'',g:'',prog:null,pm:'',pickCb:null,rb:null};
 const $=id=>document.getElementById(id);
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
-let ENC=null; // encrypted-storage state, set by profiles.js / estado del almacenamiento cifrado (profiles.js)
-function jget(k,d){if(ENC&&encOn(k))return encGet(k,d);try{const s=localStorage.getItem(k);return s?JSON.parse(s):d;}catch(e){return d;}}
-function jset(k,v){if(ENC&&encOn(k))return encSet(k,v);try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){try{toast(t('saveFail'));}catch(x){}return false;}}
+function jget(k,d){try{const s=localStorage.getItem(k);return s?JSON.parse(s):d;}catch(e){return d;}}
+function jset(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){try{toast(t('saveFail'));}catch(x){}return false;}}
 function numParse(s){const n=parseFloat(String(s).replace(',','.'));return isFinite(n)&&n>=0?n:null;}
 function fmtNum(n,d){const k=Math.pow(10,d==null?1:d);return String(Math.round(n*k)/k);}
 function norm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
@@ -33,7 +32,7 @@ function loadAll(){
 }
 function saveSet(){jset(K_SET,SET);try{localStorage.setItem('bl_lang',SET.lang);localStorage.setItem('bl_theme',SET.theme||'system');}catch(e){}}
 function saveData(){if(!CLAPPLY)DATA._u=Date.now();const r=jset(K_DATA,DATA);if(typeof clSchedule==='function')clSchedule();return r;}
-function jdel(k){if(ENC&&encOn(k)){encDel(k);return;}try{localStorage.removeItem(k);}catch(e){}}
+function jdel(k){try{localStorage.removeItem(k);}catch(e){}}
 function saveAct(){if(ACT)jset(K_ACT,ACT);else jdel(K_ACT);}
 
 /* ---------- units ---------- */
@@ -213,7 +212,6 @@ async function checkUpd(){
   if(!j||!j.v){toast(t('updOff'));return;}
   if(j.v===APP_VER){toast(t('updLatest',APP_VER));return;}
   toast(t('updating',j.v));
-  try{if(window.pfFlush)await pfFlush();}catch(e){}
   try{const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()));}catch(e){}
   try{const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)));}catch(e){}
   setTimeout(()=>{location.replace(location.pathname+'?v='+encodeURIComponent(j.v));},500);

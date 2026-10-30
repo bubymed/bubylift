@@ -194,7 +194,7 @@ function cloudCard(){
 function clAuthBack(){
   const p=pfCur();
   if(p&&p.tmp){const k=pfKeys(p.id);try{[k.d,k.s,k.a].forEach(x=>localStorage.removeItem(x));}catch(e){}PFS=PFS.filter(x=>x.id!==p.id);pfSave();}
-  try{sessionStorage.removeItem('bl_sess');sessionStorage.removeItem('bl_sk');sessionStorage.setItem('bl_pick','1');}catch(e){}
+  try{sessionStorage.removeItem('bl_sess');sessionStorage.setItem('bl_pick','1');}catch(e){}
   location.replace(location.pathname);
 }
 /* is this e-mail registered? (asks the database; null if it cannot tell) / ¿está registrado este correo? */
@@ -312,7 +312,7 @@ async function clFreshGo(){
 /* manage account */
 function clAcctOpen(){
   sheet('<div class="form"><div class="pick-h"><h3>'+t('clManage')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted">'+esc((CL&&CL.email)||'')+'</p>'+
-    '<div class="menu"><button onclick="sheetClose();gEdit(PFID,true)">✎ '+t('pfEditT')+'</button>'+(CL&&CL.plain?'':'<button onclick="clChPwOpen()">'+t('clChPw')+'</button><button onclick="clNewRecAsk()">'+t('clNewRec')+'</button>')+'<button onclick="sheetClose();clOutAsk()">'+t('clOut')+'</button></div>'+
+    '<div class="menu"><button onclick="sheetClose();gEdit(PFID)">✎ '+t('pfEditT')+'</button>'+(CL&&CL.plain?'':'<button onclick="clChPwOpen()">'+t('clChPw')+'</button><button onclick="clNewRecAsk()">'+t('clNewRec')+'</button>')+'<button onclick="sheetClose();clOutAsk()">'+t('clOut')+'</button></div>'+
     '<div class="row"><button class="btn danger wide" onclick="sheetClose();clDelAsk()">'+t('clDel')+'</button></div><p class="muted sm">'+t('clDelP')+'</p></div>');
 }
 function clChPwOpen(){

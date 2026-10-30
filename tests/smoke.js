@@ -892,8 +892,6 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(ev("pfClean(PFS.find(function(p){return p.id==='tmpx1';})).tmp")===1,'temporary profile flag survives cleaning');
   ev("pfDropTmp()");
   ok(ev("PFS.some(function(p){return p.id==='tmpx1';})")===false&&ev("localStorage.getItem('bl_s_tmpx1')")===null,'abandoned temporary profile is removed at start');
-  ev("gAdd()");
-  ok(/gAcct\('in'\)/.test(doc.getElementById('gate').innerHTML)&&!/gNew\(1/.test(doc.getElementById('gate').innerHTML),'add profile with the cloud on leads to sign in / create account only');
   ev("gateHide()");
   for(const known of [false,true]){
     ev("window.__fx0=window.fetch;window.fetch=function(u){var s=String(u);var b=function(o,ok,st){return Promise.resolve({ok:ok,status:st,json:function(){return Promise.resolve(o);}});};if(/rpc\\/email_registered/.test(s))return b("+known+",true,200);return b({msg:'Invalid login credentials'},false,400);};");
@@ -903,14 +901,9 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
     ev("window.fetch=window.__fx0;sheetClose();");
   }
   ev("window.CLOUD_CFG={url:'',key:''};");
-  /* v0.97 old local profiles */
-  ev("window.CLOUD_CFG={url:'https://x.supabase.co',key:'anon'};window.__pf0=PFS.slice();PFS.push({id:'oldp1',name:'Old',av:{k:'p',p:'001'},pw:{s:'AAAA',h:'AAAA',n:1},qs:[],enc:null,rm:0,t:1,g:0,acct:0},{id:'acc1',name:'Acc',av:{k:'p',p:'001'},pw:null,qs:[],enc:null,rm:0,t:1,g:0,acct:1});try{localStorage.setItem('bl_d_oldp1','{}');}catch(e){}");
-  ok(ev("pfIsOld(PFS.find(function(p){return p.id==='oldp1';}))")===true&&ev("pfIsOld(PFS.find(function(p){return p.id==='acc1';}))")===false,'only password-protected local profiles without an account count as old');
-  ev("gLegacy()");
-  ok(/pfLegKeep\('oldp1'\)/.test(doc.getElementById('gate').innerHTML)&&!/pfLegKeep\('acc1'\)/.test(doc.getElementById('gate').innerHTML),'old profile screen lists only the old profile');
-  ev("pfPurge('oldp1');pfPurge('acc1')");
-  ok(ev("localStorage.getItem('bl_d_oldp1')")===null&&!ev("PFS.some(function(p){return p.id==='oldp1';})"),'purging an old profile removes its data');
-  ev("PFS.length=0;window.__pf0.forEach(function(x){PFS.push(x);});gateHide();window.CLOUD_CFG={url:'',key:''};");
+  /* retired local-password profiles are skipped, never entered */
+  ok(ev("pfIsOld(pfClean({id:'oldp1',name:'Old',av:{k:'p',p:'001'},pw:{s:'AAAA',h:'AAAA',n:1},t:1,g:0,acct:0}))")===true&&ev("pfIsOld(pfClean({id:'acc1',name:'Acc',t:1,g:0,acct:1}))")===false&&ev("pfIsOld(pfClean({id:'gst1',name:'G',t:1,g:1}))")===false,'only retired password profiles without an account count as old');
+  ok(ev("typeof gLegacy+typeof gPick+typeof gNew+typeof gRecv+typeof gSend+typeof pfLogin")==='undefinedundefinedundefinedundefinedundefinedundefined','the retired local-profile screens are gone');
   console.log('recovery plans');
   ev("ACT=null;saveAct();tab='stretch';STX.sec='rehab';RH.plan=null;render()");
   ok(/rhc/.test(main())&&ev('REHAB.length')===13,'recovery list shows all thirteen plans');
