@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.0.3 — 2026-10-30
+- **Easier set entry:** bigger weight and reps boxes with large − and + buttons, the whole number selects when you tap it, and a big green check.
+  **Series más fáciles de anotar:** cajas de peso y repeticiones más grandes con botones − y + grandes, el número se selecciona completo al tocarlo y un check verde grande.
+
 ## v1.0.2 — 2026-10-30
 - **Share cards fixed:** the exercise list now shows every exercise in your order, the preview opens on a dark background, and Share opens your phone's share sheet right away.
   **Tarjetas de compartir arregladas:** la lista muestra todos tus ejercicios en tu orden, la vista previa abre con fondo oscuro y Compartir abre al instante el menú de compartir de tu teléfono.

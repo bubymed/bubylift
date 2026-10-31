@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.0.3',items:[
+  {i:'grid',en:'<b>Easier set entry:</b> bigger weight and reps boxes with large − and + buttons, the whole number selects when you tap it, and a big green check.',es:'<b>Series más fáciles de anotar:</b> cajas de peso y repeticiones más grandes con botones − y + grandes, el número se selecciona completo al tocarlo y un check verde grande.'}
+ ]},
  {v:'v1.0.2',items:[
   {i:'share',en:'<b>Share cards fixed:</b> the exercise list now shows every exercise in your order, the preview opens on a dark background, and Share opens your phone\'s share sheet right away.',es:'<b>Tarjetas de compartir arregladas:</b> la lista muestra todos tus ejercicios en tu orden, la vista previa abre con fondo oscuro y Compartir abre al instante el menú de compartir de tu teléfono.'}
  ]},
