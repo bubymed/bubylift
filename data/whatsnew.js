@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.1',items:[
+  {i:'body',en:'<b>Muscle recovery</b> on the Body tab: days since your last workout, groups recovered, and a ready-in-hours bar per muscle.',es:'<b>Recuperación muscular</b> en la pestaña Cuerpo: días desde tu último entrenamiento, grupos recuperados y una barra con las horas que faltan por músculo.'}
+ ]},
  {v:'v1.1.0',items:[
   {i:'search',en:'<b>New exercise picker</b>: All / By muscle / Categories tabs, A–Z with letters, stretches kept separate, search pinned above the keyboard. New sets copy the last one and Enter walks weight → reps → done.',es:'<b>Selector nuevo</b>: pestañas Todo / Por músculo / Categorías, orden A–Z con letras, estiramientos aparte, búsqueda pegada al teclado. Las series nuevas copian la anterior y Enter va peso → reps → listo.'}
  ]},

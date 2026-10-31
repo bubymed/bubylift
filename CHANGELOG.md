@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.1 — 2026-10-30
+- **Muscle recovery** on the Body tab: days since your last workout, groups recovered, and a ready-in-hours bar per muscle.
+  **Recuperación muscular** en la pestaña Cuerpo: días desde tu último entrenamiento, grupos recuperados y una barra con las horas que faltan por músculo.
+
 ## v1.1.0 — 2026-10-30
 - **New exercise picker**: All / By muscle / Categories tabs, A–Z with letters, stretches kept separate, search pinned above the keyboard. New sets copy the last one and Enter walks weight → reps → done.
   **Selector nuevo**: pestañas Todo / Por músculo / Categorías, orden A–Z con letras, estiramientos aparte, búsqueda pegada al teclado. Las series nuevas copian la anterior y Enter va peso → reps → listo.

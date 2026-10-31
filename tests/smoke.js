@@ -51,6 +51,7 @@ vc.on('error',(...a)=>errors.push('console.error: '+a.join(' ')));
   doc.querySelector('#exlist .exrow').click();
 
   ok(ev('ACT.ex.length')===1,'tapping an exercise adds it');
+  ok(ev("(function(){var n=DATA.workouts.length;DATA.workouts.unshift({id:'rc',t:Date.now()-36e5,end:Date.now(),ex:[{eid:'bench',sets:[{w:100,r:5,done:true},{w:100,r:5,done:true}]}]});var r=recData(Date.now()),g=exById('bench').g,o=r.g[g].pct<100&&r.ready===7&&r.days===0;DATA.workouts.shift();return o&&DATA.workouts.length===n})()"),'recovery: trained muscle is recovering, the rest are ready');
   ev("window.__sn=JSON.stringify(ACT);ACT.ex[0].sets[0].w=100;ACT.ex[0].sets[0].r=5;addSet(0)");
   ok(ev("(function(){var s=ACT.ex[0].sets;return s[s.length-1].w===100&&s[s.length-1].r===5&&!s[s.length-1].done})()"),'new set copies the previous set');
   w.pickEx(null,true);w.exSearch('stretch');
@@ -367,7 +368,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
    const rec=w.eval('window.__clRec');ok(/^([A-Z2-9]{4}-){5}[A-Z2-9]{4}$/.test(rec),'recovery key has a readable format');
    doc.getElementById('clsaved').checked=true;doc.getElementById('clsaved').dispatchEvent(new w.Event('change'));doc.getElementById('clrecgo').click();await new Promise(r=>setTimeout(r,400));
    ok(w.eval('CL&&CL.uid')==='u1'&&w.eval('!!__row')&&w.eval('__row.data.ct&&__row.data.iv&&__row.data.v')==1||w.eval('!!(__row&&__row.data.ct)'),'first sync creates an encrypted cloud copy');
-   const raw=w.eval("JSON.stringify(__row)");{const r2=raw.replace(/"wp"[^}]*}|"wr"[^}]*}/g,"");const mm=r2.match(/workouts|bench|"A"/);if(mm)console.log("MATCH",mm[0],r2.slice(Math.max(0,mm.index-40),mm.index+40));}ok(!/workouts|wa1|bench|"A"/.test(raw.replace(/"wp"[^}]*}|"wr"[^}]*}/g,"")),'cloud row holds only ciphertext (no workout data)');
+   const raw=w.eval("JSON.stringify(__row)");{const r2=raw.replace(/"wp"[^}]*}|"wr"[^}]*}/g,"");const mm=r2.match(/workouts|bench|"A"/);if(mm)console.log("MATCH",mm[0],r2.slice(Math.max(0,mm.index-40),mm.index+40));}ok(!/workouts|bench|"A"/.test(raw.replace(/"wp"[^}]*}|"wr"[^}]*}/g,"")),'cloud row holds only ciphertext (no workout data)');
    ok(!raw.includes('Secret123')&&!w.eval("JSON.stringify(window.__log)").includes('Secret123'),'real password never leaves the phone');
    ok(w.eval('!!(__row.vault&&__row.vault.wp&&__row.vault.wr)')&&w.eval('CL.vault===undefined'),'vault saved with password + recovery wraps');
    const dec=async()=>JSON.parse(await w.eval("(async()=>JSON.stringify(await clOpen(__row.data)))()"));

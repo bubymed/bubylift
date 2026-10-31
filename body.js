@@ -19,10 +19,32 @@ function bwStep(d){
   let v=numParse(e.value);if(v==null)v=last?parseFloat(wShow(last.w)):null;if(v==null)return;
   e.value=fmtNum(Math.max(0,Math.round((v+d)*10)/10),1);
 }
+/* muscle recovery from what you logged: ~48 h base, longer after more hard sets / recuperación muscular según lo que registraste */
+const REC_G=['chest','back','shoulders','biceps','triceps','legs','glutes','core'];
+function recData(now){
+  now=now||Date.now();const o={};REC_G.forEach(g=>{o[g]={t:0,n:0};});let lastT=0;
+  DATA.workouts.forEach(wk=>{
+    const per={};
+    wk.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;if(!g||!o[g])return;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(n)per[g]=(per[g]||0)+n;});
+    const end=wk.end||wk.t;if(Object.keys(per).length&&end>lastT)lastT=end;
+    for(const g in per)if(end>o[g].t){o[g].t=end;o[g].n=per[g];}
+  });
+  REC_G.forEach(g=>{const r=o[g];if(!r.t){r.pct=null;return;}
+    const win=(48+Math.min(36,Math.max(0,r.n-4)*6)+((g==='legs'||g==='back')?12:0))*36e5,el=now-r.t;
+    r.pct=Math.max(0,Math.min(100,Math.round(el/win*100)));r.left=Math.max(0,Math.ceil((win-el)/36e5));});
+  return{g:o,last:lastT,days:lastT?Math.floor((now-lastT)/864e5):null,ready:REC_G.filter(g=>o[g].pct==null||o[g].pct>=100).length};
+}
+function recCard(){
+  const r=recData();
+  if(!r.last)return'<div class="card rec"><div class="lbl">'+t('recT')+'</div><p class="muted sm">'+t('recNone')+'</p></div>';
+  return'<div class="card rec"><div class="lbl">'+t('recT')+'</div><div class="rec-top"><span><b>'+(r.days===0?t('recToday'):r.days)+'</b><small>'+t('recDays')+'</small></span><span><b>'+r.ready+'/'+REC_G.length+'</b><small>'+t('recReady')+'</small></span></div>'+
+    '<div class="rec-grid">'+REC_G.map(g=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low');
+      return'<div class="rec-t '+c+'"><b>'+t('g_'+g)+'</b><i><u style="width:'+p+'%"></u></i><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small></div>';}).join('')+'</div></div>';
+}
 function vBody(){
   const today=dInput(Date.now()),last=DATA.body.find(b=>b.w),sg=d=>(d>0?'+':'')+fmtNum(d,1);
   const toU=kg=>imp()?kg*KG_LB:kg;
-  let h='<div class="card form bwhero"><div class="lbl c">'+t('bwTitle')+'</div>'+
+  let h=recCard()+'<div class="card form bwhero"><div class="lbl c">'+t('bwTitle')+'</div>'+
     '<div class="bw-row"><button class="bw-st" aria-label="'+esc(t('bwMinus'))+'" onclick="bwStep(-0.1)">−</button>'+
     '<span class="bw-f"><input id="bw" class="bw-in" type="text" inputmode="decimal" autocomplete="off" placeholder="'+esc(last?wShow(last.w):'0.0')+'"><b class="bw-u">'+wUnit()+'</b></span>'+
     '<button class="bw-st" aria-label="'+esc(t('bwPlus'))+'" onclick="bwStep(0.1)">+</button></div>'+

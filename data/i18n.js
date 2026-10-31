@@ -434,6 +434,7 @@ const STR={
  restSaved:['Rest saved','Descanso guardado'],
  searchEx:['Search: "incline press", "lat", "cable"…','Busca: "press inclinado", "dorsal", "polea"…'],
  mineB:['Mine','Mis ejercicios'],mineNone:['Exercises you use or like will show up here.','Aquí aparecerán los ejercicios que uses o que te gusten.'],
+ recT:['Muscle recovery','Recuperación muscular'],recNone:['Log a workout and your recovery map appears here.','Registra un entrenamiento y aquí aparece tu mapa de recuperación.'],recDays:['days since your last workout','días desde tu último entrenamiento'],recReady:['muscle groups recovered','grupos musculares recuperados'],recToday:['Today','Hoy'],recFresh:['Fresh','Fresco'],recOk:['Ready to train','Listo para entrenar'],recIn:['Ready in {0} h','Listo en {0} h'],
  tabAll:['All','Todo'],tabMus:['By muscle','Por músculo'],tabCat:['Categories','Categorías'],catAll:['All exercises','Todos los ejercicios'],catRecent:['Recently used','Usados recientemente'],catCustom:['Added by me','Agregados por mí'],catBw:['Bodyweight only','Solo peso corporal'],catWt:['Weighted exercises','Ejercicios con peso'],catEq:['By equipment','Por equipo'],alsoCalled:['Also called: {0}','También se llama: {0}'],seeStr:['See {0} in Stretch & mobility','Ver {0} en Estiramiento y movilidad'],
  anyEq:['Any equipment','Cualquier equipo'],
  nMatch:['{0} exercises','{0} ejercicios'],

@@ -401,3 +401,11 @@ body.kbd #sheet.pks{padding-bottom:10px}
 .pk-bot{flex:none;padding-top:8px;background:var(--panel)}
 .pk-bot .pickadd{position:static;margin:0 0 8px}
 .pk-q{border-radius:999px;padding-left:18px;min-height:48px}
+/* recovery card / tarjeta de recuperación */
+.rec-top{display:flex;gap:12px;margin:8px 0 12px}.rec-top span{flex:1;background:var(--panel2);border-radius:14px;padding:12px;text-align:center}
+.rec-top b{display:block;font-size:1.7rem;font-weight:800}.rec-top small{color:var(--dim)}
+.rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rec-t{background:var(--panel2);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.rec-t b{font-size:.95rem}.rec-t small{color:var(--dim);font-size:.78rem}
+.rec-t i{display:block;height:6px;border-radius:3px;background:var(--line);overflow:hidden}.rec-t u{display:block;height:100%;border-radius:3px;background:#34c759}
+.rec-t.mid u{background:#ffcc00}.rec-t.low u{background:#ff453a}
