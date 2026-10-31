@@ -1,9 +1,9 @@
 # Bubylift — workout log / registro de entrenamientos
 
-A free workout, progress and body log that lives on your phone. **No account, no ads, no tracking** — it works offline and installs like an app on Android and iPhone.
-Un registro gratis de entrenamientos, progreso y cuerpo que vive en tu teléfono. **Sin cuenta, sin anuncios, sin rastreo** — funciona sin internet y se instala como app en Android y iPhone.
+A free workout, progress and body log that lives on your phone. **No ads, no tracking, account optional** — it works offline and installs like an app on Android and iPhone.
+Un registro gratis de entrenamientos, progreso y cuerpo que vive en tu teléfono. **Sin anuncios, sin rastreo, cuenta opcional** — funciona sin internet y se instala como app en Android y iPhone.
 
-**[▶ Open the app / Abrir la app](https://bubymed.github.io/bubylift/)**
+**[▶ Open the app / Abrir la app](https://bubymed.github.io/bubylift/)** · User manual / Manual: [EN](docs/Bubylift-UserManual-v1.0-EN.pdf) · [ES](docs/Bubylift-Manual-v1.0-ES.pdf)
 
 ## What it does / Qué hace
 - **Workout / Entrenar:** start by choosing how you want to train: let the app build your plan (great if you are new), pick a ready routine by muscle, jump straight to the famous splits, take a challenge, or log your own workout. Log weight × reps, bodyweight reps or time & distance; see last time's numbers; rest timer; 🏆 for new records. / empieza eligiendo cómo quieres entrenar: que la app arme tu plan (ideal si empiezas), una rutina lista por músculo, directo a las divisiones famosas, un reto, o tu propio entrenamiento. Registra peso × repeticiones, repeticiones con peso corporal o tiempo y distancia; mira los números de la vez anterior; temporizador de descanso; 🏆 en récords nuevos.
@@ -12,12 +12,16 @@ Un registro gratis de entrenamientos, progreso y cuerpo que vive en tu teléfono
 - **Classic programs / Programas clásicos:** Full body, StrongLifts 5×5, Starting Strength, 5/3/1 (Wendler), PHUL and German Volume (10×10), built with your equipment; 5/3/1 calculates each set's weight from your training max. / Cuerpo completo, StrongLifts 5×5, Starting Strength, 5/3/1 (Wendler), PHUL y Volumen Alemán (10×10), armados con tu equipo; el 5/3/1 calcula el peso de cada serie desde tu máximo de entrenamiento.
 - **Ready routines by muscle / Rutinas listas por músculo:** chest, back, shoulders, arms, legs, glutes and core, in six ranks with their own names. Higher ranks use more range of motion, single-side work, resistance profiles, instability, harder leverage and no momentum, and each exercise says which one it uses. / pecho, espalda, hombros, brazos, piernas, glúteos y abdomen, en seis rangos con nombres propios. Los rangos altos usan más rango de movimiento, trabajo unilateral, perfiles de resistencia, inestabilidad, palancas más difíciles y nada de impulso, y cada ejercicio dice cuál usa.
 - **Challenges / Retos:** 30 morning-PT, CrossFit-style and Hyrox-style sessions with a built-in timer (AMRAP, EMOM, intervals, for time). Mark the equipment you have and each challenge adapts; your best result is saved. Any routine or challenge can be added to your plan as an extra day. / 30 sesiones de PT de la mañana, estilo CrossFit y estilo Hyrox con temporizador incluido (AMRAP, EMOM, intervalos, por tiempo). Marca el equipo que tienes y cada reto se adapta; tu mejor marca se guarda. Cualquier rutina o reto se puede agregar a tu plan como día extra.
-- **Exercise library / Biblioteca de ejercicios:** 990 exercises in English and Spanish with technique guides. / cerca de 990 ejercicios en español e inglés con guías de técnica.
+- **Account & sync / Cuenta y sincronización:** use it as a guest, or sign in with Google or e-mail + password; your plan, workouts, settings, body log, Recovery progress and the workout in progress follow you to any phone. E-mail accounts are end-to-end encrypted with a recovery key. / úsala como invitado, o inicia sesión con Google o correo y contraseña; tu plan, entrenamientos, ajustes, registro corporal, progreso de Recuperación y el entrenamiento en curso te siguen a cualquier teléfono. Las cuentas de correo se cifran de extremo a extremo con una clave de recuperación.
+- **Weight suggestions & records / Sugerencias de peso y récords:** a suggested weight for every exercise, a Use button, and a celebration on every personal record. / una sugerencia de peso en cada ejercicio, un botón Usar y una celebración en cada récord personal.
+- **Mobility & Recovery / Movilidad y Recuperación:** guided stretching sessions and 13 phased Recovery plans for common aches. / sesiones guiadas de estiramiento y 13 planes de Recuperación por fases para dolores comunes.
+- **Goals & sharing / Metas y compartir:** goals with progress bars, weekly streak, and a card studio to share workouts. / metas con barra de progreso, racha semanal y un estudio de tarjetas para compartir entrenamientos.
+- **Exercise library / Biblioteca de ejercicios:** about 1,000 exercises in English and Spanish with technique guides. / cerca de 1,000 ejercicios en español e inglés con guías de técnica.
 - **History / Historial:** every workout by month; repeat, share or delete. / cada entrenamiento por mes; repetir, compartir o eliminar.
 - **Progress / Progreso:** charts per exercise (estimated 1RM, top weight, volume, reps, time) and workouts per week. / gráficas por ejercicio (1RM estimado, peso máximo, volumen, repeticiones, tiempo) y entrenamientos por semana.
 - **Body / Cuerpo:** weight, body fat and measurements with a trend chart and optional goal. / peso, grasa corporal y medidas con gráfica de tendencia y meta opcional.
 - **Any screen / Cualquier pantalla:** designed for phones, with tablet (two/three columns, centered windows) and computer (side menu) layouts. / diseñada para teléfonos, con vistas para tableta (dos/tres columnas, ventanas al centro) y computadora (menú lateral).
-- **More / Más:** EN / ES, dark / light, lb · in · mi or kg · cm · km, profiles with password, backup export / import (.json), workouts export (.csv), and a **Send feedback** button. / EN / ES, oscuro / claro, lb · in · mi o kg · cm · km, perfiles con contraseña, exportar / importar respaldo (.json), exportar entrenamientos (.csv) y un botón **Enviar feedback**.
+- **More / Más:** EN / ES, dark / light, lb · in · mi or kg · cm · km, account (Google or e-mail), backup export / import (.json), workouts export (.csv), and a **Send feedback** button. / EN / ES, oscuro / claro, lb · in · mi o kg · cm · km, cuenta (Google o correo), exportar / importar respaldo (.json), exportar entrenamientos (.csv) y un botón **Enviar feedback**.
 
 ## Install on your phone / Instalar en tu teléfono
 - **Android (Chrome):** open the link → **📲 Install** (or menu ⋮ → Install app).
@@ -28,8 +32,9 @@ The app updates itself when a new version is published and shows what's new once
 La app se actualiza sola cuando se publica una versión nueva y muestra las novedades una vez.
 
 ## Privacy / Privacidad
-- Everything runs in your browser. **Your training data is never sent to any server.** The only thing that leaves the app is what you type in the optional feedback form, and only if you submit it. / Todo corre en tu navegador. **Tus datos de entrenamiento nunca se envían a ningún servidor.** Lo único que sale de la app es lo que escribas en el formulario opcional de feedback, y solo si lo envías.
-- Your log is stored in the phone's local storage. If you clear browser data or delete the app it is gone — **export a backup now and then** (More → Export backup). / Tu registro se guarda en el almacenamiento local del teléfono. Si borras los datos del navegador o eliminas la app se pierde — **exporta un respaldo de vez en cuando** (Más → Exportar respaldo).
+- No ads, no tracking. As a guest, **nothing leaves your phone**; the only thing that does is what you type in the optional feedback form, if you submit it. / Sin anuncios ni rastreo. Como invitado, **nada sale de tu teléfono**; lo único que sale es lo que escribas en el formulario opcional de comentarios, si lo envías.
+- With an e-mail account your data is encrypted on your phone (AES-256-GCM) before it is uploaded; with Google it is stored in your account without extra encryption. / Con una cuenta de correo tus datos se cifran en tu teléfono (AES-256-GCM) antes de subirse; con Google se guardan en tu cuenta sin cifrado adicional.
+- Guests: your log lives in the phone's local storage, so **export a backup now and then** (More → Back up my data). / Invitados: tu registro vive en el almacenamiento local del teléfono, así que **exporta un respaldo de vez en cuando** (Más → Respaldar mis datos).
 
 ## Use it / Úsala
 - Publish the repo with GitHub Pages (Settings → Pages → Deploy from a branch → `main` / root) and open the link on a phone. / Publica el repo con GitHub Pages (Settings → Pages → Deploy from a branch → `main` / root) y abre el link en el teléfono.
@@ -46,7 +51,8 @@ plan.js, opt.js     plan engines (legacy and NASM OPT), famous splits / motores 
 pers.js             personalization: injuries, preferences, reasons / personalización: lesiones, preferencias, razones
 library.js          ready routines by muscle, ranks, challenges and timer / rutinas por músculo, rangos, retos y temporizador
 wizard.js           plan questionnaire / cuestionario del plan
-profiles.js         profiles, password, encryption, QR transfer / perfiles, contraseña, cifrado, transferencia QR
+profiles.js         guest/account profiles, boot / perfiles de invitado y cuenta, arranque
+cloud.js            Supabase auth, E2E encryption, sync / autenticación, cifrado y sincronización
 history.js          History and Progress tabs, SVG charts
 body.js             Body and More tabs, export / import
 data/exercises.js   built-in exercise library (EN/ES) / biblioteca de ejercicios (EN/ES)
@@ -67,7 +73,8 @@ Ver [CHANGELOG.md](CHANGELOG.md) (EN/ES). Reglas para contribuir: [CONTRIBUTING.
 
 ## Known limits / Límites conocidos
 - Estimated 1RM uses the Epley formula and is only a guide. / El 1RM estimado usa la fórmula de Epley y es solo una guía.
-- No cloud sync: moving to another phone means exporting and importing a backup. / Sin sincronización en la nube: para cambiar de teléfono exporta e importa un respaldo.
+- Guest data is local only: use an account (or a backup) to move to another phone. Theme and language are kept per device. / Los datos de invitado son solo locales: usa una cuenta (o un respaldo) para cambiar de teléfono. Tema e idioma se guardan por dispositivo.
+- E-mail accounts: if you lose both your password and your recovery key, the cloud copy cannot be recovered. / Cuentas de correo: si pierdes la contraseña y la clave de recuperación, la copia en la nube no se puede recuperar.
 - The rest-timer sound can be silent on iPhone if the ringer is off; vibration is not available on iPhone. / El sonido del temporizador puede no sonar en iPhone si el timbre está en silencio; la vibración no existe en iPhone.
 - Spanish text was written for gym use and has not been reviewed by a native editor. / El texto en español no ha sido revisado por un editor nativo.
 
@@ -84,7 +91,7 @@ Exercise names, steps and photos (`img/ex/`) of the imported moves are adapted f
 Icons are from Tabler Icons (https://tabler.io/icons, MIT license), embedded in `data/icons.js`. / Los iconos son de Tabler Icons (MIT), incluidos en `data/icons.js`.
 Workout structure, training phases (OPT model), exercise categories and training concepts are based on NASM-CPT7 materials, used with permission. Bubylift is independent and not endorsed by NASM. / La estructura de los entrenamientos, las fases (modelo OPT), las categorías de ejercicios y los conceptos están basados en los materiales NASM-CPT7, usados con permiso. Bubylift es independiente y no está avalada por NASM.
 
-## Profiles, password, encryption & transfer / Perfiles, contraseña, cifrado y transferencia
-- EN: Up to 5 profiles per device, each with its own data. Data is stored encrypted (AES-256-GCM) with a random master key, wrapped by the password and by the three security answers together (PBKDF2-SHA256). Forgetting both means the data cannot be recovered. Profile name, avatar, language and theme are not encrypted. QR transfer is a one-time copy encrypted with an 8-digit PIN shown on the sending phone (it carries the key too).
-- ES: Hasta 5 perfiles por dispositivo, cada uno con sus datos. Los datos se guardan cifrados (AES-256-GCM) con una llave maestra aleatoria, envuelta por la contraseña y por las tres respuestas de seguridad juntas (PBKDF2-SHA256). Si se olvidan ambas, los datos no se pueden recuperar. El nombre, avatar, idioma y tema no se cifran. La transferencia por QR es una copia única cifrada con un PIN de 8 dígitos que muestra el teléfono de origen (también lleva la llave).
+## Accounts & encryption / Cuentas y cifrado
+- EN: E-mail accounts encrypt data on the phone (AES-256-GCM) with a random key wrapped by the password and by a recovery key (PBKDF2-SHA256); the server only stores ciphertext. Google accounts are stored in plain form under row-level security. Guests stay local. Sync merges by last change.
+- ES: Las cuentas de correo cifran los datos en el teléfono (AES-256-GCM) con una llave aleatoria envuelta por la contraseña y por una clave de recuperación (PBKDF2-SHA256); el servidor solo guarda texto cifrado. Las cuentas de Google se guardan sin cifrado adicional con seguridad por fila. Los invitados se quedan en local. La sincronización combina por último cambio.
 - Third-party libraries in `lib/` / Librerías de terceros en `lib/`: qrcode-generator (MIT), jsQR (Apache-2.0); see the license files / ver los archivos de licencia.

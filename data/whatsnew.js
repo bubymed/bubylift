@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.0.1',items:[
+  {i:'book',en:'<b>User manual:</b> a complete illustrated guide to the app, in English and Spanish, and clearer help texts.',es:'<b>Manual del usuario:</b> una guía ilustrada completa de la app, en español e inglés, y textos de ayuda más claros.'}
+ ]},
  {v:'v1.0',items:[
   {i:'🎉',en:'<b>Bubylift 1.0:</b> sign in with Google or e-mail, your progress follows you to any phone, a guided plan for every goal, Recovery plans, smart weight suggestions and personal-record celebrations.',es:'<b>Bubylift 1.0:</b> inicia sesión con Google o correo, tu progreso te sigue a cualquier teléfono, un plan guiado para cada meta, planes de Recuperación, sugerencias de peso y celebración de récords.'}
  ]},
