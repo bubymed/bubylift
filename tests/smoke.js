@@ -966,6 +966,12 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("ACT=null;saveAct();SET.units='imperial';saveSet();window.CLOUD_CFG={url:'',key:''}");
   ev("var __wk={id:'t9',t:Date.now()-60000,end:Date.now(),name:'x',ex:['bench','squat','row','curl','press','dip','fly'].map(function(e){return{eid:e,n:e,sets:[{w:20,r:5}]};})};");
   ok(ev("wkCardData(__wk).top.length")===7&&ev("wkCardData(__wk).top[0].eid")==='bench','share card lists every exercise, in the order you did them');
+  ev("startWorkout({name:'clk',ex:[{eid:'bench',sets:2}]});");
+  ok(ev("actStart()")===0&&/Start timer/.test(ev("document.getElementById('wkstats').textContent")),'workout clock waits for your first set');
+  ev("ACT.ex[0].sets[0].w=100;ACT.ex[0].sets[0].r=5;tgSet(0,0);");
+  ok(ev("actStart()")>0&&ev("!!REST"),'first set done starts the clock and the rest timer');
+  ev("restSet(0,'45')");ok(ev("exRest(ACT.ex[0])")===45&&ev("SET.exRest.bench")===45,'rest can be set per exercise and is remembered');
+  ev("restSet(0,'d');stopRest();ACT=null;saveAct();");
   const miss=[...new Set(w.__miss)];
   ok(miss.length===0,'no missing translation keys: '+miss.join(','));
   ok(errors.length===0,'no JS errors: '+errors.slice(0,3).join(' | '));

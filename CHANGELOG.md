@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.0.4 — 2026-10-30
+- **A clock that matches your training:** it starts with your first set (or the Start button), and rest is big, easy to see and set per exercise.
+  **Un cronómetro que va con tu entrenamiento:** empieza con tu primera serie (o el botón Iniciar), y el descanso se ve grande y se configura por ejercicio.
+
 ## v1.0.3 — 2026-10-30
 - **Easier set entry:** bigger weight and reps boxes with large − and + buttons, the whole number selects when you tap it, and a big green check.
   **Series más fáciles de anotar:** cajas de peso y repeticiones más grandes con botones − y + grandes, el número se selecciona completo al tocarlo y un check verde grande.

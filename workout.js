@@ -116,11 +116,14 @@ function actTotals(){
 }
 function statsLine(){
   const a=actTotals();
-  return '<span id="elapsed">'+fmtClock((Date.now()-ACT.t0)/1000)+'</span> · '+t('setsDone',a.done,a.tot)+(a.vol?' · '+wShow(a.vol)+' '+wUnit():'');
+  return (actStart()?'<span id="elapsed">'+fmtClock((Date.now()-actStart())/1000)+'</span>':'<button class="lnk-d" onclick="startClock()">▶ '+t('startClk')+'</button>')+' · '+t('setsDone',a.done,a.tot)+(a.vol?' · '+wShow(a.vol)+' '+wUnit():'');
 }
+/* the clock runs from your first set (or the Start button), not from when you opened the screen / el reloj corre desde tu primera serie (o el botón Iniciar), no desde que abriste la pantalla */
+function actStart(){return ACT?(ACT.ts||(actTotals().done?ACT.t0:0)):0;}
+function startClock(){if(!ACT||ACT.ts)return;ACT.ts=Date.now();saveAct();updTop();}
 function tickElapsed(){
   if(!ACT)return;
-  const e=$('elapsed');if(e)e.textContent=fmtClock((Date.now()-ACT.t0)/1000);
+  const e=$('elapsed');if(e)e.textContent=fmtClock((Date.now()-actStart())/1000);
 }
 function updTop(){const e=$('wkstats');if(e)e.innerHTML=statsLine();}
 
@@ -173,7 +176,7 @@ function exCard(i,x){
   let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span><button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
   h+=suggLine(x);
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
-  h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'</div>';
+  h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'<button class="lnk-d" onclick="restPick('+i+')">⏱ '+(exRest(x)===0?t('restOff'):fmtClock(exRest(x)!=null?exRest(x):(SET.rest||90)))+'</button></div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
   h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+t('colPrev')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
   x.sets.forEach((s,j)=>{
@@ -231,9 +234,9 @@ function tgSet(i,j){
     const ok=m==='t'?(s.t!=null&&s.t>0):(m==='bw'?(s.r!=null&&s.r>0):(s.w!=null&&s.r!=null&&s.r>0));
     if(!ok){toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
     const prev=bestScore(x.eid,m,s),sc=setScore(m,s);
-    s.done=true;
+    s.done=true;if(!ACT.ts)ACT.ts=ACT.t0&&actTotals().done>1?ACT.t0:Date.now();
     if(prev>0&&sc>prev){s.pr=true;toast(m==='wr'?t('newPR2',wShow(Math.round(sc))+' '+wUnit(),wShow(Math.round(sc-prev))+' '+wUnit()):t('newPR'));}else delete s.pr;
-    startRest(x.tg&&x.tg.rs!=null?x.tg.rs:undefined);
+    startRest(exRest(x));
   }else{s.done=false;delete s.pr;}
   saveAct();exRedraw(i);
   if(s.done){buzz(s.pr?[12,60,24]:12);popRow(i,j);if(s.pr)prBurst(i,j);nextInView(i,j);}
@@ -275,7 +278,7 @@ function exMenu(i){
     (i>0?'<button onclick="exMove('+i+',-1)">↑ '+t('moveUp')+'</button>':'')+
     (i<ACT.ex.length-1?'<button onclick="exMove('+i+',1)">↓ '+t('moveDown')+'</button>':'')+
     '<button onclick="tasteLike(\''+x.eid+'\');exMenu('+i+')">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button onclick="tasteDis(\'act\','+i+')">'+ic('ban')+' '+t('tkDis')+'</button>'+
-    '<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
+    '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button><button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
 function exMove(i,d){const a=ACT.ex,j=i+d;if(j<0||j>=a.length)return;const x=a[i];a[i]=a[j];a[j]=x;saveAct();sheetClose();render();}
 function rmSet(i){const snap=JSON.stringify(ACT),s=ACT.ex[i].sets;if(s.length>1)s.pop();saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
@@ -299,7 +302,7 @@ function wkCheer(wk,prs){
 function finishWk(){
   const end=Date.now();
   const ex=ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})})).filter(x=>x.sets.length);
-  const wk={id:ACT.id,t:ACT.t0,end:end,name:(ACT.name||'').trim()||autoName(ACT.t0),note:(ACT.note||'').trim(),ex:ex};
+  const t0=actStart()||ACT.t0,wk={id:ACT.id,t:t0,end:end,name:(ACT.name||'').trim()||autoName(t0),note:(ACT.note||'').trim(),ex:ex};
   if(ACT.pl!=null){wk.pl=ACT.pl;if(DATA.plan)DATA.plan.cur=(ACT.pl+1)%DATA.plan.n;}
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
   goalsCheck();
@@ -332,6 +335,22 @@ function unlockAudio(){try{if(!AC){const A=window.AudioContext||window.webkitAud
 function beep(){
   if(SET.sound&&AC){try{const o=AC.createOscillator(),g=AC.createGain();o.connect(g);g.connect(AC.destination);o.frequency.value=880;g.gain.value=0.15;o.start();setTimeout(()=>{try{o.stop();}catch(e){}},350);}catch(e){}}
   try{navigator.vibrate&&navigator.vibrate([200,100,200]);}catch(e){}
+}
+/* rest for one exercise: your choice for it, then the plan's, then the default / descanso de un ejercicio: tu elección, luego la del plan, luego el predeterminado */
+function exRest(x){
+  if(x.rsu!=null)return x.rsu;
+  const m=SET.exRest&&SET.exRest[x.eid];if(m!=null)return m;
+  return x.tg&&x.tg.rs!=null?x.tg.rs:undefined;
+}
+function restPick(i){
+  const x=ACT.ex[i],cur=exRest(x),def=SET.rest||90;
+  const chip=(v,l)=>'<button class="chip'+(cur===v||(cur==null&&v==='d')?' on':'')+'" onclick="restSet('+i+',\''+v+'\')">'+l+'</button>';
+  sheet('<h3>'+t('restEx')+'</h3><p class="muted sm">'+esc(exName(x.eid,x.n))+'</p><div class="chips">'+chip('d',t('restDef')+' · '+fmtClock(def))+chip('0',t('restOff'))+[30,45,60,90,120,150,180,240,300].map(v=>chip(String(v),fmtClock(v))).join('')+'</div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
+}
+function restSet(i,v){
+  const x=ACT.ex[i];SET.exRest=SET.exRest||{};
+  if(v==='d'){delete x.rsu;delete SET.exRest[x.eid];}else{x.rsu=parseInt(v,10);SET.exRest[x.eid]=x.rsu;}
+  saveSet();saveAct();sheetClose();exRedraw(i);toast(t('restSaved'));
 }
 function startRest(sec){
   if(!SET.auto)return;
