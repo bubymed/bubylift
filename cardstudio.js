@@ -113,7 +113,7 @@ function csStats(wk,d){
   const wo=!wk.ex.length,a=[];
   if(d.dur)a.push({v:d.dur,l:t('duration'),i:'stopwatch'});
   if(wo){if(d.hr)a.push({v:d.hr.a+' bpm',l:t('cdHr'),i:'heart'});if(d.kcal)a.push({v:d.kcal+' kcal',l:t('cdKcal'),i:'bolt'});}
-  else{a.push({v:String(d.sets),l:t('sets'),i:'clipboard-list'});a.push({v:d.vol,l:t('volume'),i:'barbell'});}
+  else{a.push({v:String(d.sets),l:t('sets'),i:'clipboard-list'});a.push({v:d.vol,l:t('csTotal'),i:'barbell'});}
   return a;
 }
 function csRender(o,sc){
