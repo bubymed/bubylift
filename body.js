@@ -42,19 +42,29 @@ function recCard(){
       return'<div class="rec-t '+c+'"><b>'+t('g_'+g)+'</b><i><u style="width:'+p+'%"></u></i><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small></div>';}).join('')+'</div></div>';
 }
 /* ---------- general strength score (e1RM ÷ body weight vs. standards) / fuerza general (1RM estimado ÷ peso corporal) ---------- */
-const STR_L=[['squat',['squat'],[.75,1.25,1.75,2.5,3]],['bench',['bench','dbbench'],[.5,.75,1.25,1.75,2]],['deadlift',['deadlift','rdl'],[1,1.5,2,2.75,3.25]],['ohp',['ohp'],[.35,.55,.8,1.05,1.3]],['row',['bbrow','dbrow','bentrow'],[.5,.75,1,1.4,1.75]]];
+const STR_L=[
+ ['squat',[['squat',1]],[.75,1.25,1.5,2.25,2.75],.8],
+ ['bench',[['bench',1],['dbbench',1.7]],[.5,.75,1.1,1.6,2],.6],
+ ['deadlift',[['deadlift',1],['rdl',1.3]],[1,1.5,1.9,2.6,3.1],.8],
+ ['ohp',[['ohp',1]],[.35,.55,.75,1,1.25],.6],
+ ['row',[['bbrow',1],['bentrow',1],['dbrow',1.6]],[.5,.75,1,1.35,1.7],.65]];
+/* the sex in your plan profile picks the table; heavier lifters are compared fairly (strength grows ~ body weight^0.67) / el sexo del perfil del plan elige la tabla; los más pesados se comparan con justicia */
+function strSex(){const p=DATA.plan&&DATA.plan.prof;return p&&p.sex?p.sex:'x';}
+function strRatio(e,bw,sex){const ref=sex==='f'?62:(sex==='m'?80:71);return e/bw*Math.max(.85,Math.min(1.25,Math.pow(bw/ref,.33)));}
+function strTh(L,sex){const k=sex==='m'?1:(sex==='f'?L[3]:(1+L[3])/2);return L[2].map(v=>v*k);}
 function strPts(r,th){if(!(r>0))return 0;let lo=0,pl=0;for(let i=0;i<th.length;i++){const hi=th[i],ph=(i+1)*20;if(r<=hi)return Math.round(pl+(ph-pl)*(r-lo)/(hi-lo));lo=hi;pl=ph;}return 100;}
 function strLevel(p){return p>=80?'elite':p>=60?'adv':p>=40?'inter':p>=20?'nov':'beg';}
 function strData(){
-  const bw=(DATA.body.find(x=>x.w)||{}).w,ws=DATA.workouts.slice().sort((a,b)=>a.t-b.t),best={},pts=[];
+  const bw=(DATA.body.find(x=>x.w)||{}).w,ws=DATA.workouts.slice().sort((a,b)=>a.t-b.t),best={},pts=[],sex=strSex();
   if(!bw)return{bw:null,n:ws.length,lifts:[],pts:[],score:null};
+  const sc=L=>best[L[0]]?strPts(strRatio(best[L[0]],bw,sex),strTh(L,sex)):null;
   ws.forEach(wk=>{
-    wk.ex.forEach(x=>STR_L.forEach(L=>{if(L[1].indexOf(x.eid)<0)return;x.sets.forEach(s=>{if(s.done===false)return;const e=e1rm(s.w,s.r);if(e>(best[L[0]]||0))best[L[0]]=e;});}));
-    const v=STR_L.map(L=>best[L[0]]?strPts(best[L[0]]/bw,L[2]):null).filter(x=>x!=null);
+    wk.ex.forEach(x=>STR_L.forEach(L=>{const m=L[1].find(q=>q[0]===x.eid);if(!m)return;x.sets.forEach(s=>{if(s.done===false||!(s.r>=1&&s.r<=12))return;const e=e1rm(s.w,s.r)*m[1];if(e>(best[L[0]]||0))best[L[0]]=e;});}));
+    const v=STR_L.map(sc).filter(x=>x!=null);
     if(v.length)pts.push({t:wk.t,y:Math.round(v.reduce((a,c)=>a+c,0)/v.length)});
   });
-  const lifts=STR_L.map(L=>({k:L[0],e:best[L[0]]||0,p:best[L[0]]?strPts(best[L[0]]/bw,L[2]):null}));
-  return{bw:bw,n:ws.length,lifts:lifts,pts:pts,score:pts.length?pts[pts.length-1].y:null};
+  const lifts=STR_L.map(L=>({k:L[0],e:best[L[0]]||0,p:sc(L)}));
+  return{bw:bw,n:ws.length,lifts:lifts,pts:pts,score:pts.length?pts[pts.length-1].y:null,sex:sex};
 }
 function strCard(){
   const d=strData(),lock=d.n<3||d.score==null;
