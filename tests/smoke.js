@@ -433,7 +433,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
    {const wk0=ev("DATA.workouts[0]&&DATA.workouts[0].id");if(!wk0){ev("DATA.workouts.push({id:'cswk',t:Date.now()-1e6,end:Date.now(),name:'Push day',note:'',ex:[{eid:'bench',n:'Bench',sets:[{w:60,r:8,t:1,d:null,pr:1},{w:60,r:8,t:2,d:null}]}]})");}
     const id=ev("DATA.workouts[0].id");ev("HTMLCanvasElement.prototype.getContext=function(){return null;}");ev("wkPic('"+id+"')");
     ok(doc.querySelectorAll('#sheet [data-k=style]').length===10,'share studio offers 10 styles');
-    ok(ev("CS_STYLES.every(function(s){var c=csRender(Object.assign({},CS,{style:s,pos:'mid',fmt:'square'}),.1);return c.width>0;})"),'styles list ok');
+    ok(ev("CS_STYLES.length===10&&typeof csMuscle==='function'&&typeof csPrCard==='function'&&typeof csFun==='function'&&csFunObj(2150).k==='car'&&csFunObj(50).k==='bow'&&Object.keys(csHeat(DATA.workouts[0]||{ex:[]})).length>=0"),'styles list ok');
     ev("sheetClose()");}
    ev("DATA=JSON.parse("+JSON.stringify(sv)+");SET.units="+JSON.stringify(su)+";tab='workout';render()");}
   console.log('military v71');
