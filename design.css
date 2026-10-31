@@ -380,13 +380,24 @@ main>.lnk-d{display:flex;margin:14px auto 0;color:var(--txt)}
 body.kbd #sheet.pks{padding-bottom:10px}
 #sheet.pks .pick{display:flex;flex-direction:column;flex:1;min-height:0}
 #sheet.pks .pick>*{flex:none}#sheet.pks .pick>.pk-grid{flex:1 1 0}
-body.kbd #sheet.pks .chips.eq,body.kbd #sheet.pks .pk-own{display:none}
-.pk-cnt{min-height:1.2em;margin:2px 4px}
-#sheet.pks .exlist.pk-grid{flex:1 1 0;min-height:0;margin:4px -8px;padding:4px 8px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:max-content;gap:6px;align-content:start;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
-#sheet.pks .exrow.exth{background:var(--panel2);border:0;border-radius:12px;padding:6px 8px;gap:8px;min-height:0;height:60px;overflow:hidden}
-#sheet.pks .exrow .ex-th{width:44px;height:44px;flex:none;border-radius:10px}
-#sheet.pks .exrow .ex-tx b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.82rem;line-height:1.15}
-#sheet.pks .exrow .ex-tx small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.68rem}
-#sheet.pks .exrow.sel{background:color-mix(in srgb,var(--accent) 20%,var(--panel2));box-shadow:inset 0 0 0 2px var(--accent)}
-#sheet.pks .exrow .exck{position:absolute;top:4px;right:4px;width:18px;height:18px;font-size:.68rem;margin:0}
-#sheet.pks .pk-none{grid-column:1/-1;padding:18px 4px}
+
+/* picker v2: tabs, A-Z list, search pinned above the keyboard / selector v2 */
+.pk-tabs{display:flex;background:var(--panel2);border-radius:12px;padding:3px;margin:8px 0 4px;gap:2px;flex:none}
+.pk-tabs button{flex:1;min-height:38px;border-radius:10px;font-weight:600;font-size:.92rem;color:var(--dim)}
+.pk-tabs button.on{background:var(--line);color:var(--text,#fff)}
+#sheet.pks .exlist.pk-list{flex:1 1 0;min-height:0;margin:0 -8px;padding:0 8px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
+#sheet.pks .exrow.exth{display:flex;align-items:center;gap:12px;padding:8px 4px;min-height:68px;border-bottom:.5px solid var(--line);border-radius:0}
+#sheet.pks .exrow .ex-th{width:54px;height:54px;flex:none;border-radius:11px}
+#sheet.pks .exrow .ex-tx{flex:1;min-width:0}
+#sheet.pks .exrow .ex-tx b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:1rem;line-height:1.2}
+#sheet.pks .exrow .ex-tx small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#sheet.pks .exrow.sel{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+#sheet.pks .exrow .exck{position:static;width:26px;height:26px;margin-left:auto;font-size:.9rem}
+.pk-l{position:sticky;top:0;z-index:1;background:var(--panel);padding:14px 2px 6px;font-weight:800;color:var(--dim);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase}
+.pk-m{display:flex;align-items:center;width:100%;min-height:58px;padding:0 4px;border-bottom:.5px solid var(--line);text-align:left;gap:10px}
+.pk-m b{flex:1;font-size:1.02rem}.pk-m small{color:var(--dim)}.pk-m i{font-style:normal;color:var(--dim);font-size:1.4rem}
+.pk-more{display:block;width:100%;padding:16px 4px;text-align:left;color:var(--accent);font-weight:600}
+.pk-none{padding:18px 4px}
+.pk-bot{flex:none;padding-top:8px;background:var(--panel)}
+.pk-bot .pickadd{position:static;margin:0 0 8px}
+.pk-q{border-radius:999px;padding-left:18px;min-height:48px}

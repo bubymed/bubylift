@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.0 — 2026-10-30
+- **New exercise picker**: All / By muscle / Categories tabs, A–Z with letters, stretches kept separate, search pinned above the keyboard. New sets copy the last one and Enter walks weight → reps → done.
+  **Selector nuevo**: pestañas Todo / Por músculo / Categorías, orden A–Z con letras, estiramientos aparte, búsqueda pegada al teclado. Las series nuevas copian la anterior y Enter va peso → reps → listo.
+
 ## v1.0.7 — 2026-10-30
 - **Search that fits the keyboard:** exercises show in two compact columns, several at a time, and the list stays above the keyboard so nothing hides behind it.
   **Búsqueda que cabe con el teclado:** los ejercicios salen en dos columnas compactas, varios a la vez, y la lista queda sobre el teclado para que nada se tape.

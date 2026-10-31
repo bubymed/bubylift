@@ -197,7 +197,7 @@ function exCard(i,x){
     let f1,f2,p1,p2,k1,k2;
     if(m==='t'){k1='t';k2='d';f1=s.t!=null?fmtNum(s.t):'';f2=dShow(s.d);p1=ph&&ph.t!=null?fmtNum(ph.t):'';p2=ph&&ph.d?dShow(ph.d):'';}
     else{k1='w';k2='r';f1=wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?wShow(ph.w):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=wShow(x.sg);}
-    const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" enterkeyhint="next" onfocus="this.select()" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
+    const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" enterkeyhint="next" data-i="'+i+'" data-j="'+j+'" data-k="'+k+'" onfocus="this.select()" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
     const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+(d<0?'−':'+')+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
     const inp=(k,v,p,mode)=>m==='t'?inp0(k,v,p,mode):'<span class="stc">'+stb(k,-1)+inp0(k,v,p,mode)+stb(k,1)+'</span>';
     h+='<div class="srow'+(s.done?' done':'')+'"><button class="sn tyb'+(s.ty?' ty-'+s.ty:'')+'" aria-label="'+esc(t('tyAria'))+'" onclick="cycTy('+i+','+j+')">'+(s.ty?s.ty.toUpperCase():(j+1))+(s.pr?'<i class="pr" title="PR">'+ic('trophy')+'</i>':'')+'</button><span class="sp">'+esc(fmtPrev(m,pv[j]))+'</span>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('doneSet'))+'" onclick="tgSet('+i+','+j+')">✓</button></div>';
@@ -233,7 +233,21 @@ function stepSet(i,j,f,d){
   }
   saveAct();exRedraw(i);buzz(6);
 }
-function addSet(i){ACT.ex[i].sets.push(newSet());saveAct();exRedraw(i);}
+/* a new set starts as a copy of the last one: log it with one tap / una serie nueva copia la anterior: se registra con un toque */
+function addSet(i){const x=ACT.ex[i],l=x.sets[x.sets.length-1],n=newSet();if(l){n.w=l.w;n.r=l.r;n.t=l.t;n.d=l.d;}x.sets.push(n);saveAct();exRedraw(i);}
+/* Enter/Next walks weight → reps → done → next set, keyboard stays open / Enter/Siguiente: peso → reps → listo → siguiente serie sin cerrar el teclado */
+document.addEventListener('keydown',function(ev){
+  const el=ev.target;if(ev.key!=='Enter'||!el||!el.classList||!el.classList.contains('in')||el.dataset.i==null)return;
+  ev.preventDefault();
+  const i=+el.dataset.i,j=+el.dataset.j,card=document.getElementById('exc'+i);if(!card)return;
+  const ins=[].slice.call(card.querySelectorAll('.srow .in[data-i]')),k=ins.indexOf(el);
+  if(k>=0&&k%2===0&&ins[k+1]){ins[k+1].focus();return;}
+  if(ACT&&ACT.ex[i]&&ACT.ex[i].sets[j]&&!ACT.ex[i].sets[j].done){
+    sv(i,j,el.dataset.k,el.value);
+    tgSet(i,j);
+    setTimeout(function(){const c=document.getElementById('exc'+i),n=c&&c.querySelector('.srow:not(.done):not(.hd) .in[data-i]');if(n)n.focus();else if(document.activeElement)document.activeElement.blur();},60);
+  }else if(ins[k+1])ins[k+1].focus();
+});
 function tgSet(i,j){
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);
   unlockAudio();
@@ -406,7 +420,7 @@ async function wake(){try{if(ACT&&'wakeLock' in navigator&&!WL){WL=await navigat
 function unwake(){try{if(WL)WL.release();}catch(e){}WL=null;}
 
 /* ---------- exercise picker ---------- */
-function pickEx(cb,multi){UI.q='';UI.g='';UI.e='';UI.pickSel=[];UI.pickMulti=!!multi;UI.pickCb=cb||function(eid){addExTo(eid,1);saveAct();render();};drawPick();setTimeout(function(){const q=$('exq');if(q)q.focus();},60);}
+function pickEx(cb,multi){UI.q='';UI.pt='all';UI.pf=null;UI.pickSel=[];UI.pickMulti=!!multi;UI.pickCb=cb||function(eid){addExTo(eid,1);saveAct();render();};drawPick();}
 function recentIds(){
   const r=[];
   for(const wk of DATA.workouts){for(const x of wk.ex){if(r.indexOf(x.eid)<0)r.push(x.eid);if(r.length>=8)return r;}}
@@ -420,7 +434,7 @@ function mineIds(){
   return top;
 }
 function exThumb(id){return typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id)?'<span class="ex-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>':'<span class="ex-th ex-no">'+ic('barbell')+'</span>';}
-function exRow(e){const on=UI.pickMulti&&(UI.pickSel||[]).indexOf(e.id)>=0;return'<button class="exrow exth'+(on?' sel':'')+'" data-id="'+e.id+'" onclick="pickTap(\''+e.id+'\')">'+exThumb(e.id)+'<span class="ex-tx"><b>'+esc(LANG==='es'?e.es:e.en)+'</b><small>'+t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+esc(injBadge(e.id))+'</small></span>'+(UI.pickMulti?'<i class="exck">'+(on?'✓':'')+'</i>':'')+'</button>';}
+function exRow(e,srch){const on=UI.pickMulti&&(UI.pickSel||[]).indexOf(e.id)>=0,al=LANG==='es'?e.en:e.es,nm=LANG==='es'?e.es:e.en,sub=srch&&al&&norm(al)!==norm(nm)?t('alsoCalled',al):t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+injBadge(e.id);return'<button class="exrow exth'+(on?' sel':'')+'" data-id="'+e.id+'" onclick="pickTap(\''+e.id+'\')">'+exThumb(e.id)+'<span class="ex-tx"><b>'+esc(nm)+'</b><small>'+esc(sub)+'</small></span>'+(UI.pickMulti?'<i class="exck">'+(on?'✓':'')+'</i>':'')+'</button>';}
 /* same exercise imported twice (Pull-Up / Pullups): show it once / el mismo ejercicio importado dos veces: se muestra una vez */
 function exKey(e){return norm(e.en).replace(/[^a-z0-9 ]/g,'').split(' ').map(w=>w.replace(/(ups|up)$/,'up').replace(/s$/,'')).join('')+'|'+e.g;}
 function pickPool(){
@@ -438,46 +452,69 @@ function exRank(e,tok){
   return sc*100+nm.length;
 }
 function exListHtml(){
-  const q=norm(UI.q.trim()),tok=q?q.split(' ').filter(Boolean):[];let h='';
-  const pool=pickPool().filter(e=>e&&(!UI.e||e.e===UI.e)&&(!UI.g||UI.g==='mine'||e.g===UI.g));
-  if(UI.g==='mine'){
-    const ids=mineIds(),set=new Set(ids),l=pool.filter(e=>set.has(e.id)&&(!tok.length||exRank(e,tok)>=0)).sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));
-    return l.length?l.map(exRow).join(''):'<p class="muted pk-none">'+t('mineNone')+'</p>';
-  }
-  if(!tok.length&&!UI.g&&!UI.e){
-    const rec=recentIds().map(exById).filter(Boolean);
-    if(rec.length)h+=rec.map(exRow).join('');
-  }
-  let list;
+  const q=norm(UI.q.trim()),tok=q?q.split(' ').filter(Boolean):[];
+  if(!tok.length&&UI.pt!=='all'&&!UI.pf)return pickMenu();
+  const f=pickFx(),pool=pickPoolF(f),nmf=e=>norm(LANG==='es'?e.es:e.en);
+  let list,h='',last='';
   if(tok.length)list=pool.map(e=>({e:e,r:exRank(e,tok)})).filter(x=>x.r>=0).sort((a,b)=>a.r-b.r).map(x=>x.e);
-  else list=pool.slice().sort((a,b)=>norm(LANG==='es'?a.es:a.en).localeCompare(norm(LANG==='es'?b.es:b.en)));
-  const rid=(!tok.length&&!UI.g&&!UI.e)?recentIds():[];
-  h+=list.filter(e=>rid.indexOf(e.id)<0).map(exRow).join('');
-  return h||'<p class="muted pk-none">'+t('noMatch')+'</p>';
+  else if(f.t==='mine'||f.t==='recent'){const ids=f.t==='mine'?mineIds():recentIds();list=pool.slice().sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));}
+  else list=pool.slice().sort((a,b)=>nmf(a).localeCompare(nmf(b)));
+  const letters=!tok.length&&f.t!=='mine'&&f.t!=='recent';
+  list.forEach(e=>{
+    if(letters){const c=(nmf(e).charAt(0)||'#').toUpperCase(),L=/[A-Z]/.test(c)?c:'#';if(L!==last){last=L;h+='<div class="pk-l">'+L+'</div>';}}
+    h+=exRow(e,tok.length>0);
+  });
+  let sn=0;
+  if(tok.length&&f.t==='all'){sn=pickPoolF({t:'str'}).filter(e=>exRank(e,tok)>=0).length;if(sn)h+='<button class="pk-more" onclick="pickPick(\'str\',\'\',1)">'+t('seeStr',sn)+'</button>';}
+  if(!list.length&&!sn)h+='<p class="muted pk-none">'+t('noMatch')+'</p>';
+  return h+'<button class="pk-more pk-own" onclick="customOpen()">＋ '+t('customEx')+'</button>';
 }
+/* which exercises a view shows: stretches & mobility only when asked for / qué ejercicios muestra cada vista: estiramientos solo si se piden */
+function pickFx(){return UI.pt==='all'||!UI.pf?{t:'all'}:UI.pf;}
+function pickPoolF(f){
+  const P=pickPool().filter(Boolean),nm=e=>e.g!=='mobility';
+  switch(f.t){
+    case 'g':return P.filter(e=>e.g===f.v);
+    case 'e':return P.filter(e=>e.e===f.v&&nm(e));
+    case 'bw':return P.filter(e=>e.e==='bodyweight'&&nm(e));
+    case 'wt':return P.filter(e=>e.e!=='bodyweight'&&nm(e)&&e.g!=='cardio');
+    case 'custom':return P.filter(e=>e.custom);
+    case 'str':return P.filter(e=>e.g==='mobility');
+    case 'mine':{const s=new Set(mineIds());return P.filter(e=>s.has(e.id));}
+    case 'recent':{const s=new Set(recentIds());return P.filter(e=>s.has(e.id));}
+    default:return P.filter(nm);
+  }
+}
+function pickMenu(){
+  const row=(k,v,label,n)=>'<button class="pk-m" onclick="pickPick(\''+k+'\',\''+v+'\')"><b>'+esc(label)+'</b><small>'+n+'</small><i>›</i></button>',c=f=>pickPoolF(f).length;
+  if(UI.pt==='mus')return EX_GROUPS.filter(g=>g!=='mobility').map(g=>row('g',g,t('g_'+g),c({t:'g',v:g}))).join('');
+  const eq=['barbell','dumbbell','machine','cable','kettlebell','band','ball','suspension','other'];
+  return row('all','',t('catAll'),c({t:'all'}))+row('recent','',t('catRecent'),c({t:'recent'}))+row('mine','',t('mineB'),c({t:'mine'}))+row('custom','',t('catCustom'),c({t:'custom'}))+
+    row('bw','',t('catBw'),c({t:'bw'}))+row('wt','',t('catWt'),c({t:'wt'}))+row('g','cardio',t('g_cardio'),c({t:'g',v:'cardio'}))+row('str','',t('g_mobility'),c({t:'str'}))+
+    '<div class="pk-l">'+t('catEq')+'</div>'+eq.map(g=>row('e',g,t('e_'+g),c({t:'e',v:g}))).join('');
+}
+function pfLabel(){const f=UI.pf||{};return f.t==='g'?t('g_'+f.v):f.t==='e'?t('e_'+f.v):f.t==='mine'?t('mineB'):f.t==='str'?t('g_mobility'):t({all:'catAll',recent:'catRecent',bw:'catBw',wt:'catWt',custom:'catCustom'}[f.t]||'catAll');}
 function pickBar(){
   if(!UI.pickMulti)return'';
   const n=(UI.pickSel||[]).length;
   return'<button id="pickAdd" class="btn pri wide pickadd" onclick="pickCommit()"'+(n?'':' disabled')+'>'+(n?(n===1?t('addN1'):t('addN',n)):t('pickSome'))+'</button>';
 }
 function drawPick(){
-  const eq=['barbell','dumbbell','machine','cable','bodyweight','kettlebell','band','ball','suspension','other'];
-  sheet('<div class="pick"><div class="pick-h"><h3>'+t('addEx')+'</h3><button class="ico" onclick="pickCancel()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
-    '<input id="exq" class="in wide" type="search" enterkeyhint="search" autocomplete="off" placeholder="'+esc(t('searchEx'))+'" value="'+esc(UI.q)+'" oninput="exSearch(this.value)">'+
-    '<div class="chips sc"><button class="chip'+(UI.g===''?' on':'')+'" onclick="exGroup(\'\')">'+t('all')+'</button><button class="chip'+(UI.g==='mine'?' on':'')+'" onclick="exGroup(\'mine\')">★ '+t('mineB')+'</button>'+EX_GROUPS.map(g=>'<button class="chip'+(UI.g===g?' on':'')+'" onclick="exGroup(\''+g+'\')">'+t('g_'+g)+'</button>').join('')+'</div>'+
-    '<div class="chips sc eq"><button class="chip sm'+(UI.e===''?' on':'')+'" onclick="exEq(\'\')">'+t('anyEq')+'</button>'+eq.map(g=>'<button class="chip sm'+(UI.e===g?' on':'')+'" onclick="exEq(\''+g+'\')">'+t('e_'+g)+'</button>').join('')+'</div>'+
-    '<div class="pk-cnt muted sm" id="pkcnt">'+pkCount()+'</div><div id="exlist" class="exlist pk-grid">'+exListHtml()+'</div>'+pickBar()+'<button class="btn wide pk-own" onclick="customOpen()">＋ '+t('customEx')+'</button></div>');
+  const sub=UI.pt!=='all'&&UI.pf,x='<button class="ico" onclick="pickCancel()" aria-label="'+esc(t('close'))+'">✕</button>';
+  const head=sub?'<div class="pick-h"><button class="ico" onclick="pickBack()" aria-label="'+esc(t('back'))+'">←</button><h3>'+esc(pfLabel())+'</h3>'+x+'</div>':'<div class="pick-h"><h3>'+t('addEx')+'</h3>'+x+'</div>';
+  const tabs=sub?'':'<div class="pk-tabs">'+[['all','tabAll'],['mus','tabMus'],['cat','tabCat']].map(a=>'<button class="'+(UI.pt===a[0]?'on':'')+'" onclick="pickTab(\''+a[0]+'\')">'+t(a[1])+'</button>').join('')+'</div>';
+  sheet('<div class="pick">'+head+tabs+'<div id="exlist" class="exlist pk-list">'+exListHtml()+'</div><div class="pk-bot">'+pickBar()+
+    '<input id="exq" class="in wide pk-q" type="search" enterkeyhint="search" autocomplete="off" placeholder="'+esc(t('searchEx'))+'" value="'+esc(UI.q)+'" oninput="exSearch(this.value)"></div></div>');
   const el=$('sheet');el.className='pks';$('sheetov').classList.add('pks');
-  const c=$('pkcnt'),l=$('exlist');if(c&&l)c.textContent=t('nMatch',l.querySelectorAll('.exrow').length);
-  setTimeout(pkRows,30);
 }
-function pkCount(){return '';}
-/* as many rows of cards as fit in the space you can see / tantas filas de tarjetas como quepan en el espacio visible */
-function pkRows(){return;const l=$('exlist');if(!l||!l.classList.contains('pk-grid'))return;const r=Math.max(1,Math.min(4,Math.floor((l.clientHeight-8)/92)));l.style.setProperty('--pkr',r);}
-if(window.visualViewport)window.visualViewport.addEventListener('resize',function(){setTimeout(pkRows,60);});
-function exSearch(v){UI.q=v;const l=$('exlist');if(l){l.innerHTML=exListHtml();l.scrollTop=0;const c=$('pkcnt');if(c)c.textContent=t('nMatch',l.querySelectorAll('.exrow').length);}}
-function exGroup(g){UI.g=g;pickRedraw();}
-function exEq(g){UI.e=g;pickRedraw();}
+function exSearch(v){UI.q=v;const l=$('exlist');if(l){l.innerHTML=exListHtml();l.scrollTop=0;}}
+function pickTab(k){UI.pt=k;UI.pf=null;pickRedraw();}
+function pickBack(){UI.pf=null;pickRedraw();}
+function pickPick(k,v,fromSearch){
+  if(k==='all'&&!fromSearch){UI.pt='all';UI.pf=null;}
+  else{if(fromSearch)UI.pt='cat';else if(UI.pt==='all')UI.pt=k==='g'?'mus':'cat';UI.pf={t:k,v:v||''};}
+  pickRedraw();
+}
 function pickRedraw(){const q=UI.q;drawPick();const i=$('exq');if(i&&q)i.value=q;}
 function pickTap(id){
   if(!UI.pickMulti){pickDone(id);return;}

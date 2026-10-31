@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.0',items:[
+  {i:'search',en:'<b>New exercise picker</b>: All / By muscle / Categories tabs, A–Z with letters, stretches kept separate, search pinned above the keyboard. New sets copy the last one and Enter walks weight → reps → done.',es:'<b>Selector nuevo</b>: pestañas Todo / Por músculo / Categorías, orden A–Z con letras, estiramientos aparte, búsqueda pegada al teclado. Las series nuevas copian la anterior y Enter va peso → reps → listo.'}
+ ]},
  {v:'v1.0.7',items:[
   {i:'swipe',en:'<b>Search that fits the keyboard:</b> exercises show in two compact columns, several at a time, and the list stays above the keyboard so nothing hides behind it.',es:'<b>Búsqueda que cabe con el teclado:</b> los ejercicios salen en dos columnas compactas, varios a la vez, y la lista queda sobre el teclado para que nada se tape.'}
  ]},
