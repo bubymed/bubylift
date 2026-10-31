@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.7 — 2026-10-30
+- **Share studio v2**: transparent cards cut to a small sticker you can copy or save and paste over any photo or story, a big live preview, two new cards (Personal record, Fun comparison) and a square size.
+  **Estudio de compartir v2**: tarjetas transparentes recortadas como un sticker pequeño que puedes copiar o guardar y pegar sobre cualquier foto o historia, vista previa grande, dos tarjetas nuevas (Récord personal y Curiosa) y tamaño cuadrado.
+
 ## v1.1.6 — 2026-10-30
 - **Rest timer adjusts in bigger steps**: −1:00, −0:30, +0:30 and +1:00 on their own row.
   **El descanso se ajusta en pasos más grandes**: −1:00, −0:30, +0:30 y +1:00 en su propia fila.

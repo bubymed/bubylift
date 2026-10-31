@@ -1,6 +1,6 @@
 /* Share studio (v95): transparent workout cards in 7 styles — put them over any photo or story, or add a photo here.
    Estudio de tarjetas (v95): tarjetas con fondo transparente en 7 estilos — ponlas sobre cualquier foto o historia, o agrega una foto aquí. */
-const CS_STYLES=['classic','stack','poster','chips','lifts','badge','bar'];
+const CS_STYLES=['classic','stack','poster','chips','lifts','badge','bar','pr','fun'];
 let CS=null;
 const csAcc=()=>{try{return(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'').trim()||'#ff6a2b';}catch(e){return'#ff6a2b';}};
 function csRgba(hex,a){
@@ -10,23 +10,26 @@ function csRgba(hex,a){
 }
 function csOpen(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
-  CS={wk:wk,style:'classic',fmt:'story',bg:'dark',col:'#ffffff',photo:null,file:null};
+  CS={wk:wk,style:'classic',fmt:'story',pos:'bottom',bg:'none',col:'#ffffff',photo:null,file:null};
   const chip=(k,v,lbl,extra)=>'<button class="chip'+(CS[k]===v?' on':'')+'" data-k="'+k+'" data-v="'+v+'" onclick="'+(extra||'csSet(\''+k+'\',\''+v+'\')')+'">'+lbl+'</button>';
   const acc=csAcc();
   sheet('<div class="form cs"><div class="pick-h"><h3>'+t('cdBtn')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
-    '<p class="muted sm g-c">'+t('csHint')+'</p>'+
+    '<div class="cs-pvw"><canvas id="csPv"></canvas></div>'+
     '<div class="cs-th">'+CS_STYLES.map(k=>'<button class="cs-t'+(CS.style===k?' on':'')+'" data-k="style" data-v="'+k+'" onclick="csSet(\'style\',\''+k+'\')"><canvas data-s="'+k+'"></canvas><span>'+t('csS_'+k)+'</span></button>').join('')+'</div>'+
     '<div class="cs-l">'+t('csBgL')+'</div><div class="chips cs-row">'+chip('bg','none',t('csBgNone'))+chip('bg','photo',t('csBgPhoto'),'csBgPhoto()')+chip('bg','dark',t('csBgDark'))+'</div>'+
-    '<div class="cs-l">'+t('csFmtL')+'</div><div class="chips cs-row">'+chip('fmt','story',t('csFmtStory'))+chip('fmt','post',t('csFmtPost'))+'</div>'+
+    '<div class="cs-fp"><div class="cs-l">'+t('csFmtL')+'</div><div class="chips cs-row">'+chip('fmt','story',t('csFmtStory'))+chip('fmt','post',t('csFmtPost'))+chip('fmt','square',t('csFmtSq'))+'</div>'+
+    '<div class="cs-l">'+t('csPosL')+'</div><div class="chips cs-row">'+chip('pos','top',t('csPosTop'))+chip('pos','mid',t('csPosMid'))+chip('pos','bottom',t('csPosBot'))+'</div></div>'+
     '<div class="cs-l">'+t('csColL')+'</div><div class="cs-sw">'+['#ffffff','#111111',acc].map(c=>'<button class="cs-c'+(CS.col===c?' on':'')+'" data-k="col" data-v="'+c+'" style="background:'+c+'" aria-label="'+c+'" onclick="csSet(\'col\',\''+c+'\')"></button>').join('')+'</div>'+
     '<input id="csf" type="file" accept="image/*" hidden onchange="csPhoto(this)">'+
-    '<div class="row"><button class="btn" onclick="csOut(false)">'+t('csSave')+'</button><button class="btn pri" onclick="csOut(true)">'+t('csShare')+'</button></div></div>');
+    '<div class="row"><button class="btn" onclick="csOut(false)">'+t('csSave')+'</button><button class="btn" onclick="csCopy()">'+t('csCopy')+'</button><button class="btn pri" onclick="csOut(true)">'+t('csShare')+'</button></div></div>');
+  const sh=$('sheet').querySelector('.cs');if(sh)sh.classList.toggle('cs-tr',CS.bg==='none');
   csDraw();
 }
 function csSet(k,v){
   if(!CS)return;CS[k]=v;
+  if(k==='bg'){const sh=$('sheet').querySelector('.cs');if(sh)sh.classList.toggle('cs-tr',v==='none');}
   document.querySelectorAll('#sheet [data-k="'+k+'"]').forEach(b=>b.classList.toggle('on',b.dataset.v===String(v)));
-  if(k!=='style')csDraw();
+  csDraw();
 }
 function csBgPhoto(){
   if(!CS)return;
@@ -43,8 +46,9 @@ function csPhoto(inp){
 /* every style is drawn small, side by side, so you can compare them at a glance / cada estilo se dibuja pequeño, lado a lado, para compararlos de un vistazo */
 function csDraw(){
   if(!CS)return;
+  const pv=$('csPv');if(pv){try{const c=csFinal(CS,.34);pv.width=c.width;pv.height=c.height;const x=pv.getContext('2d');x.clearRect(0,0,c.width,c.height);x.drawImage(c,0,0);}catch(e){}}
   document.querySelectorAll('#sheet canvas[data-s]').forEach(v=>{
-    let c;try{c=csRender(Object.assign({},CS,{style:v.dataset.s}),.22);}catch(e){return;}
+    let c;try{c=csFinal(Object.assign({},CS,{style:v.dataset.s}),.22);}catch(e){return;}
     v.width=c.width;v.height=c.height;v.getContext('2d').drawImage(c,0,0);
   });
   csPrep();
@@ -53,12 +57,12 @@ function csDraw(){
 let csTm=null;
 function csPrep(){
   if(!CS)return;CS.file=null;clearTimeout(csTm);
-  const cur=CS,key=cur.style+cur.fmt+cur.bg+cur.col;
+  const cur=CS,key=cur.style+cur.fmt+cur.pos+cur.bg+cur.col;
   csTm=setTimeout(function(){
     if(CS!==cur)return;
-    let c;try{c=csRender(cur);}catch(e){return;}
+    let c;try{c=csFinal(cur);}catch(e){return;}
     c.toBlob(function(b){
-      if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.bg+cur.col)return;
+      if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.pos+cur.bg+cur.col)return;
       cur.file=new File([b],'bubylift-'+dInput(cur.wk.t)+(cur.bg==='none'?'-overlay':'')+'.png',{type:'image/png'});
     },'image/png');
   },120);
@@ -70,6 +74,22 @@ function csOut(share){
   try{if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Bubylift'}).catch(()=>{});return;}}catch(e){}
   const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);toast(t('cdSaved'));
+}
+/* a transparent card is cut to just its content, so it pastes as a small sticker instead of covering the whole story / la tarjeta transparente se recorta a su contenido: se pega como sticker pequeño y no cubre toda la historia */
+function csCrop(c){
+  const w=c.width,h=c.height,g=c.getContext('2d');let d;try{d=g.getImageData(0,0,w,h).data;}catch(e){return c;}
+  let x0=w,y0=h,x1=-1,y1=-1;
+  for(let y=0;y<h;y++){const r=y*w*4;for(let x=0;x<w;x++){if(d[r+x*4+3]>24){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}}}
+  if(x1<0)return c;
+  const p=Math.round(w*.04);x0=Math.max(0,x0-p);y0=Math.max(0,y0-p);x1=Math.min(w-1,x1+p);y1=Math.min(h-1,y1+p);
+  const o=document.createElement('canvas');o.width=x1-x0+1;o.height=y1-y0+1;o.getContext('2d').drawImage(c,x0,y0,o.width,o.height,0,0,o.width,o.height);return o;
+}
+function csFinal(o,sc){const c=csRender(o,sc);return o.bg==='none'?csCrop(c):c;}
+function csCopy(){
+  if(!CS)return;const f=CS.file;
+  if(!f){toast(t('csWait'));csPrep();return;}
+  try{if(navigator.clipboard&&window.ClipboardItem){navigator.clipboard.write([new ClipboardItem({'image/png':f})]).then(function(){toast(t('csCopied'));},function(){csOut(false);});return;}}catch(e){}
+  csOut(false);
 }
 /* the old entry point from the workout detail / punto de entrada desde el detalle del entrenamiento */
 function wkPic(id){csOpen(id);}
@@ -93,15 +113,15 @@ function csStats(wk,d){
   const wo=!wk.ex.length,a=[];
   if(d.dur)a.push({v:d.dur,l:t('duration'),i:'stopwatch'});
   if(wo){if(d.hr)a.push({v:d.hr.a+' bpm',l:t('cdHr'),i:'heart'});if(d.kcal)a.push({v:d.kcal+' kcal',l:t('cdKcal'),i:'bolt'});}
-  else{a.push({v:String(d.sets),l:t('sets'),i:'clipboard-list'});a.push({v:d.vol,l:t('volume'),i:'barbell'});}
+  else{a.push({v:String(d.sets),l:t('sets'),i:'clipboard-list'});a.push({v:d.vol,l:t('csTotal'),i:'barbell'});}
   return a;
 }
 function csRender(o,sc){
-  const wk=o.wk,d=wkCardData(wk),W=1080,H=o.fmt==='post'?1350:1920,c=document.createElement('canvas');sc=sc||1;c.width=Math.round(W*sc);c.height=Math.round(H*sc);
+  const wk=o.wk,d=wkCardData(wk),W=1080,H=o.fmt==='post'?1350:(o.fmt==='square'?1080:1920),c=document.createElement('canvas');sc=sc||1;c.width=Math.round(W*sc);c.height=Math.round(H*sc);
   const g=c.getContext('2d');g.scale(sc,sc);const acc=csAcc(),ink=o.col,light=ink!=='#111111';
   const sub=csRgba(ink,.82),line=csRgba(ink,.35),stats=csStats(wk,d),wo=!wk.ex.length;
   const name=(wk.name||(wo?spName(wk.sp):'')).trim()||spName(wk.sp);
-  const B=H-(o.fmt==='post'?100:150); // bottom edge of the block / borde inferior del bloque
+  const B=H-(o.fmt==='post'?100:(o.fmt==='square'?70:150)); // bottom edge of the block / borde inferior del bloque
   /* background / fondo */
   if(o.bg==='dark'){const bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#16161a');bg.addColorStop(1,'#2a1a12');g.fillStyle=bg;g.fillRect(0,0,W,H);}
   else if(o.bg==='photo'&&o.photo){
@@ -111,8 +131,12 @@ function csRender(o,sc){
   /* soft shadow so text reads on any photo / sombra suave para leer sobre cualquier foto */
   const shadow=function(on){g.shadowColor=on?(light?'rgba(0,0,0,.5)':'rgba(255,255,255,.45)'):'transparent';g.shadowBlur=on?16:0;g.shadowOffsetY=on?3:0;};
   shadow(true);
-  const S=({classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar})[o.style]||csClassic;
+  const S=({classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,pr:csPrCard,fun:csFun})[o.style]||csClassic;
+  /* where the block sits: top, middle or bottom / dónde queda el bloque: arriba, centro o abajo */
+  const dy=o.pos==='top'?Math.round(H*.26-(B-330)):(o.pos==='mid'?Math.round(H*.5-(B-330)):0);
+  g.save();g.translate(0,dy);
   S(g,{W:W,H:H,B:B,d:d,wk:wk,wo:wo,name:name,stats:stats,ink:ink,sub:sub,line:line,acc:acc,light:light,shadow:shadow});
+  g.restore();
   if(d.sv){shadow(false);csTxt(g,'Powered by Strava',W/2,H-40,28,'500',sub,'center');}
   return c;
 }
@@ -128,7 +152,7 @@ function csClassic(g,v){
   const p=csFit(g,v.name,W-160,92,'800');csTxt(g,v.name,80,y+190,p,'800',v.ink);
   csTxt(g,v.d.date,80,y+250,40,'500',v.sub);
   const n=v.stats.length,cw=(W-160)/Math.max(n,1);
-  v.stats.forEach((s,i)=>{const x=80+i*cw,fp=csFit(g,s.v,cw-24,86,'800');csTxt(g,s.v,x,y+390,fp,'800',v.ink);csTxt(g,s.l,x,y+440,32,'500',v.sub);});
+  v.stats.forEach((s,i)=>{const x=80+i*cw,fp=csFit(g,s.v,cw-56,86,'800');csTxt(g,s.v,x,y+390,fp,'800',v.ink);csTxt(g,s.l,x,y+440,32,'500',v.sub);});
   csPr(g,80,y+540,v);
   csTxt(g,'bubymed.github.io/bubylift',80,y+625,30,'500',v.sub);
 }
@@ -207,4 +231,30 @@ function csBar(g,v){
   const n=v.stats.length,cw=(w-72)/Math.max(n,1);
   v.stats.forEach((s,i)=>{const sx=x+36+i*cw,fp=csFit(g,s.v,cw-16,56,'800');csTxt(g,s.v,sx,y+200,fp,'800',ink);csTxt(g,s.l,sx,y+248,28,'500',sub);});
   if(v.d.prs)csTxt(g,v.d.prs+' PR',x+w-36,y+84,44,'800',v.acc,'right');
+}
+
+/* ---------- v2 styles: PR spotlight, fun comparison / estilos nuevos: récord y comparación ---------- */
+/* 9 · pr: your best moment of the day, huge / tu mejor momento del día, enorme */
+function csPrCard(g,v){
+  const W=v.W,L=v.d.top.filter(x=>x.b&&x.m==='wr'),pick=(L.filter(x=>x.pr).sort((a,b)=>b.sc-a.sc)[0])||L.sort((a,b)=>b.sc-a.sc)[0]||v.d.top[0],y=v.B-640;
+  csLogo(g,80,y-40,60,v.ink);
+  if(!pick||!pick.b){csTxt(g,v.name,80,y+200,90,'800',v.ink);return;}
+  const isPr=pick.pr;
+  if(isPr){cardIcon(g,'trophy',80,y+70,70,v.acc);csTxt(g,t('csPrNew'),170,y+125,60,'800',v.acc);}else csTxt(g,t('csTopLift'),80,y+125,50,'800',v.acc);
+  const nm=exName(pick.eid,pick.n),p=csFit(g,nm,W-160,86,'800');csTxt(g,nm,80,y+250,p,'800',v.ink);
+  const big=wShow(pick.b.w)+' '+wUnit(),fp=csFit(g,big,W-160,230,'800');csTxt(g,big,70,y+470,fp,'800',v.ink);
+  csTxt(g,'× '+pick.b.r+' '+t('colReps').toLowerCase(),80,y+545,60,'700',v.sub);
+  csTxt(g,v.d.date,80,y+620,36,'500',v.sub);
+}
+/* 10 · fun: what you lifted, in things people know / lo que levantaste, en cosas conocidas */
+const CS_OBJ=[['bus',11000],['ele',6000],['car',1300],['pia',450],['fri',80],['bow',7]];
+function csFunObj(kg){for(let i=0;i<CS_OBJ.length;i++){const n=kg/CS_OBJ[i][1];if(n>=1)return{k:CS_OBJ[i][0],n:n};}const o=CS_OBJ[CS_OBJ.length-1];return{k:o[0],n:kg/o[1]};}
+function csFun(g,v){
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg),y=v.B-640;
+  csLogo(g,80,y-40,60,v.ink);
+  csTxt(g,t('csFunT'),80,y+110,50,'700',v.sub);
+  const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),fp=csFit(g,num,W-160,300,'800');csTxt(g,num,70,y+360,fp,'800',v.acc);
+  const nm=t('csObj_'+f.k),p=csFit(g,nm,W-160,110,'800');csTxt(g,nm,80,y+480,p,'800',v.ink);
+  csTxt(g,'= '+wShow(kg)+' '+wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase(),80,y+560,44,'600',v.sub);
+  csTxt(g,v.name+'  ·  '+v.d.date,80,y+625,34,'500',v.sub);
 }

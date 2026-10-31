@@ -868,6 +868,10 @@ const STR={
  // v95 share studio
  csHint:['Save it as a transparent picture and place it over any photo or story — or add a photo here.','Guárdala como imagen transparente y ponla encima de cualquier foto o historia — o agrega una foto aquí.'],
  csStyleL:['Style','Estilo'],csBgL:['Background','Fondo'],csFmtL:['Size','Tamaño'],csColL:['Color','Color'],
+csS_pr:['Record','Récord'],csS_fun:['Fun','Curioso'],csFmtSq:['Square 1:1','Cuadrado 1:1'],csPosL:['Position','Posición'],csPosTop:['Top','Arriba'],csPosMid:['Middle','Centro'],csPosBot:['Bottom','Abajo'],
+csTotal:['Total lifted','Total levantado'],csPrNew:['NEW PERSONAL RECORD','NUEVO RÉCORD PERSONAL'],csTopLift:['TOP LIFT','MEJOR LEVANTAMIENTO'],csFunT:['Today you lifted about','Hoy levantaste cerca de'],
+ csObj_bus:['school buses','autobuses escolares'],csObj_ele:['African elephants','elefantes africanos'],csObj_car:['small cars','autos pequeños'],csObj_pia:['grand pianos','pianos de cola'],csObj_fri:['refrigerators','refrigeradores'],csObj_bow:['bowling balls','bolas de boliche'],
+ csCopy:['Copy','Copiar'],csCopied:['Copied — paste it on your story or post','Copiada — pégala en tu historia o publicación'],
  csS_classic:['Classic','Clásico'],csS_stack:['Stack','Apilado'],csS_poster:['Poster','Póster'],csS_chips:['Chips','Fichas'],csS_lifts:['Lifts','Ejercicios'],csS_badge:['Badge','Insignia'],csS_bar:['Bar','Barra'],
  csBgNone:['Transparent','Transparente'],csBgPhoto:['Photo','Foto'],csBgDark:['Dark','Oscuro'],
  csFmtStory:['Story 9:16','Historia 9:16'],csFmtPost:['Post 4:5','Publicación 4:5'],
