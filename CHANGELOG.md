@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.0.7 — 2026-10-30
+- **Swipe through exercises:** results now slide sideways in cards, and the search stays above the keyboard so nothing hides behind it.
+  **Desliza entre ejercicios:** los resultados ahora se deslizan de lado en tarjetas, y el buscador queda sobre el teclado para que nada se tape.
+
 ## v1.0.6 — 2026-10-30
 - **A stopwatch like the one on your phone:** start, pause and resume your workout clock, and pause the rest countdown too.
   **Un cronómetro como el de tu teléfono:** inicia, pausa y reanuda el reloj del entrenamiento, y pausa también la cuenta del descanso.

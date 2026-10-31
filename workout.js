@@ -442,33 +442,40 @@ function exListHtml(){
   const pool=pickPool().filter(e=>e&&(!UI.e||e.e===UI.e)&&(!UI.g||UI.g==='mine'||e.g===UI.g));
   if(UI.g==='mine'){
     const ids=mineIds(),set=new Set(ids),l=pool.filter(e=>set.has(e.id)&&(!tok.length||exRank(e,tok)>=0)).sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));
-    return l.length?l.map(exRow).join(''):'<p class="muted">'+t('mineNone')+'</p>';
+    return l.length?l.map(exRow).join(''):'<p class="muted pk-none">'+t('mineNone')+'</p>';
   }
   if(!tok.length&&!UI.g&&!UI.e){
     const rec=recentIds().map(exById).filter(Boolean);
-    if(rec.length)h+='<div class="lbl">'+t('recent')+'</div>'+rec.map(exRow).join('');
+    if(rec.length)h+=rec.map(exRow).join('');
   }
   let list;
   if(tok.length)list=pool.map(e=>({e:e,r:exRank(e,tok)})).filter(x=>x.r>=0).sort((a,b)=>a.r-b.r).map(x=>x.e);
   else list=pool.slice().sort((a,b)=>norm(LANG==='es'?a.es:a.en).localeCompare(norm(LANG==='es'?b.es:b.en)));
-  h+='<div class="lbl">'+(tok.length||UI.g||UI.e?t('nMatch',list.length):t('allEx')+' · '+list.length)+'</div>';
-  h+=list.length?list.map(exRow).join(''):'<p class="muted">'+t('noMatch')+'</p>';
-  return h;
+  const rid=(!tok.length&&!UI.g&&!UI.e)?recentIds():[];
+  h+=list.filter(e=>rid.indexOf(e.id)<0).map(exRow).join('');
+  return h||'<p class="muted pk-none">'+t('noMatch')+'</p>';
 }
 function pickBar(){
   if(!UI.pickMulti)return'';
   const n=(UI.pickSel||[]).length;
-  return'<button id="pickAdd" class="btn pri wide pickadd" onclick="pickCommit()"'+(n?'':' disabled')+'>'+(n?t('addN',n):t('pickSome'))+'</button>';
+  return'<button id="pickAdd" class="btn pri wide pickadd" onclick="pickCommit()"'+(n?'':' disabled')+'>'+(n?(n===1?t('addN1'):t('addN',n)):t('pickSome'))+'</button>';
 }
 function drawPick(){
   const eq=['barbell','dumbbell','machine','cable','bodyweight','kettlebell','band','ball','suspension','other'];
   sheet('<div class="pick"><div class="pick-h"><h3>'+t('addEx')+'</h3><button class="ico" onclick="pickCancel()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<input id="exq" class="in wide" type="search" enterkeyhint="search" autocomplete="off" placeholder="'+esc(t('searchEx'))+'" value="'+esc(UI.q)+'" oninput="exSearch(this.value)">'+
     '<div class="chips sc"><button class="chip'+(UI.g===''?' on':'')+'" onclick="exGroup(\'\')">'+t('all')+'</button><button class="chip'+(UI.g==='mine'?' on':'')+'" onclick="exGroup(\'mine\')">★ '+t('mineB')+'</button>'+EX_GROUPS.map(g=>'<button class="chip'+(UI.g===g?' on':'')+'" onclick="exGroup(\''+g+'\')">'+t('g_'+g)+'</button>').join('')+'</div>'+
-    '<div class="chips sc"><button class="chip sm'+(UI.e===''?' on':'')+'" onclick="exEq(\'\')">'+t('anyEq')+'</button>'+eq.map(g=>'<button class="chip sm'+(UI.e===g?' on':'')+'" onclick="exEq(\''+g+'\')">'+t('e_'+g)+'</button>').join('')+'</div>'+
-    '<div id="exlist" class="exlist">'+exListHtml()+'</div>'+pickBar()+'<button class="btn wide" onclick="customOpen()">＋ '+t('customEx')+'</button></div>');
+    '<div class="chips sc eq"><button class="chip sm'+(UI.e===''?' on':'')+'" onclick="exEq(\'\')">'+t('anyEq')+'</button>'+eq.map(g=>'<button class="chip sm'+(UI.e===g?' on':'')+'" onclick="exEq(\''+g+'\')">'+t('e_'+g)+'</button>').join('')+'</div>'+
+    '<div class="pk-cnt muted sm" id="pkcnt">'+pkCount()+'</div><div id="exlist" class="exlist pk-grid">'+exListHtml()+'</div>'+pickBar()+'<button class="btn wide pk-own" onclick="customOpen()">＋ '+t('customEx')+'</button></div>');
+  const el=$('sheet');el.className='pks';$('sheetov').classList.add('pks');
+  const c=$('pkcnt'),l=$('exlist');if(c&&l)c.textContent=t('nMatch',l.querySelectorAll('.exrow').length);
+  setTimeout(pkRows,30);
 }
-function exSearch(v){UI.q=v;const l=$('exlist');if(l){l.innerHTML=exListHtml();l.scrollTop=0;}}
+function pkCount(){return '';}
+/* as many rows of cards as fit in the space you can see / tantas filas de tarjetas como quepan en el espacio visible */
+function pkRows(){const l=$('exlist');if(!l||!l.classList.contains('pk-grid'))return;const r=Math.max(1,Math.min(4,Math.floor((l.clientHeight-8)/92)));l.style.setProperty('--pkr',r);}
+if(window.visualViewport)window.visualViewport.addEventListener('resize',function(){setTimeout(pkRows,60);});
+function exSearch(v){UI.q=v;const l=$('exlist');if(l){l.innerHTML=exListHtml();l.scrollLeft=0;pkRows();const c=$('pkcnt');if(c)c.textContent=t('nMatch',l.querySelectorAll('.exrow').length);}}
 function exGroup(g){UI.g=g;pickRedraw();}
 function exEq(g){UI.e=g;pickRedraw();}
 function pickRedraw(){const q=UI.q;drawPick();const i=$('exq');if(i&&q)i.value=q;}
@@ -476,7 +483,7 @@ function pickTap(id){
   if(!UI.pickMulti){pickDone(id);return;}
   const a=UI.pickSel=UI.pickSel||[],k=a.indexOf(id);if(k>=0)a.splice(k,1);else a.push(id);
   document.querySelectorAll('#exlist .exrow[data-id="'+id+'"]').forEach(b=>{const on=a.indexOf(id)>=0;b.classList.toggle('sel',on);const c=b.querySelector('.exck');if(c)c.textContent=on?'✓':'';});
-  const p=$('pickAdd');if(p){p.disabled=!a.length;p.textContent=a.length?t('addN',a.length):t('pickSome');}
+  const p=$('pickAdd');if(p){p.disabled=!a.length;p.textContent=a.length?(a.length===1?t('addN1'):t('addN',a.length)):t('pickSome');}
   buzz(6);
 }
 function pickCommit(){const cb=UI.pickCb,a=(UI.pickSel||[]).slice();UI.pickCb=null;UI.pickSel=[];sheetClose();if(cb)a.forEach(cb);}

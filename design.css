@@ -373,3 +373,20 @@ main>.lnk-d{display:flex;margin:14px auto 0;color:var(--txt)}
 .clkb{margin-left:8px;min-width:40px;height:30px;border-radius:15px;background:var(--panel2);color:var(--accent);font-weight:800;font-size:.78rem;vertical-align:middle}
 #elapsed.paused{opacity:.55}
 @media(max-width:430px){#restbar{padding:10px 12px 12px}#restbar .rb-row{gap:6px}#restbar .rb-l{display:none}#restbar #restT{font-size:1.8rem}#restbar .btn.sm{min-width:44px;padding:0 10px;font-size:.95rem}}
+
+/* exercise picker as a swipeable strip that stays above the keyboard / selector como tira deslizable que queda sobre el teclado */
+#sheetov.pks{inset:auto;left:0;right:0;top:var(--vvt,0px);height:var(--vvh,100dvh);align-items:flex-end}
+#sheet.pks{display:flex;flex-direction:column;max-height:calc(var(--vvh,100dvh) - 24px);height:calc(var(--vvh,100dvh) - 24px);overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+body.kbd #sheet.pks{padding-bottom:10px}
+#sheet.pks .pick{display:flex;flex-direction:column;flex:1;min-height:0}
+#sheet.pks .pick>*{flex:none}#sheet.pks .pick>.pk-grid{flex:1 1 0}
+body.kbd #sheet.pks .chips.eq,body.kbd #sheet.pks .pk-own{display:none}
+.pk-cnt{min-height:1.2em;margin:2px 4px}
+#sheet.pks .exlist.pk-grid{flex:1;min-height:0;margin:4px -16px;padding:4px 16px;display:grid;grid-auto-flow:column;grid-template-rows:repeat(var(--pkr,1),minmax(0,112px));grid-auto-columns:min(78vw,260px);gap:8px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scroll-padding:0 16px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x}
+#sheet.pks .exrow.exth{scroll-snap-align:start;background:var(--panel2);border:0;border-radius:14px;padding:8px 10px;min-height:0;height:100%;overflow:hidden}
+#sheet.pks .exrow .ex-th{width:56px;height:56px;flex:none}
+#sheet.pks .exrow .ex-tx b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.95rem;line-height:1.2}
+#sheet.pks .exrow .ex-tx small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.75rem}
+#sheet.pks .exrow.sel{background:color-mix(in srgb,var(--accent) 20%,var(--panel2));box-shadow:inset 0 0 0 2px var(--accent)}
+#sheet.pks .exrow .exck{width:22px;height:22px;font-size:.8rem}
+#sheet.pks .pk-none{grid-row:1;padding:18px 4px}

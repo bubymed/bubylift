@@ -436,7 +436,7 @@ const STR={
  mineB:['Mine','Mis ejercicios'],mineNone:['Exercises you use or like will show up here.','Aquí aparecerán los ejercicios que uses o que te gusten.'],
  anyEq:['Any equipment','Cualquier equipo'],
  nMatch:['{0} exercises','{0} ejercicios'],
- addN:['Add {0} exercises','Agregar {0} ejercicios'],pickSome:['Tap exercises to select them','Toca ejercicios para elegirlos'],
+ addN:['Add {0} exercises','Agregar {0} ejercicios'],addN1:['Add 1 exercise','Agregar 1 ejercicio'],pickSome:['Tap exercises to select them','Toca ejercicios para elegirlos'],
  clkPause:['Pause','Pausar'],clkResume:['Resume','Reanudar'],
  cdSaved:['Picture saved — go show it off!','Imagen guardada — ¡a presumirla!'],
  importCsv:['Bring in workouts (.csv · Bubylift, Hevy, Strong)','Traer mis entrenamientos (.csv · Bubylift, Hevy, Strong)'],
