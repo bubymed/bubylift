@@ -3,7 +3,7 @@
 A free workout, progress and body log that lives on your phone. **No ads, no tracking, account optional** — it works offline and installs like an app on Android and iPhone.
 Un registro gratis de entrenamientos, progreso y cuerpo que vive en tu teléfono. **Sin anuncios, sin rastreo, cuenta opcional** — funciona sin internet y se instala como app en Android y iPhone.
 
-**[▶ Open the app / Abrir la app](https://bubymed.github.io/bubylift/)** · User manual / Manual: [EN](docs/Bubylift-UserManual-v1.0-EN.pdf) · [ES](docs/Bubylift-Manual-v1.0-ES.pdf)
+**[▶ Open the app / Abrir la app](https://bubymed.github.io/bubylift/)** · User manual / Manual: [EN](docs/Bubylift-UserManual-v1.0-EN.pdf) · [ES](docs/Bubylift-Manual-v1.0-ES.pdf) · Architecture / Arquitectura: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ## What it does / Qué hace
 - **Workout / Entrenar:** start by choosing how you want to train: let the app build your plan (great if you are new), pick a ready routine by muscle, jump straight to the famous splits, take a challenge, or log your own workout. Log weight × reps, bodyweight reps or time & distance; see last time's numbers; rest timer; 🏆 for new records. / empieza eligiendo cómo quieres entrenar: que la app arme tu plan (ideal si empiezas), una rutina lista por músculo, directo a las divisiones famosas, un reto, o tu propio entrenamiento. Registra peso × repeticiones, repeticiones con peso corporal o tiempo y distancia; mira los números de la vez anterior; temporizador de descanso; 🏆 en récords nuevos.
