@@ -6,6 +6,14 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.5 — 2026-10-30
+- **Rest is always your choice**: it never starts by itself. A Rest button stays on screen during a workout; auto-start is an optional setting (off by default).
+  **El descanso siempre es tu decisión**: nunca empieza solo. Un botón Descanso se queda en pantalla durante el entrenamiento; el inicio automático es un ajuste opcional (apagado por defecto).
+
+## v1.1.4 — 2026-10-30
+- **Sets like Fitbod**: big weight and reps boxes, no − / + or check buttons. A set saves itself when you leave it filled in and turns green; clear a box to undo.
+  **Series como en Fitbod**: cajas grandes de peso y repeticiones, sin botones − / + ni de confirmar. La serie se guarda sola al salir de ella y se pone verde; borra una caja para deshacerla.
+
 ## v1.1.3 — 2026-10-30
 - **Fairer strength score**: uses the sex in your plan profile, compares heavier lifters fairly, counts dumbbell and RDL variants, and ignores sets above 12 reps.
   **Puntaje de fuerza más justo**: usa el sexo de tu perfil del plan, compara con justicia a los más pesados, cuenta mancuernas y peso muerto rumano, e ignora series de más de 12 repeticiones.

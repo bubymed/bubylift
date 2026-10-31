@@ -158,7 +158,7 @@ function goalSet(){
 
 /* ---------- More ---------- */
 function seg(opts,cur,fn){return'<div class="seg">'+opts.map(o=>'<button class="'+(String(o[0])===String(cur)?'on':'')+'" onclick="'+fn+'(\''+o[0]+'\')">'+esc(o[1])+'</button>').join('')+'</div>';}
-function setAuto(v){SET.auto=v==='1';saveSet();render();}
+function setAuto(v){SET.autoRest=v==='1';saveSet();render();}
 function setSound(v){SET.sound=v==='1';saveSet();render();}
 function setRest(v){SET.rest=parseInt(v,10)||90;saveSet();}
 function mrow(ic,lab,act,sub){
@@ -173,7 +173,7 @@ function vMore(){
     row(t('textSize'),seg([['s','A'],['m','A+'],['l','A++']],SET.fs||'s','setFs'))+
     row(t('appearance'),seg([['system',t('thSystem')],['dark',t('thDark')],['light',t('thLight')]],SET.theme||'system','setTheme'))+
     row(t('units'),seg([['imperial','lb·in·mi'],['metric','kg·cm·km']],SET.units,'setUnits'))+
-    row(t('restTimer'),seg([['1',t('on')],['0',t('off')]],SET.auto?'1':'0','setAuto'))+
+    row(t('restTimer'),seg([['1',t('on')],['0',t('off')]],SET.autoRest?'1':'0','setAuto'))+
     row(t('restLen'),'<select class="in" onchange="setRest(this.value)">'+[30,45,60,90,120,150,180,240,300].map(s=>'<option value="'+s+'"'+(s===SET.rest?' selected':'')+'>'+fmtClock(s)+'</option>').join('')+'</select>')+
     row(t('sound'),seg([['1',t('on')],['0',t('off')]],SET.sound?'1':'0','setSound'))+
     row(t('tourRow'),seg([['1',t('on')],['0',t('off')]],SET.tour===false?'0':'1','setTour'))+'</div>';
