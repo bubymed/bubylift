@@ -995,7 +995,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("startWorkout({name:'clk',ex:[{eid:'bench',sets:2}]});");
   ok(ev("actStart()")===0&&/Start timer/.test(ev("document.getElementById('wkstats').textContent")),'workout clock waits for your first set');
   ev("ACT.ex[0].sets[0].w=100;ACT.ex[0].sets[0].r=5;tgSet(0,0);");
-  ok(ev("actStart()")>0&&ev("!REST"),'first set done starts the clock but not the rest timer');ev("restStart()");ok(ev("!!REST"),'the Rest button starts it');
+  ok(ev("actStart()")>0&&ev("!REST"),'first set done starts the clock but not the rest timer');ev("restStart()");ok(ev("!!REST"),'the Rest button starts it');ev("window.__rt=REST.tot;restAdd(60);restAdd(-30)");ok(ev("REST.tot-window.__rt")===30&&/1:00/.test(doc.getElementById('restbar').textContent)&&/0:30/.test(doc.getElementById('restbar').textContent),'rest adjusts by 30 s and 1 min, up or down');
   ev("restSet(0,'45')");ok(ev("exRest(ACT.ex[0])")===45&&ev("SET.exRest.bench")===45,'rest can be set per exercise and is remembered');
   ev("ACT.acc=5000;ACT.sn=Date.now();ACT.pz=false;pauseClock()");var __p=ev("actMs()");
   ok(ev("ACT.pz")===true&&__p>=5000&&__p<5500,'pause freezes the stopwatch');

@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.6 — 2026-10-30
+- **Rest timer adjusts in bigger steps**: −1:00, −0:30, +0:30 and +1:00 on their own row.
+  **El descanso se ajusta en pasos más grandes**: −1:00, −0:30, +0:30 y +1:00 en su propia fila.
+
 ## v1.1.5 — 2026-10-30
 - **Rest is always your choice**: it never starts by itself. A Rest button stays on screen during a workout; auto-start is an optional setting (off by default).
   **El descanso siempre es tu decisión**: nunca empieza solo. Un botón Descanso se queda en pantalla durante el entrenamiento; el inicio automático es un ajuste opcional (apagado por defecto).

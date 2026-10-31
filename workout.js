@@ -412,7 +412,7 @@ function drawRest(){
   const b=$('restbar');if(!b)return;
   if(!REST){b.hidden=true;return;}
   if(!restBuilt){
-    b.innerHTML='<div class="rb-bar"><div id="restF"></div></div><div class="rb-row"><span class="rb-l">'+t('rest')+'</span><b id="restT"></b><span class="rb-sp"></span><button class="btn sm" id="restP" onclick="restPause()" aria-label="'+esc(t('clkPause'))+'">❚❚</button><button class="btn sm" onclick="restAdd(-15)">−15</button><button class="btn sm" onclick="restAdd(15)">+15</button><button class="btn sm pri" onclick="stopRest()">'+t('skip')+'</button></div>';
+    b.innerHTML='<div class="rb-bar"><div id="restF"></div></div><div class="rb-row"><span class="rb-l">'+t('rest')+'</span><b id="restT"></b><span class="rb-sp"></span><button class="btn sm" id="restP" onclick="restPause()" aria-label="'+esc(t('clkPause'))+'">❚❚</button><button class="btn sm pri" onclick="stopRest()">'+t('skip')+'</button></div><div class="rb-adj">'+[-60,-30,30,60].map(d=>'<button class="btn sm" onclick="restAdd('+d+')">'+(d<0?'−':'+')+(Math.abs(d)===60?'1:00':'0:30')+'</button>').join('')+'</div>';
     restBuilt=true;
   }
   b.hidden=false;
