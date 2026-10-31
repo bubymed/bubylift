@@ -49,6 +49,7 @@ function startWorkout(o){
   if(o&&o.pl!=null)ACT.pl=o.pl;
   ((o&&o.ex)||[]).forEach(x=>addExTo(x.eid,x.sets,x.n,x.tg));
   saveAct();wake();tab='workout';renderTabs();render();window.scrollTo(0,0);
+  if(!o)setTimeout(function(){if(ACT&&!ACT.ex.length)pickEx(null,true);},120);
 }
 function addExTo(eid,nSets,nm,tg){
   const e=exById(eid),x={eid:eid,n:e?e.en:(nm||eid),sets:Array.from({length:Math.max(1,nSets||1)},()=>newSet())};
@@ -141,7 +142,7 @@ function vActive(){
     h+=exCard(i,x);
   });
   if(pl)h+='<details class="card optd"><summary>'+t('optCd')+'</summary>'+optWarm(pl.ds[ACT.pl],pl,true).replace(/^<div class="card optb"><b>[^<]*<\/b>/,'<div>')+'</details>';
-  h+='<button class="btn wide" onclick="pickEx()">＋ '+t('addEx')+'</button>';
+  h+='<button class="btn wide" onclick="pickEx(null,true)">＋ '+t('addEx')+'</button>';
   h+='<button class="lnk-d" onclick="cancelAsk()">'+t('cancelWk')+'</button>';
   h+='<textarea class="note-in" rows="2" maxlength="500" placeholder="'+esc(t('wkNotePh'))+'" oninput="ACT.note=this.value;saveAct()">'+esc(ACT.note)+'</textarea>';
   if(ACT.ex.length)h+='<button class="btn wide" onclick="saveAsRoutine()">'+t('saveRoutine')+'</button>';
@@ -386,34 +387,80 @@ async function wake(){try{if(ACT&&'wakeLock' in navigator&&!WL){WL=await navigat
 function unwake(){try{if(WL)WL.release();}catch(e){}WL=null;}
 
 /* ---------- exercise picker ---------- */
-function pickEx(cb){UI.q='';UI.g='';UI.pickCb=cb||function(eid){addExTo(eid,1);saveAct();render();};drawPick();}
+function pickEx(cb,multi){UI.q='';UI.g='';UI.e='';UI.pickSel=[];UI.pickMulti=!!multi;UI.pickCb=cb||function(eid){addExTo(eid,1);saveAct();render();};drawPick();setTimeout(function(){const q=$('exq');if(q)q.focus();},60);}
 function recentIds(){
   const r=[];
-  for(const wk of DATA.workouts){for(const x of wk.ex){if(r.indexOf(x.eid)<0)r.push(x.eid);if(r.length>=6)return r;}}
+  for(const wk of DATA.workouts){for(const x of wk.ex){if(r.indexOf(x.eid)<0)r.push(x.eid);if(r.length>=8)return r;}}
   return r;
 }
+/* the exercises you use most, then the ones you liked / los que más usas y los que te gustan */
+function mineIds(){
+  const c={};DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{c[x.eid]=(c[x.eid]||0)+1;}));
+  const top=Object.keys(c).sort((a,b)=>c[b]-c[a]).slice(0,30);
+  try{EXLIB.forEach(a=>{if(tasteOf(a[0])==='lk'&&top.indexOf(a[0])<0)top.push(a[0]);});}catch(e){}
+  return top;
+}
 function exThumb(id){return typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id)?'<span class="ex-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>':'<span class="ex-th ex-no">'+ic('barbell')+'</span>';}
-function exRow(e){return'<button class="exrow exth" onclick="pickDone(\''+e.id+'\')">'+exThumb(e.id)+'<span class="ex-tx"><b>'+esc(LANG==='es'?e.es:e.en)+'</b><small>'+t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+esc(injBadge(e.id))+'</small></span></button>';}
+function exRow(e){const on=UI.pickMulti&&(UI.pickSel||[]).indexOf(e.id)>=0;return'<button class="exrow exth'+(on?' sel':'')+'" data-id="'+e.id+'" onclick="pickTap(\''+e.id+'\')">'+exThumb(e.id)+'<span class="ex-tx"><b>'+esc(LANG==='es'?e.es:e.en)+'</b><small>'+t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+esc(injBadge(e.id))+'</small></span>'+(UI.pickMulti?'<i class="exck">'+(on?'✓':'')+'</i>':'')+'</button>';}
+/* same exercise imported twice (Pull-Up / Pullups): show it once / el mismo ejercicio importado dos veces: se muestra una vez */
+function exKey(e){return norm(e.en).replace(/[^a-z0-9 ]/g,'').split(' ').map(w=>w.replace(/(ups|up)$/,'up').replace(/s$/,'')).join('')+'|'+e.g;}
+function pickPool(){
+  const seen={},out=[];
+  EXLIB.map(a=>exById(a[0])).sort((a,b)=>(/^z_/.test(a.id)?1:0)-(/^z_/.test(b.id)?1:0)).forEach(e=>{if(!e)return;const k=exKey(e);if(seen[k])return;seen[k]=1;out.push(e);});
+  return out.concat(DATA.custom.map(c=>exById(c.id)));
+}
+function exRank(e,tok){
+  const nm=norm(LANG==='es'?e.es:e.en),other=norm(LANG==='es'?e.en:e.es),ws=nm.split(' ');let sc=0;
+  for(const q of tok){
+    if(nm===q)sc+=0;else if(nm.indexOf(q)===0)sc+=1;else if(ws.some(w=>w.indexOf(q)===0))sc+=2;else if(nm.indexOf(q)>=0)sc+=4;
+    else if(other.indexOf(q)>=0)sc+=6;
+    else{const meta=norm(t('g_'+e.g)+' '+t('e_'+e.e));if(meta.indexOf(q)>=0)sc+=8;else return -1;}
+  }
+  return sc*100+nm.length;
+}
 function exListHtml(){
-  const q=norm(UI.q.trim()),all=EXLIB.map(a=>exById(a[0])).concat(DATA.custom.map(c=>exById(c.id)));
-  let h='';
-  if(!q&&!UI.g){
+  const q=norm(UI.q.trim()),tok=q?q.split(' ').filter(Boolean):[];let h='';
+  const pool=pickPool().filter(e=>e&&(!UI.e||e.e===UI.e)&&(!UI.g||UI.g==='mine'||e.g===UI.g));
+  if(UI.g==='mine'){
+    const ids=mineIds(),set=new Set(ids),l=pool.filter(e=>set.has(e.id)&&(!tok.length||exRank(e,tok)>=0)).sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));
+    return l.length?l.map(exRow).join(''):'<p class="muted">'+t('mineNone')+'</p>';
+  }
+  if(!tok.length&&!UI.g&&!UI.e){
     const rec=recentIds().map(exById).filter(Boolean);
     if(rec.length)h+='<div class="lbl">'+t('recent')+'</div>'+rec.map(exRow).join('');
-    h+='<div class="lbl">'+t('allEx')+'</div>';
   }
-  const list=all.filter(e=>e&&(!UI.g||e.g===UI.g)&&(!q||norm(e.en).indexOf(q)>=0||norm(e.es).indexOf(q)>=0)).sort((a,b)=>norm(LANG==='es'?a.es:a.en).localeCompare(norm(LANG==='es'?b.es:b.en)));
+  let list;
+  if(tok.length)list=pool.map(e=>({e:e,r:exRank(e,tok)})).filter(x=>x.r>=0).sort((a,b)=>a.r-b.r).map(x=>x.e);
+  else list=pool.slice().sort((a,b)=>norm(LANG==='es'?a.es:a.en).localeCompare(norm(LANG==='es'?b.es:b.en)));
+  h+='<div class="lbl">'+(tok.length||UI.g||UI.e?t('nMatch',list.length):t('allEx')+' · '+list.length)+'</div>';
   h+=list.length?list.map(exRow).join(''):'<p class="muted">'+t('noMatch')+'</p>';
   return h;
 }
-function drawPick(){
-  sheet('<div class="pick"><div class="pick-h"><h3>'+t('addEx')+'</h3><button class="ico" onclick="pickCancel()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
-    '<input id="exq" class="in wide" type="search" placeholder="'+esc(t('search'))+'" value="'+esc(UI.q)+'" oninput="exSearch(this.value)">'+
-    '<div class="chips"><button class="chip'+(UI.g===''?' on':'')+'" onclick="exGroup(\'\')">'+t('all')+'</button>'+EX_GROUPS.map(g=>'<button class="chip'+(UI.g===g?' on':'')+'" onclick="exGroup(\''+g+'\')">'+t('g_'+g)+'</button>').join('')+'</div>'+
-    '<div id="exlist" class="exlist">'+exListHtml()+'</div><button class="btn wide" onclick="customOpen()">＋ '+t('customEx')+'</button></div>');
+function pickBar(){
+  if(!UI.pickMulti)return'';
+  const n=(UI.pickSel||[]).length;
+  return'<button id="pickAdd" class="btn pri wide pickadd" onclick="pickCommit()"'+(n?'':' disabled')+'>'+(n?t('addN',n):t('pickSome'))+'</button>';
 }
-function exSearch(v){UI.q=v;const l=$('exlist');if(l)l.innerHTML=exListHtml();}
-function exGroup(g){UI.g=g;drawPick();const i=$('exq');if(i&&UI.q){i.value=UI.q;}}
+function drawPick(){
+  const eq=['barbell','dumbbell','machine','cable','bodyweight','kettlebell','band','ball','suspension','other'];
+  sheet('<div class="pick"><div class="pick-h"><h3>'+t('addEx')+'</h3><button class="ico" onclick="pickCancel()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+    '<input id="exq" class="in wide" type="search" enterkeyhint="search" autocomplete="off" placeholder="'+esc(t('searchEx'))+'" value="'+esc(UI.q)+'" oninput="exSearch(this.value)">'+
+    '<div class="chips sc"><button class="chip'+(UI.g===''?' on':'')+'" onclick="exGroup(\'\')">'+t('all')+'</button><button class="chip'+(UI.g==='mine'?' on':'')+'" onclick="exGroup(\'mine\')">★ '+t('mineB')+'</button>'+EX_GROUPS.map(g=>'<button class="chip'+(UI.g===g?' on':'')+'" onclick="exGroup(\''+g+'\')">'+t('g_'+g)+'</button>').join('')+'</div>'+
+    '<div class="chips sc"><button class="chip sm'+(UI.e===''?' on':'')+'" onclick="exEq(\'\')">'+t('anyEq')+'</button>'+eq.map(g=>'<button class="chip sm'+(UI.e===g?' on':'')+'" onclick="exEq(\''+g+'\')">'+t('e_'+g)+'</button>').join('')+'</div>'+
+    '<div id="exlist" class="exlist">'+exListHtml()+'</div>'+pickBar()+'<button class="btn wide" onclick="customOpen()">＋ '+t('customEx')+'</button></div>');
+}
+function exSearch(v){UI.q=v;const l=$('exlist');if(l){l.innerHTML=exListHtml();l.scrollTop=0;}}
+function exGroup(g){UI.g=g;pickRedraw();}
+function exEq(g){UI.e=g;pickRedraw();}
+function pickRedraw(){const q=UI.q;drawPick();const i=$('exq');if(i&&q)i.value=q;}
+function pickTap(id){
+  if(!UI.pickMulti){pickDone(id);return;}
+  const a=UI.pickSel=UI.pickSel||[],k=a.indexOf(id);if(k>=0)a.splice(k,1);else a.push(id);
+  document.querySelectorAll('#exlist .exrow[data-id="'+id+'"]').forEach(b=>{const on=a.indexOf(id)>=0;b.classList.toggle('sel',on);const c=b.querySelector('.exck');if(c)c.textContent=on?'✓':'';});
+  const p=$('pickAdd');if(p){p.disabled=!a.length;p.textContent=a.length?t('addN',a.length):t('pickSome');}
+  buzz(6);
+}
+function pickCommit(){const cb=UI.pickCb,a=(UI.pickSel||[]).slice();UI.pickCb=null;UI.pickSel=[];sheetClose();if(cb)a.forEach(cb);}
 function pickDone(eid){const cb=UI.pickCb;UI.pickCb=null;sheetClose();if(cb)cb(eid);}
 function pickCancel(){UI.pickCb=null;sheetClose();if(UI.rb)rbDraw();}
 function customOpen(){
@@ -445,7 +492,7 @@ function rbDraw(){
     '<button class="btn wide" onclick="rbAdd()">＋ '+t('addEx')+'</button>'+
     '<div class="row"><button class="btn pri" onclick="rbSave()">'+t('save')+'</button><button class="btn" onclick="UI.rb=null;sheetClose()">'+t('cancel')+'</button>'+(r.id?'<button class="btn danger" onclick="rbRemove()">'+t('delete')+'</button>':'')+'</div></div>');
 }
-function rbAdd(){pickEx(function(eid){const e=exById(eid);UI.rb.ex.push({eid:eid,n:e?e.en:eid,sets:3});rbDraw();});}
+function rbAdd(){pickEx(function(eid){const e=exById(eid);UI.rb.ex.push({eid:eid,n:e?e.en:eid,sets:3});rbDraw();},true);}
 function rbSets(i,d){const x=UI.rb.ex[i];x.sets=Math.max(1,Math.min(20,x.sets+d));rbDraw();}
 function rbMove(i,d){const a=UI.rb.ex,j=i+d;if(j<0||j>=a.length)return;const x=a[i];a[i]=a[j];a[j]=x;rbDraw();}
 function rbDel(i){UI.rb.ex.splice(i,1);rbDraw();}

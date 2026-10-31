@@ -49,7 +49,14 @@ vc.on('error',(...a)=>errors.push('console.error: '+a.join(' ')));
   w.exSearch('');w.exGroup('chest');
   ok(doc.querySelectorAll('#exlist .exrow').length>=9,'group filter works');
   doc.querySelector('#exlist .exrow').click();
+
   ok(ev('ACT.ex.length')===1,'tapping an exercise adds it');
+  ev("window.__n0=ACT.ex.length;pickEx(null,true)");
+  ok(ev("pickPool().filter(function(e){return /^pullup$|^pullups$/.test(norm(e.en).replace(/[^a-z]/g,''))}).length")<=1,'picker shows Pull-Up and Pullups only once');
+  var __r=doc.querySelectorAll('#exlist .exrow');__r[0].click();__r[1].click();
+  ok(ev("UI.pickSel.length")===2&&/2/.test(doc.getElementById('pickAdd').textContent),'picker lets you tick several exercises');
+  ev("pickCommit()");ok(ev("ACT.ex.length-window.__n0")===2,'adding several at once');
+  ev("ACT.ex.splice(-2);saveAct();render();");
   const eid=ev('ACT.ex[0].eid');
   w.addSet(0);
   ok(ev('ACT.ex[0].sets.length')===2,'add set');
@@ -110,7 +117,7 @@ vc.on('error',(...a)=>errors.push('console.error: '+a.join(' ')));
 
   console.log('routines');
   w.rbOpen();ev("UI.rb.name='Push day'");
-  w.rbAdd();doc.querySelector('#exlist .exrow').click();
+  w.rbAdd();doc.querySelector('#exlist .exrow').click();w.pickCommit();
   ok(ev('UI.rb.ex.length')===1,'routine builder adds exercise');
   w.rbSets(0,1);w.rbSave();
   ok(ev('DATA.routines.length')===1&&ev('DATA.routines[0].ex[0].sets')===4,'routine saved with 4 sets');

@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.0.5',items:[
+  {i:'search',en:'<b>Adding exercises is much easier:</b> tick several at once, search by words and equipment, a new Mine tab with the ones you use most, and no more repeated exercises.',es:'<b>Agregar ejercicios es mucho más fácil:</b> elige varios a la vez, busca por palabras y equipo, una pestaña Mis ejercicios con los que más usas, y sin ejercicios repetidos.'}
+ ]},
  {v:'v1.0.4',items:[
   {i:'timer',en:'<b>A clock that matches your training:</b> it starts with your first set (or the Start button), and rest is big, easy to see and set per exercise.',es:'<b>Un cronómetro que va con tu entrenamiento:</b> empieza con tu primera serie (o el botón Iniciar), y el descanso se ve grande y se configura por ejercicio.'}
  ]},

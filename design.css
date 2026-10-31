@@ -358,3 +358,13 @@ main>.lnk-d{display:flex;margin:14px auto 0;color:var(--txt)}
 #restbar .rb-l{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 #restbar .btn.sm{min-height:44px;min-width:56px;font-size:1rem}
 .exsub{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* exercise picker: multi-select, clearer rows / selector de ejercicios: selección múltiple y filas más claras */
+.exrow.exth{padding:10px 6px;border-radius:12px;position:relative}
+.exrow .exck{margin-left:auto;flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;color:#fff;font-size:.9rem}
+.exrow.sel{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.exrow.sel .exck{background:var(--accent);border-color:var(--accent)}
+.pick .lbl{position:sticky;top:0;background:var(--panel);z-index:1;padding:6px 4px}
+.pickadd{position:sticky;bottom:0;margin:8px 0 6px;min-height:52px;font-size:1.05rem}
+.pickadd:disabled{opacity:.45}
+.chips.sc{flex-wrap:nowrap}.chips .chip.sm{padding:6px 11px;font-size:.82rem;font-weight:600}

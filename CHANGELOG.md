@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.0.5 — 2026-10-30
+- **Adding exercises is much easier:** tick several at once, search by words and equipment, a new Mine tab with the ones you use most, and no more repeated exercises.
+  **Agregar ejercicios es mucho más fácil:** elige varios a la vez, busca por palabras y equipo, una pestaña Mis ejercicios con los que más usas, y sin ejercicios repetidos.
+
 ## v1.0.4 — 2026-10-30
 - **A clock that matches your training:** it starts with your first set (or the Start button), and rest is big, easy to see and set per exercise.
   **Un cronómetro que va con tu entrenamiento:** empieza con tu primera serie (o el botón Iniciar), y el descanso se ve grande y se configura por ejercicio.
