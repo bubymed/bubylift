@@ -7,7 +7,7 @@
    (AES-256-GCM); esa llave se guarda envuelta dos veces (por la contraseña y por una clave de recuperación). La contraseña
    de acceso que recibe el servidor es una derivación de un solo sentido: tampoco ve tu contraseña real. */
 let CL=null,CLBUSY=false,CLT=null,CLAPPLY=false,CLMSG='',CLK=null;
-const CL_KEYS=['workouts','routines','body','custom'],CL_ITER=150000,REC_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const CL_KEYS=['workouts','routines','body','custom'],CL_SET=['units','sound','rest','hap','have','libHave','libSty','goal','fs','auto','remTime','noEnergy','rh','p531'],CL_ITER=150000,REC_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function cloudOn(){const c=window.CLOUD_CFG;return !!(c&&c.url&&c.key&&/^https:\/\//.test(c.url)&&window.crypto&&crypto.subtle);}
 /* the session lives inside the profile's settings, so password-protected profiles keep it encrypted / la sesión vive dentro de los ajustes del perfil */
 function clLoad(){const o=SET&&SET.cl;CL=(o&&typeof o==='object'&&typeof o.uid==='string'&&typeof o.rt==='string')?o:null;CLK=null;try{const p=pfCur();if(CL&&CL.dek&&p&&!p.acct){p.acct=1;pfSave();}}catch(e){}}
@@ -67,6 +67,8 @@ function clClean(d){
   o.prof=(d.prof&&typeof d.prof==='object'&&typeof d.prof.n==='string'&&d.prof.n.trim())?{n:d.prof.n.slice(0,20),a:(d.prof.a&&typeof d.prof.a==='object')?d.prof.a:null}:null;
   if(d.aft&&typeof d.aft==='object'){o.aft={};['mdl','hrp','sdc','plk','run'].forEach(k=>{if(cn(d.aft[k])>0)o.aft[k]=d.aft[k];});}
   if(d.tomb&&typeof d.tomb==='object')Object.keys(d.tomb).slice(0,5000).forEach(k=>{if(ID_RE.test(k)&&isFinite(d.tomb[k]))o.tomb[k]=+d.tomb[k];});
+  if(d.set&&typeof d.set==='object'&&d.set.v&&typeof d.set.v==='object'){const v={};CL_SET.forEach(k=>{if(d.set.v[k]!==undefined)v[k]=d.set.v[k];});if(JSON.stringify(v).length<30000)o.set={t:isFinite(d.set.t)?+d.set.t:0,v:v};}
+  if(d.act&&typeof d.act==='object'&&isFinite(d.act.u)){const x=d.act.d,good=x&&typeof x==='object'&&Array.isArray(x.ex)&&x.ex.length<=60&&JSON.stringify(x).length<60000;o.act={u:+d.act.u,d:good?x:null};}
   o._u=isFinite(d._u)?+d._u:0;
   return o;
 }
@@ -80,17 +82,30 @@ function clMerge(a,b){ // a = this phone, b = cloud / a = este teléfono, b = nu
   out.plan=newer?(a.plan||b.plan):(b.plan||a.plan);
   out.goals=(newer?a.goals:b.goals).length?(newer?a.goals:b.goals):(newer?b.goals:a.goals);
   out.aft=newer?(a.aft||b.aft):(b.aft||a.aft);
+  out.set=(a.set&&b.set)?((a.set.t||0)>=(b.set.t||0)?a.set:b.set):(a.set||b.set||null); // settings: the most recently changed copy wins / ajustes: gana la copia cambiada más recientemente
+  out.act=(a.act&&b.act)?((a.act.u||0)>=(b.act.u||0)?a.act:b.act):(a.act||b.act||null); // workout in progress: latest wins / entrenamiento en curso: gana el último
   out.prof=a.prof||b.prof||null; // this phone's profile is the latest word / el perfil de este teléfono manda
   out.workouts.sort((x,y)=>y.t-x.t);out.body.sort((x,y)=>y.t-x.t);
   return out;
 }
-function clSame(a,b){return JSON.stringify([a.workouts,a.routines,a.body,a.custom,a.plan,a.goals,a.aft,a.tomb,a.prof||null])===JSON.stringify([b.workouts,b.routines,b.body,b.custom,b.plan,b.goals,b.aft,b.tomb,b.prof||null]);}
+function clSame(a,b){return JSON.stringify([a.workouts,a.routines,a.body,a.custom,a.plan,a.goals,a.aft,a.tomb,a.prof||null,a.set||null,a.act||null])===JSON.stringify([b.workouts,b.routines,b.body,b.custom,b.plan,b.goals,b.aft,b.tomb,b.prof||null,b.set||null,b.act||null]);}
 function clApply(m){
   CLAPPLY=true;
   CL_KEYS.forEach(k=>{DATA[k]=m[k];});DATA.plan=m.plan;DATA.goals=m.goals;DATA.aft=m.aft||undefined;DATA.tomb=m.tomb;
-  saveData();CLAPPLY=false;
+  saveData();
+  let ch=false;const ms=m.set,ma=m.act;
+  if(ms&&ms.v&&(ms.t||0)>(SET._st||0)){CL_SET.forEach(k=>{if(ms.v[k]!==undefined)SET[k]=ms.v[k];else delete SET[k];});SET._st=ms.t;SET._sh=clSetHash();jset(K_SET,SET);ch=true;}
+  if(ma&&(ma.u||0)>(SET._au||0)){ACT=ma.d;SET._au=ma.u;LASTACT=ACT?JSON.stringify(ACT):'';if(ACT)jset(K_ACT,ACT);else jdel(K_ACT);jset(K_SET,SET);ch=true;}
+  CLAPPLY=false;
+  if(ch){try{applyTheme();if(!$('gate').hidden||document.body.classList.contains('noscroll'))return;render();}catch(e){}}
 }
-function docOut(m){return{workouts:m.workouts,routines:m.routines,body:m.body,custom:m.custom,plan:m.plan,goals:m.goals,aft:m.aft||null,tomb:m.tomb,prof:m.prof||null,_u:m._u||Date.now()};}
+/* settings + workout in progress travel with the account (small, last-change-wins) / ajustes + entrenamiento en curso viajan con la cuenta */
+function clSetDoc(){const v={};CL_SET.forEach(k=>{if(SET[k]!==undefined)v[k]=SET[k];});return v;}
+function clSetHash(){const s=JSON.stringify(clSetDoc());let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return h;}
+function clSetTouch(){const h=clSetHash();if(SET._sh===undefined)SET._sh=h;else if(SET._sh!==h){SET._sh=h;SET._st=Date.now();}if(!CLAPPLY&&typeof clSchedule==='function')clSchedule();}
+function clSetOut(){return{t:SET._st||1,v:clSetDoc()};}
+function clActOut(){return SET._au?{u:SET._au,d:(ACT&&Array.isArray(ACT.ex))?ACT:null}:null;}
+function docOut(m){return{workouts:m.workouts,routines:m.routines,body:m.body,custom:m.custom,plan:m.plan,goals:m.goals,aft:m.aft||null,tomb:m.tomb,prof:m.prof||null,set:m.set||null,act:m.act||null,_u:m._u||Date.now()};}
 /* name + picture travel with the account, so logging in on a new phone feels like home / nombre y foto viajan con la cuenta */
 function clProfDoc(){const p=pfCur();return(p&&p.name&&!p.g)?{n:p.name,a:p.av&&typeof p.av==='object'?p.av:null}:null;}
 function clProfApply(pr){const p=pfCur();if(!p||!pr||!pr.n)return;p.name=pr.n.slice(0,20);if(pr.a)p.av=pfAv(pr.a);pfSave();if(typeof pfRenderAv==='function')pfRenderAv();}
@@ -103,11 +118,11 @@ async function cloudSync(manual){
     for(let i=0;i<3&&!ok;i++){
       const g=await clReq('/rest/v1/user_data?select=data,rev&user_id=eq.'+encodeURIComponent(CL.uid),'GET',null,tok);
       if(!g.ok||!Array.isArray(g.j))throw new Error('user_data '+g.s+' '+String(g.j&&(g.j.message||g.j.msg||g.j.hint||g.j.error)||'').slice(0,80));
-      const loc=clClean(DATA);loc.goals=DATA.goals||[];loc.prof=clProfDoc();
+      const loc=clClean(DATA);loc.goals=DATA.goals||[];loc.prof=clProfDoc();loc.set=clSetOut();loc.act=clActOut();
       if(!g.j.length){
         if(!CL.vault&&!CL.plain)throw new Error('novault');
         const p=await clReq('/rest/v1/user_data','POST',{user_id:CL.uid,rev:1,vault:CL.vault,data:await clSeal(docOut(loc))},tok,{Prefer:'return=representation'});
-        if(p.ok&&Array.isArray(p.j)&&p.j.length){CL.rev=1;delete CL.vault;ok=true;}else if(p.s!==409)throw new Error('post');
+        if(p.ok&&Array.isArray(p.j)&&p.j.length){CL.rev=1;delete CL.vault;delete CL.fresh;ok=true;}else if(p.s!==409)throw new Error('post');
         continue;
       }
       let rd;try{rd=await clOpen(g.j[0].data);}catch(e){CL.err='key';clSave();CLBUSY=false;if(manual)toast(t('clKeyBad'));if(tab==='more')render();return false;}

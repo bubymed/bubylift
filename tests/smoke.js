@@ -950,6 +950,20 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("window.CLOUD_CFG={url:'https://x.supabase.co',key:'anon'};delete window.__clProv");
   for(const [fn,nm] of [["gWelcome()",'welcome'],["gSignin('','')",'log in'],["gSignup(1,{})",'sign up']]){ev(fn);ok(/oa-g/.test(doc.getElementById('gate').innerHTML),'Google button is on the '+nm+' screen without any extra lookup');}
   ev("gateHide();window.CLOUD_CFG={url:'',key:''}");
+  console.log('settings + workout in progress sync');
+  ev("window.CLOUD_CFG={url:'https://x.supabase.co',key:'anon'}");
+  ok(ev("(function(){var d=clClean({set:{t:5,v:{units:'metric',evil:1,rest:90}},act:{u:7,d:{ex:[{eid:'bench',sets:[]}]}}});return d.set.v.units==='metric'&&d.set.v.evil===undefined&&d.set.t===5&&d.act.u===7&&d.act.d.ex.length===1;})()"),'cloud copy keeps only the allowed settings and a valid workout');
+  ok(ev("(function(){var d=clClean({act:{u:3,d:{nope:1}}});return d.act.u===3&&d.act.d===null;})()"),'a broken workout in the cloud copy is treated as no workout');
+  ok(ev("(function(){var l=clClean({});l.set={t:1,v:{units:'imperial'}};var r=clClean({});r.set={t:9,v:{units:'metric'}};return clMerge(l,r).set.v.units==='metric'&&clMerge(r,l).set.v.units==='metric';})()"),'the most recently changed settings win on both phones');
+  ok(ev("(function(){var l=clClean({});l.act={u:10,d:null};var r=clClean({});r.act={u:4,d:{ex:[{eid:'x',sets:[]}]}};return clMerge(l,r).act.d===null&&clMerge(r,l).act.d===null;})()"),'finishing a workout beats an older copy of it on another phone');
+  ev("SET._au=0;ACT=null;saveAct();var __a=SET._au;startWorkout({name:'sync',ex:[{eid:'bench',sets:2}]});");
+  ok(ev("SET._au")>0&&ev("clActOut().d.ex.length")===1,'starting a workout stamps it for sync');
+  ev("ACT=null;saveAct()");ok(ev("clActOut().d")===null,'ending a workout syncs as "no workout"');
+  ev("SET.units='metric';saveSet();var __t=SET._st;SET.units='imperial';saveSet()");ok(ev("SET._st")>0&&ev("clSetDoc().units")==='imperial','changing a setting stamps it for sync');
+  ev("SET.theme='dark';var __h=SET._st;saveSet()");ok(ev("SET._st===__h"),'device-only settings like theme do not count as a synced change');
+  ev("clApply(Object.assign(clClean(DATA),{set:{t:Date.now()+5000,v:{units:'metric',rest:77}},act:{u:Date.now()+5000,d:{ex:[{eid:'bench',sets:[]}]}}}))");
+  ok(ev("SET.units==='metric'&&SET.rest===77&&!!ACT&&ACT.ex[0].eid==='bench'"),'settings and workout from another phone are applied here');
+  ev("ACT=null;saveAct();SET.units='imperial';saveSet();window.CLOUD_CFG={url:'',key:''}");
   const miss=[...new Set(w.__miss)];
   ok(miss.length===0,'no missing translation keys: '+miss.join(','));
   ok(errors.length===0,'no JS errors: '+errors.slice(0,3).join(' | '));
