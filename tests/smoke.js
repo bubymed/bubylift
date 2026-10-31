@@ -360,7 +360,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
    const rec=w.eval('window.__clRec');ok(/^([A-Z2-9]{4}-){5}[A-Z2-9]{4}$/.test(rec),'recovery key has a readable format');
    doc.getElementById('clsaved').checked=true;doc.getElementById('clsaved').dispatchEvent(new w.Event('change'));doc.getElementById('clrecgo').click();await new Promise(r=>setTimeout(r,400));
    ok(w.eval('CL&&CL.uid')==='u1'&&w.eval('!!__row')&&w.eval('__row.data.ct&&__row.data.iv&&__row.data.v')==1||w.eval('!!(__row&&__row.data.ct)'),'first sync creates an encrypted cloud copy');
-   const raw=w.eval("JSON.stringify(__row)");{const r2=raw.replace(/"wp"[^}]*}|"wr"[^}]*}/g,"");const mm=r2.match(/workouts|wa1|bench|"A"/);if(mm)console.log("MATCH",mm[0],r2.slice(Math.max(0,mm.index-40),mm.index+40));}ok(!/workouts|wa1|bench|"A"/.test(raw.replace(/"wp"[^}]*}|"wr"[^}]*}/g,"")),'cloud row holds only ciphertext (no workout data)');
+   const raw=w.eval("JSON.stringify(__row)");{const r2=raw.replace(/"wp"[^}]*}|"wr"[^}]*}/g,"");const mm=r2.match(/workouts|bench|"A"/);if(mm)console.log("MATCH",mm[0],r2.slice(Math.max(0,mm.index-40),mm.index+40));}ok(!/workouts|wa1|bench|"A"/.test(raw.replace(/"wp"[^}]*}|"wr"[^}]*}/g,"")),'cloud row holds only ciphertext (no workout data)');
    ok(!raw.includes('Secret123')&&!w.eval("JSON.stringify(window.__log)").includes('Secret123'),'real password never leaves the phone');
    ok(w.eval('!!(__row.vault&&__row.vault.wp&&__row.vault.wr)')&&w.eval('CL.vault===undefined'),'vault saved with password + recovery wraps');
    const dec=async()=>JSON.parse(await w.eval("(async()=>JSON.stringify(await clOpen(__row.data)))()"));
