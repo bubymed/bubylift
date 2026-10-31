@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.3',items:[
+  {i:'trophy',en:'<b>Fairer strength score</b>: uses the sex in your plan profile, compares heavier lifters fairly, counts dumbbell and RDL variants, and ignores sets above 12 reps.',es:'<b>Puntaje de fuerza más justo</b>: usa el sexo de tu perfil del plan, compara con justicia a los más pesados, cuenta mancuernas y peso muerto rumano, e ignora series de más de 12 repeticiones.'}
+ ]},
  {v:'v1.1.2',items:[
   {i:'trophy',en:'<b>Floating tab bar</b>, a <b>Train what is recovered</b> workout from the muscles that have rested, and a <b>General strength</b> score (0–100) with a chart on Progress.',es:'<b>Barra inferior flotante</b>, un entrenamiento <b>Entrena lo recuperado</b> con los músculos que ya descansaron y un puntaje de <b>Fuerza general</b> (0–100) con gráfica en Progreso.'}
  ]},

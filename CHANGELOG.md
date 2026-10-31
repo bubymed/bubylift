@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.3 — 2026-10-30
+- **Fairer strength score**: uses the sex in your plan profile, compares heavier lifters fairly, counts dumbbell and RDL variants, and ignores sets above 12 reps.
+  **Puntaje de fuerza más justo**: usa el sexo de tu perfil del plan, compara con justicia a los más pesados, cuenta mancuernas y peso muerto rumano, e ignora series de más de 12 repeticiones.
+
 ## v1.1.2 — 2026-10-30
 - **Floating tab bar**, a **Train what is recovered** workout from the muscles that have rested, and a **General strength** score (0–100) with a chart on Progress.
   **Barra inferior flotante**, un entrenamiento **Entrena lo recuperado** con los músculos que ya descansaron y un puntaje de **Fuerza general** (0–100) con gráfica en Progreso.
