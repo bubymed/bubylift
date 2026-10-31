@@ -10,7 +10,7 @@ function csRgba(hex,a){
 }
 function csOpen(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
-  CS={wk:wk,style:'classic',fmt:'story',bg:'none',col:'#ffffff',photo:null};
+  CS={wk:wk,style:'classic',fmt:'story',bg:'dark',col:'#ffffff',photo:null,file:null};
   const chip=(k,v,lbl,extra)=>'<button class="chip'+(CS[k]===v?' on':'')+'" data-k="'+k+'" data-v="'+v+'" onclick="'+(extra||'csSet(\''+k+'\',\''+v+'\')')+'">'+lbl+'</button>';
   const acc=csAcc();
   sheet('<div class="form cs"><div class="pick-h"><h3>'+t('cdBtn')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
@@ -47,18 +47,29 @@ function csDraw(){
     let c;try{c=csRender(Object.assign({},CS,{style:v.dataset.s}),.22);}catch(e){return;}
     v.width=c.width;v.height=c.height;v.getContext('2d').drawImage(c,0,0);
   });
+  csPrep();
+}
+/* render the real PNG ahead of the tap: iPhone only opens the share sheet if it is called right inside the tap / genera el PNG antes del toque: el iPhone solo abre compartir si se llama justo dentro del toque */
+let csTm=null;
+function csPrep(){
+  if(!CS)return;CS.file=null;clearTimeout(csTm);
+  const cur=CS,key=cur.style+cur.fmt+cur.bg+cur.col;
+  csTm=setTimeout(function(){
+    if(CS!==cur)return;
+    let c;try{c=csRender(cur);}catch(e){return;}
+    c.toBlob(function(b){
+      if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.bg+cur.col)return;
+      cur.file=new File([b],'bubylift-'+dInput(cur.wk.t)+(cur.bg==='none'?'-overlay':'')+'.png',{type:'image/png'});
+    },'image/png');
+  },120);
 }
 function csOut(share){
   if(!CS)return;
-  let c;try{c=csRender(CS);}catch(e){toast(t('copyFail'));return;}
-  const wk=CS.wk,nm='bubylift-'+dInput(wk.t)+(CS.bg==='none'?'-overlay':'')+'.png';
-  c.toBlob(function(b){
-    if(!b){toast(t('copyFail'));return;}
-    const f=new File([b],nm,{type:'image/png'});
-    if(share){try{if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Bubylift'}).catch(()=>{});return;}}catch(e){}}
-    const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=nm;document.body.appendChild(a);a.click();
-    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);toast(t('cdSaved'));
-  },'image/png');
+  const f=CS.file;
+  if(!f){toast(t('csWait'));csPrep();return;}
+  try{if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Bubylift'}).catch(()=>{});return;}}catch(e){}
+  const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);toast(t('cdSaved'));
 }
 /* the old entry point from the workout detail / punto de entrada desde el detalle del entrenamiento */
 function wkPic(id){csOpen(id);}
@@ -160,17 +171,17 @@ function csChips(g,v){
 }
 /* 5 · lifts: the list of exercises / la lista de ejercicios */
 function csLifts(g,v){
-  const W=v.W,rows=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.slice(0,5).map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
-  const h=104,y=v.B-(rows.length*h)-340;
+  const W=v.W,rows=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
+  const n0=rows.length,h=n0>7?Math.max(56,Math.floor(728/n0)):104,fs=h>=96?44:Math.max(30,Math.round(h*.42)),y=v.B-(rows.length*h)-340;
   const p=csFit(g,v.name,W-160,88,'800');csTxt(g,v.name,80,y,p,'800',v.ink);
   csTxt(g,v.d.date+(v.d.dur?'  ·  '+v.d.dur:''),80,y+62,38,'500',v.sub);
   csPr(g,80,y+150,v);
   let yy=y+(v.d.prs?250:200);
   rows.forEach(r=>{
-    let n=r[0];g.font=cardFont(44,'700');while(g.measureText(n).width>560&&n.length>4)n=n.slice(0,-2);if(n!==r[0])n+='…';
-    csTxt(g,n,80,yy,44,'700',v.ink);
-    let rt=String(r[1]);if(rt.length>24)rt=rt.slice(0,24);csTxt(g,rt,W-80,yy,40,'500',v.sub,'right');
-    g.fillStyle=v.line;g.fillRect(80,yy+28,W-160,2);yy+=h;
+    let n=r[0];g.font=cardFont(fs,'700');while(g.measureText(n).width>560&&n.length>4)n=n.slice(0,-2);if(n!==r[0])n+='…';
+    csTxt(g,n,80,yy,fs,'700',v.ink);
+    let rt=String(r[1]);if(rt.length>24)rt=rt.slice(0,24);csTxt(g,rt,W-80,yy,Math.round(fs*.9),'500',v.sub,'right');
+    g.fillStyle=v.line;g.fillRect(80,yy+Math.round(h*.27),W-160,2);yy+=h;
   });
   csLogo(g,80,yy+30,60,v.ink);
 }

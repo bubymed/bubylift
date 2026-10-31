@@ -426,6 +426,7 @@ const STR={
  mdFieldD:['Pack, pull-up bar and bodyweight. About 30 minutes.','Mochila, barra de dominadas y peso corporal. Unos 30 minutos.'],
  md_field:['Field','Campo'],
  cdBtn:['Share my workout','Compartir mi entrenamiento'],
+ csWait:['One sec — preparing your picture…','Un segundo — preparando tu imagen…'],
  cdSaved:['Picture saved — go show it off!','Imagen guardada — ¡a presumirla!'],
  importCsv:['Bring in workouts (.csv · Bubylift, Hevy, Strong)','Traer mis entrenamientos (.csv · Bubylift, Hevy, Strong)'],
  impCsvAsk:['Bring in {0} workouts from this file?','¿Traer {0} entrenamientos de este archivo?'],

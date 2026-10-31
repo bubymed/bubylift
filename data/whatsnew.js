@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.0.2',items:[
+  {i:'share',en:'<b>Share cards fixed:</b> the exercise list now shows every exercise in your order, the preview opens on a dark background, and Share opens your phone\'s share sheet right away.',es:'<b>Tarjetas de compartir arregladas:</b> la lista muestra todos tus ejercicios en tu orden, la vista previa abre con fondo oscuro y Compartir abre al instante el menú de compartir de tu teléfono.'}
+ ]},
  {v:'v1.0.1',items:[
   {i:'book',en:'<b>User manual:</b> a complete illustrated guide to the app, in English and Spanish, and clearer help texts.',es:'<b>Manual del usuario:</b> una guía ilustrada completa de la app, en español e inglés, y textos de ayuda más claros.'}
  ]},
