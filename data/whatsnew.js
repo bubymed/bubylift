@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.6',items:[
+  {i:'stopwatch',en:'<b>Rest timer adjusts in bigger steps</b>: −1:00, −0:30, +0:30 and +1:00 on their own row.',es:'<b>El descanso se ajusta en pasos más grandes</b>: −1:00, −0:30, +0:30 y +1:00 en su propia fila.'}
+ ]},
  {v:'v1.1.5',items:[
   {i:'stopwatch',en:'<b>Rest is always your choice</b>: it never starts by itself. A Rest button stays on screen during a workout; auto-start is an optional setting (off by default).',es:'<b>El descanso siempre es tu decisión</b>: nunca empieza solo. Un botón Descanso se queda en pantalla durante el entrenamiento; el inicio automático es un ajuste opcional (apagado por defecto).'}
  ]},

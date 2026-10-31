@@ -439,3 +439,7 @@ body.kbd #sheet.pks{padding-bottom:10px}
 #restfab svg{width:22px;height:22px}
 #restfab[hidden]{display:none}
 @media(min-width:1100px){#restfab{bottom:24px}}
+
+/* rest adjust: ±30 s and ±1 min on their own row / ajuste del descanso: ±30 s y ±1 min en su propia fila */
+#restbar .rb-adj{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+#restbar .rb-adj .btn{min-height:46px;font-size:1.05rem;font-weight:700;min-width:0;padding:0}
