@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.0.1 — 2026-10-30
+- **User manual:** a complete illustrated guide to the app, in English and Spanish, and clearer help texts.
+  **Manual del usuario:** una guía ilustrada completa de la app, en español e inglés, y textos de ayuda más claros.
+
 ## v1.0 — 2026-10-30
 - **Bubylift 1.0:** sign in with Google or e-mail, your progress follows you to any phone, a guided plan for every goal, Recovery plans, smart weight suggestions and personal-record celebrations.
   **Bubylift 1.0:** inicia sesión con Google o correo, tu progreso te sigue a cualquier teléfono, un plan guiado para cada meta, planes de Recuperación, sugerencias de peso y celebración de récords.
