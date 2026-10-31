@@ -90,7 +90,7 @@ function vStart(){
   if(needBackup())h+='<div class="card warn"><b>'+t('bkT')+'</b><p>'+t('bkP')+'</p><div class="row"><button class="btn pri sm" onclick="exportJSON()">'+t('exportBackup')+'</button><button class="btn sm" onclick="bkLater()">'+t('later')+'</button></div></div>';
   if(typeof inApp==='function'&&inApp())h+='<div class="card warn"><b>'+t('inappT')+'</b><p>'+t(isIOS()?'inappIos':'inappAnd')+'</p><div class="row"><button class="btn sm" onclick="installApp()">'+t('inappBtn')+'</button></div></div>';
   h+=wkSumCard();
-  h+=DATA.plan?planCard():hero0();
+  h+=(DATA.plan?planCard():hero0())+recCta();
   const lw0=DATA.workouts.find(w=>w.ex&&w.ex.length&&wkSets(w)>0);
   if(lw0)h+='<button class="btn wide" onclick="repeatLast()">↺ '+t('repLast')+(lw0.name?' · '+esc(lw0.name):'')+'</button>';
   h+='<button class="btn wide emptyb" onclick="startWorkout()">'+ic('pencil')+' '+t('pkOwnT')+'</button>';

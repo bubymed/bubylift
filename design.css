@@ -409,3 +409,16 @@ body.kbd #sheet.pks{padding-bottom:10px}
 .rec-t b{font-size:.95rem}.rec-t small{color:var(--dim);font-size:.78rem}
 .rec-t i{display:block;height:6px;border-radius:3px;background:var(--line);overflow:hidden}.rec-t u{display:block;height:100%;border-radius:3px;background:#34c759}
 .rec-t.mid u{background:#ffcc00}.rec-t.low u{background:#ff453a}
+
+/* strength score + recovered-workout card / puntaje de fuerza y tarjeta de recuperados */
+.str-top{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}.str-top b{font-size:3rem;font-weight:800;line-height:1}.str-top span{color:var(--accent);font-weight:700}
+.str-l{display:flex;flex-direction:column;gap:10px;margin:12px 0}.str-l>div{display:grid;grid-template-columns:110px 1fr 76px;align-items:center;gap:8px;font-size:.88rem}
+.str-l i{display:block;height:8px;border-radius:4px;background:var(--line);overflow:hidden}.str-l u{display:block;height:100%;background:var(--accent);border-radius:4px}.str-l small{color:var(--dim);text-align:right}
+.rec-cta{display:flex;align-items:center;justify-content:space-between;gap:12px}.rec-cta b{display:block}.rec-cta small{color:var(--dim)}
+/* floating pill tab bar on phones / barra inferior flotante tipo píldora */
+@media(max-width:1099px){
+  #tabbar{left:12px;right:12px;bottom:calc(8px + env(safe-area-inset-bottom));height:64px;padding:5px;border:.5px solid var(--line);border-radius:32px;box-shadow:0 8px 28px rgba(0,0,0,.35);gap:2px}
+  #tabbar button{border-radius:26px;height:100%}
+  #tabbar button.on{background:color-mix(in srgb,var(--accent) 16%,var(--panel2))}
+  :root{--tab-h:72px}
+}

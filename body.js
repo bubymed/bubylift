@@ -41,6 +41,50 @@ function recCard(){
     '<div class="rec-grid">'+REC_G.map(g=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low');
       return'<div class="rec-t '+c+'"><b>'+t('g_'+g)+'</b><i><u style="width:'+p+'%"></u></i><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small></div>';}).join('')+'</div></div>';
 }
+/* ---------- general strength score (e1RM ÷ body weight vs. standards) / fuerza general (1RM estimado ÷ peso corporal) ---------- */
+const STR_L=[['squat',['squat'],[.75,1.25,1.75,2.5,3]],['bench',['bench','dbbench'],[.5,.75,1.25,1.75,2]],['deadlift',['deadlift','rdl'],[1,1.5,2,2.75,3.25]],['ohp',['ohp'],[.35,.55,.8,1.05,1.3]],['row',['bbrow','dbrow','bentrow'],[.5,.75,1,1.4,1.75]]];
+function strPts(r,th){if(!(r>0))return 0;let lo=0,pl=0;for(let i=0;i<th.length;i++){const hi=th[i],ph=(i+1)*20;if(r<=hi)return Math.round(pl+(ph-pl)*(r-lo)/(hi-lo));lo=hi;pl=ph;}return 100;}
+function strLevel(p){return p>=80?'elite':p>=60?'adv':p>=40?'inter':p>=20?'nov':'beg';}
+function strData(){
+  const bw=(DATA.body.find(x=>x.w)||{}).w,ws=DATA.workouts.slice().sort((a,b)=>a.t-b.t),best={},pts=[];
+  if(!bw)return{bw:null,n:ws.length,lifts:[],pts:[],score:null};
+  ws.forEach(wk=>{
+    wk.ex.forEach(x=>STR_L.forEach(L=>{if(L[1].indexOf(x.eid)<0)return;x.sets.forEach(s=>{if(s.done===false)return;const e=e1rm(s.w,s.r);if(e>(best[L[0]]||0))best[L[0]]=e;});}));
+    const v=STR_L.map(L=>best[L[0]]?strPts(best[L[0]]/bw,L[2]):null).filter(x=>x!=null);
+    if(v.length)pts.push({t:wk.t,y:Math.round(v.reduce((a,c)=>a+c,0)/v.length)});
+  });
+  const lifts=STR_L.map(L=>({k:L[0],e:best[L[0]]||0,p:best[L[0]]?strPts(best[L[0]]/bw,L[2]):null}));
+  return{bw:bw,n:ws.length,lifts:lifts,pts:pts,score:pts.length?pts[pts.length-1].y:null};
+}
+function strCard(){
+  const d=strData(),lock=d.n<3||d.score==null;
+  let h='<div class="sec"><h2>'+t('strT')+'</h2></div><div class="card strc">';
+  if(!d.bw)return h+'<p class="muted sm">'+t('strBw')+'</p><button class="btn sm" onclick="go(\'body\')">'+t('strBwGo')+'</button></div>';
+  if(lock)return h+'<p class="muted sm">'+t('strLock',Math.max(0,3-d.n))+'</p></div>';
+  h+='<div class="str-top"><b>'+d.score+'</b><span>'+t('lv_'+strLevel(d.score))+'</span></div>'+(d.pts.length>1?lineSvg(d.pts,function(v){return String(Math.round(v));}):'')+
+    '<div class="str-l">'+d.lifts.map(l=>'<div><span>'+t('sl_'+l.k)+'</span><i><u style="width:'+(l.p||0)+'%"></u></i><small>'+(l.p==null?'—':wShow(l.e)+' '+wUnit())+'</small></div>').join('')+'</div><p class="muted sm">'+t('strInfo')+'</p></div>';
+  return h;
+}
+/* a workout from the muscles that have recovered / un entrenamiento con los músculos ya recuperados */
+function recWorkout(){
+  const r=recData(),rd=REC_G.filter(g=>g!=='core'&&(r.g[g].pct==null||r.g[g].pct>=100)).sort((a,b)=>(r.g[a].t||0)-(r.g[b].t||0)).slice(0,3);
+  if(!rd.length){toast(t('recNoneRdy'));return;}
+  const use={};DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{use[x.eid]=(use[x.eid]||0)+1;}));
+  const ex=[];
+  rd.forEach(g=>{
+    const P=POOL[G2MU[g]],hv=curHave(),c=[];
+    if(P)P.m.concat(P.a).forEach(id=>{if(exById(id)&&avail(id,hv)&&c.indexOf(id)<0)c.push(id);});
+    c.sort((a,b)=>(use[b]||0)-(use[a]||0)||c.indexOf(a)-c.indexOf(b));
+    c.slice(0,2).forEach(id=>ex.push({eid:id,sets:3}));
+  });
+  if(!ex.length){toast(t('recNoneRdy'));return;}
+  startWorkout({name:t('recName'),ex:ex});
+}
+function recCta(){
+  const r=recData(),rd=REC_G.filter(g=>g!=='core'&&(r.g[g].pct==null||r.g[g].pct>=100));
+  if(!r.last||!rd.length)return'';
+  return'<div class="card rec-cta"><div><b>'+t('recCtaT')+'</b><small>'+rd.slice(0,4).map(g=>t('g_'+g)).join(' · ')+'</small></div><button class="btn pri sm" onclick="recWorkout()">'+t('recCtaB')+'</button></div>';
+}
 function vBody(){
   const today=dInput(Date.now()),last=DATA.body.find(b=>b.w),sg=d=>(d>0?'+':'')+fmtNum(d,1);
   const toU=kg=>imp()?kg*KG_LB:kg;

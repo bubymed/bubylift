@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.2',items:[
+  {i:'trophy',en:'<b>Floating tab bar</b>, a <b>Train what is recovered</b> workout from the muscles that have rested, and a <b>General strength</b> score (0–100) with a chart on Progress.',es:'<b>Barra inferior flotante</b>, un entrenamiento <b>Entrena lo recuperado</b> con los músculos que ya descansaron y un puntaje de <b>Fuerza general</b> (0–100) con gráfica en Progreso.'}
+ ]},
  {v:'v1.1.1',items:[
   {i:'body',en:'<b>Muscle recovery</b> on the Body tab: days since your last workout, groups recovered, and a ready-in-hours bar per muscle.',es:'<b>Recuperación muscular</b> en la pestaña Cuerpo: días desde tu último entrenamiento, grupos recuperados y una barra con las horas que faltan por músculo.'}
  ]},

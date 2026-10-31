@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.2 — 2026-10-30
+- **Floating tab bar**, a **Train what is recovered** workout from the muscles that have rested, and a **General strength** score (0–100) with a chart on Progress.
+  **Barra inferior flotante**, un entrenamiento **Entrena lo recuperado** con los músculos que ya descansaron y un puntaje de **Fuerza general** (0–100) con gráfica en Progreso.
+
 ## v1.1.1 — 2026-10-30
 - **Muscle recovery** on the Body tab: days since your last workout, groups recovered, and a ready-in-hours bar per muscle.
   **Recuperación muscular** en la pestaña Cuerpo: días desde tu último entrenamiento, grupos recuperados y una barra con las horas que faltan por músculo.

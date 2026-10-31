@@ -131,7 +131,7 @@ function vProgress(){
   let vol=0,sets=0;DATA.workouts.forEach(w=>{vol+=wkVol(w);sets+=wkSets(w);});
   let h=streakCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
   h+='<div class="card"><b>'+t('perWeek')+'</b>'+barSvg(vals,labels)+'</div>';
-  h+=featCharts()+rmCalc();
+  h+=strCard()+featCharts()+rmCalc();
   h+='<div class="sec"><h2>'+t('exercises')+'</h2></div>';
   h+='<div class="lgrp">';
   loggedEx().forEach(o=>{
