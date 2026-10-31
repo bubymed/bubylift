@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.16 — 2026-10-30
+- **Google everywhere:** Continue with Google now appears on every sign-up and log-in screen.
+  **Google en todas partes:** Continuar con Google ahora aparece en todas las pantallas de registro e inicio de sesión.
+
 ## v0.99.15 — 2026-10-30
 - **Simpler, lighter app:** the old on-device password profiles, security questions and phone-to-phone transfer screens are gone, now that sign-in runs through your account.
   **App más simple y ligera:** se quitaron los perfiles con contraseña local, las preguntas de seguridad y la transferencia entre teléfonos, ahora que el acceso va por tu cuenta.

@@ -946,6 +946,10 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(ev("ACT.ex[0].sets[0].done&&ACT.ex[0].sets[0].pr===true"),'beating the best marks a personal record');
   ok(!/sgbtn/.test(ev("exCard(0,ACT.ex[0])")),'no Use button once every set has a weight');
   ev("ACT=null;saveAct();DATA.workouts=[];tab='workout';render()");
+  console.log('google on every sign-in screen');
+  ev("window.CLOUD_CFG={url:'https://x.supabase.co',key:'anon'};delete window.__clProv");
+  for(const [fn,nm] of [["gWelcome()",'welcome'],["gSignin('','')",'log in'],["gSignup(1,{})",'sign up']]){ev(fn);ok(/oa-g/.test(doc.getElementById('gate').innerHTML),'Google button is on the '+nm+' screen without any extra lookup');}
+  ev("gateHide();window.CLOUD_CFG={url:'',key:''}");
   const miss=[...new Set(w.__miss)];
   ok(miss.length===0,'no missing translation keys: '+miss.join(','));
   ok(errors.length===0,'no JS errors: '+errors.slice(0,3).join(' | '));
