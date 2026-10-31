@@ -448,3 +448,7 @@ body.kbd #sheet.pks{padding-bottom:10px}
 /* share studio v2: big live preview / vista previa grande */
 .cs-pvw{display:flex;justify-content:center;margin:6px 0 4px}
 .cs-pvw canvas{display:block;height:min(38vh,320px);width:auto;max-width:100%;border-radius:16px;background:repeating-conic-gradient(#3a3a42 0 25%,#2b2b32 0 50%) 0 0/16px 16px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+
+/* transparent = a small sticker, so size and position do not apply / transparente = sticker pequeño: tamaño y posición no aplican */
+.cs.cs-tr .cs-fp{display:none}
+.cs .row{gap:8px}.cs .row .btn{flex:1;min-width:0;padding:0 8px}

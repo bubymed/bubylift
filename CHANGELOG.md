@@ -7,8 +7,8 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Nothing yet. / Nada todavía.
 
 ## v1.1.7 — 2026-10-30
-- **Share studio v2**: a big live preview, three new cards (Muscles map, Personal record, Fun comparison), a square size and top / middle / bottom placement.
-  **Estudio de compartir v2**: vista previa grande en vivo, tres tarjetas nuevas (mapa de músculos, récord personal y comparación curiosa), tamaño cuadrado y posición arriba / centro / abajo.
+- **Share studio v2**: transparent cards cut to a small sticker you can copy or save and paste over any photo or story, a big live preview, two new cards (Personal record, Fun comparison) and a square size.
+  **Estudio de compartir v2**: tarjetas transparentes recortadas como un sticker pequeño que puedes copiar o guardar y pegar sobre cualquier foto o historia, vista previa grande, dos tarjetas nuevas (Récord personal y Curiosa) y tamaño cuadrado.
 
 ## v1.1.6 — 2026-10-30
 - **Rest timer adjusts in bigger steps**: −1:00, −0:30, +0:30 and +1:00 on their own row.

@@ -1,6 +1,6 @@
 /* Share studio (v95): transparent workout cards in 7 styles — put them over any photo or story, or add a photo here.
    Estudio de tarjetas (v95): tarjetas con fondo transparente en 7 estilos — ponlas sobre cualquier foto o historia, o agrega una foto aquí. */
-const CS_STYLES=['classic','stack','poster','chips','lifts','badge','bar','muscle','pr','fun'];
+const CS_STYLES=['classic','stack','poster','chips','lifts','badge','bar','pr','fun'];
 let CS=null;
 const csAcc=()=>{try{return(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'').trim()||'#ff6a2b';}catch(e){return'#ff6a2b';}};
 function csRgba(hex,a){
@@ -10,22 +10,24 @@ function csRgba(hex,a){
 }
 function csOpen(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
-  CS={wk:wk,style:'classic',fmt:'story',pos:'bottom',bg:'dark',col:'#ffffff',photo:null,file:null};
+  CS={wk:wk,style:'classic',fmt:'story',pos:'bottom',bg:'none',col:'#ffffff',photo:null,file:null};
   const chip=(k,v,lbl,extra)=>'<button class="chip'+(CS[k]===v?' on':'')+'" data-k="'+k+'" data-v="'+v+'" onclick="'+(extra||'csSet(\''+k+'\',\''+v+'\')')+'">'+lbl+'</button>';
   const acc=csAcc();
   sheet('<div class="form cs"><div class="pick-h"><h3>'+t('cdBtn')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<div class="cs-pvw"><canvas id="csPv"></canvas></div>'+
     '<div class="cs-th">'+CS_STYLES.map(k=>'<button class="cs-t'+(CS.style===k?' on':'')+'" data-k="style" data-v="'+k+'" onclick="csSet(\'style\',\''+k+'\')"><canvas data-s="'+k+'"></canvas><span>'+t('csS_'+k)+'</span></button>').join('')+'</div>'+
     '<div class="cs-l">'+t('csBgL')+'</div><div class="chips cs-row">'+chip('bg','none',t('csBgNone'))+chip('bg','photo',t('csBgPhoto'),'csBgPhoto()')+chip('bg','dark',t('csBgDark'))+'</div>'+
-    '<div class="cs-l">'+t('csFmtL')+'</div><div class="chips cs-row">'+chip('fmt','story',t('csFmtStory'))+chip('fmt','post',t('csFmtPost'))+chip('fmt','square',t('csFmtSq'))+'</div>'+
-    '<div class="cs-l">'+t('csPosL')+'</div><div class="chips cs-row">'+chip('pos','top',t('csPosTop'))+chip('pos','mid',t('csPosMid'))+chip('pos','bottom',t('csPosBot'))+'</div>'+
+    '<div class="cs-fp"><div class="cs-l">'+t('csFmtL')+'</div><div class="chips cs-row">'+chip('fmt','story',t('csFmtStory'))+chip('fmt','post',t('csFmtPost'))+chip('fmt','square',t('csFmtSq'))+'</div>'+
+    '<div class="cs-l">'+t('csPosL')+'</div><div class="chips cs-row">'+chip('pos','top',t('csPosTop'))+chip('pos','mid',t('csPosMid'))+chip('pos','bottom',t('csPosBot'))+'</div></div>'+
     '<div class="cs-l">'+t('csColL')+'</div><div class="cs-sw">'+['#ffffff','#111111',acc].map(c=>'<button class="cs-c'+(CS.col===c?' on':'')+'" data-k="col" data-v="'+c+'" style="background:'+c+'" aria-label="'+c+'" onclick="csSet(\'col\',\''+c+'\')"></button>').join('')+'</div>'+
     '<input id="csf" type="file" accept="image/*" hidden onchange="csPhoto(this)">'+
-    '<div class="row"><button class="btn" onclick="csOut(false)">'+t('csSave')+'</button><button class="btn pri" onclick="csOut(true)">'+t('csShare')+'</button></div></div>');
+    '<div class="row"><button class="btn" onclick="csOut(false)">'+t('csSave')+'</button><button class="btn" onclick="csCopy()">'+t('csCopy')+'</button><button class="btn pri" onclick="csOut(true)">'+t('csShare')+'</button></div></div>');
+  const sh=$('sheet').querySelector('.cs');if(sh)sh.classList.toggle('cs-tr',CS.bg==='none');
   csDraw();
 }
 function csSet(k,v){
   if(!CS)return;CS[k]=v;
+  if(k==='bg'){const sh=$('sheet').querySelector('.cs');if(sh)sh.classList.toggle('cs-tr',v==='none');}
   document.querySelectorAll('#sheet [data-k="'+k+'"]').forEach(b=>b.classList.toggle('on',b.dataset.v===String(v)));
   csDraw();
 }
@@ -44,9 +46,9 @@ function csPhoto(inp){
 /* every style is drawn small, side by side, so you can compare them at a glance / cada estilo se dibuja pequeño, lado a lado, para compararlos de un vistazo */
 function csDraw(){
   if(!CS)return;
-  const pv=$('csPv');if(pv){try{const c=csRender(CS,.34);pv.width=c.width;pv.height=c.height;const x=pv.getContext('2d');x.clearRect(0,0,c.width,c.height);x.drawImage(c,0,0);}catch(e){}}
+  const pv=$('csPv');if(pv){try{const c=csFinal(CS,.34);pv.width=c.width;pv.height=c.height;const x=pv.getContext('2d');x.clearRect(0,0,c.width,c.height);x.drawImage(c,0,0);}catch(e){}}
   document.querySelectorAll('#sheet canvas[data-s]').forEach(v=>{
-    let c;try{c=csRender(Object.assign({},CS,{style:v.dataset.s}),.22);}catch(e){return;}
+    let c;try{c=csFinal(Object.assign({},CS,{style:v.dataset.s}),.22);}catch(e){return;}
     v.width=c.width;v.height=c.height;v.getContext('2d').drawImage(c,0,0);
   });
   csPrep();
@@ -58,7 +60,7 @@ function csPrep(){
   const cur=CS,key=cur.style+cur.fmt+cur.pos+cur.bg+cur.col;
   csTm=setTimeout(function(){
     if(CS!==cur)return;
-    let c;try{c=csRender(cur);}catch(e){return;}
+    let c;try{c=csFinal(cur);}catch(e){return;}
     c.toBlob(function(b){
       if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.pos+cur.bg+cur.col)return;
       cur.file=new File([b],'bubylift-'+dInput(cur.wk.t)+(cur.bg==='none'?'-overlay':'')+'.png',{type:'image/png'});
@@ -72,6 +74,22 @@ function csOut(share){
   try{if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Bubylift'}).catch(()=>{});return;}}catch(e){}
   const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);toast(t('cdSaved'));
+}
+/* a transparent card is cut to just its content, so it pastes as a small sticker instead of covering the whole story / la tarjeta transparente se recorta a su contenido: se pega como sticker pequeño y no cubre toda la historia */
+function csCrop(c){
+  const w=c.width,h=c.height,g=c.getContext('2d');let d;try{d=g.getImageData(0,0,w,h).data;}catch(e){return c;}
+  let x0=w,y0=h,x1=-1,y1=-1;
+  for(let y=0;y<h;y++){const r=y*w*4;for(let x=0;x<w;x++){if(d[r+x*4+3]>24){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}}}
+  if(x1<0)return c;
+  const p=Math.round(w*.04);x0=Math.max(0,x0-p);y0=Math.max(0,y0-p);x1=Math.min(w-1,x1+p);y1=Math.min(h-1,y1+p);
+  const o=document.createElement('canvas');o.width=x1-x0+1;o.height=y1-y0+1;o.getContext('2d').drawImage(c,x0,y0,o.width,o.height,0,0,o.width,o.height);return o;
+}
+function csFinal(o,sc){const c=csRender(o,sc);return o.bg==='none'?csCrop(c):c;}
+function csCopy(){
+  if(!CS)return;const f=CS.file;
+  if(!f){toast(t('csWait'));csPrep();return;}
+  try{if(navigator.clipboard&&window.ClipboardItem){navigator.clipboard.write([new ClipboardItem({'image/png':f})]).then(function(){toast(t('csCopied'));},function(){csOut(false);});return;}}catch(e){}
+  csOut(false);
 }
 /* the old entry point from the workout detail / punto de entrada desde el detalle del entrenamiento */
 function wkPic(id){csOpen(id);}
@@ -113,7 +131,7 @@ function csRender(o,sc){
   /* soft shadow so text reads on any photo / sombra suave para leer sobre cualquier foto */
   const shadow=function(on){g.shadowColor=on?(light?'rgba(0,0,0,.5)':'rgba(255,255,255,.45)'):'transparent';g.shadowBlur=on?16:0;g.shadowOffsetY=on?3:0;};
   shadow(true);
-  const S=({classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,muscle:csMuscle,pr:csPrCard,fun:csFun})[o.style]||csClassic;
+  const S=({classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,pr:csPrCard,fun:csFun})[o.style]||csClassic;
   /* where the block sits: top, middle or bottom / dónde queda el bloque: arriba, centro o abajo */
   const dy=o.pos==='top'?Math.round(H*.26-(B-330)):(o.pos==='mid'?Math.round(H*.5-(B-330)):0);
   g.save();g.translate(0,dy);
@@ -215,47 +233,7 @@ function csBar(g,v){
   if(v.d.prs)csTxt(g,v.d.prs+' PR',x+w-36,y+84,44,'800',v.acc,'right');
 }
 
-/* ---------- v2 styles: muscle map, PR spotlight, fun comparison / estilos nuevos: mapa muscular, récord y comparación ---------- */
-/* sets per muscle group in this workout / series por grupo muscular de este entrenamiento */
-function csHeat(wk){
-  const h={};wk.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;if(!g)return;const n=x.sets.filter(q=>q.done!==false&&(q.r>0||q.t>0)).length;if(n)h[g]=(h[g]||0)+n;});
-  return h;
-}
-function csFig(g,x0,y0,k,view,heat,v){
-  const base=csRgba(v.ink,.2),mx=Math.max(1,Math.max.apply(null,Object.values(heat).concat(1)));
-  const fill=gr=>{const n=heat[gr]||0;if(!n)return base;const a=.45+.55*n/mx;return csRgba(v.acc,a);};
-  const E=(cx,cy,rx,ry,gr)=>{g.fillStyle=fill(gr);g.beginPath();g.ellipse(x0+cx*k,y0+cy*k,rx*k,ry*k,0,0,Math.PI*2);g.fill();};
-  const R=(x,y,w,h,r,gr)=>{g.fillStyle=fill(gr);g.beginPath();g.roundRect?g.roundRect(x0+x*k,y0+y*k,w*k,h*k,r*k):g.rect(x0+x*k,y0+y*k,w*k,h*k);g.fill();};
-  E(50,14,11,13,'');R(45,25,10,8,2,'');                       // head, neck
-  if(view==='front'){
-    E(27,50,10,11,'shoulders');E(73,50,10,11,'shoulders');
-    R(33,44,16,24,6,'chest');R(51,44,16,24,6,'chest');
-    R(41,70,18,42,5,'core');R(32,72,7,34,4,'core');R(61,72,7,34,4,'core');
-    E(18,82,6,16,'biceps');E(82,82,6,16,'biceps');E(13,116,5,15,'');E(87,116,5,15,'');
-    E(39,158,12,34,'legs');E(61,158,12,34,'legs');E(37,214,7,20,'legs');E(63,214,7,20,'legs');
-  }else{
-    R(38,35,24,18,6,'back');E(27,52,10,10,'shoulders');E(73,52,10,10,'shoulders');
-    R(31,56,17,36,7,'back');R(52,56,17,36,7,'back');R(42,94,16,16,4,'back');
-    E(18,82,6,16,'triceps');E(82,82,6,16,'triceps');E(13,116,5,15,'');E(87,116,5,15,'');
-    E(41,124,11,13,'glutes');E(59,124,11,13,'glutes');
-    E(39,166,11,28,'legs');E(61,166,11,28,'legs');E(37,214,7,20,'legs');E(63,214,7,20,'legs');
-  }
-}
-/* 8 · muscle: front and back figures lit up by what you trained / figuras de frente y espalda iluminadas por lo que entrenaste */
-function csMuscle(g,v){
-  const W=v.W,heat=csHeat(v.wk),top=Object.keys(heat).sort((a,b)=>heat[b]-heat[a]).slice(0,4),k=4.1,fh=240*k,y=v.B-fh-330;
-  csLogo(g,80,y-230,60,v.ink);
-  csTxt(g,t('csMuscleT'),W-80,y-180,34,'700',v.sub,'right');
-  const p=csFit(g,v.name,W-160,84,'800');csTxt(g,v.name,80,y-60,p,'800',v.ink);
-  v.shadow(false);
-  csFig(g,W/2-470,y+20,k,'front',heat,v);csFig(g,W/2+60,y+20,k,'back',heat,v);
-  v.shadow(true);
-  const yy=y+fh+90;
-  if(!top.length){csTxt(g,v.d.date,80,yy,40,'500',v.sub);return;}
-  const cw=(W-160)/top.length;
-  top.forEach((gr,i)=>{const x=80+i*cw,nm=t('g_'+gr),fp=csFit(g,nm,cw-16,44,'800');csTxt(g,nm,x,yy,fp,'800',v.ink);csTxt(g,t('csSets',heat[gr]),x,yy+50,32,'500',v.acc);});
-  csTxt(g,v.d.date+(v.d.dur?'  ·  '+v.d.dur:''),80,yy+140,36,'500',v.sub);
-}
+/* ---------- v2 styles: PR spotlight, fun comparison / estilos nuevos: récord y comparación ---------- */
 /* 9 · pr: your best moment of the day, huge / tu mejor momento del día, enorme */
 function csPrCard(g,v){
   const W=v.W,L=v.d.top.filter(x=>x.b&&x.m==='wr'),pick=(L.filter(x=>x.pr).sort((a,b)=>b.sc-a.sc)[0])||L.sort((a,b)=>b.sc-a.sc)[0]||v.d.top[0],y=v.B-640;
