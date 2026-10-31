@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.0.2 — 2026-10-30
+- **Share cards fixed:** the exercise list now shows every exercise in your order, the preview opens on a dark background, and Share opens your phone's share sheet right away.
+  **Tarjetas de compartir arregladas:** la lista muestra todos tus ejercicios en tu orden, la vista previa abre con fondo oscuro y Compartir abre al instante el menú de compartir de tu teléfono.
+
 ## v1.0.1 — 2026-10-30
 - **User manual:** a complete illustrated guide to the app, in English and Spanish, and clearer help texts.
   **Manual del usuario:** una guía ilustrada completa de la app, en español e inglés, y textos de ayuda más claros.

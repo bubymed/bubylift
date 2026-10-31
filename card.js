@@ -9,7 +9,7 @@ function cardIcon(g,n,x,y,sz,col){
 function cardFont(px,w){return(w||'700')+' '+px+'px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';}
 function wkCardData(wk){
   const top=wk.ex.map(x=>{const m=exMode(x.eid);let b=null,bs=-1;x.sets.forEach(s=>{const sc=setScore(m,s);if(sc>bs){bs=sc;b=s;}});return{eid:x.eid,n:x.n,m:m,b:b,pr:x.sets.some(s=>s.pr),sets:x.sets.length,sc:bs};})
-    .sort((a,b)=>(b.pr-a.pr)||(b.sets-a.sets)).slice(0,5);
+    ;
   return{name:wk.name,date:dFmt(wk.t,{month:'long',day:'numeric',year:'numeric'}),dur:wk.end?fmtDur((wk.end-wk.t)/1000):'',sets:wkSets(wk),vol:wShow(wkVol(wk))+' '+wUnit(),hr:wk.hr||null,kcal:wk.kcal||0,sv:!!wk.sv,prs:wk.ex.reduce((a,x)=>a+x.sets.filter(s=>s.pr).length,0),top:top};
 }
 /* ---- CSV import: reads the file Bubylift exports / lee el archivo que exporta Bubylift ---- */

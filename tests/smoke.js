@@ -964,6 +964,8 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("clApply(Object.assign(clClean(DATA),{set:{t:Date.now()+5000,v:{units:'metric',rest:77}},act:{u:Date.now()+5000,d:{ex:[{eid:'bench',sets:[]}]}}}))");
   ok(ev("SET.units==='metric'&&SET.rest===77&&!!ACT&&ACT.ex[0].eid==='bench'"),'settings and workout from another phone are applied here');
   ev("ACT=null;saveAct();SET.units='imperial';saveSet();window.CLOUD_CFG={url:'',key:''}");
+  ev("var __wk={id:'t9',t:Date.now()-60000,end:Date.now(),name:'x',ex:['bench','squat','row','curl','press','dip','fly'].map(function(e){return{eid:e,n:e,sets:[{w:20,r:5}]};})};");
+  ok(ev("wkCardData(__wk).top.length")===7&&ev("wkCardData(__wk).top[0].eid")==='bench','share card lists every exercise, in the order you did them');
   const miss=[...new Set(w.__miss)];
   ok(miss.length===0,'no missing translation keys: '+miss.join(','));
   ok(errors.length===0,'no JS errors: '+errors.slice(0,3).join(' | '));
