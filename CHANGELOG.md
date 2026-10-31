@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.8 — 2026-10-30
+- **Transparent share cards keep the full canvas**: Story, Post and Square sizes and the Top/Middle/Bottom position work with transparent too.
+  **Las tarjetas transparentes mantienen el lienzo completo**: los tamaños Story, Post y Square y la posición Arriba/Medio/Abajo funcionan también en transparente.
+
 ## v1.1.7 — 2026-10-30
 - **Share studio v2**: transparent cards cut to a small sticker you can copy or save and paste over any photo or story, a big live preview, two new cards (Personal record, Fun comparison) and a square size.
   **Estudio de compartir v2**: tarjetas transparentes recortadas como un sticker pequeño que puedes copiar o guardar y pegar sobre cualquier foto o historia, vista previa grande, dos tarjetas nuevas (Récord personal y Curiosa) y tamaño cuadrado.

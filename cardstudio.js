@@ -22,12 +22,10 @@ function csOpen(id){
     '<div class="cs-l">'+t('csColL')+'</div><div class="cs-sw">'+['#ffffff','#111111',acc].map(c=>'<button class="cs-c'+(CS.col===c?' on':'')+'" data-k="col" data-v="'+c+'" style="background:'+c+'" aria-label="'+c+'" onclick="csSet(\'col\',\''+c+'\')"></button>').join('')+'</div>'+
     '<input id="csf" type="file" accept="image/*" hidden onchange="csPhoto(this)">'+
     '<div class="row"><button class="btn" onclick="csOut(false)">'+t('csSave')+'</button><button class="btn" onclick="csCopy()">'+t('csCopy')+'</button><button class="btn pri" onclick="csOut(true)">'+t('csShare')+'</button></div></div>');
-  const sh=$('sheet').querySelector('.cs');if(sh)sh.classList.toggle('cs-tr',CS.bg==='none');
   csDraw();
 }
 function csSet(k,v){
   if(!CS)return;CS[k]=v;
-  if(k==='bg'){const sh=$('sheet').querySelector('.cs');if(sh)sh.classList.toggle('cs-tr',v==='none');}
   document.querySelectorAll('#sheet [data-k="'+k+'"]').forEach(b=>b.classList.toggle('on',b.dataset.v===String(v)));
   csDraw();
 }
@@ -84,7 +82,7 @@ function csCrop(c){
   const p=Math.round(w*.04);x0=Math.max(0,x0-p);y0=Math.max(0,y0-p);x1=Math.min(w-1,x1+p);y1=Math.min(h-1,y1+p);
   const o=document.createElement('canvas');o.width=x1-x0+1;o.height=y1-y0+1;o.getContext('2d').drawImage(c,x0,y0,o.width,o.height,0,0,o.width,o.height);return o;
 }
-function csFinal(o,sc){const c=csRender(o,sc);return o.bg==='none'?csCrop(c):c;}
+function csFinal(o,sc){return csRender(o,sc);}
 function csCopy(){
   if(!CS)return;const f=CS.file;
   if(!f){toast(t('csWait'));csPrep();return;}
