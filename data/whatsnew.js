@@ -3,7 +3,7 @@
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
  {v:'v1.0.7',items:[
-  {i:'swipe',en:'<b>Swipe through exercises:</b> results now slide sideways in cards, and the search stays above the keyboard so nothing hides behind it.',es:'<b>Desliza entre ejercicios:</b> los resultados ahora se deslizan de lado en tarjetas, y el buscador queda sobre el teclado para que nada se tape.'}
+  {i:'swipe',en:'<b>Search that fits the keyboard:</b> exercises show in two compact columns, several at a time, and the list stays above the keyboard so nothing hides behind it.',es:'<b>Búsqueda que cabe con el teclado:</b> los ejercicios salen en dos columnas compactas, varios a la vez, y la lista queda sobre el teclado para que nada se tape.'}
  ]},
  {v:'v1.0.6',items:[
   {i:'stopwatch',en:'<b>A stopwatch like the one on your phone:</b> start, pause and resume your workout clock, and pause the rest countdown too.',es:'<b>Un cronómetro como el de tu teléfono:</b> inicia, pausa y reanuda el reloj del entrenamiento, y pausa también la cuenta del descanso.'}

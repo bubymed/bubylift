@@ -473,9 +473,9 @@ function drawPick(){
 }
 function pkCount(){return '';}
 /* as many rows of cards as fit in the space you can see / tantas filas de tarjetas como quepan en el espacio visible */
-function pkRows(){const l=$('exlist');if(!l||!l.classList.contains('pk-grid'))return;const r=Math.max(1,Math.min(4,Math.floor((l.clientHeight-8)/92)));l.style.setProperty('--pkr',r);}
+function pkRows(){return;const l=$('exlist');if(!l||!l.classList.contains('pk-grid'))return;const r=Math.max(1,Math.min(4,Math.floor((l.clientHeight-8)/92)));l.style.setProperty('--pkr',r);}
 if(window.visualViewport)window.visualViewport.addEventListener('resize',function(){setTimeout(pkRows,60);});
-function exSearch(v){UI.q=v;const l=$('exlist');if(l){l.innerHTML=exListHtml();l.scrollLeft=0;pkRows();const c=$('pkcnt');if(c)c.textContent=t('nMatch',l.querySelectorAll('.exrow').length);}}
+function exSearch(v){UI.q=v;const l=$('exlist');if(l){l.innerHTML=exListHtml();l.scrollTop=0;const c=$('pkcnt');if(c)c.textContent=t('nMatch',l.querySelectorAll('.exrow').length);}}
 function exGroup(g){UI.g=g;pickRedraw();}
 function exEq(g){UI.e=g;pickRedraw();}
 function pickRedraw(){const q=UI.q;drawPick();const i=$('exq');if(i&&q)i.value=q;}

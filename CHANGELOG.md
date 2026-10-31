@@ -7,8 +7,8 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Nothing yet. / Nada todavía.
 
 ## v1.0.7 — 2026-10-30
-- **Swipe through exercises:** results now slide sideways in cards, and the search stays above the keyboard so nothing hides behind it.
-  **Desliza entre ejercicios:** los resultados ahora se deslizan de lado en tarjetas, y el buscador queda sobre el teclado para que nada se tape.
+- **Search that fits the keyboard:** exercises show in two compact columns, several at a time, and the list stays above the keyboard so nothing hides behind it.
+  **Búsqueda que cabe con el teclado:** los ejercicios salen en dos columnas compactas, varios a la vez, y la lista queda sobre el teclado para que nada se tape.
 
 ## v1.0.6 — 2026-10-30
 - **A stopwatch like the one on your phone:** start, pause and resume your workout clock, and pause the rest countdown too.
