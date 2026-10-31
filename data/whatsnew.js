@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99.16',items:[
+  {i:'🔑',en:'<b>Google everywhere:</b> Continue with Google now appears on every sign-up and log-in screen.',es:'<b>Google en todas partes:</b> Continuar con Google ahora aparece en todas las pantallas de registro e inicio de sesión.'}
+ ]},
  {v:'v0.99.15',items:[
   {i:'🧹',en:'<b>Simpler, lighter app:</b> the old on-device password profiles, security questions and phone-to-phone transfer screens are gone, now that sign-in runs through your account.',es:'<b>App más simple y ligera:</b> se quitaron los perfiles con contraseña local, las preguntas de seguridad y la transferencia entre teléfonos, ahora que el acceso va por tu cuenta.'}
  ]},
