@@ -2,6 +2,30 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.2',items:[
+  {i:'trophy',en:'<b>Floating tab bar</b>, a <b>Train what is recovered</b> workout from the muscles that have rested, and a <b>General strength</b> score (0–100) with a chart on Progress.',es:'<b>Barra inferior flotante</b>, un entrenamiento <b>Entrena lo recuperado</b> con los músculos que ya descansaron y un puntaje de <b>Fuerza general</b> (0–100) con gráfica en Progreso.'}
+ ]},
+ {v:'v1.1.1',items:[
+  {i:'body',en:'<b>Muscle recovery</b> on the Body tab: days since your last workout, groups recovered, and a ready-in-hours bar per muscle.',es:'<b>Recuperación muscular</b> en la pestaña Cuerpo: días desde tu último entrenamiento, grupos recuperados y una barra con las horas que faltan por músculo.'}
+ ]},
+ {v:'v1.1.0',items:[
+  {i:'search',en:'<b>New exercise picker</b>: All / By muscle / Categories tabs, A–Z with letters, stretches kept separate, search pinned above the keyboard. New sets copy the last one and Enter walks weight → reps → done.',es:'<b>Selector nuevo</b>: pestañas Todo / Por músculo / Categorías, orden A–Z con letras, estiramientos aparte, búsqueda pegada al teclado. Las series nuevas copian la anterior y Enter va peso → reps → listo.'}
+ ]},
+ {v:'v1.0.7',items:[
+  {i:'swipe',en:'<b>Search that fits the keyboard:</b> exercises show in two compact columns, several at a time, and the list stays above the keyboard so nothing hides behind it.',es:'<b>Búsqueda que cabe con el teclado:</b> los ejercicios salen en dos columnas compactas, varios a la vez, y la lista queda sobre el teclado para que nada se tape.'}
+ ]},
+ {v:'v1.0.6',items:[
+  {i:'stopwatch',en:'<b>A stopwatch like the one on your phone:</b> start, pause and resume your workout clock, and pause the rest countdown too.',es:'<b>Un cronómetro como el de tu teléfono:</b> inicia, pausa y reanuda el reloj del entrenamiento, y pausa también la cuenta del descanso.'}
+ ]},
+ {v:'v1.0.5',items:[
+  {i:'search',en:'<b>Adding exercises is much easier:</b> tick several at once, search by words and equipment, a new Mine tab with the ones you use most, and no more repeated exercises.',es:'<b>Agregar ejercicios es mucho más fácil:</b> elige varios a la vez, busca por palabras y equipo, una pestaña Mis ejercicios con los que más usas, y sin ejercicios repetidos.'}
+ ]},
+ {v:'v1.0.4',items:[
+  {i:'timer',en:'<b>A clock that matches your training:</b> it starts with your first set (or the Start button), and rest is big, easy to see and set per exercise.',es:'<b>Un cronómetro que va con tu entrenamiento:</b> empieza con tu primera serie (o el botón Iniciar), y el descanso se ve grande y se configura por ejercicio.'}
+ ]},
+ {v:'v1.0.3',items:[
+  {i:'grid',en:'<b>Easier set entry:</b> bigger weight and reps boxes with large − and + buttons, the whole number selects when you tap it, and a big green check.',es:'<b>Series más fáciles de anotar:</b> cajas de peso y repeticiones más grandes con botones − y + grandes, el número se selecciona completo al tocarlo y un check verde grande.'}
+ ]},
  {v:'v1.0.2',items:[
   {i:'share',en:'<b>Share cards fixed:</b> the exercise list now shows every exercise in your order, the preview opens on a dark background, and Share opens your phone\'s share sheet right away.',es:'<b>Tarjetas de compartir arregladas:</b> la lista muestra todos tus ejercicios en tu orden, la vista previa abre con fondo oscuro y Compartir abre al instante el menú de compartir de tu teléfono.'}
  ]},

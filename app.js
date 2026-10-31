@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.0.2';
+const APP_VER='v1.1.2';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -68,7 +68,7 @@ function toast(msg){const e=$('toast');if(!e)return;e.textContent=msg;e.classLis
 function sheetKey(){const e=$('sheet'),h=e.querySelector('h3,.wz-top');return h?h.textContent:(e.textContent||'').trim().slice(0,30);}
 function sheet(html){
   ghostDrop();const el=$('sheet'),was=!$('sheetov').hidden,st=el.scrollTop,k0=was?sheetKey():'';
-  el.className='';el.innerHTML=html;$('sheetov').hidden=false;document.body.classList.add('noscroll');
+  el.className='';$('sheetov').classList.remove('pks');el.innerHTML=html;$('sheetov').hidden=false;document.body.classList.add('noscroll');
   const k1=sheetKey();el.scrollTop=(was&&k0&&k0===k1)?st:0;
 }
 /* fade-out ghost: the real sheet hides at once (state stays simple), a copy animates away / copia que se desvanece mientras la hoja real se oculta al instante */
@@ -83,7 +83,7 @@ function ghostOut(el){
   }catch(e){}
 }
 function ghostDrop(){try{if(GHOST){GHOST.remove();GHOST=null;}}catch(e){}}
-function sheetClose(){ghostOut($('sheetov'));$('sheetov').hidden=true;$('sheet').innerHTML='';document.body.classList.remove('noscroll');}
+function sheetClose(){ghostOut($('sheetov'));$('sheetov').hidden=true;$('sheetov').classList.remove('pks');$('sheet').innerHTML='';document.body.classList.remove('noscroll');}
 let _askFn=null;
 function ask(msg,okTxt,fn,danger){_askFn=fn;sheet('<div class="dlg"><p>'+esc(msg)+'</p><div class="dlg-b"><button class="btn" onclick="askNo()">'+t('cancel')+'</button><button class="btn '+(danger?'danger':'pri')+'" onclick="askOk()">'+esc(okTxt)+'</button></div></div>');}
 function askOk(){const f=_askFn;_askFn=null;sheetClose();if(f)f();}
@@ -239,3 +239,14 @@ function bootApp(){
   setTimeout(()=>{try{guestNag();}catch(e){}},4500);
   try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}
 }
+
+/* keep sheets with a search box above the keyboard: follow the visible part of the screen / mantiene las hojas con buscador sobre el teclado: sigue la parte visible de la pantalla */
+(function(){
+  const vv=window.visualViewport;if(!vv)return;
+  function fit(){
+    const r=document.documentElement.style,kb=Math.max(0,window.innerHeight-vv.height-vv.offsetTop);
+    r.setProperty('--vvh',Math.round(vv.height)+'px');r.setProperty('--vvt',Math.round(vv.offsetTop)+'px');
+    document.body.classList.toggle('kbd',kb>120);
+  }
+  vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit);fit();
+})();

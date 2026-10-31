@@ -6,6 +6,38 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.2 — 2026-10-30
+- **Floating tab bar**, a **Train what is recovered** workout from the muscles that have rested, and a **General strength** score (0–100) with a chart on Progress.
+  **Barra inferior flotante**, un entrenamiento **Entrena lo recuperado** con los músculos que ya descansaron y un puntaje de **Fuerza general** (0–100) con gráfica en Progreso.
+
+## v1.1.1 — 2026-10-30
+- **Muscle recovery** on the Body tab: days since your last workout, groups recovered, and a ready-in-hours bar per muscle.
+  **Recuperación muscular** en la pestaña Cuerpo: días desde tu último entrenamiento, grupos recuperados y una barra con las horas que faltan por músculo.
+
+## v1.1.0 — 2026-10-30
+- **New exercise picker**: All / By muscle / Categories tabs, A–Z with letters, stretches kept separate, search pinned above the keyboard. New sets copy the last one and Enter walks weight → reps → done.
+  **Selector nuevo**: pestañas Todo / Por músculo / Categorías, orden A–Z con letras, estiramientos aparte, búsqueda pegada al teclado. Las series nuevas copian la anterior y Enter va peso → reps → listo.
+
+## v1.0.7 — 2026-10-30
+- **Search that fits the keyboard:** exercises show in two compact columns, several at a time, and the list stays above the keyboard so nothing hides behind it.
+  **Búsqueda que cabe con el teclado:** los ejercicios salen en dos columnas compactas, varios a la vez, y la lista queda sobre el teclado para que nada se tape.
+
+## v1.0.6 — 2026-10-30
+- **A stopwatch like the one on your phone:** start, pause and resume your workout clock, and pause the rest countdown too.
+  **Un cronómetro como el de tu teléfono:** inicia, pausa y reanuda el reloj del entrenamiento, y pausa también la cuenta del descanso.
+
+## v1.0.5 — 2026-10-30
+- **Adding exercises is much easier:** tick several at once, search by words and equipment, a new Mine tab with the ones you use most, and no more repeated exercises.
+  **Agregar ejercicios es mucho más fácil:** elige varios a la vez, busca por palabras y equipo, una pestaña Mis ejercicios con los que más usas, y sin ejercicios repetidos.
+
+## v1.0.4 — 2026-10-30
+- **A clock that matches your training:** it starts with your first set (or the Start button), and rest is big, easy to see and set per exercise.
+  **Un cronómetro que va con tu entrenamiento:** empieza con tu primera serie (o el botón Iniciar), y el descanso se ve grande y se configura por ejercicio.
+
+## v1.0.3 — 2026-10-30
+- **Easier set entry:** bigger weight and reps boxes with large − and + buttons, the whole number selects when you tap it, and a big green check.
+  **Series más fáciles de anotar:** cajas de peso y repeticiones más grandes con botones − y + grandes, el número se selecciona completo al tocarlo y un check verde grande.
+
 ## v1.0.2 — 2026-10-30
 - **Share cards fixed:** the exercise list now shows every exercise in your order, the preview opens on a dark background, and Share opens your phone's share sheet right away.
   **Tarjetas de compartir arregladas:** la lista muestra todos tus ejercicios en tu orden, la vista previa abre con fondo oscuro y Compartir abre al instante el menú de compartir de tu teléfono.

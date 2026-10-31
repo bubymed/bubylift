@@ -19,10 +19,76 @@ function bwStep(d){
   let v=numParse(e.value);if(v==null)v=last?parseFloat(wShow(last.w)):null;if(v==null)return;
   e.value=fmtNum(Math.max(0,Math.round((v+d)*10)/10),1);
 }
+/* muscle recovery from what you logged: ~48 h base, longer after more hard sets / recuperación muscular según lo que registraste */
+const REC_G=['chest','back','shoulders','biceps','triceps','legs','glutes','core'];
+function recData(now){
+  now=now||Date.now();const o={};REC_G.forEach(g=>{o[g]={t:0,n:0};});let lastT=0;
+  DATA.workouts.forEach(wk=>{
+    const per={};
+    wk.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;if(!g||!o[g])return;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(n)per[g]=(per[g]||0)+n;});
+    const end=wk.end||wk.t;if(Object.keys(per).length&&end>lastT)lastT=end;
+    for(const g in per)if(end>o[g].t){o[g].t=end;o[g].n=per[g];}
+  });
+  REC_G.forEach(g=>{const r=o[g];if(!r.t){r.pct=null;return;}
+    const win=(48+Math.min(36,Math.max(0,r.n-4)*6)+((g==='legs'||g==='back')?12:0))*36e5,el=now-r.t;
+    r.pct=Math.max(0,Math.min(100,Math.round(el/win*100)));r.left=Math.max(0,Math.ceil((win-el)/36e5));});
+  return{g:o,last:lastT,days:lastT?Math.floor((now-lastT)/864e5):null,ready:REC_G.filter(g=>o[g].pct==null||o[g].pct>=100).length};
+}
+function recCard(){
+  const r=recData();
+  if(!r.last)return'<div class="card rec"><div class="lbl">'+t('recT')+'</div><p class="muted sm">'+t('recNone')+'</p></div>';
+  return'<div class="card rec"><div class="lbl">'+t('recT')+'</div><div class="rec-top"><span><b>'+(r.days===0?t('recToday'):r.days)+'</b><small>'+t('recDays')+'</small></span><span><b>'+r.ready+'/'+REC_G.length+'</b><small>'+t('recReady')+'</small></span></div>'+
+    '<div class="rec-grid">'+REC_G.map(g=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low');
+      return'<div class="rec-t '+c+'"><b>'+t('g_'+g)+'</b><i><u style="width:'+p+'%"></u></i><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small></div>';}).join('')+'</div></div>';
+}
+/* ---------- general strength score (e1RM ÷ body weight vs. standards) / fuerza general (1RM estimado ÷ peso corporal) ---------- */
+const STR_L=[['squat',['squat'],[.75,1.25,1.75,2.5,3]],['bench',['bench','dbbench'],[.5,.75,1.25,1.75,2]],['deadlift',['deadlift','rdl'],[1,1.5,2,2.75,3.25]],['ohp',['ohp'],[.35,.55,.8,1.05,1.3]],['row',['bbrow','dbrow','bentrow'],[.5,.75,1,1.4,1.75]]];
+function strPts(r,th){if(!(r>0))return 0;let lo=0,pl=0;for(let i=0;i<th.length;i++){const hi=th[i],ph=(i+1)*20;if(r<=hi)return Math.round(pl+(ph-pl)*(r-lo)/(hi-lo));lo=hi;pl=ph;}return 100;}
+function strLevel(p){return p>=80?'elite':p>=60?'adv':p>=40?'inter':p>=20?'nov':'beg';}
+function strData(){
+  const bw=(DATA.body.find(x=>x.w)||{}).w,ws=DATA.workouts.slice().sort((a,b)=>a.t-b.t),best={},pts=[];
+  if(!bw)return{bw:null,n:ws.length,lifts:[],pts:[],score:null};
+  ws.forEach(wk=>{
+    wk.ex.forEach(x=>STR_L.forEach(L=>{if(L[1].indexOf(x.eid)<0)return;x.sets.forEach(s=>{if(s.done===false)return;const e=e1rm(s.w,s.r);if(e>(best[L[0]]||0))best[L[0]]=e;});}));
+    const v=STR_L.map(L=>best[L[0]]?strPts(best[L[0]]/bw,L[2]):null).filter(x=>x!=null);
+    if(v.length)pts.push({t:wk.t,y:Math.round(v.reduce((a,c)=>a+c,0)/v.length)});
+  });
+  const lifts=STR_L.map(L=>({k:L[0],e:best[L[0]]||0,p:best[L[0]]?strPts(best[L[0]]/bw,L[2]):null}));
+  return{bw:bw,n:ws.length,lifts:lifts,pts:pts,score:pts.length?pts[pts.length-1].y:null};
+}
+function strCard(){
+  const d=strData(),lock=d.n<3||d.score==null;
+  let h='<div class="sec"><h2>'+t('strT')+'</h2></div><div class="card strc">';
+  if(!d.bw)return h+'<p class="muted sm">'+t('strBw')+'</p><button class="btn sm" onclick="go(\'body\')">'+t('strBwGo')+'</button></div>';
+  if(lock)return h+'<p class="muted sm">'+t('strLock',Math.max(0,3-d.n))+'</p></div>';
+  h+='<div class="str-top"><b>'+d.score+'</b><span>'+t('lv_'+strLevel(d.score))+'</span></div>'+(d.pts.length>1?lineSvg(d.pts,function(v){return String(Math.round(v));}):'')+
+    '<div class="str-l">'+d.lifts.map(l=>'<div><span>'+t('sl_'+l.k)+'</span><i><u style="width:'+(l.p||0)+'%"></u></i><small>'+(l.p==null?'—':wShow(l.e)+' '+wUnit())+'</small></div>').join('')+'</div><p class="muted sm">'+t('strInfo')+'</p></div>';
+  return h;
+}
+/* a workout from the muscles that have recovered / un entrenamiento con los músculos ya recuperados */
+function recWorkout(){
+  const r=recData(),rd=REC_G.filter(g=>g!=='core'&&(r.g[g].pct==null||r.g[g].pct>=100)).sort((a,b)=>(r.g[a].t||0)-(r.g[b].t||0)).slice(0,3);
+  if(!rd.length){toast(t('recNoneRdy'));return;}
+  const use={};DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{use[x.eid]=(use[x.eid]||0)+1;}));
+  const ex=[];
+  rd.forEach(g=>{
+    const P=POOL[G2MU[g]],hv=curHave(),c=[];
+    if(P)P.m.concat(P.a).forEach(id=>{if(exById(id)&&avail(id,hv)&&c.indexOf(id)<0)c.push(id);});
+    c.sort((a,b)=>(use[b]||0)-(use[a]||0)||c.indexOf(a)-c.indexOf(b));
+    c.slice(0,2).forEach(id=>ex.push({eid:id,sets:3}));
+  });
+  if(!ex.length){toast(t('recNoneRdy'));return;}
+  startWorkout({name:t('recName'),ex:ex});
+}
+function recCta(){
+  const r=recData(),rd=REC_G.filter(g=>g!=='core'&&(r.g[g].pct==null||r.g[g].pct>=100));
+  if(!r.last||!rd.length)return'';
+  return'<div class="card rec-cta"><div><b>'+t('recCtaT')+'</b><small>'+rd.slice(0,4).map(g=>t('g_'+g)).join(' · ')+'</small></div><button class="btn pri sm" onclick="recWorkout()">'+t('recCtaB')+'</button></div>';
+}
 function vBody(){
   const today=dInput(Date.now()),last=DATA.body.find(b=>b.w),sg=d=>(d>0?'+':'')+fmtNum(d,1);
   const toU=kg=>imp()?kg*KG_LB:kg;
-  let h='<div class="card form bwhero"><div class="lbl c">'+t('bwTitle')+'</div>'+
+  let h=recCard()+'<div class="card form bwhero"><div class="lbl c">'+t('bwTitle')+'</div>'+
     '<div class="bw-row"><button class="bw-st" aria-label="'+esc(t('bwMinus'))+'" onclick="bwStep(-0.1)">−</button>'+
     '<span class="bw-f"><input id="bw" class="bw-in" type="text" inputmode="decimal" autocomplete="off" placeholder="'+esc(last?wShow(last.w):'0.0')+'"><b class="bw-u">'+wUnit()+'</b></span>'+
     '<button class="bw-st" aria-label="'+esc(t('bwPlus'))+'" onclick="bwStep(0.1)">+</button></div>'+
