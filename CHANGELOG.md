@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.0 — 2026-10-30
+- **Bubylift 1.0:** sign in with Google or e-mail, your progress follows you to any phone, a guided plan for every goal, Recovery plans, smart weight suggestions and personal-record celebrations.
+  **Bubylift 1.0:** inicia sesión con Google o correo, tu progreso te sigue a cualquier teléfono, un plan guiado para cada meta, planes de Recuperación, sugerencias de peso y celebración de récords.
+
 ## v0.99.17 — 2026-10-30
 - **Everything follows you:** your settings, Recovery progress and the workout you are in the middle of now appear on any phone you log in on, and profile photo changes no longer get undone.
   **Todo te sigue:** tus ajustes, el progreso de Recuperación y el entrenamiento que llevas a medias ahora aparecen en cualquier teléfono donde inicies sesión, y los cambios de foto de perfil ya no se deshacen.
