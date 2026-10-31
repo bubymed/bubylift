@@ -712,7 +712,12 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   w.stepSet(0,0,'w',1);const w1=ev('ACT.ex[0].sets[0].w');w.stepSet(0,0,'w',1);ok(ev('ACT.ex[0].sets[0].w')>w1&&w1>0,'weight + button works');
   w.stepSet(0,0,'r',1);w.stepSet(0,0,'r',1);ok(ev('ACT.ex[0].sets[0].r')>=2,'reps + button works');
   w.stepSet(0,0,'r',-1);w.stepSet(0,0,'w',-1);w.stepSet(0,0,'w',-1);w.stepSet(0,0,'w',-1);ok(ev('ACT.ex[0].sets[0].w')>=0,'weight never goes below zero');
-  ok(/class="stp"/.test(main()),'steppers are rendered');
+  ok(!/class="stp"/.test(main())&&!/class="chk"/.test(main()),'set rows have no +/- or check buttons');
+  ev("ACT.ex[0].sets[0].done=false;ACT.ex[0].sets[0].w=60;ACT.ex[0].sets[0].r=8;saveAct()");
+  ok(ev("autoDone(0,0)")===true&&ev("ACT.ex[0].sets[0].done")===true,'a set saves itself once weight and reps are filled in');
+  ev("ACT.ex[0].sets[1].done=false;ACT.ex[0].sets[1].w=60;ACT.ex[0].sets[1].r=null");
+  ok(ev("autoDone(0,1)")===false&&ev("ACT.ex[0].sets[1].done")===false,'an incomplete set is not confirmed');
+  ev("sv(0,0,'r','')");ok(ev("ACT.ex[0].sets[0].done")===false,'clearing a value un-confirms the set');
   ev("ACT=null;saveAct();render()");
   // injuries in the plan + picker badges
   ev("DATA.plan.prof.inj=['knee'];saveData()");

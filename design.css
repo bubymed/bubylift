@@ -422,3 +422,14 @@ body.kbd #sheet.pks{padding-bottom:10px}
   #tabbar button.on{background:color-mix(in srgb,var(--accent) 16%,var(--panel2))}
   :root{--tab-h:72px}
 }
+
+/* sets, Fitbod style: big boxes, no − / + , no check button, no previous column / series al estilo Fitbod */
+.srow{grid-template-columns:46px 1fr 1fr!important;gap:10px}
+.srow .in{min-height:60px;font-size:1.6rem;font-weight:700;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:0 8px;color:var(--text,#fff)}
+.srow .in::placeholder{color:var(--dim);opacity:.55}
+.srow .in:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent);background:var(--bg,#000)}
+.srow.done .in,.srow .in.dn{background:color-mix(in srgb,var(--green) 18%,var(--panel2));border-color:color-mix(in srgb,var(--green) 55%,transparent);color:var(--green)}
+.srow .sn{min-height:60px}
+.srow.done .sn{color:var(--green)}
+.srow.hd span:nth-child(2){display:block!important}
+.srow.hd span{text-align:center}

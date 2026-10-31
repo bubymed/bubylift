@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.4',items:[
+  {i:'pencil',en:'<b>Sets like Fitbod</b>: big weight and reps boxes, no − / + or check buttons. A set saves itself when you leave it filled in and turns green; clear a box to undo.',es:'<b>Series como en Fitbod</b>: cajas grandes de peso y repeticiones, sin botones − / + ni de confirmar. La serie se guarda sola al salir de ella y se pone verde; borra una caja para deshacerla.'}
+ ]},
  {v:'v1.1.3',items:[
   {i:'trophy',en:'<b>Fairer strength score</b>: uses the sex in your plan profile, compares heavier lifters fairly, counts dumbbell and RDL variants, and ignores sets above 12 reps.',es:'<b>Puntaje de fuerza más justo</b>: usa el sexo de tu perfil del plan, compara con justicia a los más pesados, cuenta mancuernas y peso muerto rumano, e ignora series de más de 12 repeticiones.'}
  ]},
