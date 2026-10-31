@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v0.99.17 — 2026-10-30
+- **Everything follows you:** your settings, Recovery progress and the workout you are in the middle of now appear on any phone you log in on, and profile photo changes no longer get undone.
+  **Todo te sigue:** tus ajustes, el progreso de Recuperación y el entrenamiento que llevas a medias ahora aparecen en cualquier teléfono donde inicies sesión, y los cambios de foto de perfil ya no se deshacen.
+
 ## v0.99.16 — 2026-10-30
 - **Google everywhere:** Continue with Google now appears on every sign-up and log-in screen.
   **Google en todas partes:** Continuar con Google ahora aparece en todas las pantallas de registro e inicio de sesión.

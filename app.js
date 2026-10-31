@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v0.99.16';
+const APP_VER='v0.99.17';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -28,12 +28,18 @@ function loadAll(){
   DATA.workouts.sort((a,b)=>b.t-a.t);DATA.body.sort((a,b)=>b.t-a.t);
   ACT=jget(K_ACT,null);
   if(ACT&&!Array.isArray(ACT.ex))ACT=null;
+  LASTACT=ACT?JSON.stringify(ACT):'';
   LANG=SET.lang==='es'?'es':'en';
 }
-function saveSet(){jset(K_SET,SET);try{localStorage.setItem('bl_lang',SET.lang);localStorage.setItem('bl_theme',SET.theme||'system');}catch(e){}}
+function saveSet(){if(typeof clSetTouch==='function')clSetTouch();jset(K_SET,SET);try{localStorage.setItem('bl_lang',SET.lang);localStorage.setItem('bl_theme',SET.theme||'system');}catch(e){}}
 function saveData(){if(!CLAPPLY)DATA._u=Date.now();const r=jset(K_DATA,DATA);if(typeof clSchedule==='function')clSchedule();return r;}
 function jdel(k){try{localStorage.removeItem(k);}catch(e){}}
-function saveAct(){if(ACT)jset(K_ACT,ACT);else jdel(K_ACT);}
+let LASTACT='';
+function saveAct(){
+  if(ACT)jset(K_ACT,ACT);else jdel(K_ACT);
+  const s=ACT?JSON.stringify(ACT):'';
+  if(s!==LASTACT){LASTACT=s;SET._au=Date.now();jset(K_SET,SET);if(typeof clSchedule==='function')clSchedule();} // the workout in progress travels with the account / el entrenamiento en curso viaja con la cuenta
+}
 
 /* ---------- units ---------- */
 const imp=()=>SET.units==='imperial';

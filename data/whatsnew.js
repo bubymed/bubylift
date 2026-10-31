@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v0.99.17',items:[
+  {i:'☁️',en:'<b>Everything follows you:</b> your settings, Recovery progress and the workout you are in the middle of now appear on any phone you log in on, and profile photo changes no longer get undone.',es:'<b>Todo te sigue:</b> tus ajustes, el progreso de Recuperación y el entrenamiento que llevas a medias ahora aparecen en cualquier teléfono donde inicies sesión, y los cambios de foto de perfil ya no se deshacen.'}
+ ]},
  {v:'v0.99.16',items:[
   {i:'🔑',en:'<b>Google everywhere:</b> Continue with Google now appears on every sign-up and log-in screen.',es:'<b>Google en todas partes:</b> Continuar con Google ahora aparece en todas las pantallas de registro e inicio de sesión.'}
  ]},
