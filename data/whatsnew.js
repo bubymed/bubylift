@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.7',items:[
+  {i:'camera',en:'<b>Share studio v2</b>: a big live preview, three new cards (Muscles map, Personal record, Fun comparison), a square size and top / middle / bottom placement.',es:'<b>Estudio de compartir v2</b>: vista previa grande en vivo, tres tarjetas nuevas (mapa de músculos, récord personal y comparación curiosa), tamaño cuadrado y posición arriba / centro / abajo.'}
+ ]},
  {v:'v1.1.6',items:[
   {i:'stopwatch',en:'<b>Rest timer adjusts in bigger steps</b>: −1:00, −0:30, +0:30 and +1:00 on their own row.',es:'<b>El descanso se ajusta en pasos más grandes</b>: −1:00, −0:30, +0:30 y +1:00 en su propia fila.'}
  ]},

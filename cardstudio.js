@@ -1,6 +1,6 @@
 /* Share studio (v95): transparent workout cards in 7 styles — put them over any photo or story, or add a photo here.
    Estudio de tarjetas (v95): tarjetas con fondo transparente en 7 estilos — ponlas sobre cualquier foto o historia, o agrega una foto aquí. */
-const CS_STYLES=['classic','stack','poster','chips','lifts','badge','bar'];
+const CS_STYLES=['classic','stack','poster','chips','lifts','badge','bar','muscle','pr','fun'];
 let CS=null;
 const csAcc=()=>{try{return(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'').trim()||'#ff6a2b';}catch(e){return'#ff6a2b';}};
 function csRgba(hex,a){
@@ -10,14 +10,15 @@ function csRgba(hex,a){
 }
 function csOpen(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
-  CS={wk:wk,style:'classic',fmt:'story',bg:'dark',col:'#ffffff',photo:null,file:null};
+  CS={wk:wk,style:'classic',fmt:'story',pos:'bottom',bg:'dark',col:'#ffffff',photo:null,file:null};
   const chip=(k,v,lbl,extra)=>'<button class="chip'+(CS[k]===v?' on':'')+'" data-k="'+k+'" data-v="'+v+'" onclick="'+(extra||'csSet(\''+k+'\',\''+v+'\')')+'">'+lbl+'</button>';
   const acc=csAcc();
   sheet('<div class="form cs"><div class="pick-h"><h3>'+t('cdBtn')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
-    '<p class="muted sm g-c">'+t('csHint')+'</p>'+
+    '<div class="cs-pvw"><canvas id="csPv"></canvas></div>'+
     '<div class="cs-th">'+CS_STYLES.map(k=>'<button class="cs-t'+(CS.style===k?' on':'')+'" data-k="style" data-v="'+k+'" onclick="csSet(\'style\',\''+k+'\')"><canvas data-s="'+k+'"></canvas><span>'+t('csS_'+k)+'</span></button>').join('')+'</div>'+
     '<div class="cs-l">'+t('csBgL')+'</div><div class="chips cs-row">'+chip('bg','none',t('csBgNone'))+chip('bg','photo',t('csBgPhoto'),'csBgPhoto()')+chip('bg','dark',t('csBgDark'))+'</div>'+
-    '<div class="cs-l">'+t('csFmtL')+'</div><div class="chips cs-row">'+chip('fmt','story',t('csFmtStory'))+chip('fmt','post',t('csFmtPost'))+'</div>'+
+    '<div class="cs-l">'+t('csFmtL')+'</div><div class="chips cs-row">'+chip('fmt','story',t('csFmtStory'))+chip('fmt','post',t('csFmtPost'))+chip('fmt','square',t('csFmtSq'))+'</div>'+
+    '<div class="cs-l">'+t('csPosL')+'</div><div class="chips cs-row">'+chip('pos','top',t('csPosTop'))+chip('pos','mid',t('csPosMid'))+chip('pos','bottom',t('csPosBot'))+'</div>'+
     '<div class="cs-l">'+t('csColL')+'</div><div class="cs-sw">'+['#ffffff','#111111',acc].map(c=>'<button class="cs-c'+(CS.col===c?' on':'')+'" data-k="col" data-v="'+c+'" style="background:'+c+'" aria-label="'+c+'" onclick="csSet(\'col\',\''+c+'\')"></button>').join('')+'</div>'+
     '<input id="csf" type="file" accept="image/*" hidden onchange="csPhoto(this)">'+
     '<div class="row"><button class="btn" onclick="csOut(false)">'+t('csSave')+'</button><button class="btn pri" onclick="csOut(true)">'+t('csShare')+'</button></div></div>');
@@ -26,7 +27,7 @@ function csOpen(id){
 function csSet(k,v){
   if(!CS)return;CS[k]=v;
   document.querySelectorAll('#sheet [data-k="'+k+'"]').forEach(b=>b.classList.toggle('on',b.dataset.v===String(v)));
-  if(k!=='style')csDraw();
+  csDraw();
 }
 function csBgPhoto(){
   if(!CS)return;
@@ -43,6 +44,7 @@ function csPhoto(inp){
 /* every style is drawn small, side by side, so you can compare them at a glance / cada estilo se dibuja pequeño, lado a lado, para compararlos de un vistazo */
 function csDraw(){
   if(!CS)return;
+  const pv=$('csPv');if(pv){try{const c=csRender(CS,.34);pv.width=c.width;pv.height=c.height;const x=pv.getContext('2d');x.clearRect(0,0,c.width,c.height);x.drawImage(c,0,0);}catch(e){}}
   document.querySelectorAll('#sheet canvas[data-s]').forEach(v=>{
     let c;try{c=csRender(Object.assign({},CS,{style:v.dataset.s}),.22);}catch(e){return;}
     v.width=c.width;v.height=c.height;v.getContext('2d').drawImage(c,0,0);
@@ -53,12 +55,12 @@ function csDraw(){
 let csTm=null;
 function csPrep(){
   if(!CS)return;CS.file=null;clearTimeout(csTm);
-  const cur=CS,key=cur.style+cur.fmt+cur.bg+cur.col;
+  const cur=CS,key=cur.style+cur.fmt+cur.pos+cur.bg+cur.col;
   csTm=setTimeout(function(){
     if(CS!==cur)return;
     let c;try{c=csRender(cur);}catch(e){return;}
     c.toBlob(function(b){
-      if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.bg+cur.col)return;
+      if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.pos+cur.bg+cur.col)return;
       cur.file=new File([b],'bubylift-'+dInput(cur.wk.t)+(cur.bg==='none'?'-overlay':'')+'.png',{type:'image/png'});
     },'image/png');
   },120);
@@ -97,11 +99,11 @@ function csStats(wk,d){
   return a;
 }
 function csRender(o,sc){
-  const wk=o.wk,d=wkCardData(wk),W=1080,H=o.fmt==='post'?1350:1920,c=document.createElement('canvas');sc=sc||1;c.width=Math.round(W*sc);c.height=Math.round(H*sc);
+  const wk=o.wk,d=wkCardData(wk),W=1080,H=o.fmt==='post'?1350:(o.fmt==='square'?1080:1920),c=document.createElement('canvas');sc=sc||1;c.width=Math.round(W*sc);c.height=Math.round(H*sc);
   const g=c.getContext('2d');g.scale(sc,sc);const acc=csAcc(),ink=o.col,light=ink!=='#111111';
   const sub=csRgba(ink,.82),line=csRgba(ink,.35),stats=csStats(wk,d),wo=!wk.ex.length;
   const name=(wk.name||(wo?spName(wk.sp):'')).trim()||spName(wk.sp);
-  const B=H-(o.fmt==='post'?100:150); // bottom edge of the block / borde inferior del bloque
+  const B=H-(o.fmt==='post'?100:(o.fmt==='square'?70:150)); // bottom edge of the block / borde inferior del bloque
   /* background / fondo */
   if(o.bg==='dark'){const bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#16161a');bg.addColorStop(1,'#2a1a12');g.fillStyle=bg;g.fillRect(0,0,W,H);}
   else if(o.bg==='photo'&&o.photo){
@@ -111,8 +113,12 @@ function csRender(o,sc){
   /* soft shadow so text reads on any photo / sombra suave para leer sobre cualquier foto */
   const shadow=function(on){g.shadowColor=on?(light?'rgba(0,0,0,.5)':'rgba(255,255,255,.45)'):'transparent';g.shadowBlur=on?16:0;g.shadowOffsetY=on?3:0;};
   shadow(true);
-  const S=({classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar})[o.style]||csClassic;
+  const S=({classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,muscle:csMuscle,pr:csPrCard,fun:csFun})[o.style]||csClassic;
+  /* where the block sits: top, middle or bottom / dónde queda el bloque: arriba, centro o abajo */
+  const dy=o.pos==='top'?Math.round(H*.26-(B-330)):(o.pos==='mid'?Math.round(H*.5-(B-330)):0);
+  g.save();g.translate(0,dy);
   S(g,{W:W,H:H,B:B,d:d,wk:wk,wo:wo,name:name,stats:stats,ink:ink,sub:sub,line:line,acc:acc,light:light,shadow:shadow});
+  g.restore();
   if(d.sv){shadow(false);csTxt(g,'Powered by Strava',W/2,H-40,28,'500',sub,'center');}
   return c;
 }
@@ -128,7 +134,7 @@ function csClassic(g,v){
   const p=csFit(g,v.name,W-160,92,'800');csTxt(g,v.name,80,y+190,p,'800',v.ink);
   csTxt(g,v.d.date,80,y+250,40,'500',v.sub);
   const n=v.stats.length,cw=(W-160)/Math.max(n,1);
-  v.stats.forEach((s,i)=>{const x=80+i*cw,fp=csFit(g,s.v,cw-24,86,'800');csTxt(g,s.v,x,y+390,fp,'800',v.ink);csTxt(g,s.l,x,y+440,32,'500',v.sub);});
+  v.stats.forEach((s,i)=>{const x=80+i*cw,fp=csFit(g,s.v,cw-56,86,'800');csTxt(g,s.v,x,y+390,fp,'800',v.ink);csTxt(g,s.l,x,y+440,32,'500',v.sub);});
   csPr(g,80,y+540,v);
   csTxt(g,'bubymed.github.io/bubylift',80,y+625,30,'500',v.sub);
 }
@@ -207,4 +213,70 @@ function csBar(g,v){
   const n=v.stats.length,cw=(w-72)/Math.max(n,1);
   v.stats.forEach((s,i)=>{const sx=x+36+i*cw,fp=csFit(g,s.v,cw-16,56,'800');csTxt(g,s.v,sx,y+200,fp,'800',ink);csTxt(g,s.l,sx,y+248,28,'500',sub);});
   if(v.d.prs)csTxt(g,v.d.prs+' PR',x+w-36,y+84,44,'800',v.acc,'right');
+}
+
+/* ---------- v2 styles: muscle map, PR spotlight, fun comparison / estilos nuevos: mapa muscular, récord y comparación ---------- */
+/* sets per muscle group in this workout / series por grupo muscular de este entrenamiento */
+function csHeat(wk){
+  const h={};wk.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;if(!g)return;const n=x.sets.filter(q=>q.done!==false&&(q.r>0||q.t>0)).length;if(n)h[g]=(h[g]||0)+n;});
+  return h;
+}
+function csFig(g,x0,y0,k,view,heat,v){
+  const base=csRgba(v.ink,.2),mx=Math.max(1,Math.max.apply(null,Object.values(heat).concat(1)));
+  const fill=gr=>{const n=heat[gr]||0;if(!n)return base;const a=.45+.55*n/mx;return csRgba(v.acc,a);};
+  const E=(cx,cy,rx,ry,gr)=>{g.fillStyle=fill(gr);g.beginPath();g.ellipse(x0+cx*k,y0+cy*k,rx*k,ry*k,0,0,Math.PI*2);g.fill();};
+  const R=(x,y,w,h,r,gr)=>{g.fillStyle=fill(gr);g.beginPath();g.roundRect?g.roundRect(x0+x*k,y0+y*k,w*k,h*k,r*k):g.rect(x0+x*k,y0+y*k,w*k,h*k);g.fill();};
+  E(50,14,11,13,'');R(45,25,10,8,2,'');                       // head, neck
+  if(view==='front'){
+    E(27,50,10,11,'shoulders');E(73,50,10,11,'shoulders');
+    R(33,44,16,24,6,'chest');R(51,44,16,24,6,'chest');
+    R(41,70,18,42,5,'core');R(32,72,7,34,4,'core');R(61,72,7,34,4,'core');
+    E(18,82,6,16,'biceps');E(82,82,6,16,'biceps');E(13,116,5,15,'');E(87,116,5,15,'');
+    E(39,158,12,34,'legs');E(61,158,12,34,'legs');E(37,214,7,20,'legs');E(63,214,7,20,'legs');
+  }else{
+    R(38,35,24,18,6,'back');E(27,52,10,10,'shoulders');E(73,52,10,10,'shoulders');
+    R(31,56,17,36,7,'back');R(52,56,17,36,7,'back');R(42,94,16,16,4,'back');
+    E(18,82,6,16,'triceps');E(82,82,6,16,'triceps');E(13,116,5,15,'');E(87,116,5,15,'');
+    E(41,124,11,13,'glutes');E(59,124,11,13,'glutes');
+    E(39,166,11,28,'legs');E(61,166,11,28,'legs');E(37,214,7,20,'legs');E(63,214,7,20,'legs');
+  }
+}
+/* 8 · muscle: front and back figures lit up by what you trained / figuras de frente y espalda iluminadas por lo que entrenaste */
+function csMuscle(g,v){
+  const W=v.W,heat=csHeat(v.wk),top=Object.keys(heat).sort((a,b)=>heat[b]-heat[a]).slice(0,4),k=4.1,fh=240*k,y=v.B-fh-330;
+  csLogo(g,80,y-230,60,v.ink);
+  csTxt(g,t('csMuscleT'),W-80,y-180,34,'700',v.sub,'right');
+  const p=csFit(g,v.name,W-160,84,'800');csTxt(g,v.name,80,y-60,p,'800',v.ink);
+  v.shadow(false);
+  csFig(g,W/2-470,y+20,k,'front',heat,v);csFig(g,W/2+60,y+20,k,'back',heat,v);
+  v.shadow(true);
+  const yy=y+fh+90;
+  if(!top.length){csTxt(g,v.d.date,80,yy,40,'500',v.sub);return;}
+  const cw=(W-160)/top.length;
+  top.forEach((gr,i)=>{const x=80+i*cw,nm=t('g_'+gr),fp=csFit(g,nm,cw-16,44,'800');csTxt(g,nm,x,yy,fp,'800',v.ink);csTxt(g,t('csSets',heat[gr]),x,yy+50,32,'500',v.acc);});
+  csTxt(g,v.d.date+(v.d.dur?'  ·  '+v.d.dur:''),80,yy+140,36,'500',v.sub);
+}
+/* 9 · pr: your best moment of the day, huge / tu mejor momento del día, enorme */
+function csPrCard(g,v){
+  const W=v.W,L=v.d.top.filter(x=>x.b&&x.m==='wr'),pick=(L.filter(x=>x.pr).sort((a,b)=>b.sc-a.sc)[0])||L.sort((a,b)=>b.sc-a.sc)[0]||v.d.top[0],y=v.B-640;
+  csLogo(g,80,y-40,60,v.ink);
+  if(!pick||!pick.b){csTxt(g,v.name,80,y+200,90,'800',v.ink);return;}
+  const isPr=pick.pr;
+  if(isPr){cardIcon(g,'trophy',80,y+70,70,v.acc);csTxt(g,t('csPrNew'),170,y+125,60,'800',v.acc);}else csTxt(g,t('csTopLift'),80,y+125,50,'800',v.acc);
+  const nm=exName(pick.eid,pick.n),p=csFit(g,nm,W-160,86,'800');csTxt(g,nm,80,y+250,p,'800',v.ink);
+  const big=wShow(pick.b.w)+' '+wUnit(),fp=csFit(g,big,W-160,230,'800');csTxt(g,big,70,y+470,fp,'800',v.ink);
+  csTxt(g,'× '+pick.b.r+' '+t('colReps').toLowerCase(),80,y+545,60,'700',v.sub);
+  csTxt(g,v.d.date,80,y+620,36,'500',v.sub);
+}
+/* 10 · fun: what you lifted, in things people know / lo que levantaste, en cosas conocidas */
+const CS_OBJ=[['bus',11000],['ele',6000],['car',1300],['pia',450],['fri',80],['bow',7]];
+function csFunObj(kg){for(let i=0;i<CS_OBJ.length;i++){const n=kg/CS_OBJ[i][1];if(n>=1)return{k:CS_OBJ[i][0],n:n};}const o=CS_OBJ[CS_OBJ.length-1];return{k:o[0],n:kg/o[1]};}
+function csFun(g,v){
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg),y=v.B-640;
+  csLogo(g,80,y-40,60,v.ink);
+  csTxt(g,t('csFunT'),80,y+110,50,'700',v.sub);
+  const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),fp=csFit(g,num,W-160,300,'800');csTxt(g,num,70,y+360,fp,'800',v.acc);
+  const nm=t('csObj_'+f.k),p=csFit(g,nm,W-160,110,'800');csTxt(g,nm,80,y+480,p,'800',v.ink);
+  csTxt(g,'= '+wShow(kg)+' '+wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase(),80,y+560,44,'600',v.sub);
+  csTxt(g,v.name+'  ·  '+v.d.date,80,y+625,34,'500',v.sub);
 }

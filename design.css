@@ -228,7 +228,8 @@ body{transition:background-color .25s,color .25s}
 .wk-head .wk-act .btn{width:auto;min-height:44px;padding:10px 20px}
 
 /* v95 share studio */
-.cs-th{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 6px}
+.cs-th{display:flex;gap:8px;margin:8px -4px 6px;padding:0 4px 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.cs-th .cs-t{flex:none;width:82px}
 .cs-t{border-radius:12px;border:2px solid transparent;padding:3px;text-align:center;font-size:.7rem;font-weight:600;color:var(--dim);min-width:0}
 .cs-t canvas{display:block;width:100%;height:auto;border-radius:12px;background:repeating-conic-gradient(#3a3a42 0 25%,#2b2b32 0 50%) 0 0/12px 12px;margin-bottom:4px}
 .cs-t.on{border-color:var(--accent);color:var(--txt)}
@@ -443,3 +444,7 @@ body.kbd #sheet.pks{padding-bottom:10px}
 /* rest adjust: ±30 s and ±1 min on their own row / ajuste del descanso: ±30 s y ±1 min en su propia fila */
 #restbar .rb-adj{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
 #restbar .rb-adj .btn{min-height:46px;font-size:1.05rem;font-weight:700;min-width:0;padding:0}
+
+/* share studio v2: big live preview / vista previa grande */
+.cs-pvw{display:flex;justify-content:center;margin:6px 0 4px}
+.cs-pvw canvas{display:block;height:min(38vh,320px);width:auto;max-width:100%;border-radius:16px;background:repeating-conic-gradient(#3a3a42 0 25%,#2b2b32 0 50%) 0 0/16px 16px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
