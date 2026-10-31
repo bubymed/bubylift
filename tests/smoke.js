@@ -978,6 +978,12 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("ACT.ex[0].sets[0].w=100;ACT.ex[0].sets[0].r=5;tgSet(0,0);");
   ok(ev("actStart()")>0&&ev("!!REST"),'first set done starts the clock and the rest timer');
   ev("restSet(0,'45')");ok(ev("exRest(ACT.ex[0])")===45&&ev("SET.exRest.bench")===45,'rest can be set per exercise and is remembered');
+  ev("ACT.acc=5000;ACT.sn=Date.now();ACT.pz=false;pauseClock()");var __p=ev("actMs()");
+  ok(ev("ACT.pz")===true&&__p>=5000&&__p<5500,'pause freezes the stopwatch');
+  ev("ACT.sn=null");ok(ev("actMs()")===__p,'paused time does not move');
+  ev("pauseClock()");ok(ev("ACT.pz")===false&&ev("actMs()")>=__p,'resume keeps the saved time');
+  ev("REST&&(REST.end=Date.now()+60000);restPause()");ok(ev("REST.pz")===true&&ev("REST.left")>55000,'rest timer pauses');
+  ev("restPause()");ok(ev("REST.pz")===false,'rest timer resumes');
   ev("restSet(0,'d');stopRest();ACT=null;saveAct();");
   const miss=[...new Set(w.__miss)];
   ok(miss.length===0,'no missing translation keys: '+miss.join(','));

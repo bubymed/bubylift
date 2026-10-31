@@ -117,14 +117,26 @@ function actTotals(){
 }
 function statsLine(){
   const a=actTotals();
-  return (actStart()?'<span id="elapsed">'+fmtClock((Date.now()-actStart())/1000)+'</span>':'<button class="lnk-d" onclick="startClock()">▶ '+t('startClk')+'</button>')+' · '+t('setsDone',a.done,a.tot)+(a.vol?' · '+wShow(a.vol)+' '+wUnit():'');
+  return (actStart()?'<span id="elapsed"'+(ACT.pz?' class="paused"':'')+'>'+fmtClock(actMs()/1000)+'</span><button class="clkb" onclick="pauseClock()" aria-label="'+esc(t(ACT.pz?'clkResume':'clkPause'))+'">'+(ACT.pz?'▶':'❚❚')+'</button>':'<button class="lnk-d" onclick="startClock()">▶ '+t('startClk')+'</button>')+' · '+t('setsDone',a.done,a.tot)+(a.vol?' · '+wShow(a.vol)+' '+wUnit():'');
 }
 /* the clock runs from your first set (or the Start button), not from when you opened the screen / el reloj corre desde tu primera serie (o el botón Iniciar), no desde que abriste la pantalla */
 function actStart(){return ACT?(ACT.ts||(actTotals().done?ACT.t0:0)):0;}
-function startClock(){if(!ACT||ACT.ts)return;ACT.ts=Date.now();saveAct();updTop();}
+/* a real stopwatch: start, pause, resume; the time is always "saved + now minus when it last started" / un cronómetro de verdad: iniciar, pausar, reanudar; el tiempo siempre es "lo guardado + ahora menos cuando arrancó" */
+function actMs(){
+  if(!ACT||!actStart())return 0;
+  const sn=ACT.sn===undefined?ACT.ts||ACT.t0:ACT.sn;
+  return (ACT.acc||0)+(ACT.pz||!sn?0:Math.max(0,Date.now()-sn));
+}
+function startClock(){if(!ACT||ACT.ts)return;ACT.ts=Date.now();ACT.sn=ACT.ts;ACT.acc=0;ACT.pz=false;saveAct();updTop();}
+function pauseClock(){
+  if(!ACT||!actStart())return;
+  if(ACT.pz){ACT.pz=false;ACT.sn=Date.now();}
+  else{ACT.acc=actMs();ACT.pz=true;ACT.sn=null;}
+  saveAct();updTop();buzz(10);
+}
 function tickElapsed(){
   if(!ACT)return;
-  const e=$('elapsed');if(e)e.textContent=fmtClock((Date.now()-actStart())/1000);
+  const e=$('elapsed');if(e)e.textContent=fmtClock(actMs()/1000);
 }
 function updTop(){const e=$('wkstats');if(e)e.innerHTML=statsLine();}
 
@@ -235,7 +247,7 @@ function tgSet(i,j){
     const ok=m==='t'?(s.t!=null&&s.t>0):(m==='bw'?(s.r!=null&&s.r>0):(s.w!=null&&s.r!=null&&s.r>0));
     if(!ok){toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
     const prev=bestScore(x.eid,m,s),sc=setScore(m,s);
-    s.done=true;if(!ACT.ts)ACT.ts=ACT.t0&&actTotals().done>1?ACT.t0:Date.now();
+    s.done=true;if(!ACT.ts){ACT.ts=ACT.t0&&actTotals().done>1?ACT.t0:Date.now();ACT.sn=ACT.ts;ACT.acc=0;ACT.pz=false;}else if(ACT.pz){ACT.pz=false;ACT.sn=Date.now();}
     if(prev>0&&sc>prev){s.pr=true;toast(m==='wr'?t('newPR2',wShow(Math.round(sc))+' '+wUnit(),wShow(Math.round(sc-prev))+' '+wUnit()):t('newPR'));}else delete s.pr;
     startRest(exRest(x));
   }else{s.done=false;delete s.pr;}
@@ -303,7 +315,7 @@ function wkCheer(wk,prs){
 function finishWk(){
   const end=Date.now();
   const ex=ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})})).filter(x=>x.sets.length);
-  const t0=actStart()||ACT.t0,wk={id:ACT.id,t:t0,end:end,name:(ACT.name||'').trim()||autoName(t0),note:(ACT.note||'').trim(),ex:ex};
+  const t0=actStart()||ACT.t0,dur=actStart()?actMs():end-t0,wk={id:ACT.id,t:t0,end:t0+dur,name:(ACT.name||'').trim()||autoName(t0),note:(ACT.note||'').trim(),ex:ex};
   if(ACT.pl!=null){wk.pl=ACT.pl;if(DATA.plan)DATA.plan.cur=(ACT.pl+1)%DATA.plan.n;}
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
   goalsCheck();
@@ -364,11 +376,12 @@ function drawRest(){
   const b=$('restbar');if(!b)return;
   if(!REST){b.hidden=true;return;}
   if(!restBuilt){
-    b.innerHTML='<div class="rb-bar"><div id="restF"></div></div><div class="rb-row"><span class="rb-l">'+t('rest')+'</span><b id="restT"></b><span class="rb-sp"></span><button class="btn sm" onclick="restAdd(-15)">−15</button><button class="btn sm" onclick="restAdd(15)">+15</button><button class="btn sm pri" onclick="stopRest()">'+t('skip')+'</button></div>';
+    b.innerHTML='<div class="rb-bar"><div id="restF"></div></div><div class="rb-row"><span class="rb-l">'+t('rest')+'</span><b id="restT"></b><span class="rb-sp"></span><button class="btn sm" id="restP" onclick="restPause()" aria-label="'+esc(t('clkPause'))+'">❚❚</button><button class="btn sm" onclick="restAdd(-15)">−15</button><button class="btn sm" onclick="restAdd(15)">+15</button><button class="btn sm pri" onclick="stopRest()">'+t('skip')+'</button></div>';
     restBuilt=true;
   }
   b.hidden=false;
-  const left=Math.ceil((REST.end-Date.now())/1000),T=$('restT'),F=$('restF');
+  const left=Math.ceil((REST.pz?REST.left:REST.end-Date.now())/1000),T=$('restT'),F=$('restF'),P=$('restP');
+  if(P){const g=REST.pz?'▶':'❚❚';if(P.textContent!==g)P.textContent=g;}
   if(left<=0){
     if(!REST.done){REST.done=true;beep();}
     if(T){T.textContent=t('restOver');T.classList.add('rdone');}if(F)F.style.width='100%';
@@ -378,7 +391,13 @@ function drawRest(){
   if(T){T.textContent=fmtClock(left);T.classList.remove('rdone');}
   if(F)F.style.width=Math.max(0,Math.min(100,100*(1-left/REST.tot)))+'%';
 }
-function restAdd(d){if(!REST)return;REST.end+=d*1000;REST.tot=Math.max(5,REST.tot+d);REST.done=false;drawRest();}
+function restPause(){
+  if(!REST||REST.done)return;
+  if(REST.pz){REST.end=Date.now()+REST.left;REST.pz=false;}
+  else{REST.left=Math.max(0,REST.end-Date.now());REST.pz=true;}
+  drawRest();buzz(10);
+}
+function restAdd(d){if(!REST)return;if(REST.pz)REST.left=Math.max(0,REST.left+d*1000);REST.end+=d*1000;REST.tot=Math.max(5,REST.tot+d);REST.done=false;drawRest();}
 function stopRest(){REST=null;restBuilt=false;if(restTick){clearInterval(restTick);restTick=null;}const b=$('restbar');if(b){b.hidden=true;b.innerHTML='';}}
 
 /* ---------- keep screen awake during a workout ---------- */

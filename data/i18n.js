@@ -437,6 +437,7 @@ const STR={
  anyEq:['Any equipment','Cualquier equipo'],
  nMatch:['{0} exercises','{0} ejercicios'],
  addN:['Add {0} exercises','Agregar {0} ejercicios'],pickSome:['Tap exercises to select them','Toca ejercicios para elegirlos'],
+ clkPause:['Pause','Pausar'],clkResume:['Resume','Reanudar'],
  cdSaved:['Picture saved — go show it off!','Imagen guardada — ¡a presumirla!'],
  importCsv:['Bring in workouts (.csv · Bubylift, Hevy, Strong)','Traer mis entrenamientos (.csv · Bubylift, Hevy, Strong)'],
  impCsvAsk:['Bring in {0} workouts from this file?','¿Traer {0} entrenamientos de este archivo?'],

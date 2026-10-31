@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.0.6 — 2026-10-30
+- **A stopwatch like the one on your phone:** start, pause and resume your workout clock, and pause the rest countdown too.
+  **Un cronómetro como el de tu teléfono:** inicia, pausa y reanuda el reloj del entrenamiento, y pausa también la cuenta del descanso.
+
 ## v1.0.5 — 2026-10-30
 - **Adding exercises is much easier:** tick several at once, search by words and equipment, a new Mine tab with the ones you use most, and no more repeated exercises.
   **Agregar ejercicios es mucho más fácil:** elige varios a la vez, busca por palabras y equipo, una pestaña Mis ejercicios con los que más usas, y sin ejercicios repetidos.
