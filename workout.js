@@ -229,6 +229,7 @@ function autoDone(i,j){
   const m=exMode(x.eid),has=m==='t'?(s.t!=null&&s.t>0):(m==='bw'?(s.r!=null&&s.r>0):(s.w!=null&&s.r!=null&&s.r>0));
   if(!has)return false;tgSet(i,j);return true;
 }
+document.addEventListener('focusin',function(ev){const el=ev.target;if(el&&el.dataset&&el.dataset.i!=null&&el.classList.contains('in')){REST_LAST=+el.dataset.i;restFab();}});
 document.addEventListener('focusout',function(ev){
   const el=ev.target,rt=ev.relatedTarget;
   if(!el||!el.classList||!el.classList.contains('in')||el.dataset.i==null)return;
@@ -264,7 +265,7 @@ document.addEventListener('keydown',function(ev){
     setTimeout(function(){const c=document.getElementById('exc'+i),n=c&&c.querySelector('.srow:not(.done):not(.hd) .in[data-i]');if(n)n.focus();else if(document.activeElement)document.activeElement.blur();},60);
   }else if(ins[k+1])ins[k+1].focus();
 });
-function tgSet(i,j){
+function tgSet(i,j){REST_LAST=i;
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);
   unlockAudio();
   if(!s.done){
@@ -395,13 +396,18 @@ function restSet(i,v){
   if(v==='d'){delete x.rsu;delete SET.exRest[x.eid];}else{x.rsu=parseInt(v,10);SET.exRest[x.eid]=x.rsu;}
   saveSet();saveAct();sheetClose();exRedraw(i);toast(t('restSaved'));
 }
-function startRest(sec){
-  if(!SET.auto)return;
-  if(sec===0){return;} // supersets: straight to the next exercise / supersets: directo al siguiente ejercicio
+/* rest never starts by itself unless you turn that on; the Rest button is always there / el descanso nunca empieza solo salvo que lo actives; el botón Descanso siempre está */
+let REST_LAST=0;
+function startRest(sec,manual){
+  if(!manual&&!SET.autoRest)return;
+  if(sec===0&&!manual){return;} // supersets: straight to the next exercise / supersets: directo al siguiente ejercicio
   sec=sec||SET.rest||90;
   REST={end:Date.now()+sec*1000,tot:sec,done:false};restBuilt=false;
-  drawRest();if(!restTick)restTick=setInterval(drawRest,250);
+  drawRest();if(!restTick)restTick=setInterval(drawRest,250);restFab();
 }
+/* the always-there Rest button / el botón Descanso siempre visible */
+function restStart(){if(!ACT)return;const x=ACT.ex[Math.min(REST_LAST,ACT.ex.length-1)],r=x?exRest(x):null;startRest(r>0?r:(SET.rest||90),true);buzz(8);}
+function restFab(){const b=$('restfab');if(!b)return;const on=!!ACT&&tab==='workout'&&!REST;b.hidden=!on;if(on){const x=ACT.ex[Math.min(REST_LAST,ACT.ex.length-1)],r=x?exRest(x):null;b.innerHTML=ic('stopwatch')+'<span>'+fmtClock(r>0?r:(SET.rest||90))+'</span>';b.setAttribute('aria-label',t('restStartB'));}}
 function drawRest(){
   const b=$('restbar');if(!b)return;
   if(!REST){b.hidden=true;return;}
@@ -428,7 +434,7 @@ function restPause(){
   drawRest();buzz(10);
 }
 function restAdd(d){if(!REST)return;if(REST.pz)REST.left=Math.max(0,REST.left+d*1000);REST.end+=d*1000;REST.tot=Math.max(5,REST.tot+d);REST.done=false;drawRest();}
-function stopRest(){REST=null;restBuilt=false;if(restTick){clearInterval(restTick);restTick=null;}const b=$('restbar');if(b){b.hidden=true;b.innerHTML='';}}
+function stopRest(){REST=null;restBuilt=false;if(restTick){clearInterval(restTick);restTick=null;}const b=$('restbar');if(b){b.hidden=true;b.innerHTML='';}restFab();}
 
 /* ---------- keep screen awake during a workout ---------- */
 let WL=null;

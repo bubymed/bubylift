@@ -76,7 +76,9 @@ vc.on('error',(...a)=>errors.push('console.error: '+a.join(' ')));
   w.tgSet(0,0);
   ok(ev('ACT.ex[0].sets[0].done'),'set marked done');
   ok(Math.abs(ev('ACT.ex[0].sets[0].w')-135/2.20462262185)<1e-9,'weight stored in kg');
-  ok(!doc.getElementById('restbar').hidden,'rest timer shown after a set');
+  ok(doc.getElementById('restbar').hidden&&!doc.getElementById('restfab').hidden,'rest does not start by itself; the Rest button is there');
+  w.restStart();
+  ok(!doc.getElementById('restbar').hidden&&doc.getElementById('restfab').hidden,'tapping the Rest button starts the timer');
   ok(/Rest/.test(doc.getElementById('restbar').textContent),'rest bar has text');
   w.tgSet(0,1); // empty row shows the previous set as placeholder → accepts it
   ok(ev('ACT.ex[0].sets[1].done&&ACT.ex[0].sets[1].r')===8,'empty row accepts the placeholder (previous set)');
@@ -212,7 +214,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   console.log('settings, install, what\'s new, theme');
   w.go('more');
   w.setTheme('light');ok(doc.documentElement.getAttribute('data-mode')==='light','light theme');
-  w.setTheme('system');w.setAuto('0');ok(ev('SET.auto')===false,'auto rest toggle');w.setAuto('1');w.setRest('120');ok(ev('SET.rest')===120,'rest length');
+  w.setTheme('system');w.setAuto('0');ok(ev('SET.autoRest')===false,'auto rest toggle');w.setAuto('1');ok(ev('SET.autoRest')===true,'auto rest can be turned on');w.setAuto('0');w.setRest('120');ok(ev('SET.rest')===120,'rest length');
   w.installApp();ok(/Why install it/.test(sheetHtml())&&/Computer/.test(sheetHtml()),'install guide has why + platforms');w.installApp('pc');ok(/Install Bubylift<\/b>|Chrome/.test(sheetHtml()),'pc steps');ok(/Install Bubylift/.test(sheetHtml()),'install instructions');w.sheetClose();
   w.wnShow(true);ok(sheetHtml().replace(/<[^>]*>/g,'').indexOf(ev("WHATSNEW[0].items[0].en").replace(/<[^>]*>/g,'').slice(0,24))>=0,'what\'s new shows the latest version');w.wnDone();
   ok(ev("EXLIB.length")>950&&ev("EX_GROUPS.indexOf('mobility')")>=0,'v48 library has ~990 exercises and a mobility group');
@@ -993,7 +995,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("startWorkout({name:'clk',ex:[{eid:'bench',sets:2}]});");
   ok(ev("actStart()")===0&&/Start timer/.test(ev("document.getElementById('wkstats').textContent")),'workout clock waits for your first set');
   ev("ACT.ex[0].sets[0].w=100;ACT.ex[0].sets[0].r=5;tgSet(0,0);");
-  ok(ev("actStart()")>0&&ev("!!REST"),'first set done starts the clock and the rest timer');
+  ok(ev("actStart()")>0&&ev("!REST"),'first set done starts the clock but not the rest timer');ev("restStart()");ok(ev("!!REST"),'the Rest button starts it');
   ev("restSet(0,'45')");ok(ev("exRest(ACT.ex[0])")===45&&ev("SET.exRest.bench")===45,'rest can be set per exercise and is remembered');
   ev("ACT.acc=5000;ACT.sn=Date.now();ACT.pz=false;pauseClock()");var __p=ev("actMs()");
   ok(ev("ACT.pz")===true&&__p>=5000&&__p<5500,'pause freezes the stopwatch');

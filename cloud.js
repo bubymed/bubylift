@@ -7,7 +7,7 @@
    (AES-256-GCM); esa llave se guarda envuelta dos veces (por la contraseña y por una clave de recuperación). La contraseña
    de acceso que recibe el servidor es una derivación de un solo sentido: tampoco ve tu contraseña real. */
 let CL=null,CLBUSY=false,CLT=null,CLAPPLY=false,CLMSG='',CLK=null;
-const CL_KEYS=['workouts','routines','body','custom'],CL_SET=['units','sound','rest','hap','have','libHave','libSty','goal','fs','auto','remTime','noEnergy','rh','p531','exRest'],CL_ITER=150000,REC_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const CL_KEYS=['workouts','routines','body','custom'],CL_SET=['units','sound','rest','hap','have','libHave','libSty','goal','fs','auto','autoRest','remTime','noEnergy','rh','p531','exRest'],CL_ITER=150000,REC_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function cloudOn(){const c=window.CLOUD_CFG;return !!(c&&c.url&&c.key&&/^https:\/\//.test(c.url)&&window.crypto&&crypto.subtle);}
 /* the session lives inside the profile's settings, so password-protected profiles keep it encrypted / la sesión vive dentro de los ajustes del perfil */
 function clLoad(){const o=SET&&SET.cl;CL=(o&&typeof o==='object'&&typeof o.uid==='string'&&typeof o.rt==='string')?o:null;CLK=null;try{const p=pfCur();if(CL&&CL.dek&&p&&!p.acct){p.acct=1;pfSave();}}catch(e){}}

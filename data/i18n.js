@@ -100,7 +100,7 @@ const STR={
  toGo:['{0} to go','Faltan {0}'],goalReached:['Goal reached 🎉','Meta alcanzada 🎉'],entries:['Entries','Registros'],nMeas:['{0} measurements','{0} medidas'],
  // more
  language:['Language','Idioma'],appearance:['Appearance','Apariencia'],thSystem:['System','Sistema'],thDark:['Dark','Oscuro'],thLight:['Light','Claro'],units:['Units','Unidades'],
- restTimer:['Rest timer','Temporizador de descanso'],restLen:['Default rest','Descanso por defecto'],sound:['Sound & vibration','Sonido y vibración'],
+ restTimer:['Start rest by itself after each set','Iniciar el descanso solo tras cada serie'],restStartB:['Start rest timer','Iniciar descanso'],restLen:['Default rest','Descanso por defecto'],sound:['Sound & vibration','Sonido y vibración'],
  yourData:['Your data','Tus datos'],dataP:['{0} workouts and {1} body entries are stored on this device.','{0} entrenamientos y {1} registros del cuerpo se guardan en este dispositivo.'],
  exportBackup:['Back up my data (.json)','Respaldar mis datos (.json)'],exportCsv:['Export my workouts (.csv)','Exportar mis entrenamientos (.csv)'],importBackup:['Restore a backup','Restaurar un respaldo'],exported:['Your file is ready ✓','Tu archivo está listo ✓'],
  lastBackup:['Last backup: {0}','Último respaldo: {0}'],noBackup:['No backup yet.','Aún no hay respaldo.'],

@@ -433,3 +433,9 @@ body.kbd #sheet.pks{padding-bottom:10px}
 .srow.done .sn{color:var(--green)}
 .srow.hd span:nth-child(2){display:block!important}
 .srow.hd span{text-align:center}
+
+/* always-there Rest button / botón Descanso siempre visible */
+#restfab{position:fixed;right:16px;bottom:calc(var(--tab-h) + 22px + env(safe-area-inset-bottom));z-index:26;display:flex;align-items:center;gap:8px;height:52px;padding:0 18px;border-radius:26px;background:var(--panel);border:1.5px solid var(--accent);color:var(--accent);font-weight:800;font-size:1.05rem;box-shadow:0 6px 22px rgba(0,0,0,.35);font-variant-numeric:tabular-nums}
+#restfab svg{width:22px;height:22px}
+#restfab[hidden]{display:none}
+@media(min-width:1100px){#restfab{bottom:24px}}
