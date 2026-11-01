@@ -7,8 +7,8 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Nothing yet. / Nada todavía.
 
 ## v1.1.27 — 2026-11-01
-- **Your old workouts stay correct**: workouts saved before the bar and dumbbell update are converted once, so your history, records and suggestions match the new way of counting (dumbbell weights count both dumbbells; barbell totals stay as they were).
-  **Tus entrenos anteriores siguen correctos**: los entrenos guardados antes de la actualización de barra y mancuernas se convierten una sola vez, para que tu historial, récords y sugerencias coincidan con la nueva forma de contar (el peso de mancuernas cuenta las dos; los totales con barra se quedan igual).
+- **Your old workouts stay as they were**: your earlier workouts keep their weights exactly as you logged them (totals); the new boxes just show the weight of one dumbbell, or the plates without the bar.
+  **Tus entrenos anteriores se quedan como estaban**: tus entrenos anteriores conservan los pesos tal como los registraste (totales); las cajas nuevas solo muestran el peso de una mancuerna, o los discos sin la barra.
 
 ## v1.1.26 — 2026-11-01
 - **Two dumbbells count double**: type the weight of one dumbbell and the app saves the total for both. Tap the dumbbell line (or ⋯ → Dumbbells) to switch to 1 dumbbell. Changing the bar or dumbbells keeps what you typed and recalculates the total.

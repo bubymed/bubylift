@@ -3,7 +3,7 @@
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
  {v:'v1.1.27',items:[
-  {i:'🔁',en:'<b>Your old workouts stay correct</b>: workouts saved before the bar and dumbbell update are converted once, so your history, records and suggestions match the new way of counting (dumbbell weights count both dumbbells; barbell totals stay as they were).',es:'<b>Tus entrenos anteriores siguen correctos</b>: los entrenos guardados antes de la actualización de barra y mancuernas se convierten una sola vez, para que tu historial, récords y sugerencias coincidan con la nueva forma de contar (el peso de mancuernas cuenta las dos; los totales con barra se quedan igual).'}
+  {i:'🔁',en:'<b>Your old workouts stay as they were</b>: your earlier workouts keep their weights exactly as you logged them (totals); the new boxes just show the weight of one dumbbell, or the plates without the bar.',es:'<b>Tus entrenos anteriores se quedan como estaban</b>: tus entrenos anteriores conservan los pesos tal como los registraste (totales); las cajas nuevas solo muestran el peso de una mancuerna, o los discos sin la barra.'}
  ]},
  {v:'v1.1.26',items:[
   {i:'🏋️',en:'<b>Two dumbbells count double</b>: type the weight of one dumbbell and the app saves the total for both. Tap the dumbbell line (or ⋯ → Dumbbells) to switch to 1 dumbbell. Changing the bar or dumbbells keeps what you typed and recalculates the total.',es:'<b>Dos mancuernas cuentan doble</b>: escribe el peso de una mancuerna y la app guarda el total de las dos. Toca la línea de mancuernas (o ⋯ → Mancuernas) para cambiar a 1 mancuerna. Al cambiar la barra o las mancuernas, lo que escribiste se queda y el total se recalcula.'}

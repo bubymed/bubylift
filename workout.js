@@ -51,13 +51,13 @@ function startWorkout(o){
   saveAct();wake();tab='workout';renderTabs();render();window.scrollTo(0,0);
   if(!o)setTimeout(function(){if(ACT&&!ACT.ex.length)pickEx(null,true);},120);
 }
-/* workouts saved before the bar/dumbbell update: dumbbell weights were typed per dumbbell, so count both once; barbell totals were already totals / entrenos guardados antes de la actualización de barra/mancuernas: el peso de mancuernas era por mancuerna, se cuentan las dos una sola vez; en barra ya eran totales */
+/* workouts saved before the bar/dumbbell update already hold totals (you typed the sum of both dumbbells, the bar included): keep every number, only mark them as the new model / los entrenos guardados antes ya tienen totales (escribías la suma de las dos mancuernas, con la barra incluida): se conservan todos los números y solo se marcan como el modelo nuevo */
 function legacyFix(){
   let ch=false;
   (DATA.workouts||[]).forEach(wk=>wk.ex.forEach(x=>{
     if(x.v)return;x.v=2;ch=true;
     const e=exById(x.eid);
-    if(e&&e.m==='wr'&&e.e==='dumbbell'&&mulDef(x.eid)>1){x.sets.forEach(s=>{if(s.w!=null)s.w*=2;});x.mul=2;}
+    if(e&&e.m==='wr'&&e.e==='dumbbell'&&mulDef(x.eid)>1)x.mul=2; // old numbers were already the sum of both dumbbells: keep them, just show half per dumbbell / los números viejos ya eran la suma de las dos: se conservan, solo se muestra la mitad por mancuerna
   }));
   return ch;
 }
