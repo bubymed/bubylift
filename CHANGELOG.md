@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.9 — 2026-10-31
+- **73 exercises now have an animated demo**: Burpee, Bird Dog, Bear Crawl, band, stability-ball, balance, power and military drills and more show a looping 3D-mannequin animation on a gym background (cached for offline).
+  **73 ejercicios ahora tienen demo animada**: Burpee, Bird Dog, Bear Crawl, y los de banda, pelota de estabilidad, balance, potencia y militares muestran una animación en bucle con un maniquí 3D en un gimnasio (queda guardada para usar sin internet).
+
 ## v1.1.8 — 2026-10-30
 - **Transparent share cards keep the full canvas**: Story, Post and Square sizes and the Top/Middle/Bottom position work with transparent too.
   **Las tarjetas transparentes mantienen el lienzo completo**: los tamaños Story, Post y Square y la posición Arriba/Medio/Abajo funcionan también en transparente.

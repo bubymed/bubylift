@@ -185,7 +185,7 @@ function prBurst(i,j){
 }
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
-  const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'"><img src="img/ex/'+x.eid+'-0.jpg" alt=""><img class="b" src="img/ex/'+x.eid+'-1.jpg" alt="" onerror="this.remove()"></button>':'';
+  const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'">'+exImgs(x.eid,'this.remove()')+'</button>':'';
   let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span><button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
   h+=suggLine(x);
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
@@ -455,6 +455,9 @@ function mineIds(){
   try{EXLIB.forEach(a=>{if(tasteOf(a[0])==='lk'&&top.indexOf(a[0])<0)top.push(a[0]);});}catch(e){}
   return top;
 }
+/* Big exercise media: animated loop when we have one (EXANIM), otherwise the two-photo crossfade. / Media grande: animación en bucle si existe (EXANIM), si no el cruce de dos fotos. */
+function exAnimOn(id){return typeof EXANIM!=='undefined'&&EXANIM.has(id);}
+function exImgs(id,own){return exAnimOn(id)?'<img class="a" src="img/ex/a/'+id+'.webp" alt="" loading="lazy" onerror="this.src=\'img/ex/'+id+'-0.jpg\'">':'<img src="img/ex/'+id+'-0.jpg" alt="" onerror="'+(own||'this.parentNode.remove()')+'"><img class="b" src="img/ex/'+id+'-1.jpg" alt="" onerror="this.remove()">';}
 function exThumb(id){return typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id)?'<span class="ex-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>':'<span class="ex-th ex-no">'+ic('barbell')+'</span>';}
 function exRow(e,srch){const on=UI.pickMulti&&(UI.pickSel||[]).indexOf(e.id)>=0,al=LANG==='es'?e.en:e.es,nm=LANG==='es'?e.es:e.en,sub=srch&&al&&norm(al)!==norm(nm)?t('alsoCalled',al):t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+injBadge(e.id);return'<button class="exrow exth'+(on?' sel':'')+'" data-id="'+e.id+'" onclick="pickTap(\''+e.id+'\')">'+exThumb(e.id)+'<span class="ex-tx"><b>'+esc(nm)+'</b><small>'+esc(sub)+'</small></span>'+(UI.pickMulti?'<i class="exck">'+(on?'✓':'')+'</i>':'')+'</button>';}
 /* same exercise imported twice (Pull-Up / Pullups): show it once / el mismo ejercicio importado dos veces: se muestra una vez */
