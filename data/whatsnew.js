@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.26',items:[
+  {i:'🏋️',en:'<b>Two dumbbells count double</b>: type the weight of one dumbbell and the app saves the total for both. Tap the dumbbell line (or ⋯ → Dumbbells) to switch to 1 dumbbell. Changing the bar or dumbbells keeps what you typed and recalculates the total.',es:'<b>Dos mancuernas cuentan doble</b>: escribe el peso de una mancuerna y la app guarda el total de las dos. Toca la línea de mancuernas (o ⋯ → Mancuernas) para cambiar a 1 mancuerna. Al cambiar la barra o las mancuernas, lo que escribiste se queda y el total se recalcula.'}
+ ]},
  {v:'v1.1.25',items:[
   {i:'🏋️',en:'<b>Bar weight is added for you</b>: barbell exercises start with the bar included (45 lb; EZ bar 20 lb). Type only the plates and the total is saved. Tap the bar line, or ⋯ → Bar weight, to change it for any exercise (the app remembers your choice).',es:'<b>El peso de la barra se suma solo</b>: los ejercicios con barra empiezan con la barra incluida (45 lb; barra Z 20 lb). Escribe solo los discos y se guarda el total. Toca la línea de la barra, o ⋯ → Peso de la barra, para cambiarla en cualquier ejercicio (la app recuerda tu elección).'}
  ]},

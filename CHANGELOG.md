@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.26 — 2026-11-01
+- **Two dumbbells count double**: type the weight of one dumbbell and the app saves the total for both. Tap the dumbbell line (or ⋯ → Dumbbells) to switch to 1 dumbbell. Changing the bar or dumbbells keeps what you typed and recalculates the total.
+  **Dos mancuernas cuentan doble**: escribe el peso de una mancuerna y la app guarda el total de las dos. Toca la línea de mancuernas (o ⋯ → Mancuernas) para cambiar a 1 mancuerna. Al cambiar la barra o las mancuernas, lo que escribiste se queda y el total se recalcula.
+
 ## v1.1.25 — 2026-11-01
 - **Bar weight is added for you**: barbell exercises start with the bar included (45 lb; EZ bar 20 lb). Type only the plates and the total is saved. Tap the bar line, or ⋯ → Bar weight, to change it for any exercise (the app remembers your choice).
   **El peso de la barra se suma solo**: los ejercicios con barra empiezan con la barra incluida (45 lb; barra Z 20 lb). Escribe solo los discos y se guarda el total. Toca la línea de la barra, o ⋯ → Peso de la barra, para cambiarla en cualquier ejercicio (la app recuerda tu elección).
