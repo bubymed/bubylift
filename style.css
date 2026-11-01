@@ -156,7 +156,7 @@ textarea.note-in{width:100%;background:var(--panel);border:0;border-radius:var(-
 .wkd-s span:first-child{width:22px;color:var(--dim)}
 .wkd-note{margin-top:12px;color:var(--dim);white-space:pre-wrap}
 .wn-k{font-size:.75rem;font-weight:800;letter-spacing:.08em;color:var(--accent)}
-.wn-i{display:flex;gap:12px;margin:14px 0}.wn-ic{font-size:1.5rem}
+.wn-i{display:flex;gap:12px;margin:14px 0}.wn-ic{font-size:1.5rem;color:var(--accent);flex:none;line-height:1}.wn-ic .ic{width:1.5rem;height:1.5rem;display:block}
 .inst{text-align:left}.inst-ic{width:56px;height:56px;border-radius:14px;margin-bottom:8px}
 .inst ol{margin:10px 0 12px 20px}.inst li{margin:6px 0}
 .ib{display:inline-block;padding:0 6px;border-radius:6px;background:var(--panel2)}

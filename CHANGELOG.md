@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.10 — 2026-10-31
+- **What's new popup shows real icons**: the icon names ("share", "stopwatch"…) that appeared as text are now drawn as icons.
+  **Novedades muestra los iconos de verdad**: los nombres de icono ("share", "stopwatch"…) que salían como texto ahora se dibujan como iconos.
+
 ## v1.1.9 — 2026-10-31
 - **73 exercises now have an animated demo**: Burpee, Bird Dog, Bear Crawl, band, stability-ball, balance, power and military drills and more show a looping 3D-mannequin animation on a gym background (cached for offline).
   **73 ejercicios ahora tienen demo animada**: Burpee, Bird Dog, Bear Crawl, y los de banda, pelota de estabilidad, balance, potencia y militares muestran una animación en bucle con un maniquí 3D en un gimnasio (queda guardada para usar sin internet).
