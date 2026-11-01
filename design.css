@@ -585,3 +585,5 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 .brand::first-letter{color:inherit}
 .wel-logo.wl{background:none;box-shadow:none;width:auto;height:auto;border-radius:0;display:flex;justify-content:center;margin:0 auto 14px;color:#fff;--blb:#fff}
 .wel-logo.wl .bl{height:44px;width:auto;max-width:86vw}
+
+.barln{margin:2px 0 4px}.menu button.on{color:var(--accent);font-weight:800}

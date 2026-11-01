@@ -51,8 +51,30 @@ function startWorkout(o){
   saveAct();wake();tab='workout';renderTabs();render();window.scrollTo(0,0);
   if(!o)setTimeout(function(){if(ACT&&!ACT.ex.length)pickEx(null,true);},120);
 }
+/* barbell weight: you type the plates, the bar is added for you / peso de la barra: tú escribes los discos, la barra se suma sola */
+function barDef(eid){
+  if(SET.barPref&&SET.barPref[eid]!=null)return SET.barPref[eid];
+  const e=exById(eid);if(!e||e.m!=='wr'||e.e!=='barbell')return 0;
+  const n=(e.en||'').toLowerCase();
+  if(/\bez\b|ez-bar|curl bar/.test(n))return imp()?20/KG_LB:9;
+  return imp()?45/KG_LB:20;
+}
+function barOf(x){return x&&x.bar>0?x.bar:0;}
+function barPresets(){return imp()?[0,15,20,25,35,45,55].map(v=>v/KG_LB):[0,7,10,15,20,25];}
+function barTxt(kg){return kg>0?wShow(kg)+' '+wUnit():t('barNone');}
+function barMenu(i){
+  const x=ACT.ex[i];if(!x)return;const cur=barOf(x);
+  sheet('<h3>'+esc(t('barTitle'))+'</h3><p class="muted sm">'+esc(t('barHelp'))+'</p><div class="menu">'+barPresets().map(v=>'<button'+(Math.abs(v-cur)<0.05?' class="on"':'')+' onclick="barSet('+i+','+v+')">'+(Math.abs(v-cur)<0.05?'✓ ':'')+esc(barTxt(v))+'</button>').join('')+'</div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
+}
+function barSet(i,kg){
+  const x=ACT.ex[i];if(!x)return;
+  if(kg>0)x.bar=kg;else delete x.bar;
+  SET.barPref=SET.barPref||{};SET.barPref[x.eid]=kg>0?kg:0;jset(K_SET,SET);
+  saveAct();sheetClose();render();
+}
 function addExTo(eid,nSets,nm,tg){
   const e=exById(eid),x={eid:eid,n:e?e.en:(nm||eid),sets:Array.from({length:Math.max(1,nSets||1)},()=>newSet())};
+  {const b=barDef(eid);if(b>0)x.bar=b;}
   if(tg){x.tg=tg;const sg=sugg(eid,tg);if(sg&&sg.w!=null)x.sg=sg.w;}
   ACT.ex.push(x);
 }
@@ -185,18 +207,20 @@ function prBurst(i,j){
 }
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
+  const bar=m==='wr'?barOf(x):0,pw=v=>v==null?'':wShow(Math.max(0,v-bar));
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'">'+exImgs(x.eid,'this.remove()')+'</button>':'';
   let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
   h+=suggLine(x);
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
   h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'<button class="lnk-d" onclick="restPick('+i+')">⏱ '+(exRest(x)===0?t('restOff'):fmtClock(exRest(x)!=null?exRest(x):(SET.rest||90)))+'</button></div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
+  if(m==='wr'&&(bar>0||exById(x.eid)&&exById(x.eid).e==='barbell'))h+='<div class="barln"><button class="lnk-d" onclick="barMenu('+i+')">🏋 '+esc(bar>0?t('barOn',barTxt(bar)):t('barOff'))+'</button></div>';
   h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span></div>';
   x.sets.forEach((s,j)=>{
     const ph=pv[j]||(pv.length?pv[pv.length-1]:null)||(j>0?x.sets[j-1]:null);
     let f1,f2,p1,p2,k1,k2;
     if(m==='t'){k1='t';k2='d';f1=s.t!=null?fmtNum(s.t):'';f2=dShow(s.d);p1=ph&&ph.t!=null?fmtNum(ph.t):'';p2=ph&&ph.d?dShow(ph.d):'';}
-    else{k1='w';k2='r';f1=wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?wShow(ph.w):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=wShow(x.sg);}
+    else{k1='w';k2='r';f1=m==='wr'?pw(s.w):wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?(m==='wr'?pw(ph.w):wShow(ph.w)):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=pw(x.sg);}
     const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" enterkeyhint="next" data-i="'+i+'" data-j="'+j+'" data-k="'+k+'" onfocus="this.select()" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
     const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+(d<0?'−':'+')+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
     const inp=inp0;
@@ -219,6 +243,7 @@ function sv(i,j,f,v){
     else if(f==='r'){n=parseInt(v,10);if(!(n>=0))n=null;}
     else n=numParse(v);
   }
+  if(f==='w'&&n!=null){const bx=ACT.ex[i];if(exMode(bx.eid)==='wr')n+=barOf(bx);}
   s[f]=n;
   if(n==null&&s.done){s.done=false;delete s.pr;const r=document.querySelectorAll('#exc'+i+' .srow:not(.hd)')[j];if(r){r.classList.remove('done');r.querySelectorAll('.in').forEach(q=>q.classList.remove('dn'));}}
   saveAct();updTop();
@@ -245,8 +270,8 @@ function stepSet(i,j,f,d){
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);if(m==='t')return;
   const pv=lastEx(x.eid),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
   if(f==='w'){
-    let b=s.w;if(b==null)b=(m==='wr'&&x.sg!=null)?x.sg:(ph&&ph.w!=null?ph.w:0);
-    const st=wInc();s.w=Math.max(0,Math.round((b+d*st)/st)*st);
+    const br=m==='wr'?barOf(x):0;let b=s.w;if(b==null)b=(m==='wr'&&x.sg!=null)?x.sg:(ph&&ph.w!=null?ph.w:br);
+    const st=wInc();s.w=Math.max(br,Math.round((b+d*st)/st)*st);
   }else{
     let b=s.r;if(b==null)b=ph&&ph.r!=null?ph.r:(x.tg&&x.tg.u==='r'?x.tg.lo:0);
     s.r=Math.max(0,Math.min(999,b+d));
@@ -325,7 +350,7 @@ function exMenu(i){
     (i>0?'<button onclick="exMove('+i+',-1)">↑ '+t('moveUp')+'</button>':'')+
     (i<ACT.ex.length-1?'<button onclick="exMove('+i+',1)">↓ '+t('moveDown')+'</button>':'')+
     '<button onclick="tasteLike(\''+x.eid+'\');exMenu('+i+')">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button onclick="tasteDis(\'act\','+i+')">'+ic('ban')+' '+t('tkDis')+'</button>'+
-    '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
+    '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+''+(exMode(x.eid)==='wr'?'<button onclick="barMenu('+i+')">🏋 '+t('barTitle')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
 function exMove(i,d){const a=ACT.ex,j=i+d;if(j<0||j>=a.length)return;const x=a[i];a[i]=a[j];a[j]=x;saveAct();sheetClose();render();}
 function rmSet(i){const snap=JSON.stringify(ACT),s=ACT.ex[i].sets;if(s.length>1)s.pop();saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
