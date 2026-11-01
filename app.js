@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.22';
+const APP_VER='v1.1.23';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -265,5 +265,9 @@ function bootApp(){
     document.body.classList.toggle('kbd',kb>120);
   }
   vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit);fit();
-  document.addEventListener('focusout',function(){setTimeout(fit,150);setTimeout(fit,500);}); // keyboard closing: re-measure so nothing keeps the old height / al cerrar el teclado, vuelve a medir
+  /* iOS animates the keyboard and scrolls the page to reveal the focused field: keep re-measuring every frame while it moves, and put the picker back in place / iOS anima el teclado y desplaza la página para mostrar el campo: vuelve a medir en cada cuadro mientras se mueve y deja el selector en su sitio */
+  let ft=0;
+  function settle(){const t0=Date.now();if(ft)return;(function f(){fit();const sh=document.getElementById('sheet');if(sh&&sh.classList.contains('pks')){if(sh.scrollTop)sh.scrollTop=0;if(window.scrollY)window.scrollTo(0,0);}if(Date.now()-t0<900)ft=requestAnimationFrame(f);else ft=0;})();}
+  document.addEventListener('focusin',settle);document.addEventListener('focusout',function(){setTimeout(settle,30);});
+  document.addEventListener('scroll',function(e){const t=e.target;if(t&&t.id==='sheet'&&t.scrollTop)t.scrollTop=0;},true);
 })();
