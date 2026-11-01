@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.25 — 2026-11-01
+- **Bar weight is added for you**: barbell exercises start with the bar included (45 lb; EZ bar 20 lb). Type only the plates and the total is saved. Tap the bar line, or ⋯ → Bar weight, to change it for any exercise (the app remembers your choice).
+  **El peso de la barra se suma solo**: los ejercicios con barra empiezan con la barra incluida (45 lb; barra Z 20 lb). Escribe solo los discos y se guarda el total. Toca la línea de la barra, o ⋯ → Peso de la barra, para cambiarla en cualquier ejercicio (la app recuerda tu elección).
+
 ## v1.1.24 — 2026-11-01
 - **No more jumping to the top**: tapping weight or reps keeps the page where you are.
   **Adiós al salto hacia arriba**: al tocar el peso o las repeticiones, la página se queda donde estás.

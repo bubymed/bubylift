@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.25',items:[
+  {i:'🏋️',en:'<b>Bar weight is added for you</b>: barbell exercises start with the bar included (45 lb; EZ bar 20 lb). Type only the plates and the total is saved. Tap the bar line, or ⋯ → Bar weight, to change it for any exercise (the app remembers your choice).',es:'<b>El peso de la barra se suma solo</b>: los ejercicios con barra empiezan con la barra incluida (45 lb; barra Z 20 lb). Escribe solo los discos y se guarda el total. Toca la línea de la barra, o ⋯ → Peso de la barra, para cambiarla en cualquier ejercicio (la app recuerda tu elección).'}
+ ]},
  {v:'v1.1.24',items:[
   {i:'🩹',en:'<b>No more jumping to the top</b>: tapping weight or reps keeps the page where you are.',es:'<b>Adiós al salto hacia arriba</b>: al tocar el peso o las repeticiones, la página se queda donde estás.'}
  ]},
