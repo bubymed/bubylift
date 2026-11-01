@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.17',items:[
+  {i:'sparkles',en:'<b>The orange card stays with you</b>: when you scroll down in Workout, Mobility and Body, a slim copy (title + main button) pins to the top, so you can start your workout or mobility session from anywhere on the screen.',es:'<b>La tarjeta naranja te acompaña</b>: al deslizar hacia abajo en Entrenar, Movilidad y Cuerpo, una versión delgada (título + botón principal) se queda fija arriba, para empezar tu entrenamiento o sesión de movilidad desde cualquier parte de la pantalla.'}
+ ]},
  {v:'v1.1.16',items:[
   {i:'chart-bar',en:'<b>Training load indicator</b> in Body: compares this week\'s hard sets with your last 3 weeks and flags Light, Optimal, High or Overload (big jumps, volume rising for weeks, or over 20 sets for one muscle), with a short tip and a 4-week chart.',es:'<b>Indicador de carga de entrenamiento</b> en Body: compara las series duras de esta semana con tus últimas 3 semanas y marca Ligera, Óptima, Alta o Sobrecarga (saltos grandes, volumen subiendo por semanas, o más de 20 series de un músculo), con un consejo corto y una gráfica de 4 semanas.'}
  ]},

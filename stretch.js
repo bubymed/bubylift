@@ -44,7 +44,7 @@ function strAreaGo(save){
 }
 function strHero(){
   const l=strItems(STX.type,STX.min),n=l.length;
-  return'<div class="card hero mb-hero"><span class="hero-e">'+t('mobToday')+'</span><h2>'+t('strT_'+STX.type)+' · '+t('strMin',STX.min)+'</h2>'+
+  return'<div class="card hero mb-hero"'+skAttr(t('mobToday'),t('strT_'+STX.type)+' · '+t('strMin',STX.min),t('mobGo'),'strSessGo(0)')+'><span class="hero-e">'+t('mobToday')+'</span><h2>'+t('strT_'+STX.type)+' · '+t('strMin',STX.min)+'</h2>'+
     '<div class="mb-stats"><span><b>'+n+'</b>'+t('mbMovesL')+'</span><span><b>'+STX.min+'</b>'+t('mbMinL')+'</span><span><b>'+strSecs()+'s</b>'+t('mbEachL')+'</span></div>'+
     '<div class="pv-mini mb-mini">'+l.slice(0,7).map(m=>pvMiniTh(m.eid)).join('')+(n>7?'<i class="more">+'+(n-7)+'</i>':'')+'</div>'+
     '<button class="btn pri big wide pv-go" onclick="strSessGo(0)">'+ic('stopwatch')+' '+t('mobGo')+'</button></div>';
