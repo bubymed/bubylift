@@ -378,7 +378,7 @@ main>.lnk-d{display:flex;margin:14px auto 0;color:var(--txt)}
 /* exercise picker as a swipeable strip that stays above the keyboard / selector como tira deslizable que queda sobre el teclado */
 #sheetov.pks{inset:0;height:auto;align-items:flex-end}
 body.kbd #sheetov.pks{inset:auto;left:0;right:0;top:var(--vvt,0px);height:var(--vvh,100dvh)}
-#sheet.pks{display:flex;flex-direction:column;max-height:calc(100dvh - 24px);height:calc(100dvh - 24px);overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+#sheet.pks{overflow:hidden;overflow:clip;overscroll-behavior:none;display:flex;flex-direction:column;max-height:calc(100dvh - 24px);height:calc(100dvh - 24px);overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
 body.kbd #sheet.pks{max-height:calc(var(--vvh,100dvh) - 24px);height:calc(var(--vvh,100dvh) - 24px);padding-bottom:10px}
 /* keyboard open in the picker: only the search stays in view; the keyboard may cover the tab bar and the add button / con el teclado abierto en el selector solo queda a la vista el buscador; el teclado puede tapar la barra inferior y el botón de agregar */
 body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skbar,body.kbd:has(#sheet.pks) #sheet.pks .pk-bot .pickadd{display:none}

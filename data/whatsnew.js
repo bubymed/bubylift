@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.23',items:[
+  {i:'🩹',en:'<b>Search above the keyboard, for real</b>: the exercise picker no longer shifts when the keyboard opens, so the search bar and cursor stay together and no black gap is left.',es:'<b>El buscador sobre el teclado, ahora sí</b>: el selector de ejercicios ya no se mueve al abrir el teclado, así que la barra de búsqueda y el cursor quedan juntos y no sobra espacio negro.'}
+ ]},
  {v:'v1.1.22',items:[
   {i:'🩹',en:'<b>No more black gap</b>: after closing the keyboard, the exercise picker fills the whole screen again.',es:'<b>Adiós al espacio negro</b>: al cerrar el teclado, el selector de ejercicios vuelve a ocupar toda la pantalla.'}
  ]},
