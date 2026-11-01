@@ -552,6 +552,7 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 /* exercise photos (Free Exercise DB) — two frames that alternate / fotos de ejercicios: dos cuadros que alternan */
 .eximg{position:relative;width:100%;max-width:320px;margin:8px auto;border-radius:10px;overflow:hidden;background:#fff;line-height:0}
 .eximg img{width:100%;height:auto;display:block}
+.eximg img.a{background:#20242b}
 .eximg img.b{position:absolute;left:0;top:0;animation:exfl 1.6s steps(1,end) infinite}
 @keyframes exfl{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.eximg img.b{animation:none;opacity:0}}

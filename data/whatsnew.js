@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.9',items:[
+  {i:'sparkles',en:'<b>73 exercises now have an animated demo</b>: Burpee, Bird Dog, Bear Crawl, band, stability-ball, balance, power and military drills and more show a looping 3D-mannequin animation on a gym background (cached for offline).',es:'<b>73 ejercicios ahora tienen demo animada</b>: Burpee, Bird Dog, Bear Crawl, y los de banda, pelota de estabilidad, balance, potencia y militares muestran una animación en bucle con un maniquí 3D en un gimnasio (queda guardada para usar sin internet).'}
+ ]},
  {v:'v1.1.8',items:[
   {i:'share',en:'<b>Transparent share cards keep the full canvas</b>: Story, Post and Square sizes and the Top/Middle/Bottom position work with transparent too.',es:'<b>Las tarjetas transparentes mantienen el lienzo completo</b>: los tamaños Story, Post y Square y la posición Arriba/Medio/Abajo funcionan también en transparente.'}
  ]},

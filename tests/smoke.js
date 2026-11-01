@@ -235,7 +235,9 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   console.log('   (info) stretch',JSON.stringify(stR[0]));
   ok(stR.every(l=>l.length>=6)&&ev("libFocus('stretch',0,[]).every(e=>e.u==='m')"),'stretch routine has 6+ timed holds at every level');
   ok(ev("LIB_EQ.every(a=>[0,2,4].every(k=>libFocus(a,k,[]).length>=4))"),'equipment routines work without marking any equipment');
-  ok(ev("EXPHOTO.has('bench')&&EXPHOTO.has('z_zottman_curl')&&!EXPHOTO.has('burpee')"),'photo list covers old and new exercises');
+  ok(ev("EXPHOTO.has('bench')&&EXPHOTO.has('z_zottman_curl')&&EXPHOTO.has('burpee')&&EXANIM.has('burpee')&&!EXANIM.has('bench')"),'photo list covers old and new exercises');
+  ok(ev("EXANIM.size>=70&&[...EXANIM].every(i=>EXPHOTO.has(i)&&exById(i))"),'every animated exercise has a still and exists');
+  ok(JSON.parse(ev("JSON.stringify([...EXANIM])")).every(i=>fs.existsSync(path.join(ROOT,'img/ex/a',i+'.webp'))&&fs.existsSync(path.join(ROOT,'img/ex',i+'-0.jpg'))),'animation and still files exist for every animated exercise');
   ok(ev("LIB_EQ.every(a=>[0,1,2].every(l=>FOCUS[a][l].every(s=>s.split('|')[0].split(',').every(id=>exById(id)))))"),'equipment routine ids all exist');
   const zUse=ev("(function(){let n=0,tot=0;[['muscle',3,'some'],['muscle',4,'new'],['strength',3,'adv'],['fat',5,'some'],['hybrid',4,'some'],['general',3,'new']].forEach(a=>{[0,1,2,3].forEach(sd=>{genPlan({goal:a[0],n:a[1],len:75,lvl:a[2],have:HAVE_KEYS.slice(),sd:sd}).ds.forEach(d=>d.ex.forEach(x=>{tot++;if(String(x.eid).slice(0,2)==='z_')n++;}))})});return n+'/'+tot})()");
   console.log('   (info) imported exercises in generated plans',zUse);
