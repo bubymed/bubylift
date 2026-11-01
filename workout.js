@@ -325,11 +325,12 @@ function exMenu(i){
     (i>0?'<button onclick="exMove('+i+',-1)">↑ '+t('moveUp')+'</button>':'')+
     (i<ACT.ex.length-1?'<button onclick="exMove('+i+',1)">↓ '+t('moveDown')+'</button>':'')+
     '<button onclick="tasteLike(\''+x.eid+'\');exMenu('+i+')">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button onclick="tasteDis(\'act\','+i+')">'+ic('ban')+' '+t('tkDis')+'</button>'+
-    '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button><button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
+    '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
 function exMove(i,d){const a=ACT.ex,j=i+d;if(j<0||j>=a.length)return;const x=a[i];a[i]=a[j];a[j]=x;saveAct();sheetClose();render();}
 function rmSet(i){const snap=JSON.stringify(ACT),s=ACT.ex[i].sets;if(s.length>1)s.pop();saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
-function rmEx(i,ok){const x=ACT&&ACT.ex[i];if(!x)return;if(!ok&&x.sets&&x.sets.some(s=>s.done)){ask(t('delEx'),t('delete'),function(){rmEx(i,1);},true);return;}const snap=JSON.stringify(ACT);ACT.ex.splice(i,1);saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
+function unDoneLast(i){const x=ACT&&ACT.ex[i];if(!x)return;for(let j=x.sets.length-1;j>=0;j--)if(x.sets[j].done){tgSet(i,j);break;}sheetClose();}
+function rmEx(i,ok){const x=ACT&&ACT.ex[i];if(!x)return;if(!ok&&x.sets&&x.sets.some(s=>s.done||s.w!=null||s.r!=null||s.t!=null)){ask(t('delEx'),t('delete'),function(){rmEx(i,1);},true);return;}const snap=JSON.stringify(ACT);ACT.ex.splice(i,1);saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
 
 /* ---------- finish / cancel ---------- */
 function autoName(ts){const h=new Date(ts).getHours();return t(h<12?'wkMorning':(h<18?'wkAfternoon':'wkEvening'));}
