@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.11 — 2026-10-31
+- **Red ✕ delete button** in the top-right corner of workouts in History, routines, body entries, and exercises in a workout or routine editor — no more hunting for the delete option.
+  **Botón rojo ✕ para eliminar** en la esquina superior derecha de los entrenamientos del Historial, rutinas, registros de cuerpo y ejercicios dentro de un entrenamiento o del editor de rutinas — ya no hay que buscar la opción de eliminar.
+
 ## v1.1.10 — 2026-10-31
 - **What's new popup shows real icons**: the icon names ("share", "stopwatch"…) that appeared as text are now drawn as icons.
   **Novedades muestra los iconos de verdad**: los nombres de icono ("share", "stopwatch"…) que salían como texto ahora se dibujan como iconos.

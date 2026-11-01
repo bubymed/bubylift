@@ -132,7 +132,7 @@ function vBody(){
   h+='<div class="sec"><h2>'+t('entries')+'</h2></div>';
   DATA.body.slice(0,40).forEach(b=>{
     const parts=[];if(b.w)parts.push(wShow(b.w)+' '+wUnit());if(b.bf)parts.push(fmtNum(b.bf,1)+'%');if(b.m)parts.push(t('nMeas',Object.keys(b.m).length));
-    h+='<div class="card bde"><div><b>'+esc(dFmt(b.t))+'</b><div class="muted sm">'+esc(parts.join(' · '))+(b.note?' — '+esc(b.note):'')+'</div></div><button class="ico" aria-label="'+esc(t('delete'))+'" onclick="bodyDel(\''+b.id+'\')">'+ic('trash')+'</button></div>';
+    h+='<div class="card bde"><div><b>'+esc(dFmt(b.t))+'</b><div class="muted sm">'+esc(parts.join(' · '))+(b.note?' — '+esc(b.note):'')+'</div></div>'+xBtn('bodyDel(\''+b.id+'\')')+'</div>';
   });
   return h;
 }

@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.11',items:[
+  {i:'trash',en:'<b>Red ✕ delete button</b> in the top-right corner of workouts in History, routines, body entries, and exercises in a workout or routine editor — no more hunting for the delete option.',es:'<b>Botón rojo ✕ para eliminar</b> en la esquina superior derecha de los entrenamientos del Historial, rutinas, registros de cuerpo y ejercicios dentro de un entrenamiento o del editor de rutinas — ya no hay que buscar la opción de eliminar.'}
+ ]},
  {v:'v1.1.10',items:[
   {i:'sparkles',en:'<b>What\'s new popup shows real icons</b>: the icon names ("share", "stopwatch"…) that appeared as text are now drawn as icons.',es:'<b>Novedades muestra los iconos de verdad</b>: los nombres de icono ("share", "stopwatch"…) que salían como texto ahora se dibujan como iconos.'}
   ,{i:'refresh',en:'<b>Better demo animations</b>: redone Frog Pump, Hand-Release Push-Up, Clamshell, Fire Hydrant, Banded Bridge, Kettlebell Halo (three versions), Speed Ladder, High Knees, Sprint and Shuttle Run so each one looks different and makes sense.',es:'<b>Mejores animaciones</b>: rehechas Frog Pump, Flexiones con liberación de manos, Clamshell, Fire Hydrant, Puente con banda, Kettlebell Halo (tres versiones), Escalera de velocidad, Rodillas altas, Sprint y Shuttle para que cada una se vea distinta y tenga sentido.'}
