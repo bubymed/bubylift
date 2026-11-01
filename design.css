@@ -456,7 +456,7 @@ body.kbd #sheet.pks{padding-bottom:10px}
 .xdel{position:absolute;top:6px;right:6px;z-index:3;width:24px;height:24px;border-radius:50%;background:#e5484d;color:#fff;font-size:.78rem;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;border:0;padding:0;box-shadow:0 1px 4px rgba(0,0,0,.4);cursor:pointer}
 .xdel::after{content:'';position:absolute;inset:-9px}
 .xdel:active{background:#c93a3f}
-.xdel.inl{position:static;flex:none;width:30px;height:30px;font-size:.95rem}
+.xdel.inl{position:relative;flex:none;width:30px;height:30px;font-size:.95rem}
 .wkw{position:relative}.wkw+.wkw{border-top:.5px solid var(--line)}.wkw .wkrow{padding-right:40px}
 .card.rt .xdel{top:5px;right:5px}.card.rt .rt-b{margin-top:16px}
 .bde{position:relative;padding-right:40px}

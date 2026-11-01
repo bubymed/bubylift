@@ -235,6 +235,9 @@ document.addEventListener('focusout',function(ev){
   if(!el||!el.classList||!el.classList.contains('in')||el.dataset.i==null)return;
   if(rt&&rt.dataset&&rt.dataset.i===el.dataset.i&&rt.dataset.j===el.dataset.j)return; // moving inside the same set
   const i=+el.dataset.i,j=+el.dataset.j;
+  if(!(rt&&rt.dataset&&rt.dataset.i!=null)){ // tapping a button: let its click land before the card is redrawn / al tocar un botón, deja que el clic llegue antes de redibujar
+    setTimeout(function(){const a=document.activeElement;if(a&&a.classList&&a.classList.contains('in')&&a.dataset.i==el.dataset.i&&a.dataset.j==el.dataset.j)return;autoDone(i,j);},350);return;
+  }
   if(!autoDone(i,j))return;
   if(rt&&rt.dataset&&rt.dataset.i!=null){const n=document.querySelector('#exc'+rt.dataset.i+' .in[data-j="'+rt.dataset.j+'"][data-k="'+rt.dataset.k+'"]');if(n&&n!==rt)n.focus();}
 });
@@ -251,7 +254,7 @@ function stepSet(i,j,f,d){
   saveAct();exRedraw(i);buzz(6);
 }
 /* a new set starts as a copy of the last one: log it with one tap / una serie nueva copia la anterior: se registra con un toque */
-function addSet(i){const x=ACT.ex[i],l=x.sets[x.sets.length-1],n=newSet();if(l){n.w=l.w;n.r=l.r;n.t=l.t;n.d=l.d;}x.sets.push(n);saveAct();exRedraw(i);}
+function addSet(i){const x=ACT.ex[i];autoDone(i,x.sets.length-1);const l=x.sets[x.sets.length-1],n=newSet();if(l){n.w=l.w;n.r=l.r;n.t=l.t;n.d=l.d;}x.sets.push(n);saveAct();exRedraw(i);}
 /* Enter/Next walks weight → reps → done → next set, keyboard stays open / Enter/Siguiente: peso → reps → listo → siguiente serie sin cerrar el teclado */
 document.addEventListener('keydown',function(ev){
   const el=ev.target;if(ev.key!=='Enter'||!el||!el.classList||!el.classList.contains('in')||el.dataset.i==null)return;
