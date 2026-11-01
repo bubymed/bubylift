@@ -80,6 +80,7 @@ function clMerge(a,b){ // a = this phone, b = cloud / a = este teléfono, b = nu
     out[k]=Object.keys(m).map(i=>m[i]);
   });
   out.plan=newer?(a.plan||b.plan):(b.plan||a.plan);
+  if(out.plan&&tomb['pl'+out.plan.t0])out.plan=null; // a deleted plan stays deleted / un plan eliminado se queda eliminado
   out.goals=(newer?a.goals:b.goals).length?(newer?a.goals:b.goals):(newer?b.goals:a.goals);
   out.aft=newer?(a.aft||b.aft):(b.aft||a.aft);
   out.set=(a.set&&b.set)?((a.set.t||0)>=(b.set.t||0)?a.set:b.set):(a.set||b.set||null); // settings: the most recently changed copy wins / ajustes: gana la copia cambiada más recientemente
