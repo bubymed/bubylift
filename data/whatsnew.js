@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.22',items:[
+  {i:'🩹',en:'<b>No more black gap</b>: after closing the keyboard, the exercise picker fills the whole screen again.',es:'<b>Adiós al espacio negro</b>: al cerrar el teclado, el selector de ejercicios vuelve a ocupar toda la pantalla.'}
+ ]},
  {v:'v1.1.21',items:[
   {i:'↩️',en:'<b>Un-mark a set</b>: the exercise menu (⋯) can un-mark the last done set, and removing an exercise asks first whenever it has numbers typed in.',es:'<b>Desmarcar una serie</b>: el menú del ejercicio (⋯) puede desmarcar la última serie hecha, y quitar un ejercicio pregunta primero si ya tiene números escritos.'}
  ]},
