@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.19 — 2026-11-01
+- **Add set / Add exercise fixed**: the buttons no longer delete exercises, and a new set starts with the previous set's weight and reps — just change it or keep it.
+  **Agregar serie / ejercicio arreglado**: los botones ya no borran ejercicios, y la serie nueva empieza con el peso y las repeticiones de la anterior; solo cámbialos o déjalos.
+
 ## v1.1.18 — 2026-10-31
 - **New Bubylift logo**: the dumbbell is now the “I” in BUBYLIFT, in the header and welcome screen, and the app icon is a new orange dumbbell. (If you installed the app, remove it and add it again to see the new home-screen icon.)
   **Nuevo logo de Bubylift**: la mancuerna ahora es la “I” de BUBYLIFT, en el encabezado y la pantalla de bienvenida, y el ícono de la app es una nueva mancuerna naranja. (Si instalaste la app, quítala y agrégala de nuevo para ver el ícono nuevo en tu pantalla de inicio.)
