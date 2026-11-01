@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.22 — 2026-11-01
+- **No more black gap**: after closing the keyboard, the exercise picker fills the whole screen again.
+  **Adiós al espacio negro**: al cerrar el teclado, el selector de ejercicios vuelve a ocupar toda la pantalla.
+
 ## v1.1.21 — 2026-11-01
 - **Un-mark a set**: the exercise menu (⋯) can un-mark the last done set, and removing an exercise asks first whenever it has numbers typed in.
   **Desmarcar una serie**: el menú del ejercicio (⋯) puede desmarcar la última serie hecha, y quitar un ejercicio pregunta primero si ya tiene números escritos.
