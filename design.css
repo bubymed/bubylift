@@ -555,3 +555,14 @@ body.kbd #sheet.pks{padding-bottom:10px}
 .rv-t b{font-size:1rem}.rv-t small{color:var(--dim);font-size:.78rem}
 .rv-hint{text-align:center;margin-top:10px}
 @media (prefers-reduced-motion:reduce){.rv-hero,.rv-t,.mb-mini i{animation:none}}
+
+/* training load / carga */
+.ldc{--c:#34c759;border-left:5px solid var(--c);animation:pvUp .4s both}.ldc.high{--c:#ffcc00}.ldc.over{--c:#ff453a}.ldc.low{--c:#0a84ff}
+.ld-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 0}.ld-top b{font-size:.85rem;color:var(--dim);font-weight:700}
+.ld-chip{background:var(--c);color:#111;font-weight:800;border-radius:999px;padding:5px 14px;font-size:.95rem}
+.ld-msg{margin:6px 0 12px;line-height:1.4}
+.ld-bars{display:flex;gap:10px;align-items:flex-end;height:112px;margin:4px 0 10px}
+.ld-bars div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:2px}
+.ld-bars u{width:100%;border-radius:8px 8px 3px 3px;background:var(--line);display:block}.ld-bars .now u{background:var(--c)}
+.ld-bars small{font-weight:800;font-size:.8rem}.ld-bars em{font-style:normal;font-size:.68rem;color:var(--dim)}
+.ld-why{margin:0 0 8px;padding-left:18px;font-size:.85rem;color:var(--dim);line-height:1.45}

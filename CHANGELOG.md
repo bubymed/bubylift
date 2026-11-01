@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.16 — 2026-10-31
+- **Training load indicator** in Body: compares this week's hard sets with your last 3 weeks and flags Light, Optimal, High or Overload (big jumps, volume rising for weeks, or over 20 sets for one muscle), with a short tip and a 4-week chart.
+  **Indicador de carga de entrenamiento** en Body: compara las series duras de esta semana con tus últimas 3 semanas y marca Ligera, Óptima, Alta o Sobrecarga (saltos grandes, volumen subiendo por semanas, o más de 20 series de un músculo), con un consejo corto y una gráfica de 4 semanas.
+
 ## v1.1.15 — 2026-10-31
 - **Redesigned Mobility and Muscle Recovery**: Mobility now has a bold header with your session stats and previews, icon tiles for focus, big time buttons and animated move cards. Recovery shows an overall progress ring and a ring per muscle — tap a ready muscle to train it.
   **Movilidad y Recuperación muscular rediseñadas**: Movilidad ahora tiene un encabezado llamativo con las estadísticas y vistas previas de tu sesión, mosaicos con iconos para el enfoque, botones grandes de tiempo y tarjetas de movimientos animadas. Recuperación muestra un anillo de progreso general y uno por músculo — toca un músculo listo para entrenarlo.
