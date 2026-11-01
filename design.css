@@ -462,3 +462,57 @@ body.kbd #sheet.pks{padding-bottom:10px}
 .bde{position:relative;padding-right:40px}
 .card.plan{position:relative}.card.plan .xdel{top:8px;right:8px}.card.plan .plh{padding-right:34px}
 .pick-h .xdel.inl{margin-left:auto;margin-right:8px}
+
+/* ---------- My plan screen / pantalla Mi plan ---------- */
+.pv .pv-hero{position:relative;overflow:hidden;border-radius:22px;padding:18px 18px 16px;color:#fff;background:linear-gradient(135deg,var(--accent),#b5390a);box-shadow:0 10px 26px color-mix(in srgb,var(--accent) 38%,transparent);margin:6px 0 12px}
+.pv .pv-hero::after{content:'';position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.12)}
+.pv-k{font-size:.74rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.9;position:relative}
+.pv-big{font-size:1.45rem;font-weight:800;line-height:1.15;margin:4px 0 12px;position:relative}
+.pv-week{display:flex;gap:8px;position:relative}
+.pv-dot{flex:1;max-width:44px;height:34px;border-radius:12px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;animation:pvPop .4s both;animation-delay:calc(var(--i)*60ms)}
+.pv-dot.on{background:#fff;color:var(--accent)}
+.pv-dot.nx{outline:2.5px solid #fff;outline-offset:2px}
+.pv-wl{font-size:.82rem;font-weight:600;opacity:.95;margin:8px 0 12px;position:relative}
+.pv-go{position:relative;width:100%;border:0;border-radius:16px;padding:14px;background:#fff;color:var(--accent);font-weight:800;font-size:1.02rem;box-shadow:0 4px 0 rgba(0,0,0,.22);transition:transform .12s,box-shadow .12s}
+.pv-go:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.22)}
+.pv-ph{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;font-size:.8rem;font-weight:600;position:relative}
+.pv-ph button{border:0;border-radius:999px;padding:6px 12px;background:rgba(255,255,255,.22);color:#fff;font-weight:700;font-size:.78rem;white-space:nowrap}
+.pv-ph .ic{width:14px;height:14px}
+.pv-tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.pv-tags span{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:var(--panel);font-size:.76rem;font-weight:600;color:var(--txt);box-shadow:var(--shadow)}
+.pv-tags span.w{background:color-mix(in srgb,#e5484d 14%,var(--panel));color:#e5484d}
+.pv-tags .ic{width:13px;height:13px;color:var(--accent)}
+.pv .pv-dt{margin-top:8px}.pv .pv-dt summary{padding:11px 14px;font-size:.95rem}.pv .pv-dt .card{margin:0;box-shadow:none;background:transparent;padding:4px 2px}
+.pv-days{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;margin:14px -16px 6px;padding:4px 16px 8px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.pv-days::-webkit-scrollbar{display:none}
+.pv-day{flex:none;scroll-snap-align:center;width:132px;text-align:left;border-radius:18px;padding:11px 12px;background:var(--panel2);border:2px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;transition:transform .15s,border-color .15s}
+.pv-day:active{transform:scale(.96)}
+.pv-day.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--panel))}
+.pv-dk{display:flex;align-items:center;justify-content:space-between;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.pv-dk em{font-style:normal;background:var(--accent);color:#fff;border-radius:999px;padding:2px 8px;font-size:.64rem}.pv-dk em.ok{background:#2fb36b}
+.pv-day b{font-size:.95rem;line-height:1.2;min-height:2.3em;color:var(--txt)}
+.pv-mini{display:flex}.pv-mini i{width:26px;height:26px;border-radius:50%;background:var(--panel2) center/cover;border:2px solid var(--panel);margin-left:-8px}.pv-mini i:first-child{margin-left:0}
+.pv-dh{display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px}
+.pv-dn{font-size:1.2rem;font-weight:800;display:flex;align-items:center;gap:6px}
+.pv-sub{font-size:.8rem;color:var(--dim);margin-top:2px}
+.pv-ex{display:flex;align-items:center;gap:12px;padding:10px;margin:8px 0;border-radius:18px;background:var(--panel2);box-shadow:var(--shadow);cursor:pointer;animation:pvUp .4s both;animation-delay:calc(var(--i)*45ms);transition:transform .12s}
+.pv-ex:active{transform:scale(.98)}
+.pv-th{flex:none;width:84px;height:84px;border-radius:14px;background:var(--panel2) center/cover no-repeat}
+.pv-no{display:flex;align-items:center;justify-content:center;color:var(--dim)}.pv-no .ic{width:28px;height:28px}
+.pv-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.pv-b>b{font-size:1rem;line-height:1.2}
+.pv-pills{display:flex;flex-wrap:wrap;gap:5px}
+.pv-p{background:var(--accent);color:#fff;border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:800}
+.pv-p2{background:var(--panel2);color:var(--dim);border-radius:999px;padding:3px 9px;font-size:.72rem;font-weight:600}
+.pv-b .rz{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.74rem;color:var(--dim);line-height:1.3}
+.pv-b .warnt{font-size:.74rem;color:#e5484d}
+.pv-play{flex:none;width:34px;height:34px;border-radius:50%;border:0;background:var(--panel2);color:var(--accent);display:flex;align-items:center;justify-content:center;padding:0}
+.pv-play .ic{width:20px;height:20px}
+.pv-act{margin-top:14px}
+.pv-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 4px}
+.pv-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:84px;padding:10px 6px;border-radius:16px;background:var(--panel2);border:0;box-shadow:var(--shadow);color:var(--txt);font-size:.74rem;font-weight:700;line-height:1.15;text-align:center;transition:transform .12s}
+.pv-tile:active{transform:scale(.95)}
+.pv-tile .ic{width:24px;height:24px;color:var(--accent)}
+@keyframes pvUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pvPop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.pv-ex,.pv-dot{animation:none}}
