@@ -51,6 +51,16 @@ function startWorkout(o){
   saveAct();wake();tab='workout';renderTabs();render();window.scrollTo(0,0);
   if(!o)setTimeout(function(){if(ACT&&!ACT.ex.length)pickEx(null,true);},120);
 }
+/* workouts saved before the bar/dumbbell update: dumbbell weights were typed per dumbbell, so count both once; barbell totals were already totals / entrenos guardados antes de la actualización de barra/mancuernas: el peso de mancuernas era por mancuerna, se cuentan las dos una sola vez; en barra ya eran totales */
+function legacyFix(){
+  let ch=false;
+  (DATA.workouts||[]).forEach(wk=>wk.ex.forEach(x=>{
+    if(x.v)return;x.v=2;ch=true;
+    const e=exById(x.eid);
+    if(e&&e.m==='wr'&&e.e==='dumbbell'&&mulDef(x.eid)>1){x.sets.forEach(s=>{if(s.w!=null)s.w*=2;});x.mul=2;}
+  }));
+  return ch;
+}
 /* barbell weight: you type the plates, the bar is added for you / peso de la barra: tú escribes los discos, la barra se suma sola */
 function barDef(eid){
   if(SET.barPref&&SET.barPref[eid]!=null)return SET.barPref[eid];
@@ -100,6 +110,7 @@ function barSet(i,kg){
 }
 function addExTo(eid,nSets,nm,tg){
   const e=exById(eid),x={eid:eid,n:e?e.en:(nm||eid),sets:Array.from({length:Math.max(1,nSets||1)},()=>newSet())};
+  x.v=2; // new weight model: bar + dumbbells counted / modelo nuevo de peso: barra + mancuernas contadas
   {const b=barDef(eid);if(b>0)x.bar=b;}
   {const m=mulDef(eid);if(m>1)x.mul=m;}
   if(tg){x.tg=tg;const sg=sugg(eid,tg);if(sg&&sg.w!=null)x.sg=sg.w;}
@@ -402,7 +413,7 @@ function wkCheer(wk,prs){
 }
 function finishWk(){
   const end=Date.now();
-  const ex=ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})})).filter(x=>x.sets.length);
+  const ex=ACT.ex.map(x=>{const o={eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})};if(x.v)o.v=x.v;if(x.mul>1)o.mul=x.mul;if(x.bar>0)o.bar=x.bar;return o;}).filter(x=>x.sets.length);
   const t0=actStart()||ACT.t0,dur=actStart()?actMs():end-t0,wk={id:ACT.id,t:t0,end:t0+dur,name:(ACT.name||'').trim()||autoName(t0),note:(ACT.note||'').trim(),ex:ex};
   if(ACT.pl!=null){wk.pl=ACT.pl;if(DATA.plan)DATA.plan.cur=(ACT.pl+1)%DATA.plan.n;}
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);

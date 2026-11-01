@@ -93,6 +93,7 @@ function clSame(a,b){return JSON.stringify([a.workouts,a.routines,a.body,a.custo
 function clApply(m){
   CLAPPLY=true;
   CL_KEYS.forEach(k=>{DATA[k]=m[k];});DATA.plan=m.plan;DATA.goals=m.goals;DATA.aft=m.aft||undefined;DATA.tomb=m.tomb;
+  try{legacyFix();}catch(e){}
   saveData();
   let ch=false;const ms=m.set,ma=m.act;
   if(ms&&ms.v&&(ms.t||0)>(SET._st||0)){CL_SET.forEach(k=>{if(ms.v[k]!==undefined)SET[k]=ms.v[k];else delete SET[k];});SET._st=ms.t;SET._sh=clSetHash();jset(K_SET,SET);ch=true;}

@@ -274,7 +274,7 @@ function cleanHr(h){return(h&&typeof h==='object'&&isFinite(h.a)&&h.a>=30&&h.a<=
 function cleanWk(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||typeof x.t!=='number'||!isFinite(x.t)||!Array.isArray(x.ex))return null;
   const ex=[];
-  x.ex.forEach(e=>{if(!e||!ID_RE.test(String(e.eid))||!Array.isArray(e.sets))return;const sets=e.sets.map(cleanSet).filter(Boolean);if(sets.length)ex.push({eid:String(e.eid),n:String(e.n||e.eid).slice(0,80),sets:sets});});
+  x.ex.forEach(e=>{if(!e||!ID_RE.test(String(e.eid))||!Array.isArray(e.sets))return;const sets=e.sets.map(cleanSet).filter(Boolean);if(!sets.length)return;const o={eid:String(e.eid),n:String(e.n||e.eid).slice(0,80),sets:sets};if(e.v===2)o.v=2;if(e.mul===2)o.mul=2;if(typeof e.bar==='number'&&e.bar>0&&e.bar<=100)o.bar=e.bar;ex.push(o);});
   const sid=/^\d{1,15}$/.test(String(x.sid||''))?String(x.sid):'';
   if(!ex.length&&!sid)return null; // watch-only workouts come from Strava / los entrenamientos solo-reloj vienen de Strava
   return{id:String(x.id),t:x.t,end:(typeof x.end==='number'&&isFinite(x.end))?x.end:0,name:String(x.name||'').slice(0,80),note:String(x.note||'').slice(0,500),ex:ex,hr:cleanHr(x.hr),kcal:(isFinite(x.kcal)&&x.kcal>0&&x.kcal<=10000)?Math.round(x.kcal):undefined,sv:x.sv?1:undefined,pl:(Number.isInteger(x.pl)&&x.pl>=0&&x.pl<5)?x.pl:undefined,ch:cleanCh(x.ch),sid:sid||undefined,sp:sid?String(x.sp||'').slice(0,30):undefined,sec:(sid&&isFinite(x.sec)&&x.sec>0&&x.sec<172800)?Math.round(x.sec):undefined};
@@ -325,7 +325,7 @@ function importFile(inp){
       aw.forEach(x=>DATA.workouts.push(x));ab.forEach(x=>DATA.body.push(x));ar.forEach(x=>DATA.routines.push(x));ac.forEach(x=>DATA.custom.push(x));if(np)DATA.plan=np;
       if(gAdd.length){DATA.goals=(DATA.goals||[]).concat(gAdd);}
       if(na&&!DATA.aft){DATA.aft={};['mdl','hrp','sdc','plk','run'].forEach(k=>{if(cn(na[k])>0)DATA.aft[k]=na[k];});}
-      DATA.workouts.sort((a,b)=>b.t-a.t);DATA.body.sort((a,b)=>b.t-a.t);
+      DATA.workouts.sort((a,b)=>b.t-a.t);DATA.body.sort((a,b)=>b.t-a.t);legacyFix();
       saveData();toast(t('imported'));render();
     });
   };
