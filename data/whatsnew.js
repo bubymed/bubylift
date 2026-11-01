@@ -2,6 +2,18 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.27',items:[
+  {i:'🔁',en:'<b>Your old workouts stay as they were</b>: your earlier workouts keep their weights exactly as you logged them (totals); the new boxes just show the weight of one dumbbell, or the plates without the bar.',es:'<b>Tus entrenos anteriores se quedan como estaban</b>: tus entrenos anteriores conservan los pesos tal como los registraste (totales); las cajas nuevas solo muestran el peso de una mancuerna, o los discos sin la barra.'}
+ ]},
+ {v:'v1.1.26',items:[
+  {i:'🏋️',en:'<b>Two dumbbells count double</b>: type the weight of one dumbbell and the app saves the total for both. Tap the dumbbell line (or ⋯ → Dumbbells) to switch to 1 dumbbell. Changing the bar or dumbbells keeps what you typed and recalculates the total.',es:'<b>Dos mancuernas cuentan doble</b>: escribe el peso de una mancuerna y la app guarda el total de las dos. Toca la línea de mancuernas (o ⋯ → Mancuernas) para cambiar a 1 mancuerna. Al cambiar la barra o las mancuernas, lo que escribiste se queda y el total se recalcula.'}
+ ]},
+ {v:'v1.1.25',items:[
+  {i:'🏋️',en:'<b>Bar weight is added for you</b>: barbell exercises start with the bar included (45 lb; EZ bar 20 lb). Type only the plates and the total is saved. Tap the bar line, or ⋯ → Bar weight, to change it for any exercise (the app remembers your choice).',es:'<b>El peso de la barra se suma solo</b>: los ejercicios con barra empiezan con la barra incluida (45 lb; barra Z 20 lb). Escribe solo los discos y se guarda el total. Toca la línea de la barra, o ⋯ → Peso de la barra, para cambiarla en cualquier ejercicio (la app recuerda tu elección).'}
+ ]},
+ {v:'v1.1.24',items:[
+  {i:'🩹',en:'<b>No more jumping to the top</b>: tapping weight or reps keeps the page where you are.',es:'<b>Adiós al salto hacia arriba</b>: al tocar el peso o las repeticiones, la página se queda donde estás.'}
+ ]},
  {v:'v1.1.23',items:[
   {i:'🩹',en:'<b>Search above the keyboard, for real</b>: the exercise picker no longer shifts when the keyboard opens, so the search bar and cursor stay together and no black gap is left.',es:'<b>El buscador sobre el teclado, ahora sí</b>: el selector de ejercicios ya no se mueve al abrir el teclado, así que la barra de búsqueda y el cursor quedan juntos y no sobra espacio negro.'}
  ]},

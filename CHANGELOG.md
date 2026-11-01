@@ -6,6 +6,22 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.27 — 2026-11-01
+- **Your old workouts stay as they were**: your earlier workouts keep their weights exactly as you logged them (totals); the new boxes just show the weight of one dumbbell, or the plates without the bar.
+  **Tus entrenos anteriores se quedan como estaban**: tus entrenos anteriores conservan los pesos tal como los registraste (totales); las cajas nuevas solo muestran el peso de una mancuerna, o los discos sin la barra.
+
+## v1.1.26 — 2026-11-01
+- **Two dumbbells count double**: type the weight of one dumbbell and the app saves the total for both. Tap the dumbbell line (or ⋯ → Dumbbells) to switch to 1 dumbbell. Changing the bar or dumbbells keeps what you typed and recalculates the total.
+  **Dos mancuernas cuentan doble**: escribe el peso de una mancuerna y la app guarda el total de las dos. Toca la línea de mancuernas (o ⋯ → Mancuernas) para cambiar a 1 mancuerna. Al cambiar la barra o las mancuernas, lo que escribiste se queda y el total se recalcula.
+
+## v1.1.25 — 2026-11-01
+- **Bar weight is added for you**: barbell exercises start with the bar included (45 lb; EZ bar 20 lb). Type only the plates and the total is saved. Tap the bar line, or ⋯ → Bar weight, to change it for any exercise (the app remembers your choice).
+  **El peso de la barra se suma solo**: los ejercicios con barra empiezan con la barra incluida (45 lb; barra Z 20 lb). Escribe solo los discos y se guarda el total. Toca la línea de la barra, o ⋯ → Peso de la barra, para cambiarla en cualquier ejercicio (la app recuerda tu elección).
+
+## v1.1.24 — 2026-11-01
+- **No more jumping to the top**: tapping weight or reps keeps the page where you are.
+  **Adiós al salto hacia arriba**: al tocar el peso o las repeticiones, la página se queda donde estás.
+
 ## v1.1.23 — 2026-11-01
 - **Search above the keyboard, for real**: the exercise picker no longer shifts when the keyboard opens, so the search bar and cursor stay together and no black gap is left.
   **El buscador sobre el teclado, ahora sí**: el selector de ejercicios ya no se mueve al abrir el teclado, así que la barra de búsqueda y el cursor quedan juntos y no sobra espacio negro.

@@ -809,7 +809,7 @@ function swapUse(id){
   if(SW.mode==='act'){
     const x=ACT&&ACT.ex[SW.i];if(!x)return;
     if(x.sets.some(s=>s.done)){toast(t('swapDone'));return;}
-    const e=exById(id);x.eid=id;x.n=e?e.en:id;x.sets=x.sets.map(()=>newSet());delete x.sg;
+    const e=exById(id);x.eid=id;x.n=e?e.en:id;x.sets=x.sets.map(()=>newSet());delete x.sg;delete x.bar;delete x.mul;x.v=2;{const b=barDef(id),m=mulDef(id);if(b>0)x.bar=b;if(m>1)x.mul=m;}
     if(x.tg){const sg=sugg(id,x.tg);if(sg&&sg.w!=null)x.sg=sg.w;}
     saveAct();sheetClose();render();toast(t('swapped'));return;
   }

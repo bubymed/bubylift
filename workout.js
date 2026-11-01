@@ -51,8 +51,68 @@ function startWorkout(o){
   saveAct();wake();tab='workout';renderTabs();render();window.scrollTo(0,0);
   if(!o)setTimeout(function(){if(ACT&&!ACT.ex.length)pickEx(null,true);},120);
 }
+/* workouts saved before the bar/dumbbell update already hold totals (you typed the sum of both dumbbells, the bar included): keep every number, only mark them as the new model / los entrenos guardados antes ya tienen totales (escribías la suma de las dos mancuernas, con la barra incluida): se conservan todos los números y solo se marcan como el modelo nuevo */
+function legacyFix(){
+  let ch=false;
+  (DATA.workouts||[]).forEach(wk=>wk.ex.forEach(x=>{
+    if(x.v)return;x.v=2;ch=true;
+    const e=exById(x.eid);
+    if(e&&e.m==='wr'&&e.e==='dumbbell'&&mulDef(x.eid)>1)x.mul=2; // old numbers were already the sum of both dumbbells: keep them, just show half per dumbbell / los números viejos ya eran la suma de las dos: se conservan, solo se muestra la mitad por mancuerna
+  }));
+  return ch;
+}
+/* barbell weight: you type the plates, the bar is added for you / peso de la barra: tú escribes los discos, la barra se suma sola */
+function barDef(eid){
+  if(SET.barPref&&SET.barPref[eid]!=null)return SET.barPref[eid];
+  const e=exById(eid);if(!e||e.m!=='wr'||e.e!=='barbell')return 0;
+  const n=(e.en||'').toLowerCase();
+  if(/\bez\b|ez-bar|curl bar/.test(n))return imp()?20/KG_LB:9;
+  return imp()?45/KG_LB:20;
+}
+function barOf(x){return x&&x.bar>0?x.bar:0;}
+/* dumbbells: you type the weight of one, the app counts both (or just one) / mancuernas: escribes el peso de una y la app cuenta las dos (o solo una) */
+function mulDef(eid){
+  if(SET.mulPref&&SET.mulPref[eid]!=null)return SET.mulPref[eid];
+  const e=exById(eid);if(!e||e.m!=='wr'||e.e!=='dumbbell')return 1;
+  return /single|one-?arm|one-?leg|unilateral|goblet|pullover|concentration|kickback|alternating|renegade|\bsplit\b/i.test(e.en||'')?1:2;
+}
+function mulOf(x){return x&&x.mul>1?x.mul:1;}
+function isDb(x){const e=exById(x.eid);return !!e&&e.m==='wr'&&e.e==='dumbbell'||mulOf(x)>1;}
+function mulMenu(i){
+  const x=ACT.ex[i];if(!x)return;const cur=mulOf(x);
+  sheet('<h3>'+esc(t('mulTitle'))+'</h3><p class="muted sm">'+esc(t('mulHelp'))+'</p><div class="menu"><button'+(cur===2?' class="on"':'')+' onclick="mulSet('+i+',2)">'+(cur===2?'✓ ':'')+esc(t('mul2'))+'</button><button'+(cur===1?' class="on"':'')+' onclick="mulSet('+i+',1)">'+(cur===1?'✓ ':'')+esc(t('mul1'))+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
+}
+/* change bar / dumbbell count: what you typed stays, the total follows / al cambiar barra o mancuernas: lo escrito se queda y el total se recalcula */
+function reScale(x,nb,nm){
+  const ob=barOf(x),om=mulOf(x);
+  x.sets.forEach(s=>{if(s.w!=null){const p=Math.max(0,(s.w-ob)/om);s.w=p*nm+nb;}});
+  if(x.sg!=null){const p=Math.max(0,(x.sg-ob)/om);x.sg=p*nm+nb;}
+  if(nb>0)x.bar=nb;else delete x.bar;
+  if(nm>1)x.mul=nm;else delete x.mul;
+}
+function mulSet(i,n){
+  const x=ACT.ex[i];if(!x)return;
+  reScale(x,barOf(x),n);
+  SET.mulPref=SET.mulPref||{};SET.mulPref[x.eid]=n>1?2:1;jset(K_SET,SET);
+  saveAct();sheetClose();render();
+}
+function barPresets(){return imp()?[0,15,20,25,35,45,55].map(v=>v/KG_LB):[0,7,10,15,20,25];}
+function barTxt(kg){return kg>0?wShow(kg)+' '+wUnit():t('barNone');}
+function barMenu(i){
+  const x=ACT.ex[i];if(!x)return;const cur=barOf(x);
+  sheet('<h3>'+esc(t('barTitle'))+'</h3><p class="muted sm">'+esc(t('barHelp'))+'</p><div class="menu">'+barPresets().map(v=>'<button'+(Math.abs(v-cur)<0.05?' class="on"':'')+' onclick="barSet('+i+','+v+')">'+(Math.abs(v-cur)<0.05?'✓ ':'')+esc(barTxt(v))+'</button>').join('')+'</div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
+}
+function barSet(i,kg){
+  const x=ACT.ex[i];if(!x)return;
+  reScale(x,kg>0?kg:0,mulOf(x));
+  SET.barPref=SET.barPref||{};SET.barPref[x.eid]=kg>0?kg:0;jset(K_SET,SET);
+  saveAct();sheetClose();render();
+}
 function addExTo(eid,nSets,nm,tg){
   const e=exById(eid),x={eid:eid,n:e?e.en:(nm||eid),sets:Array.from({length:Math.max(1,nSets||1)},()=>newSet())};
+  x.v=2; // new weight model: bar + dumbbells counted / modelo nuevo de peso: barra + mancuernas contadas
+  {const b=barDef(eid);if(b>0)x.bar=b;}
+  {const m=mulDef(eid);if(m>1)x.mul=m;}
   if(tg){x.tg=tg;const sg=sugg(eid,tg);if(sg&&sg.w!=null)x.sg=sg.w;}
   ACT.ex.push(x);
 }
@@ -185,18 +245,21 @@ function prBurst(i,j){
 }
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
+  const bar=m==='wr'?barOf(x):0,ml=m==='wr'?mulOf(x):1,pw=v=>v==null?'':wShow(Math.max(0,(v-bar)/ml));
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'">'+exImgs(x.eid,'this.remove()')+'</button>':'';
   let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
   h+=suggLine(x);
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
   h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'<button class="lnk-d" onclick="restPick('+i+')">⏱ '+(exRest(x)===0?t('restOff'):fmtClock(exRest(x)!=null?exRest(x):(SET.rest||90)))+'</button></div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
+  if(m==='wr'&&(bar>0||exById(x.eid)&&exById(x.eid).e==='barbell'))h+='<div class="barln"><button class="lnk-d" onclick="barMenu('+i+')">🏋 '+esc(bar>0?t('barOn',barTxt(bar)):t('barOff'))+'</button></div>';
+  if(m==='wr'&&isDb(x))h+='<div class="barln"><button class="lnk-d" onclick="mulMenu('+i+')">🏋 '+esc(t(ml>1?'mulOn':'mulOff'))+'</button></div>';
   h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span></div>';
   x.sets.forEach((s,j)=>{
     const ph=pv[j]||(pv.length?pv[pv.length-1]:null)||(j>0?x.sets[j-1]:null);
     let f1,f2,p1,p2,k1,k2;
     if(m==='t'){k1='t';k2='d';f1=s.t!=null?fmtNum(s.t):'';f2=dShow(s.d);p1=ph&&ph.t!=null?fmtNum(ph.t):'';p2=ph&&ph.d?dShow(ph.d):'';}
-    else{k1='w';k2='r';f1=wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?wShow(ph.w):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=wShow(x.sg);}
+    else{k1='w';k2='r';f1=m==='wr'?pw(s.w):wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?(m==='wr'?pw(ph.w):wShow(ph.w)):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=pw(x.sg);}
     const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" enterkeyhint="next" data-i="'+i+'" data-j="'+j+'" data-k="'+k+'" onfocus="this.select()" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
     const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+(d<0?'−':'+')+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
     const inp=inp0;
@@ -219,6 +282,7 @@ function sv(i,j,f,v){
     else if(f==='r'){n=parseInt(v,10);if(!(n>=0))n=null;}
     else n=numParse(v);
   }
+  if(f==='w'&&n!=null){const bx=ACT.ex[i];if(exMode(bx.eid)==='wr')n=n*mulOf(bx)+barOf(bx);}
   s[f]=n;
   if(n==null&&s.done){s.done=false;delete s.pr;const r=document.querySelectorAll('#exc'+i+' .srow:not(.hd)')[j];if(r){r.classList.remove('done');r.querySelectorAll('.in').forEach(q=>q.classList.remove('dn'));}}
   saveAct();updTop();
@@ -245,8 +309,8 @@ function stepSet(i,j,f,d){
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);if(m==='t')return;
   const pv=lastEx(x.eid),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
   if(f==='w'){
-    let b=s.w;if(b==null)b=(m==='wr'&&x.sg!=null)?x.sg:(ph&&ph.w!=null?ph.w:0);
-    const st=wInc();s.w=Math.max(0,Math.round((b+d*st)/st)*st);
+    const br=m==='wr'?barOf(x):0;let b=s.w;if(b==null)b=(m==='wr'&&x.sg!=null)?x.sg:(ph&&ph.w!=null?ph.w:br);
+    const st=wInc(),ml=m==='wr'?mulOf(x):1;let dv=Math.max(0,(b-br)/ml);dv=Math.max(0,Math.round((dv+d*st)/st)*st);s.w=dv*ml+br;
   }else{
     let b=s.r;if(b==null)b=ph&&ph.r!=null?ph.r:(x.tg&&x.tg.u==='r'?x.tg.lo:0);
     s.r=Math.max(0,Math.min(999,b+d));
@@ -325,7 +389,7 @@ function exMenu(i){
     (i>0?'<button onclick="exMove('+i+',-1)">↑ '+t('moveUp')+'</button>':'')+
     (i<ACT.ex.length-1?'<button onclick="exMove('+i+',1)">↓ '+t('moveDown')+'</button>':'')+
     '<button onclick="tasteLike(\''+x.eid+'\');exMenu('+i+')">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button onclick="tasteDis(\'act\','+i+')">'+ic('ban')+' '+t('tkDis')+'</button>'+
-    '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
+    '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+''+(exMode(x.eid)==='wr'?'<button onclick="barMenu('+i+')">🏋 '+t('barTitle')+'</button>':'')+(exMode(x.eid)==='wr'&&isDb(x)?'<button onclick="mulMenu('+i+')">🏋 '+t('mulTitle')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
 function exMove(i,d){const a=ACT.ex,j=i+d;if(j<0||j>=a.length)return;const x=a[i];a[i]=a[j];a[j]=x;saveAct();sheetClose();render();}
 function rmSet(i){const snap=JSON.stringify(ACT),s=ACT.ex[i].sets;if(s.length>1)s.pop();saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
@@ -349,7 +413,7 @@ function wkCheer(wk,prs){
 }
 function finishWk(){
   const end=Date.now();
-  const ex=ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})})).filter(x=>x.sets.length);
+  const ex=ACT.ex.map(x=>{const o={eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})};if(x.v)o.v=x.v;if(x.mul>1)o.mul=x.mul;if(x.bar>0)o.bar=x.bar;return o;}).filter(x=>x.sets.length);
   const t0=actStart()||ACT.t0,dur=actStart()?actMs():end-t0,wk={id:ACT.id,t:t0,end:t0+dur,name:(ACT.name||'').trim()||autoName(t0),note:(ACT.note||'').trim(),ex:ex};
   if(ACT.pl!=null){wk.pl=ACT.pl;if(DATA.plan)DATA.plan.cur=(ACT.pl+1)%DATA.plan.n;}
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
