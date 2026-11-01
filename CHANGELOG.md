@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.24 — 2026-11-01
+- **No more jumping to the top**: tapping weight or reps keeps the page where you are.
+  **Adiós al salto hacia arriba**: al tocar el peso o las repeticiones, la página se queda donde estás.
+
 ## v1.1.23 — 2026-11-01
 - **Search above the keyboard, for real**: the exercise picker no longer shifts when the keyboard opens, so the search bar and cursor stay together and no black gap is left.
   **El buscador sobre el teclado, ahora sí**: el selector de ejercicios ya no se mueve al abrir el teclado, así que la barra de búsqueda y el cursor quedan juntos y no sobra espacio negro.
