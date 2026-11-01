@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.20 — 2026-11-01
+- **Exercise picker with keyboard**: when you type in the search, only the search bar stays in view; the keyboard now covers the tab bar.
+  **Selector de ejercicios con teclado**: al escribir en el buscador, solo queda a la vista la barra de búsqueda; el teclado ahora tapa la barra inferior.
+
 ## v1.1.19 — 2026-11-01
 - **Add set / Add exercise fixed**: the buttons no longer delete exercises, and a new set starts with the previous set's weight and reps — just change it or keep it.
   **Agregar serie / ejercicio arreglado**: los botones ya no borran ejercicios, y la serie nueva empieza con el peso y las repeticiones de la anterior; solo cámbialos o déjalos.

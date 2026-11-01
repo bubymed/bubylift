@@ -379,6 +379,8 @@ main>.lnk-d{display:flex;margin:14px auto 0;color:var(--txt)}
 #sheetov.pks{inset:auto;left:0;right:0;top:var(--vvt,0px);height:var(--vvh,100dvh);align-items:flex-end}
 #sheet.pks{display:flex;flex-direction:column;max-height:calc(var(--vvh,100dvh) - 24px);height:calc(var(--vvh,100dvh) - 24px);overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
 body.kbd #sheet.pks{padding-bottom:10px}
+/* keyboard open in the picker: only the search stays in view; the keyboard may cover the tab bar and the add button / con el teclado abierto en el selector solo queda a la vista el buscador; el teclado puede tapar la barra inferior y el botón de agregar */
+body.kbd:has(#sheet.pks) #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skbar,body.kbd:has(#sheet.pks) #sheet.pks .pk-bot .pickadd{display:none}
 #sheet.pks .pick{display:flex;flex-direction:column;flex:1;min-height:0}
 #sheet.pks .pick>*{flex:none}#sheet.pks .pick>.pk-grid{flex:1 1 0}
 
