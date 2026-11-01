@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.12 — 2026-10-31
+- **Red ✕ to delete your plan** on the plan card and in the plan screen (it still asks to confirm; your logged workouts are kept). Removing an exercise with logged sets or from your plan now asks first too.
+  **✕ rojo para eliminar tu plan** en la tarjeta del plan y en la pantalla del plan (sigue pidiendo confirmar; tus entrenamientos registrados se conservan). Quitar un ejercicio con series registradas o de tu plan también pregunta antes.
+
 ## v1.1.11 — 2026-10-31
 - **Red ✕ delete button** in the top-right corner of workouts in History, routines, body entries, and exercises in a workout or routine editor — no more hunting for the delete option.
   **Botón rojo ✕ para eliminar** en la esquina superior derecha de los entrenamientos del Historial, rutinas, registros de cuerpo y ejercicios dentro de un entrenamiento o del editor de rutinas — ya no hay que buscar la opción de eliminar.
