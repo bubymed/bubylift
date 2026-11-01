@@ -983,6 +983,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(ev("(function(){var d=clClean({set:{t:5,v:{units:'metric',evil:1,rest:90}},act:{u:7,d:{ex:[{eid:'bench',sets:[]}]}}});return d.set.v.units==='metric'&&d.set.v.evil===undefined&&d.set.t===5&&d.act.u===7&&d.act.d.ex.length===1;})()"),'cloud copy keeps only the allowed settings and a valid workout');
   ok(ev("(function(){var d=clClean({act:{u:3,d:{nope:1}}});return d.act.u===3&&d.act.d===null;})()"),'a broken workout in the cloud copy is treated as no workout');
   ok(ev("(function(){var l=clClean({});l.set={t:1,v:{units:'imperial'}};var r=clClean({});r.set={t:9,v:{units:'metric'}};return clMerge(l,r).set.v.units==='metric'&&clMerge(r,l).set.v.units==='metric';})()"),'the most recently changed settings win on both phones');
+  ok(ev("(function(){var l=clClean({});l.tomb={pl77:5};l._u=9;var r=clClean({});r.plan={t0:77};r._u=1;return clMerge(l,r).plan===null&&clMerge(r,l).plan===null;})()"),'a deleted plan is not brought back by the cloud copy');
   ok(ev("(function(){var l=clClean({});l.act={u:10,d:null};var r=clClean({});r.act={u:4,d:{ex:[{eid:'x',sets:[]}]}};return clMerge(l,r).act.d===null&&clMerge(r,l).act.d===null;})()"),'finishing a workout beats an older copy of it on another phone');
   ev("SET._au=0;ACT=null;saveAct();var __a=SET._au;startWorkout({name:'sync',ex:[{eid:'bench',sets:2}]});");
   ok(ev("SET._au")>0&&ev("clActOut().d.ex.length")===1,'starting a workout stamps it for sync');

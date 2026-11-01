@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.14 — 2026-10-31
+- **Deleted plan stays deleted**: after you delete your plan, signing in or syncing no longer brings it back from the cloud copy.
+  **El plan eliminado se queda eliminado**: después de borrar tu plan, al abrir la app o sincronizar ya no vuelve desde la copia de la nube.
+
 ## v1.1.13 — 2026-10-31
 - **Redesigned "My plan" screen**: a bold header with your week progress and a big "Start next workout" button, swipeable day cards, large exercise cards with animated demos and a ▶ how-to button, collapsible Why / Warm-up / Cool-down, and plan options as tappable tiles.
   **Pantalla "Mi plan" rediseñada**: encabezado llamativo con tu progreso de la semana y un botón grande "Empezar siguiente entrenamiento", tarjetas de día deslizables, tarjetas grandes de ejercicio con demos animadas y botón ▶ de cómo hacerlo, secciones plegables de Por qué / Calentamiento / Enfriamiento, y las opciones del plan como botones tipo mosaico.
