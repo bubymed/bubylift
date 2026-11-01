@@ -2,6 +2,12 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.16',items:[
+  {i:'chart-bar',en:'<b>Training load indicator</b> in Body: compares this week\'s hard sets with your last 3 weeks and flags Light, Optimal, High or Overload (big jumps, volume rising for weeks, or over 20 sets for one muscle), with a short tip and a 4-week chart.',es:'<b>Indicador de carga de entrenamiento</b> en Body: compara las series duras de esta semana con tus últimas 3 semanas y marca Ligera, Óptima, Alta o Sobrecarga (saltos grandes, volumen subiendo por semanas, o más de 20 series de un músculo), con un consejo corto y una gráfica de 4 semanas.'}
+ ]},
+ {v:'v1.1.15',items:[
+  {i:'sparkles',en:'<b>Redesigned Mobility and Muscle Recovery</b>: Mobility now has a bold header with your session stats and previews, icon tiles for focus, big time buttons and animated move cards. Recovery shows an overall progress ring and a ring per muscle — tap a ready muscle to train it.',es:'<b>Movilidad y Recuperación muscular rediseñadas</b>: Movilidad ahora tiene un encabezado llamativo con las estadísticas y vistas previas de tu sesión, mosaicos con iconos para el enfoque, botones grandes de tiempo y tarjetas de movimientos animadas. Recuperación muestra un anillo de progreso general y uno por músculo — toca un músculo listo para entrenarlo.'}
+ ]},
  {v:'v1.1.14',items:[
   {i:'trash',en:'<b>Deleted plan stays deleted</b>: after you delete your plan, signing in or syncing no longer brings it back from the cloud copy.',es:'<b>El plan eliminado se queda eliminado</b>: después de borrar tu plan, al abrir la app o sincronizar ya no vuelve desde la copia de la nube.'}
  ]},

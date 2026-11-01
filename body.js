@@ -34,12 +34,48 @@ function recData(now){
     r.pct=Math.max(0,Math.min(100,Math.round(el/win*100)));r.left=Math.max(0,Math.ceil((win-el)/36e5));});
   return{g:o,last:lastT,days:lastT?Math.floor((now-lastT)/864e5):null,ready:REC_G.filter(g=>o[g].pct==null||o[g].pct>=100).length};
 }
+/* training load: hard sets per week, this week vs your last 3 weeks, and per-muscle weekly sets / carga de entrenamiento: series duras por semana */
+function loadData(now){
+  now=now||Date.now();const W=7*864e5,wk=[0,0,0,0],mus={};REC_G.forEach(g=>{mus[g]=0;});
+  DATA.workouts.forEach(w=>{
+    const end=w.end||w.t,age=now-end;if(age<0||age>=4*W)return;const k=Math.floor(age/W);
+    w.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(!n)return;wk[k]+=n;if(k===0&&g&&mus[g]!=null)mus[g]+=n;});
+  });
+  const a=wk[0],ch=(wk[1]+wk[2]+wk[3])/3,ratio=ch>0?a/ch:null;
+  const up=(x,y)=>x>0&&y>=x*1.1,c4=up(wk[3],wk[2])&&up(wk[2],wk[1])&&up(wk[1],wk[0]),c3=up(wk[2],wk[1])&&up(wk[1],wk[0]);
+  const hi=REC_G.filter(g=>mus[g]>20).sort((x,y)=>mus[y]-mus[x]),top=hi.length?mus[hi[0]]:0;
+  let lv='ok';
+  if(a<1)lv='none';
+  else if((ratio!=null&&ratio>=1.5&&a>=20)||top>=26||c4)lv='over';
+  else if((ratio!=null&&ratio>=1.3&&a>=15)||hi.length||c3)lv='high';
+  else if(ratio!=null&&ch>=10&&ratio<.6)lv='low';
+  return{wk:wk,mus:mus,hi:hi,lv:lv,ratio:ratio,climb:c4?4:(c3?3:0)};
+}
+function loadCard(){
+  const d=loadData();if(d.lv==='none')return'';
+  const mx=Math.max.apply(null,d.wk.concat([1])),why=[];
+  if(d.ratio!=null&&d.ratio>=1.3)why.push(t('ldRatio',Math.min(200,Math.round((d.ratio-1)*100))));
+  if(d.climb)why.push(t('ldClimb',d.climb));
+  if(d.hi.length)why.push(t('ldMus',d.hi.map(g=>t('g_'+g)+' ('+d.mus[g]+')').join(', ')));
+  return'<div class="card ldc '+d.lv+'"><div class="lbl">'+t('ldT')+'</div><div class="ld-top"><span class="ld-chip">'+t('ldL_'+d.lv)+'</span><b>'+t('ldSets',d.wk[0])+'</b></div><p class="ld-msg">'+t('ldM_'+d.lv)+'</p>'+
+    '<div class="ld-bars">'+[3,2,1,0].map(k=>'<div class="'+(k===0?'now':'')+'"><u style="height:'+Math.max(4,Math.round(d.wk[k]/mx*100))+'%"></u><small>'+d.wk[k]+'</small><em>'+(k===0?t('ldNow'):t('ldAgo',k))+'</em></div>').join('')+'</div>'+
+    (why.length?'<ul class="ld-why">'+why.map(x=>'<li>'+x+'</li>').join('')+'</ul>':'')+
+    '<details class="dtl pv-dt"><summary><b>'+t('ldInfoT')+'</b></summary><p class="muted sm">'+t('ldInfo')+'</p></details></div>';
+}
 function recCard(){
   const r=recData();
   if(!r.last)return'<div class="card rec"><div class="lbl">'+t('recT')+'</div><p class="muted sm">'+t('recNone')+'</p></div>';
-  return'<div class="card rec"><div class="lbl">'+t('recT')+'</div><div class="rec-top"><span><b>'+(r.days===0?t('recToday'):r.days)+'</b><small>'+t('recDays')+'</small></span><span><b>'+r.ready+'/'+REC_G.length+'</b><small>'+t('recReady')+'</small></span></div>'+
-    '<div class="rec-grid">'+REC_G.map(g=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low');
-      return'<div class="rec-t '+c+'"><b>'+t('g_'+g)+'</b><i><u style="width:'+p+'%"></u></i><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small></div>';}).join('')+'</div></div>';
+  const vals=REC_G.map(g=>r.g[g].pct==null?100:r.g[g].pct),avg=Math.round(vals.reduce((a,c)=>a+c,0)/vals.length);
+  return'<div class="rv"><div class="rv-hero"><div class="rv-ring" style="--p:'+avg+'"><b>'+avg+'<small>%</small></b></div><div class="rv-ht"><span class="hero-e">'+t('recT')+'</span><h3>'+t('recPct',avg)+'</h3>'+
+    '<p>'+r.ready+'/'+REC_G.length+' '+t('recReady')+' · '+(r.days===0?t('recLastToday'):r.days+' '+t('recDays'))+'</p></div></div>'+
+    '<div class="rv-leg"><span class="ok">'+t('rlOk')+'</span><span class="mid">'+t('rlMid')+'</span><span class="low">'+t('rlLow')+'</span></div>'+
+    '<div class="rv-grid">'+REC_G.map((g,k)=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low');
+      return'<button class="rv-t '+c+'" style="--p:'+p+';--i:'+k+'" onclick="recTap(\''+g+'\')"><span class="rv-r"><em>'+(p>=100?'✓':p+'%')+'</em></span><b>'+t('g_'+g)+'</b><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small></button>';}).join('')+'</div><p class="muted sm rv-hint">'+t('recTapGo')+'</p></div>';
+}
+function recTap(g){
+  const r=recData(),x=r.g[g];
+  if(g==='core'||x.pct==null||x.pct>=100){recWorkout(g==='core'?null:g);return;}
+  toast(t('g_'+g)+': '+t('recIn',x.left));
 }
 /* ---------- general strength score (e1RM ÷ body weight vs. standards) / fuerza general (1RM estimado ÷ peso corporal) ---------- */
 const STR_L=[
@@ -76,8 +112,8 @@ function strCard(){
   return h;
 }
 /* a workout from the muscles that have recovered / un entrenamiento con los músculos ya recuperados */
-function recWorkout(){
-  const r=recData(),rd=REC_G.filter(g=>g!=='core'&&(r.g[g].pct==null||r.g[g].pct>=100)).sort((a,b)=>(r.g[a].t||0)-(r.g[b].t||0)).slice(0,3);
+function recWorkout(only){
+  const r=recData(),rd=only?[only]:REC_G.filter(g=>g!=='core'&&(r.g[g].pct==null||r.g[g].pct>=100)).sort((a,b)=>(r.g[a].t||0)-(r.g[b].t||0)).slice(0,3);
   if(!rd.length){toast(t('recNoneRdy'));return;}
   const use={};DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{use[x.eid]=(use[x.eid]||0)+1;}));
   const ex=[];
@@ -98,7 +134,7 @@ function recCta(){
 function vBody(){
   const today=dInput(Date.now()),last=DATA.body.find(b=>b.w),sg=d=>(d>0?'+':'')+fmtNum(d,1);
   const toU=kg=>imp()?kg*KG_LB:kg;
-  let h=recCard()+'<div class="card form bwhero"><div class="lbl c">'+t('bwTitle')+'</div>'+
+  let h=recCard()+loadCard()+'<div class="card form bwhero"><div class="lbl c">'+t('bwTitle')+'</div>'+
     '<div class="bw-row"><button class="bw-st" aria-label="'+esc(t('bwMinus'))+'" onclick="bwStep(-0.1)">−</button>'+
     '<span class="bw-f"><input id="bw" class="bw-in" type="text" inputmode="decimal" autocomplete="off" placeholder="'+esc(last?wShow(last.w):'0.0')+'"><b class="bw-u">'+wUnit()+'</b></span>'+
     '<button class="bw-st" aria-label="'+esc(t('bwPlus'))+'" onclick="bwStep(0.1)">+</button></div>'+
