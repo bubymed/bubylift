@@ -2,6 +2,12 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.21',items:[
+  {i:'↩️',en:'<b>Un-mark a set</b>: the exercise menu (⋯) can un-mark the last done set, and removing an exercise asks first whenever it has numbers typed in.',es:'<b>Desmarcar una serie</b>: el menú del ejercicio (⋯) puede desmarcar la última serie hecha, y quitar un ejercicio pregunta primero si ya tiene números escritos.'}
+ ]},
+ {v:'v1.1.20',items:[
+  {i:'⌨️',en:'<b>Exercise picker with keyboard</b>: when you type in the search, only the search bar stays in view; the keyboard now covers the tab bar.',es:'<b>Selector de ejercicios con teclado</b>: al escribir en el buscador, solo queda a la vista la barra de búsqueda; el teclado ahora tapa la barra inferior.'}
+ ]},
  {v:'v1.1.19',items:[
   {i:'🛠',en:'<b>Add set / Add exercise fixed</b>: the buttons no longer delete exercises, and a new set starts with the previous set\'s weight and reps — just change it or keep it.',es:'<b>Agregar serie / ejercicio arreglado</b>: los botones ya no borran ejercicios, y la serie nueva empieza con el peso y las repeticiones de la anterior; solo cámbialos o déjalos.'}
  ]},
