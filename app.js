@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.9';
+const APP_VER='v1.1.10';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -201,7 +201,7 @@ function wnShow(force){
   if(!list.length){if(!force&&SET.wnSeen!==APP_VER){SET.wnSeen=APP_VER;saveSet();}return;}
   const items=list.flatMap(e=>e.items.map(x=>Object.assign({v:e.v},x)));
   sheet('<div class="wn"><div class="wn-k">'+(force?'':t('updated')+' · ')+APP_VER+'</div><h3>'+t('whatsNew')+'</h3>'+
-    items.map(x=>'<div class="wn-i"><span class="wn-ic">'+x.i+'</span><div>'+(LANG==='es'?x.es:x.en)+'</div></div>').join('')+
+    items.map(x=>'<div class="wn-i"><span class="wn-ic">'+(ic(x.i)||x.i)+'</span><div>'+(LANG==='es'?x.es:x.en)+'</div></div>').join('')+
     '<button class="btn pri wide" onclick="wnDone()">'+t('gotIt')+'</button></div>');
 }
 function wnInit(n){

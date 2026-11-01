@@ -6,6 +6,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.10 — 2026-10-31
+- **What's new popup shows real icons**: the icon names ("share", "stopwatch"…) that appeared as text are now drawn as icons.
+  **Novedades muestra los iconos de verdad**: los nombres de icono ("share", "stopwatch"…) que salían como texto ahora se dibujan como iconos.
+- **Better demo animations**: redone Frog Pump, Hand-Release Push-Up, Clamshell, Fire Hydrant, Banded Bridge, Kettlebell Halo (three versions), Speed Ladder, High Knees, Sprint and Shuttle Run.
+  **Mejores animaciones**: rehechas Frog Pump, Flexiones con liberación de manos, Clamshell, Fire Hydrant, Puente con banda, Kettlebell Halo (tres versiones), Escalera de velocidad, Rodillas altas, Sprint y Shuttle.
+
 ## v1.1.9 — 2026-10-31
 - **73 exercises now have an animated demo**: Burpee, Bird Dog, Bear Crawl, band, stability-ball, balance, power and military drills and more show a looping 3D-mannequin animation on a gym background (cached for offline).
   **73 ejercicios ahora tienen demo animada**: Burpee, Bird Dog, Bear Crawl, y los de banda, pelota de estabilidad, balance, potencia y militares muestran una animación en bucle con un maniquí 3D en un gimnasio (queda guardada para usar sin internet).
