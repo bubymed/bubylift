@@ -647,7 +647,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   const rt=ev("cleanPlan(JSON.parse(JSON.stringify(DATA.plan)))");
   ok(rt&&rt.ds.length===4,'plan survives export/import sanitizing');
   ok(ev("cleanPlan({goal:'x',n:3,lvl:'new',t0:1,ds:[]})")===null&&ev("cleanPlan('<script>')")===null,'bad plans are rejected');
-  w.planOpen();ok(/My plan/.test(sheetHtml())&&/daytabs/.test(sheetHtml())&&/Edit ›/.test(sheetHtml()),'plan sheet shows day tabs and tappable exercises');w.sheetClose();
+  w.planOpen();ok(/My plan/.test(sheetHtml())&&/pv-days/.test(sheetHtml())&&/pv-ex/.test(sheetHtml())&&/pv-go/.test(sheetHtml()),'plan sheet shows day tabs and tappable exercises');w.sheetClose();
   ev("tab='workout';render()");
   ev("setLang('es')");ok(/Te toca/.test(main()),'plan card in Spanish');ev("setLang('en')");
   ev("ACT=null;saveAct();render()");

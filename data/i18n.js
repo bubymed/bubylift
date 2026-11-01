@@ -143,7 +143,7 @@ const STR={
  planInfo:['Goal: {0} · {1} days a week · {2}','Meta: {0} · {1} días por semana · {2}'],
  planNote:['A general plan, not personal medical or coaching advice. Rest on the other days, start light and stop if something hurts.','Un plan general, no un consejo médico ni de entrenamiento personal. Descansa los demás días, empieza ligero y para si algo te duele.'],
  prefs:['Preferences','Preferencias'],
- planExN:['{0} exercises','{0} ejercicios'],planMoreN:['+{0} more','+{0} más'],planOpts:['Plan options','Opciones del plan'],tipsT:['Tips and info','Consejos e información'],guideB:['Guide','Guía'],
+ pvNext:['Start next workout','Empezar siguiente entrenamiento'],pvWeek:['This week · {0} of {1} done','Esta semana · {0} de {1} hechos'],pvNextB:['Next','Siguiente'],pvMin:['~{0} min','~{0} min'],pvWhy:['Why this plan','Por qué este plan'],planInfo2:['{0} days a week · level: {1}','{0} días por semana · nivel: {1}'], planExN:['{0} exercises','{0} ejercicios'],planMoreN:['+{0} more','+{0} más'],planOpts:['Plan options','Opciones del plan'],tipsT:['Tips and info','Consejos e información'],guideB:['Guide','Guía'],
  planDel:['Delete this plan','Eliminar este plan'],
  delPlan:['Delete your plan? Your logged workouts stay; the plan and its check-ins are removed.','¿Eliminar tu plan? Tus entrenamientos registrados se conservan; se borran el plan y sus revisiones.'],
  planDeleted:['Plan deleted','Plan eliminado'],

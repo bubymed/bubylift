@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.13 — 2026-10-31
+- **Redesigned "My plan" screen**: a bold header with your week progress and a big "Start next workout" button, swipeable day cards, large exercise cards with animated demos and a ▶ how-to button, collapsible Why / Warm-up / Cool-down, and plan options as tappable tiles.
+  **Pantalla "Mi plan" rediseñada**: encabezado llamativo con tu progreso de la semana y un botón grande "Empezar siguiente entrenamiento", tarjetas de día deslizables, tarjetas grandes de ejercicio con demos animadas y botón ▶ de cómo hacerlo, secciones plegables de Por qué / Calentamiento / Enfriamiento, y las opciones del plan como botones tipo mosaico.
+
 ## v1.1.12 — 2026-10-31
 - **Red ✕ to delete your plan** on the plan card and in the plan screen (it still asks to confirm; your logged workouts are kept). Removing an exercise with logged sets or from your plan now asks first too.
   **✕ rojo para eliminar tu plan** en la tarjeta del plan y en la pantalla del plan (sigue pidiendo confirmar; tus entrenamientos registrados se conservan). Quitar un ejercicio con series registradas o de tu plan también pregunta antes.

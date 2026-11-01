@@ -613,32 +613,65 @@ function planStart(i){
   startWorkout({name:dayName(i),pl:i,ex:p.ds[i].ex.map(e=>({eid:e.eid,sets:e.sets,tg:{lo:e.lo,hi:e.hi,u:e.u,nt:e.nt,tp:e.tp,rs:e.rs,ss:e.ss,sec:e.sec}}))});
 }
 
+
+/* ---------- "My plan" screen helpers / ayudas de la pantalla Mi plan ---------- */
+function pvWeekDone(k){const ws=weekStart();return planDone().some(w=>w.pl===k&&w.t>=ws);}
+function pvMins(d){let s=0;d.ex.forEach(e=>{s+=e.sets*((e.u==='m'?Math.max(30,e.hi*60):45)+(e.rs==null?60:e.rs));});return Math.max(10,Math.round(s/60/5)*5);}
+function pvMiniTh(id){return typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id)?'<i style="background-image:url(img/ex/'+id+'-0.jpg)"></i>':'<i class="no"></i>';}
+function pvTh(id){
+  if(typeof exAnimOn==='function'&&exAnimOn(id))return'<span class="pv-th" style="background-image:url(img/ex/a/'+id+'.webp)"></span>';
+  if(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id))return'<span class="pv-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>';
+  return'<span class="pv-th pv-no">'+ic('barbell')+'</span>';
+}
+function planExCards(d,di){
+  let last='',n=0;
+  return d.ex.map((e,ei)=>{
+    let h='';
+    if(e.sec&&e.sec!==last){h+='<div class="secl">'+t('sec_'+e.sec)+'</div>';}
+    last=e.sec||last;
+    const ss=optSsLabel(d,ei),ln=optLine(e);
+    return h+'<div class="pv-ex" role="button" tabindex="0" style="--i:'+(n++)+'" onclick="planEdit('+di+','+ei+')">'+pvTh(e.eid)+
+      '<div class="pv-b"><b>'+(ss?'<i class="ssl">'+ss+'</i>':'')+(e.mn?'<i class="mnl" title="'+esc(t('mainT'))+'">★</i> ':'')+esc(exName(e.eid))+'</b>'+
+      '<div class="pv-pills"><span class="pv-p">'+esc(tgText(e))+'</span>'+(ln?'<span class="pv-p2">'+esc(ln)+'</span>':'')+'</div>'+
+      (e.rz?'<small class="rz">↳ '+esc(rzText(e))+'</small>':'')+(e.cn?'<small class="warnt">⚠ '+esc(t('injCare',jointNames(e.cn)))+'</small>':'')+'</div>'+
+      '<button class="pv-play" onclick="event.stopPropagation();howOpen(\''+e.eid+'\',\'planOpen\')" aria-label="'+esc(t('howTo'))+'">'+ic('help-circle')+'</button></div>';
+  }).join('');
+}
+
 /* ---------- full plan view and editing ---------- */
 let PV=0;
 function planOpen(d){
   const p=DATA.plan;if(!p){planSetup();return;}
   if(typeof d==='number')PV=d;if(PV<0||PV>=p.ds.length)PV=0;
   const pr=p.prof,i=PV;
-  let h='<div class="form"><div class="pick-h"><h3>'+t('planMine')+'</h3>'+xBtn('planDelAsk()',1)+'<button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
-    '<p class="muted sm">'+t('planInfo',goalTxt(p.prof),p.n,t('pl_'+p.lvl))+'</p>'+
-    (p.ph?'<p class="sm"><b>'+esc(phLine(p))+'</b> <button class="btn sm" onclick="phOpen()">'+ic('target')+' '+t('phBtn')+'</button></p>':'')+planWhyCard(p)+
-    (pr.focus.length?'<p class="muted sm">'+t('planFocus',pr.focus.map(k=>t('fm_'+k)).join(', '))+'</p>':'')+
-    (pr.skills.length?'<p class="muted sm">'+t('planSkill',pr.skills.map(k=>t('sk_'+k)).join(', '))+'</p>':'')+
-    (pr.inj.length?'<p class="muted sm">⚠ '+t('planInj',pr.inj.map(k=>t('inj_'+k)).join(', '))+'</p>':'')+
+  const nx=planNext(),wk=planWeek(),d0=p.ds[i];
+  let h='<div class="form pv"><div class="pick-h"><h3>'+t('planMine')+'</h3>'+xBtn('planDelAsk()',1)+'<button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+    /* hero: goal, week progress, big start button / tarjeta principal */
+    '<div class="pv-hero"><div class="pv-k">'+esc(goalTxt(pr))+'</div><div class="pv-big">'+esc(t('planInfo2',p.n,t('pl_'+p.lvl)))+'</div>'+
+    '<div class="pv-week" aria-label="'+esc(t('pvWeek',wk,p.n))+'">'+p.ds.map((x,k)=>'<span class="pv-dot'+(pvWeekDone(k)?' on':'')+(k===nx?' nx':'')+'" style="--i:'+k+'">'+(pvWeekDone(k)?'✓':(k+1))+'</span>').join('')+'</div>'+
+    '<div class="pv-wl">'+esc(t('pvWeek',wk,p.n))+'</div>'+
+    '<button class="pv-go" onclick="planStart('+nx+')">▶ '+t('pvNext')+' · '+esc(dayName(nx).split(' · ')[0])+'</button>'+
+    (p.ph?'<div class="pv-ph"><span>'+esc(phLine(p))+'</span><button onclick="phOpen()">'+ic('target')+' '+t('phBtn')+'</button></div>':'')+'</div>'+
+    ((pr.focus.length||pr.skills.length||pr.inj.length)?'<div class="pv-tags">'+pr.focus.map(k=>'<span>'+ic('target')+' '+esc(t('fm_'+k))+'</span>').join('')+pr.skills.map(k=>'<span>'+ic('bolt')+' '+esc(t('sk_'+k))+'</span>').join('')+(pr.inj.length?'<span class="w">⚠ '+esc(t('planInj',pr.inj.map(k=>t('inj_'+k)).join(', ')))+'</span>':'')+'</div>':'')+
     (pr.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'')+
-    '<div class="chips wrap daytabs">'+p.ds.map((d,k)=>'<button class="chip'+(k===i?' on':'')+'" onclick="planOpen('+k+')">'+esc(dayName(k).split(' · ')[0])+'</button>').join('')+'</div>'+
-    '<h3 class="dayh">'+esc(dayName(i))+' <button class="ico" onclick="dayRen('+i+')" aria-label="'+esc(t('dayRen'))+'">✎</button></h3>'+(p.ds[i].g?'<p class="muted sm daytag">'+esc(t('pg_'+p.ds[i].g))+'</p>':'')+wyCard(p.ds[i])+(p.ph?optWarm(p.ds[i],p):'')+planExList(p.ds[i],i,true)+(p.ph?optWarm(p.ds[i],p,true):'')+
-    '<div class="row"><button class="btn pri" onclick="planStart('+i+')">▶ '+t('planStart')+'</button><button class="btn" onclick="planAddEx('+i+')">＋ '+t('addEx')+'</button></div>';
+    (p.ph?'<details class="dtl pv-dt"><summary>'+t('pvWhy')+'</summary>'+planWhyCard(p)+'</details>':'')+
+    /* day cards / tarjetas de día */
+    '<div class="pv-days">'+p.ds.map((d,k)=>'<button class="pv-day'+(k===i?' on':'')+(pvWeekDone(k)?' done':'')+'" onclick="planOpen('+k+')"><span class="pv-dk">'+esc(dayName(k).split(' · ')[0])+(k===nx?'<em>'+t('pvNextB')+'</em>':(pvWeekDone(k)?'<em class="ok">✓</em>':''))+'</span><b>'+esc(dayName(k).split(' · ').slice(1).join(' · '))+'</b><span class="pv-mini">'+d.ex.slice(0,4).map(e=>pvMiniTh(e.eid)).join('')+'</span></button>').join('')+'</div>'+
+    '<div class="pv-dh"><div><div class="pv-dn">'+esc(dayName(i))+'<button class="ico" onclick="dayRen('+i+')" aria-label="'+esc(t('dayRen'))+'">✎</button></div>'+
+    '<div class="pv-sub">'+t('planExN',d0.ex.length)+' · '+t('nSetsT',d0.ex.reduce((a,e)=>a+e.sets,0))+' · '+t('pvMin',pvMins(d0))+(d0.g?' · '+esc(t('pg_'+d0.g)):'')+'</div></div></div>'+
+    (d0.wy&&d0.wy.length?'<details class="dtl pv-dt"><summary>'+t('wyT')+'</summary>'+wyCard(d0)+'</details>':'')+(p.ph?optWarm(d0,p,false,true):'')+planExCards(d0,i)+(p.ph?optWarm(d0,p,true,true):'')+
+    '<div class="row pv-act"><button class="btn pri" onclick="planStart('+i+')">▶ '+t('planStart')+'</button><button class="btn" onclick="planAddEx('+i+')">＋ '+t('addEx')+'</button></div>';
   let tips='';
   const gs=goalsOf(pr),hyg=gs.filter(isHy)[0];
   if(gs.indexOf('runner')>=0)tips+='<h4>'+t('runT')+'</h4><p class="sm">'+t('runTips1')+'</p><p class="sm">'+t('runTips2')+'</p>';
   if(gs.indexOf('bodybuilding')>=0)tips+='<h4>'+t('bbT')+'</h4><p class="sm">'+t('bbTips1')+'</p><p class="sm">'+t('bbTips2')+'</p>';
   if(hyg)tips+='<h4>'+t(hyg==='military'?'hyT':'hyT2')+'</h4>'+(pr.test==='aft'?'<p class="sm">'+t('hyAft')+'</p><div class="row"><button class="btn sm" onclick="aftOpen()">'+t('afT')+'</button><button class="btn sm" onclick="simStart(\'aft\')">'+t('sim_aft')+'</button></div>':'')+(pr.test==='usmc'?'<p class="sm">'+t('hyUsmc')+'</p><div class="row"><button class="btn sm" onclick="simStart(\'pft\')">'+t('sim_pft')+'</button><button class="btn sm" onclick="simStart(\'cft\')">'+t('sim_cft')+'</button></div>':'')+'<p class="sm">'+t('hyOrder')+'</p><p class="sm">'+t('hyRun')+'</p><p class="muted sm">'+t('hyOfficial')+'</p>';
   tips+='<h4>'+t('guideT')+'</h4><p class="sm">'+t('guideWarm')+'</p><p class="sm">'+t('guideRest')+'</p><p class="sm">'+t('guideEffort')+'</p><p class="sm">'+t('guideProg')+'</p><p class="muted sm">'+t('planNote')+'</p>';
-  h+='<div class="lbl">'+t('planOpts')+'</div><div class="row stack"><button class="btn" onclick="planAnother()">'+ic('arrows-shuffle')+' '+t('anBtn')+'</button><button class="btn" onclick="remOpen()">'+ic('calendar')+' '+t('rmT')+'</button><button class="btn" onclick="tasteOpen()">'+ic('heart')+' '+t('tkBtn')+'</button><button class="btn" onclick="chkOpen()">'+ic('clipboard-list')+' '+t('chkOpen')+'</button><button class="btn" onclick="schedOpen()">'+ic('calendar')+' '+t('schBtn')+'</button><button class="btn" onclick="volOpen()">'+ic('chart-bar')+' '+t('volBtn')+'</button><button class="btn" onclick="focusOpen()">'+ic('target')+' '+t('focusT')+'</button><button class="btn" onclick="planShuffleAsk()">'+ic('arrows-shuffle')+' '+t('shufBtn')+'</button><button class="btn" onclick="planSetup()">'+ic('settings')+' '+t('planChange')+'</button></div>'+
+  h+='<div class="lbl">'+t('planOpts')+'</div><div class="pv-tiles"><button class="pv-tile" onclick="planAnother()">'+ic('arrows-shuffle')+'<span>'+t('anBtn')+'</span></button><button class="pv-tile" onclick="remOpen()">'+ic('calendar')+'<span>'+t('rmT')+'</span></button><button class="pv-tile" onclick="tasteOpen()">'+ic('heart')+'<span>'+t('tkBtn')+'</span></button><button class="pv-tile" onclick="chkOpen()">'+ic('clipboard-list')+'<span>'+t('chkOpen')+'</span></button><button class="pv-tile" onclick="schedOpen()">'+ic('calendar')+'<span>'+t('schBtn')+'</span></button><button class="pv-tile" onclick="volOpen()">'+ic('chart-bar')+'<span>'+t('volBtn')+'</span></button><button class="pv-tile" onclick="focusOpen()">'+ic('target')+'<span>'+t('focusT')+'</span></button><button class="pv-tile" onclick="planShuffleAsk()">'+ic('arrows-shuffle')+'<span>'+t('shufBtn')+'</span></button><button class="pv-tile" onclick="planSetup()">'+ic('settings')+'<span>'+t('planChange')+'</span></button></div>'+
     '<details class="dtl"><summary>'+t('tipsT')+'</summary>'+tips+'</details>'+
     (typeof xdHtml==='function'?xdHtml():'')+'<div class="dz"><button class="btn danger" onclick="planDelAsk()">'+ic('trash')+' '+t('planDel')+'</button></div></div>';
   sheet(h);
+  const dc=document.querySelector('.pv-days'),dn=dc&&dc.querySelector('.pv-day.on');if(dn)dc.scrollLeft=dn.offsetLeft-(dc.clientWidth-dn.clientWidth)/2;
 }
 /* ---------- tastes: like / dislike an exercise / gustos: me gusta / no me gusta ---------- */
 function tastePr(){return DATA.plan?DATA.plan.prof:null;}

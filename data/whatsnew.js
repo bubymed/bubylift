@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.13',items:[
+  {i:'sparkles',en:'<b>Redesigned "My plan" screen</b>: a bold header with your week progress and a big "Start next workout" button, swipeable day cards, large exercise cards with animated demos and a ▶ how-to button, collapsible Why / Warm-up / Cool-down, and plan options as tappable tiles.',es:'<b>Pantalla "Mi plan" rediseñada</b>: encabezado llamativo con tu progreso de la semana y un botón grande "Empezar siguiente entrenamiento", tarjetas de día deslizables, tarjetas grandes de ejercicio con demos animadas y botón ▶ de cómo hacerlo, secciones plegables de Por qué / Calentamiento / Enfriamiento, y las opciones del plan como botones tipo mosaico.'}
+ ]},
  {v:'v1.1.12',items:[
   {i:'trash',en:'<b>Red ✕ to delete your plan</b> on the plan card and in the plan screen (it still asks to confirm; your logged workouts are kept). Removing an exercise with logged sets or from your plan now asks first too.',es:'<b>✕ rojo para eliminar tu plan</b> en la tarjeta del plan y en la pantalla del plan (sigue pidiendo confirmar; tus entrenamientos registrados se conservan). Quitar un ejercicio con series registradas o de tu plan también pregunta antes.'}
  ]},

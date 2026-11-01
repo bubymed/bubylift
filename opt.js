@@ -326,16 +326,16 @@ function genOpt(prof){
 }
 
 /* --- warm-up and cool-down text (CPT7 template) / calentamiento y enfriamiento --- */
-function optWarm(d,p,cool){
+function optWarm(d,p,cool,det){
   const cl=WD_DT[d.k]||'lu',key=cl==='l'?'l':(cl==='u'?'u':'lu');
   const fat=goalsOf(p.prof).indexOf('fat')>=0;
-  let h='<div class="card optb"><b>'+(cool?t('optCd'):t('optWu'))+'</b><ul class="optul">';
+  let h=det?'<details class="dtl pv-dt"><summary>'+(cool?t('optCd'):t('optWu'))+'</summary><ul class="optul">':'<div class="card optb"><b>'+(cool?t('optCd'):t('optWu'))+'</b><ul class="optul">';
   if(!cool&&fat)h+='<li>'+t('optCardio')+'</li>';
   h+='<li>'+t('optFoam',t('optM_'+key))+'</li>';
   h+='<li>'+(cool?t('optStatic',t('optM_'+key)):t('optActive',t('optM_'+key)))+'</li>';
   if(!cool)h+='<li>'+t('optDyn')+'</li>';
   if(cool&&fat)h+='<li>'+t('optCardioCd')+'</li>';
-  return h+'</ul></div>';
+  return h+(det?'</ul></details>':'</ul></div>');
 }
 const OPT_TP={sl:'tpSl',md:'tpMd',ex:'tpEx',ct:'tpCt',rp:'tpRp'};
 function optRestTxt(s){return s===0?t('rsNone'):(s>=120?t('rsMin',fmtNum(s/60,1)):t('rsSec',s));}
