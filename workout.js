@@ -98,7 +98,7 @@ function vStart(){
   if(DATA.workouts.length)h+=weekStrip();
   h+='<div class="sec"><h2>'+t('routines')+'</h2><button class="btn sm" onclick="rbOpen()">＋ '+t('newRoutine')+'</button></div>';
   if(!DATA.routines.length)h+='<div class="card tip"><p class="muted">'+t('noRoutines')+'</p></div>';
-  else h+=DATA.routines.map(r=>'<div class="swp"><div class="swp-h swp-hl">'+t('swDelete')+'</div><div class="swp-h swp-hr">'+t('swEdit')+'</div><div class="card rt swp-in" data-l="rtDelAsk" data-r="rtEdit" data-a="'+r.id+'">'+rtThumb(r)+'<div class="rt-main"><b>'+esc(r.name)+'</b><div class="muted sm">'+r.ex.slice(0,4).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(r.ex.length>4?' …':'')+'</div></div><div class="rt-b"><button class="btn pri sm" onclick="startRoutine(\''+r.id+'\')">'+t('start')+'</button><button class="btn sm" onclick="rbOpen(\''+r.id+'\')">'+t('edit')+'</button></div></div></div>').join('');
+  else h+=DATA.routines.map(r=>'<div class="swp"><div class="swp-h swp-hl">'+t('swDelete')+'</div><div class="swp-h swp-hr">'+t('swEdit')+'</div><div class="card rt swp-in" data-l="rtDelAsk" data-r="rtEdit" data-a="'+r.id+'">'+rtThumb(r)+'<div class="rt-main"><b>'+esc(r.name)+'</b><div class="muted sm">'+r.ex.slice(0,4).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(r.ex.length>4?' …':'')+'</div></div>'+xBtn('rtDelAsk(\''+r.id+'\')')+'<div class="rt-b"><button class="btn pri sm" onclick="startRoutine(\''+r.id+'\')">'+t('start')+'</button><button class="btn sm" onclick="rbOpen(\''+r.id+'\')">'+t('edit')+'</button></div></div></div>').join('');
   h+=exploreList();
   const lw=DATA.workouts[0];
   if(lw)h+='<div class="sec"><h2>'+t('lastWorkout')+'</h2></div><div class="lgrp">'+wkCard(lw)+'</div>';
@@ -186,7 +186,7 @@ function prBurst(i,j){
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'">'+exImgs(x.eid,'this.remove()')+'</button>':'';
-  let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span><button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
+  let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
   h+=suggLine(x);
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
   h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'<button class="lnk-d" onclick="restPick('+i+')">⏱ '+(exRest(x)===0?t('restOff'):fmtClock(exRest(x)!=null?exRest(x):(SET.rest||90)))+'</button></div>';
@@ -456,6 +456,8 @@ function mineIds(){
   return top;
 }
 /* Big exercise media: animated loop when we have one (EXANIM), otherwise the two-photo crossfade. / Media grande: animación en bucle si existe (EXANIM), si no el cruce de dos fotos. */
+/* Red ✕ delete button (top-right of a card). / Botón rojo ✕ para eliminar (esquina superior derecha de una tarjeta). */
+function xBtn(call,inl){return'<button class="xdel'+(inl?' inl':'')+'" onclick="event.stopPropagation();'+call+'" aria-label="'+esc(t('delete'))+'">✕</button>';}
 function exAnimOn(id){return typeof EXANIM!=='undefined'&&EXANIM.has(id);}
 function exImgs(id,own){return exAnimOn(id)?'<img class="a" src="img/ex/a/'+id+'.webp" alt="" loading="lazy" onerror="this.src=\'img/ex/'+id+'-0.jpg\'">':'<img src="img/ex/'+id+'-0.jpg" alt="" onerror="'+(own||'this.parentNode.remove()')+'"><img class="b" src="img/ex/'+id+'-1.jpg" alt="" onerror="this.remove()">';}
 function exThumb(id){return typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id)?'<span class="ex-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>':'<span class="ex-th ex-no">'+ic('barbell')+'</span>';}
@@ -576,7 +578,7 @@ function rbDraw(){
   const r=UI.rb;
   sheet('<div class="form"><h3>'+t(r.id?'editRoutine':'newRoutine')+'</h3><label>'+t('name')+'<input class="in wide" type="text" maxlength="60" value="'+esc(r.name)+'" oninput="UI.rb.name=this.value"></label>'+
     '<div class="lbl">'+t('exercises')+'</div>'+
-    (r.ex.length?r.ex.map((x,i)=>'<div class="rbx"><b>'+esc(exName(x.eid,x.n))+'</b><span class="rbs"><button class="ico" onclick="rbSets('+i+',-1)">−</button><span>'+t('nSets',x.sets)+'</span><button class="ico" onclick="rbSets('+i+',1)">＋</button></span><button class="ico" onclick="rbMove('+i+',-1)" aria-label="'+esc(t('moveUp'))+'"'+(i<1?' disabled':'')+'>↑</button><button class="ico" onclick="rbMove('+i+',1)" aria-label="'+esc(t('moveDn'))+'"'+(i>=r.ex.length-1?' disabled':'')+'>↓</button><button class="ico" onclick="rbDel('+i+')" aria-label="'+esc(t('rmEx'))+'">✕</button></div>').join(''):'<p class="muted">'+t('noEx')+'</p>')+
+    (r.ex.length?r.ex.map((x,i)=>'<div class="rbx"><b>'+esc(exName(x.eid,x.n))+'</b><span class="rbs"><button class="ico" onclick="rbSets('+i+',-1)">−</button><span>'+t('nSets',x.sets)+'</span><button class="ico" onclick="rbSets('+i+',1)">＋</button></span><button class="ico" onclick="rbMove('+i+',-1)" aria-label="'+esc(t('moveUp'))+'"'+(i<1?' disabled':'')+'>↑</button><button class="ico" onclick="rbMove('+i+',1)" aria-label="'+esc(t('moveDn'))+'"'+(i>=r.ex.length-1?' disabled':'')+'>↓</button>'+xBtn('rbDel('+i+')',1)+'</div>').join(''):'<p class="muted">'+t('noEx')+'</p>')+
     '<button class="btn wide" onclick="rbAdd()">＋ '+t('addEx')+'</button>'+
     '<div class="row"><button class="btn pri" onclick="rbSave()">'+t('save')+'</button><button class="btn" onclick="UI.rb=null;sheetClose()">'+t('cancel')+'</button>'+(r.id?'<button class="btn danger" onclick="rbRemove()">'+t('delete')+'</button>':'')+'</div></div>');
 }
