@@ -460,3 +460,5 @@ body.kbd #sheet.pks{padding-bottom:10px}
 .wkw{position:relative}.wkw+.wkw{border-top:.5px solid var(--line)}.wkw .wkrow{padding-right:40px}
 .card.rt .xdel{top:5px;right:5px}.card.rt .rt-b{margin-top:16px}
 .bde{position:relative;padding-right:40px}
+.card.plan{position:relative}.card.plan .xdel{top:8px;right:8px}.card.plan .plh{padding-right:34px}
+.pick-h .xdel.inl{margin-left:auto;margin-right:8px}

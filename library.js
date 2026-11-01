@@ -358,7 +358,7 @@ function xdAdd(k){
   if(p.xd.length>=6){toast(t('xdMax'));return;}
   p.xd.push(k);saveData();toast(t('xdAdded'));render();
 }
-function xdDel(i){const p=DATA.plan;if(!p||!p.xd)return;p.xd.splice(i,1);saveData();planOpen();render();}
+function xdDel(i){const p=DATA.plan;if(!p||!p.xd)return;ask(t('delXd'),t('delete'),function(){p.xd.splice(i,1);saveData();planOpen();render();},true);}
 function xdStart(i){
   const p=DATA.plan,k=p&&p.xd&&p.xd[i],x=xdParse(k);if(!x)return;
   if(x.ty==='f'){sheetClose();libFocusStart(x.id,x.li);}

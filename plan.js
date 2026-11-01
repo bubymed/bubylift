@@ -510,7 +510,7 @@ function planCard1(){
   const p=DATA.plan;
   if(!p)return'<div class="card tip"><b>'+t('planT')+'</b><p>'+t('planP')+'</p><div class="row"><button class="btn pri" onclick="planSetup()">'+t('planMake')+'</button></div></div>';
   const i=planNext(),d=p.ds[i];
-  let h='<div class="swp"><div class="swp-h swp-hl">'+t('swSkip')+'</div><div class="swp-h swp-hr">'+t('swChange')+'</div><div class="card plan swp-in" data-l="planSkipAsk" data-r="planPickDay"><div class="plh"><b>'+t('planToday')+'</b><span class="muted sm">'+t('planWeek',planWeek(),p.n)+'</span></div><h3>'+esc(dayName(i))+'</h3>'+planBrief(d)+
+  let h='<div class="swp"><div class="swp-h swp-hl">'+t('swSkip')+'</div><div class="swp-h swp-hr">'+t('swChange')+'</div><div class="card plan swp-in" data-l="planSkipAsk" data-r="planPickDay">'+xBtn('planDelAsk()')+'<div class="plh"><b>'+t('planToday')+'</b><span class="muted sm">'+t('planWeek',planWeek(),p.n)+'</span></div><h3>'+esc(dayName(i))+'</h3>'+planBrief(d)+
     (p.wu?'<p class="muted sm">'+ic('calendar')+' '+(p.wd.indexOf(new Date().getDay())>=0?t('schCardOn',wdName(new Date().getDay())):t('schCardRest'))+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="planGo('+i+')">'+t('planStart')+'</button><button class="btn" onclick="planOpen()">'+t('planAll')+'</button></div>'+
     (p.ph?'<p class="muted sm">'+ic('target')+' '+esc(phLine(p))+'</p>':'')+
@@ -619,7 +619,7 @@ function planOpen(d){
   const p=DATA.plan;if(!p){planSetup();return;}
   if(typeof d==='number')PV=d;if(PV<0||PV>=p.ds.length)PV=0;
   const pr=p.prof,i=PV;
-  let h='<div class="form"><div class="pick-h"><h3>'+t('planMine')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+  let h='<div class="form"><div class="pick-h"><h3>'+t('planMine')+'</h3>'+xBtn('planDelAsk()',1)+'<button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<p class="muted sm">'+t('planInfo',goalTxt(p.prof),p.n,t('pl_'+p.lvl))+'</p>'+
     (p.ph?'<p class="sm"><b>'+esc(phLine(p))+'</b> <button class="btn sm" onclick="phOpen()">'+ic('target')+' '+t('phBtn')+'</button></p>':'')+planWhyCard(p)+
     (pr.focus.length?'<p class="muted sm">'+t('planFocus',pr.focus.map(k=>t('fm_'+k)).join(', '))+'</p>':'')+
@@ -718,7 +718,7 @@ function dayRenSave(i){
 function peRemove(){
   const d=DATA.plan.ds[PE.d];
   if(d.ex.length<=1){toast(t('needOne'));return;}
-  d.ex.splice(PE.e,1);saveData();planOpen();
+  const e=PE.e;ask(t('delExP'),t('delete'),function(){d.ex.splice(e,1);saveData();planOpen();},true);
 }
 function planAddEx(di){
   pickEx(function(eid){

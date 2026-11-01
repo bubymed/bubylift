@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.12',items:[
+  {i:'trash',en:'<b>Red ✕ to delete your plan</b> on the plan card and in the plan screen (it still asks to confirm; your logged workouts are kept). Removing an exercise with logged sets or from your plan now asks first too.',es:'<b>✕ rojo para eliminar tu plan</b> en la tarjeta del plan y en la pantalla del plan (sigue pidiendo confirmar; tus entrenamientos registrados se conservan). Quitar un ejercicio con series registradas o de tu plan también pregunta antes.'}
+ ]},
  {v:'v1.1.11',items:[
   {i:'trash',en:'<b>Red ✕ delete button</b> in the top-right corner of workouts in History, routines, body entries, and exercises in a workout or routine editor — no more hunting for the delete option.',es:'<b>Botón rojo ✕ para eliminar</b> en la esquina superior derecha de los entrenamientos del Historial, rutinas, registros de cuerpo y ejercicios dentro de un entrenamiento o del editor de rutinas — ya no hay que buscar la opción de eliminar.'}
  ]},

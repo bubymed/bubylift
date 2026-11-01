@@ -326,7 +326,7 @@ function exMenu(i){
 }
 function exMove(i,d){const a=ACT.ex,j=i+d;if(j<0||j>=a.length)return;const x=a[i];a[i]=a[j];a[j]=x;saveAct();sheetClose();render();}
 function rmSet(i){const snap=JSON.stringify(ACT),s=ACT.ex[i].sets;if(s.length>1)s.pop();saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
-function rmEx(i){const snap=JSON.stringify(ACT);ACT.ex.splice(i,1);saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
+function rmEx(i,ok){const x=ACT&&ACT.ex[i];if(!x)return;if(!ok&&x.sets&&x.sets.some(s=>s.done)){ask(t('delEx'),t('delete'),function(){rmEx(i,1);},true);return;}const snap=JSON.stringify(ACT);ACT.ex.splice(i,1);saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
 
 /* ---------- finish / cancel ---------- */
 function autoName(ts){const h=new Date(ts).getHours();return t(h<12?'wkMorning':(h<18?'wkAfternoon':'wkEvening'));}
