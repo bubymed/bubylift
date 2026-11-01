@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.28',items:[
+  {i:'🩹',en:'<b>Scrolling fixed</b>: long sheets, like a workout\'s details, scroll normally again instead of jumping back to the top.',es:'<b>Desplazamiento arreglado</b>: las hojas largas, como el detalle de un entreno, vuelven a deslizarse normal en vez de brincar al inicio.'}
+ ]},
  {v:'v1.1.27',items:[
   {i:'🔁',en:'<b>Your old workouts stay as they were</b>: your earlier workouts keep their weights exactly as you logged them (totals); the new boxes just show the weight of one dumbbell, or the plates without the bar.',es:'<b>Tus entrenos anteriores se quedan como estaban</b>: tus entrenos anteriores conservan los pesos tal como los registraste (totales); las cajas nuevas solo muestran el peso de una mancuerna, o los discos sin la barra.'}
  ]},

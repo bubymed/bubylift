@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.28 — 2026-11-01
+- **Scrolling fixed**: long sheets, like a workout's details, scroll normally again instead of jumping back to the top.
+  **Desplazamiento arreglado**: las hojas largas, como el detalle de un entreno, vuelven a deslizarse normal en vez de brincar al inicio.
+
 ## v1.1.27 — 2026-11-01
 - **Your old workouts stay as they were**: your earlier workouts keep their weights exactly as you logged them (totals); the new boxes just show the weight of one dumbbell, or the plates without the bar.
   **Tus entrenos anteriores se quedan como estaban**: tus entrenos anteriores conservan los pesos tal como los registraste (totales); las cajas nuevas solo muestran el peso de una mancuerna, o los discos sin la barra.
