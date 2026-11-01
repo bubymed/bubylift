@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.18',items:[
+  {i:'sparkles',en:'<b>New Bubylift logo</b>: the dumbbell is now the “I” in BUBYLIFT, in the header and welcome screen, and the app icon is a new orange dumbbell. (If you installed the app, remove it and add it again to see the new home-screen icon.)',es:'<b>Nuevo logo de Bubylift</b>: la mancuerna ahora es la “I” de BUBYLIFT, en el encabezado y la pantalla de bienvenida, y el ícono de la app es una nueva mancuerna naranja. (Si instalaste la app, quítala y agrégala de nuevo para ver el ícono nuevo en tu pantalla de inicio.)'}
+ ]},
  {v:'v1.1.17',items:[
   {i:'sparkles',en:'<b>The orange card stays with you</b>: when you scroll down in Workout, Mobility and Body, a slim copy (title + main button) pins to the top, so you can start your workout or mobility session from anywhere on the screen.',es:'<b>La tarjeta naranja te acompaña</b>: al deslizar hacia abajo en Entrenar, Movilidad y Cuerpo, una versión delgada (título + botón principal) se queda fija arriba, para empezar tu entrenamiento o sesión de movilidad desde cualquier parte de la pantalla.'}
  ]},

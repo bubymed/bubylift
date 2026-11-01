@@ -139,7 +139,7 @@ function pfSetLang(l){LANG=l==='es'?'es':'en';try{localStorage.setItem('bl_lang'
 function gWelcome(back){
   GS={redraw:function(){gWelcome(back);},back:!!back};
   const cl=typeof cloudOn==='function'&&cloudOn();
-  gateShow('<div class="wel-hero"><div class="wel-logo">'+ic('barbell')+'</div><h1>Bubylift</h1><p>'+t('wTag')+'</p></div>'+
+  gateShow('<div class="wel-hero"><div class="wel-logo wl" role="img" aria-label="Bubylift"><svg class="bl" width="280" height="44" viewBox="0 0 1621 257"><use href="#bl-logo"/></svg></div><p>'+t('wTag')+'</p></div>'+
     '<div class="g-form wel-act">'+(cl&&typeof oaBtn==='function'?oaBtn()+oaOr():'')+(cl?'<button class="btn pri big wide" onclick="gAcct(\'up\')">'+t('wSignUp')+'</button>'+
     '<button class="btn big wide" onclick="gAcct(\'in\')">'+t('wLogIn')+'</button>':'')+
     '<button class="btn '+(cl?'':'pri big ')+'wide wel-guest" onclick="pfGuest()">'+t('wGuestB')+'</button><p class="muted sm g-c">'+t('wGuestN')+'</p><p id="gmsg" class="g-msg"></p></div>'+

@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.18 — 2026-10-31
+- **New Bubylift logo**: the dumbbell is now the “I” in BUBYLIFT, in the header and welcome screen, and the app icon is a new orange dumbbell. (If you installed the app, remove it and add it again to see the new home-screen icon.)
+  **Nuevo logo de Bubylift**: la mancuerna ahora es la “I” de BUBYLIFT, en el encabezado y la pantalla de bienvenida, y el ícono de la app es una nueva mancuerna naranja. (Si instalaste la app, quítala y agrégala de nuevo para ver el ícono nuevo en tu pantalla de inicio.)
+
 ## v1.1.17 — 2026-10-31
 - **The orange card stays with you**: when you scroll down in Workout, Mobility and Body, a slim copy (title + main button) pins to the top, so you can start your workout or mobility session from anywhere on the screen.
   **La tarjeta naranja te acompaña**: al deslizar hacia abajo en Entrenar, Movilidad y Cuerpo, una versión delgada (título + botón principal) se queda fija arriba, para empezar tu entrenamiento o sesión de movilidad desde cualquier parte de la pantalla.
