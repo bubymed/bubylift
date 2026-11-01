@@ -21,7 +21,7 @@ function strMove(id,secs){
 }
 function strLine(m){return m.hold?t('strHoldS',m.secs):t('strRepsN',10);}
 function strRows(list){
-  return list.map(m=>'<div class="plex">'+exThumb(m.eid)+'<span><b>'+esc(exName(m.eid))+'</b><small>'+esc(strLine(m))+' · '+t(strIsDyn(m.eid)?'strDyn':'strStatic')+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="howOpen(\''+m.eid+'\')">ⓘ</button></div>').join('');
+  return'<div class="mb-list">'+list.map((m,k)=>'<div class="pv-ex mb-ex" role="button" tabindex="0" style="--i:'+k+'" onclick="howOpen(\''+m.eid+'\')">'+(typeof pvTh==='function'?pvTh(m.eid):exThumb(m.eid))+'<div class="pv-b"><b><i class="mb-n">'+(k+1)+'</i>'+esc(exName(m.eid))+'</b><div class="pv-pills"><span class="pv-p">'+esc(strLine(m))+'</span><span class="pv-p2">'+t(strIsDyn(m.eid)?'strDyn':'strStatic')+'</span></div></div><button class="pv-play" aria-label="'+esc(t('howTo'))+'" onclick="event.stopPropagation();howOpen(\''+m.eid+'\')">'+ic('help-circle')+'</button></div>').join('')+'</div>';
 }
 function strStart(name,list){
   if(ACT){toast(t('finishFirst'));return;}
@@ -43,18 +43,24 @@ function strAreaGo(save){
   if(save)strSave(name,l);else strStart(name,l);
 }
 function strHero(){
-  const n=strItems(STX.type,STX.min).length;
-  return'<div class="card hero"><span class="hero-e">'+t('mobToday')+'</span><h2>'+t('strT_'+STX.type)+' · '+t('strMin',STX.min)+'</h2><p>'+t('mobHeroP',n)+'</p><button class="btn pri big wide" onclick="strSessGo(0)">'+t('mobGo')+'</button></div>';
+  const l=strItems(STX.type,STX.min),n=l.length;
+  return'<div class="card hero mb-hero"><span class="hero-e">'+t('mobToday')+'</span><h2>'+t('strT_'+STX.type)+' · '+t('strMin',STX.min)+'</h2>'+
+    '<div class="mb-stats"><span><b>'+n+'</b>'+t('mbMovesL')+'</span><span><b>'+STX.min+'</b>'+t('mbMinL')+'</span><span><b>'+strSecs()+'s</b>'+t('mbEachL')+'</span></div>'+
+    '<div class="pv-mini mb-mini">'+l.slice(0,7).map(m=>pvMiniTh(m.eid)).join('')+(n>7?'<i class="more">+'+(n-7)+'</i>':'')+'</div>'+
+    '<button class="btn pri big wide pv-go" onclick="strSessGo(0)">'+ic('stopwatch')+' '+t('mobGo')+'</button></div>';
 }
+const MB_IC={full:'yoga',lower:'target',upper:'bolt',back:'refresh',warm:'sparkles',cool:'heart'};
+function mbTiles(cur){return'<div class="pv-tiles mb-tiles">'+['full','lower','upper','back','warm','cool'].map(k=>'<button class="pv-tile'+(k===cur?' on':'')+'" onclick="strType(\''+k+'\')">'+ic(MB_IC[k])+'<span>'+t('strT_'+k)+'</span><small>'+t('mbSub_'+k)+'</small></button>').join('')+'</div>';}
+function mbTimes(cur){return'<div class="mb-times">'+[5,10,15].map(m=>'<button class="mb-time'+(m===cur?' on':'')+'" onclick="strMinSet(\''+m+'\')"><b>'+m+'</b><span>min</span><small>'+t('mbSecEach',STX_SECS[m])+'</small></button>').join('')+'</div>';}
 function vStretch(){
   const rhOn=STX.sec==='rehab';
-  let h=(rhOn?'':strHero()+'<div class="sec"><h2>'+t('mobCustom')+'</h2></div><p class="muted sm">'+t('strIntro')+'</p>')+
+  let h=(rhOn?'':strHero()+'<div class="sec"><h2>'+t('mobCustom')+'</h2></div><details class="dtl pv-dt"><summary><b>'+t('mbTips')+'</b></summary><p class="muted sm">'+t('strIntro')+'</p></details>')+
     '<div class="seg"><button class="'+(STX.sec==='sess'?'on':'')+'" onclick="strSet(\'sec\',\'sess\')">'+ic('stopwatch')+' '+t('strSess')+'</button><button class="'+(STX.sec==='area'?'on':'')+'" onclick="strSet(\'sec\',\'area\')">'+ic('yoga')+' '+t('strArea')+'</button><button class="'+(rhOn?'on':'')+'" onclick="strSet(\'sec\',\'rehab\')">'+ic('heart')+' '+t('rhSeg')+'</button></div>';
   if(rhOn)return h+vRehab();
   if(STX.sec==='sess'){
     const l=strItems(STX.type,STX.min),secs=strSecs();
-    h+=libStep(1,'strStep1')+libChips(['full','lower','upper','back','warm','cool'],STX.type,'strType',k=>t('strT_'+k),1)+
-      libStep(2,'strStep2')+libChips([5,10,15],STX.min,'strMinSet',k=>t('strMin',k),1)+
+    h+=libStep(1,'strStep1')+mbTiles(STX.type)+
+      libStep(2,'strStep2')+mbTimes(STX.min)+
       libStep(3,'strStep3');
     if(!l.length)return h+'<p class="muted">'+t('strNone')+'</p>';
     h+='<p class="muted sm">'+t('strPlan',l.length,STX.min,secs)+'</p>'+strRows(l)+

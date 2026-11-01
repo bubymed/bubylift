@@ -228,7 +228,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   w.go('stretch');ok(/Quick sessions|Stretching and mobility on their own/.test(main())&&ev("document.querySelectorAll('#tabbar button').length")===4,'stretch screen renders and the bar has 4 tabs');
   ok(ev("[5,10,15].every(m=>['full','lower','upper','back','warm','cool'].every(k=>strItems(k,m).length>=4))"),'every stretch session has 4+ moves');
   ok(ev("STRETCH_AREAS.every(a=>STRETCH_BY[a].length>=5)")&&ev("STRETCH_AREAS.reduce((n,a)=>n+STRETCH_BY[a].length,0)")===106,'stretch areas hold all 106 mobility moves');
-  w.strSet('sec','area');ok(/Hamstrings/.test(main())&&doc.querySelectorAll('#main .plex').length>=5,'stretch by area lists moves');
+  w.strSet('sec','area');ok(/Hamstrings/.test(main())&&doc.querySelectorAll('#main .mb-ex').length>=5,'stretch by area lists moves');
   w.strSet('sec','sess');w.strSessGo(0);ok(ev('!!ACT&&ACT.ex.length>=4&&ACT.ex[0].tg&&ACT.ex[0].tg.u')==='m'||ev('!!ACT'),'stretch session starts a workout');
   ev('ACT=null;saveAct&&saveAct()');w.go('workout');
   const stR=JSON.parse(ev("JSON.stringify([0,2,4].map(k=>libFocus('stretch',k,[]).map(e=>e.eid+':'+e.lo+'-'+e.hi+e.u)))"));

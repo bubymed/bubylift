@@ -37,9 +37,17 @@ function recData(now){
 function recCard(){
   const r=recData();
   if(!r.last)return'<div class="card rec"><div class="lbl">'+t('recT')+'</div><p class="muted sm">'+t('recNone')+'</p></div>';
-  return'<div class="card rec"><div class="lbl">'+t('recT')+'</div><div class="rec-top"><span><b>'+(r.days===0?t('recToday'):r.days)+'</b><small>'+t('recDays')+'</small></span><span><b>'+r.ready+'/'+REC_G.length+'</b><small>'+t('recReady')+'</small></span></div>'+
-    '<div class="rec-grid">'+REC_G.map(g=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low');
-      return'<div class="rec-t '+c+'"><b>'+t('g_'+g)+'</b><i><u style="width:'+p+'%"></u></i><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small></div>';}).join('')+'</div></div>';
+  const vals=REC_G.map(g=>r.g[g].pct==null?100:r.g[g].pct),avg=Math.round(vals.reduce((a,c)=>a+c,0)/vals.length);
+  return'<div class="rv"><div class="rv-hero"><div class="rv-ring" style="--p:'+avg+'"><b>'+avg+'<small>%</small></b></div><div class="rv-ht"><span class="hero-e">'+t('recT')+'</span><h3>'+t('recPct',avg)+'</h3>'+
+    '<p>'+r.ready+'/'+REC_G.length+' '+t('recReady')+' · '+(r.days===0?t('recLastToday'):r.days+' '+t('recDays'))+'</p></div></div>'+
+    '<div class="rv-leg"><span class="ok">'+t('rlOk')+'</span><span class="mid">'+t('rlMid')+'</span><span class="low">'+t('rlLow')+'</span></div>'+
+    '<div class="rv-grid">'+REC_G.map((g,k)=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low');
+      return'<button class="rv-t '+c+'" style="--p:'+p+';--i:'+k+'" onclick="recTap(\''+g+'\')"><span class="rv-r"><em>'+(p>=100?'✓':p+'%')+'</em></span><b>'+t('g_'+g)+'</b><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small></button>';}).join('')+'</div><p class="muted sm rv-hint">'+t('recTapGo')+'</p></div>';
+}
+function recTap(g){
+  const r=recData(),x=r.g[g];
+  if(g==='core'||x.pct==null||x.pct>=100){recWorkout(g==='core'?null:g);return;}
+  toast(t('g_'+g)+': '+t('recIn',x.left));
 }
 /* ---------- general strength score (e1RM ÷ body weight vs. standards) / fuerza general (1RM estimado ÷ peso corporal) ---------- */
 const STR_L=[
@@ -76,8 +84,8 @@ function strCard(){
   return h;
 }
 /* a workout from the muscles that have recovered / un entrenamiento con los músculos ya recuperados */
-function recWorkout(){
-  const r=recData(),rd=REC_G.filter(g=>g!=='core'&&(r.g[g].pct==null||r.g[g].pct>=100)).sort((a,b)=>(r.g[a].t||0)-(r.g[b].t||0)).slice(0,3);
+function recWorkout(only){
+  const r=recData(),rd=only?[only]:REC_G.filter(g=>g!=='core'&&(r.g[g].pct==null||r.g[g].pct>=100)).sort((a,b)=>(r.g[a].t||0)-(r.g[b].t||0)).slice(0,3);
   if(!rd.length){toast(t('recNoneRdy'));return;}
   const use={};DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{use[x.eid]=(use[x.eid]||0)+1;}));
   const ex=[];
