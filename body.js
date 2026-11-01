@@ -66,7 +66,7 @@ function recCard(){
   const r=recData();
   if(!r.last)return'<div class="card rec"><div class="lbl">'+t('recT')+'</div><p class="muted sm">'+t('recNone')+'</p></div>';
   const vals=REC_G.map(g=>r.g[g].pct==null?100:r.g[g].pct),avg=Math.round(vals.reduce((a,c)=>a+c,0)/vals.length);
-  return'<div class="rv"><div class="rv-hero"><div class="rv-ring" style="--p:'+avg+'"><b>'+avg+'<small>%</small></b></div><div class="rv-ht"><span class="hero-e">'+t('recT')+'</span><h3>'+t('recPct',avg)+'</h3>'+
+  return'<div class="rv"><div class="rv-hero"'+skAttr(t('recT'),t('recPct',avg),t('recCtaB'),'recWorkout()')+'><div class="rv-ring" style="--p:'+avg+'"><b>'+avg+'<small>%</small></b></div><div class="rv-ht"><span class="hero-e">'+t('recT')+'</span><h3>'+t('recPct',avg)+'</h3>'+
     '<p>'+r.ready+'/'+REC_G.length+' '+t('recReady')+' · '+(r.days===0?t('recLastToday'):r.days+' '+t('recDays'))+'</p></div></div>'+
     '<div class="rv-leg"><span class="ok">'+t('rlOk')+'</span><span class="mid">'+t('rlMid')+'</span><span class="low">'+t('rlLow')+'</span></div>'+
     '<div class="rv-grid">'+REC_G.map((g,k)=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low');

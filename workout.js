@@ -76,7 +76,7 @@ function mobCard(){
 }
 function mobGo(m){STX.type=m===5?'warm':'full';STX.min=m;strSessGo(0);}
 function hero0(){
-  return'<div class="card hero"><span class="hero-e">'+t('hiWelcome')+'</span><h2>'+t('pkPlanT')+'</h2><p>'+t('pkPlanP')+'</p><button class="btn pri big wide" onclick="planSetup()">'+t('planMake')+'</button></div>';
+  return'<div class="card hero"'+skAttr(t('hiWelcome'),t('pkPlanT'),t('planMake'),'planSetup()')+'><span class="hero-e">'+t('hiWelcome')+'</span><h2>'+t('pkPlanT')+'</h2><p>'+t('pkPlanP')+'</p><button class="btn pri big wide" onclick="planSetup()">'+t('planMake')+'</button></div>';
 }
 function exploreList(){
   const r=(i,tt,pp,fn)=>'<button class="lrow" onclick="'+fn+'"><span class="li">'+ic(i)+'</span><span class="lt2"><b>'+t(tt)+'</b><small>'+t(pp)+'</small></span><span class="lc">›</span></button>';

@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.16';
+const APP_VER='v1.1.17';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -130,6 +130,20 @@ function renderTabs(){
 }
 function go(x){if(x==='history'){x='progress';UI.ps='hist';}else if(x==='progress')UI.ps='prog';tab=x;UI.prog=null;renderTabs();render();window.scrollTo(0,0);pgAnim();}
 function pgAnim(){const m=$('main');if(!m)return;m.classList.remove('pgin');void m.offsetWidth;m.classList.add('pgin');}
+/* the big orange card stays reachable: when it scrolls away a slim copy (title + main button) pins under the top bar / la tarjeta naranja sigue a mano: al salir de pantalla queda una versión delgada */
+function skAttr(e,ti,l,f){return' data-sk-e="'+esc(e)+'" data-sk-t="'+esc(ti)+'" data-sk-l="'+esc(l)+'" data-sk-f="'+esc(f)+'"';}
+function skUpdate(){
+  const b=$('skbar');if(!b)return;const h=document.querySelector('#main [data-sk-t]'),tp=$('top');
+  if(!h||!tp){b.classList.remove('on');return;}
+  const pin=/sticky|fixed/.test(getComputedStyle(tp).position),top=pin?tp.offsetHeight:0,r=h.getBoundingClientRect();
+  b.style.setProperty('--skt',top+'px');
+  if(r.bottom<top+8){
+    const k=h.dataset.skT+'|'+h.dataset.skL;
+    if(b.dataset.k!==k){b.dataset.k=k;b.firstChild.innerHTML='<div class="sk-t"><small>'+h.dataset.skE+'</small><b>'+h.dataset.skT+'</b></div><button class="btn pri sm" onclick="'+h.dataset.skF+'">'+h.dataset.skL+'</button>';}
+    b.classList.add('on');
+  }else b.classList.remove('on');
+}
+try{window.addEventListener('scroll',function(){requestAnimationFrame(skUpdate);},{passive:true});}catch(e){}
 function render(){
   const v={workout:vWorkout,history:vHistory,progress:vProgTab,body:vBody,stretch:vStretch,more:vMore}[tab];
   const tk=TAB_KEYS.find(a=>a[0]===tab);
@@ -137,6 +151,7 @@ function render(){
   $('main').innerHTML=(ACT&&tab==='workout'?'':'<h1 class="lt">'+t(tk?tk[1]:'tWorkout')+'</h1>'+((tab==='workout'||tab==='progress')&&typeof guestBar==='function'?guestBar():''))+v();
   if(y>0&&Math.abs(window.scrollY-y)>2)window.scrollTo(0,y);
   if(typeof restFab==='function')restFab();
+  skUpdate();
 }
 
 /* ---------- auto-update: compare version.json with APP_VER; reload once if newer ---------- */
