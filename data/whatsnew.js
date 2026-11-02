@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.31',items:[
+  {i:'🚪',en:'<b>Clear exits in guided sessions</b>: an Exit button on top (save, discard, list view or keep going), plus Finish this move, List view and Finish session always on screen. Nobody gets stuck.',es:'<b>Salidas claras en las sesiones guiadas</b>: un botón Salir arriba (guardar, descartar, ver lista o seguir), y siempre en pantalla Terminar este movimiento, Ver lista y Terminar sesión. Nadie se queda atrapado.'}
+ ]},
  {v:'v1.1.30',items:[
   {i:'🧘',en:'<b>Guided mobility sessions</b>: Mobility now walks you through one move at a time, with a countdown, a short switch between sides for one-sided stretches, and one big button to pause or go to the next move. ⋯ → View as list brings back the old list.',es:'<b>Sesiones de movilidad guiadas</b>: Movilidad ahora te guía un movimiento a la vez, con cuenta regresiva, un cambio corto de lado en los estiramientos de un lado y un botón grande para pausar o pasar al siguiente. ⋯ → Ver como lista trae de vuelta la lista de antes.'}
  ]},
