@@ -35,7 +35,7 @@ const STR={
  why1:['⚡ <b>One tap</b> from your home screen, full screen, like any other app.','⚡ <b>Un toque</b> desde tu pantalla de inicio, en pantalla completa, como cualquier app.'],
  why2:['📶 <b>Works with no signal</b> — even in a gym basement.','📶 <b>Funciona sin señal</b> — incluso en el sótano de un gimnasio.'],
  why3:['🔒 <b>Keeps your log safer</b>: your data stays on your phone and an installed app is much less likely to be cleared by the browser.','🔒 <b>Cuida mejor tu registro</b>: tus datos se quedan en tu teléfono y es mucho menos probable que el navegador borre una app instalada.'],
- why4:['🆓 <b>Free, no app store, no account</b>, and it updates itself.','🆓 <b>Gratis, sin tienda de apps y sin cuenta</b>, y se actualiza sola.'],
+ why4:['🆓 <b>Free, no app store, no payments</b>, and it updates itself.','🆓 <b>Gratis, sin tienda de apps ni pagos</b>, y se actualiza sola.'],
  tabIos:['iPhone / iPad','iPhone / iPad'],tabAnd:['Android','Android'],tabPc:['Computer','Computadora'],installNow:['Install now','Instalar ahora'],orSteps:['Or follow the steps:','O sigue los pasos:'],
  pcS1:['Open this page in <b>Chrome</b> or <b>Edge</b>.','Abre esta página en <b>Chrome</b> o <b>Edge</b>.'],
  pcS2:['Click the install icon <span class="ib">⊕</span> at the right of the address bar (or menu <span class="ib">⋮</span> → <b>Install Bubylift</b>).','Haz clic en el ícono de instalar <span class="ib">⊕</span> a la derecha de la barra de direcciones (o menú <span class="ib">⋮</span> → <b>Instalar Bubylift</b>).'],
