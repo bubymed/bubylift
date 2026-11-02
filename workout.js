@@ -49,7 +49,7 @@ function startWorkout(o){
   if(o&&o.pl!=null)ACT.pl=o.pl;
   if(o&&o.guide)ACT.guide=1;
   ((o&&o.ex)||[]).forEach(x=>addExTo(x.eid,x.sets,x.n,x.tg));
-  saveAct();wake();tab='workout';renderTabs();render();window.scrollTo(0,0);
+  saveAct();wake();tab='workout';renderTabs();render();window.scrollTo(0,0);pgAnim();
   if(!o)setTimeout(function(){if(ACT&&!ACT.ex.length)pickEx(null,true);},120);
 }
 /* workouts saved before the bar/dumbbell update already hold totals (you typed the sum of both dumbbells, the bar included): keep every number, only mark them as the new model / los entrenos guardados antes ya tienen totales (escribías la suma de las dos mancuernas, con la barra incluida): se conservan todos los números y solo se marcan como el modelo nuevo */
@@ -319,7 +319,7 @@ function stepSet(i,j,f,d){
   saveAct();exRedraw(i);buzz(6);
 }
 /* a new set starts as a copy of the last one: log it with one tap / una serie nueva copia la anterior: se registra con un toque */
-function addSet(i){const x=ACT.ex[i];autoDone(i,x.sets.length-1);const l=x.sets[x.sets.length-1],n=newSet();if(l){n.w=l.w;n.r=l.r;n.t=l.t;n.d=l.d;}x.sets.push(n);saveAct();exRedraw(i);}
+function addSet(i){const x=ACT.ex[i];autoDone(i,x.sets.length-1);const l=x.sets[x.sets.length-1],n=newSet();if(l){n.w=l.w;n.r=l.r;n.t=l.t;n.d=l.d;}x.sets.push(n);saveAct();exRedraw(i);{const r=document.querySelectorAll('#exc'+i+' .srow:not(.hd)'),l=r[r.length-1];if(l){l.classList.add('rin');setTimeout(()=>l.classList.remove('rin'),500);}}}
 /* Enter/Next walks weight → reps → done → next set, keyboard stays open / Enter/Siguiente: peso → reps → listo → siguiente serie sin cerrar el teclado */
 document.addEventListener('keydown',function(ev){
   const el=ev.target;if(ev.key!=='Enter'||!el||!el.classList||!el.classList.contains('in')||el.dataset.i==null)return;
@@ -440,7 +440,7 @@ function fbShow(){
     '<div class="row"><a class="btn pri" href="https://tally.so/r/KpY5MA" target="_blank" rel="noopener" onclick="sheetClose()">'+t('fbPopYes')+'</a><button class="btn" onclick="sheetClose()">'+t('fbPopNo')+'</button></div></div>');
 }
 function cancelAsk(){ask(t('cancelAsk'),t('discard'),cancelWk,true);}
-function cancelWk(){ACT=null;saveAct();stopRest();unwake();render();}
+function cancelWk(){ACT=null;saveAct();stopRest();unwake();render();pgAnim();}
 
 /* ---------- rest timer ---------- */
 let REST=null,restTick=null,restBuilt=false,AC=null;
