@@ -113,6 +113,11 @@ function csFit(g,s,maxW,px,w){
   return p;
 }
 function csTxt(g,s,x,y,px,w,col,al){g.font=cardFont(px,w);g.fillStyle=col;g.textAlign=al||'left';g.fillText(s,x,y);g.textAlign='left';}
+/* big number: ink left edge at x and ink top at top; returns the baseline / número grande: borde izquierdo de la tinta en x y parte superior en top; devuelve la línea base */
+function csNum(g,num,x,top,maxW,px,w,col){
+  const fp=csFit(g,num,maxW,px,w);g.font=cardFont(fp,w);const m=g.measureText(num),b=top+m.actualBoundingBoxAscent;
+  csTxt(g,num,x+m.actualBoundingBoxLeft,b,fp,w,col);return b;
+}
 function csLogo(g,x,y,sz,col,al,icol){
   g.font=cardFont(Math.round(sz*.82),'800');
   const tw=g.measureText('BUBYLIFT').width,total=sz+Math.round(sz*.28)+tw;
@@ -315,7 +320,7 @@ function csGiantH(g,v){
   const W=v.W,y=v.B-420,kg=wkVol(v.wk),num=wShow(kg);
   csLogo(g,80,y,56,v.ink,'left',v.acc);
   csTxt(g,t('csGiantL'),80,y+150,46,'700',v.sub);
-  const fp=csFit(g,num,480,300,'900');csTxt(g,num,64,y+150+fp*.88,fp,'900',v.ink);
+  csNum(g,num,80,y+200,480,300,'900',v.ink);
   const x=620,cw=W-80-x;
   const ut=wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase();g.font=cardFont(46,'800');const pw=Math.min(cw,g.measureText(ut).width+60);
   g.fillStyle=v.acc;g.beginPath();if(g.roundRect)g.roundRect(x,y+120,pw,76,38);else g.rect(x,y+120,pw,76);g.fill();
@@ -344,14 +349,15 @@ function csListH(g,v,dots){
   csLogo(g,W-80,y+150+per*h+(v.d.prs?14:30),48,v.ink,'right',dots?v.acc:undefined);
 }
 function csFunH(g,v){
-  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg),y=v.B-440;
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg),y=v.B-440,T=y+110;
   csLogo(g,80,y,56,v.ink);
-  const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),fp=csFit(g,num,430,330,'900');csTxt(g,num,64,y+130+fp*.88,fp,'900',v.acc);
+  const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),nb=csNum(g,num,80,T,430,330,'900',v.acc);
   const x=560,cw=W-80-x;
-  csTxt(g,t('csFunT'),x,y+170,36,'700',v.sub);
-  const nm=t('csObj_'+f.k),p=csFit(g,nm,cw,96,'800');csTxt(g,nm,x,y+170+p+14,p,'800',v.ink);
-  csTxt(g,'= '+wShow(kg)+' '+wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase(),x,y+170+p+78,34,'600',v.sub);
-  {const ft=v.d.date,fq=csFit(g,ft,cw,28,'500');csTxt(g,ft,x,y+170+p+130,fq,'500',v.sub);}
+  /* right text spans exactly from the top of the number to its baseline / el texto de la derecha va del tope del número a su línea base */
+  const l1=T+26;csTxt(g,t('csFunT'),x,l1,36,'700',v.sub);
+  const nm=t('csObj_'+f.k),p=csFit(g,nm,cw,96,'800'),nB=l1+16+p*.78;csTxt(g,nm,x,nB,p,'800',v.ink);
+  const ft=v.d.date,fq=csFit(g,ft,cw,28,'500');csTxt(g,ft,x,nb,fq,'500',v.sub);
+  csTxt(g,'= '+wShow(kg)+' '+wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase(),x,(nB+nb)/2+8,34,'600',v.sub);
 }
 
 /* duo: the "fun" card and the exercise list together in ONE image (stacked, or side by side when wide) / la tarjeta curiosa y la lista de ejercicios juntas en UNA imagen (apiladas, o lado a lado en horizontal) */
@@ -363,15 +369,15 @@ function csDuo(g,v){
   if(v.h){
     const y=v.B-Math.max(n*h,330)-250;
     csLogo(g,80,y,52,v.ink);
-    const fp=csFit(g,num,340,300,'900');csTxt(g,num,64,y+130+fp*.88,fp,'900',v.acc);
-    csTxt(g,t('csFunT'),80,y+130+fp*.88+54,28,'700',v.sub);
-    const q=csFit(g,nmO,380,44,'800');csTxt(g,nmO,80,y+130+fp*.88+100,q,'800',v.ink);
+    const nb=csNum(g,num,80,y+100,340,300,'900',v.acc);
+    csTxt(g,t('csFunT'),80,nb+56,28,'700',v.sub);
+    const q=csFit(g,nmO,380,44,'800');csTxt(g,nmO,80,nb+104,q,'800',v.ink);
     list(470,y+40,W-80-470);
     return;
   }
   const y=v.B-(n*h)-680;
   csLogo(g,80,y,56,v.ink);
-  const fp=csFit(g,num,440,260,'900');csTxt(g,num,64,y+120+fp*.88,fp,'900',v.acc);
+  csNum(g,num,80,y+110,440,260,'900',v.acc);
   const x=560,cw=W-80-x;
   csTxt(g,t('csFunT'),x,y+160,34,'700',v.sub);
   const q=csFit(g,nmO,cw,70,'800');csTxt(g,nmO,x,y+160+q+10,q,'800',v.ink);
