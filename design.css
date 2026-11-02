@@ -667,3 +667,4 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 .cs-opt{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:10px;background:none;border:0;color:var(--dim);font-size:.82rem;font-weight:600}
 .cs-opt svg{width:16px;height:16px}
 .cs-adv{max-height:42vh;overflow-y:auto;margin-bottom:10px}
+.cs-ori{margin:6px 0 4px}.cs-g[hidden]{display:none}

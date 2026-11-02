@@ -33,7 +33,7 @@ const STR={
  wlT:['Put Bubylift on your phone','Pon Bubylift en tu teléfono'],wlP:['One tap away, full screen, and it works with no signal.','A un toque, en pantalla completa y funciona sin señal.'],wlHow:['Show me how','Muéstrame cómo'],wlHowIos:['Show me how (Safari)','Muéstrame cómo (Safari)'],wlLater:['Not now','Ahora no'],wlScan:['Scan with your phone camera to open it there.','Escanéalo con la cámara de tu teléfono para abrirla allí.'],
  csPanL:['Card panel','Panel de la tarjeta'],csPanOn:['Soft panel','Con panel'],csPanOff:['No panel','Sin panel'],
  csGiantL:['You lifted today','Hoy levantaste'],csS_giant:['Giant','Gigante'],csS_vert:['Vertical','Vertical'],csS_row:['Row','En fila'],csS_dots:['Dots','Puntos'],
- csWkL:['Workout','Entrenamiento'],csStory:['Story','Historia'],csSaveS:['Save','Guardar'],csMore:['More','Más'],csAdv:['Background, size and color','Fondo, tamaño y color'],csStoryHint:['Copied — in Instagram tap the screen and choose Paste','Copiada — en Instagram toca la pantalla y elige Pegar'],
+ csWkL:['Workout','Entrenamiento'],csOriV:['Vertical','Vertical'],csOriH:['Horizontal','Horizontal'],csStory:['Story','Historia'],csSaveS:['Save','Guardar'],csMore:['More','Más'],csAdv:['Background, size and color','Fondo, tamaño y color'],csStoryHint:['Copied — in Instagram tap the screen and choose Paste','Copiada — en Instagram toca la pantalla y elige Pegar'],
  ginT:['Install Bubylift','Instala Bubylift'],whyT:['Why install it?','¿Por qué instalarla?'],howT:['How to install it','Cómo instalarla'],
  why1:['⚡ <b>One tap</b> from your home screen, full screen, like any other app.','⚡ <b>Un toque</b> desde tu pantalla de inicio, en pantalla completa, como cualquier app.'],
  why2:['📶 <b>Works with no signal</b> — even in a gym basement.','📶 <b>Funciona sin señal</b> — incluso en el sótano de un gimnasio.'],
@@ -895,7 +895,7 @@ const STR={
  // v95 share studio
  csHint:['Save it as a transparent picture and place it over any photo or story — or add a photo here.','Guárdala como imagen transparente y ponla encima de cualquier foto o historia — o agrega una foto aquí.'],
  csStyleL:['Style','Estilo'],csBgL:['Background','Fondo'],csFmtL:['Size','Tamaño'],csColL:['Color','Color'],
-csS_pr:['Record','Récord'],csS_fun:['Fun','Curioso'],csFmtSq:['Square 1:1','Cuadrado 1:1'],csPosL:['Position','Posición'],csPosTop:['Top','Arriba'],csPosMid:['Middle','Centro'],csPosBot:['Bottom','Abajo'],
+csS_pr:['Record','Récord'],csS_fun:['Fun','Curioso'],csS_duo:['Duo','Dúo'],csFmtSq:['Square 1:1','Cuadrado 1:1'],csPosL:['Position','Posición'],csPosTop:['Top','Arriba'],csPosMid:['Middle','Centro'],csPosBot:['Bottom','Abajo'],
 csTotal:['Total lifted','Total levantado'],csPrNew:['NEW PERSONAL RECORD','NUEVO RÉCORD PERSONAL'],csTopLift:['TOP LIFT','MEJOR LEVANTAMIENTO'],csFunT:['Today you lifted about','Hoy levantaste cerca de'],
  csObj_bus:['school buses','autobuses escolares'],csObj_ele:['African elephants','elefantes africanos'],csObj_car:['small cars','autos pequeños'],csObj_pia:['grand pianos','pianos de cola'],csObj_fri:['refrigerators','refrigeradores'],csObj_bow:['bowling balls','bolas de boliche'],
  csCopy:['Copy','Copiar'],csCopied:['Copied — paste it on your story or post','Copiada — pégala en tu historia o publicación'],
