@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.37',items:[
+  {i:'shield-check',en:'The About section no longer closes by itself, the profile photo no longer flickers, and the privacy text is up to date.',es:'La sección Acerca de ya no se cierra sola, la foto de perfil ya no parpadea y el texto de privacidad está al día.'}
+ ]},
  {v:'v1.1.36',items:[
   {i:'share',en:'Share previews keep the full story shape, like they will look on Instagram.',es:'Las vistas previas de compartir mantienen la forma completa de una historia, como se verán en Instagram.'}
  ]},

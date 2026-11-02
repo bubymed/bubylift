@@ -777,3 +777,4 @@ main>.lnk-d{display:block;margin:12px auto 0;color:var(--dim)}
 .welc .qrbox{margin:8px auto}.welc .qrbox svg{width:150px;height:150px}.welc .why{font-size:.95em}
 .welc .qrbox{display:flex;justify-content:center;width:auto;max-width:none}
 .welc .qrbox{aspect-ratio:auto;height:auto;width:166px}
+.cr-av.nf::before{content:'M'}
