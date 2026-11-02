@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.38 — 2026-10-30
+- Share cards now come in Vertical and Horizontal, plus a new Duo style that puts the fun card and the exercise list together in one image.
+  Las tarjetas para compartir ahora vienen en Vertical y Horizontal, y hay un nuevo estilo Dúo que junta la tarjeta curiosa y la lista de ejercicios en una sola imagen.
+
 ## v1.1.37 — 2026-10-30
 - The About section no longer closes by itself, the profile photo no longer flickers, and the privacy text is up to date.
   La sección Acerca de ya no se cierra sola, la foto de perfil ya no parpadea y el texto de privacidad está al día.

@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.38',items:[
+  {i:'share',en:'Share cards now come in Vertical and Horizontal, plus a new Duo style that puts the fun card and the exercise list together in one image.',es:'Las tarjetas para compartir ahora vienen en Vertical y Horizontal, y hay un nuevo estilo Dúo que junta la tarjeta curiosa y la lista de ejercicios en una sola imagen.'}
+ ]},
  {v:'v1.1.37',items:[
   {i:'shield-check',en:'The About section no longer closes by itself, the profile photo no longer flickers, and the privacy text is up to date.',es:'La sección Acerca de ya no se cierra sola, la foto de perfil ya no parpadea y el texto de privacidad está al día.'}
  ]},

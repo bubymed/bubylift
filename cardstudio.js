@@ -1,6 +1,7 @@
 /* Share studio (v95): transparent workout cards in 7 styles — put them over any photo or story, or add a photo here.
    Estudio de tarjetas (v95): tarjetas con fondo transparente en 7 estilos — ponlas sobre cualquier foto o historia, o agrega una foto aquí. */
-const CS_STYLES=['giant','vert','row','dots','classic','stack','poster','chips','lifts','badge','bar','pr','fun'];
+const CS_STYLES=['giant','vert','row','dots','classic','stack','poster','chips','lifts','badge','bar','pr','fun','duo'];
+const CS_H={giant:1,dots:1,lifts:1,fun:1,duo:1}; // styles that also come in a wide version / estilos que también tienen versión ancha
 const CS_CLEAN={giant:1,dots:1,vert:1,row:1}; // already big and bold: no panel needed / ya son grandes y claros: sin panel
 let CS=null;
 const csAcc=()=>{try{return(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'').trim()||'#ff6a2b';}catch(e){return'#ff6a2b';}};
@@ -11,10 +12,11 @@ function csRgba(hex,a){
 }
 function csOpen(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
-  CS={wk:wk,style:'giant',fmt:'story',pos:'bottom',bg:'none',panel:'on',col:'#ffffff',photo:null,file:null,adv:false};
+  CS={wk:wk,style:'giant',fmt:'story',ori:'v',pos:'bottom',bg:'none',panel:'on',col:'#ffffff',photo:null,file:null,adv:false};
   const chip=(k,v,lbl,extra)=>'<button class="chip'+(CS[k]===v?' on':'')+'" data-k="'+k+'" data-v="'+v+'" onclick="'+(extra||'csSet(\''+k+'\',\''+v+'\')')+'">'+lbl+'</button>';
   const acc=csAcc(),act=(ico,lbl,fn,cls)=>'<button class="cs-a'+(cls?' '+cls:'')+'" onclick="'+fn+'"><span class="cs-ai">'+ic(ico)+'</span><span>'+lbl+'</span></button>';
   sheet('<div class="form cs"><div class="pick-h"><h3>'+t('cdBtn')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+    '<div class="chips cs-ori">'+chip('ori','v',t('csOriV'))+chip('ori','h',t('csOriH'))+'</div>'+
     '<div class="cs-grid">'+CS_STYLES.map(k=>'<button class="cs-g'+(CS.style===k?' on':'')+'" data-k="style" data-v="'+k+'" onclick="csSet(\'style\',\''+k+'\')"><canvas data-s="'+k+'"></canvas><i class="cs-ck">'+ic('check')+'</i><span>'+t('csS_'+k)+'</span></button>').join('')+'</div>'+
     '<div class="cs-bar"><div class="cs-adv" id="csAdv" hidden>'+
       '<div class="cs-l">'+t('csBgL')+'</div><div class="chips cs-row">'+chip('bg','none',t('csBgNone'))+chip('bg','photo',t('csBgPhoto'),'csBgPhoto()')+chip('bg','dark',t('csBgDark'))+'</div>'+
@@ -38,6 +40,7 @@ function csStory(){
 }
 function csSet(k,v){
   if(!CS)return;CS[k]=v;
+  if(k==='ori'){document.querySelectorAll('#sheet .cs-g').forEach(b=>{b.hidden=v==='h'&&!CS_H[b.dataset.v];});if(v==='h'&&!CS_H[CS.style])CS.style='giant';document.querySelectorAll('#sheet [data-k="style"]').forEach(b=>b.classList.toggle('on',b.dataset.v===CS.style));}
   document.querySelectorAll('#sheet [data-k="'+k+'"]').forEach(b=>b.classList.toggle('on',b.dataset.v===String(v)));
   csDraw();
 }
@@ -66,12 +69,12 @@ function csDraw(){
 let csTm=null;
 function csPrep(){
   if(!CS)return;CS.file=null;clearTimeout(csTm);
-  const cur=CS,key=cur.style+cur.fmt+cur.pos+cur.bg+cur.col+cur.panel;
+  const cur=CS,key=cur.style+cur.fmt+cur.ori+cur.pos+cur.bg+cur.col+cur.panel;
   csTm=setTimeout(function(){
     if(CS!==cur)return;
     let c;try{c=csFinal(Object.assign({},cur,{crop:1}));}catch(e){return;}
     c.toBlob(function(b){
-      if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.pos+cur.bg+cur.col+cur.panel)return;
+      if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.ori+cur.pos+cur.bg+cur.col+cur.panel)return;
       cur.file=new File([b],'bubylift-'+dInput(cur.wk.t)+(cur.bg==='none'?'-overlay':'')+'.png',{type:'image/png'});
     },'image/png');
   },120);
@@ -141,11 +144,11 @@ function csRender(o,sc){
   /* soft shadow so text reads on any photo / sombra suave para leer sobre cualquier foto */
   const shadow=function(){g.shadowColor='transparent';g.shadowBlur=0;g.shadowOffsetY=0;}; // no glow behind letters: clean edges / sin brillo detrás de las letras: bordes limpios
   shadow(true);
-  const S=({giant:csGiant,vert:csVert,row:csRow,dots:csDots,classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,pr:csPrCard,fun:csFun})[o.style]||csClassic;
+  const S=({giant:csGiant,vert:csVert,row:csRow,dots:csDots,classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,pr:csPrCard,fun:csFun,duo:csDuo})[o.style]||csClassic;
   /* where the block sits: top, middle or bottom / dónde queda el bloque: arriba, centro o abajo */
   const dy=o.pos==='top'?Math.round(H*.26-(B-330)):(o.pos==='mid'?Math.round(H*.5-(B-330)):0);
   g.save();g.translate(0,dy);
-  S(g,{W:W,H:H,B:B,d:d,wk:wk,wo:wo,name:name,stats:stats,ink:ink,sub:sub,line:line,acc:acc,light:light,shadow:shadow});
+  S(g,{h:o.ori==='h'&&!!CS_H[o.style],W:W,H:H,B:B,d:d,wk:wk,wo:wo,name:name,stats:stats,ink:ink,sub:sub,line:line,acc:acc,light:light,shadow:shadow});
   g.restore();
   if(d.sv){shadow(false);csTxt(g,'Powered by Strava',W/2,H-40,28,'500',sub,'center');}
   if(o.bg==='none'&&o.panel!=='off'&&!CS_CLEAN[o.style])return csPanel(c,light,!!o.crop);
@@ -222,6 +225,7 @@ function csChips(g,v){
 }
 /* 5 · lifts: the list of exercises / la lista de ejercicios */
 function csLifts(g,v){
+  if(v.h)return csListH(g,v,false);
   const W=v.W,rows=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
   const n0=rows.length,h=n0>7?Math.max(56,Math.floor(728/n0)):104,fs=h>=96?44:Math.max(30,Math.round(h*.42)),y=v.B-(rows.length*h)-340;
   const p=csFit(g,v.name,W-160,88,'800');csTxt(g,v.name,80,y,p,'800',v.ink);
@@ -239,6 +243,7 @@ function csLifts(g,v){
 
 /* giant: one huge number, almost nothing else (the style that reads on any photo) / un solo número enorme y casi nada más (el estilo que se lee sobre cualquier foto) */
 function csGiant(g,v){
+  if(v.h)return csGiantH(g,v);
   const W=v.W,y=v.B-700,kg=wkVol(v.wk),num=wShow(kg);
   csLogo(g,80,y,60,v.ink,'left',v.acc);
   csTxt(g,t('csGiantL'),80,y+170,54,'700',v.sub);
@@ -286,6 +291,7 @@ function csRow(g,v){
 }
 /* dots: bold name and a compact list with dotted leaders / nombre en grande y lista compacta con puntos guía */
 function csDots(g,v){
+  if(v.h)return csDotsH(g,v);
   const W=v.W,rows=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
   const h=Math.min(78,Math.floor(760/Math.max(rows.length,1))),fs=Math.round(h*.52),y=v.B-(rows.length*h)-290;
   const p=csFit(g,v.name,W-160,112,'900');csTxt(g,v.name,80,y,p,'900',v.ink);
@@ -302,6 +308,77 @@ function csDots(g,v){
   });
   if(v.d.prs)csPr(g,80,yy+30,v);
   csLogo(g,80,yy+(v.d.prs?80:40),56,v.ink,'left',v.acc);
+}
+
+/* ---- wide versions (landscape cards) / versiones anchas (tarjetas horizontales) ---- */
+function csGiantH(g,v){
+  const W=v.W,y=v.B-420,kg=wkVol(v.wk),num=wShow(kg);
+  csLogo(g,80,y,56,v.ink,'left',v.acc);
+  csTxt(g,t('csGiantL'),80,y+150,46,'700',v.sub);
+  const fp=csFit(g,num,480,300,'900');csTxt(g,num,64,y+150+fp*.88,fp,'900',v.ink);
+  const x=620,cw=W-80-x;
+  const ut=wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase();g.font=cardFont(46,'800');const pw=Math.min(cw,g.measureText(ut).width+60);
+  g.fillStyle=v.acc;g.beginPath();if(g.roundRect)g.roundRect(x,y+120,pw,76,38);else g.rect(x,y+120,pw,76);g.fill();
+  csTxt(g,ut,x+30,y+174,46,'800','#ffffff');
+  const nn=csFit(g,v.name,cw,56,'800');csTxt(g,v.name,x,y+270,nn,'800',v.ink);
+  {const dq=csFit(g,v.d.date,cw,30,'600');csTxt(g,v.d.date,x,y+318,dq,'600',v.sub);}
+  if(v.d.prs)csPr(g,x,y+390,v);
+}
+function csDotsH(g,v){csListH(g,v,true);}
+/* two columns of exercises: dotted (clean) or with lines / dos columnas de ejercicios: con puntos o con líneas */
+function csListH(g,v,dots){
+  const W=v.W,rows=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
+  const two=rows.length>4,per=two?Math.ceil(rows.length/2):rows.length,h=64,fs=two?26:34,cw=two?(W-160-40)/2:W-160,y=v.B-(per*h)-230;
+  const p=csFit(g,v.name,W-160,96,'900');csTxt(g,v.name,80,y,p,'900',v.ink);
+  csTxt(g,v.d.date+(v.d.dur?'  ·  '+v.d.dur:''),80,y+54,34,'600',v.sub);
+  if(dots){g.fillStyle=v.acc;g.fillRect(80,y+84,150,10);}
+  rows.forEach((r,i)=>{
+    const col=i<per?0:1,x=80+col*(cw+40),yy=y+150+(i%per)*h;
+    let rt=String(r[1]);if(rt.length>20)rt=rt.slice(0,20);g.font=cardFont(fs,'700');const rw=g.measureText(rt).width;
+    let n=r[0];g.font=cardFont(fs,'800');const mx=cw-rw-32;while(g.measureText(n).width>mx&&n.length>4){n=n.slice(0,-1).trimEnd();}if(n!==r[0]){n+='…';while(g.measureText(n).width>mx&&n.length>2)n=n.slice(0,-2)+'…';}
+    csTxt(g,n,x,yy,fs,'800',v.ink);csTxt(g,rt,x+cw,yy,fs,'700',v.ink,'right');
+    if(dots){g.font=cardFont(fs,'800');const a=x+g.measureText(n).width+16;g.font=cardFont(fs,'700');const b=x+cw-g.measureText(rt).width-16;g.fillStyle=v.acc;for(let d=a;d<b;d+=15){g.beginPath();g.arc(d,yy-fs*.18,2.8,0,6.3);g.fill();}}
+    else{g.fillStyle=v.line;g.fillRect(x,yy+18,cw,2);}
+  });
+  if(v.d.prs)csPr(g,80,y+150+per*h+30,v);
+  csLogo(g,W-80,y+150+per*h+(v.d.prs?14:30),48,v.ink,'right',dots?v.acc:undefined);
+}
+function csFunH(g,v){
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg),y=v.B-440;
+  csLogo(g,80,y,56,v.ink);
+  const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),fp=csFit(g,num,430,330,'900');csTxt(g,num,64,y+130+fp*.88,fp,'900',v.acc);
+  const x=560,cw=W-80-x;
+  csTxt(g,t('csFunT'),x,y+170,36,'700',v.sub);
+  const nm=t('csObj_'+f.k),p=csFit(g,nm,cw,96,'800');csTxt(g,nm,x,y+170+p+14,p,'800',v.ink);
+  csTxt(g,'= '+wShow(kg)+' '+wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase(),x,y+170+p+78,34,'600',v.sub);
+  {const ft=v.d.date,fq=csFit(g,ft,cw,28,'500');csTxt(g,ft,x,y+170+p+130,fq,'500',v.sub);}
+}
+
+/* duo: the "fun" card and the exercise list together in ONE image (stacked, or side by side when wide) / la tarjeta curiosa y la lista de ejercicios juntas en UNA imagen (apiladas, o lado a lado en horizontal) */
+function csDuo(g,v){
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg),all=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
+  const rows=all.slice(0,6),n=rows.length,h=66,fs=32,num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1);
+  const list=(x,y,cw)=>rows.forEach((r,i)=>{const yy=y+i*h;let rt=String(r[1]);if(rt.length>20)rt=rt.slice(0,20);g.font=cardFont(fs,'700');const mx=cw-g.measureText(rt).width-28;let nm=r[0];g.font=cardFont(fs,'800');while(g.measureText(nm).width>mx&&nm.length>4)nm=nm.slice(0,-1).trimEnd();if(nm!==r[0])nm+='…';csTxt(g,nm,x,yy,fs,'800',v.ink);csTxt(g,rt,x+cw,yy,fs,'700',v.sub,'right');g.fillStyle=v.line;g.fillRect(x,yy+18,cw,2);});
+  const nmO=t('csObj_'+f.k);
+  if(v.h){
+    const y=v.B-Math.max(n*h,330)-250;
+    csLogo(g,80,y,52,v.ink);
+    const fp=csFit(g,num,340,300,'900');csTxt(g,num,64,y+130+fp*.88,fp,'900',v.acc);
+    csTxt(g,t('csFunT'),80,y+130+fp*.88+54,28,'700',v.sub);
+    const q=csFit(g,nmO,380,44,'800');csTxt(g,nmO,80,y+130+fp*.88+100,q,'800',v.ink);
+    list(470,y+40,W-80-470);
+    return;
+  }
+  const y=v.B-(n*h)-680;
+  csLogo(g,80,y,56,v.ink);
+  const fp=csFit(g,num,440,260,'900');csTxt(g,num,64,y+120+fp*.88,fp,'900',v.acc);
+  const x=560,cw=W-80-x;
+  csTxt(g,t('csFunT'),x,y+160,34,'700',v.sub);
+  const q=csFit(g,nmO,cw,70,'800');csTxt(g,nmO,x,y+160+q+10,q,'800',v.ink);
+  csTxt(g,'= '+wShow(kg)+' '+wUnit(),x,y+160+q+66,32,'600',v.sub);
+  g.fillStyle=v.acc;g.fillRect(80,y+380,150,10);
+  csTxt(g,v.d.date,80,y+450,32,'600',v.sub);
+  list(80,y+520,W-160);
 }
 /* 6 · badge: a ring with the main number / un anillo con el número principal */
 function csBadge(g,v){
@@ -344,6 +421,7 @@ function csPrCard(g,v){
 const CS_OBJ=[['bus',11000],['ele',6000],['car',1300],['pia',450],['fri',80],['bow',7]];
 function csFunObj(kg){for(let i=0;i<CS_OBJ.length;i++){const n=kg/CS_OBJ[i][1];if(n>=1)return{k:CS_OBJ[i][0],n:n};}const o=CS_OBJ[CS_OBJ.length-1];return{k:o[0],n:kg/o[1]};}
 function csFun(g,v){
+  if(v.h)return csFunH(g,v);
   const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg),y=v.B-640;
   csLogo(g,80,y-40,60,v.ink);
   csTxt(g,t('csFunT'),80,y+110,50,'700',v.sub);
