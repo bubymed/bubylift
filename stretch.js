@@ -26,7 +26,7 @@ function strRows(list){
 function strStart(name,list){
   if(ACT){toast(t('finishFirst'));return;}
   if(!list.length){toast(t('strNone'));return;}
-  startWorkout({name:name,ex:list.map(m=>({eid:m.eid,sets:1,tg:m.tg}))});
+  startWorkout({name:name,guide:1,ex:list.map(m=>({eid:m.eid,sets:1,tg:m.tg}))});
 }
 function strSave(name,list){
   if(!list.length)return;

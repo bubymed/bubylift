@@ -47,6 +47,7 @@ function startWorkout(o){
   if(ACT){toast(t('finishFirst'));return;}
   ACT={id:uid(),t0:Date.now(),name:(o&&o.name)||'',note:'',ex:[]};
   if(o&&o.pl!=null)ACT.pl=o.pl;
+  if(o&&o.guide)ACT.guide=1;
   ((o&&o.ex)||[]).forEach(x=>addExTo(x.eid,x.sets,x.n,x.tg));
   saveAct();wake();tab='workout';renderTabs();render();window.scrollTo(0,0);
   if(!o)setTimeout(function(){if(ACT&&!ACT.ex.length)pickEx(null,true);},120);
@@ -119,7 +120,7 @@ function addExTo(eid,nSets,nm,tg){
 function startRoutine(id){const r=DATA.routines.find(x=>x.id===id);if(r)startWorkout({name:r.name,ex:r.ex});}
 
 /* ---------- views ---------- */
-function vWorkout(){return ACT?vActive():vStart();}
+function vWorkout(){if(!ACT)return vStart();if(ACT.guide&&!ACT.gOff&&typeof vGuide==='function')return vGuide();return(ACT.guide?'<button class="btn sm wide gd-back" onclick="gdOn()">'+ic('play')+' '+t('gdGuide')+'</button>':'')+vActive();}
 function needBackup(){
   const n=DATA.workouts.length+DATA.body.length;
   return n>=5&&(Date.now()-(SET.lastExport||0))>30*864e5&&Date.now()>(SET.bkSnooze||0);
@@ -475,7 +476,7 @@ function startRest(sec,manual){
 }
 /* the always-there Rest button / el botón Descanso siempre visible */
 function restStart(){if(!ACT)return;const x=ACT.ex[Math.min(REST_LAST,ACT.ex.length-1)],r=x?exRest(x):null;startRest(r>0?r:(SET.rest||90),true);buzz(8);}
-function restFab(){const b=$('restfab');if(!b)return;const on=!!ACT&&tab==='workout'&&!REST;b.hidden=!on;if(on){const x=ACT.ex[Math.min(REST_LAST,ACT.ex.length-1)],r=x?exRest(x):null;b.innerHTML=ic('stopwatch')+'<span>'+fmtClock(r>0?r:(SET.rest||90))+'</span>';b.setAttribute('aria-label',t('restStartB'));}}
+function restFab(){const b=$('restfab');if(!b)return;const on=!!ACT&&tab==='workout'&&!REST&&!(ACT.guide&&!ACT.gOff);b.hidden=!on;if(on){const x=ACT.ex[Math.min(REST_LAST,ACT.ex.length-1)],r=x?exRest(x):null;b.innerHTML=ic('stopwatch')+'<span>'+fmtClock(r>0?r:(SET.rest||90))+'</span>';b.setAttribute('aria-label',t('restStartB'));}}
 function drawRest(){
   const b=$('restbar');if(!b)return;
   if(!REST){b.hidden=true;return;}
