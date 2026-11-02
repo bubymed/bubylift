@@ -55,16 +55,26 @@ function gdOn(){if(!ACT)return;delete ACT.gOff;saveAct();render();}
 function gdMenu(){
   sheet('<h3>'+t('gdGuide')+'</h3><div class="menu"><button onclick="sheetClose();ACT.gOff=1;saveAct();render()">☰ '+t('gdList')+'</button><button onclick="sheetClose();gdLoad(GD?GD.i:gdFirst());render()">↺ '+t('gdRestart')+'</button><button class="danger" onclick="sheetClose();finishAsk()">'+t('gdEnd')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
+/* which part of the body switches (arm, leg…), read from the how-to text / qué parte del cuerpo cambia (brazo, pierna…), según el texto de cómo hacerlo */
+function gdPart(eid){
+  const e=exById(eid),n=((e&&e.en)||'')+' '+String(eid).replace(/^z_/,'').replace(/_/g,' ');
+  if(/hamstring|quad|calf|\bhip|groin|glute|thigh|ankle|foot|knee|\blegs?\b|lunge|adductor|achilles|soleus|gastroc|peroneal|tibialis|split|runner|\bit band|dancer|scissor|locust|world/i.test(n))return'leg';
+  if(/tricep|bicep|shoulder|wrist|deltoid|forearm|\barms?\b|elbow|\blat\b|chest stretch|handed/i.test(n))return'arm';
+  if(/neck|spin|torso|lateral|\bback\b|\bside\b|crossover|overhead/i.test(n))return'side';
+  const h=(typeof HOWTO!=='undefined'&&HOWTO[eid]||[])[0]||'';
+  const m=h.match(/\b(?:other|opposite|each|one|both)\s+(arm|leg|knee|foot|elbow|hand)s?\b/i)||h.match(/\bswitch(?:ing)?\s+(arm|leg|knee|foot|elbow|hand)s?\b/i);
+  return m?({hand:'arm',foot:'leg',knee:'leg',elbow:'arm'}[m[1].toLowerCase()]||m[1].toLowerCase()):'side';
+}
 function gdDyn(){return typeof STRETCH_DYN!=='undefined'&&STRETCH_DYN.indexOf(ACT.ex[GD.i].eid)>=0;}
 function gdLabel(){
   const f=GD.f,p=GD.ph;
-  if(p==='ready')return f.reps?t('gdReps',f.n):(gdDyn()?t('gdMove',f.secs):(f.sides===2?t('gdHoldEach',f.secs):t('gdHold',f.secs)));
+  if(p==='ready')return f.reps?t('gdReps',f.n):(gdDyn()?t('gdMove',f.secs):(f.sides===2?t('gdE_'+gdPart(ACT.ex[GD.i].eid),f.secs):t('gdHold',f.secs)));
   if(p==='reps')return t('gdReps',f.n);
   if(p==='prep')return t('gdPrep');
-  if(p==='swap')return t('gdSwap');
+  if(p==='swap')return t('gdW_'+gdPart(ACT.ex[GD.i].eid));
   if(p==='done')return t('gdDone');
   if(gdDyn())return t('gdMoving');
-  return f.sides===2?t('gdSide',GD.side+1,2):t('gdHolding');
+  return f.sides===2?t((GD.side?'gdS_':'gdF_')+gdPart(ACT.ex[GD.i].eid))+' — '+t('gdHoldW'):t('gdHolding');
 }
 function vGuide(){
   if(!GD||GD.i>=ACT.ex.length)gdLoad(gdFirst());
