@@ -6,6 +6,14 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.30 — 2026-11-01
+- **Guided mobility sessions**: Mobility now walks you through one move at a time, with a countdown, a short switch between sides for one-sided stretches, and one big button to pause or go to the next move. ⋯ → View as list brings back the old list.
+  **Sesiones de movilidad guiadas**: Movilidad ahora te guía un movimiento a la vez, con cuenta regresiva, un cambio corto de lado en los estiramientos de un lado y un botón grande para pausar o pasar al siguiente. ⋯ → Ver como lista trae de vuelta la lista de antes.
+
+## v1.1.29 — 2026-11-01
+- **Picker continues behind the keyboard**: the exercise list now keeps going behind the keyboard, and only the search bar floats right above it.
+  **El selector sigue detrás del teclado**: la lista de ejercicios ahora sigue hacia abajo detrás del teclado, y solo la barra de búsqueda queda flotando justo encima.
+
 ## v1.1.28 — 2026-11-01
 - **Scrolling fixed**: long sheets, like a workout's details, scroll normally again instead of jumping back to the top.
   **Desplazamiento arreglado**: las hojas largas, como el detalle de un entreno, vuelven a deslizarse normal en vez de brincar al inicio.

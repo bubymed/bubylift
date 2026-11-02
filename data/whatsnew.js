@@ -2,6 +2,12 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.30',items:[
+  {i:'🧘',en:'<b>Guided mobility sessions</b>: Mobility now walks you through one move at a time, with a countdown, a short switch between sides for one-sided stretches, and one big button to pause or go to the next move. ⋯ → View as list brings back the old list.',es:'<b>Sesiones de movilidad guiadas</b>: Movilidad ahora te guía un movimiento a la vez, con cuenta regresiva, un cambio corto de lado en los estiramientos de un lado y un botón grande para pausar o pasar al siguiente. ⋯ → Ver como lista trae de vuelta la lista de antes.'}
+ ]},
+ {v:'v1.1.29',items:[
+  {i:'🩹',en:'<b>Picker continues behind the keyboard</b>: the exercise list now keeps going behind the keyboard, and only the search bar floats right above it.',es:'<b>El selector sigue detrás del teclado</b>: la lista de ejercicios ahora sigue hacia abajo detrás del teclado, y solo la barra de búsqueda queda flotando justo encima.'}
+ ]},
  {v:'v1.1.28',items:[
   {i:'🩹',en:'<b>Scrolling fixed</b>: long sheets, like a workout\'s details, scroll normally again instead of jumping back to the top.',es:'<b>Desplazamiento arreglado</b>: las hojas largas, como el detalle de un entreno, vuelven a deslizarse normal en vez de brincar al inicio.'}
  ]},

@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.28';
+const APP_VER='v1.1.30';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -263,7 +263,7 @@ function bootApp(){
   function fit(){
     const r=document.documentElement.style,kb=Math.max(0,window.innerHeight-vv.height-vv.offsetTop);
     r.setProperty('--vvh',Math.round(vv.height)+'px');r.setProperty('--vvt',Math.round(vv.offsetTop)+'px');
-    document.body.classList.toggle('kbd',kb>120);
+    r.setProperty('--kbh',Math.round(kb)+'px');document.body.classList.toggle('kbd',kb>120);
   }
   vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit);fit();
   /* iOS animates the keyboard and scrolls the page to reveal the focused field: keep re-measuring every frame while it moves, and put the picker back in place / iOS anima el teclado y desplaza la página para mostrar el campo: vuelve a medir en cada cuadro mientras se mueve y deja el selector en su sitio */

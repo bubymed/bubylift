@@ -376,10 +376,13 @@ main>.lnk-d{display:flex;margin:14px auto 0;color:var(--txt)}
 @media(max-width:430px){#restbar{padding:10px 12px 12px}#restbar .rb-row{gap:6px}#restbar .rb-l{display:none}#restbar #restT{font-size:1.8rem}#restbar .btn.sm{min-width:44px;padding:0 10px;font-size:.95rem}}
 
 /* exercise picker as a swipeable strip that stays above the keyboard / selector como tira deslizable que queda sobre el teclado */
-#sheetov.pks{inset:0;height:auto;align-items:flex-end}
-body.kbd #sheetov.pks{inset:auto;left:0;right:0;top:var(--vvt,0px);height:var(--vvh,100dvh)}
-#sheet.pks{overflow:hidden;overflow:clip;overscroll-behavior:none;display:flex;flex-direction:column;max-height:calc(100dvh - 24px);height:calc(100dvh - 24px);overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
-body.kbd #sheet.pks{max-height:calc(var(--vvh,100dvh) - 24px);height:calc(var(--vvh,100dvh) - 24px);padding-bottom:10px}
+#sheetov.pks{inset:0;height:auto;align-items:flex-end;justify-content:flex-end}
+/* keyboard open: the sheet and its list keep going down behind the keyboard; only the search bar floats right above it / con el teclado abierto: la hoja y su lista siguen hacia abajo detrás del teclado; solo la barra de búsqueda queda flotando justo encima */
+body.kbd #sheet.pks{position:relative;padding-bottom:0}
+body.kbd #sheet.pks .pk-bot{position:absolute;left:16px;right:16px;bottom:var(--kbh,0px);padding:8px 0 10px;background:var(--panel);z-index:2}
+body.kbd #sheet.pks .exlist.pk-list{padding-bottom:calc(var(--kbh,0px) + 76px)}
+#sheet.pks{overflow:hidden;overflow:clip;overscroll-behavior:none;display:flex;flex-direction:column;max-height:calc(100% - 24px);height:calc(100% - 24px);overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+
 /* keyboard open in the picker: only the search stays in view; the keyboard may cover the tab bar and the add button / con el teclado abierto en el selector solo queda a la vista el buscador; el teclado puede tapar la barra inferior y el botón de agregar */
 body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skbar,body.kbd:has(#sheet.pks) #sheet.pks .pk-bot .pickadd{display:none}
 #sheet.pks .pick{display:flex;flex-direction:column;flex:1;min-height:0}
@@ -587,3 +590,25 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 .wel-logo.wl .bl{height:44px;width:auto;max-width:86vw}
 
 .barln{margin:2px 0 4px}.menu button.on{color:var(--accent);font-weight:800}
+
+/* guided mobility session / sesión de movilidad guiada */
+.gd{display:flex;flex-direction:column;align-items:center;gap:12px;padding:6px 0 24px;text-align:center}
+.gd-top{display:flex;align-items:center;gap:12px;width:100%}
+.gd-prog{flex:1;display:flex;gap:3px}.gd-prog i{flex:1;height:5px;border-radius:3px;background:var(--line)}.gd-prog i.ok{background:var(--accent)}.gd-prog i.cur{background:var(--txt);opacity:.7}
+.gd-cnt{font-size:.85rem;color:var(--dim);font-weight:700;min-width:38px;text-align:right}
+.gd-name{margin:2px 0 0;font-size:1.4rem;line-height:1.2}
+.gd-img{width:100%;max-width:300px;max-height:26vh;border-radius:18px;overflow:hidden;background:var(--panel2)}.gd-img img{width:100%;height:100%;object-fit:cover;display:block}
+.gd-lbl{font-size:1.05rem;font-weight:700;color:var(--accent);min-height:1.4em}
+.gd-ring{position:relative;width:190px;height:190px}
+.gd-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gd-ring circle{fill:none;stroke-width:10}.gd-ring .bg{stroke:var(--line)}.gd-ring .fg{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:534;transition:stroke-dashoffset .25s linear}
+.gd-hold .gd-ring .fg,.gd-prep .gd-ring .fg{stroke:var(--accent)}.gd-swap .gd-ring .fg{stroke:var(--accent2,#ffcc00)}.gd-done .gd-ring .fg{stroke:#34c759}
+.gd-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:4.6rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.gd-num small{font-size:1rem;color:var(--dim);font-weight:600;margin-top:4px}
+.gd-ok{color:#34c759}.gd-ok .ic{width:84px;height:84px;stroke-width:2.4}
+.gd-ctl{display:flex;align-items:center;justify-content:center;gap:16px;width:100%;margin-top:4px}
+.gd-main{flex:1;max-width:260px;min-height:64px;border-radius:32px;background:var(--accent);color:#fff;font-weight:800;font-size:1.05rem;display:flex;align-items:center;justify-content:center;gap:10px;padding:0 20px}
+.gd-main .ic{width:26px;height:26px;flex:none}.gd-main span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gd-s{width:52px;height:52px;border-radius:26px;background:var(--panel2);display:flex;align-items:center;justify-content:center}.gd-s:disabled{opacity:.3}
+.gd-how{width:100%;text-align:left;background:var(--panel);border-radius:16px;padding:12px 16px;margin-top:6px}
+.gd-back{margin-bottom:10px}
