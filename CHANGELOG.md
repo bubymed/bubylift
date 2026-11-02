@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.34 — 2026-10-30
+- A welcome screen helps you put Bubylift on your phone.
+  Una pantalla de bienvenida te ayuda a poner Bubylift en tu teléfono.
+
 ## v1.1.33 — 2026-10-30
 - Swipe any sheet down to close it.
   Desliza cualquier hoja hacia abajo para cerrarla.

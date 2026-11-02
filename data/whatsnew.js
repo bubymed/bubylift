@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.34',items:[
+  {i:'device-mobile',en:'A welcome screen helps you put Bubylift on your phone.',es:'Una pantalla de bienvenida te ayuda a poner Bubylift en tu teléfono.'}
+ ]},
  {v:'v1.1.33',items:[
   {i:'chevron-left',en:'Swipe any sheet down to close it.',es:'Desliza cualquier hoja hacia abajo para cerrarla.'}
  ]},
