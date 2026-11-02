@@ -101,7 +101,7 @@ function vGuide(){
     '<div class="gd-ring"><svg viewBox="0 0 190 190" aria-hidden="true"><circle class="bg" cx="95" cy="95" r="85"/><circle id="gdR" class="fg" cx="95" cy="95" r="85" style="stroke-dashoffset:'+off+'"/></svg><div class="gd-num">'+big+'</div></div>'+
     '<div class="gd-ctl"><button class="gd-s" onclick="gdSkip(-1)" aria-label="'+esc(t('gdBack'))+'"'+(i<1?' disabled':'')+'>'+ic('chevron-left')+'</button><button class="gd-main" onclick="gdMain()">'+btn[0]+'<span>'+esc(btn[1])+'</span></button><button class="gd-s" onclick="gdSkip(1)" aria-label="'+esc(t('gdSkip'))+'"'+(last?' disabled':'')+'>'+ic('chevron-right')+'</button></div>'+
     (run?'<button class="gd-fm" onclick="gdFinMove()">'+ic('check')+' '+t('gdFinMove')+'</button>':'')+
-    '<div class="gd-acts"><button onclick="ACT.gOff=1;saveAct();render()">☰ '+t('gdListB')+'</button><button onclick="finishAsk()">■ '+t('gdEnd')+'</button></div>'+
+    '<div class="gd-acts"><button onclick="ACT.gOff=1;saveAct();render();pgAnim()">☰ '+t('gdListB')+'</button><button onclick="finishAsk()">■ '+t('gdEnd')+'</button></div>'+
     (steps.length?'<div class="gd-how"><div class="lbl">'+t('howSteps')+'</div><ol class="how">'+steps.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol></div>':'')+
   '</div>';
 }

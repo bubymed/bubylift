@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.32 — 2026-11-01
+- **Smoother motion**: guided sessions now slide between moves, the countdown pulses each second, the done check pops in, new sets slide into place and starting or leaving a session fades in softly.
+  **Movimiento más suave**: las sesiones guiadas ahora se deslizan entre movimientos, la cuenta regresiva late cada segundo, la palomita de terminado aparece con un pop, las series nuevas entran deslizándose y empezar o salir de una sesión aparece con suavidad.
+
 ## v1.1.31 — 2026-11-01
 - **Clear exits in guided sessions**: an Exit button on top (save, discard, list view or keep going), plus Finish this move, List view and Finish session always on screen. Nobody gets stuck.
   **Salidas claras en las sesiones guiadas**: un botón Salir arriba (guardar, descartar, ver lista o seguir), y siempre en pantalla Terminar este movimiento, Ver lista y Terminar sesión. Nadie se queda atrapado.

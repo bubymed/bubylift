@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.32',items:[
+  {i:'✨',en:'<b>Smoother motion</b>: guided sessions now slide between moves, the countdown pulses each second, the done check pops in, new sets slide into place and starting or leaving a session fades in softly.',es:'<b>Movimiento más suave</b>: las sesiones guiadas ahora se deslizan entre movimientos, la cuenta regresiva late cada segundo, la palomita de terminado aparece con un pop, las series nuevas entran deslizándose y empezar o salir de una sesión aparece con suavidad.'}
+ ]},
  {v:'v1.1.31',items:[
   {i:'🚪',en:'<b>Clear exits in guided sessions</b>: an Exit button on top (save, discard, list view or keep going), plus Finish this move, List view and Finish session always on screen. Nobody gets stuck.',es:'<b>Salidas claras en las sesiones guiadas</b>: un botón Salir arriba (guardar, descartar, ver lista o seguir), y siempre en pantalla Terminar este movimiento, Ver lista y Terminar sesión. Nadie se queda atrapado.'}
  ]},
