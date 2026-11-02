@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.35',items:[
+  {i:'share',en:'Share screen redesigned: big card gallery, Instagram story button, new Giant, Vertical, Row and Dots styles, clearer text.',es:'Pantalla de compartir rediseñada: galería grande, botón de historia de Instagram, estilos nuevos Gigante, Vertical, En fila y Puntos, y texto más claro.'}
+ ]},
  {v:'v1.1.34',items:[
   {i:'device-mobile',en:'A welcome screen helps you put Bubylift on your phone.',es:'Una pantalla de bienvenida te ayuda a poner Bubylift en tu teléfono.'}
  ]},

@@ -1,6 +1,7 @@
 /* Share studio (v95): transparent workout cards in 7 styles — put them over any photo or story, or add a photo here.
    Estudio de tarjetas (v95): tarjetas con fondo transparente en 7 estilos — ponlas sobre cualquier foto o historia, o agrega una foto aquí. */
-const CS_STYLES=['classic','stack','poster','chips','lifts','badge','bar','pr','fun'];
+const CS_STYLES=['giant','vert','row','dots','classic','stack','poster','chips','lifts','badge','bar','pr','fun'];
+const CS_CLEAN={giant:1,dots:1,vert:1,row:1}; // already big and bold: no panel needed / ya son grandes y claros: sin panel
 let CS=null;
 const csAcc=()=>{try{return(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'').trim()||'#ff6a2b';}catch(e){return'#ff6a2b';}};
 function csRgba(hex,a){
@@ -10,19 +11,30 @@ function csRgba(hex,a){
 }
 function csOpen(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
-  CS={wk:wk,style:'classic',fmt:'story',pos:'bottom',bg:'none',col:'#ffffff',photo:null,file:null};
+  CS={wk:wk,style:'giant',fmt:'story',pos:'bottom',bg:'none',panel:'on',col:'#ffffff',photo:null,file:null,adv:false};
   const chip=(k,v,lbl,extra)=>'<button class="chip'+(CS[k]===v?' on':'')+'" data-k="'+k+'" data-v="'+v+'" onclick="'+(extra||'csSet(\''+k+'\',\''+v+'\')')+'">'+lbl+'</button>';
-  const acc=csAcc();
+  const acc=csAcc(),act=(ico,lbl,fn,cls)=>'<button class="cs-a'+(cls?' '+cls:'')+'" onclick="'+fn+'"><span class="cs-ai">'+ic(ico)+'</span><span>'+lbl+'</span></button>';
   sheet('<div class="form cs"><div class="pick-h"><h3>'+t('cdBtn')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
-    '<div class="cs-pvw"><canvas id="csPv"></canvas></div>'+
-    '<div class="cs-th">'+CS_STYLES.map(k=>'<button class="cs-t'+(CS.style===k?' on':'')+'" data-k="style" data-v="'+k+'" onclick="csSet(\'style\',\''+k+'\')"><canvas data-s="'+k+'"></canvas><span>'+t('csS_'+k)+'</span></button>').join('')+'</div>'+
-    '<div class="cs-l">'+t('csBgL')+'</div><div class="chips cs-row">'+chip('bg','none',t('csBgNone'))+chip('bg','photo',t('csBgPhoto'),'csBgPhoto()')+chip('bg','dark',t('csBgDark'))+'</div>'+
-    '<div class="cs-fp"><div class="cs-l">'+t('csFmtL')+'</div><div class="chips cs-row">'+chip('fmt','story',t('csFmtStory'))+chip('fmt','post',t('csFmtPost'))+chip('fmt','square',t('csFmtSq'))+'</div>'+
-    '<div class="cs-l">'+t('csPosL')+'</div><div class="chips cs-row">'+chip('pos','top',t('csPosTop'))+chip('pos','mid',t('csPosMid'))+chip('pos','bottom',t('csPosBot'))+'</div></div>'+
-    '<div class="cs-l">'+t('csColL')+'</div><div class="cs-sw">'+['#ffffff','#111111',acc].map(c=>'<button class="cs-c'+(CS.col===c?' on':'')+'" data-k="col" data-v="'+c+'" style="background:'+c+'" aria-label="'+c+'" onclick="csSet(\'col\',\''+c+'\')"></button>').join('')+'</div>'+
-    '<input id="csf" type="file" accept="image/*" hidden onchange="csPhoto(this)">'+
-    '<div class="row"><button class="btn" onclick="csOut(false)">'+t('csSave')+'</button><button class="btn" onclick="csCopy()">'+t('csCopy')+'</button><button class="btn pri" onclick="csOut(true)">'+t('csShare')+'</button></div></div>');
+    '<div class="cs-grid">'+CS_STYLES.map(k=>'<button class="cs-g'+(CS.style===k?' on':'')+'" data-k="style" data-v="'+k+'" onclick="csSet(\'style\',\''+k+'\')"><canvas data-s="'+k+'"></canvas><i class="cs-ck">'+ic('check')+'</i><span>'+t('csS_'+k)+'</span></button>').join('')+'</div>'+
+    '<div class="cs-bar"><div class="cs-adv" id="csAdv" hidden>'+
+      '<div class="cs-l">'+t('csBgL')+'</div><div class="chips cs-row">'+chip('bg','none',t('csBgNone'))+chip('bg','photo',t('csBgPhoto'),'csBgPhoto()')+chip('bg','dark',t('csBgDark'))+'</div>'+
+      '<div class="cs-l">'+t('csPanL')+'</div><div class="chips cs-row">'+chip('panel','on',t('csPanOn'))+chip('panel','off',t('csPanOff'))+'</div>'+
+      '<div class="cs-l">'+t('csFmtL')+'</div><div class="chips cs-row">'+chip('fmt','story',t('csFmtStory'))+chip('fmt','post',t('csFmtPost'))+chip('fmt','square',t('csFmtSq'))+'</div>'+
+      '<div class="cs-l">'+t('csPosL')+'</div><div class="chips cs-row">'+chip('pos','top',t('csPosTop'))+chip('pos','mid',t('csPosMid'))+chip('pos','bottom',t('csPosBot'))+'</div>'+
+      '<div class="cs-l">'+t('csColL')+'</div><div class="cs-sw">'+['#ffffff','#111111',acc].map(c=>'<button class="cs-c'+(CS.col===c?' on':'')+'" data-k="col" data-v="'+c+'" style="background:'+c+'" aria-label="'+c+'" onclick="csSet(\'col\',\''+c+'\')"></button>').join('')+'</div></div>'+
+      '<input id="csf" type="file" accept="image/*" hidden onchange="csPhoto(this)">'+
+      '<div class="cs-acts">'+act('brand-instagram',t('csStory'),'csStory()','ig')+act('copy',t('csCopy'),'csCopy()')+act('download',t('csSaveS'),'csOut(false)')+act('share',t('csMore'),'csOut(true)')+'</div>'+
+      '<button class="cs-opt" onclick="csAdv()">'+ic('settings')+' '+t('csAdv')+'</button></div></div>');
   csDraw();
+}
+function csAdv(){const e=$('csAdv');if(e)e.hidden=!e.hidden;}
+/* straight to Instagram: copy the card, open the story camera, and paste it as a sticker / directo a Instagram: copia la tarjeta, abre la cámara de historias y se pega como sticker */
+function csStory(){
+  if(!CS)return;const f=CS.file;
+  if(!f){toast(t('csWait'));csPrep();return;}
+  const go=function(){toast(t('csStoryHint'));setTimeout(function(){try{location.href='instagram://story-camera';}catch(e){}},350);};
+  try{if(navigator.clipboard&&window.ClipboardItem){navigator.clipboard.write([new ClipboardItem({'image/png':f})]).then(go,function(){csOut(true);});return;}}catch(e){}
+  csOut(true);
 }
 function csSet(k,v){
   if(!CS)return;CS[k]=v;
@@ -44,10 +56,11 @@ function csPhoto(inp){
 /* every style is drawn small, side by side, so you can compare them at a glance / cada estilo se dibuja pequeño, lado a lado, para compararlos de un vistazo */
 function csDraw(){
   if(!CS)return;
-  const pv=$('csPv');if(pv){try{const c=csFinal(CS,.34);pv.width=c.width;pv.height=c.height;const x=pv.getContext('2d');x.clearRect(0,0,c.width,c.height);x.drawImage(c,0,0);}catch(e){}}
-  document.querySelectorAll('#sheet canvas[data-s]').forEach(v=>{
-    let c;try{c=csFinal(Object.assign({},CS,{style:v.dataset.s}),.22);}catch(e){return;}
-    v.width=c.width;v.height=c.height;v.getContext('2d').drawImage(c,0,0);
+    document.querySelectorAll('#sheet canvas[data-s]').forEach(v=>{
+    let c;try{c=csFinal(Object.assign({},CS,{style:v.dataset.s}),.3);}catch(e){return;}
+    let sy=0,sh=c.height;
+    if(CS.fmt==='story'){const f=CS.pos==='top'?[.08,.66]:(CS.pos==='mid'?[.2,.8]:[.4,1]);sy=Math.round(c.height*f[0]);sh=Math.round(c.height*(f[1]-f[0]));}
+    v.width=c.width;v.height=sh;v.getContext('2d').drawImage(c,0,sy,c.width,sh,0,0,c.width,sh);
   });
   csPrep();
 }
@@ -55,12 +68,12 @@ function csDraw(){
 let csTm=null;
 function csPrep(){
   if(!CS)return;CS.file=null;clearTimeout(csTm);
-  const cur=CS,key=cur.style+cur.fmt+cur.pos+cur.bg+cur.col;
+  const cur=CS,key=cur.style+cur.fmt+cur.pos+cur.bg+cur.col+cur.panel;
   csTm=setTimeout(function(){
     if(CS!==cur)return;
-    let c;try{c=csFinal(cur);}catch(e){return;}
+    let c;try{c=csFinal(Object.assign({},cur,{crop:1}));}catch(e){return;}
     c.toBlob(function(b){
-      if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.pos+cur.bg+cur.col)return;
+      if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.pos+cur.bg+cur.col+cur.panel)return;
       cur.file=new File([b],'bubylift-'+dInput(cur.wk.t)+(cur.bg==='none'?'-overlay':'')+'.png',{type:'image/png'});
     },'image/png');
   },120);
@@ -99,11 +112,11 @@ function csFit(g,s,maxW,px,w){
   return p;
 }
 function csTxt(g,s,x,y,px,w,col,al){g.font=cardFont(px,w);g.fillStyle=col;g.textAlign=al||'left';g.fillText(s,x,y);g.textAlign='left';}
-function csLogo(g,x,y,sz,col,al){
+function csLogo(g,x,y,sz,col,al,icol){
   g.font=cardFont(Math.round(sz*.82),'800');
   const tw=g.measureText('BUBYLIFT').width,total=sz+Math.round(sz*.28)+tw;
   const x0=al==='center'?x-total/2:al==='right'?x-total:x;
-  cardIcon(g,'barbell',x0,y,sz,col);
+  cardIcon(g,'barbell',x0,y,sz,icol||col);
   csTxt(g,'BUBYLIFT',x0+sz+Math.round(sz*.28),y+sz*.78,Math.round(sz*.82),'800',col);
   return total;
 }
@@ -119,6 +132,7 @@ function csRender(o,sc){
   const g=c.getContext('2d');g.scale(sc,sc);const acc=csAcc(),ink=o.col,light=ink!=='#111111';
   const sub=csRgba(ink,.82),line=csRgba(ink,.35),stats=csStats(wk,d),wo=!wk.ex.length;
   const name=(wk.name||(wo?spName(wk.sp):'')).trim()||spName(wk.sp);
+  d.date=t('csWkL')+'  ·  '+d.date; // tells viewers what the name is / le dice a quien lo ve qué es el nombre
   const B=H-(o.fmt==='post'?100:(o.fmt==='square'?70:150)); // bottom edge of the block / borde inferior del bloque
   /* background / fondo */
   if(o.bg==='dark'){const bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#16161a');bg.addColorStop(1,'#2a1a12');g.fillStyle=bg;g.fillRect(0,0,W,H);}
@@ -127,16 +141,33 @@ function csRender(o,sc){
     const sh=g.createLinearGradient(0,H*.35,0,H);sh.addColorStop(0,'rgba(0,0,0,0)');sh.addColorStop(1,light?'rgba(0,0,0,.55)':'rgba(255,255,255,.4)');g.fillStyle=sh;g.fillRect(0,H*.35,W,H*.65);
   }
   /* soft shadow so text reads on any photo / sombra suave para leer sobre cualquier foto */
-  const shadow=function(on){g.shadowColor=on?(light?'rgba(0,0,0,.5)':'rgba(255,255,255,.45)'):'transparent';g.shadowBlur=on?16:0;g.shadowOffsetY=on?3:0;};
+  const shadow=function(){g.shadowColor='transparent';g.shadowBlur=0;g.shadowOffsetY=0;}; // no glow behind letters: clean edges / sin brillo detrás de las letras: bordes limpios
   shadow(true);
-  const S=({classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,pr:csPrCard,fun:csFun})[o.style]||csClassic;
+  const S=({giant:csGiant,vert:csVert,row:csRow,dots:csDots,classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,pr:csPrCard,fun:csFun})[o.style]||csClassic;
   /* where the block sits: top, middle or bottom / dónde queda el bloque: arriba, centro o abajo */
   const dy=o.pos==='top'?Math.round(H*.26-(B-330)):(o.pos==='mid'?Math.round(H*.5-(B-330)):0);
   g.save();g.translate(0,dy);
   S(g,{W:W,H:H,B:B,d:d,wk:wk,wo:wo,name:name,stats:stats,ink:ink,sub:sub,line:line,acc:acc,light:light,shadow:shadow});
   g.restore();
   if(d.sv){shadow(false);csTxt(g,'Powered by Strava',W/2,H-40,28,'500',sub,'center');}
+  if(o.bg==='none'&&o.panel!=='off'&&!CS_CLEAN[o.style])return csPanel(c,light,!!o.crop);
   return c;
+}
+/* soft panel behind the card so it reads on ANY photo (bright wall, busy mirror…); the exported sticker is cut to the panel
+   panel suave detrás de la tarjeta para que se lea sobre CUALQUIER foto (pared clara, espejo…); el sticker exportado se recorta al panel */
+function csPanel(c,light,crop){
+  const w=c.width,h=c.height,k=w/1080;let d;try{d=c.getContext('2d').getImageData(0,0,w,h).data;}catch(e){return c;}
+  let x0=w,y0=h,x1=-1,y1=-1;
+  for(let y=0;y<h;y++){const r=y*w*4;for(let x=0;x<w;x++){if(d[r+x*4+3]>110){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}}}
+  if(x1<0)return c;
+  const pad=Math.round(56*k),m=crop?Math.round(8*k):0;
+  const px=Math.max(0,x0-pad),py=Math.max(0,y0-pad),pw=Math.min(w,x1+pad)-px,ph=Math.min(h,y1+pad)-py;
+  const out=document.createElement('canvas');out.width=crop?pw+m*2:w;out.height=crop?ph+m*2:h;
+  const g=out.getContext('2d'),ox=crop?m-px:0,oy=crop?m-py:0,rx=px+ox,ry=py+oy,r=Math.round(54*k);
+  g.fillStyle=light?'rgba(12,12,16,.58)':'rgba(255,255,255,.72)';
+  g.beginPath();if(g.roundRect)g.roundRect(rx,ry,pw,ph,r);else g.rect(rx,ry,pw,ph);g.fill();
+  g.lineWidth=Math.max(1,2*k);g.strokeStyle=light?'rgba(255,255,255,.14)':'rgba(0,0,0,.10)';g.stroke();
+  g.drawImage(c,ox,oy);return out;
 }
 function csPr(g,x,y,v,al){
   if(!v.d.prs)return;
@@ -206,6 +237,73 @@ function csLifts(g,v){
     g.fillStyle=v.line;g.fillRect(80,yy+Math.round(h*.27),W-160,2);yy+=h;
   });
   csLogo(g,80,yy+30,60,v.ink);
+}
+
+/* giant: one huge number, almost nothing else (the style that reads on any photo) / un solo número enorme y casi nada más (el estilo que se lee sobre cualquier foto) */
+function csGiant(g,v){
+  const W=v.W,y=v.B-700,kg=wkVol(v.wk),num=wShow(kg);
+  csLogo(g,80,y,60,v.ink,'left',v.acc);
+  csTxt(g,t('csGiantL'),80,y+170,54,'700',v.sub);
+  const fp=csFit(g,num,W-140,420,'900');csTxt(g,num,64,y+170+fp*.86,fp,'900',v.ink);
+  const y2=y+170+fp*.86+86;
+  const ut=wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase();g.font=cardFont(58,'800');const pw=g.measureText(ut).width+72;
+  g.fillStyle=v.acc;g.beginPath();if(g.roundRect)g.roundRect(80,y2-62,pw,92,46);else g.rect(80,y2-62,pw,92);g.fill();
+  csTxt(g,ut,80+36,y2+2,58,'800','#ffffff');
+  const nn=csFit(g,v.name,W-160,52,'800');csTxt(g,v.name,80,y2+110,nn,'800',v.ink);
+  csTxt(g,v.d.date,80,y2+164,36,'600',v.sub);
+  if(v.d.prs)csPr(g,80,y2+240,v);
+}
+
+/* vert: stats run up the right edge, name bottom-left (like the sideways Strava card) / datos en vertical por el borde derecho, nombre abajo a la izquierda */
+function csVert(g,v){
+  const W=v.W,H=v.H,n=v.stats.length;
+  csLogo(g,80,110,64,v.ink,'left',v.acc);
+  g.fillStyle=v.acc;g.fillRect(W-196,Math.round(H*.12),8,Math.round(H*.76));
+  v.stats.forEach((s,i)=>{
+    const cy=H*.2+(i+.5)*(H*.6/Math.max(n,1));
+    g.save();g.translate(W-110,cy);g.rotate(-Math.PI/2);
+    g.textAlign='center';
+    g.font=cardFont(34,'600');g.fillStyle=v.sub;g.fillText(s.l,0,-92);
+    const fp=csFit(g,s.v,H*.6/Math.max(n,1)-60,92,'900');g.font=cardFont(fp,'900');g.fillStyle=v.ink;g.fillText(s.v,0,0);
+    g.restore();
+  });
+  const p=csFit(g,v.name,W-420,104,'900');csTxt(g,v.name,80,H-250,p,'900',v.ink);
+  csTxt(g,v.d.date,80,H-190,36,'600',v.sub);
+  if(v.d.prs)csPr(g,80,H-120,v);
+}
+/* row: three big numbers side by side with an accent bar under each / tres números grandes en fila con una barra de color debajo */
+function csRow(g,v){
+  const W=v.W,y=v.B-560,n=Math.max(v.stats.length,1),cw=(W-160)/n;
+  csLogo(g,80,y,60,v.ink,'left',v.acc);
+  const p=csFit(g,v.name,W-160,120,'900');csTxt(g,v.name,80,y+200,p,'900',v.ink);
+  csTxt(g,v.d.date,80,y+264,38,'600',v.sub);
+  const fp=Math.min.apply(null,v.stats.map(s=>csFit(g,s.v,cw-30,118,'900'))); // same size for all so they line up / mismo tamaño para que se alineen
+  v.stats.forEach((s,i)=>{
+    const x=80+i*cw;
+    csTxt(g,s.l,x,y+370,34,'700',v.sub);
+    csTxt(g,s.v,x,y+370+fp*.95,fp,'900',v.ink);
+    g.fillStyle=v.acc;g.fillRect(x,y+370+fp*.95+30,90,12);
+  });
+  if(v.d.prs)csPr(g,80,y+620,v);
+}
+/* dots: bold name and a compact list with dotted leaders / nombre en grande y lista compacta con puntos guía */
+function csDots(g,v){
+  const W=v.W,rows=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
+  const h=Math.min(78,Math.floor(760/Math.max(rows.length,1))),fs=Math.round(h*.52),y=v.B-(rows.length*h)-290;
+  const p=csFit(g,v.name,W-160,112,'900');csTxt(g,v.name,80,y,p,'900',v.ink);
+  csTxt(g,v.d.date+(v.d.dur?'  ·  '+v.d.dur:''),80,y+58,38,'600',v.sub);
+  g.fillStyle=v.acc;g.fillRect(80,y+92,150,12);
+  let yy=y+170;
+  rows.forEach(r=>{
+    let n=r[0];g.font=cardFont(fs,'800');while(g.measureText(n).width>520&&n.length>4)n=n.slice(0,-2);if(n!==r[0])n+='…';
+    csTxt(g,n,80,yy,fs,'800',v.ink);
+    let rt=String(r[1]);if(rt.length>24)rt=rt.slice(0,24);csTxt(g,rt,W-80,yy,fs,'700',v.ink,'right');
+    g.font=cardFont(fs,'800');const a=80+g.measureText(n).width+22;g.font=cardFont(fs,'700');const b=W-80-g.measureText(rt).width-22;
+    g.fillStyle=v.acc;for(let x=a;x<b;x+=17){g.beginPath();g.arc(x,yy-fs*.18,3.2,0,6.3);g.fill();}
+    yy+=h;
+  });
+  if(v.d.prs)csPr(g,80,yy+30,v);
+  csLogo(g,80,yy+(v.d.prs?80:40),56,v.ink,'left',v.acc);
 }
 /* 6 · badge: a ring with the main number / un anillo con el número principal */
 function csBadge(g,v){
