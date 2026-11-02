@@ -58,9 +58,7 @@ function csDraw(){
   if(!CS)return;
     document.querySelectorAll('#sheet canvas[data-s]').forEach(v=>{
     let c;try{c=csFinal(Object.assign({},CS,{style:v.dataset.s}),.3);}catch(e){return;}
-    let sy=0,sh=c.height;
-    if(CS.fmt==='story'){const f=CS.pos==='top'?[.08,.66]:(CS.pos==='mid'?[.2,.8]:[.4,1]);sy=Math.round(c.height*f[0]);sh=Math.round(c.height*(f[1]-f[0]));}
-    v.width=c.width;v.height=sh;v.getContext('2d').drawImage(c,0,sy,c.width,sh,0,0,c.width,sh);
+    v.width=c.width;v.height=c.height;v.getContext('2d').drawImage(c,0,0);
   });
   csPrep();
 }

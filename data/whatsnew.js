@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.36',items:[
+  {i:'share',en:'Share previews keep the full story shape, like they will look on Instagram.',es:'Las vistas previas de compartir mantienen la forma completa de una historia, como se verán en Instagram.'}
+ ]},
  {v:'v1.1.35',items:[
   {i:'share',en:'Share screen redesigned: big card gallery, Instagram story button, new Giant, Vertical, Row and Dots styles, clearer text.',es:'Pantalla de compartir rediseñada: galería grande, botón de historia de Instagram, estilos nuevos Gigante, Vertical, En fila y Puntos, y texto más claro.'}
  ]},
