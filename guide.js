@@ -13,9 +13,9 @@ function gdInfo(i){
   return{reps:false,secs:secs,sides:gdUni(x.eid)?2:1};
 }
 function gdFirst(){for(let i=0;i<ACT.ex.length;i++)if(!ACT.ex[i].sets.every(s=>s.done))return i;return ACT.ex.length-1;}
-function gdLoad(i){
+function gdLoad(i,en){
   i=Math.max(0,Math.min(ACT.ex.length-1,i));const f=gdInfo(i),done=ACT.ex[i].sets.every(s=>s.done);
-  GD={i:i,f:f,ph:done?'done':(f.reps?'reps':'ready'),side:0,dur:0,tEnd:0,left:0,paused:false};
+  GD={i:i,f:f,ph:done?'done':(f.reps?'reps':'ready'),side:0,dur:0,tEnd:0,left:0,paused:false,enter:en||'x'};
 }
 function gdPhase(ph,sec){GD.ph=ph;GD.dur=sec*1000;GD.tEnd=Date.now()+GD.dur;GD.left=GD.dur;GD.paused=false;}
 function gdStamp(){if(!ACT.ts){ACT.ts=Date.now();ACT.sn=ACT.ts;ACT.acc=0;ACT.pz=false;}else if(ACT.pz){ACT.pz=false;ACT.sn=Date.now();}}
@@ -29,7 +29,7 @@ function gdMain(){
   const p=GD.ph;
   if(p==='ready'){gdStamp();gdPhase('prep',GD_PREP);}
   else if(p==='reps'){gdMark();GD.ph='done';buzz(12);}
-  else if(p==='done'){if(GD.i>=ACT.ex.length-1){finishAsk();return;}gdLoad(GD.i+1);}
+  else if(p==='done'){if(GD.i>=ACT.ex.length-1){finishAsk();return;}gdLoad(GD.i+1,'f');}
   else if(GD.paused){GD.paused=false;GD.tEnd=Date.now()+GD.left;}
   else{GD.paused=true;GD.left=Math.max(0,GD.tEnd-Date.now());}
   saveAct();render();gdTick();
@@ -40,7 +40,7 @@ function gdFinMove(){
   if(!f.reps){const left=GD.paused?GD.left:Math.max(0,GD.tEnd-Date.now()),done=(GD.ph==='swap'?1:(GD.ph==='hold'?GD.side:0))*f.secs+(GD.ph==='hold'?Math.max(0,(GD.dur-left)/1000):0);sec=Math.max(1,Math.round(done));}
   gdMark(sec);GD.ph='done';buzz(12);render();
 }
-function gdSkip(d){if(!GD)gdLoad(gdFirst());const n=GD.i+d;if(n<0||n>=ACT.ex.length)return;gdLoad(n);render();}
+function gdSkip(d){if(!GD)gdLoad(gdFirst());const n=GD.i+d;if(n<0||n>=ACT.ex.length)return;gdLoad(n,d>0?'f':'b');render();}
 function gdAdvance(){ // a countdown reached 0 / una cuenta llegó a 0
   const p=GD.ph;beep();buzz([60,40,60]);
   if(p==='prep'){GD.side=0;gdPhase('hold',GD.f.secs);}
@@ -52,14 +52,14 @@ function gdTick(){
   if(!gdOnNow()){if(GDT){clearInterval(GDT);GDT=0;}return;}
   if(!GD||GD.paused||!(GD.ph==='prep'||GD.ph==='hold'||GD.ph==='swap'))return;
   const left=Math.max(0,GD.tEnd-Date.now()),s=Math.ceil(left/1000),n=document.getElementById('gdN'),r=document.getElementById('gdR');
-  if(n&&n.textContent!==String(s)){n.textContent=s;if(s>0&&s<=3)buzz(10);}
+  if(n&&n.textContent!==String(s)){n.textContent=s;n.classList.remove('tk','tk3');void n.offsetWidth;n.classList.add(s>0&&s<=3?'tk3':'tk');if(s>0&&s<=3)buzz(10);}
   if(r)r.style.strokeDashoffset=String(Math.round(534*(1-(GD.dur?left/GD.dur:0))));
   if(left<=0)gdAdvance();
 }
 setInterval(gdTick,200);
-function gdOn(){if(!ACT)return;delete ACT.gOff;saveAct();render();}
+function gdOn(){if(!ACT)return;delete ACT.gOff;saveAct();render();pgAnim();}
 function gdMenu(){
-  sheet('<h3>'+t('gdExitT')+'</h3><div class="menu"><button onclick="sheetClose();finishAsk()">✓ '+t('gdSave')+'</button><button onclick="sheetClose();ACT.gOff=1;saveAct();render()">☰ '+t('gdList')+'</button><button onclick="sheetClose();gdLoad(GD?GD.i:gdFirst());render()">↺ '+t('gdRestart')+'</button><button class="danger" onclick="sheetClose();cancelAsk()">✕ '+t('gdDiscard')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('gdStay')+'</button>');
+  sheet('<h3>'+t('gdExitT')+'</h3><div class="menu"><button onclick="sheetClose();finishAsk()">✓ '+t('gdSave')+'</button><button onclick="sheetClose();ACT.gOff=1;saveAct();render();pgAnim()">☰ '+t('gdList')+'</button><button onclick="sheetClose();gdLoad(GD?GD.i:gdFirst());render()">↺ '+t('gdRestart')+'</button><button class="danger" onclick="sheetClose();cancelAsk()">✕ '+t('gdDiscard')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('gdStay')+'</button>');
 }
 /* which part of the body switches (arm, leg…), read from the how-to text / qué parte del cuerpo cambia (brazo, pierna…), según el texto de cómo hacerlo */
 function gdPart(eid){
@@ -92,7 +92,8 @@ function vGuide(){
   const nx=ACT.ex[i+1],last=i>=n-1;
   const btn=p==='ready'?[ic('play'),t('gdStart')]:(p==='reps'?[ic('check'),t('gdRepsDone')]:(p==='done'?(last?[ic('check'),t('gdFinish')]:[ic('play'),t('gdNext',exName(nx.eid,nx.n))]):(GD.paused?[ic('play'),t('gdResume')]:[ic('pause'),t('gdPause')])));
   const segs=ACT.ex.map((q,k)=>'<i class="'+(q.sets.every(s=>s.done)?'ok':(k===i?'cur':''))+'"></i>').join('');
-  return'<div class="gd gd-'+p+'">'+
+  const en=GD.enter;GD.enter='';
+  return'<div class="gd gd-'+p+(en?' gd-e-'+en:'')+'">'+
     '<div class="gd-top"><button class="gd-exit" onclick="gdMenu()">'+ic('chevron-left')+' '+t('gdExit')+'</button><div class="gd-prog">'+segs+'</div><span class="gd-cnt">'+(i+1)+'/'+n+'</span></div>'+
     '<h2 class="gd-name">'+esc(exName(x.eid,x.n))+'</h2>'+
     ((typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<div class="eximg gd-img">'+exImgs(x.eid)+'</div>':'')+
