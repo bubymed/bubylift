@@ -197,6 +197,25 @@ function installApp(tab){
     '<ol>'+steps.map(k=>'<li>'+t(k)+'</li>').join('')+'</ol>'+(cur==='ios'?'<p class="note">'+t('iosNote')+'</p>':'')+
     '<button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>');
 }
+/* ---------- install welcome: shown once, only when the app is not installed yet / bienvenida de instalación: una sola vez y solo si la app aún no está instalada ---------- */
+function welcomeDone(){SET.instSeen=1;saveSet();sheetClose();}
+function welcomeInstall(){SET.instSeen=1;saveSet();if(instEvt)instNative();else installApp();}
+async function welcomeShow(force){
+  if(!force&&(SET.instSeen||!canInstall()))return;
+  const plat=instPlat(),touch=(navigator.maxTouchPoints>0)||(window.matchMedia&&matchMedia('(pointer:coarse)').matches),pc=plat==='pc'&&!touch; // QR only on a real computer: on any touch device you can't scan your own screen / QR solo en computadora real
+  sheet('<div class="inst welc"><img src="icons/icon-192.png" alt="" class="welc-ic"><h3>'+t('wlT')+'</h3><p class="muted">'+t('wlP')+'</p>'+
+    '<ul class="why">'+[t('why1'),t('why2'),t('why4')].map(x=>'<li>'+x+'</li>').join('')+'</ul>'+
+    (pc?'<div class="qrbox" id="wlqr" style="cursor:default"></div><p class="muted sm g-c">'+t('wlScan')+'</p>':
+      '<button class="btn pri wide" onclick="welcomeInstall()">'+ic('device-mobile')+' '+t(instEvt?'installNow':(plat==='ios'?'wlHowIos':'wlHow'))+'</button>')+
+    '<button class="btn wide" onclick="welcomeDone()">'+t('wlLater')+'</button></div>');
+  if(pc){try{await pfLib('lib/qrcode.min.js');const e=$('wlqr');if(e)e.innerHTML=pfQrSvg(APP_URL);}catch(e){const x=$('wlqr');if(x)x.remove();}}
+}
+function welcomeInit(n){
+  n=n||0;
+  if(SET.instSeen||!canInstall())return;
+  if(!$('sheetov').hidden||(typeof TR!=='undefined'&&TR.on)||ACT||!$('gate').hidden){if(n<20)setTimeout(()=>welcomeInit(n+1),3000);return;}
+  welcomeShow(false);
+}
 async function instNative(){
   if(!instEvt)return;
   sheetClose();instEvt.prompt();try{await instEvt.userChoice;}catch(e){}instEvt=null;instUpd();
@@ -254,6 +273,7 @@ function bootApp(){
   setTimeout(()=>wnInit(0),1200);
   setTimeout(()=>{try{tourMaybe(0);}catch(e){}},2000);
   setTimeout(()=>{try{guestNag();}catch(e){}},4500);
+  setTimeout(()=>{try{welcomeInit(0);}catch(e){}},9000);
   try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}
 }
 

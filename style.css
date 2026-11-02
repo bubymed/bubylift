@@ -773,3 +773,7 @@ main>.lnk-d{display:block;margin:12px auto 0;color:var(--dim)}
 /* undo toast / aviso con Deshacer */
 #toast.undo{pointer-events:auto}
 #toast .tundo{margin-left:10px;background:none;border:0;color:inherit;font:inherit;font-weight:800;text-decoration:underline;padding:4px 2px;cursor:pointer}
+.welc{text-align:center}.welc-ic{width:84px;height:84px;border-radius:21px;margin:4px auto 10px;display:block;box-shadow:0 8px 24px rgba(0,0,0,.25)}.welc h3{margin:0 0 4px}.welc .why{text-align:left;margin:14px 0}.welc .btn{margin-top:8px}
+.welc .qrbox{margin:8px auto}.welc .qrbox svg{width:150px;height:150px}.welc .why{font-size:.95em}
+.welc .qrbox{display:flex;justify-content:center;width:auto;max-width:none}
+.welc .qrbox{aspect-ratio:auto;height:auto;width:166px}
