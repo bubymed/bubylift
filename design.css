@@ -650,7 +650,7 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 @media (prefers-reduced-motion:reduce){.gd-e-f,.gd-e-b,.gd-e-x,.gd-e-f>*,.gd-e-b>*,.gd-e-x>*,.gd-lbl,.gd-num .tk,.gd-num .tk3,.gd-ok .ic,.gd-done .gd-ring .fg,.gd-prog i.ok,.srow.rin{animation:none}.gd-main,.gd-s,.gd-fm,.gd-acts button,.gd-exit,.gd-ring .fg{transition:none}}
 
 /* share studio v2: big grid + action bar like Strava / estudio de compartir v2: cuadrícula grande y barra de acciones */
-.cs-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 8px}
+.cs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:10px 0 8px}
 .cs-g{position:relative;border:0;background:none;padding:0;text-align:center;font-size:.8rem;font-weight:700;color:var(--dim);min-width:0}
 .cs-g canvas{display:block;width:100%;height:auto;border-radius:18px;background:repeating-conic-gradient(#3a3a42 0 25%,#2b2b32 0 50%) 0 0/16px 16px;border:3px solid transparent;box-sizing:border-box;transition:border-color .15s,transform .15s}
 .cs-g.on canvas{border-color:#fff}.cs-g.on{color:var(--txt)}

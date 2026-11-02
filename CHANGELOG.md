@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.36 — 2026-10-30
+- Share previews keep the full story shape, like they will look on Instagram.
+  Las vistas previas de compartir mantienen la forma completa de una historia, como se verán en Instagram.
+
 ## v1.1.35 — 2026-10-30
 - Share screen redesigned: big card gallery, Instagram story button, new Giant, Vertical, Row and Dots styles, clearer text.
   Pantalla de compartir rediseñada: galería grande, botón de historia de Instagram, estilos nuevos Gigante, Vertical, En fila y Puntos, y texto más claro.
