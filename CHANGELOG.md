@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.35 — 2026-10-30
+- Share screen redesigned: big card gallery, Instagram story button, new Giant, Vertical, Row and Dots styles, clearer text.
+  Pantalla de compartir rediseñada: galería grande, botón de historia de Instagram, estilos nuevos Gigante, Vertical, En fila y Puntos, y texto más claro.
+
 ## v1.1.34 — 2026-10-30
 - A welcome screen helps you put Bubylift on your phone.
   Una pantalla de bienvenida te ayuda a poner Bubylift en tu teléfono.
