@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.33',items:[
+  {i:'chevron-left',en:'Swipe any sheet down to close it.',es:'Desliza cualquier hoja hacia abajo para cerrarla.'}
+ ]},
  {v:'v1.1.32',items:[
   {i:'✨',en:'<b>Smoother motion</b>: guided sessions now slide between moves, the countdown pulses each second, the done check pops in, new sets slide into place and starting or leaving a session fades in softly.',es:'<b>Movimiento más suave</b>: las sesiones guiadas ahora se deslizan entre movimientos, la cuenta regresiva late cada segundo, la palomita de terminado aparece con un pop, las series nuevas entran deslizándose y empezar o salir de una sesión aparece con suavidad.'}
  ]},
