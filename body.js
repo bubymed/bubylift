@@ -229,7 +229,7 @@ function vMore(){
     mrow(ic('message-circle'),t('fbT'),'https://tally.so/r/KpY5MA')+
     mrow(ic('share'),t('shT'),'shareOpen()')+
     mrow(ic('refresh'),t('updChk'),'checkUpd()',APP_VER)+'</div>'+
-    '<div class="card creator"><div class="cr-top"><span class="cr-av">M<img src="icons/creator.jpg" alt="" onerror="this.remove()"></span><div><b>Mike</b><div class="muted sm">@bubylifts</div></div></div>'+
+    '<div class="card creator"><div class="cr-top"><span class="cr-av"><img src="icons/creator.jpg" alt="" onerror="this.parentNode.classList.add(\'nf\');this.remove()"></span><div><b>Mike</b><div class="muted sm">@bubylifts</div></div></div>'+
     '<p class="sm">'+t('crBio')+'</p><a class="btn pri wide" href="https://www.instagram.com/bubylifts/" target="_blank" rel="noopener">'+ic('brand-instagram')+' '+t('crFollow')+'</a></div>'+
     '<div class="card"><details class="dtl nob"><summary>'+t('about')+' · Bubylift '+APP_VER+'</summary><p class="sm">'+t('privacy')+'</p><p class="muted sm">'+t('credits')+'</p><p class="muted sm">'+t('disclaimer')+'</p>'+
     '<p class="sm"><a href="https://github.com/bubymed/bubylift" target="_blank" rel="noopener">github.com/bubymed/bubylift</a></p></details></div>';

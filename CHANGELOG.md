@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.37 — 2026-10-30
+- The About section no longer closes by itself, the profile photo no longer flickers, and the privacy text is up to date.
+  La sección Acerca de ya no se cierra sola, la foto de perfil ya no parpadea y el texto de privacidad está al día.
+
 ## v1.1.36 — 2026-10-30
 - Share previews keep the full story shape, like they will look on Instagram.
   Las vistas previas de compartir mantienen la forma completa de una historia, como se verán en Instagram.
