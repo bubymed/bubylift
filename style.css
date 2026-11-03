@@ -778,3 +778,10 @@ main>.lnk-d{display:block;margin:12px auto 0;color:var(--dim)}
 .welc .qrbox{display:flex;justify-content:center;width:auto;max-width:none}
 .welc .qrbox{aspect-ratio:auto;height:auto;width:166px}
 .cr-av.nf::before{content:'M'}
+
+/* swipe a set left to remove it / deslizar una serie a la izquierda para quitarla */
+.srow:not(.hd){position:relative;touch-action:pan-y}
+.srow.sw::after{content:attr(data-del);position:absolute;left:100%;top:0;bottom:0;width:100vw;margin-left:8px;border-radius:12px;background:color-mix(in srgb,var(--red) 55%,var(--panel2));color:#fff;font-weight:800;font-size:.85rem;display:flex;align-items:center;padding-left:16px;box-sizing:border-box}
+.srow.sw.swgo::after{background:var(--red)}
+.srow.swr{transition:transform .2s ease-out}
+[id^=exc]{overflow-x:clip}

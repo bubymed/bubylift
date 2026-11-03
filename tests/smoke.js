@@ -731,6 +731,11 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(ev("typeof ACT.ex[0].sets[1].done")==='boolean','a set with only a weight is handled');
   ev("ACT.ex[0].sets[0].done=true");
   ev("sv(0,0,'r','')");ok(ev("ACT.ex[0].sets[0].done")===false,'clearing a value un-confirms the set');
+  ev("ACT.ex[0].sets=[{w:50,r:5,done:true},{w:60,r:6,done:true},{w:70,r:7,done:false}];saveAct()");
+  ev("rmSetAt(0,1)");ok(ev("ACT.ex[0].sets.length")===2&&ev("ACT.ex[0].sets[1].w")===70,'removing a set (swipe) keeps the others in order');
+  ok(ev("document.getElementById('toast').textContent.indexOf('Undo')>=0||!!document.querySelector('#toast .tundo')"),'removing a set offers Undo');
+  ev("undoRun()");ok(ev("ACT.ex[0].sets.length")===3&&ev("ACT.ex[0].sets[1].w")===60,'Undo brings the set back');
+  ev("ACT.ex[0].sets=[{w:50,r:5,done:true}];rmSetAt(0,0)");ok(ev("ACT.ex[0].sets.length")===1&&ev("ACT.ex[0].sets[0].w")===null&&ev("ACT.ex[0].sets[0].done")===false,'removing the only set empties it instead');
   ok(ev("(function(){var w=DATA.workouts;DATA.workouts=[];var a=sugg('bench',{lo:6,hi:12,u:'r'}),b=sugg('bench',{lo:3,hi:5,u:'r'}),c=sugg('bench',{u:'r'});DATA.workouts=w;return a.r===6&&a.w==null&&b.r===3&&c.r===6})()"),'rep suggestion: cold start uses the bottom of the range (plan range, or 6)');
   ok(ev("(function(){var w=DATA.workouts;var mk=function(r){return[{id:'q',t:Date.now()-864e5,end:Date.now(),ex:[{eid:'bench',sets:r.map(function(x){return{w:80,r:x,done:true}})}]}]};DATA.workouts=mk([8,8,7]);var a=sugg('bench',{lo:6,hi:12,u:'r'});DATA.workouts=mk([12,12,12]);var b=sugg('bench',{lo:6,hi:12,u:'r'});DATA.workouts=mk([11,11]);var c=sugg('bench',{lo:6,hi:12,u:'r'});DATA.workouts=w;return a.r===9&&a.w===80&&b.key==='sgUp'&&b.w>80&&b.r===6&&c.r===12})()"),'rep suggestion: +1 rep in range, more weight at the top, capped at the top');
   ok(ev("sugg('plank',{lo:6,hi:12,u:'r'})==null||sugg('plank',{lo:6,hi:12,u:'r'}).r==null")&&ev("sugg('bench',{lo:6,hi:12,u:'m'})===null"),'no rep suggestion for timed work or minute targets');

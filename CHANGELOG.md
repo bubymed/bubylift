@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.41 — 2026-10-30
+- Swipe a set to the left to remove it (with Undo).
+  Desliza una serie a la izquierda para quitarla (con Deshacer).
+
 ## v1.1.40 — 2026-10-30
 - Sets now count only when you tap the check button, and the app suggests reps for each set (it starts at the bottom of your rep range and moves up as you hit the top).
   Las series ahora cuentan solo cuando tocas el botón ✓, y la app sugiere repeticiones para cada serie (empieza en el piso de tu rango y sube cuando llegas al tope).
