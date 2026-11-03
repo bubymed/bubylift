@@ -262,7 +262,7 @@ function exCard(i,x){
     let f1,f2,p1,p2,k1,k2;
     if(m==='t'){k1='t';k2='d';f1=s.t!=null?fmtNum(s.t):'';f2=dShow(s.d);p1=ph&&ph.t!=null?fmtNum(ph.t):'';p2=ph&&ph.d?dShow(ph.d):'';}
     else{k1='w';k2='r';f1=m==='wr'?pw(s.w):wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?(m==='wr'?pw(ph.w):wShow(ph.w)):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=pw(x.sg);}
-    if((m==='wr'||m==='bw')&&sg&&!s.done&&s.ty!=='w'&&!(j>0&&x.sets[j-1].r!=null)){ // suggestion, unless an earlier set already shows what you do today / sugerencia, salvo que una serie anterior ya muestre lo de hoy
+    if((m==='wr'||m==='bw')&&sg&&!s.done&&s.ty!=='w'&&!x.sets.slice(0,j).some(q=>q.r!=null)){ // suggestion, unless an earlier set already shows what you do today / sugerencia, salvo que una serie anterior ya muestre lo de hoy
       if(sg.r&&s.r==null)p2=String(sg.r);
       if(m==='wr'&&sg.w!=null&&x.sg==null&&s.w==null)p1=pw(sg.w);
     }
@@ -324,7 +324,7 @@ function tgSet(i,j){REST_LAST=i;
     const bk={w:s.w,r:s.r,t:s.t,d:s.d}; // so a rejected tap leaves the row untouched / para que un toque rechazado no cambie la fila
     const pv=lastEx(x.eid),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
     if(m==='wr'&&s.w==null&&x.sg!=null)s.w=x.sg;
-    if((m==='wr'||m==='bw')&&s.ty!=='w'&&!(j>0&&x.sets[j-1].r!=null)){const g=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});if(g){if(g.r&&s.r==null)s.r=g.r;if(m==='wr'&&g.w!=null&&x.sg==null&&s.w==null)s.w=g.w;}}
+    if((m==='wr'||m==='bw')&&s.ty!=='w'&&!x.sets.slice(0,j).some(q=>q.r!=null)){const g=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});if(g){if(g.r&&s.r==null)s.r=g.r;if(m==='wr'&&g.w!=null&&x.sg==null&&s.w==null)s.w=g.w;}}
     if(ph){
       if(m==='t'){if(s.t==null&&ph.t!=null)s.t=ph.t;if(s.d==null&&ph.d)s.d=ph.d;}
       else{if(s.w==null&&ph.w!=null&&m!=='bw')s.w=ph.w;if(s.w==null&&m==='bw'&&ph.w)s.w=ph.w;if(s.r==null&&ph.r!=null)s.r=ph.r;}
