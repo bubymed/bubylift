@@ -379,6 +379,41 @@ function exMenu(i){
     '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+''+(exMode(x.eid)==='wr'?'<button onclick="barMenu('+i+')">🏋 '+t('barTitle')+'</button>':'')+(exMode(x.eid)==='wr'&&isDb(x)?'<button onclick="mulMenu('+i+')">🏋 '+t('mulTitle')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
 function exMove(i,d){const a=ACT.ex,j=i+d;if(j<0||j>=a.length)return;const x=a[i];a[i]=a[j];a[j]=x;saveAct();sheetClose();render();}
+/* remove one set (the swipe-left uses this); the last set left is emptied instead / quitar una serie (lo usa deslizar a la izquierda); si queda una sola, se vacía */
+function rmSetAt(i,j){
+  const x=ACT&&ACT.ex[i];if(!x||!x.sets[j])return;
+  const snap=JSON.stringify(ACT);
+  if(x.sets.length>1)x.sets.splice(j,1);else x.sets[0]=newSet();
+  saveAct();exRedraw(i);buzz(8);undoToast(t('rmDone'),snap);
+}
+/* swipe a set row to the left to remove it (with Undo) / deslizar una serie a la izquierda para quitarla (con Deshacer) */
+(function(){
+  let st=null;
+  const home=row=>{row.classList.add('swr');row.style.transform='';setTimeout(()=>{row.classList.remove('sw','swr');delete row.dataset.del;},220);};
+  document.addEventListener('touchstart',e=>{
+    const row=e.target.closest&&e.target.closest('.srow:not(.hd)');
+    if(!row||!row.closest('[id^="exc"]')||e.touches.length!==1){st=null;return;}
+    const a=document.activeElement;if(a&&a.classList&&a.classList.contains('in')){st=null;return;} // keyboard open: leave it alone / con el teclado abierto no se desliza
+    st={row:row,x:e.touches[0].clientX,y:e.touches[0].clientY,on:false,dx:0};
+  },{passive:true});
+  document.addEventListener('touchmove',e=>{
+    if(!st)return;const dx=e.touches[0].clientX-st.x,dy=e.touches[0].clientY-st.y;
+    if(!st.on){
+      if(Math.abs(dy)>10&&Math.abs(dy)>Math.abs(dx)){st=null;return;}
+      if(dx<-14&&Math.abs(dx)>Math.abs(dy)*1.5){st.on=true;st.row.classList.add('sw');st.row.dataset.del=t('remove');}else return;
+    }
+    st.dx=Math.min(0,dx);st.row.style.transform='translateX('+st.dx+'px)';
+    st.row.classList.toggle('swgo',st.dx<-90);
+    if(e.cancelable)e.preventDefault();
+  },{passive:false});
+  const end=()=>{
+    if(!st)return;const o=st;st=null;if(!o.on)return;
+    const card=o.row.closest('[id^="exc"]'),i=card?+card.id.slice(3):-1,rows=card?[].slice.call(card.querySelectorAll('.srow:not(.hd)')):[],j=rows.indexOf(o.row);
+    if(o.dx<-90&&i>=0&&j>=0){o.row.style.transform='translateX(-110%)';o.row.classList.add('swr');setTimeout(()=>rmSetAt(i,j),160);}
+    else home(o.row);
+  };
+  document.addEventListener('touchend',end);document.addEventListener('touchcancel',end);
+})();
 function rmSet(i){const snap=JSON.stringify(ACT),s=ACT.ex[i].sets;if(s.length>1)s.pop();saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
 function unDoneLast(i){const x=ACT&&ACT.ex[i];if(!x)return;for(let j=x.sets.length-1;j>=0;j--)if(x.sets[j].done){tgSet(i,j);break;}sheetClose();}
 function rmEx(i,ok){const x=ACT&&ACT.ex[i];if(!x)return;if(!ok&&x.sets&&x.sets.some(s=>s.done||s.w!=null||s.r!=null||s.t!=null)){ask(t('delEx'),t('delete'),function(){rmEx(i,1);},true);return;}const snap=JSON.stringify(ACT);ACT.ex.splice(i,1);saveAct();sheetClose();render();undoToast(t('rmDone'),snap);}
