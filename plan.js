@@ -395,7 +395,10 @@ function tgText(e){
 function wInc(){return imp()?5/KG_LB:2.5;}
 function wRound(kg){const s=wInc();return Math.max(s,Math.round(kg/s)*s);}
 /* progressive overload from the last session / sobrecarga progresiva según la última sesión */
-function sugg(eid,tg){
+function sugg(eid,tg){ // walking lunges count steps, so a 6-12 rep default makes no sense / las zancadas caminando cuentan pasos: 6-12 por defecto no tiene sentido
+  const o=sugg0(eid,tg);if(o&&typeof repNote==='function'&&repNote(eid,exMode(eid))==='rnWalk')delete o.r;return o;
+}
+function sugg0(eid,tg){
   if(!tg||tg.u==='m'||tg.fx)return null;
   const m=exMode(eid),le=lastEx(eid),lo=tg.lo>0?tg.lo:6,hi=tg.hi>0?tg.hi:Math.max(lo,12); // r = suggested reps per set / r = repeticiones sugeridas por serie
   if(m==='bw'){

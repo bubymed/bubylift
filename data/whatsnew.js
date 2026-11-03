@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.42',items:[
+  {i:'info',en:'A short note on how to count reps appears on walking lunges, alternating moves and one-side exercises.',es:'Una nota corta explica cómo contar repeticiones en zancadas caminando, ejercicios alternados y de un solo lado.'}
+ ]},
  {v:'v1.1.41',items:[
   {i:'trash',en:'Swipe a set to the left to remove it (with Undo).',es:'Desliza una serie a la izquierda para quitarla (con Deshacer).'}
  ]},

@@ -731,6 +731,8 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(ev("typeof ACT.ex[0].sets[1].done")==='boolean','a set with only a weight is handled');
   ev("ACT.ex[0].sets[0].done=true");
   ev("sv(0,0,'r','')");ok(ev("ACT.ex[0].sets[0].done")===false,'clearing a value un-confirms the set');
+  ok(ev("repNote('lunge','wr')")==='rnWalk'&&ev("repNote('z_alternating_floor_press','wr')")==='rnAlt'&&ev("repNote('revlunge','bw')")==='rnUni'&&ev("repNote('bulgsplit','wr')")==='rnUni'&&ev("repNote('bench','wr')")===''&&ev("repNote('sideplank','t')")===''&&ev("repNote('squat','wr')")==='','rep-counting note: walking, alternating and one-side exercises only');
+  ok(ev("sugg('lunge',{lo:6,hi:12,u:'r'}).r===undefined")&&ev("sugg('revlunge',{lo:6,hi:12,u:'r'}).r===6"),'walking lunges get no default rep suggestion (steps are counted)');
   ev("ACT.ex[0].sets=[{w:50,r:5,done:true},{w:60,r:6,done:true},{w:70,r:7,done:false}];saveAct()");
   ev("rmSetAt(0,1)");ok(ev("ACT.ex[0].sets.length")===2&&ev("ACT.ex[0].sets[1].w")===70,'removing a set (swipe) keeps the others in order');
   ok(ev("document.getElementById('toast').textContent.indexOf('Undo')>=0||!!document.querySelector('#toast .tundo')"),'removing a set offers Undo');

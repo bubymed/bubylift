@@ -244,12 +244,24 @@ function prBurst(i,j){
   if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)return;
   for(let k=0;k<8;k++){const sp=document.createElement('span');sp.className='prp';sp.textContent=['✨','🏆','⭐'][k%3];sp.style.setProperty('--dx',(Math.cos(k/8*6.283)*46)+'px');sp.style.setProperty('--dy',(Math.sin(k/8*6.283)*46-18)+'px');r.appendChild(sp);setTimeout(()=>sp.remove(),1000);}
 }
+/* how to count reps in exercises done one side at a time / cómo contar repeticiones en ejercicios que se hacen de un lado a la vez */
+const RN_WALK=/(^lunge$|walking_lunge)/,RN_ALT=/(alternat|^mountain$|mountain_climber)/;
+const RN_UNI=/(onearm|one_arm|singleleg|single_leg|one_leg|one_legged|^slsquat$|^sldl$|^slbridge$|^slsq|bulgsplit|splitsq|split_squat|step_?up|stepup|lunge|pistol|kickback|windmill|side_bend|^dbrow$|calfdb|^latstep$|^powerstep$)/;
+function repNote(eid,m){
+  if(m==='t')return'';
+  const id=String(eid).toLowerCase();
+  if(RN_WALK.test(id))return'rnWalk';
+  if(RN_ALT.test(id))return'rnAlt';
+  if(RN_UNI.test(id))return'rnUni';
+  return'';
+}
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
   const bar=m==='wr'?barOf(x):0,ml=m==='wr'?mulOf(x):1,pw=v=>v==null?'':wShow(Math.max(0,(v-bar)/ml));
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'">'+exImgs(x.eid,'this.remove()')+'</button>':'';
   let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
   h+=suggLine(x);
+  {const rn=repNote(x.eid,m);if(rn)h+='<p class="muted sm rn">'+esc(t(rn))+'</p>';}
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
   h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'<button class="lnk-d" onclick="restPick('+i+')">⏱ '+(exRest(x)===0?t('restOff'):fmtClock(exRest(x)!=null?exRest(x):(SET.rest||90)))+'</button></div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
