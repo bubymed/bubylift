@@ -94,8 +94,10 @@ vc.on('error',(...a)=>errors.push('console.error: '+a.join(' ')));
 
   console.log('PR + placeholders');
   w.startWorkout({name:'Push',ex:[{eid:eid,sets:2}]});
-  w.tgSet(0,0); // empty → placeholders from last time
+  w.tgSet(0,0); // empty → placeholders (the suggestion)
   ok(ev('ACT.ex[0].sets[0].done'),'placeholder values fill an empty set');
+  ok(ev('ACT.ex[0].sets[0].r')===9,'the placeholder suggests one more rep than last time');
+  ev("ACT.ex[0].sets[0].done=false;delete ACT.ex[0].sets[0].pr;ACT.ex[0].sets[0].r=8;tgSet(0,0)");
   ok(!ev('!!ACT.ex[0].sets[0].pr'),'same lift is not a PR');
   w.sv(0,1,'w','145');w.sv(0,1,'r','8');w.tgSet(0,1);
   ok(ev('!!ACT.ex[0].sets[1].pr'),'heavier set flagged as PR');
@@ -719,12 +721,19 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   w.stepSet(0,0,'w',1);const w1=ev('ACT.ex[0].sets[0].w');w.stepSet(0,0,'w',1);ok(ev('ACT.ex[0].sets[0].w')>w1&&w1>0,'weight + button works');
   w.stepSet(0,0,'r',1);w.stepSet(0,0,'r',1);ok(ev('ACT.ex[0].sets[0].r')>=2,'reps + button works');
   w.stepSet(0,0,'r',-1);w.stepSet(0,0,'w',-1);w.stepSet(0,0,'w',-1);w.stepSet(0,0,'w',-1);ok(ev('ACT.ex[0].sets[0].w')>=0,'weight never goes below zero');
-  ok(!/class="stp"/.test(main())&&!/class="chk"/.test(main()),'set rows have no +/- or check buttons');
+  ok(!/class="stp"/.test(main())&&/class="chk"/.test(main()),'set rows have a check button and no +/- buttons');
   ev("ACT.ex[0].sets[0].done=false;ACT.ex[0].sets[0].w=60;ACT.ex[0].sets[0].r=8;saveAct()");
-  ok(ev("autoDone(0,0)")===true&&ev("ACT.ex[0].sets[0].done")===true,'a set saves itself once weight and reps are filled in');
-  ev("ACT.ex[0].sets[1].done=false;ACT.ex[0].sets[1].w=60;ACT.ex[0].sets[1].r=null");
-  ok(ev("autoDone(0,1)")===false&&ev("ACT.ex[0].sets[1].done")===false,'an incomplete set is not confirmed');
+  ev("document.activeElement&&document.activeElement.blur&&document.activeElement.blur()");
+  ok(ev("ACT.ex[0].sets[0].done")===false,'typing weight and reps does not confirm the set');
+  ev("tgSet(0,0)");ok(ev("ACT.ex[0].sets[0].done")===true,'tapping the check confirms it');
+  ev("tgSet(0,0)");ok(ev("ACT.ex[0].sets[0].done")===false,'tapping the check again un-confirms it');
+  ev("ACT.ex[0].sets[1].done=false;ACT.ex[0].sets[1].w=60;ACT.ex[0].sets[1].r=null;tgSet(0,1)");
+  ok(ev("typeof ACT.ex[0].sets[1].done")==='boolean','a set with only a weight is handled');
+  ev("ACT.ex[0].sets[0].done=true");
   ev("sv(0,0,'r','')");ok(ev("ACT.ex[0].sets[0].done")===false,'clearing a value un-confirms the set');
+  ok(ev("(function(){var w=DATA.workouts;DATA.workouts=[];var a=sugg('bench',{lo:6,hi:12,u:'r'}),b=sugg('bench',{lo:3,hi:5,u:'r'}),c=sugg('bench',{u:'r'});DATA.workouts=w;return a.r===6&&a.w==null&&b.r===3&&c.r===6})()"),'rep suggestion: cold start uses the bottom of the range (plan range, or 6)');
+  ok(ev("(function(){var w=DATA.workouts;var mk=function(r){return[{id:'q',t:Date.now()-864e5,end:Date.now(),ex:[{eid:'bench',sets:r.map(function(x){return{w:80,r:x,done:true}})}]}]};DATA.workouts=mk([8,8,7]);var a=sugg('bench',{lo:6,hi:12,u:'r'});DATA.workouts=mk([12,12,12]);var b=sugg('bench',{lo:6,hi:12,u:'r'});DATA.workouts=mk([11,11]);var c=sugg('bench',{lo:6,hi:12,u:'r'});DATA.workouts=w;return a.r===9&&a.w===80&&b.key==='sgUp'&&b.w>80&&b.r===6&&c.r===12})()"),'rep suggestion: +1 rep in range, more weight at the top, capped at the top');
+  ok(ev("sugg('plank',{lo:6,hi:12,u:'r'})==null||sugg('plank',{lo:6,hi:12,u:'r'}).r==null")&&ev("sugg('bench',{lo:6,hi:12,u:'m'})===null"),'no rep suggestion for timed work or minute targets');
   ev("ACT=null;saveAct();render()");
   // injuries in the plan + picker badges
   ev("DATA.plan.prof.inj=['knee'];saveData()");

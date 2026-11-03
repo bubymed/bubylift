@@ -397,23 +397,25 @@ function wRound(kg){const s=wInc();return Math.max(s,Math.round(kg/s)*s);}
 /* progressive overload from the last session / sobrecarga progresiva según la última sesión */
 function sugg(eid,tg){
   if(!tg||tg.u==='m'||tg.fx)return null;
-  const m=exMode(eid),le=lastEx(eid);
+  const m=exMode(eid),le=lastEx(eid),lo=tg.lo>0?tg.lo:6,hi=tg.hi>0?tg.hi:Math.max(lo,12); // r = suggested reps per set / r = repeticiones sugeridas por serie
   if(m==='bw'){
-    if(!le)return{key:'sgFirstBw'};
+    if(!le)return{key:'sgFirstBw',r:lo};
     const ok=le.x.sets.length&&le.x.sets.every(s=>(s.r||0)>=tg.hi);
-    return ok?{key:'sgUpBw'}:{key:'sgHold2'};
+    const mr=Math.max.apply(null,le.x.sets.map(s=>s.r||0).concat(0));
+    return ok?{key:'sgUpBw',r:hi+1}:{key:'sgHold2',r:Math.max(lo,Math.min(hi,mr+1))};
   }
   if(m!=='wr')return null;
-  if(!le)return{key:'sgFirst'};
-  const ss=le.x.sets.filter(s=>s.w!=null&&s.r);
-  if(!ss.length)return{key:'sgFirst'};
+  if(!le)return{key:'sgFirst',r:lo};
+  const ss=le.x.sets.filter(s=>s.w!=null&&s.r&&s.ty!=='w');
+  if(!ss.length)return{key:'sgFirst',r:lo};
   const W=Math.max.apply(null,ss.map(s=>s.w));
-  if(ss.every(s=>s.r>=tg.hi))return{key:'sgUp',w:wRound(W+wInc())};
+  if(ss.every(s=>s.r>=tg.hi))return{key:'sgUp',w:wRound(W+wInc()),r:lo};
   if(ss.some(s=>s.r<tg.lo)){
     const p2=lastEx(eid,le.wk.t),low2=p2&&p2.x.sets.some(s=>s.w!=null&&s.r&&s.r<tg.lo);
-    return low2?{key:'sgDown',w:wRound(W*0.9)}:{key:'sgHold',w:W};
+    return low2?{key:'sgDown',w:wRound(W*0.9),r:lo}:{key:'sgHold',w:W,r:lo};
   }
-  return{key:'sgHold2',w:W};
+  const mr=Math.max.apply(null,ss.filter(s=>s.w===W).map(s=>s.r));
+  return{key:'sgHold2',w:W,r:Math.max(lo,Math.min(hi,mr+1))};
 }
 function suggLine(x){
   const L=curInjL(),bd=injBadge(x.eid);
@@ -422,6 +424,7 @@ function suggLine(x){
     const s=sugg(x.eid,x.tg);
     h='<div class="goalln">'+((x.tg.lo||x.tg.hi)?'<b>'+t('target')+':</b> '+esc(tgText({sets:x.sets.length,lo:x.tg.lo,hi:x.tg.hi,u:x.tg.u})):'');
     if(s)h+='<br><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span>';
+    if(s&&s.r)h+='<br><span class="sg">'+esc(t('sgReps',s.r))+'</span>';
     if(typeof x.tg.ln==='string'&&x.tg.ln)h+='<br><span class="sg">'+esc(x.tg.ln.slice(0,200))+'</span>';
     if(x.tg.nt&&NT_KEYS.indexOf(x.tg.nt)>=0)h+='<br><span class="muted">'+esc(t(x.tg.nt))+'</span>';
     if(x.tg.tp){const ss=x.tg.ss?optSsLabelAct(x):'';h+='<br><span class="muted">'+(ss?'<i class="ssl">'+ss+'</i> ':'')+esc(optLine(x.tg))+'</span>'+(ss?'<br><span class="muted">'+esc(t('ssHint'))+'</span>':'');}
@@ -430,7 +433,8 @@ function suggLine(x){
   // your own workouts get a suggestion too (a normal 6-12 range) / tus propios entrenamientos también reciben sugerencia
   if(!x.tg&&(typeof ACT!=='undefined'&&ACT)){
     const s=sugg(x.eid,{lo:6,hi:12,u:'r'});
-    if(s&&s.key!=='sgFirst'&&s.key!=='sgFirstBw')h='<div class="goalln"><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span></div>';
+    if(s&&s.key!=='sgFirst'&&s.key!=='sgFirstBw')h='<div class="goalln"><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span>'+(s.r?'<br><span class="sg">'+esc(t('sgReps',s.r))+'</span>':'')+'</div>';
+    else if(s&&s.r)h='<div class="goalln"><span class="sg">'+esc(t('sgReps',s.r))+'</span></div>';
   }
   const si=typeof ACT!=='undefined'&&ACT?ACT.ex.indexOf(x):-1;
   if(si>=0&&exMode(x.eid)==='wr'&&x.sets.some(q=>!q.done&&q.w==null)){
