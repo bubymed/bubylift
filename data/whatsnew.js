@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.43',items:[
+  {i:'heart',en:'Cool-down by muscle group: pick what you trained (legs, chest, back, shoulders, arms, core) and get a stretch session for it. After saving a workout there is a one-tap Cool-down for what you trained.',es:'Cool down por grupo muscular: elige qué entrenaste (piernas, pecho, espalda, hombros, brazos, core) y recibes una sesión de estiramientos para eso. Al guardar un entrenamiento hay un botón de Cool down de lo que entrenaste.'}
+ ]},
  {v:'v1.1.42',items:[
   {i:'info',en:'A short note on how to count reps appears on walking lunges, alternating moves and one-side exercises.',es:'Una nota corta explica cómo contar repeticiones en zancadas caminando, ejercicios alternados y de un solo lado.'}
  ]},
