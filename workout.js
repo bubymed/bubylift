@@ -255,16 +255,21 @@ function exCard(i,x){
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
   if(m==='wr'&&(bar>0||exById(x.eid)&&exById(x.eid).e==='barbell'))h+='<div class="barln"><button class="lnk-d" onclick="barMenu('+i+')">🏋 '+esc(bar>0?t('barOn',barTxt(bar)):t('barOff'))+'</button></div>';
   if(m==='wr'&&isDb(x))h+='<div class="barln"><button class="lnk-d" onclick="mulMenu('+i+')">🏋 '+esc(t(ml>1?'mulOn':'mulOff'))+'</button></div>';
-  h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span></div>';
+  h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
+  const sg=(m==='wr'||m==='bw')?sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'}):null;
   x.sets.forEach((s,j)=>{
     const ph=pv[j]||(pv.length?pv[pv.length-1]:null)||(j>0?x.sets[j-1]:null);
     let f1,f2,p1,p2,k1,k2;
     if(m==='t'){k1='t';k2='d';f1=s.t!=null?fmtNum(s.t):'';f2=dShow(s.d);p1=ph&&ph.t!=null?fmtNum(ph.t):'';p2=ph&&ph.d?dShow(ph.d):'';}
     else{k1='w';k2='r';f1=m==='wr'?pw(s.w):wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?(m==='wr'?pw(ph.w):wShow(ph.w)):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=pw(x.sg);}
+    if((m==='wr'||m==='bw')&&sg&&!s.done&&s.ty!=='w'&&!(j>0&&x.sets[j-1].r!=null)){ // suggestion, unless an earlier set already shows what you do today / sugerencia, salvo que una serie anterior ya muestre lo de hoy
+      if(sg.r&&s.r==null)p2=String(sg.r);
+      if(m==='wr'&&sg.w!=null&&x.sg==null&&s.w==null)p1=pw(sg.w);
+    }
     const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" enterkeyhint="next" data-i="'+i+'" data-j="'+j+'" data-k="'+k+'" onfocus="this.select()" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
     const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+(d<0?'−':'+')+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
     const inp=inp0;
-    h+='<div class="srow'+(s.done?' done':'')+'"><button class="sn tyb'+(s.ty?' ty-'+s.ty:'')+'" aria-label="'+esc(t('tyAria'))+'" onclick="cycTy('+i+','+j+')">'+(s.ty?s.ty.toUpperCase():(j+1))+(s.pr?'<i class="pr" title="PR">'+ic('trophy')+'</i>':'')+'</button>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'</div>';
+    h+='<div class="srow'+(s.done?' done':'')+'"><button class="sn tyb'+(s.ty?' ty-'+s.ty:'')+'" aria-label="'+esc(t('tyAria'))+'" onclick="cycTy('+i+','+j+')">'+(s.ty?s.ty.toUpperCase():(j+1))+(s.pr?'<i class="pr" title="PR">'+ic('trophy')+'</i>':'')+'</button>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('chkAria'))+'" onclick="tgSet('+i+','+j+')">'+ic('check')+'</button></div>';
   });
   h+='<button class="btn sm wide" onclick="addSet('+i+')">＋ '+t('addSet')+'</button></section>';
   return h;
@@ -288,24 +293,8 @@ function sv(i,j,f,v){
   if(n==null&&s.done){s.done=false;delete s.pr;const r=document.querySelectorAll('#exc'+i+' .srow:not(.hd)')[j];if(r){r.classList.remove('done');r.querySelectorAll('.in').forEach(q=>q.classList.remove('dn'));}}
   saveAct();updTop();
 }
-/* no check button: a set saves itself when you leave it with weight and reps filled in, and turns green / sin botón de confirmar: la serie se guarda sola al salir de ella con peso y repeticiones, y se pone verde */
-function autoDone(i,j){
-  const x=ACT&&ACT.ex[i],s=x&&x.sets[j];if(!s||s.done)return false;
-  const m=exMode(x.eid),has=m==='t'?(s.t!=null&&s.t>0):(m==='bw'?(s.r!=null&&s.r>0):(s.w!=null&&s.r!=null&&s.r>0));
-  if(!has)return false;tgSet(i,j);return true;
-}
+/* a set only counts when you tap its check button: typing numbers never confirms it / una serie solo cuenta al tocar su botón ✓: escribir números no la confirma */
 document.addEventListener('focusin',function(ev){const el=ev.target;if(el&&el.dataset&&el.dataset.i!=null&&el.classList.contains('in')){REST_LAST=+el.dataset.i;restFab();}});
-document.addEventListener('focusout',function(ev){
-  const el=ev.target,rt=ev.relatedTarget;
-  if(!el||!el.classList||!el.classList.contains('in')||el.dataset.i==null)return;
-  if(rt&&rt.dataset&&rt.dataset.i===el.dataset.i&&rt.dataset.j===el.dataset.j)return; // moving inside the same set
-  const i=+el.dataset.i,j=+el.dataset.j;
-  if(!(rt&&rt.dataset&&rt.dataset.i!=null)){ // tapping a button: let its click land before the card is redrawn / al tocar un botón, deja que el clic llegue antes de redibujar
-    setTimeout(function(){const a=document.activeElement;if(a&&a.classList&&a.classList.contains('in')&&a.dataset.i==el.dataset.i&&a.dataset.j==el.dataset.j)return;autoDone(i,j);},350);return;
-  }
-  if(!autoDone(i,j))return;
-  if(rt&&rt.dataset&&rt.dataset.i!=null){const n=document.querySelector('#exc'+rt.dataset.i+' .in[data-j="'+rt.dataset.j+'"][data-k="'+rt.dataset.k+'"]');if(n&&n!==rt)n.focus();}
-});
 function stepSet(i,j,f,d){
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);if(m==='t')return;
   const pv=lastEx(x.eid),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
@@ -319,32 +308,29 @@ function stepSet(i,j,f,d){
   saveAct();exRedraw(i);buzz(6);
 }
 /* a new set starts as a copy of the last one: log it with one tap / una serie nueva copia la anterior: se registra con un toque */
-function addSet(i){const x=ACT.ex[i];autoDone(i,x.sets.length-1);const l=x.sets[x.sets.length-1],n=newSet();if(l){n.w=l.w;n.r=l.r;n.t=l.t;n.d=l.d;}x.sets.push(n);saveAct();exRedraw(i);{const r=document.querySelectorAll('#exc'+i+' .srow:not(.hd)'),l=r[r.length-1];if(l){l.classList.add('rin');setTimeout(()=>l.classList.remove('rin'),500);}}}
-/* Enter/Next walks weight → reps → done → next set, keyboard stays open / Enter/Siguiente: peso → reps → listo → siguiente serie sin cerrar el teclado */
+function addSet(i){const x=ACT.ex[i];const l=x.sets[x.sets.length-1],n=newSet();if(l){n.w=l.w;n.r=l.r;n.t=l.t;n.d=l.d;}x.sets.push(n);saveAct();exRedraw(i);{const r=document.querySelectorAll('#exc'+i+' .srow:not(.hd)'),l=r[r.length-1];if(l){l.classList.add('rin');setTimeout(()=>l.classList.remove('rin'),500);}}}
+/* Enter/Next only walks weight → reps → next set; it never confirms / Enter/Siguiente solo pasa de peso a reps y a la siguiente serie; nunca confirma */
 document.addEventListener('keydown',function(ev){
   const el=ev.target;if(ev.key!=='Enter'||!el||!el.classList||!el.classList.contains('in')||el.dataset.i==null)return;
   ev.preventDefault();
-  const i=+el.dataset.i,j=+el.dataset.j,card=document.getElementById('exc'+i);if(!card)return;
+  const card=document.getElementById('exc'+el.dataset.i);if(!card)return;
   const ins=[].slice.call(card.querySelectorAll('.srow .in[data-i]')),k=ins.indexOf(el);
-  if(k>=0&&k%2===0&&ins[k+1]){ins[k+1].focus();return;}
-  if(ACT&&ACT.ex[i]&&ACT.ex[i].sets[j]&&!ACT.ex[i].sets[j].done){
-    sv(i,j,el.dataset.k,el.value);
-    tgSet(i,j);
-    setTimeout(function(){const c=document.getElementById('exc'+i),n=c&&c.querySelector('.srow:not(.done):not(.hd) .in[data-i]');if(n)n.focus();else if(document.activeElement)document.activeElement.blur();},60);
-  }else if(ins[k+1])ins[k+1].focus();
+  if(k>=0&&ins[k+1])ins[k+1].focus();else el.blur();
 });
 function tgSet(i,j){REST_LAST=i;
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);
   unlockAudio();
   if(!s.done){
+    const bk={w:s.w,r:s.r,t:s.t,d:s.d}; // so a rejected tap leaves the row untouched / para que un toque rechazado no cambie la fila
     const pv=lastEx(x.eid),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
     if(m==='wr'&&s.w==null&&x.sg!=null)s.w=x.sg;
+    if((m==='wr'||m==='bw')&&s.ty!=='w'&&!(j>0&&x.sets[j-1].r!=null)){const g=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});if(g){if(g.r&&s.r==null)s.r=g.r;if(m==='wr'&&g.w!=null&&x.sg==null&&s.w==null)s.w=g.w;}}
     if(ph){
       if(m==='t'){if(s.t==null&&ph.t!=null)s.t=ph.t;if(s.d==null&&ph.d)s.d=ph.d;}
       else{if(s.w==null&&ph.w!=null&&m!=='bw')s.w=ph.w;if(s.w==null&&m==='bw'&&ph.w)s.w=ph.w;if(s.r==null&&ph.r!=null)s.r=ph.r;}
     }
     const ok=m==='t'?(s.t!=null&&s.t>0):(m==='bw'?(s.r!=null&&s.r>0):(s.w!=null&&s.r!=null&&s.r>0));
-    if(!ok){toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
+    if(!ok){s.w=bk.w;s.r=bk.r;s.t=bk.t;s.d=bk.d;toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
     const prev=bestScore(x.eid,m,s),sc=setScore(m,s);
     s.done=true;if(!ACT.ts){ACT.ts=ACT.t0&&actTotals().done>1?ACT.t0:Date.now();ACT.sn=ACT.ts;ACT.acc=0;ACT.pz=false;}else if(ACT.pz){ACT.pz=false;ACT.sn=Date.now();}
     if(prev>0&&sc>prev){s.pr=true;toast(m==='wr'?t('newPR2',wShow(Math.round(sc))+' '+wUnit(),wShow(Math.round(sc-prev))+' '+wUnit()):t('newPR'));}else delete s.pr;

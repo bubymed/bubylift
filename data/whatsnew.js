@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.40',items:[
+  {i:'check',en:'Sets now count only when you tap the check button, and the app suggests reps for each set (it starts at the bottom of your rep range and moves up as you hit the top).',es:'Las series ahora cuentan solo cuando tocas el botón ✓, y la app sugiere repeticiones para cada serie (empieza en el piso de tu rango y sube cuando llegas al tope).'}
+ ]},
  {v:'v1.1.39',items:[
   {i:'share',en:'Wide share cards: the big number now lines up exactly with the logo and the text under it.',es:'Tarjetas anchas: el número grande ahora queda alineado con el logo y el texto de abajo.'}
  ]},
