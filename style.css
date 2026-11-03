@@ -785,3 +785,4 @@ main>.lnk-d{display:block;margin:12px auto 0;color:var(--dim)}
 .srow.sw.swgo::after{background:var(--red)}
 .srow.swr{transition:transform .2s ease-out}
 [id^=exc]{overflow-x:clip}
+.rn{margin:6px 0}

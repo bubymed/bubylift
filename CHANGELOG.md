@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.42 — 2026-10-30
+- A short note on how to count reps appears on walking lunges, alternating moves and one-side exercises.
+  Una nota corta explica cómo contar repeticiones en zancadas caminando, ejercicios alternados y de un solo lado.
+
 ## v1.1.41 — 2026-10-30
 - Swipe a set to the left to remove it (with Undo).
   Desliza una serie a la izquierda para quitarla (con Deshacer).
