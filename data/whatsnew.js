@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.51',items:[
+  {i:'trophy',en:'Your rank now shows on the Workout home, and asks for your body weight or the workouts you still need to reveal it. Also visible on Progress before your first workout.',es:'Tu rango ahora se muestra en el inicio de Entrenar, y te pide tu peso corporal o los entrenamientos que te faltan para revelarlo. También se ve en Progreso antes de tu primer entrenamiento.'}
+ ]},
  {v:'v1.1.50',items:[
   {i:'palette',en:'Rank colors: brighter shades on the dark theme, deeper ones on the light theme.',es:'Colores de rango: tonos más vivos en el tema oscuro y más profundos en el claro.'}
  ]},
