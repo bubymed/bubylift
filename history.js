@@ -129,17 +129,17 @@ function vProgress(){
   const now=Date.now(),ws=weekStart(now),vals=[],labels=[];
   for(let i=7;i>=0;i--){const a=ws-i*7*864e5,b=a+7*864e5;vals.push(DATA.workouts.filter(w=>w.t>=a&&w.t<b).length);labels.push(dFmt(a,{month:'numeric',day:'numeric'}));}
   let vol=0,sets=0;DATA.workouts.forEach(w=>{vol+=wkVol(w);sets+=wkSets(w);});
+  const pt=UI.pt||'sum';
   let h=streakCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
   h+='<div class="card"><b>'+t('perWeek')+'</b>'+barSvg(vals,labels)+'</div>';
-  h+=strCard()+bwCard()+xpCard()+balCard()+featCharts()+rmCalc();
-  h+='<div class="sec"><h2>'+t('exercises')+'</h2></div>';
-  h+='<div class="lgrp">';
+  const rk=strCard()+bwCard()+xpCard()+balCard();
+  let ex=featCharts()+rmCalc()+'<div class="sec"><h2>'+t('exercises')+'</h2></div><div class="lgrp">';
   loggedEx().forEach(o=>{
     const m=exMode(o.eid),b=bestSet(o.eid);
-    h+='<button class="lrow" onclick="openProg(\''+o.eid+'\')">'+(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(o.eid)?photoTh(o.eid):'<span class="li">'+ic('barbell')+'</span>')+'<span class="lt2"><b>'+esc(exName(o.eid,o.n))+'</b><small>'+t('sessions',o.cnt)+(b?' · '+t(m==='t'?'longest':'best')+': '+esc(fmtSet(m,b)):'')+'</small></span><span class="lc">›</span></button>';
+    ex+='<button class="lrow" onclick="openProg(\''+o.eid+'\')">'+(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(o.eid)?photoTh(o.eid):'<span class="li">'+ic('barbell')+'</span>')+'<span class="lt2"><b>'+esc(exName(o.eid,o.n))+'</b><small>'+t('sessions',o.cnt)+(b?' · '+t(m==='t'?'longest':'best')+': '+esc(fmtSet(m,b)):'')+'</small></span><span class="lc">›</span></button>';
   });
-  h+='</div>';
-  return h;
+  ex+='</div>';
+  return subBar('pt',[['sum',t('psOv')],['rank',t('psRank')],['ex',t('psEx')]],pt)+subWrap(pt==='rank'?rk:(pt==='ex'?ex:h));
 }
 /* Top lifts with a chart right on the Progress home / las ejercicios principales con gráfica en Progreso */
 function featCharts(){
