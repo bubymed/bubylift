@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.47',items:[
+  {i:'heart',en:'<b>Deeper muscle recovery</b> — every exercise now trains several parts with different weight (a deadlift is not a pull-up, leg extensions spare your hamstrings). Tap a muscle to see its parts (21 in all), each with its own recovery time, and tap a ready part to train it.',es:'<b>Recuperación muscular más profunda</b> — cada ejercicio ahora trabaja varias partes con distinto peso (un peso muerto no es una dominada, las extensiones de cuádriceps no cansan los isquiotibiales). Toca un músculo para ver sus partes (21 en total), cada una con su propio tiempo de recuperación, y toca una parte lista para entrenarla.'}
+ ]},
  {v:'v1.1.46',items:[
   {i:'yoga',en:'<b>Stretching with equipment</b> — pick what you have (foam roller, band, bench, bar, ball) and get 26 new moves, used first in your cool-down. Wall and floor moves included.',es:'<b>Estiramientos con equipo</b> — elige lo que tengas (rodillo, banda, banco, barra, pelota) y obtén 26 movimientos nuevos, usados primero en tu cool down. Incluye movimientos con pared y piso.'}
  ]},

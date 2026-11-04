@@ -19,19 +19,45 @@ function bwStep(d){
   let v=numParse(e.value);if(v==null)v=last?parseFloat(wShow(last.w)):null;if(v==null)return;
   e.value=fmtNum(Math.max(0,Math.round((v+d)*10)/10),1);
 }
-/* muscle recovery from what you logged: ~48 h base, longer after more hard sets / recuperación muscular según lo que registraste */
+/* muscle recovery from what you logged, per muscle part (data/musc.js): every exercise trains several parts with different weight; each part has its own window, and unrecovered fatigue carries over
+   recuperación muscular según lo que registraste, por parte del músculo (data/musc.js): cada ejercicio trabaja varias partes con distinto peso; cada parte tiene su ventana y la fatiga no recuperada se arrastra */
 const REC_G=['chest','back','shoulders','biceps','triceps','legs','glutes','core'];
+let _MW={};
+function muW(eid){ // [[part, weight],...] of an exercise / partes y pesos de un ejercicio
+  if(_MW[eid]!==undefined)return _MW[eid];
+  const e=exById(eid);let r=null;
+  if(e){const str=EXMU[eid]||MUS_DEF[e.g];if(str){r=[];str.split(' ').forEach(p=>{const m=/^([a-z]+)([\d.]+)$/.exec(p);if(m&&MUS_BASE[m[1]])r.push([m[1],+m[2]]);});}}
+  _MW[eid]=r;return r;
+}
+function muGroup(sub){for(const g in MUS_SUB)if(MUS_SUB[g].indexOf(sub)>=0)return g;return null;}
+/* hours a part needs after a session of s effective sets / horas que necesita una parte tras una sesión de s series efectivas */
+function recWin(sub,s){const f=s<=4?Math.max(.5,.5+s*.125):Math.min(1.75,1+(s-4)*.125);return MUS_BASE[sub]*f;}
 function recData(now){
-  now=now||Date.now();const o={};REC_G.forEach(g=>{o[g]={t:0,n:0};});let lastT=0;
-  DATA.workouts.forEach(wk=>{
-    const per={};
-    wk.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;if(!g||!o[g])return;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(n)per[g]=(per[g]||0)+n;});
-    const end=wk.end||wk.t;if(Object.keys(per).length&&end>lastT)lastT=end;
-    for(const g in per)if(end>o[g].t){o[g].t=end;o[g].n=per[g];}
+  now=now||Date.now();
+  const ev={};Object.keys(MUS_BASE).forEach(k=>{ev[k]=[];});let lastT=0;
+  DATA.workouts.slice().sort((x,y)=>(x.end||x.t)-(y.end||y.t)).forEach(wk=>{
+    const eff={},end=wk.end||wk.t;let any=0;
+    wk.ex.forEach(x=>{const w=muW(x.eid);if(!w)return;const n=x.sets.filter(q=>q.done!==false&&(q.r>0||q.t>0)).length;if(!n)return;any=1;w.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});});
+    if(any&&end>lastT)lastT=end;
+    for(const k in eff)if(eff[k]>=1)ev[k].push([end,eff[k]]);
   });
-  REC_G.forEach(g=>{const r=o[g];if(!r.t){r.pct=null;return;}
-    const win=(48+Math.min(36,Math.max(0,r.n-4)*6)+((g==='legs'||g==='back')?12:0))*36e5,el=now-r.t;
-    r.pct=Math.max(0,Math.min(100,Math.round(el/win*100)));r.left=Math.max(0,Math.ceil((win-el)/36e5));});
+  const o={};
+  REC_G.forEach(g=>{o[g]={t:0,n:0,pct:null,left:0,subs:{}};});
+  Object.keys(MUS_BASE).forEach(k=>{
+    const g=muGroup(k),L=ev[k];if(!g)return;
+    const r={t:0,s:0,pct:null,left:0};
+    if(L.length){
+      let R=0,prev=0;
+      L.forEach(q=>{const dec=prev?Math.max(0,R-(q[0]-prev)/36e5):0;R=recWin(k,q[1])+.5*dec;prev=q[0];r.s=q[1];});
+      const el=(now-prev)/36e5;r.t=prev;r.pct=Math.max(0,Math.min(100,Math.round(el/R*100)));r.left=Math.max(0,Math.ceil(R-el));
+    }
+    o[g].subs[k]=r;
+  });
+  REC_G.forEach(g=>{
+    const x=o[g],tr=Object.keys(x.subs).filter(k=>x.subs[k].pct!=null);
+    if(!tr.length)return;
+    x.pct=Math.min.apply(null,tr.map(k=>x.subs[k].pct));x.left=Math.max.apply(null,tr.map(k=>x.subs[k].left));x.t=Math.max.apply(null,tr.map(k=>x.subs[k].t));x.n=Math.round(Math.max.apply(null,tr.map(k=>x.subs[k].s)));
+  });
   return{g:o,last:lastT,days:lastT?Math.floor((now-lastT)/864e5):null,ready:REC_G.filter(g=>o[g].pct==null||o[g].pct>=100).length};
 }
 /* training load: hard sets per week, this week vs your last 3 weeks, and per-muscle weekly sets / carga de entrenamiento: series duras por semana */
@@ -69,13 +95,26 @@ function recCard(){
   return'<div class="rv"><div class="rv-hero"'+skAttr(t('recT'),t('recPct',avg),t('recCtaB'),'recWorkout()')+'><div class="rv-ring" style="--p:'+avg+'"><b>'+avg+'<small>%</small></b></div><div class="rv-ht"><span class="hero-e">'+t('recT')+'</span><h3>'+t('recPct',avg)+'</h3>'+
     '<p>'+r.ready+'/'+REC_G.length+' '+t('recReady')+' · '+(r.days===0?t('recLastToday'):r.days+' '+t('recDays'))+'</p></div></div>'+
     '<div class="rv-leg"><span class="ok">'+t('rlOk')+'</span><span class="mid">'+t('rlMid')+'</span><span class="low">'+t('rlLow')+'</span></div>'+
-    '<div class="rv-grid">'+REC_G.map((g,k)=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low');
-      return'<button class="rv-t '+c+'" style="--p:'+p+';--i:'+k+'" onclick="recTap(\''+g+'\')"><span class="rv-r"><em>'+(p>=100?'✓':p+'%')+'</em></span><b>'+t('g_'+g)+'</b><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small></button>';}).join('')+'</div><p class="muted sm rv-hint">'+t('recTapGo')+'</p></div>';
+    '<div class="rv-grid">'+REC_G.map((g,k)=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low'),op=REC_OPEN===g;
+      let h='<button class="rv-t '+c+(op?' open':'')+'" aria-expanded="'+op+'" style="--p:'+p+';--i:'+k+'" onclick="recTap(\''+g+'\')"><span class="rv-r"><em>'+(p>=100?'✓':p+'%')+'</em></span><b>'+t('g_'+g)+'</b><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small><i class="rv-chv" aria-hidden="true">▾</i></button>';
+      const oi=REC_G.indexOf(REC_OPEN);
+      if(oi>=0&&Math.floor(oi/2)===Math.floor(k/2)&&(k%2===1||k===REC_G.length-1))h+=recSubs(r,REC_OPEN);
+      return h;}).join('')+'</div><p class="muted sm rv-hint">'+t('recTapGo')+'</p></div>';
 }
-function recTap(g){
-  const r=recData(),x=r.g[g];
-  if(g==='core'||x.pct==null||x.pct>=100){recWorkout(g==='core'?null:g);return;}
-  toast(t('g_'+g)+': '+t('recIn',x.left));
+let REC_OPEN=null;
+/* the parts of one muscle, opened under the grid / las partes de un músculo, abiertas bajo la cuadrícula */
+function recSubs(r,g){
+  const x=r.g[g];
+  return'<div class="rv-sub" role="group" aria-label="'+esc(t('g_'+g))+'"><div class="rv-sh"><b>'+t('g_'+g)+'</b><button class="ico" onclick="recTap(\''+g+'\')" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+    MUS_SUB[g].map(k=>{const q=x.subs[k],p=q.pct==null?100:q.pct,c=p>=100?'ok':(p>=60?'mid':'low');
+      return'<button class="rv-s '+c+'" style="--p:'+p+'" onclick="recSubTap(\''+k+'\')"><span class="rv-sn">'+t('ms_'+k)+'</span><span class="rv-bar"><u style="width:'+p+'%"></u></span><span class="rv-st">'+(q.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',q.left)))+'</span>'+(p>=100?'<span class="rv-go">'+t('recSubTrain')+'</span>':'')+'</button>';}).join('')+'</div>';
+}
+function recTap(g){REC_OPEN=REC_OPEN===g?null:g;render();}
+/* tap a part: start a workout for it if it is ready, otherwise say how long is left / toca una parte: empieza un entreno si está lista, si no dice cuánto falta */
+function recSubTap(k){
+  const q=recData().g[muGroup(k)].subs[k];
+  if(q.pct==null||q.pct>=100){recWorkout(null,k);return;}
+  toast(t('ms_'+k)+': '+t('recIn',q.left));
 }
 /* ---------- general strength score (e1RM ÷ body weight vs. standards) / fuerza general (1RM estimado ÷ peso corporal) ---------- */
 const STR_L=[
@@ -112,7 +151,15 @@ function strCard(){
   return h;
 }
 /* a workout from the muscles that have recovered / un entrenamiento con los músculos ya recuperados */
-function recWorkout(only){
+function recWorkout(only,sub){
+  if(sub){ // one muscle part: the exercises that train it most, the ones you already do first / una parte: los ejercicios que más la trabajan, primero los que ya haces
+    const use={},hv=curHave(),c=[];DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{use[x.eid]=(use[x.eid]||0)+1;}));
+    EXLIB.forEach((e,i)=>{if(e[3]==='mobility'||e[3]==='cardio')return;const w=muW(e[0]);if(!w||!avail(e[0],hv))return;const m=w.find(q=>q[0]===sub);if(m&&m[1]>=.8&&(w.filter(q=>q[1]>=.8).length<=2))c.push([e[0],i]);});
+    c.sort((x,y)=>(use[y[0]]||0)-(use[x[0]]||0)||x[1]-y[1]);
+    const ex=c.slice(0,4).map(q=>({eid:q[0],sets:3}));
+    if(!ex.length){toast(t('recNoneRdy'));return;}
+    startWorkout({name:t('ms_'+sub),ex:ex});return;
+  }
   const r=recData(),rd=only?[only]:REC_G.filter(g=>g!=='core'&&(r.g[g].pct==null||r.g[g].pct>=100)).sort((a,b)=>(r.g[a].t||0)-(r.g[b].t||0)).slice(0,3);
   if(!rd.length){toast(t('recNoneRdy'));return;}
   const use={};DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{use[x.eid]=(use[x.eid]||0)+1;}));
