@@ -29,7 +29,7 @@ function strCard(){
   if(!d.bw)return h+'<p class="muted sm">'+t('strBw')+'</p><button class="btn sm" onclick="go(\'body\')">'+t('strBwGo')+'</button></div>';
   if(lock)return h+'<p class="muted sm">'+t('strLock',Math.max(0,3-d.n))+'</p></div>';
   const shown=d.cur!=null?d.cur:d.score,ix=rkIdx(shown),pk=rkIdx(d.score),top=ix>=RK_T.length-1,lo=RK_T[ix],hi=top?100:RK_T[ix+1],pct=top?100:Math.round((shown-lo)/(hi-lo)*100);
-  h+='<div class="str-top"><b>'+shown+'</b><span>'+esc(rkName(ix))+'</span></div>';
+  h+='<div class="str-top rk-hero"><span class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</span><b>'+shown+' <small>'+t('rkPts')+'</small></b></div>';
   if(d.cur==null)h+='<p class="rk-back">'+t('rkAway',rkName(pk))+'</p>';
   else if(pk>ix)h+='<p class="rk-back">'+t('rkBack',rkName(pk))+'</p>';
   h+='<div class="rk-bar"><u style="width:'+pct+'%"></u></div><p class="muted sm rk-nx">'+(top?t('rkTop'):t(hi-shown===1?'rkNext1':'rkNext',hi-shown,rkName(ix+1)))+'</p>';
@@ -53,7 +53,7 @@ function rkCheck(){
   }catch(e){}
 }
 function rkUp(ix){
-  sheet('<div class="form rkup"><div class="rk-big">'+ic('trophy')+'<h2>'+t('rkUpT')+'</h2><b>'+esc(rkName(ix))+'</b><p class="muted">'+t('rkUpP',esc(rkName(ix)))+'</p></div><div class="row"><button class="btn pri" onclick="sheetClose();go(\'progress\')">'+t('rkUpGo')+'</button><button class="btn" onclick="sheetClose()">'+t('close')+'</button></div></div>');
+  sheet('<div class="form rkup"><div class="rk-big">'+ic('trophy')+'<h2>'+t('rkUpT')+'</h2><b class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</b><p class="muted">'+t('rkUpP',esc(rkName(ix)))+'</p></div><div class="row"><button class="btn pri" onclick="sheetClose();go(\'progress\')">'+t('rkUpGo')+'</button><button class="btn" onclick="sheetClose()">'+t('close')+'</button></div></div>');
 }
 /* consistency level: XP from sessions, sets and records; it never goes down / nivel de constancia: XP por sesiones, series y récords; nunca baja */
 function xpData(){
