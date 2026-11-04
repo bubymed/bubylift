@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.56 — 2026-10-30
+- New 'All ranks' window: every rank with the points it asks for, the ones you passed and how far the next ones are. Tap your rank on the home screen to open it. Fixed the missing gap between cards inside the new tabs.
+  Nueva ventana 'Todos los rangos': cada rango con los puntos que pide, los que ya superaste y cuánto falta para los siguientes. Toca tu rango en el inicio para abrirla. Arreglado el espacio que faltaba entre tarjetas dentro de las pestañas nuevas.
+
 ## v1.1.55 — 2026-10-30
 - Progress and Body are split into tabs with a pill bar: swipe left or right to move between them. Progress: Overview, Rank, Exercises. Body: Recovery, Weight, Log.
   Progreso y Cuerpo se dividen en pestañas con una barra de pastillas: desliza a la izquierda o derecha para moverte entre ellas. Progreso: Resumen, Rango, Ejercicios. Cuerpo: Recuperación, Peso, Registro.
