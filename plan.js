@@ -420,6 +420,20 @@ function sugg0(eid,tg){
   const mr=Math.max.apply(null,ss.filter(s=>s.w===W).map(s=>s.r));
   return{key:'sgHold2',w:W,r:Math.max(lo,Math.min(hi,mr+1))};
 }
+/* first time with an exercise: a starting weight range from your body weight and the kind of lift / primera vez con un ejercicio: un rango de peso inicial según tu peso corporal y el tipo de levantamiento */
+const NOV_R={chest:{barbell:.75,dumbbell:.6,machine:.8,cable:.3},back:{barbell:.8,machine:.8,cable:.75,dumbbell:.4},shoulders:{barbell:.45,dumbbell:.35,machine:.5,cable:.15},biceps:{barbell:.4,dumbbell:.3,cable:.4,machine:.4},triceps:{barbell:.5,cable:.5,dumbbell:.25,machine:.5},legs:{barbell:1,machine:1.2,dumbbell:.5,cable:.3},glutes:{barbell:1,machine:1,dumbbell:.5,cable:.3}};
+const NOV_LIGHT={latraise:.08,frontraise:.08,reardelt:.07,facepull:.2};
+function firstRange(eid,reps){
+  const e=exById(eid),bw=(DATA.body.find(q=>q.w)||{}).w;if(!e||!bw||exMode(eid)!=='wr')return null;
+  const r=NOV_LIGHT[eid]!=null?NOV_LIGHT[eid]:(NOV_R[e.g]||{})[e.e];if(!r)return null;
+  const sx=typeof strSex==='function'?strSex():'x',f=sx==='f'?.6:(sx==='m'?1:.8);
+  const w=r*bw*f/(1+(reps||6)/30),lo=wRound(w*.65),hi=Math.max(wRound(w),lo+wInc());
+  return[lo,hi];
+}
+function startLine(x,reps){
+  const rg=firstRange(x.eid,reps);
+  return'<br><span class="sg">'+esc(rg?t('sgStart',wShow(rg[0])+'–'+wShow(rg[1])+' '+wUnit()):t('sgStartGen'))+'</span>';
+}
 function suggLine(x){
   const L=curInjL(),bd=injBadge(x.eid);
   let h='';
@@ -427,7 +441,7 @@ function suggLine(x){
     const s=sugg(x.eid,x.tg);
     h='<div class="goalln">'+((x.tg.lo||x.tg.hi)?'<b>'+t('target')+':</b> '+esc(tgText({sets:x.sets.length,lo:x.tg.lo,hi:x.tg.hi,u:x.tg.u})):'');
     if(s)h+='<br><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span>';
-    if(s&&s.r)h+='<br><span class="sg">'+esc(t('sgReps',s.r))+'</span>';
+    if(s&&s.r)h+='<br><span class="sg">'+esc(t('sgReps',s.r))+'</span>'+(s.key==='sgFirst'?startLine(x,s.r):'');
     if(typeof x.tg.ln==='string'&&x.tg.ln)h+='<br><span class="sg">'+esc(x.tg.ln.slice(0,200))+'</span>';
     if(x.tg.nt&&NT_KEYS.indexOf(x.tg.nt)>=0)h+='<br><span class="muted">'+esc(t(x.tg.nt))+'</span>';
     if(x.tg.tp){const ss=x.tg.ss?optSsLabelAct(x):'';h+='<br><span class="muted">'+(ss?'<i class="ssl">'+ss+'</i> ':'')+esc(optLine(x.tg))+'</span>'+(ss?'<br><span class="muted">'+esc(t('ssHint'))+'</span>':'');}
@@ -437,7 +451,7 @@ function suggLine(x){
   if(!x.tg&&(typeof ACT!=='undefined'&&ACT)){
     const s=sugg(x.eid,{lo:6,hi:12,u:'r'});
     if(s&&s.key!=='sgFirst'&&s.key!=='sgFirstBw')h='<div class="goalln"><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span>'+(s.r?'<br><span class="sg">'+esc(t('sgReps',s.r))+'</span>':'')+'</div>';
-    else if(s&&s.r)h='<div class="goalln"><span class="sg">'+esc(t('sgReps',s.r))+'</span></div>';
+    else if(s&&s.r)h='<div class="goalln"><span class="sg">'+esc(t('sgReps',s.r))+'</span>'+(s.key==='sgFirst'?startLine(x,s.r):'')+'</div>';
   }
   const si=typeof ACT!=='undefined'&&ACT?ACT.ex.indexOf(x):-1;
   if(si>=0&&exMode(x.eid)==='wr'&&x.sets.some(q=>!q.done&&q.w==null)){

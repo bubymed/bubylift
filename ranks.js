@@ -44,6 +44,7 @@ function strCard(){
   if(d.cur==null)h+='<p class="rk-back">'+t('rkAway',rkName(pk))+'</p>';
   else if(pk>ix)h+='<p class="rk-back">'+t('rkBack',rkName(pk))+'</p>';
   h+='<div class="rk-bar"><u style="width:'+pct+'%"></u></div><p class="muted sm rk-nx">'+(top?t('rkTop'):t(hi-shown===1?'rkNext1':'rkNext',hi-shown,rkName(ix+1)))+'</p>';
+  {const ms=d.lifts.filter(l=>l.p==null);if(ms.length)h+='<p class="muted sm rk-miss">'+t('rkMiss',ms.map(l=>t('sl_'+l.k)).join(', '))+'</p>';}
   h+=(d.pts.length>1?lineSvg(d.pts,function(v){return String(Math.round(v));}):'');
   h+='<div class="rk-l">'+d.lifts.map(l=>{
     const pc=l.pc!=null?l.pc:l.p,tg=rkTarget(l,d),op=RKO===l.k;
@@ -59,7 +60,7 @@ function rkCheck(){
   try{
     const d=strData();if(!d.bw||d.n<3||d.score==null)return;
     const ix=rkIdx(d.score),mx=SET.rkMax;
-    if(mx==null){SET.rkMax=ix;saveSet();return;}
+    if(mx==null||SET.rkV!==2){SET.rkMax=ix;SET.rkV=2;saveSet();return;} // v2: the overall score counts all five lifts / v2: el puntaje general cuenta los cinco levantamientos
     if(ix>mx){SET.rkMax=ix;saveSet();setTimeout(()=>rkUp(ix),1400);}
   }catch(e){}
 }

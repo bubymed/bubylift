@@ -137,13 +137,13 @@ function strData(){
   const sc=L=>best[L[0]]?strPts(strRatio(best[L[0]],bw,sex),strTh(L,sex)):null;
   ws.forEach(wk=>{
     wk.ex.forEach(x=>x.vr?0:STR_L.forEach(L=>{const m=L[1].find(q=>q[0]===x.eid);if(!m)return;x.sets.forEach(s=>{if(s.done===false||!(s.r>=1&&s.r<=12))return;const e=e1rm(s.w,s.r)*m[1];if(e>(best[L[0]]||0))best[L[0]]=e;if(wk.t>=cut&&e>(rec[L[0]]||0))rec[L[0]]=e;});}));
-    const v=STR_L.map(sc).filter(x=>x!=null);
-    if(v.length)pts.push({t:wk.t,y:Math.round(v.reduce((a,c)=>a+c,0)/v.length)});
+    const v=STR_L.map(sc); // lifts you have not tried count as 0: one strong lift cannot carry the rank / los levantamientos que no has hecho cuentan 0: uno solo no puede sostener el rango
+    if(v.some(x=>x!=null))pts.push({t:wk.t,y:Math.round(v.reduce((a,c)=>a+(c||0),0)/STR_L.length)});
   });
   const scc=L=>rec[L[0]]?strPts(strRatio(rec[L[0]],bw,sex),strTh(L,sex)):null; // current = best of the last 6 months / actual = mejor de los últimos 6 meses
   const lifts=STR_L.map(L=>({k:L[0],e:best[L[0]]||0,p:sc(L),ec:rec[L[0]]||0,pc:scc(L)}));
   const cv=lifts.filter(l=>l.pc!=null).map(l=>l.pc);
-  return{bw:bw,n:ws.length,lifts:lifts,pts:pts,score:pts.length?pts[pts.length-1].y:null,cur:cv.length?Math.round(cv.reduce((a,c)=>a+c,0)/cv.length):null,sex:sex};
+  return{bw:bw,n:ws.length,lifts:lifts,pts:pts,score:pts.length?pts[pts.length-1].y:null,cur:cv.length?Math.round(cv.reduce((a,c)=>a+c,0)/STR_L.length):null,sex:sex};
 }
 /* a workout from the muscles that have recovered / un entrenamiento con los músculos ya recuperados */
 function recWorkout(only,sub){
