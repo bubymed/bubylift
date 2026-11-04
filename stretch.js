@@ -2,6 +2,20 @@
    Pestaña Estirar (v49): sesiones rápidas por enfoque y tiempo, y todos los estiramientos por zona del cuerpo. */
 const STX={sec:'sess',type:'full',min:10,area:'ham',cdg:[]}; // cdg: muscle groups for the cool-down (empty = whole body) / grupos musculares del cool down (vacío = cuerpo completo)
 const STX_SECS={5:20,10:30,15:40};
+/* equipment for stretching: its own choice, apart from the training profile (default: what the profile already has) / equipo para estirar: elección propia, aparte del perfil de entreno (por defecto lo que ya tiene el perfil) */
+const STR_EQ=['roller','band','bench','bar','ball'];
+function strHave(){
+  const h=Array.isArray(SET.strHave)?SET.strHave:curHave();
+  return STR_EQ.filter(k=>h.indexOf(k)>=0);
+}
+function strEqToggle(k){
+  const h=strHave(),i=h.indexOf(k);if(i>=0)h.splice(i,1);else h.push(k);
+  SET.strHave=h;saveSet();render();
+}
+function strEqChips(){
+  const h=strHave();
+  return'<div class="card optb steq"><b>'+t('stEqT')+'</b><p class="muted sm">'+t('stEqW')+'</p><div class="chips wrap">'+STR_EQ.map(k=>'<button class="chip'+(h.indexOf(k)>=0?' on':'')+'" aria-pressed="'+(h.indexOf(k)>=0)+'" onclick="strEqToggle(\''+k+'\')">'+(h.indexOf(k)>=0?'✓ ':'')+t('stEq_'+k)+'</button>').join('')+'</div></div>';
+}
 function strSecs(){return STX_SECS[STX.min]||30;}
 function strSet(k,v){STX[k]=v;if(k==='min')STX.min=+v;render();}
 function strIsDyn(id){return STRETCH_DYN.indexOf(id)>=0;}
@@ -15,12 +29,12 @@ function cgFromWk(wk){
   return CG_KEYS.filter(k=>o[k]);
 }
 function cgPool(g,have){
-  const used={},lists=CG_AREAS[g].map(a=>(STRETCH_BY[a]||[]).filter(id=>!strIsDyn(id)&&exById(id)&&avail(id,have))),out=[];
+  const used={},gear=id=>{const e=exById(id);return e&&e.e!=='bodyweight'&&e.e!=='other'?0:1;},lists=CG_AREAS[g].map(a=>(STRETCH_BY[a]||[]).filter(id=>!strIsDyn(id)&&exById(id)&&avail(id,have)).map((id,i)=>[gear(id),i,id]).sort((x,y)=>x[0]-y[0]||x[1]-y[1]).map(x=>x[2])),out=[];
   for(let i=0;lists.some(l=>i<l.length);i++)lists.forEach(l=>{if(i<l.length&&!used[l[i]]){used[l[i]]=1;out.push(l[i]);}});
   return out;
 }
 function strCoolItems(groups,min){
-  const secs=STX_SECS[min]||30,have=curHave(),gs=CG_KEYS.filter(k=>groups.indexOf(k)>=0),pools={};
+  const secs=STX_SECS[min]||30,have=strHave(),gs=CG_KEYS.filter(k=>groups.indexOf(k)>=0),pools={};
   gs.forEach(g=>{pools[g]=cgPool(g,have);});
   const n=Math.max(gs.length,Math.max(4,Math.round(min*60/(secs+15)))),cnt={};
   gs.forEach(g=>{cnt[g]=0;});
@@ -52,7 +66,7 @@ function strSessName(){
 }
 /* the moves of a session: first option the person can do in every slot, as many as fit the time / los movimientos de una sesión */
 function strItems(type,min){
-  const secs=STX_SECS[min]||30,n=Math.max(4,Math.round(min*60/(secs+15))),have=curHave(),used={},out=[];
+  const secs=STX_SECS[min]||30,n=Math.max(4,Math.round(min*60/(secs+15))),have=strHave(),used={},out=[];
   (STRETCH_SESS[type]||'').split('|').forEach(s=>{
     if(out.length>=n)return;
     const id=s.split(',').find(a=>!used[a]&&avail(a,have));
@@ -82,7 +96,7 @@ function strSessGo(save){
   const name=strSessName(),l=strItemsOf();
   if(save)strSave(name,l);else strStart(name,l);
 }
-function strAreaList(){const have=curHave();return (STRETCH_BY[STX.area]||[]).filter(id=>avail(id,have)&&exById(id)).map(id=>strMove(id,30));}
+function strAreaList(){const have=strHave();return (STRETCH_BY[STX.area]||[]).filter(id=>avail(id,have)&&exById(id)).map(id=>strMove(id,30));}
 function strAreaGo(save){
   const name=t('strA_'+STX.area),l=strAreaList();
   if(save)strSave(name,l);else strStart(name,l);
@@ -104,7 +118,7 @@ function vStretch(){
   if(rhOn)return h+vRehab();
   if(STX.sec==='sess'){
     const l=strItemsOf(),secs=strSecs();
-    h+=libStep(1,'strStep1')+mbTiles(STX.type)+(STX.type==='cool'?cgChips():'')+
+    h+=strEqChips()+libStep(1,'strStep1')+mbTiles(STX.type)+(STX.type==='cool'?cgChips():'')+
       libStep(2,'strStep2')+mbTimes(STX.min)+
       libStep(3,'strStep3');
     if(!l.length)return h+'<p class="muted">'+t('strNone')+'</p>';
@@ -113,7 +127,7 @@ function vStretch(){
       '<div class="row"><button class="btn pri" onclick="strSessGo(0)">'+t('strStart')+'</button><button class="btn" onclick="strSessGo(1)">'+t('libSave')+'</button></div>';
   }else{
     const l=strAreaList();
-    h+=libStep(1,'strStepA')+libChips(STRETCH_AREAS,STX.area,'strAreaSet',k=>t('strA_'+k),1)+libStep(2,'strStepB');
+    h+=strEqChips()+libStep(1,'strStepA')+libChips(STRETCH_AREAS,STX.area,'strAreaSet',k=>t('strA_'+k),1)+libStep(2,'strStepB');
     if(!l.length)return h+'<p class="muted">'+t('strNone')+'</p>';
     h+=strRows(l)+'<p class="muted sm">'+t('strBoth')+'</p>'+
       '<div class="row"><button class="btn pri" onclick="strAreaGo(0)">'+t('strAreaStart')+'</button><button class="btn" onclick="strAreaGo(1)">'+t('libSave')+'</button></div>';

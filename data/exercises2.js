@@ -757,3 +757,34 @@ EXLIB.push(
  ['z_zottman_curl','Zottman Curl','Curl Zottman','biceps','dumbbell'],
  ['z_zottman_preacher_curl','Zottman Preacher Curl','Curl Zottman en predicador','biceps','dumbbell']
 );
+
+/* Stretching with equipment (v1.1.46): foam roller, band, bench, bar, ball, wall. No plan metadata, like the other mobility moves.
+   Estiramientos con equipo (v1.1.46): rodillo, banda, banco, barra, pelota, pared. Sin metadatos de plan, como los demás de movilidad. */
+EXLIB.push(
+ ['z_fr_quads','Foam Roll Quads','Rodillo en cuádriceps','mobility','roller','t'],
+ ['z_fr_hamstrings','Foam Roll Hamstrings','Rodillo en isquiotibiales','mobility','roller','t'],
+ ['z_fr_calves','Foam Roll Calves','Rodillo en pantorrillas','mobility','roller','t'],
+ ['z_fr_glutes','Foam Roll Glutes','Rodillo en glúteos','mobility','roller','t'],
+ ['z_fr_adductors','Foam Roll Inner Thighs','Rodillo en aductores','mobility','roller','t'],
+ ['z_fr_upper_back','Foam Roll Upper Back','Rodillo en espalda alta','mobility','roller','t'],
+ ['z_fr_lats','Foam Roll Lats','Rodillo en dorsales','mobility','roller','t'],
+ ['z_fr_chest_opener','Foam Roller Chest Opener','Apertura de pecho sobre rodillo','mobility','roller','t'],
+ ['z_band_hamstring_stretch','Band Hamstring Stretch','Estiramiento de isquiotibiales con banda','mobility','band','t'],
+ ['z_band_quad_stretch','Band Quad Stretch','Estiramiento de cuádriceps con banda','mobility','band','t'],
+ ['z_band_calf_stretch','Band Calf Stretch','Estiramiento de pantorrilla con banda','mobility','band','t'],
+ ['z_band_glute_stretch','Band Glute Stretch','Estiramiento de glúteo con banda','mobility','band','t'],
+ ['z_band_shoulder_dislocates','Band Shoulder Pass-Through','Pase de hombros con banda','mobility','band','bw'],
+ ['z_bench_hip_flexor','Bench Hip Flexor Stretch','Estiramiento de flexores de cadera en banco','mobility','bench','t'],
+ ['z_bench_thoracic_extension','Bench Thoracic Extension','Extensión torácica en banco','mobility','bench','t'],
+ ['z_bench_chest_stretch','Bench Chest Stretch','Estiramiento de pecho en banco','mobility','bench','t'],
+ ['z_bench_hamstring_stretch','Bench Hamstring Stretch','Estiramiento de isquiotibiales en banco','mobility','bench','t'],
+ ['z_bar_dead_hang','Dead Hang','Colgado en barra','mobility','bar','t'],
+ ['z_bar_lat_stretch','Bar Lat Stretch','Estiramiento de dorsales en barra','mobility','bar','t'],
+ ['z_bar_hanging_twist','Hanging Spinal Twist','Giro espinal colgado','mobility','bar','t'],
+ ['z_ball_back_extension','Ball Back Extension Stretch','Estiramiento de espalda sobre pelota','mobility','ball','t'],
+ ['z_ball_lat_stretch','Ball Lat Stretch','Estiramiento de dorsales con pelota','mobility','ball','t'],
+ ['z_wall_angels','Wall Angels','Ángeles en la pared','mobility','bodyweight','bw'],
+ ['z_doorway_chest_stretch','Doorway Chest Stretch','Estiramiento de pecho en el marco de la puerta','mobility','bodyweight','t'],
+ ['z_wall_legs_up','Legs Up the Wall','Piernas arriba en la pared','mobility','bodyweight','t'],
+ ['z_wall_quad_stretch','Wall Quad Stretch','Estiramiento de cuádriceps contra la pared','mobility','bodyweight','t']
+);

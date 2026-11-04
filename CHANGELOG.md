@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.46 — 2026-10-30
+- **Stretching with equipment** — pick what you have (foam roller, band, bench, bar, ball) and get 26 new moves, used first in your cool-down. Wall and floor moves included.
+  **Estiramientos con equipo** — elige lo que tengas (rodillo, banda, banco, barra, pelota) y obtén 26 movimientos nuevos, usados primero en tu cool down. Incluye movimientos con pared y piso.
+
 ## v1.1.45 — 2026-10-30
 - **Clearer share button** — “Background, size and color” now looks like a button (border, arrow that flips when open).
   **Botón de compartir más claro** — “Fondo, tamaño y color” ahora parece un botón (borde y flecha que gira al abrir).
