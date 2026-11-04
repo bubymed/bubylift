@@ -3,7 +3,7 @@
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
  {v:'v1.1.54',items:[
-  {i:'sliders',en:'First time with an exercise now suggests a starting weight range from your body weight. New Seated variation for curls, shoulder presses and raises.',es:'La primera vez con un ejercicio ahora sugiere un rango de peso inicial según tu peso corporal. Nueva variante Sentado para curls, press de hombros y elevaciones.'}
+  {i:'sliders',en:'First time with an exercise now suggests a starting weight range from your body weight. New Seated variation for curls, shoulder presses and raises. Plate exercises no longer ask for a bar.',es:'La primera vez con un ejercicio ahora sugiere un rango de peso inicial según tu peso corporal. Nueva variante Sentado para curls, press de hombros y elevaciones. Los ejercicios con disco ya no piden barra.'}
  ]},
  {v:'v1.1.53',items:[
   {i:'sliders',en:'Exercise variations: choose underhand, neutral, wide or close grip on rows, pulldowns, pull-ups, presses and curls. Each variation shifts the muscle map and keeps its own last time and records.',es:'Variantes de ejercicio: elige agarre supino, neutro, ancho o cerrado en remos, jalones, dominadas, press y curls. Cada variante cambia el mapa muscular y guarda su propia última vez y récords.'}

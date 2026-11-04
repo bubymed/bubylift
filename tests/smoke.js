@@ -1054,8 +1054,12 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(ev("(function(){var a=muW('machrow'),b=muW('machrow','under'),bi=function(w){return w.find(function(q){return q[0]==='bic'})[1]};return bi(b)>bi(a)&&muW('machrow')===a&&muW('machrow','under')!==a})()"),'underhand row shifts the muscle map toward biceps');
   ok(ev("(function(){var n=DATA.workouts.length;DATA.workouts.unshift({id:'va',t:Date.now()-1e6,ex:[{eid:'machrow',sets:[{w:100,r:8,done:true}]},{eid:'machrow',vr:'under',sets:[{w:60,r:8,done:true}]}]});var ok=lastEx('machrow').x.sets[0].w===100&&lastEx('machrow~under').x.sets[0].w===60&&exNameV('machrow','under').indexOf('·')>0;DATA.workouts.shift();return ok&&DATA.workouts.length===n})()"),'each variation keeps its own last time');
   ok(ev("(function(){var n=DATA.workouts.length;DATA.body.unshift({id:'vb',t:Date.now(),w:80});for(var k=0;k<3;k++)DATA.workouts.unshift({id:'vv'+k,t:Date.now()-k*864e5,ex:[{eid:'bench',vr:'close',sets:[{w:200,r:5,done:true}]}]});var d=strData(),ok=d.lifts[1].e===0;DATA.workouts.splice(0,3);DATA.body.shift();return ok&&DATA.workouts.length===n})()"),'variation sets do not count toward the strength score');
+<<<<<<< Updated upstream
   ok(ev("(function(){var sv=DATA.body;DATA.body=[];var a=firstRange('ezcurl',6);DATA.body=[{id:'fb',t:Date.now(),w:80}];var r=firstRange('ezcurl',6),sq=firstRange('squat',6),pu=firstRange('pushup',6);DATA.body=sv;return a===null&&r&&r[0]>0&&r[1]>r[0]&&r[1]<80&&sq&&sq[1]>r[1]&&pu===null})()"),'first-time weight range needs body weight and scales with the lift');
   ok(ev("exVars('ezcurl').indexOf('seat')>=0&&exVars('dbcurl').indexOf('seat')>=0&&exVars('ohp').indexOf('seat')>=0&&muW('ezcurl','seat').length>0"),'seated variation exists for curls and shoulder presses');
+=======
+  ok(ev("barDef('z_plate_twist')===0&&barDef('z_front_plate_raise')===0&&barDef('bench')>0&&barDef('z_squat_with_plate_movers')>0"),'plate exercises do not ask for a bar');
+>>>>>>> Stashed changes
   ev("restSet(0,'45')");ok(ev("exRest(ACT.ex[0])")===45&&ev("SET.exRest.bench")===45,'rest can be set per exercise and is remembered');
   ev("ACT.acc=5000;ACT.sn=Date.now();ACT.pz=false;pauseClock()");var __p=ev("actMs()");
   ok(ev("ACT.pz")===true&&__p>=5000&&__p<5500,'pause freezes the stopwatch');

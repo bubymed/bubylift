@@ -63,9 +63,11 @@ function legacyFix(){
   return ch;
 }
 /* barbell weight: you type the plates, the bar is added for you / peso de la barra: tú escribes los discos, la barra se suma sola */
+/* plate exercises are labeled barbell but use no bar / ejercicios con disco están como barra pero no usan barra */
+function noBar(e){const n=(e&&e.en||'').toLowerCase();return/\bplate\b/.test(n)&&!/movers/.test(n);}
 function barDef(eid){
   if(SET.barPref&&SET.barPref[eid]!=null)return SET.barPref[eid];
-  const e=exById(eid);if(!e||e.m!=='wr'||e.e!=='barbell')return 0;
+  const e=exById(eid);if(!e||e.m!=='wr'||e.e!=='barbell'||noBar(e))return 0;
   const n=(e.en||'').toLowerCase();
   if(/\bez\b|ez-bar|curl bar/.test(n))return imp()?20/KG_LB:9;
   return imp()?45/KG_LB:20;
@@ -266,7 +268,7 @@ function exCard(i,x){
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
   h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'<button class="lnk-d" onclick="restPick('+i+')">⏱ '+(exRest(x)===0?t('restOff'):fmtClock(exRest(x)!=null?exRest(x):(SET.rest||90)))+'</button></div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
-  if(m==='wr'&&(bar>0||exById(x.eid)&&exById(x.eid).e==='barbell'))h+='<div class="barln"><button class="lnk-d" onclick="barMenu('+i+')">🏋 '+esc(bar>0?t('barOn',barTxt(bar)):t('barOff'))+'</button></div>';
+  if(m==='wr'&&(bar>0||exById(x.eid)&&exById(x.eid).e==='barbell'&&!noBar(exById(x.eid))))h+='<div class="barln"><button class="lnk-d" onclick="barMenu('+i+')">🏋 '+esc(bar>0?t('barOn',barTxt(bar)):t('barOff'))+'</button></div>';
   if(m==='wr'&&isDb(x))h+='<div class="barln"><button class="lnk-d" onclick="mulMenu('+i+')">🏋 '+esc(t(ml>1?'mulOn':'mulOff'))+'</button></div>';
   h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
   const sg=(m==='wr'||m==='bw')?sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'}):null;
