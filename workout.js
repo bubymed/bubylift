@@ -125,6 +125,7 @@ function startRoutine(id){const r=DATA.routines.find(x=>x.id===id);if(r)startWor
 function vWorkout(){if(!ACT)return vStart();if(ACT.guide&&!ACT.gOff&&typeof vGuide==='function')return vGuide();return(ACT.guide?'<button class="btn sm wide gd-back" onclick="gdOn()">'+ic('play')+' '+t('gdGuide')+'</button>':'')+vActive();}
 function needBackup(){
   const n=DATA.workouts.length+DATA.body.length;
+  if(typeof CL!=='undefined'&&CL&&CL.uid&&!CL.bad&&!CL.err&&CL.last&&Date.now()-CL.last<7*864e5)return false; // signed in and synced this week: the cloud is the backup / con sesión y sincronizado esta semana: la nube es el respaldo
   return n>=5&&(Date.now()-(SET.lastExport||0))>30*864e5&&Date.now()>(SET.bkSnooze||0);
 }
 function weekStrip(){
