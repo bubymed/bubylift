@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.58',items:[
+  {i:'📷',en:'<b>Share card:</b> fixed Save/Copy/More showing "preparing your picture…" forever and saving nothing.',es:'<b>Tarjeta para compartir:</b> arreglado que Guardar/Copiar/Más mostraran «preparando tu imagen…» para siempre sin guardar nada.'}
+ ]},
  {v:'v1.1.57',items:[
   {i:'🏆',en:'<b>Ranks:</b> tap your rank in Progress to see all ranks; the list opens on your rank and scrolls — swipe down only closes it at the top.',es:'<b>Rangos:</b> toca tu rango en Progreso para ver todos; la lista abre en tu rango y se desliza — deslizar hacia abajo solo la cierra cuando estás arriba.'}
  ]},

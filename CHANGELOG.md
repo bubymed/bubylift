@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.58 — 2026-10-30
+- **Share card:** fixed Save/Copy/More showing "preparing your picture…" forever and saving nothing.
+  **Tarjeta para compartir:** arreglado que Guardar/Copiar/Más mostraran «preparando tu imagen…» para siempre sin guardar nada.
+
 ## v1.1.57 — 2026-10-30
 - **Ranks:** tap your rank in Progress to see all ranks; the list opens on your rank and scrolls — swipe down only closes it at the top.
   **Rangos:** toca tu rango en Progreso para ver todos; la lista abre en tu rango y se desliza — deslizar hacia abajo solo la cierra cuando estás arriba.

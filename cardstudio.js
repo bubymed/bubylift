@@ -71,12 +71,12 @@ function csDraw(){
 let csTm=null;
 function csPrep(){
   if(!CS)return;CS.file=null;clearTimeout(csTm);
-  const cur=CS,key=cur.style+cur.fmt+cur.ori+cur.pos+cur.bg+cur.col+cur.panel+cur.fs;
+  const kf=o=>o.style+o.fmt+o.ori+o.pos+o.bg+o.col+o.panel+o.fs,cur=CS,key=kf(cur);
   csTm=setTimeout(function(){
     if(CS!==cur)return;
     let c;try{c=csFinal(Object.assign({},cur,{crop:1}));}catch(e){return;}
     c.toBlob(function(b){
-      if(!b||CS!==cur||key!==cur.style+cur.fmt+cur.ori+cur.pos+cur.bg+cur.col+cur.panel)return;
+      if(!b||CS!==cur||key!==kf(cur))return;
       cur.file=new File([b],'bubylift-'+dInput(cur.wk.t)+(cur.bg==='none'?'-overlay':'')+'.png',{type:'image/png'});
     },'image/png');
   },120);
