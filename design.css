@@ -790,3 +790,12 @@ button.rk-tz{cursor:pointer}
 @keyframes subinr{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
 @keyframes subinl{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.sub-ind{transition:none}.subc,.subc.from-r,.subc.from-l{animation:none}}
+
+/* keep the card spacing inside the tab content / mantener el espacio entre tarjetas dentro de la pestaña */
+.subc>*+*{margin-top:14px}.subc>.sec{margin-top:28px;margin-bottom:-4px}
+.rkl-you{margin:6px 0 10px;font-size:1.1rem}.rkl-you b{font-size:1.8rem}
+.rkl-list{display:flex;flex-direction:column;gap:6px;margin:8px 0 12px;max-height:56vh;overflow-y:auto}
+.rkl-r{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:12px;background:var(--panel2);border:1.5px solid transparent}
+.rkl-r.now{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel2))}.rkl-r.todo{opacity:.72}
+.rkl-n{display:flex;flex-direction:column}.rkl-n .rkn{font-size:1.35rem}.rkl-n small{color:var(--dim);font-size:.78rem;font-weight:600;margin-top:2px}
+.rkl-s{font-size:.82rem;font-weight:700;color:var(--dim);text-align:right}.rkl-r.now .rkl-s{color:var(--accent)}.rkl-r.done .rkl-s{color:#30a050}
