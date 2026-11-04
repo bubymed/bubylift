@@ -1,7 +1,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.56';
+const APP_VER='v1.1.57';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -301,18 +301,19 @@ function bootApp(){
 /* swipe a sheet down to close it (only when it is scrolled to the top) / deslizar una hoja hacia abajo para cerrarla (solo si está arriba del todo) */
 (function(){
   const sh=$('sheet');if(!sh)return;
-  let y0=0,dy=0,on=false,t0=0;
+  let y0=0,dy=0,on=false,t0=0,inner=null;
   const reduce=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
   sh.addEventListener('touchstart',e=>{
     on=false;dy=0;
     if(e.touches.length!==1||sh.scrollTop>0||sh.classList.contains('pks')||$('sheetov').classList.contains('pks')||(typeof pfCur==='function'&&pfCur()&&pfCur().tmp))return;
     const a=document.activeElement;if(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))return;
+    inner=e.target.closest?e.target.closest('.rkl-list'):null;
     y0=e.touches[0].clientY;t0=Date.now();on='wait';
   },{passive:true});
   sh.addEventListener('touchmove',e=>{
     if(!on)return;
     const d=e.touches[0].clientY-y0;
-    if(on==='wait'){if(d<-6){on=false;return;}if(d<8)return;if(sh.scrollTop>0){on=false;return;}on=true;sh.style.transition='none';}
+    if(on==='wait'){if(d<-6){on=false;return;}if(d<8)return;if(sh.scrollTop>0||(inner&&inner.scrollTop>0)){on=false;return;}on=true;sh.style.transition='none';}
     dy=Math.max(0,d);sh.style.transform='translateY('+dy+'px)';
     if(e.cancelable)e.preventDefault();
   },{passive:false});
