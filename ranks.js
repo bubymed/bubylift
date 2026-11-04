@@ -23,11 +23,22 @@ function rkGoal(k){
   if(goalList().some(g=>!g.done&&g.k==='lift'&&g.eid===eid&&g.tg===tv)){toast(t('rkGoalDup'));return;}
   goalList().push({id:uid(),k:'lift',eid:eid,t:Date.now(),tg:tv});saveData();toast(t('rkGoalOk'));render();
 }
+function rkLockMsg(n){const l=Math.max(1,3-n);return l===1?t('rkLock1'):t('rkLock',l);}
+function rkAsk(){return'<p class="rk-ask"><b>'+t('rkAskT')+'</b><br>'+t('rkAskP')+'</p><button class="btn pri sm" onclick="go(\'body\')">'+t('rkAskGo')+'</button>';}
+/* always-visible rank on the workout home / rango siempre visible en el inicio */
+function rkTeaser(){
+  const d=strData();let b;
+  if(!d.bw)b=rkAsk();
+  else if(d.n<3||d.score==null)b='<p class="rk-ask">'+rkLockMsg(d.n)+'</p>';
+  else{const s=d.cur!=null?d.cur:d.score,ix=rkIdx(s),top=ix>=RK_T.length-1,lo=RK_T[ix],hi=top?100:RK_T[ix+1],pct=top?100:Math.round((s-lo)/(hi-lo)*100);
+    return'<button class="card rk-tz" onclick="go(\'progress\')"><div class="lbl">'+t('rkT')+'</div><div class="rk-hero"><span class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</span><b>'+s+' <small>'+t('rkPts')+'</small></b></div><div class="rk-bar"><u style="width:'+pct+'%"></u></div><p class="muted sm rk-nx">'+(top?t('rkTop'):t(hi-s===1?'rkNext1':'rkNext',hi-s,rkName(ix+1)))+'</p></button>';}
+  return'<div class="card rk-tz"><div class="lbl">'+t('rkT')+'</div>'+b+'</div>';
+}
 function strCard(){
   const d=strData(),lock=d.n<3||d.score==null;
   let h='<div class="sec"><h2>'+t('rkT')+'</h2></div><div class="card strc rkc">';
-  if(!d.bw)return h+'<p class="muted sm">'+t('strBw')+'</p><button class="btn sm" onclick="go(\'body\')">'+t('strBwGo')+'</button></div>';
-  if(lock)return h+'<p class="muted sm">'+t('strLock',Math.max(0,3-d.n))+'</p></div>';
+  if(!d.bw)return h+rkAsk()+'</div>';
+  if(lock)return h+'<p class="rk-ask">'+rkLockMsg(d.n)+'</p></div>';
   const shown=d.cur!=null?d.cur:d.score,ix=rkIdx(shown),pk=rkIdx(d.score),top=ix>=RK_T.length-1,lo=RK_T[ix],hi=top?100:RK_T[ix+1],pct=top?100:Math.round((shown-lo)/(hi-lo)*100);
   h+='<div class="str-top rk-hero"><span class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</span><b>'+shown+' <small>'+t('rkPts')+'</small></b></div>';
   if(d.cur==null)h+='<p class="rk-back">'+t('rkAway',rkName(pk))+'</p>';

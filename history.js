@@ -124,7 +124,7 @@ function setPm(k){UI.pm=k;render();}
 function closeProg(){UI.prog=null;render();window.scrollTo(0,0);}
 
 function vProgress(){
-  if(!DATA.workouts.length)return goalsCard()+emptyState('chart-bar',t('emptyProgT'),t('emptyProgP'),t('emStart'),"go('workout')");
+  if(!DATA.workouts.length)return goalsCard()+strCard()+emptyState('chart-bar',t('emptyProgT'),t('emptyProgP'),t('emStart'),"go('workout')");
   if(UI.prog)return vExProg(UI.prog);
   const now=Date.now(),ws=weekStart(now),vals=[],labels=[];
   for(let i=7;i>=0;i--){const a=ws-i*7*864e5,b=a+7*864e5;vals.push(DATA.workouts.filter(w=>w.t>=a&&w.t<b).length);labels.push(dFmt(a,{month:'numeric',day:'numeric'}));}

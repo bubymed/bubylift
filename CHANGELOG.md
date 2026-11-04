@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.51 — 2026-10-30
+- Your rank now shows on the Workout home, and asks for your body weight or the workouts you still need to reveal it. Also visible on Progress before your first workout.
+  Tu rango ahora se muestra en el inicio de Entrenar, y te pide tu peso corporal o los entrenamientos que te faltan para revelarlo. También se ve en Progreso antes de tu primer entrenamiento.
+
 ## v1.1.50 — 2026-10-30
 - Rank colors: brighter shades on the dark theme, deeper ones on the light theme.
   Colores de rango: tonos más vivos en el tema oscuro y más profundos en el claro.
