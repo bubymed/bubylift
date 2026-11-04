@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.50',items:[
+  {i:'palette',en:'Rank colors: brighter shades on the dark theme, deeper ones on the light theme.',es:'Colores de rango: tonos más vivos en el tema oscuro y más profundos en el claro.'}
+ ]},
  {v:'v1.1.49',items:[
   {i:'trophy',en:'Ranks: a 16-rank ladder for each lift and overall (current vs peak), what you need for the next rank with a one-tap goal, a consistency level, and a muscle-balance radar with weakest parts and train buttons. Epic rank names.',es:'Rangos: 16 rangos por levantamiento y general (actual vs máximo), lo que necesitas para el siguiente rango con meta en un toque, nivel de constancia y radar de equilibrio muscular con las partes más atrasadas y botones para entrenarlas. Nombres de rango épicos.'}
  ]},
