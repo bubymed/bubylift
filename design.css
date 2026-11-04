@@ -747,20 +747,24 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 .rk-hero b{font-size:1rem;font-weight:700;color:var(--dim)}.rk-hero small{font-size:.8rem;font-weight:600}
 .rkn{display:block;line-height:1.1;font-size:2.3rem;font-weight:400;word-break:break-word}
 .rkn2{font-size:1.9rem}.rkn4,.rkn11{font-size:2.6rem}.rkn8,.rkn12,.rkn13{font-size:2.6rem}.rkn7{font-size:2rem}.rkn10{font-size:2.1rem}
-.rkn0{color:#9e9e9e}
-.rkn1{color:#78909c}
-.rkn2{color:#4f8a8b}
-.rkn3{color:#2e86ab}
-.rkn4{color:#3f6fd1}
-.rkn5{color:#6a5acd}
-.rkn6{color:#8e44ad}
-.rkn7{color:#c2185b}
-.rkn8{color:#d32f2f}
-.rkn9{color:#e64a19}
-.rkn10{color:#ef6c00}
-.rkn11{color:#f59e0b}
-.rkn12{color:#b8860b}
-.rkn13{color:#c99a06}
-.rkn14{color:#d4a017}
-.rkn15{color:#e0a800}
+.rkn0{color:var(--rk0)}
+.rkn1{color:var(--rk1)}
+.rkn2{color:var(--rk2)}
+.rkn3{color:var(--rk3)}
+.rkn4{color:var(--rk4)}
+.rkn5{color:var(--rk5)}
+.rkn6{color:var(--rk6)}
+.rkn7{color:var(--rk7)}
+.rkn8{color:var(--rk8)}
+.rkn9{color:var(--rk9)}
+.rkn10{color:var(--rk10)}
+.rkn11{color:var(--rk11)}
+.rkn12{color:var(--rk12)}
+.rkn13{color:var(--rk13)}
+.rkn14{color:var(--rk14)}
+.rkn15{color:var(--rk15)}
 .rk-big .rkn{font-size:2.4rem;margin:6px 0}
+
+/* rank colors: bright on the dark theme, deeper on light / colores de rango: vivos en tema oscuro, más profundos en claro */
+:root{--rk0:#bdbdc6;--rk1:#9fb4c4;--rk2:#5fc4bf;--rk3:#4fb3e8;--rk4:#6c9bff;--rk5:#9a8cff;--rk6:#c77dff;--rk7:#ff5c9a;--rk8:#ff5c5c;--rk9:#ff6b2c;--rk10:#ff9a3c;--rk11:#ffb340;--rk12:#ffc84a;--rk13:#ffd24d;--rk14:#ffdc5e;--rk15:#ffe680;}
+:root[data-mode="light"]{--rk0:#9e9e9e;--rk1:#78909c;--rk2:#4f8a8b;--rk3:#2e86ab;--rk4:#3f6fd1;--rk5:#6a5acd;--rk6:#8e44ad;--rk7:#c2185b;--rk8:#d32f2f;--rk9:#e64a19;--rk10:#ef6c00;--rk11:#f59e0b;--rk12:#b8860b;--rk13:#c99a06;--rk14:#d4a017;--rk15:#e0a800;}

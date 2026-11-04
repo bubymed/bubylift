@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.50 — 2026-10-30
+- Rank colors: brighter shades on the dark theme, deeper ones on the light theme.
+  Colores de rango: tonos más vivos en el tema oscuro y más profundos en el claro.
+
 ## v1.1.49 — 2026-10-30
 - Ranks: a 16-rank ladder for each lift and overall (current vs peak), what you need for the next rank with a one-tap goal, a consistency level, and a muscle-balance radar with weakest parts and train buttons. Epic rank names.
   Rangos: 16 rangos por levantamiento y general (actual vs máximo), lo que necesitas para el siguiente rango con meta en un toque, nivel de constancia y radar de equilibrio muscular con las partes más atrasadas y botones para entrenarlas. Nombres de rango épicos.
