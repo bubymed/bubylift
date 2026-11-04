@@ -1,3 +1,6 @@
+/* Body, More and Recovery tabs, strength score (strData), backup import/export and the sub-tab bar with swipe.
+   Pestañas Cuerpo, Más y Recuperación, puntaje de fuerza (strData), importar/exportar respaldo y barra de subpestañas con deslizar.
+   Map of all files: docs/CODEMAP.md / Mapa de todos los archivos: docs/CODEMAP.md */
 'use strict';
 /* Body tab (weight, body fat, measurements) and More tab (settings, backup, about).
    Pestaña Cuerpo (peso, grasa, medidas) y pestaña Más (ajustes, respaldo, acerca de). */

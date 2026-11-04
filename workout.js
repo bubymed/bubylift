@@ -1,3 +1,6 @@
+/* Workout tab: start screen, active workout, set logging, PRs, rest timer and exercise picker.
+   Pestaña Entrenar: inicio, entrenamiento activo, registro de series, récords, descanso y selector de ejercicios.
+   Map of all files: docs/CODEMAP.md / Mapa de todos los archivos: docs/CODEMAP.md */
 'use strict';
 /* Workout tab: start, log sets, rest timer, finish, routines, exercise picker.
    Pestaña Entrenar: empezar, registrar series, temporizador de descanso, terminar, rutinas, selector de ejercicios. */

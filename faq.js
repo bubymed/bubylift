@@ -1,3 +1,6 @@
+/* Help and feedback sheet.
+   Hoja de ayuda y comentarios.
+   Map of all files: docs/CODEMAP.md / Mapa de todos los archivos: docs/CODEMAP.md */
 'use strict';
 /* Help & FAQ: common questions on top, a box for questions, complaints or comments below (sent through a Tally form).
    Ayuda y preguntas frecuentes: arriba las dudas comunes, abajo un recuadro para dudas, quejas o comentarios (se envía con un formulario de Tally). */

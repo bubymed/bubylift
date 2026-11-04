@@ -1,5 +1,7 @@
 # Bubylift architecture / Arquitectura de Bubylift
 
+Where is what? See [CODEMAP.md](CODEMAP.md) · ¿Dónde está qué? Mira [CODEMAP.md](CODEMAP.md)
+
 Short technical overview. The full, illustrated version is chapter 14 of the user manuals in this folder.
 Resumen técnico corto. La versión completa e ilustrada es el capítulo 14 de los manuales de esta carpeta.
 
@@ -22,6 +24,7 @@ Resumen técnico corto. La versión completa e ilustrada es el capítulo 14 de l
 | `library.js`, `data/library*.js`, `data/programs.js` | muscle routines, ranks, challenges, classic programs / rutinas, rangos, retos, programas |
 | `stretch.js`, `rehab.js`, `data/rehab*.js` | Mobility and 13 Recovery plans / Movilidad y 13 planes de Recuperación |
 | `history.js`, `goals.js`, `habit.js`, `aft.js` | History, charts, goals, streak, AFT / Historial, gráficas, metas, racha, AFT |
+| `ranks.js`, `variants.js` | ranks, XP, balance; exercise variations / rangos, XP, balance; variantes de ejercicio |
 | `body.js`, `card.js`, `cardstudio.js` | Body/More tabs, share cards / pestañas Cuerpo/Más, tarjetas |
 | `cloud.js`, `profiles.js` | accounts, encryption, sync; profiles and boot / cuentas, cifrado, sincronización; perfiles y arranque |
 | `server/` | Supabase `schema.sql`, Strava function, setup guide / esquema, función de Strava, guía |

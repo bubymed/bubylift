@@ -1,3 +1,6 @@
+/* Core of the app: storage, units, language, theme, sheets, tabs/router, install and auto-update. Loaded first; every other file builds on it.
+   Núcleo de la app: almacenamiento, unidades, idioma, tema, hojas, pestañas/navegación, instalación y auto-actualización. Se carga primero; todo lo demás se apoya en él.
+   Map of all files: docs/CODEMAP.md / Mapa de todos los archivos: docs/CODEMAP.md */
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */

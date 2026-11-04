@@ -1,3 +1,6 @@
+/* Profiles, sign-in / sign-up gate screens and boot(), the app's entry point (called last from index.html).
+   Perfiles, pantallas de entrada/registro y boot(), el punto de arranque de la app (se llama al final desde index.html).
+   Map of all files: docs/CODEMAP.md / Mapa de todos los archivos: docs/CODEMAP.md */
 'use strict';
 /* Profiles on this device (guest or cloud account), sign-in screens, avatars and the shared key helpers the cloud vault uses.
    Perfiles en este dispositivo (invitado o cuenta en la nube), pantallas de acceso, avatares y las funciones de llave que usa la bóveda en la nube. */

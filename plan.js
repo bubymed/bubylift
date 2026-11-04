@@ -1,3 +1,6 @@
+/* Plan engine and plan screens: generating the week, suggested weights, plan editor, swaps and setup.
+   Motor y pantallas del plan: generar la semana, pesos sugeridos, editor, cambios y configuración.
+   Map of all files: docs/CODEMAP.md / Mapa de todos los archivos: docs/CODEMAP.md */
 'use strict';
 /* Guided weekly plan: smart builder (goal, focus, schedule, equipment, injuries), substitutions, swipe gestures,
    technique guide, weight suggestions and check-ins. All plans are original Bubylift templates.
