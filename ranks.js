@@ -45,6 +45,7 @@ function rkLadder(){
     h+='<div class="rkl-r '+st+'"><span class="rkl-n"><span class="rkn rkn'+i+'">'+esc(rkName(i))+'</span><small>'+RK_T[i]+(RK_T[i]===hi?'':'–'+hi)+' '+t('rkPts')+'</small></span><span class="rkl-s">'+(st==='done'?'✓ '+t('rkPassed'):(st==='now'?t('rkHere'):(has?t('rkToGo',RK_T[i]-s):'')))+'</span></div>';
   }
   sheet(h+'</div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>');
+  try{const L=document.querySelector('#sheet .rkl-list'),n=L&&L.querySelector('.rkl-r.now');if(n)L.scrollTop=Math.max(0,n.offsetTop-L.offsetTop-(L.clientHeight-n.offsetHeight)/2);}catch(e){}
 }
 function strCard(){
   const d=strData(),lock=d.n<3||d.score==null;
@@ -52,7 +53,7 @@ function strCard(){
   if(!d.bw)return h+rkAsk()+'</div>';
   if(lock)return h+'<p class="rk-ask">'+rkLockMsg(d.n)+'</p></div>';
   const shown=d.cur!=null?d.cur:d.score,ix=rkIdx(shown),pk=rkIdx(d.score),top=ix>=RK_T.length-1,lo=RK_T[ix],hi=top?100:RK_T[ix+1],pct=top?100:Math.round((shown-lo)/(hi-lo)*100);
-  h+='<div class="str-top rk-hero"><span class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</span><b>'+shown+' <small>'+t('rkPts')+'</small></b></div>';
+  h+='<div class="str-top rk-hero" role="button" tabindex="0" onclick="rkLadder()"><span class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</span><b>'+shown+' <small>'+t('rkPts')+'</small></b></div>';
   if(d.cur==null)h+='<p class="rk-back">'+t('rkAway',rkName(pk))+'</p>';
   else if(pk>ix)h+='<p class="rk-back">'+t('rkBack',rkName(pk))+'</p>';
   h+='<div class="rk-bar"><u style="width:'+pct+'%"></u></div><p class="muted sm rk-nx">'+(top?t('rkTop'):t(hi-shown===1?'rkNext1':'rkNext',hi-shown,rkName(ix+1)))+'</p>';

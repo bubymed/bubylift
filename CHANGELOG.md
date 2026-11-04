@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.57 — 2026-10-30
+- **Ranks:** tap your rank in Progress to see all ranks; the list opens on your rank and scrolls — swipe down only closes it at the top.
+  **Rangos:** toca tu rango en Progreso para ver todos; la lista abre en tu rango y se desliza — deslizar hacia abajo solo la cierra cuando estás arriba.
+
 ## v1.1.56 — 2026-10-30
 - New 'All ranks' window: every rank with the points it asks for, the ones you passed and how far the next ones are. Tap your rank on the home screen to open it. Fixed the missing gap between cards inside the new tabs.
   Nueva ventana 'Todos los rangos': cada rango con los puntos que pide, los que ya superaste y cuánto falta para los siguientes. Toca tu rango en el inicio para abrirla. Arreglado el espacio que faltaba entre tarjetas dentro de las pestañas nuevas.

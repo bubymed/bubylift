@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.57',items:[
+  {i:'🏆',en:'<b>Ranks:</b> tap your rank in Progress to see all ranks; the list opens on your rank and scrolls — swipe down only closes it at the top.',es:'<b>Rangos:</b> toca tu rango en Progreso para ver todos; la lista abre en tu rango y se desliza — deslizar hacia abajo solo la cierra cuando estás arriba.'}
+ ]},
  {v:'v1.1.56',items:[
   {i:'trophy',en:'New \'All ranks\' window: every rank with the points it asks for, the ones you passed and how far the next ones are. Tap your rank on the home screen to open it. Fixed the missing gap between cards inside the new tabs.',es:'Nueva ventana \'Todos los rangos\': cada rango con los puntos que pide, los que ya superaste y cuánto falta para los siguientes. Toca tu rango en el inicio para abrirla. Arreglado el espacio que faltaba entre tarjetas dentro de las pestañas nuevas.'}
  ]},
