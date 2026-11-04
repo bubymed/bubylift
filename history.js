@@ -53,7 +53,7 @@ function vHistory(){
   if(!DATA.workouts.length)return emptyState('clipboard-list',t('emptyHistT'),t('emptyHistP'),t('emStart'),"go('workout')");
   const now=new Date(),ws=weekStart(now.getTime()),ms=new Date(now.getFullYear(),now.getMonth(),1).getTime();
   const wn=DATA.workouts.filter(w=>w.t>=ws).length,mn=DATA.workouts.filter(w=>w.t>=ms).length;
-  let h='<div class="stats card"><div><b>'+wn+'</b><span>'+t('thisWeek')+'</span></div><div><b>'+mn+'</b><span>'+t('thisMonth')+'</span></div><div><b>'+DATA.workouts.length+'</b><span>'+t('total')+'</span></div></div>';
+  let h='<div class="stats card calc" role="button" tabindex="0" onclick="calOpen()"><div><b>'+wn+'</b><span>'+t('thisWeek')+'</span></div><div><b>'+mn+'</b><span>'+t('thisMonth')+'</span></div><div><b>'+DATA.workouts.length+'</b><span>'+t('total')+'</span></div><p class="calh">'+ic('calendar')+' '+t('calOpenB')+' ›</p></div>';
   let last='';
   DATA.workouts.forEach(wk=>{
     const lb=dFmt(wk.t,{month:'long',year:'numeric'});
@@ -187,4 +187,27 @@ function vProgTab(){
   if(UI.prog||!DATA.workouts.length)return vProgress();
   const h=UI.ps==='hist';
   return'<div class="seg"><button class="'+(h?'':'on')+'" onclick="psSet(\'prog\')">'+ic('chart-bar')+' '+t('tProgress')+'</button><button class="'+(h?'on':'')+'" onclick="psSet(\'hist\')">'+ic('calendar')+' '+t('tHistory')+'</button></div>'+(h?vHistory():vProgress());
+}
+
+/* calendar: tap the week / month / total card to see which days you trained and open them / calendario: toca la tarjeta semana / mes / total para ver qué días entrenaste y abrirlos */
+let CAL={y:0,m:0,sel:null};
+function calOpen(){const d=new Date();CAL={y:d.getFullYear(),m:d.getMonth(),sel:null};sheet('<div class="form cal"><div class="pick-h"><h3>'+t('calT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><div id="calb">'+calHtml()+'</div></div>');}
+function calMove(d){let m=CAL.m+d,y=CAL.y;if(m<0){m=11;y--;}else if(m>11){m=0;y++;}const n=new Date();if(y>n.getFullYear()||(y===n.getFullYear()&&m>n.getMonth()))return;CAL.y=y;CAL.m=m;CAL.sel=null;calDraw();}
+function calSel(d){CAL.sel=CAL.sel===d?null:d;calDraw();}
+function calDraw(){const e=$('calb');if(e)e.innerHTML=calHtml();}
+function calHtml(){
+  const y=CAL.y,m=CAL.m,n=new Date(),by={};
+  DATA.workouts.forEach(w=>{const d=new Date(w.t);if(d.getFullYear()===y&&d.getMonth()===m)(by[d.getDate()]=by[d.getDate()]||[]).push(w);});
+  const first=(new Date(y,m,1).getDay()+6)%7,days=new Date(y,m+1,0).getDate(),isNow=y===n.getFullYear()&&m===n.getMonth(),nDays=Object.keys(by).length,nWk=Object.keys(by).reduce((a,k)=>a+by[k].length,0);
+  let h='<div class="cal-h"><button class="ico" onclick="calMove(-1)" aria-label="'+esc(t('calPrev'))+'">‹</button><b>'+esc(dFmt(new Date(y,m,1).getTime(),{month:'long',year:'numeric'}))+'</b><button class="ico" onclick="calMove(1)"'+(isNow?' disabled':'')+' aria-label="'+esc(t('calNext'))+'">›</button></div><div class="cal-g cal-w">';
+  for(let i=0;i<7;i++)h+='<span>'+esc(new Date(2024,0,1+i).toLocaleDateString(loc(),{weekday:'narrow'}))+'</span>';
+  h+='</div><div class="cal-g">';
+  for(let i=0;i<first;i++)h+='<i></i>';
+  for(let d=1;d<=days;d++){
+    const L=by[d],fut=isNow&&d>n.getDate();
+    h+='<button class="cal-d'+(L?' on':'')+(isNow&&d===n.getDate()?' td':'')+(CAL.sel===d?' sel':'')+'"'+(L?' onclick="calSel('+d+')" aria-label="'+esc(dFmt(new Date(y,m,d).getTime(),{weekday:'long',month:'long',day:'numeric'})+' · '+t('calN',L.length))+'"':' disabled')+(fut?' style="opacity:.35"':'')+'><span>'+d+'</span>'+(L?'<u>'+(L.length>1?'●'.repeat(Math.min(3,L.length)):'')+'</u>':'')+'</button>';
+  }
+  h+='</div><p class="muted sm cal-s">'+(nWk?t('calSum',nWk,nDays):t('calEmpty'))+'</p>';
+  if(CAL.sel&&by[CAL.sel])h+='<div class="lgrp">'+by[CAL.sel].map(wkCard).join('')+'</div>';
+  return h;
 }

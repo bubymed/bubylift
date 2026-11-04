@@ -683,3 +683,13 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 .cs-opt svg{width:18px;height:18px}
 .cs-adv{max-height:42vh;overflow-y:auto;margin-bottom:10px}
 .cs-ori{margin:6px 0 4px}.cs-g[hidden]{display:none}
+
+.stats.calc{flex-wrap:wrap;cursor:pointer}.stats.calc:active{opacity:.85}
+.calh{flex-basis:100%;margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);font-size:.82rem;font-weight:700;color:var(--accent);display:flex;align-items:center;justify-content:center;gap:6px}.calh svg{width:16px;height:16px}
+.gl-e{flex:1;min-width:0;cursor:pointer}.gl-pen{font-size:1rem}
+.cal-h{display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px}.cal-h b{font-size:1.05rem}.cal-h b::first-letter{text-transform:uppercase}.cal-h .ico:disabled{opacity:.3}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.cal-w span{text-align:center;font-size:.72rem;font-weight:700;color:var(--dim)}
+.cal-d{position:relative;aspect-ratio:1;border:0;border-radius:12px;background:var(--panel2);color:var(--dim);font-size:.9rem;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0}
+.cal-d:disabled{background:none;opacity:.55}.cal-d.on{background:var(--accent);color:#fff;font-weight:800}.cal-d.td{box-shadow:0 0 0 2px var(--txt)}.cal-d.sel{box-shadow:0 0 0 3px var(--txt)}
+.cal-d u{text-decoration:none;font-size:.4rem;line-height:.5;letter-spacing:1px;margin-top:2px;min-height:.4rem}
+.cal-s{text-align:center;margin:12px 0 6px}
