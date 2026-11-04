@@ -1,6 +1,6 @@
 /* Ranks, consistency level and muscle balance (v1.1.49), all from your own logs, offline.
    Rangos, nivel de constancia y equilibrio muscular (v1.1.49), todo con tus propios registros, sin conexión. */
-const RK_T=[0,12,25,40,55,70,85]; // points where each of the 7 ranks starts / puntos donde empieza cada uno de los 7 rangos
+const RK_T=[0,4,8,12,17,22,28,34,40,47,54,61,68,75,82,90]; // points where each of the 16 ranks starts / puntos donde empieza cada uno de los 16 rangos
 let RKO=null;
 function rkIdx(p){let r=0;RK_T.forEach((v,i)=>{if(p>=v)r=i;});return r;}
 function rkName(i){return t('rk_'+i);}
