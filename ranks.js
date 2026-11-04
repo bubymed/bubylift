@@ -85,7 +85,7 @@ function balData(now){
   now=now||Date.now();
   const ws=DATA.workouts.filter(w=>{const e=w.end||w.t;return e>=now-28*864e5&&e<=now;}),eff={};
   const first=DATA.workouts.reduce((a,w)=>Math.min(a,w.t),now),days=Math.max(7,Math.min(28,Math.ceil((now-first)/864e5)));
-  ws.forEach(wk=>wk.ex.forEach(x=>{const w=muW(x.eid);if(!w)return;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(!n)return;w.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});}));
+  ws.forEach(wk=>wk.ex.forEach(x=>{const w=muW(x.eid,x.vr);if(!w)return;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(!n)return;w.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});}));
   const subs={},g={};
   Object.keys(MUS_TGT).forEach(k=>{const wk=(eff[k]||0)/(days/7);subs[k]={wk:wk,pct:Math.min(100,Math.round(wk/MUS_TGT[k]*100))};});
   REC_G.forEach(k=>{const a=MUS_SUB[k].map(q=>subs[q].pct);g[k]=Math.round(a.reduce((x,y)=>x+y,0)/a.length);});

@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.53 — 2026-10-30
+- Exercise variations: choose underhand, neutral, wide or close grip on rows, pulldowns, pull-ups, presses and curls. Each variation shifts the muscle map and keeps its own last time and records.
+  Variantes de ejercicio: elige agarre supino, neutro, ancho o cerrado en remos, jalones, dominadas, press y curls. Cada variante cambia el mapa muscular y guarda su propia última vez y récords.
+
 ## v1.1.52 — 2026-10-30
 - Bodyweight ranks: pull-ups, push-ups and dips ranked on the same 16-rank ladder by your best set (added weight counts), with the reps needed for the next rank.
   Rangos con peso corporal: dominadas, flexiones y fondos en la misma escalera de 16 rangos por tu mejor serie (el peso extra cuenta), con las repeticiones que faltan para el siguiente rango.

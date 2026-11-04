@@ -775,3 +775,6 @@ button.rk-tz{cursor:pointer}
 .bw-r{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.bw-r small{display:block;color:var(--dim);font-size:.78rem;font-weight:500}
 .bw-c{display:flex;flex-direction:column;align-items:flex-end;text-align:right}.bw-c .rkn{font-size:1.5rem}.bw-c .rk-back{color:#ffa000;font-weight:700}
 .bwc .lbl{margin-bottom:4px}
+
+.varchip{display:inline-block;white-space:nowrap;margin-top:4px;padding:3px 10px;border-radius:99px;border:1px solid color-mix(in srgb,var(--txt) 30%,transparent);background:none;color:var(--dim);font-size:.78rem}.varchip b{color:var(--accent)}
+.menu button.on{color:var(--accent);font-weight:800}

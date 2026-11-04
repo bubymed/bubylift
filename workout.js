@@ -15,12 +15,12 @@ function e1rm(w,r){if(!w||!r||r<1)return 0;return r===1?w:w*(1+Math.min(r,30)/30
 function setScore(m,s){if(s.ty==='w')return 0;if(m==='t')return s.t||0;if(m==='bw')return s.w?e1rm(s.w,s.r):(s.r||0);return e1rm(s.w,s.r);}
 function bestScore(eid,m,skip){
   let b=0;
-  DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{if(x.eid===eid)x.sets.forEach(s=>{b=Math.max(b,setScore(m,s));});}));
-  if(ACT)ACT.ex.forEach(x=>{if(x.eid===eid)x.sets.forEach(s=>{if(s.done&&s!==skip)b=Math.max(b,setScore(m,s));});});
+  DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{if(xk(x)===eid)x.sets.forEach(s=>{b=Math.max(b,setScore(m,s));});}));
+  if(ACT)ACT.ex.forEach(x=>{if(xk(x)===eid)x.sets.forEach(s=>{if(s.done&&s!==skip)b=Math.max(b,setScore(m,s));});});
   return b;
 }
 function lastEx(eid,beforeT){
-  for(const wk of DATA.workouts){if(beforeT&&wk.t>=beforeT)continue;const x=wk.ex.find(y=>y.eid===eid);if(x&&x.sets.length)return{wk:wk,x:x};}
+  for(const wk of DATA.workouts){if(beforeT&&wk.t>=beforeT)continue;const x=wk.ex.find(y=>xk(y)===eid);if(x&&x.sets.length)return{wk:wk,x:x};}
   return null;
 }
 function setVol(s){return s.ty==='w'?0:(s.w||0)*(s.r||0);}
@@ -226,7 +226,7 @@ function vActive(){
 function cueOf(eid){const s=HOWTO&&HOWTO[eid];if(!s)return'';const st=(s[LANG==='es'?1:0]||'').split('|')[0]||'';return st.length>90?st.slice(0,87)+'…':st;}
 /* fill the empty sets with what you did last time, in one tap / llena las series vacías con lo de la última vez, en un toque */
 function fillLast(i){
-  const x=ACT.ex[i],le=lastEx(x.eid);if(!le)return;const ps=le.x.sets,m=exMode(x.eid);
+  const x=ACT.ex[i],le=lastEx(xk(x));if(!le)return;const ps=le.x.sets,m=exMode(x.eid);
   x.sets.forEach((s,j)=>{if(s.done)return;const p=ps[j]||ps[ps.length-1];if(!p)return;
     if(m==='t'){if(s.t==null)s.t=p.t;if(s.d==null)s.d=p.d;}else{if(s.w==null)s.w=p.w;if(s.r==null)s.r=p.r;}});
   saveAct();exRedraw(i);toast(t('flDone'));
@@ -257,10 +257,10 @@ function repNote(eid,m){
   return'';
 }
 function exCard(i,x){
-  const m=exMode(x.eid),le=lastEx(x.eid),pv=le?le.x.sets:[];
+  const m=exMode(x.eid),le=lastEx(xk(x)),pv=le?le.x.sets:[];
   const bar=m==='wr'?barOf(x):0,ml=m==='wr'?mulOf(x):1,pw=v=>v==null?'':wShow(Math.max(0,(v-bar)/ml));
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'">'+exImgs(x.eid,'this.remove()')+'</button>':'';
-  let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
+  let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+varChip(i,x)+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
   h+=suggLine(x);
   {const rn=repNote(x.eid,m);if(rn)h+='<p class="muted sm rn">'+esc(t(rn))+'</p>';}
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
@@ -310,7 +310,7 @@ function sv(i,j,f,v){
 document.addEventListener('focusin',function(ev){const el=ev.target;if(el&&el.dataset&&el.dataset.i!=null&&el.classList.contains('in')){REST_LAST=+el.dataset.i;restFab();}});
 function stepSet(i,j,f,d){
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);if(m==='t')return;
-  const pv=lastEx(x.eid),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
+  const pv=lastEx(xk(x)),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
   if(f==='w'){
     const br=m==='wr'?barOf(x):0;let b=s.w;if(b==null)b=(m==='wr'&&x.sg!=null)?x.sg:(ph&&ph.w!=null?ph.w:br);
     const st=wInc(),ml=m==='wr'?mulOf(x):1;let dv=Math.max(0,(b-br)/ml);dv=Math.max(0,Math.round((dv+d*st)/st)*st);s.w=dv*ml+br;
@@ -335,7 +335,7 @@ function tgSet(i,j){REST_LAST=i;
   unlockAudio();
   if(!s.done){
     const bk={w:s.w,r:s.r,t:s.t,d:s.d}; // so a rejected tap leaves the row untouched / para que un toque rechazado no cambie la fila
-    const pv=lastEx(x.eid),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
+    const pv=lastEx(xk(x)),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
     if(m==='wr'&&s.w==null&&x.sg!=null)s.w=x.sg;
     if((m==='wr'||m==='bw')&&s.ty!=='w'&&!x.sets.slice(0,j).some(q=>q.r!=null)){const g=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});if(g){if(g.r&&s.r==null)s.r=g.r;if(m==='wr'&&g.w!=null&&x.sg==null&&s.w==null)s.w=g.w;}}
     if(ph){
@@ -344,7 +344,7 @@ function tgSet(i,j){REST_LAST=i;
     }
     const ok=m==='t'?(s.t!=null&&s.t>0):(m==='bw'?(s.r!=null&&s.r>0):(s.w!=null&&s.r!=null&&s.r>0));
     if(!ok){s.w=bk.w;s.r=bk.r;s.t=bk.t;s.d=bk.d;toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
-    const prev=bestScore(x.eid,m,s),sc=setScore(m,s);
+    const prev=bestScore(xk(x),m,s),sc=setScore(m,s);
     s.done=true;if(!ACT.ts){ACT.ts=ACT.t0&&actTotals().done>1?ACT.t0:Date.now();ACT.sn=ACT.ts;ACT.acc=0;ACT.pz=false;}else if(ACT.pz){ACT.pz=false;ACT.sn=Date.now();}
     if(prev>0&&sc>prev){s.pr=true;toast(m==='wr'?t('newPR2',wShow(Math.round(sc))+' '+wUnit(),wShow(Math.round(sc-prev))+' '+wUnit()):t('newPR'));}else delete s.pr;
     startRest(exRest(x));
@@ -384,8 +384,8 @@ function nextInView(i,j){
 }
 function exMenu(i){
   const x=ACT.ex[i];
-  sheet('<h3>'+esc(exName(x.eid,x.n))+'</h3><div class="menu">'+
-    '<button onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button><button onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button>'+
+  sheet('<h3>'+esc(exNameV(x.eid,x.vr,x.n))+'</h3><div class="menu">'+
+    (exVars(x.eid).length?'<button onclick="varOpen('+i+')">⚙ '+t('varB')+'</button>':'')+'<button onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button><button onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button>'+
     (i>0?'<button onclick="exMove('+i+',-1)">↑ '+t('moveUp')+'</button>':'')+
     (i<ACT.ex.length-1?'<button onclick="exMove('+i+',1)">↓ '+t('moveDown')+'</button>':'')+
     '<button onclick="tasteLike(\''+x.eid+'\');exMenu('+i+')">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button onclick="tasteDis(\'act\','+i+')">'+ic('ban')+' '+t('tkDis')+'</button>'+
@@ -448,7 +448,7 @@ function wkCheer(wk,prs){
 }
 function finishWk(){
   const end=Date.now();
-  const ex=ACT.ex.map(x=>{const o={eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})};if(x.v)o.v=x.v;if(x.mul>1)o.mul=x.mul;if(x.bar>0)o.bar=x.bar;return o;}).filter(x=>x.sets.length);
+  const ex=ACT.ex.map(x=>{const o={eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})};if(x.v)o.v=x.v;if(x.vr)o.vr=x.vr;if(x.mul>1)o.mul=x.mul;if(x.bar>0)o.bar=x.bar;return o;}).filter(x=>x.sets.length);
   const t0=actStart()||ACT.t0,dur=actStart()?actMs():end-t0,wk={id:ACT.id,t:t0,end:t0+dur,name:(ACT.name||'').trim()||autoName(t0),note:(ACT.note||'').trim(),ex:ex};
   if(ACT.pl!=null){wk.pl=ACT.pl;if(DATA.plan)DATA.plan.cur=(ACT.pl+1)%DATA.plan.n;}
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
