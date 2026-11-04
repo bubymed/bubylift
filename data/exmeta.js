@@ -55,3 +55,6 @@ const HAVE_SPECIAL=['kettlebell','band','ball','medball','suspension','sled','wh
 const HAVE_PRESETS={gym:HAVE_CONV.slice(),db:['dumbbell','bench'],home:['band'],none:[],all:HAVE_KEYS.slice()};
 /* Which injuries exist in the app: key → joint letters. / Lesiones disponibles: clave → letras de articulación. */
 const INJ={knee:'k',back:'b',shoulder:'s',elbow:'e',wrist:'w',hip:'h',ankle:'a',neck:'n'};
+
+/* chair stretches need a chair (optional equipment) / los estiramientos en silla necesitan una silla (equipo opcional) */
+NEED.z_chair_leg_extended_stretch=NEED.z_chair_lower_back_stretch=NEED.z_chair_upper_body_stretch='chair';

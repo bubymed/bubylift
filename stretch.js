@@ -3,7 +3,7 @@
 const STX={sec:'sess',type:'full',min:10,area:'ham',cdg:[]}; // cdg: muscle groups for the cool-down (empty = whole body) / grupos musculares del cool down (vacío = cuerpo completo)
 const STX_SECS={5:20,10:30,15:40};
 /* equipment for stretching: its own choice, apart from the training profile (default: what the profile already has) / equipo para estirar: elección propia, aparte del perfil de entreno (por defecto lo que ya tiene el perfil) */
-const STR_EQ=['roller','band','bench','bar','ball'];
+const STR_EQ=['roller','band','bench','bar','ball','chair'];
 function strHave(){
   const h=Array.isArray(SET.strHave)?SET.strHave:curHave();
   return STR_EQ.filter(k=>h.indexOf(k)>=0);

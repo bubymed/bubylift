@@ -7,8 +7,8 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Nothing yet. / Nada todavía.
 
 ## v1.1.54 — 2026-10-30
-- First time with an exercise now suggests a starting weight range from your body weight. New Seated variation for curls, shoulder presses and raises. Plate exercises no longer ask for a bar.
-  La primera vez con un ejercicio ahora sugiere un rango de peso inicial según tu peso corporal. Nueva variante Sentado para curls, press de hombros y elevaciones. Los ejercicios con disco ya no piden barra.
+- First time with an exercise now suggests a starting weight range from your body weight. New Seated variation for curls, shoulder presses and raises. Plate exercises no longer ask for a bar. Chair is now optional stretching equipment.
+  La primera vez con un ejercicio ahora sugiere un rango de peso inicial según tu peso corporal. Nueva variante Sentado para curls, press de hombros y elevaciones. Los ejercicios con disco ya no piden barra. La silla ahora es equipo opcional para estirar.
 
 ## v1.1.53 — 2026-10-30
 - Exercise variations: choose underhand, neutral, wide or close grip on rows, pulldowns, pull-ups, presses and curls. Each variation shifts the muscle map and keeps its own last time and records.
