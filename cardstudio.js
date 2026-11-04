@@ -352,7 +352,7 @@ function csListH(g,v,dots){
 }
 function csFunH(g,v){
   const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v)),y=v.B-440,T=y+110;
-  csLogo(g,80,y,56,v.ink);
+  csLogo(g,80,y,56,v.ink);csTierPill(g,v,W-80,y);
   const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),nb=csNum(g,num,80,T,430,330,'900',v.acc);
   const x=560,cw=W-80-x;
   /* right text spans exactly from the top of the number to its baseline / el texto de la derecha va del tope del número a su línea base */
@@ -426,21 +426,46 @@ function csPrCard(g,v){
   csTxt(g,v.d.date,80,y+620,36,'500',v.sub);
 }
 /* 10 · fun: what you lifted, in things people know / lo que levantaste, en cosas conocidas */
-const CS_OBJ=[['whl',150000],['jet',41000],['hmp',30000],['fir',18000],['bus',11000],['trx',8000],['ele',6000],['orc',5000],['pck',2500],['rhi',2300],['cnt',2200],['hip',1500],['car',1300],['gir',1200],['shk',900],['cow',700],['hrs',500],['pia',450],['pbr',450],['mot',300],['vnd',250],['tig',220],['lio',190],['gor',160],['sum',150],['pnd',100],['fri',80],['adl',75],['keg',73],['kng',70],['cem',43],['dog',30],['lug',23],['tir',10],['mel',8],['bow',7],['cat',4.5],['bby',3.5],['gal',3.8],['lap',2],['soc',0.43]].sort(function(a,b){return b[1]-a[1];}); // [key, kg] — sorted heaviest first / [clave, kg] — de más pesado a más ligero
-/* what you lifted, as a thing people know. With a seed it picks, day after day, among the things that give a nice number (1 to 15); without one, the heaviest thing you outweigh /
-   lo que levantaste, como algo conocido. Con semilla elige, día tras día, entre lo que da un número agradable (1 a 15); sin semilla, lo más pesado que superaste */
+const CS_OBJ=[['whl',150000],['jet',41000],['hmp',30000],['fir',18000],['bus',11000],['trx',8000],['ele',6000],['orc',5000],['pck',2500],['rhi',2300],['cnt',2200],['hip',1500],['car',1300],['gir',1200],['shk',900],['cow',700],['hrs',500],['pia',450],['pbr',450],['mot',300],['vnd',250],['tig',220],['lio',190],['gor',160],['sum',150],['pnd',100],['fri',80],['adl',75],['keg',73],['kng',70],['cem',43],['dog',30],['lug',23],['tir',10],['mel',8],['bow',7],['cat',4.5],['bby',3.5],['gal',3.8],['lap',2],['soc',0.43],['b52',83000],['mbt',60000],['c13',34000],['brd',30000],['f22',19700],['str',16500],['f35',13300],['a10',11300],['chn',11000],['f16',8600],['blk',5200],['hum',5000],['hwz',4200],['tmh',1600],['m2',38],['shl',47],['ruk',30],['jav',22],['m24',12.5],['m4',3.4]].sort(function(a,b){return b[1]-a[1];}); // [key, kg] — sorted heaviest first / [clave, kg] — de más pesado a más ligero
+/* what you lifted, as a thing people know. With a seed it picks among the things that give a nice number (1 to 15), epic ones on big days; without one, the heaviest thing you outweigh /
+   lo que levantaste, como algo conocido. Con semilla elige entre lo que da un número agradable (1 a 15), cosas épicas en los días grandes; sin semilla, lo más pesado que superaste */
+const CS_EPIC={whl:1,jet:1,hmp:1,fir:1,bus:1,trx:1,ele:1,orc:1,pck:1,b52:1,mbt:1,c13:1,brd:1,f22:1,str:1,f35:1,a10:1,chn:1,f16:1,blk:1,hum:1,hwz:1,tmh:1}; // war machines and giants: big days get these / máquinas de guerra y gigantes: los días grandes las reciben
 function csFunObj(kg,seed){
-  const ok=CS_OBJ.filter(function(o){const n=kg/o[1];return n>=1;});
+  const ok=CS_OBJ.filter(function(o){return kg/o[1]>=1;});
   if(!ok.length){const o=CS_OBJ[CS_OBJ.length-1];return{k:o[0],n:kg/o[1]};}
   let pick=ok[0];
-  if(seed!=null){const pool=ok.filter(function(o){return kg/o[1]<=15;});if(pool.length)pick=pool[((seed%pool.length)+pool.length)%pool.length];}
+  if(seed!=null){
+    let pool=[];
+    if(csTier(kg)==='epic'||csTier(kg)==='leg')pool=ok.filter(function(o){return CS_EPIC[o[0]]&&kg/o[1]<=10;}); // a big day deserves something epic / un día grande merece algo épico
+    if(!pool.length)pool=ok.filter(function(o){return kg/o[1]<=15;});
+    if(pool.length)pick=pool[seed%pool.length];
+  }
   return{k:pick[0],n:kg/pick[1]};
 }
-function csFunSeed(v){return Math.floor(((v.wk&&v.wk.t)||0)/864e5)+(v.fs|0);}
+/* the pick comes from the numbers you lifted (volume, sets, reps), never from the date: two workouts in one day give different things, the same numbers give the same thing /
+   la elección sale de los números que levantaste (volumen, series, repeticiones), nunca de la fecha: dos entrenamientos el mismo día dan cosas distintas, los mismos números dan lo mismo */
+function csFunSeed(v){
+  const wk=v.wk||{ex:[]};let sets=0,reps=0;
+  (wk.ex||[]).forEach(function(x){(x.sets||[]).forEach(function(q){sets++;reps+=q.r||0;});});
+  let h=(Math.round(wkVol(wk))|0)^Math.imul(sets+1,2654435761)^Math.imul(reps+1,40503);
+  h^=h>>>16;h=Math.imul(h,2246822507);h^=h>>>13;h=Math.imul(h,3266489909);h^=h>>>16;
+  return (h>>>0)+(v.fs|0);
+}
+/* rarity tag from the volume, like a game: only big days earn one / etiqueta de rareza según el volumen, como en un juego: solo los días grandes la ganan */
+function csTier(kg){return kg>=15000?'leg':kg>=8000?'epic':kg>=4000?'rare':'';}
+function csTierPill(g,v,xr,y){
+  const k=csTier(wkVol(v.wk));if(!k)return;
+  const txt=t('csTier_'+k);g.font=cardFont(30,'800');
+  const w=g.measureText(txt).width+52,x=xr-w,h=54,gold=k==='leg';
+  g.beginPath();if(g.roundRect)g.roundRect(x,y,w,h,27);else g.rect(x,y,w,h);
+  if(k==='rare'){g.strokeStyle=v.ink;g.lineWidth=3;g.stroke();}else{g.fillStyle=gold?'#FFC93C':v.acc;g.fill();}
+  csTxt(g,txt,x+26,y+37,30,'800',k==='rare'?v.ink:(gold?'#2A1A00':'#ffffff'));
+}
 function csFun(g,v){
   if(v.h)return csFunH(g,v);
   const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v)),y=v.B-640;
   csLogo(g,80,y-40,60,v.ink);
+  csTierPill(g,v,W-80,y-36);
   csTxt(g,t('csFunT'),80,y+110,50,'700',v.sub);
   const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),fp=csFit(g,num,W-160,300,'800');csTxt(g,num,70,y+360,fp,'800',v.acc);
   const nm=t('csObj_'+f.k),p=csFit(g,nm,W-160,110,'800');csTxt(g,nm,80,y+480,p,'800',v.ink);
