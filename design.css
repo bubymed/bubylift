@@ -693,3 +693,74 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 .cal-d:disabled{background:none;opacity:.55}.cal-d.on{background:var(--accent);color:#fff;font-weight:800}.cal-d.td{box-shadow:0 0 0 2px var(--txt)}.cal-d.sel{box-shadow:0 0 0 3px var(--txt)}
 .cal-d u{text-decoration:none;font-size:.4rem;line-height:.5;letter-spacing:1px;margin-top:2px;min-height:.4rem}
 .cal-s{text-align:center;margin:12px 0 6px}
+
+.rkc .rk-back{margin:2px 0 6px;font-size:.82rem;font-weight:700;color:#ffa000}
+.rk-bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:10px 0 4px}.rk-bar u{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.rk-nx{margin:2px 0 10px}
+.rk-l{display:flex;flex-direction:column;margin:10px 0}
+.rk-r{display:grid;grid-template-columns:96px 1fr minmax(70px,auto);align-items:center;gap:8px;padding:10px 0;border:0;border-top:1px solid var(--line);background:none;color:var(--txt);text-align:left;font-size:.88rem}
+.rk-r i{display:block;height:8px;border-radius:4px;background:var(--line);overflow:hidden}.rk-r u{display:block;height:100%;background:var(--accent);border-radius:4px}
+.rk-n{font-weight:600}.rk-c{font-weight:800;color:var(--accent);font-size:.78rem;text-align:right;line-height:1.15}
+.rk-r.open .rk-n{color:var(--accent)}
+.rk-d{padding:2px 0 12px;font-size:.88rem}.rk-d p{margin:4px 0}.rk-d .btn{margin-top:6px}
+.rkup{text-align:center}.rk-big svg{width:56px;height:56px;color:var(--accent)}.rk-big h2{margin:8px 0 2px}.rk-big b{display:block;font-size:2rem;font-weight:800;color:var(--accent)}
+.radar{width:100%;height:auto;display:block;margin:6px auto 0}
+.rd-ring{fill:none;stroke:var(--line);stroke-width:1}.rd-ax{stroke:var(--line);stroke-width:1}
+.rd-v{fill:color-mix(in srgb,var(--accent) 30%,transparent);stroke:var(--accent);stroke-width:2;stroke-linejoin:round}
+.rd-d{fill:var(--accent)}.rd-t{fill:var(--txt);font-size:11px;font-weight:700}
+.bal-w{margin-top:8px}.bal-r{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}.bal-r small{display:block;color:var(--dim);font-size:.78rem}
+
+@font-face{font-family:'rk0';src:url(fonts/rk0.woff2) format('woff2');font-display:swap}
+.rkn0{font-family:'rk0',system-ui,sans-serif}
+@font-face{font-family:'rk1';src:url(fonts/rk1.woff2) format('woff2');font-display:swap}
+.rkn1{font-family:'rk1',system-ui,sans-serif}
+@font-face{font-family:'rk2';src:url(fonts/rk2.woff2) format('woff2');font-display:swap}
+.rkn2{font-family:'rk2',system-ui,sans-serif}
+@font-face{font-family:'rk3';src:url(fonts/rk3.woff2) format('woff2');font-display:swap}
+.rkn3{font-family:'rk3',system-ui,sans-serif}
+@font-face{font-family:'rk4';src:url(fonts/rk4.woff2) format('woff2');font-display:swap}
+.rkn4{font-family:'rk4',system-ui,sans-serif}
+@font-face{font-family:'rk5';src:url(fonts/rk5.woff2) format('woff2');font-display:swap}
+.rkn5{font-family:'rk5',system-ui,sans-serif}
+@font-face{font-family:'rk6';src:url(fonts/rk6.woff2) format('woff2');font-display:swap}
+.rkn6{font-family:'rk6',system-ui,sans-serif}
+@font-face{font-family:'rk7';src:url(fonts/rk7.woff2) format('woff2');font-display:swap}
+.rkn7{font-family:'rk7',system-ui,sans-serif}
+@font-face{font-family:'rk8';src:url(fonts/rk8.woff2) format('woff2');font-display:swap}
+.rkn8{font-family:'rk8',system-ui,sans-serif}
+@font-face{font-family:'rk9';src:url(fonts/rk9.woff2) format('woff2');font-display:swap}
+.rkn9{font-family:'rk9',system-ui,sans-serif}
+@font-face{font-family:'rk10';src:url(fonts/rk10.woff2) format('woff2');font-display:swap}
+.rkn10{font-family:'rk10',system-ui,sans-serif}
+@font-face{font-family:'rk11';src:url(fonts/rk11.woff2) format('woff2');font-display:swap}
+.rkn11{font-family:'rk11',system-ui,sans-serif}
+@font-face{font-family:'rk12';src:url(fonts/rk12.woff2) format('woff2');font-display:swap}
+.rkn12{font-family:'rk12',system-ui,sans-serif}
+@font-face{font-family:'rk13';src:url(fonts/rk13.woff2) format('woff2');font-display:swap}
+.rkn13{font-family:'rk13',system-ui,sans-serif}
+@font-face{font-family:'rk14';src:url(fonts/rk14.woff2) format('woff2');font-display:swap}
+.rkn14{font-family:'rk14',system-ui,sans-serif}
+@font-face{font-family:'rk15';src:url(fonts/rk15.woff2) format('woff2');font-display:swap}
+.rkn15{font-family:'rk15',system-ui,sans-serif}
+/* rank names: one font per rank, bundled offline (OFL, Google Fonts) / nombres de rango: una fuente por rango, incluida sin conexión (OFL, Google Fonts) */
+.rk-hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;padding:6px 0 2px}
+.rk-hero b{font-size:1rem;font-weight:700;color:var(--dim)}.rk-hero small{font-size:.8rem;font-weight:600}
+.rkn{display:block;line-height:1.1;font-size:2.3rem;font-weight:400;word-break:break-word}
+.rkn2{font-size:1.9rem}.rkn4,.rkn11{font-size:2.6rem}.rkn8,.rkn12,.rkn13{font-size:2.6rem}.rkn7{font-size:2rem}.rkn10{font-size:2.1rem}
+.rkn0{color:#9e9e9e}
+.rkn1{color:#78909c}
+.rkn2{color:#4f8a8b}
+.rkn3{color:#2e86ab}
+.rkn4{color:#3f6fd1}
+.rkn5{color:#6a5acd}
+.rkn6{color:#8e44ad}
+.rkn7{color:#c2185b}
+.rkn8{color:#d32f2f}
+.rkn9{color:#e64a19}
+.rkn10{color:#ef6c00}
+.rkn11{color:#f59e0b}
+.rkn12{color:#b8860b}
+.rkn13{color:#c99a06}
+.rkn14{color:#d4a017}
+.rkn15{color:#e0a800}
+.rk-big .rkn{font-size:2.4rem;margin:6px 0}

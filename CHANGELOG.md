@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.49 — 2026-10-30
+- Ranks: a 16-rank ladder for each lift and overall (current vs peak), what you need for the next rank with a one-tap goal, a consistency level, and a muscle-balance radar with weakest parts and train buttons. Epic rank names.
+  Rangos: 16 rangos por levantamiento y general (actual vs máximo), lo que necesitas para el siguiente rango con meta en un toque, nivel de constancia y radar de equilibrio muscular con las partes más atrasadas y botones para entrenarlas. Nombres de rango épicos.
+
 ## v1.1.48 — 2026-10-30
 - **Edit goals + calendar** — change the target of any goal (pencil or tap it), and tap the week / month / total card to open a calendar of the days you trained.
   **Editar metas + calendario** — cambia la meta de cualquier objetivo (lápiz o tócalo) y toca la tarjeta de semana / mes / total para abrir un calendario con los días que entrenaste.
