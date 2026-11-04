@@ -113,7 +113,7 @@ Object.assign(EXM,{
  z_suspended_reverse_crunch:'A1a1k1b1',z_suspended_row:'B1',z_suspended_split_squat:'Q1k1b1h1',z_svend_press:'P1s1',z_t_bar_row_with_handle:'B1b1',z_tate_press:'T1s1e1',z_thigh_abductor:'G1',
  z_thigh_adductor:'G1',z_trail_running_walking:'Q1a1k1',z_tricep_dumbbell_kickback:'T1e1',z_triceps_overhead_extension_with_ro:'T1s1e1',z_triceps_pushdown_rope_attachment:'T1s1e1',
  z_triceps_pushdown_v_bar_attachment:'T1s1e1',z_tuck_crunch:'A1a1k1b1',z_two_arm_dumbbell_preacher_curl:'I1e1',z_two_arm_kettlebell_clean:'S1b1s1',z_two_arm_kettlebell_jerk:'S1s1',
- z_two_arm_kettlebell_military_press:'S1s1',z_two_arm_kettlebell_row:'B1b1',z_underhand_cable_pulldowns:'B1s1',z_upright_cable_row:'B1s2e1w1',z_upright_row_with_bands:'B1s2e1w1',z_v_bar_pulldown:'B1s1',
+ z_two_arm_kettlebell_military_press:'S1s1',z_two_arm_kettlebell_row:'B1b1',z_underhand_cable_pulldowns:'B1s1',z_underhand_machine_row:'B1b1',z_upright_cable_row:'B1s2e1w1',z_upright_row_with_bands:'B1s2e1w1',z_v_bar_pulldown:'B1s1',
  z_v_bar_pullup:'B1s1e1',z_vertical_swing:'H1b1',z_walking_treadmill:'Q1',z_weighted_ball_hyperextension:'B1b2',z_weighted_ball_side_bend:'A1',z_weighted_bench_dip:'T1s1e1',
  z_weighted_crunches:'A1a1k1b1',z_weighted_jump_squat:'Q2k1b1a1',z_weighted_pull_ups:'B1',z_weighted_sissy_squat:'Q2k2b1',z_wide_grip_barbell_bench_press:'P2s1',
  z_wide_grip_decline_barbell_bench_pr:'P2s1',z_wide_grip_decline_barbell_pullover:'P2s1',z_wide_grip_lat_pulldown:'B1s1',z_wide_grip_pulldown_behind_the_neck:'B1s2n1',z_wide_grip_rear_pull_up:'B1s1e1',

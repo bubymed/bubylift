@@ -839,6 +839,7 @@ const EXMU={
  z_two_arm_kettlebell_jerk:'qd.5 gmx.3 sdf1 sdl.7 trm.7 trp.3 abs.3',
  z_two_arm_kettlebell_military_press:'sdf1 sdl.7 trm.7 trl.3 trp.3 abs.2',
  z_two_arm_kettlebell_row:'ubk1 lat.8 bic.5 sdr.5 lbk.2 trp.4 frm.3',
+ z_underhand_machine_row:'lat1 bic.8 ubk.5 frm.3',
  z_underhand_cable_pulldowns:'lat1 bic.8 ubk.5 frm.3',
  z_upright_cable_row:'sdl1 trp.8 sdf.4 bic.3',
  z_upright_row_with_bands:'sdl1 trp.8 sdf.4 bic.3',

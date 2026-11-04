@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.53',items:[
+  {i:'dumbbell',en:'New exercise: Underhand Machine Row (palms up), with how-to and muscle map.',es:'Ejercicio nuevo: Remo en máquina con agarre supino (palmas arriba), con instrucciones y mapa muscular.'}
+ ]},
  {v:'v1.1.52',items:[
   {i:'trophy',en:'Bodyweight ranks: pull-ups, push-ups and dips ranked on the same 16-rank ladder by your best set (added weight counts), with the reps needed for the next rank.',es:'Rangos con peso corporal: dominadas, flexiones y fondos en la misma escalera de 16 rangos por tu mejor serie (el peso extra cuenta), con las repeticiones que faltan para el siguiente rango.'}
  ]},

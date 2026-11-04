@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.53 — 2026-10-30
+- New exercise: Underhand Machine Row (palms up), with how-to and muscle map.
+  Ejercicio nuevo: Remo en máquina con agarre supino (palmas arriba), con instrucciones y mapa muscular.
+
 ## v1.1.52 — 2026-10-30
 - Bodyweight ranks: pull-ups, push-ups and dips ranked on the same 16-rank ladder by your best set (added weight counts), with the reps needed for the next rank.
   Rangos con peso corporal: dominadas, flexiones y fondos en la misma escalera de 16 rangos por tu mejor serie (el peso extra cuenta), con las repeticiones que faltan para el siguiente rango.

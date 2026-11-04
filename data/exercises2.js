@@ -722,6 +722,7 @@ EXLIB.push(
  ['z_two_arm_kettlebell_jerk','Two-Arm Kettlebell Jerk','Envión con dos pesas rusas (jerk)','shoulders','kettlebell'],
  ['z_two_arm_kettlebell_military_press','Two-Arm Kettlebell Military Press','Press militar con dos pesas rusas','shoulders','kettlebell'],
  ['z_two_arm_kettlebell_row','Two-Arm Kettlebell Row','Remo con dos pesas rusas','back','kettlebell'],
+ ['z_underhand_machine_row','Underhand Machine Row','Remo en máquina con agarre supino','back','machine'],
  ['z_underhand_cable_pulldowns','Underhand Cable Pulldowns','Jalón al pecho con agarre supino','back','cable'],
  ['z_upper_back_leg_grab','Upper Back-Leg Grab','Abrazo de piernas sentado (espalda alta)','mobility','bodyweight','t'],
  ['z_upper_back_stretch','Upper Back Stretch','Estiramiento de espalda alta','mobility','bodyweight','t'],
