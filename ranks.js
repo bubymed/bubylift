@@ -32,7 +32,7 @@ function strCard(){
   h+='<div class="str-top"><b>'+shown+'</b><span>'+esc(rkName(ix))+'</span></div>';
   if(d.cur==null)h+='<p class="rk-back">'+t('rkAway',rkName(pk))+'</p>';
   else if(pk>ix)h+='<p class="rk-back">'+t('rkBack',rkName(pk))+'</p>';
-  h+='<div class="rk-bar"><u style="width:'+pct+'%"></u></div><p class="muted sm rk-nx">'+(top?t('rkTop'):t('rkNext',hi-shown,rkName(ix+1)))+'</p>';
+  h+='<div class="rk-bar"><u style="width:'+pct+'%"></u></div><p class="muted sm rk-nx">'+(top?t('rkTop'):t(hi-shown===1?'rkNext1':'rkNext',hi-shown,rkName(ix+1)))+'</p>';
   h+=(d.pts.length>1?lineSvg(d.pts,function(v){return String(Math.round(v));}):'');
   h+='<div class="rk-l">'+d.lifts.map(l=>{
     const pc=l.pc!=null?l.pc:l.p,tg=rkTarget(l,d),op=RKO===l.k;
