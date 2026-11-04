@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.48 — 2026-10-30
+- **Edit goals + calendar** — change the target of any goal (pencil or tap it), and tap the week / month / total card to open a calendar of the days you trained.
+  **Editar metas + calendario** — cambia la meta de cualquier objetivo (lápiz o tócalo) y toca la tarjeta de semana / mes / total para abrir un calendario con los días que entrenaste.
+
 ## v1.1.47 — 2026-10-30
 - **Deeper muscle recovery** — every exercise now trains several parts with different weight (a deadlift is not a pull-up, leg extensions spare your hamstrings). Tap a muscle to see its parts (21 in all), each with its own recovery time, and tap a ready part to train it.
   **Recuperación muscular más profunda** — cada ejercicio ahora trabaja varias partes con distinto peso (un peso muerto no es una dominada, las extensiones de cuádriceps no cansan los isquiotibiales). Toca un músculo para ver sus partes (21 en total), cada una con su propio tiempo de recuperación, y toca una parte lista para entrenarla.

@@ -348,7 +348,7 @@ const STR={
  shP:['The app keeps the main lifts and drops the extras.','La app deja los ejercicios principales y quita los extras.'],
  shMin:['{0} minutes','{0} minutos'],
  shN2:['{0} of {1} exercises','{0} de {1} ejercicios'],
- gT:['Your goals','Tus metas'],
+ gT:['Your goals','Tus metas'],gEdit:['Edit goal','Editar meta'],gEditB:['Edit','Editar'],calT:['Calendar','Calendario'],calOpenB:['See your calendar','Ver calendario'],calPrev:['Previous month','Mes anterior'],calNext:['Next month','Mes siguiente'],calN:['{0} workout(s)','{0} entrenamiento(s)'],calSum:['{0} workouts on {1} days this month','{0} entrenamientos en {1} días este mes'],calEmpty:['No workouts this month.','Sin entrenamientos este mes.'],
  gNew:['Set a new goal','Fijar una meta'],
  gEmpty:['Pick a concrete goal, like 10 pull-ups or 225 lb, and watch the bar fill.','Elige una meta concreta, como 10 dominadas o 225 lb, y mira cómo se llena la barra.'],
  gP:['What do you want to reach?','¿Qué quieres lograr?'],

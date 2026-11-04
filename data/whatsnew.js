@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.48',items:[
+  {i:'calendar',en:'<b>Edit goals + calendar</b> — change the target of any goal (pencil or tap it), and tap the week / month / total card to open a calendar of the days you trained.',es:'<b>Editar metas + calendario</b> — cambia la meta de cualquier objetivo (lápiz o tócalo) y toca la tarjeta de semana / mes / total para abrir un calendario con los días que entrenaste.'}
+ ]},
  {v:'v1.1.47',items:[
   {i:'heart',en:'<b>Deeper muscle recovery</b> — every exercise now trains several parts with different weight (a deadlift is not a pull-up, leg extensions spare your hamstrings). Tap a muscle to see its parts (21 in all), each with its own recovery time, and tap a ready part to train it.',es:'<b>Recuperación muscular más profunda</b> — cada ejercicio ahora trabaja varias partes con distinto peso (un peso muerto no es una dominada, las extensiones de cuádriceps no cansan los isquiotibiales). Toca un músculo para ver sus partes (21 en total), cada una con su propio tiempo de recuperación, y toca una parte lista para entrenarla.'}
  ]},
