@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.44',items:[
+  {i:'share',en:'The \'Fun\' share card now compares your lifted volume to 52 things, from watermelons and tigers to F-35 jets and M1 Abrams tanks. The pick follows the numbers you lifted, so every workout gets its own, and big days earn epic ones and a rarity tag. Tap the style again to shuffle.',es:'La tarjeta \'Curioso\' ahora compara tu volumen con 52 cosas, desde sandías y tigres hasta cazas F-35 y tanques M1 Abrams. La elección sigue los números que levantaste, así que cada entrenamiento tiene la suya, y los días grandes ganan objetos épicos y una etiqueta de rareza. Toca el estilo otra vez para cambiarla.'}
+ ]},
  {v:'v1.1.43',items:[
   {i:'heart',en:'Cool-down by muscle group: pick what you trained (legs, chest, back, shoulders, arms, core) and get a stretch session for it. After saving a workout there is a one-tap Cool-down for what you trained.',es:'Cool down por grupo muscular: elige qué entrenaste (piernas, pecho, espalda, hombros, brazos, core) y recibes una sesión de estiramientos para eso. Al guardar un entrenamiento hay un botón de Cool down de lo que entrenaste.'}
  ]},
