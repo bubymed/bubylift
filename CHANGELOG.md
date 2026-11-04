@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.44 — 2026-10-30
+- The 'Fun' share card now compares your lifted volume to 41 things (whales, tigers, jets, suitcases, watermelons…), a different one each day. Tap the style again to shuffle.
+  La tarjeta 'Curioso' ahora compara tu volumen con 41 cosas (ballenas, tigres, aviones, maletas, sandías…), una distinta cada día. Toca el estilo otra vez para cambiarla.
+
 ## v1.1.43 — 2026-10-30
 - Cool-down by muscle group: pick what you trained (legs, chest, back, shoulders, arms, core) and get a stretch session for it. After saving a workout there is a one-tap Cool-down for what you trained.
   Cool down por grupo muscular: elige qué entrenaste (piernas, pecho, espalda, hombros, brazos, core) y recibes una sesión de estiramientos para eso. Al guardar un entrenamiento hay un botón de Cool down de lo que entrenaste.

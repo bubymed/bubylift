@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.44',items:[
+  {i:'share',en:'The \'Fun\' share card now compares your lifted volume to 41 things (whales, tigers, jets, suitcases, watermelons…), a different one each day. Tap the style again to shuffle.',es:'La tarjeta \'Curioso\' ahora compara tu volumen con 41 cosas (ballenas, tigres, aviones, maletas, sandías…), una distinta cada día. Toca el estilo otra vez para cambiarla.'}
+ ]},
  {v:'v1.1.43',items:[
   {i:'heart',en:'Cool-down by muscle group: pick what you trained (legs, chest, back, shoulders, arms, core) and get a stretch session for it. After saving a workout there is a one-tap Cool-down for what you trained.',es:'Cool down por grupo muscular: elige qué entrenaste (piernas, pecho, espalda, hombros, brazos, core) y recibes una sesión de estiramientos para eso. Al guardar un entrenamiento hay un botón de Cool down de lo que entrenaste.'}
  ]},

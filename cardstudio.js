@@ -12,7 +12,7 @@ function csRgba(hex,a){
 }
 function csOpen(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
-  CS={wk:wk,style:'giant',fmt:'story',ori:'v',pos:'bottom',bg:'none',panel:'on',col:'#ffffff',photo:null,file:null,adv:false};
+  CS={wk:wk,fs:0,style:'giant',fmt:'story',ori:'v',pos:'bottom',bg:'none',panel:'on',col:'#ffffff',photo:null,file:null,adv:false};
   const chip=(k,v,lbl,extra)=>'<button class="chip'+(CS[k]===v?' on':'')+'" data-k="'+k+'" data-v="'+v+'" onclick="'+(extra||'csSet(\''+k+'\',\''+v+'\')')+'">'+lbl+'</button>';
   const acc=csAcc(),act=(ico,lbl,fn,cls)=>'<button class="cs-a'+(cls?' '+cls:'')+'" onclick="'+fn+'"><span class="cs-ai">'+ic(ico)+'</span><span>'+lbl+'</span></button>';
   sheet('<div class="form cs"><div class="pick-h"><h3>'+t('cdBtn')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
@@ -39,7 +39,9 @@ function csStory(){
   csOut(true);
 }
 function csSet(k,v){
-  if(!CS)return;CS[k]=v;
+  if(!CS)return;
+  if(k==='style'&&v===CS.style&&(v==='fun'||v==='duo'))CS.fs=(CS.fs|0)+1; // tap it again: another object / tocarlo otra vez: otro objeto
+  CS[k]=v;
   if(k==='ori'){document.querySelectorAll('#sheet .cs-g').forEach(b=>{b.hidden=v==='h'&&!CS_H[b.dataset.v];});if(v==='h'&&!CS_H[CS.style])CS.style='giant';document.querySelectorAll('#sheet [data-k="style"]').forEach(b=>b.classList.toggle('on',b.dataset.v===CS.style));}
   document.querySelectorAll('#sheet [data-k="'+k+'"]').forEach(b=>b.classList.toggle('on',b.dataset.v===String(v)));
   csDraw();
@@ -69,7 +71,7 @@ function csDraw(){
 let csTm=null;
 function csPrep(){
   if(!CS)return;CS.file=null;clearTimeout(csTm);
-  const cur=CS,key=cur.style+cur.fmt+cur.ori+cur.pos+cur.bg+cur.col+cur.panel;
+  const cur=CS,key=cur.style+cur.fmt+cur.ori+cur.pos+cur.bg+cur.col+cur.panel+cur.fs;
   csTm=setTimeout(function(){
     if(CS!==cur)return;
     let c;try{c=csFinal(Object.assign({},cur,{crop:1}));}catch(e){return;}
@@ -153,7 +155,7 @@ function csRender(o,sc){
   /* where the block sits: top, middle or bottom / dónde queda el bloque: arriba, centro o abajo */
   const dy=o.pos==='top'?Math.round(H*.26-(B-330)):(o.pos==='mid'?Math.round(H*.5-(B-330)):0);
   g.save();g.translate(0,dy);
-  S(g,{h:o.ori==='h'&&!!CS_H[o.style],W:W,H:H,B:B,d:d,wk:wk,wo:wo,name:name,stats:stats,ink:ink,sub:sub,line:line,acc:acc,light:light,shadow:shadow});
+  S(g,{fs:o.fs|0,h:o.ori==='h'&&!!CS_H[o.style],W:W,H:H,B:B,d:d,wk:wk,wo:wo,name:name,stats:stats,ink:ink,sub:sub,line:line,acc:acc,light:light,shadow:shadow});
   g.restore();
   if(d.sv){shadow(false);csTxt(g,'Powered by Strava',W/2,H-40,28,'500',sub,'center');}
   if(o.bg==='none'&&o.panel!=='off'&&!CS_CLEAN[o.style])return csPanel(c,light,!!o.crop);
@@ -349,7 +351,7 @@ function csListH(g,v,dots){
   csLogo(g,W-80,y+150+per*h+(v.d.prs?14:30),48,v.ink,'right',dots?v.acc:undefined);
 }
 function csFunH(g,v){
-  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg),y=v.B-440,T=y+110;
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v)),y=v.B-440,T=y+110;
   csLogo(g,80,y,56,v.ink);
   const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),nb=csNum(g,num,80,T,430,330,'900',v.acc);
   const x=560,cw=W-80-x;
@@ -362,7 +364,7 @@ function csFunH(g,v){
 
 /* duo: the "fun" card and the exercise list together in ONE image (stacked, or side by side when wide) / la tarjeta curiosa y la lista de ejercicios juntas en UNA imagen (apiladas, o lado a lado en horizontal) */
 function csDuo(g,v){
-  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg),all=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v)),all=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
   const rows=all.slice(0,6),n=rows.length,h=66,fs=32,num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1);
   const list=(x,y,cw)=>rows.forEach((r,i)=>{const yy=y+i*h;let rt=String(r[1]);if(rt.length>20)rt=rt.slice(0,20);g.font=cardFont(fs,'700');const mx=cw-g.measureText(rt).width-28;let nm=r[0];g.font=cardFont(fs,'800');while(g.measureText(nm).width>mx&&nm.length>4)nm=nm.slice(0,-1).trimEnd();if(nm!==r[0])nm+='…';csTxt(g,nm,x,yy,fs,'800',v.ink);csTxt(g,rt,x+cw,yy,fs,'700',v.sub,'right');g.fillStyle=v.line;g.fillRect(x,yy+18,cw,2);});
   const nmO=t('csObj_'+f.k);
@@ -424,11 +426,20 @@ function csPrCard(g,v){
   csTxt(g,v.d.date,80,y+620,36,'500',v.sub);
 }
 /* 10 · fun: what you lifted, in things people know / lo que levantaste, en cosas conocidas */
-const CS_OBJ=[['bus',11000],['ele',6000],['car',1300],['pia',450],['fri',80],['bow',7]];
-function csFunObj(kg){for(let i=0;i<CS_OBJ.length;i++){const n=kg/CS_OBJ[i][1];if(n>=1)return{k:CS_OBJ[i][0],n:n};}const o=CS_OBJ[CS_OBJ.length-1];return{k:o[0],n:kg/o[1]};}
+const CS_OBJ=[['whl',150000],['jet',41000],['hmp',30000],['fir',18000],['bus',11000],['trx',8000],['ele',6000],['orc',5000],['pck',2500],['rhi',2300],['cnt',2200],['hip',1500],['car',1300],['gir',1200],['shk',900],['cow',700],['hrs',500],['pia',450],['pbr',450],['mot',300],['vnd',250],['tig',220],['lio',190],['gor',160],['sum',150],['pnd',100],['fri',80],['adl',75],['keg',73],['kng',70],['cem',43],['dog',30],['lug',23],['tir',10],['mel',8],['bow',7],['cat',4.5],['bby',3.5],['gal',3.8],['lap',2],['soc',0.43]].sort(function(a,b){return b[1]-a[1];}); // [key, kg] — sorted heaviest first / [clave, kg] — de más pesado a más ligero
+/* what you lifted, as a thing people know. With a seed it picks, day after day, among the things that give a nice number (1 to 15); without one, the heaviest thing you outweigh /
+   lo que levantaste, como algo conocido. Con semilla elige, día tras día, entre lo que da un número agradable (1 a 15); sin semilla, lo más pesado que superaste */
+function csFunObj(kg,seed){
+  const ok=CS_OBJ.filter(function(o){const n=kg/o[1];return n>=1;});
+  if(!ok.length){const o=CS_OBJ[CS_OBJ.length-1];return{k:o[0],n:kg/o[1]};}
+  let pick=ok[0];
+  if(seed!=null){const pool=ok.filter(function(o){return kg/o[1]<=15;});if(pool.length)pick=pool[((seed%pool.length)+pool.length)%pool.length];}
+  return{k:pick[0],n:kg/pick[1]};
+}
+function csFunSeed(v){return Math.floor(((v.wk&&v.wk.t)||0)/864e5)+(v.fs|0);}
 function csFun(g,v){
   if(v.h)return csFunH(g,v);
-  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg),y=v.B-640;
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v)),y=v.B-640;
   csLogo(g,80,y-40,60,v.ink);
   csTxt(g,t('csFunT'),80,y+110,50,'700',v.sub);
   const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),fp=csFit(g,num,W-160,300,'800');csTxt(g,num,70,y+360,fp,'800',v.acc);
