@@ -47,7 +47,7 @@ function wkDur(wk){return(wk.end&&wk.end>wk.t)?(wk.end-wk.t)/1000:0;}
 function wkPRs(wk){let n=0;wk.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr)n++;}));return n;}
 function wkCard(wk){
   const d=wkDur(wk),pr=wkPRs(wk),vol=wkVol(wk),dt=new Date(wk.t);
-  return'<div class="wkw"><button class="lrow wkrow" onclick="openWk(\''+wk.id+'\')"><span class="dchip"><b>'+dt.getDate()+'</b><small>'+esc(dt.toLocaleDateString(LANG==='es'?'es':'en',{month:'short'}).replace('.',''))+'</small></span>'+
+  return'<div class="wkw"><button class="lrow wkrow" onclick="openWk(\''+wk.id+'\')"><span class="dchip"><b>'+dt.getDate()+'</b><small>'+esc(dFmt(wk.t,{month:'short'}).replace('.',''))+'</small></span>'+
     '<span class="lt2"><b>'+esc(wk.name||dFmt(wk.t,{weekday:'long'}))+(pr?' <span class="pr">'+ic('trophy')+' '+pr+'</span>':'')+'</b>'+
     '<small>'+(d?fmtDur(d)+(wk.ex.length?' · ':''):'')+(wk.ex.length?t('nSetsT',wkSets(wk)):'')+(vol?' · '+wShow(vol)+' '+wUnit():'')+'</small>'+
     '<small>'+(wk.ex.length?wk.ex.slice(0,3).map(x=>esc(exNameV(x.eid,x.vr,x.n))).join(' · ')+(wk.ex.length>3?' …':''):esc(spName(wk.sp)))+(wk.hr?' · '+ic('heart')+' '+wk.hr.a:'')+(wk.kcal?' · '+wk.kcal+' kcal':'')+'</small></span><span class="lc">›</span></button>'+xBtn('delWkAsk(\''+wk.id+'\')')+'</div>';
