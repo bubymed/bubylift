@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.46',items:[
+  {i:'yoga',en:'<b>Stretching with equipment</b> — pick what you have (foam roller, band, bench, bar, ball) and get 26 new moves, used first in your cool-down. Wall and floor moves included.',es:'<b>Estiramientos con equipo</b> — elige lo que tengas (rodillo, banda, banco, barra, pelota) y obtén 26 movimientos nuevos, usados primero en tu cool down. Incluye movimientos con pared y piso.'}
+ ]},
  {v:'v1.1.45',items:[
   {i:'sparkles',en:'<b>Clearer share button</b> — “Background, size and color” now looks like a button (border, arrow that flips when open).',es:'<b>Botón de compartir más claro</b> — “Fondo, tamaño y color” ahora parece un botón (borde y flecha que gira al abrir).'}
  ]},
