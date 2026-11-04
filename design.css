@@ -703,7 +703,6 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 .rk-n{font-weight:600}.rk-c{font-weight:800;color:var(--accent);font-size:.8rem;min-width:70px;text-align:right}
 .rk-r.open .rk-n{color:var(--accent)}
 .rk-d{padding:2px 0 12px;font-size:.88rem}.rk-d p{margin:4px 0}.rk-d .btn{margin-top:6px}
-.rk-th{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
 .rkup{text-align:center}.rk-big svg{width:56px;height:56px;color:var(--accent)}.rk-big h2{margin:8px 0 2px}.rk-big b{display:block;font-size:2rem;font-weight:800;color:var(--accent)}
 .radar{width:100%;height:auto;display:block;margin:6px auto 0}
 .rd-ring{fill:none;stroke:var(--line);stroke-width:1}.rd-ax{stroke:var(--line);stroke-width:1}

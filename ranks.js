@@ -3,8 +3,7 @@
 const RK_T=[0,12,25,40,55,70,85]; // points where each of the 7 ranks starts / puntos donde empieza cada uno de los 7 rangos
 let RKO=null;
 function rkIdx(p){let r=0;RK_T.forEach((v,i)=>{if(p>=v)r=i;});return r;}
-function rkName(i){return t((SET.rkTheme==='m'?'rkM_':'rkN_')+i);}
-function rkTheme(k){SET.rkTheme=k;saveSet();render();}
+function rkName(i){return t('rk_'+i);}
 function rkOpen(k){RKO=RKO===k?null:k;render();}
 /* points → strength ratio (inverse of strPts) / puntos → relación de fuerza (inversa de strPts) */
 function strInv(p,th){
@@ -41,8 +40,7 @@ function strCard(){
     if(op)r+='<div class="rk-d">'+(pc==null?'<p class="muted sm">'+t('rkNoLift')+'</p>':'<p>'+t('rkBest',wShow(l.ec||l.e)+' '+wUnit())+'</p>'+
       (tg?'<p>'+t('rkNeed',esc(rkName(tg.next)),'<b>'+wShow(tg.e)+' '+wUnit()+'</b>',wShow(Math.max(0,tg.e-(tg.from||0)))+' '+wUnit())+'</p><button class="btn sm" onclick="rkGoal(\''+l.k+'\')">'+ic('target')+' '+t('rkSetGoal')+'</button>':'<p>'+t('rkTop')+'</p>'))+'</div>';
     return r;}).join('')+'</div>';
-  h+='<div class="rk-th"><span class="muted sm">'+t('rkTheme')+'</span><button class="chip'+(SET.rkTheme==='m'?'':' on')+'" onclick="rkTheme(\'n\')">'+t('rkThN')+'</button><button class="chip'+(SET.rkTheme==='m'?' on':'')+'" onclick="rkTheme(\'m\')">'+t('rkThM')+'</button></div>'+
-    '<details class="dtl pv-dt"><summary><b>'+t('rkInfoT')+'</b></summary><p class="muted sm">'+t('rkInfo')+'</p></details></div>';
+  h+='<details class="dtl pv-dt"><summary><b>'+t('rkInfoT')+'</b></summary><p class="muted sm">'+t('rkInfo')+'</p></details></div>';
   return h;
 }
 /* a new overall rank: celebrate once (the first time just remember where you are) / un rango general nuevo: se celebra una vez (la primera vez solo se recuerda dónde estás) */
