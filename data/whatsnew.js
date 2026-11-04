@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.45',items:[
+  {i:'sparkles',en:'<b>Clearer share button</b> — “Background, size and color” now looks like a button (border, arrow that flips when open).',es:'<b>Botón de compartir más claro</b> — “Fondo, tamaño y color” ahora parece un botón (borde y flecha que gira al abrir).'}
+ ]},
  {v:'v1.1.44',items:[
   {i:'share',en:'The \'Fun\' share card now compares your lifted volume to 52 things, from watermelons and tigers to F-35 jets and M1 Abrams tanks. The pick follows the numbers you lifted, so every workout gets its own, and big days earn epic ones and a rarity tag. Tap the style again to shuffle.',es:'La tarjeta \'Curioso\' ahora compara tu volumen con 52 cosas, desde sandías y tigres hasta cazas F-35 y tanques M1 Abrams. La elección sigue los números que levantaste, así que cada entrenamiento tiene la suya, y los días grandes ganan objetos épicos y una etiqueta de rareza. Toca el estilo otra vez para cambiarla.'}
  ]},

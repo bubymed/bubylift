@@ -26,10 +26,10 @@ function csOpen(id){
       '<div class="cs-l">'+t('csColL')+'</div><div class="cs-sw">'+['#ffffff','#111111',acc].map(c=>'<button class="cs-c'+(CS.col===c?' on':'')+'" data-k="col" data-v="'+c+'" style="background:'+c+'" aria-label="'+c+'" onclick="csSet(\'col\',\''+c+'\')"></button>').join('')+'</div></div>'+
       '<input id="csf" type="file" accept="image/*" hidden onchange="csPhoto(this)">'+
       '<div class="cs-acts">'+act('brand-instagram',t('csStory'),'csStory()','ig')+act('copy',t('csCopy'),'csCopy()')+act('download',t('csSaveS'),'csOut(false)')+act('share',t('csMore'),'csOut(true)')+'</div>'+
-      '<button class="cs-opt" onclick="csAdv()">'+ic('settings')+' '+t('csAdv')+'</button></div></div>');
+      '<button class="cs-opt" id="csOpt" aria-expanded="false" aria-controls="csAdv" onclick="csAdv()">'+ic('settings')+' <span>'+t('csAdv')+'</span><i class="cs-chv" aria-hidden="true">▾</i></button></div></div>');
   csDraw();
 }
-function csAdv(){const e=$('csAdv');if(e)e.hidden=!e.hidden;}
+function csAdv(){const e=$('csAdv'),b=$('csOpt');if(!e)return;e.hidden=!e.hidden;if(b){b.classList.toggle('on',!e.hidden);b.setAttribute('aria-expanded',e.hidden?'false':'true');}if(!e.hidden&&e.scrollIntoView)e.scrollIntoView({block:'nearest',behavior:'smooth'});}
 /* straight to Instagram: copy the card, open the story camera, and paste it as a sticker / directo a Instagram: copia la tarjeta, abre la cámara de historias y se pega como sticker */
 function csStory(){
   if(!CS)return;const f=CS.file;
