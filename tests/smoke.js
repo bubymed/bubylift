@@ -156,7 +156,7 @@ vc.on('error',(...a)=>errors.push('console.error: '+a.join(' ')));
   doc.getElementById('lES');
   w.bodyDel;
   // body entry via the form
-  w.go('body');
+  w.go('body');ev("UI.bt='wt';render()");
   doc.getElementById('bw').value='180.5';doc.getElementById('bf').value='18';doc.getElementById('bm_waist').value='34';doc.getElementById('bn').value='morning <i>x</i>';
   w.bodySave();
   ok(ev('DATA.body.length')===1&&ev('DATA.body[0].m.waist>0'),'body entry saved');
@@ -440,7 +440,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
    w.eval("window.__clDone=null;sheetClose();clUnlink();window.fetch=window.__fetch0;window.CLOUD_CFG={url:'',key:''};");
    w.eval("DATA=JSON.parse("+JSON.stringify(sv)+")");w.go('workout');}
    {const ws=JSON.stringify(w.eval("JSON.stringify(DATA)"));w.eval("DATA.workouts=[0,1,2].map(i=>({id:'z'+i,t:Date.now()-(3-i)*864e5*3,end:0,name:'',ex:[{eid:'bench-press',n:'x',sets:[{w:60+i*5,r:5}]}]}))");
-   const eid=w.eval("EXLIB[0][0]");w.eval("DATA.workouts.forEach(k=>k.ex[0].eid='"+eid+"')");w.eval("UI.prog=null");const pg=w.eval("vProgress()");
+   const eid=w.eval("EXLIB[0][0]");w.eval("DATA.workouts.forEach(k=>k.ex[0].eid='"+eid+"')");w.eval("UI.prog=null;UI.pt='ex'");const pg=w.eval("vProgress()");w.eval("UI.pt='sum'");
    ok(/class="card tl"/.test(pg)&&/id="rmw"/.test(pg),'Progress shows top-lift charts and the 1RM calculator');
    w.eval("document.body.insertAdjacentHTML('beforeend','<div id=tmpx></div>')");
    w.eval("(function(){var d=document.getElementById('tmpx');d.innerHTML=rmCalc();document.getElementById('rmw').value='100';document.getElementById('rmr').value='5';rmUpdate();})()");
@@ -1060,6 +1060,8 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(ev("(function(){var sv=SET.strHave;SET.strHave=['roller'];var no=avail('z_chair_lower_back_stretch',strHave());SET.strHave=['roller','chair'];var yes=avail('z_chair_lower_back_stretch',strHave());SET.strHave=sv;return !no&&yes&&STR_EQ.indexOf('chair')>=0})()"),'chair stretches only show when you have a chair');
   ok(ev("(function(){var n=DATA.workouts.length,nb=DATA.body.length;DATA.body.unshift({id:'ob',t:Date.now(),w:80});for(var k=0;k<3;k++)DATA.workouts.unshift({id:'o'+k,t:Date.now()-k*864e5,ex:[{eid:'deadlift',sets:[{w:240,r:5,done:true}]}]});var d=strData(),ok=d.lifts[2].p>60&&d.score<=Math.round(d.lifts[2].p/5)+1&&rkIdx(d.score)<=4&&strCard().indexOf('rk-miss')>0;DATA.workouts.splice(0,3);DATA.body.shift();return ok&&DATA.workouts.length===n&&DATA.body.length===nb})()"),'one strong lift cannot carry the overall rank');
   ok(ev("(function(){var sv=[CL,SET.lastExport,SET.bkSnooze],nb=DATA.body.length;SET.lastExport=0;SET.bkSnooze=0;for(var k=0;k<5;k++)DATA.body.push({id:'bk'+k,t:Date.now()-k,w:80});CL=null;var a=needBackup();CL={uid:'u',last:Date.now()};var b=needBackup();CL={uid:'u',last:Date.now()-9*864e5};var c=needBackup();CL=sv[0];SET.lastExport=sv[1];SET.bkSnooze=sv[2];DATA.body.splice(nb);return a===true&&b===false&&c===true})()"),'backup reminder is skipped when the cloud is syncing');
+  ok(ev("(function(){var sw=DATA.workouts;DATA.workouts=[{id:'tt',t:Date.now(),ex:[{eid:'bench',sets:[{w:60,r:5,done:true}]}]}];UI.pt='sum';var h=vProgress();var a=h.indexOf('sub-ind')>0&&h.indexOf('str-top')<0;UI.pt='rank';var r=vProgress();UI.pt='sum';DATA.workouts=sw;return a&&r.indexOf('rkc')>0&&r.indexOf('sub-ind')>0})()"),'progress is split into tabs with a pill bar');
+  ok(ev("(function(){var sw=DATA.workouts;DATA.workouts=[{id:'tt',t:Date.now(),ex:[{eid:'bench',sets:[{w:60,r:5,done:true}]}]}];UI.pt='sum';vProgress();var ok=SUBS.pt.opts.length===3&&SUBS.pt.cur==='sum';var h=subWrap('x');UI.sdir=1;var r=subWrap('x').indexOf('from-r')>0;UI.sdir=-1;var l=subWrap('x').indexOf('from-l')>0;UI.sdir=0;DATA.workouts=sw;return ok&&r&&l&&h.indexOf('from')<0})()"),'tab slide direction is remembered once');
   ev("restSet(0,'45')");ok(ev("exRest(ACT.ex[0])")===45&&ev("SET.exRest.bench")===45,'rest can be set per exercise and is remembered');
   ev("ACT.acc=5000;ACT.sn=Date.now();ACT.pz=false;pauseClock()");var __p=ev("actMs()");
   ok(ev("ACT.pz")===true&&__p>=5000&&__p<5500,'pause freezes the stopwatch');

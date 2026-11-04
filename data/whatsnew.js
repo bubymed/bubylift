@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.55',items:[
+  {i:'layers',en:'Progress and Body are split into tabs with a pill bar: swipe left or right to move between them. Progress: Overview, Rank, Exercises. Body: Recovery, Weight, Log.',es:'Progreso y Cuerpo se dividen en pestañas con una barra de pastillas: desliza a la izquierda o derecha para moverte entre ellas. Progreso: Resumen, Rango, Ejercicios. Cuerpo: Recuperación, Peso, Registro.'}
+ ]},
  {v:'v1.1.54',items:[
   {i:'sliders',en:'First time with an exercise now suggests a starting weight range from your body weight. New Seated variation for curls, shoulder presses and raises. Plate exercises no longer ask for a bar. Chair is now optional stretching equipment. The overall rank counts all five lifts (untried ones count 0). The backup reminder no longer shows when your cloud account is syncing.',es:'La primera vez con un ejercicio ahora sugiere un rango de peso inicial según tu peso corporal. Nueva variante Sentado para curls, press de hombros y elevaciones. Los ejercicios con disco ya no piden barra. La silla ahora es equipo opcional para estirar. El rango general cuenta los cinco levantamientos (los no probados cuentan 0). El recordatorio de respaldo ya no sale si tu cuenta en la nube está sincronizando.'}
  ]},

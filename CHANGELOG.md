@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.55 — 2026-10-30
+- Progress and Body are split into tabs with a pill bar: swipe left or right to move between them. Progress: Overview, Rank, Exercises. Body: Recovery, Weight, Log.
+  Progreso y Cuerpo se dividen en pestañas con una barra de pastillas: desliza a la izquierda o derecha para moverte entre ellas. Progreso: Resumen, Rango, Ejercicios. Cuerpo: Recuperación, Peso, Registro.
+
 ## v1.1.54 — 2026-10-30
 - First time with an exercise now suggests a starting weight range from your body weight. New Seated variation for curls, shoulder presses and raises. Plate exercises no longer ask for a bar. Chair is now optional stretching equipment. The overall rank counts all five lifts (untried ones count 0). The backup reminder no longer shows when your cloud account is syncing.
   La primera vez con un ejercicio ahora sugiere un rango de peso inicial según tu peso corporal. Nueva variante Sentado para curls, press de hombros y elevaciones. Los ejercicios con disco ya no piden barra. La silla ahora es equipo opcional para estirar. El rango general cuenta los cinco levantamientos (los no probados cuentan 0). El recordatorio de respaldo ya no sale si tu cuenta en la nube está sincronizando.

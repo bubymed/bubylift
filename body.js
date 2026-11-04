@@ -176,7 +176,9 @@ function recCta(){
 function vBody(){
   const today=dInput(Date.now()),last=DATA.body.find(b=>b.w),sg=d=>(d>0?'+':'')+fmtNum(d,1);
   const toU=kg=>imp()?kg*KG_LB:kg;
-  let h=recCard()+loadCard()+'<div class="card form bwhero"><div class="lbl c">'+t('bwTitle')+'</div>'+
+  const REC=recCard()+loadCard();
+  const bodyTabs=(rec,wt,lg)=>{const c=UI.bt||'rec';return subBar('bt',[['rec',t('bsRec')],['wt',t('bsWt')],['log',t('bsLog')]],c)+subWrap(c==='wt'?wt:(c==='log'?lg:rec));};
+  let h='<div class="card form bwhero"><div class="lbl c">'+t('bwTitle')+'</div>'+
     '<div class="bw-row"><button class="bw-st" aria-label="'+esc(t('bwMinus'))+'" onclick="bwStep(-0.1)">−</button>'+
     '<span class="bw-f"><input id="bw" class="bw-in" type="text" inputmode="decimal" autocomplete="off" placeholder="'+esc(last?wShow(last.w):'0.0')+'"><b class="bw-u">'+wUnit()+'</b></span>'+
     '<button class="bw-st" aria-label="'+esc(t('bwPlus'))+'" onclick="bwStep(0.1)">+</button></div>'+
@@ -187,7 +189,7 @@ function vBody(){
     '<label>'+t('bodyFat')+' (%)<input id="bf" class="in wide" type="text" inputmode="decimal" autocomplete="off"></label>'+
     '<div class="lbl">'+t('measure')+' ('+lUnit()+')</div><div class="two">'+MEAS.map(k=>'<label>'+t('me_'+k)+'<input id="bm_'+k+'" class="in wide" type="text" inputmode="decimal" autocomplete="off"></label>').join('')+'</div>'+
     '<label>'+t('note')+'<input id="bn" class="in wide" type="text" maxlength="120"></label></details></div>';
-  if(!DATA.body.length)return h+'<div class="card tip"><b>'+t('emptyBodyT')+'</b><p>'+t('emptyBodyP')+'</p></div>';
+  if(!DATA.body.length){const tip='<div class="card tip"><b>'+t('emptyBodyT')+'</b><p>'+t('emptyBodyP')+'</p></div>';return bodyTabs(REC,h+tip,tip);}
 
   const ws=DATA.body.filter(b=>b.w>0).slice().reverse();
   if(ws.length){
@@ -205,6 +207,7 @@ function vBody(){
       (goal&&rate!=null&&Math.abs(tr-goal)*toU(1)>=0.5?'<p class="muted sm">'+((goal-tr)*rate>0&&Math.abs(rate)>0.02?(function(){const wk=Math.round((goal-tr)/rate);return wk<=104?t('bwEta',Math.max(1,wk)):'';})():t('bwAway'))+'</p>':'')+
       '<details class="dtl"><summary>'+t('bwGoalH')+'</summary><div class="goalrow"><label>'+t('goal')+' ('+wUnit()+')<input id="bg" class="in" type="text" inputmode="decimal" autocomplete="off" value="'+esc(goal?wShow(goal):'')+'"></label><button class="btn sm" onclick="goalSet()">'+t('set')+'</button></div></details></div>';
   }
+  const WT=h;h='';
   const ms=MEAS.map(k=>{const b=DATA.body.find(x=>x.m&&x.m[k]>0);return b?[k,b.m[k],b.t]:null;}).filter(Boolean);
   if(ms.length)h+='<div class="card"><b>'+t('measure')+'</b><div class="mtab">'+ms.map(a=>'<div><span>'+t('me_'+a[0])+'</span><b>'+lShow(a[1])+' '+lUnit()+'</b><small>'+esc(dFmt(a[2],{month:'short',day:'numeric'}))+'</small></div>').join('')+'</div></div>';
   h+='<div class="sec"><h2>'+t('entries')+'</h2></div>';
@@ -212,7 +215,7 @@ function vBody(){
     const parts=[];if(b.w)parts.push(wShow(b.w)+' '+wUnit());if(b.bf)parts.push(fmtNum(b.bf,1)+'%');if(b.m)parts.push(t('nMeas',Object.keys(b.m).length));
     h+='<div class="card bde"><div><b>'+esc(dFmt(b.t))+'</b><div class="muted sm">'+esc(parts.join(' · '))+(b.note?' — '+esc(b.note):'')+'</div></div>'+xBtn('bodyDel(\''+b.id+'\')')+'</div>';
   });
-  return h;
+  return bodyTabs(REC,WT,h);
 }
 function bodySave(){
   const o={id:uid(),t:dFromInput($('bd').value)};
@@ -235,6 +238,37 @@ function goalSet(){
 }
 
 /* ---------- More ---------- */
+/* second-level tabs: pill bar with a sliding marker, swipe left/right to change / pestañas de segundo nivel: barra de pastillas con marcador deslizante, desliza a los lados para cambiar */
+const SUBS={};
+function subBar(key,opts,cur){
+  const n=opts.length,ci=Math.max(0,opts.findIndex(o=>o[0]===cur)),pi=UI['sp_'+key]!=null?Math.min(n-1,UI['sp_'+key]):ci;
+  SUBS[key]={opts:opts.map(o=>o[0]),cur:opts[ci][0]};UI['sp_'+key]=ci;
+  return'<div class="seg sub" data-k="'+key+'" role="tablist"><span class="sub-ind" style="--n:'+n+';--i:'+pi+'" data-to="'+ci+'"></span>'+opts.map((o,i)=>'<button role="tab" aria-selected="'+(i===ci)+'" class="'+(i===ci?'on':'')+'" onclick="subSet(\''+key+'\',\''+o[0]+'\')">'+esc(o[1])+'</button>').join('')+'</div>';
+}
+function subWrap(html){const d=UI.sdir||0;UI.sdir=0;return'<div class="subc'+(d>0?' from-r':(d<0?' from-l':''))+'">'+html+'</div>';}
+function subSet(k,v){const s=SUBS[k];if(!s||s.cur===v)return;UI.sdir=s.opts.indexOf(v)>s.opts.indexOf(s.cur)?1:-1;UI[k]=v;render();window.scrollTo(0,0);}
+function subAnim(){requestAnimationFrame(()=>{document.querySelectorAll('.sub-ind[data-to]').forEach(e=>{e.style.setProperty('--i',e.dataset.to);});});}
+(function(){
+  let x0=0,y0=0,t0=0,ok=false;
+  function blocked(el){
+    for(let e=el;e&&e!==document.body;e=e.parentElement){
+      const n=e.tagName;if(n==='INPUT'||n==='TEXTAREA'||n==='SELECT')return true;
+      if(e.classList&&(e.classList.contains('swp')||e.classList.contains('noswipe')))return true;
+      if(e.id==='sheet'||(e.classList&&e.classList.contains('sheet')))return true;
+      if(e.scrollWidth>e.clientWidth+4&&/(auto|scroll)/.test(getComputedStyle(e).overflowX))return true;
+    }
+    return false;
+  }
+  document.addEventListener('touchstart',e=>{const p=e.touches[0];x0=p.clientX;y0=p.clientY;t0=Date.now();ok=e.touches.length===1&&!blocked(e.target)&&!!document.querySelector('.seg.sub[data-k]');},{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(!ok)return;ok=false;const p=e.changedTouches[0],dx=p.clientX-x0,dy=p.clientY-y0;
+    if(Math.abs(dx)<70||Math.abs(dy)>Math.abs(dx)*.6||Date.now()-t0>700)return;
+    const bar=document.querySelector('.seg.sub[data-k]');if(!bar)return;
+    const k=bar.getAttribute('data-k'),s=SUBS[k];if(!s)return;
+    const i=s.opts.indexOf(s.cur)+(dx<0?1:-1);if(i<0||i>=s.opts.length)return;
+    subSet(k,s.opts[i]);
+  },{passive:true});
+})();
 function seg(opts,cur,fn){return'<div class="seg">'+opts.map(o=>'<button class="'+(String(o[0])===String(cur)?'on':'')+'" onclick="'+fn+'(\''+o[0]+'\')">'+esc(o[1])+'</button>').join('')+'</div>';}
 function setAuto(v){SET.autoRest=v==='1';saveSet();render();}
 function setSound(v){SET.sound=v==='1';saveSet();render();}
