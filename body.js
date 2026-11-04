@@ -125,30 +125,24 @@ const STR_L=[
  ['row',[['bbrow',1],['bentrow',1],['dbrow',1.6]],[.5,.75,1,1.35,1.7],.65]];
 /* the sex in your plan profile picks the table; heavier lifters are compared fairly (strength grows ~ body weight^0.67) / el sexo del perfil del plan elige la tabla; los más pesados se comparan con justicia */
 function strSex(){const p=DATA.plan&&DATA.plan.prof;return p&&p.sex?p.sex:'x';}
-function strRatio(e,bw,sex){const ref=sex==='f'?62:(sex==='m'?80:71);return e/bw*Math.max(.85,Math.min(1.25,Math.pow(bw/ref,.33)));}
+function strFac(bw,sex){const ref=sex==='f'?62:(sex==='m'?80:71);return Math.max(.85,Math.min(1.25,Math.pow(bw/ref,.33)));}
+function strRatio(e,bw,sex){return e/bw*strFac(bw,sex);}
 function strTh(L,sex){const k=sex==='m'?1:(sex==='f'?L[3]:(1+L[3])/2);return L[2].map(v=>v*k);}
 function strPts(r,th){if(!(r>0))return 0;let lo=0,pl=0;for(let i=0;i<th.length;i++){const hi=th[i],ph=(i+1)*20;if(r<=hi)return Math.round(pl+(ph-pl)*(r-lo)/(hi-lo));lo=hi;pl=ph;}return 100;}
 function strLevel(p){return p>=80?'elite':p>=60?'adv':p>=40?'inter':p>=20?'nov':'beg';}
 function strData(){
-  const bw=(DATA.body.find(x=>x.w)||{}).w,ws=DATA.workouts.slice().sort((a,b)=>a.t-b.t),best={},pts=[],sex=strSex();
+  const bw=(DATA.body.find(x=>x.w)||{}).w,ws=DATA.workouts.slice().sort((a,b)=>a.t-b.t),best={},rec={},cut=Date.now()-180*864e5,pts=[],sex=strSex();
   if(!bw)return{bw:null,n:ws.length,lifts:[],pts:[],score:null};
   const sc=L=>best[L[0]]?strPts(strRatio(best[L[0]],bw,sex),strTh(L,sex)):null;
   ws.forEach(wk=>{
-    wk.ex.forEach(x=>STR_L.forEach(L=>{const m=L[1].find(q=>q[0]===x.eid);if(!m)return;x.sets.forEach(s=>{if(s.done===false||!(s.r>=1&&s.r<=12))return;const e=e1rm(s.w,s.r)*m[1];if(e>(best[L[0]]||0))best[L[0]]=e;});}));
+    wk.ex.forEach(x=>STR_L.forEach(L=>{const m=L[1].find(q=>q[0]===x.eid);if(!m)return;x.sets.forEach(s=>{if(s.done===false||!(s.r>=1&&s.r<=12))return;const e=e1rm(s.w,s.r)*m[1];if(e>(best[L[0]]||0))best[L[0]]=e;if(wk.t>=cut&&e>(rec[L[0]]||0))rec[L[0]]=e;});}));
     const v=STR_L.map(sc).filter(x=>x!=null);
     if(v.length)pts.push({t:wk.t,y:Math.round(v.reduce((a,c)=>a+c,0)/v.length)});
   });
-  const lifts=STR_L.map(L=>({k:L[0],e:best[L[0]]||0,p:sc(L)}));
-  return{bw:bw,n:ws.length,lifts:lifts,pts:pts,score:pts.length?pts[pts.length-1].y:null,sex:sex};
-}
-function strCard(){
-  const d=strData(),lock=d.n<3||d.score==null;
-  let h='<div class="sec"><h2>'+t('strT')+'</h2></div><div class="card strc">';
-  if(!d.bw)return h+'<p class="muted sm">'+t('strBw')+'</p><button class="btn sm" onclick="go(\'body\')">'+t('strBwGo')+'</button></div>';
-  if(lock)return h+'<p class="muted sm">'+t('strLock',Math.max(0,3-d.n))+'</p></div>';
-  h+='<div class="str-top"><b>'+d.score+'</b><span>'+t('lv_'+strLevel(d.score))+'</span></div>'+(d.pts.length>1?lineSvg(d.pts,function(v){return String(Math.round(v));}):'')+
-    '<div class="str-l">'+d.lifts.map(l=>'<div><span>'+t('sl_'+l.k)+'</span><i><u style="width:'+(l.p||0)+'%"></u></i><small>'+(l.p==null?'—':wShow(l.e)+' '+wUnit())+'</small></div>').join('')+'</div><p class="muted sm">'+t('strInfo')+'</p></div>';
-  return h;
+  const scc=L=>rec[L[0]]?strPts(strRatio(rec[L[0]],bw,sex),strTh(L,sex)):null; // current = best of the last 6 months / actual = mejor de los últimos 6 meses
+  const lifts=STR_L.map(L=>({k:L[0],e:best[L[0]]||0,p:sc(L),ec:rec[L[0]]||0,pc:scc(L)}));
+  const cv=lifts.filter(l=>l.pc!=null).map(l=>l.pc);
+  return{bw:bw,n:ws.length,lifts:lifts,pts:pts,score:pts.length?pts[pts.length-1].y:null,cur:cv.length?Math.round(cv.reduce((a,c)=>a+c,0)/cv.length):null,sex:sex};
 }
 /* a workout from the muscles that have recovered / un entrenamiento con los músculos ya recuperados */
 function recWorkout(only,sub){

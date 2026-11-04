@@ -693,3 +693,20 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 .cal-d:disabled{background:none;opacity:.55}.cal-d.on{background:var(--accent);color:#fff;font-weight:800}.cal-d.td{box-shadow:0 0 0 2px var(--txt)}.cal-d.sel{box-shadow:0 0 0 3px var(--txt)}
 .cal-d u{text-decoration:none;font-size:.4rem;line-height:.5;letter-spacing:1px;margin-top:2px;min-height:.4rem}
 .cal-s{text-align:center;margin:12px 0 6px}
+
+.rkc .rk-back{margin:2px 0 6px;font-size:.82rem;font-weight:700;color:#ffa000}
+.rk-bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:10px 0 4px}.rk-bar u{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.rk-nx{margin:2px 0 10px}
+.rk-l{display:flex;flex-direction:column;margin:10px 0}
+.rk-r{display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:8px;padding:10px 0;border:0;border-top:1px solid var(--line);background:none;color:var(--txt);text-align:left;font-size:.88rem}
+.rk-r i{display:block;height:8px;border-radius:4px;background:var(--line);overflow:hidden}.rk-r u{display:block;height:100%;background:var(--accent);border-radius:4px}
+.rk-n{font-weight:600}.rk-c{font-weight:800;color:var(--accent);font-size:.8rem;min-width:70px;text-align:right}
+.rk-r.open .rk-n{color:var(--accent)}
+.rk-d{padding:2px 0 12px;font-size:.88rem}.rk-d p{margin:4px 0}.rk-d .btn{margin-top:6px}
+.rk-th{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
+.rkup{text-align:center}.rk-big svg{width:56px;height:56px;color:var(--accent)}.rk-big h2{margin:8px 0 2px}.rk-big b{display:block;font-size:2rem;font-weight:800;color:var(--accent)}
+.radar{width:100%;height:auto;display:block;margin:6px auto 0}
+.rd-ring{fill:none;stroke:var(--line);stroke-width:1}.rd-ax{stroke:var(--line);stroke-width:1}
+.rd-v{fill:color-mix(in srgb,var(--accent) 30%,transparent);stroke:var(--accent);stroke-width:2;stroke-linejoin:round}
+.rd-d{fill:var(--accent)}.rd-t{fill:var(--txt);font-size:11px;font-weight:700}
+.bal-w{margin-top:8px}.bal-r{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}.bal-r small{display:block;color:var(--dim);font-size:.78rem}
