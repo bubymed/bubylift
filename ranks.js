@@ -109,3 +109,26 @@ function balCard(){
     '<div class="bal-w"><b>'+t('balWeak')+'</b>'+(weak.length?weak.map(k=>'<div class="bal-r"><span><b>'+t('ms_'+k)+'</b><small>'+t('balSets',(Math.round(d.subs[k].wk*10)/10),MUS_TGT[k])+'</small></span><button class="btn sm" onclick="recWorkout(null,\''+k+'\')">'+t('recSubTrain')+'</button></div>').join(''):'<p class="muted sm">'+t('balGood')+'</p>')+'</div>'+
     '<details class="dtl pv-dt"><summary><b>'+t('balInfoT')+'</b></summary><p class="muted sm">'+t('balInfo')+'</p></details></div>';
 }
+
+/* bodyweight skills: pull-ups, push-ups and dips ranked by your best set (added weight counts), outside the strength score / habilidades con peso corporal: dominadas, flexiones y fondos por tu mejor serie (el peso extra cuenta), fuera de la puntuación de fuerza */
+const BW_L=[['pullup',['pullup','chinup'],[3,8,15,22,30],[1,4,9,14,20]],['pushup',['pushup'],[10,25,40,60,80],[5,15,28,42,60]],['dip',['dip'],[3,10,18,26,35],[1,5,10,16,22]]];
+function bwTh(L,sex){return sex==='f'?L[3]:L[2];}
+function bwData(now){
+  now=now||Date.now();const cut=now-180*864e5,sex=strSex(),bw=(DATA.body.find(x=>x.w)||{}).w||0,rec={},best={};
+  DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{const L=BW_L.find(q=>q[1].indexOf(x.eid)>=0);if(!L)return;x.sets.forEach(s=>{
+    if(s.done===false||!(s.r>0))return;const e=s.r*(1+(bw&&s.w>0?s.w/bw:0));
+    if(e>(best[L[0]]||0))best[L[0]]=e;if(wk.t>=cut&&e>(rec[L[0]]||0))rec[L[0]]=e;});}));
+  return BW_L.map(L=>{const th=bwTh(L,sex),pk=best[L[0]]?strPts(best[L[0]],th):null,cu=rec[L[0]]?strPts(rec[L[0]],th):null;
+    const ix=cu!=null?rkIdx(cu):null,nx=ix!=null&&ix<RK_T.length-1?Math.ceil(strInv(RK_T[ix+1],th)):null;
+    return{k:L[0],best:best[L[0]]||0,rec:rec[L[0]]||0,pk:pk,cu:cu,ix:ix,pix:pk!=null?rkIdx(pk):null,next:nx,th:th};});
+}
+function bwCard(){
+  const d=bwData(),any=d.some(x=>x.pk!=null),h0='<div class="card bwc"><div class="lbl">'+t('bwT')+'</div>';
+  if(!any)return h0+'<p class="rk-ask">'+t('bwEmpty')+'</p></div>';
+  return h0+d.map(x=>{
+    if(x.pk==null)return'<div class="bw-r"><span class="rk-n">'+t('bw_'+x.k)+'</span><span class="muted sm">—</span></div>';
+    const ix=x.ix!=null?x.ix:x.pix,back=x.ix==null?t('rkAway',rkName(x.pix)):(x.pix>x.ix?t('rkBack',rkName(x.pix)):'');
+    return'<div class="bw-r"><span class="rk-n">'+t('bw_'+x.k)+'<small>'+t('bwBest',Math.round(x.best*10)/10)+'</small></span><span class="bw-c"><span class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</span>'+
+      (back?'<small class="rk-back">'+back+'</small>':'')+(x.next&&x.ix!=null?'<small>'+t('bwReps',x.next,rkName(ix+1))+'</small>':'')+'</span></div>';}).join('')+
+    '<details class="dtl pv-dt"><summary><b>'+t('bwInfoT')+'</b></summary><p class="muted sm">'+t('bwInfo')+'</p></details></div>';
+}

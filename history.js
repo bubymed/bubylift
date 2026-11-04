@@ -124,14 +124,14 @@ function setPm(k){UI.pm=k;render();}
 function closeProg(){UI.prog=null;render();window.scrollTo(0,0);}
 
 function vProgress(){
-  if(!DATA.workouts.length)return goalsCard()+strCard()+emptyState('chart-bar',t('emptyProgT'),t('emptyProgP'),t('emStart'),"go('workout')");
+  if(!DATA.workouts.length)return goalsCard()+strCard()+bwCard()+emptyState('chart-bar',t('emptyProgT'),t('emptyProgP'),t('emStart'),"go('workout')");
   if(UI.prog)return vExProg(UI.prog);
   const now=Date.now(),ws=weekStart(now),vals=[],labels=[];
   for(let i=7;i>=0;i--){const a=ws-i*7*864e5,b=a+7*864e5;vals.push(DATA.workouts.filter(w=>w.t>=a&&w.t<b).length);labels.push(dFmt(a,{month:'numeric',day:'numeric'}));}
   let vol=0,sets=0;DATA.workouts.forEach(w=>{vol+=wkVol(w);sets+=wkSets(w);});
   let h=streakCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
   h+='<div class="card"><b>'+t('perWeek')+'</b>'+barSvg(vals,labels)+'</div>';
-  h+=strCard()+xpCard()+balCard()+featCharts()+rmCalc();
+  h+=strCard()+bwCard()+xpCard()+balCard()+featCharts()+rmCalc();
   h+='<div class="sec"><h2>'+t('exercises')+'</h2></div>';
   h+='<div class="lgrp">';
   loggedEx().forEach(o=>{
