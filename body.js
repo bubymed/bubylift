@@ -23,7 +23,8 @@ function bwStep(d){
    recuperación muscular según lo que registraste, por parte del músculo (data/musc.js): cada ejercicio trabaja varias partes con distinto peso; cada parte tiene su ventana y la fatiga no recuperada se arrastra */
 const REC_G=['chest','back','shoulders','biceps','triceps','legs','glutes','core'];
 let _MW={};
-function muW(eid){ // [[part, weight],...] of an exercise / partes y pesos de un ejercicio
+function muW(eid,vr){ // [[part, weight],...] of an exercise (and variation) / partes y pesos de un ejercicio (y variante)
+  if(vr&&typeof muVar==='function')return muVar(muW(eid),eid,vr);
   if(_MW[eid]!==undefined)return _MW[eid];
   const e=exById(eid);let r=null;
   if(e){const str=EXMU[eid]||MUS_DEF[e.g];if(str){r=[];str.split(' ').forEach(p=>{const m=/^([a-z]+)([\d.]+)$/.exec(p);if(m&&MUS_BASE[m[1]])r.push([m[1],+m[2]]);});}}
@@ -37,7 +38,7 @@ function recData(now){
   const ev={};Object.keys(MUS_BASE).forEach(k=>{ev[k]=[];});let lastT=0;
   DATA.workouts.slice().sort((x,y)=>(x.end||x.t)-(y.end||y.t)).forEach(wk=>{
     const eff={},end=wk.end||wk.t;let any=0;
-    wk.ex.forEach(x=>{const w=muW(x.eid);if(!w)return;const n=x.sets.filter(q=>q.done!==false&&(q.r>0||q.t>0)).length;if(!n)return;any=1;w.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});});
+    wk.ex.forEach(x=>{const w=muW(x.eid,x.vr);if(!w)return;const n=x.sets.filter(q=>q.done!==false&&(q.r>0||q.t>0)).length;if(!n)return;any=1;w.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});});
     if(any&&end>lastT)lastT=end;
     for(const k in eff)if(eff[k]>=1)ev[k].push([end,eff[k]]);
   });
@@ -135,7 +136,7 @@ function strData(){
   if(!bw)return{bw:null,n:ws.length,lifts:[],pts:[],score:null};
   const sc=L=>best[L[0]]?strPts(strRatio(best[L[0]],bw,sex),strTh(L,sex)):null;
   ws.forEach(wk=>{
-    wk.ex.forEach(x=>STR_L.forEach(L=>{const m=L[1].find(q=>q[0]===x.eid);if(!m)return;x.sets.forEach(s=>{if(s.done===false||!(s.r>=1&&s.r<=12))return;const e=e1rm(s.w,s.r)*m[1];if(e>(best[L[0]]||0))best[L[0]]=e;if(wk.t>=cut&&e>(rec[L[0]]||0))rec[L[0]]=e;});}));
+    wk.ex.forEach(x=>x.vr?0:STR_L.forEach(L=>{const m=L[1].find(q=>q[0]===x.eid);if(!m)return;x.sets.forEach(s=>{if(s.done===false||!(s.r>=1&&s.r<=12))return;const e=e1rm(s.w,s.r)*m[1];if(e>(best[L[0]]||0))best[L[0]]=e;if(wk.t>=cut&&e>(rec[L[0]]||0))rec[L[0]]=e;});}));
     const v=STR_L.map(sc).filter(x=>x!=null);
     if(v.length)pts.push({t:wk.t,y:Math.round(v.reduce((a,c)=>a+c,0)/v.length)});
   });
@@ -298,7 +299,7 @@ function csvCell(v){
 function exportCSV(){
   const rows=[['date','workout','exercise','set','weight','weight_unit','reps','minutes','distance','distance_unit','pr','set_type']];
   DATA.workouts.slice().reverse().forEach(wk=>wk.ex.forEach(x=>x.sets.forEach((s,i)=>{
-    rows.push([dInput(wk.t),wk.name,exName(x.eid,x.n),i+1,s.w!=null?wShow(s.w):'',wUnit(),s.r!=null?s.r:'',s.t!=null?s.t:'',s.d?dShow(s.d):'',dUnit(),s.pr?1:'',s.ty||'']);
+    rows.push([dInput(wk.t),wk.name,exNameV(x.eid,x.vr,x.n),i+1,s.w!=null?wShow(s.w):'',wUnit(),s.r!=null?s.r:'',s.t!=null?s.t:'',s.d?dShow(s.d):'',dUnit(),s.pr?1:'',s.ty||'']);
   })));
   fileOut('bubylift-workouts-'+dInput(Date.now())+'.csv','﻿'+rows.map(r=>r.map(csvCell).join(',')).join('\n'),'text/csv');
   toast(t('exported'));

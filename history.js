@@ -47,7 +47,7 @@ function wkCard(wk){
   return'<div class="wkw"><button class="lrow wkrow" onclick="openWk(\''+wk.id+'\')"><span class="dchip"><b>'+dt.getDate()+'</b><small>'+esc(dt.toLocaleDateString(LANG==='es'?'es':'en',{month:'short'}).replace('.',''))+'</small></span>'+
     '<span class="lt2"><b>'+esc(wk.name||dFmt(wk.t,{weekday:'long'}))+(pr?' <span class="pr">'+ic('trophy')+' '+pr+'</span>':'')+'</b>'+
     '<small>'+(d?fmtDur(d)+(wk.ex.length?' · ':''):'')+(wk.ex.length?t('nSetsT',wkSets(wk)):'')+(vol?' · '+wShow(vol)+' '+wUnit():'')+'</small>'+
-    '<small>'+(wk.ex.length?wk.ex.slice(0,3).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(wk.ex.length>3?' …':''):esc(spName(wk.sp)))+(wk.hr?' · '+ic('heart')+' '+wk.hr.a:'')+(wk.kcal?' · '+wk.kcal+' kcal':'')+'</small></span><span class="lc">›</span></button>'+xBtn('delWkAsk(\''+wk.id+'\')')+'</div>';
+    '<small>'+(wk.ex.length?wk.ex.slice(0,3).map(x=>esc(exNameV(x.eid,x.vr,x.n))).join(' · ')+(wk.ex.length>3?' …':''):esc(spName(wk.sp)))+(wk.hr?' · '+ic('heart')+' '+wk.hr.a:'')+(wk.kcal?' · '+wk.kcal+' kcal':'')+'</small></span><span class="lc">›</span></button>'+xBtn('delWkAsk(\''+wk.id+'\')')+'</div>';
 }
 function vHistory(){
   if(!DATA.workouts.length)return emptyState('clipboard-list',t('emptyHistT'),t('emptyHistP'),t('emStart'),"go('workout')");
@@ -64,7 +64,7 @@ function vHistory(){
 }
 function wkText(wk){
   let s=wk.name+' — '+dFmt(wk.t)+'\n';
-  wk.ex.forEach(x=>{const m=exMode(x.eid);s+='\n'+exName(x.eid,x.n)+'\n';x.sets.forEach((st,i)=>{s+='  '+(i+1)+') '+fmtSet(m,st)+(st.pr?' 🏆':'')+'\n';});});
+  wk.ex.forEach(x=>{const m=exMode(x.eid);s+='\n'+exNameV(x.eid,x.vr,x.n)+'\n';x.sets.forEach((st,i)=>{s+='  '+(i+1)+') '+fmtSet(m,st)+(st.pr?' 🏆':'')+'\n';});});
   if(wk.note)s+='\n'+wk.note+'\n';
   return s+'\nBubylift';
 }
@@ -76,7 +76,7 @@ function openWk(id){
     ((wk.hr||wk.kcal)?'<div class="stats svst">'+(wk.hr?'<div><b>'+wk.hr.a+'</b><span>'+t('svAvg')+'</span></div><div><b>'+wk.hr.m+'</b><span>'+t('svMax')+'</span></div>':'')+(wk.kcal?'<div><b>'+wk.kcal+'</b><span>kcal</span></div>':'')+'</div>'+(wk.sv?'<p class="muted sm c">Powered by Strava</p>':''):'');
   wk.ex.forEach(x=>{
     const m=exMode(x.eid);
-    h+='<div class="wkd-ex"><b>'+esc(exName(x.eid,x.n))+'</b>'+x.sets.map((s,i)=>'<div class="wkd-s"><span>'+(i+1)+'</span><span>'+esc(fmtSet(m,s))+'</span>'+(s.pr?'<i class="pr">'+ic('trophy')+'</i>':'')+'</div>').join('')+'</div>';
+    h+='<div class="wkd-ex"><b>'+esc(exNameV(x.eid,x.vr,x.n))+'</b>'+x.sets.map((s,i)=>'<div class="wkd-s"><span>'+(i+1)+'</span><span>'+esc(fmtSet(m,s))+'</span>'+(s.pr?'<i class="pr">'+ic('trophy')+'</i>':'')+'</div>').join('')+'</div>';
   });
   if(wk.note)h+='<p class="wkd-note">'+esc(wk.note)+'</p>';
   h+='<div class="menu"><button onclick="repeatWk(\''+id+'\')">↻ '+t('repeat')+'</button><button onclick="saveWkAsRoutine(\''+id+'\')">☰ '+t('saveRoutineS')+'</button>'+(typeof stravaOn==='function'&&stravaOn()?'<button onclick="stravaGet(\''+id+'\')">♥ '+t('svGet')+'</button>':'')+'<button onclick="shareWk(\''+id+'\')">⇪ '+t('share')+'</button><button onclick="wkPic(\''+id+'\')">'+ic('share')+' '+t('cdBtn')+'</button><button class="danger" onclick="delWkAsk(\''+id+'\')">'+ic('trash')+' '+t('delete')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>';
