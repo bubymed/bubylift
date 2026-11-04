@@ -771,3 +771,7 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 
 .rk-tz{display:block;width:100%;text-align:left;color:var(--txt);font:inherit}.rk-tz .rk-hero{padding:2px 0}.rk-ask{margin:4px 0 10px;font-size:.95rem;line-height:1.4}
 button.rk-tz{cursor:pointer}
+
+.bw-r{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.bw-r small{display:block;color:var(--dim);font-size:.78rem;font-weight:500}
+.bw-c{display:flex;flex-direction:column;align-items:flex-end;text-align:right}.bw-c .rkn{font-size:1.5rem}.bw-c .rk-back{color:#ffa000;font-weight:700}
+.bwc .lbl{margin-bottom:4px}

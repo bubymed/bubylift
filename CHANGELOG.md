@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.52 — 2026-10-30
+- Bodyweight ranks: pull-ups, push-ups and dips ranked on the same 16-rank ladder by your best set (added weight counts), with the reps needed for the next rank.
+  Rangos con peso corporal: dominadas, flexiones y fondos en la misma escalera de 16 rangos por tu mejor serie (el peso extra cuenta), con las repeticiones que faltan para el siguiente rango.
+
 ## v1.1.51 — 2026-10-30
 - Your rank now shows on the Workout home, and asks for your body weight or the workouts you still need to reveal it. Also visible on Progress before your first workout.
   Tu rango ahora se muestra en el inicio de Entrenar, y te pide tu peso corporal o los entrenamientos que te faltan para revelarlo. También se ve en Progreso antes de tu primer entrenamiento.
