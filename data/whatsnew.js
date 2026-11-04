@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.59',items:[
+  {i:'🛠',en:'<b>Fixes:</b> the "How much time do you have?" sheet no longer shows the Share-the-app title and QR text; the workout clock shows hours past 60 minutes.',es:'<b>Arreglos:</b> la hoja «¿Cuánto tiempo tienes?» ya no muestra el título y texto de «Compartir la app»; el reloj del entrenamiento muestra horas pasados los 60 minutos.'}
+ ]},
  {v:'v1.1.58',items:[
   {i:'📷',en:'<b>Share card:</b> fixed Save/Copy/More showing "preparing your picture…" forever and saving nothing.',es:'<b>Tarjeta para compartir:</b> arreglado que Guardar/Copiar/Más mostraran «preparando tu imagen…» para siempre sin guardar nada.'}
  ]},

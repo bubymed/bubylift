@@ -4,7 +4,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.58';
+const APP_VER='v1.1.59';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -60,7 +60,7 @@ const loc=()=>LANG==='es'?'es':'en-US';
 function dFmt(ts,o){return new Date(ts).toLocaleDateString(loc(),o||{month:'short',day:'numeric',year:'numeric'});}
 function dInput(ts){const d=new Date(ts);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function dFromInput(s){const p=String(s).split('-').map(Number);if(p.length!==3||p.some(isNaN))return Date.now();return new Date(p[0],p[1]-1,p[2],12,0,0).getTime();}
-function weekStart(ts){const d=new Date(ts);d.setHours(0,0,0,0);const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return d.getTime();}
+function weekStart(ts){const d=new Date(ts==null?Date.now():ts);d.setHours(0,0,0,0);const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return d.getTime();}
 function fmtDur(sec){sec=Math.max(0,Math.round(sec));const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60);return h?h+'h '+String(m).padStart(2,'0')+'m':m+'m';}
 function fmtClock(sec){sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(s).padStart(2,'0');}
 

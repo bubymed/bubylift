@@ -104,12 +104,12 @@ function chQty(s){
 function chSegTxt(s){return exName(s.id)+' '+chQty(s);}
 function chScoreTxt(ty,sc){
   if(!sc)return'';
-  if(ty==='time')return fmtClock(sc.v);
+  if(ty==='time')return chClock(sc.v);
   if(ty==='amrap')return t('chRounds',sc.r,sc.x||0);
   if(ty==='emom')return t('chMin',sc.v);
   return t('chReps',sc.v);
 }
-function fmtClock(sec){sec=Math.max(0,Math.round(sec));const m=Math.floor(sec/60),s=sec%60;return m+':'+String(s).padStart(2,'0');}
+function chClock(sec){sec=Math.max(0,Math.round(sec));const m=Math.floor(sec/60),s=sec%60;return m+':'+String(s).padStart(2,'0');}
 function chKey(sc,ty){return ty==='time'?-sc.v:(ty==='amrap'?sc.r*1000+(sc.x||0):sc.v);}
 function chLvOf(ch){return ch.v===2?ch.lv:[0,2,4][ch.lv];} // results saved before the ranks / resultados anteriores a los rangos
 function chBest(id,li,ty){
@@ -245,16 +245,16 @@ function chPos(){
 function chTick(){
   if(!CHR||!CHR.run||CHR.done){chStop();return;}
   const c=CHR.b.c,p=chPos(),el=$('chclk');
-  if(c.ty==='time'){if(el)el.textContent=fmtClock(chElapsed());return;}
+  if(c.ty==='time'){if(el)el.textContent=chClock(chElapsed());return;}
   if(p.end){beep();chStop();CHR.done=true;chEnd();return;}
   if(c.ty==='emom'){
     if(CHR.ph!==p.k){if(CHR.ph>=0)beep();CHR.ph=p.k;chDraw();}
-    const e2=$('chclk');if(e2)e2.textContent=fmtClock(p.left);
+    const e2=$('chclk');if(e2)e2.textContent=chClock(p.left);
   }else if(c.ty==='interval'){
     if(CHR.ph!==p.key){if(CHR.ph!==-1)beep();CHR.ph=p.key;chDraw();}
     const e2=$('chclk');if(e2)e2.textContent=String(Math.ceil(p.left));
   }else{
-    if(el)el.textContent=fmtClock(p.left);
+    if(el)el.textContent=chClock(p.left);
     if(!CHR.warn&&p.left<=10){CHR.warn=1;beep();}
   }
 }
@@ -269,17 +269,17 @@ function chDraw(){
   }
   const p=chPos();
   if(c.ty==='time'){
-    h+='<div class="chclk" id="chclk">'+fmtClock(chElapsed())+'</div><p class="muted sm center">'+t('chCap',c.cap)+'</p>';
+    h+='<div class="chclk" id="chclk">'+chClock(chElapsed())+'</div><p class="muted sm center">'+t('chCap',c.cap)+'</p>';
     const per=c.rd>1?b.segs.length/c.rd:b.segs.length;
-    h+=b.segs.map((s,i)=>'<div class="chseg'+(i<CHR.idx?' done':(i===CHR.idx?' now':''))+'">'+(c.rd>1&&i%per===0?'<small>'+t('chRound',s.r+1)+'</small>':'')+'<span>'+(i<CHR.idx?'✓ ':'')+esc(chSegTxt(s))+'</span>'+(i<CHR.idx?'<i>'+fmtClock(CHR.splits[i])+'</i>':'')+'</div>').join('');
+    h+=b.segs.map((s,i)=>'<div class="chseg'+(i<CHR.idx?' done':(i===CHR.idx?' now':''))+'">'+(c.rd>1&&i%per===0?'<small>'+t('chRound',s.r+1)+'</small>':'')+'<span>'+(i<CHR.idx?'✓ ':'')+esc(chSegTxt(s))+'</span>'+(i<CHR.idx?'<i>'+chClock(CHR.splits[i])+'</i>':'')+'</div>').join('');
     h+='<div class="row"><button class="btn pri big wide" onclick="chSegDone()">'+(CHR.idx>=b.segs.length-1?t('chFinishB'):t('chNext'))+'</button></div>';
   }else if(c.ty==='amrap'){
-    h+='<div class="chclk" id="chclk">'+fmtClock(p.left)+'</div><div class="chr"><b>'+CHR.rounds+'</b> '+t('chRoundsL')+'</div>'+
+    h+='<div class="chclk" id="chclk">'+chClock(p.left)+'</div><div class="chr"><b>'+CHR.rounds+'</b> '+t('chRoundsL')+'</div>'+
       '<div class="card optb"><ol class="how">'+b.segs.map(s=>'<li>'+esc(chSegTxt(s))+'</li>').join('')+'</ol></div>'+
       '<div class="row"><button class="btn pri big wide" onclick="chRound()">+1 '+t('chRoundsL')+'</button></div><div class="row"><button class="btn" onclick="chUndo()">−1</button><button class="btn" onclick="chEnd()">'+t('chFinishNow')+'</button></div>';
   }else if(c.ty==='emom'){
     const cur=b.segs[p.k%b.segs.length],nx=b.segs[(p.k+1)%b.segs.length];
-    h+='<div class="chclk" id="chclk">'+fmtClock(p.left)+'</div><p class="center muted">'+t('chMinute',p.k+1,c.cap)+'</p><div class="chnow">'+esc(chSegTxt(cur))+'</div><p class="center muted sm">'+t('chNextUp')+': '+esc(chSegTxt(nx))+'</p><div class="row"><button class="btn" onclick="chEnd()">'+t('chFinishNow')+'</button></div>';
+    h+='<div class="chclk" id="chclk">'+chClock(p.left)+'</div><p class="center muted">'+t('chMinute',p.k+1,c.cap)+'</p><div class="chnow">'+esc(chSegTxt(cur))+'</div><p class="center muted sm">'+t('chNextUp')+': '+esc(chSegTxt(nx))+'</p><div class="row"><button class="btn" onclick="chEnd()">'+t('chFinishNow')+'</button></div>';
   }else{
     const cur=b.segs[Math.min(p.mv||0,b.segs.length-1)];
     h+='<div class="chclk '+(p.work?'work':'rest')+'" id="chclk">'+Math.ceil(p.left||0)+'</div><p class="center"><b>'+(p.work?t('chWork'):t('chRestL'))+'</b> · '+t('chRoundOf',(p.round||0)+1,b.rd)+'</p><div class="chnow">'+esc(exName(cur.id))+'</div><div class="row"><button class="btn" onclick="chEnd()">'+t('chFinishNow')+'</button></div>';

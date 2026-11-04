@@ -467,7 +467,6 @@ function suggLine(x){
 
 /* ---------- progress through the plan ---------- */
 function planDone(){const p=DATA.plan;return p?DATA.workouts.filter(w=>w.pl!=null&&w.t>=p.t0):[];}
-function weekStart(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d.getTime();}
 function planNext(){const p=DATA.plan;if(!p)return 0;
   if(p.wu&&Array.isArray(p.wd)){const i=p.wd.indexOf(new Date().getDay());if(i>=0&&!planDone().some(w=>w.pl===i&&dInput(w.t)===dInput(Date.now())))return i;} // your own schedule decides today / tu horario decide hoy
   return Number.isInteger(p.cur)?p.cur%p.n:planDone().length%p.n;}
@@ -600,7 +599,7 @@ function shortDay(ex,min){
 }
 function shortOpen(){
   const p=DATA.plan;if(!p)return;const i=planNext();
-  sheet('<div class="form"><div class="pick-h"><h3>'+t('shT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted sm">'+t('shP')+'</p>'+
+  sheet('<div class="form"><div class="pick-h"><h3>'+t('sdT')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted sm">'+t('sdP')+'</p>'+
     [20,30,45].map(m=>{const n=shortDay(p.ds[i].ex,m).length;return'<button class="exrow" onclick="planStartShort('+i+','+m+')"><b>'+t('shMin',m)+'</b><small>'+t('shN2',n,p.ds[i].ex.length)+'</small></button>';}).join('')+'</div>');
 }
 function planStartShort(i,m){
