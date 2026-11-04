@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.54 — 2026-10-30
+- First time with an exercise now suggests a starting weight range from your body weight. New Seated variation for curls, shoulder presses and raises.
+  La primera vez con un ejercicio ahora sugiere un rango de peso inicial según tu peso corporal. Nueva variante Sentado para curls, press de hombros y elevaciones.
+
 ## v1.1.53 — 2026-10-30
 - Exercise variations: choose underhand, neutral, wide or close grip on rows, pulldowns, pull-ups, presses and curls. Each variation shifts the muscle map and keeps its own last time and records.
   Variantes de ejercicio: elige agarre supino, neutro, ancho o cerrado en remos, jalones, dominadas, press y curls. Cada variante cambia el mapa muscular y guarda su propia última vez y récords.
