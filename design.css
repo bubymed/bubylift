@@ -664,7 +664,11 @@ body.kbd #tabbar,body.kbd:has(#sheet.pks) #restbar,body.kbd:has(#sheet.pks) #skb
 .cs-ai{width:50px;height:50px;border-radius:50%;background:var(--card,#2a2a30);display:flex;align-items:center;justify-content:center}
 .cs-ai svg{width:24px;height:24px}
 .cs-a.ig .cs-ai{background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);color:#fff}
-.cs-opt{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:10px;background:none;border:0;color:var(--dim);font-size:.82rem;font-weight:600}
-.cs-opt svg{width:16px;height:16px}
+.cs-opt{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;min-height:46px;padding:0 16px;border-radius:14px;background:var(--panel2);border:1.5px solid color-mix(in srgb,var(--txt) 28%,transparent);color:var(--txt);font-size:.9rem;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s,transform .1s}
+.cs-opt:active{transform:scale(.97);background:color-mix(in srgb,var(--accent) 22%,var(--panel2))}
+.cs-opt.on{border-color:var(--accent);color:var(--accent)}
+.cs-chv{font-style:normal;font-size:.8rem;transition:transform .2s}
+.cs-opt.on .cs-chv{transform:rotate(180deg)}
+.cs-opt svg{width:18px;height:18px}
 .cs-adv{max-height:42vh;overflow-y:auto;margin-bottom:10px}
 .cs-ori{margin:6px 0 4px}.cs-g[hidden]{display:none}

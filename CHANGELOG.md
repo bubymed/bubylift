@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.45 — 2026-10-30
+- **Clearer share button** — “Background, size and color” now looks like a button (border, arrow that flips when open).
+  **Botón de compartir más claro** — “Fondo, tamaño y color” ahora parece un botón (borde y flecha que gira al abrir).
+
 ## v1.1.44 — 2026-10-30
 - The 'Fun' share card now compares your lifted volume to 52 things, from watermelons and tigers to F-35 jets and M1 Abrams tanks. The pick follows the numbers you lifted, so every workout gets its own, and big days earn epic ones and a rarity tag. Tap the style again to shuffle.
   La tarjeta 'Curioso' ahora compara tu volumen con 52 cosas, desde sandías y tigres hasta cazas F-35 y tanques M1 Abrams. La elección sigue los números que levantaste, así que cada entrenamiento tiene la suya, y los días grandes ganan objetos épicos y una etiqueta de rareza. Toca el estilo otra vez para cambiarla.
