@@ -3,7 +3,7 @@
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
  {v:'v1.1.65',items:[
-  {i:'🏅',en:'Your rank now stands out on the Workout home: card tinted with your rank\'s color, bigger name and glowing progress bar. Plus 3 new muscle share cards: Muscle map, Recovery and Muscles.',es:'Tu rango ahora destaca en el inicio: tarjeta teñida con el color de tu rango, nombre más grande y barra con brillo. Y 3 tarjetas nuevas con músculos para compartir: Mapa, Recuperación y Músculos.'}
+  {i:'🏅',en:'Your rank now stands out on the Workout home: card tinted with your rank\'s color, bigger name and glowing progress bar. Plus 2 new muscle share cards: Muscle map and Muscles.',es:'Tu rango ahora destaca en el inicio: tarjeta teñida con el color de tu rango, nombre más grande y barra con brillo. Y 2 tarjetas nuevas con músculos para compartir: Mapa y Músculos.'}
  ]},
  {v:'v1.1.64',items:[
   {i:'🏋️',en:'Body share card: crops to the half you trained (upper / lower / full) and has 3 detail levels: Quick, Detailed, Complete. Recovery map now uses a smooth red-to-green gradient.',es:'Tarjeta Cuerpo: se recorta a la mitad que entrenaste (arriba / abajo / completo) y tiene 3 niveles de detalle: Rápida, Detallada, Completa. El mapa de recuperación usa un degradado suave de rojo a verde.'}

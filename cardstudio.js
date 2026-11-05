@@ -1,6 +1,6 @@
 /* Share studio (v95): transparent workout cards in 7 styles — put them over any photo or story, or add a photo here.
    Estudio de tarjetas (v95): tarjetas con fondo transparente en 7 estilos — ponlas sobre cualquier foto o historia, o agrega una foto aquí. */
-const CS_STYLES=['giant','vert','row','dots','classic','stack','poster','chips','lifts','badge','bar','pr','fun','duo','body','bone','brec','bpill'];
+const CS_STYLES=['giant','vert','row','dots','classic','stack','poster','chips','lifts','badge','bar','pr','fun','duo','body','bone','bpill'];
 const CS_H={giant:1,dots:1,lifts:1,fun:1,duo:1}; // styles that also come in a wide version / estilos que también tienen versión ancha
 const CS_CLEAN={giant:1,dots:1,vert:1,row:1}; // already big and bold: no panel needed / ya son grandes y claros: sin panel
 let CS=null;
@@ -155,7 +155,7 @@ function csRender(o,sc){
   /* soft shadow so text reads on any photo / sombra suave para leer sobre cualquier foto */
   const shadow=function(){g.shadowColor='transparent';g.shadowBlur=0;g.shadowOffsetY=0;}; // no glow behind letters: clean edges / sin brillo detrás de las letras: bordes limpios
   shadow(true);
-  const S=({giant:csGiant,vert:csVert,row:csRow,dots:csDots,classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,pr:csPrCard,fun:csFun,duo:csDuo,body:csBody,bone:csBodyOne,brec:csBodyRec,bpill:csBodyPill})[o.style]||csClassic;
+  const S=({giant:csGiant,vert:csVert,row:csRow,dots:csDots,classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,pr:csPrCard,fun:csFun,duo:csDuo,body:csBody,bone:csBodyOne,bpill:csBodyPill})[o.style]||csClassic;
   /* where the block sits: top, middle or bottom / dónde queda el bloque: arriba, centro o abajo */
   const dy=o.pos==='top'?Math.round(H*.26-(B-330)):(o.pos==='mid'?Math.round(H*.5-(B-330)):0);
   g.save();g.translate(0,dy);
@@ -517,22 +517,6 @@ function csBodyOne(g,v){
   const pitch=Math.max(84,Math.min(130,(hf-80)/6));b.keys.slice(0,Math.min(6,Math.floor((hf-60)/pitch))).forEach(function(k){csTxt(g,t('ms_'+k),x,c+4,36,'700',v.ink);csBar(g,x,c+22,bw,b.sc[k]/b.mx,b.col(k),v.ink);c+=pitch;});
   const n=Math.min(3,v.stats.length),cw=(W-160)/Math.max(n,1);
   v.stats.slice(0,3).forEach(function(q,i){const xx=80+i*cw,fp=csFit(g,q.v,cw-40,64,'800');csTxt(g,q.v,xx,v.B-60,fp,'800',v.ink);csTxt(g,q.l,xx,v.B-20,28,'500',v.sub);});
-}
-/* Recovery: the body as it is right now, red → green / Recuperación: el cuerpo ahora mismo, rojo → verde */
-function csBodyRec(g,v){
-  const W=v.W,r=recData(),b=csBodySc(v),span=b.yr[1]-b.yr[0],sq=v.H<1200,hf=sq?Math.min(span>300?400:340,v.B-640):Math.min(span>300?620:480,v.B-780),y=v.B-hf-(sq?500:650);
-  const f=anaRecFill(r),pcs=REC_G.map(function(k){return r.g[k].pct;}).filter(function(p){return p!=null;}),avg=pcs.length?Math.round(pcs.reduce(function(a,p){return a+p;},0)/pcs.length):100;
-  csLogo(g,80,y-70,60,v.ink);csTxt(g,v.d.date,W-80,y-30,34,'500',v.sub,'right');
-  const ww=ANA.front.vb.split(' ')[2]*hf/span,gap=70,x0=(W-2*ww-gap)/2;
-  (b.lead==='back'?['back','front']:['front','back']).forEach(function(face,i){csFig(g,face,x0+i*(ww+gap),y,hf,b.yr,function(k){return b.sc[k]?f(k):'rgba(128,128,140,.30)';});});
-  let c=y+hf+60;
-  if(!sq)csTxt(g,t('csRecT'),80,c,44,'700',v.sub);c+=sq?130:190;
-  const big=avg+'%',fp=csFit(g,big,520,sq?120:150,'800');csTxt(g,big,80,c,fp,'800',v.ink);csTxt(g,t('csRecW'),80+g.measureText(big).width+30,c-10,sq?44:56,'800',v.acc);
-  const gy=c+50,gw=W-160;const gr=g.createLinearGradient(80,0,80+gw,0);gr.addColorStop(0,'#f03c32');gr.addColorStop(.5,'#ffc400');gr.addColorStop(1,'#2cbe50');
-  g.fillStyle=gr;g.beginPath();g.roundRect(80,gy,gw,18,9);g.fill();g.fillStyle='#fff';g.strokeStyle='rgba(0,0,0,.5)';g.lineWidth=5;g.beginPath();g.arc(80+gw*avg/100,gy+9,18,0,7);g.stroke();g.fill();
-  csTxt(g,t('rlLow'),80,gy+70,30,'600',v.sub);csTxt(g,t('rlOk'),W-80,gy+70,30,'600',v.sub,'right');
-  const n=Math.min(3,v.stats.length),cw=(W-160)/Math.max(n,1);
-  v.stats.slice(0,3).forEach(function(q,i){const xx=80+i*cw,fq=csFit(g,q.v,cw-40,64,'800');csTxt(g,q.v,xx,v.B-60,fq,'800',v.ink);csTxt(g,q.l,xx,v.B-20,28,'500',v.sub);});
 }
 /* Pills: giant muscle count + chips / Píldoras: número gigante de músculos + etiquetas */
 function csBodyPill(g,v){
