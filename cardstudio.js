@@ -12,11 +12,12 @@ function csRgba(hex,a){
 }
 function csOpen(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
-  CS={wk:wk,fs:0,style:'giant',fmt:'story',ori:'v',pos:'bottom',bg:'none',panel:'on',col:'#ffffff',photo:null,file:null,adv:false};
+  CS={wk:wk,fs:0,style:'giant',fmt:'story',ori:'v',pos:'bottom',bg:'none',panel:'on',col:'#ffffff',photo:null,file:null,adv:false,lol:SET.csLol?'on':'off'};
   const chip=(k,v,lbl,extra)=>'<button class="chip'+(CS[k]===v?' on':'')+'" data-k="'+k+'" data-v="'+v+'" onclick="'+(extra||'csSet(\''+k+'\',\''+v+'\')')+'">'+lbl+'</button>';
   const acc=csAcc(),act=(ico,lbl,fn,cls)=>'<button class="cs-a'+(cls?' '+cls:'')+'" onclick="'+fn+'"><span class="cs-ai">'+ic(ico)+'</span><span>'+lbl+'</span></button>';
   sheet('<div class="form cs"><div class="pick-h"><h3>'+t('cdBtn')+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<div class="chips cs-ori">'+chip('ori','v',t('csOriV'))+chip('ori','h',t('csOriH'))+'</div>'+
+    '<div class="cs-l">'+t('csLolL')+'</div><div class="chips cs-row">'+chip('lol','off',t('csLolOff'))+chip('lol','on',t('csLolOn'))+'</div>'+
     '<div class="cs-grid">'+CS_STYLES.map(k=>'<button class="cs-g'+(CS.style===k?' on':'')+'" data-k="style" data-v="'+k+'" onclick="csSet(\'style\',\''+k+'\')"><canvas data-s="'+k+'"></canvas><i class="cs-ck">'+ic('check')+'</i><span>'+t('csS_'+k)+'</span></button>').join('')+'</div>'+
     '<div class="cs-bar"><div class="cs-adv" id="csAdv" hidden>'+
       '<div class="cs-l">'+t('csBgL')+'</div><div class="chips cs-row">'+chip('bg','none',t('csBgNone'))+chip('bg','photo',t('csBgPhoto'),'csBgPhoto()')+chip('bg','dark',t('csBgDark'))+'</div>'+
@@ -42,6 +43,7 @@ function csSet(k,v){
   if(!CS)return;
   if(k==='style'&&v===CS.style&&(v==='fun'||v==='duo'))CS.fs=(CS.fs|0)+1; // tap it again: another object / tocarlo otra vez: otro objeto
   CS[k]=v;
+  if(k==='lol'){SET.csLol=v==='on';saveSet();}
   if(k==='ori'){document.querySelectorAll('#sheet .cs-g').forEach(b=>{b.hidden=v==='h'&&!CS_H[b.dataset.v];});if(v==='h'&&!CS_H[CS.style])CS.style='giant';document.querySelectorAll('#sheet [data-k="style"]').forEach(b=>b.classList.toggle('on',b.dataset.v===CS.style));}
   document.querySelectorAll('#sheet [data-k="'+k+'"]').forEach(b=>b.classList.toggle('on',b.dataset.v===String(v)));
   csDraw();
@@ -155,7 +157,7 @@ function csRender(o,sc){
   /* where the block sits: top, middle or bottom / dónde queda el bloque: arriba, centro o abajo */
   const dy=o.pos==='top'?Math.round(H*.26-(B-330)):(o.pos==='mid'?Math.round(H*.5-(B-330)):0);
   g.save();g.translate(0,dy);
-  S(g,{fs:o.fs|0,h:o.ori==='h'&&!!CS_H[o.style],W:W,H:H,B:B,d:d,wk:wk,wo:wo,name:name,stats:stats,ink:ink,sub:sub,line:line,acc:acc,light:light,shadow:shadow});
+  S(g,{fs:o.fs|0,lol:o.lol==='on',h:o.ori==='h'&&!!CS_H[o.style],W:W,H:H,B:B,d:d,wk:wk,wo:wo,name:name,stats:stats,ink:ink,sub:sub,line:line,acc:acc,light:light,shadow:shadow});
   g.restore();
   if(d.sv){shadow(false);csTxt(g,'Powered by Strava',W/2,H-40,28,'500',sub,'center');}
   if(o.bg==='none'&&o.panel!=='off'&&!CS_CLEAN[o.style])return csPanel(c,light,!!o.crop);
@@ -351,7 +353,7 @@ function csListH(g,v,dots){
   csLogo(g,W-80,y+150+per*h+(v.d.prs?14:30),48,v.ink,'right',dots?v.acc:undefined);
 }
 function csFunH(g,v){
-  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v)),y=v.B-440,T=y+110;
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v),v.lol),y=v.B-440,T=y+110;
   csLogo(g,80,y,56,v.ink);csTierPill(g,v,W-80,y);
   const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),nb=csNum(g,num,80,T,430,330,'900',v.acc);
   const x=560,cw=W-80-x;
@@ -364,7 +366,7 @@ function csFunH(g,v){
 
 /* duo: the "fun" card and the exercise list together in ONE image (stacked, or side by side when wide) / la tarjeta curiosa y la lista de ejercicios juntas en UNA imagen (apiladas, o lado a lado en horizontal) */
 function csDuo(g,v){
-  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v)),all=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v),v.lol),all=v.wo?v.stats.map(s=>[s.l,s.v]):v.d.top.map(x=>{let n=exName(x.eid,x.n);return[n,x.sets+' × '+(x.b?fmtSet(x.m,x.b):'')];});
   const rows=all.slice(0,6),n=rows.length,h=66,fs=32,num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1);
   const list=(x,y,cw)=>rows.forEach((r,i)=>{const yy=y+i*h;let rt=String(r[1]);if(rt.length>20)rt=rt.slice(0,20);g.font=cardFont(fs,'700');const mx=cw-g.measureText(rt).width-28;let nm=r[0];g.font=cardFont(fs,'800');while(g.measureText(nm).width>mx&&nm.length>4)nm=nm.slice(0,-1).trimEnd();if(nm!==r[0])nm+='…';csTxt(g,nm,x,yy,fs,'800',v.ink);csTxt(g,rt,x+cw,yy,fs,'700',v.sub,'right');g.fillStyle=v.line;g.fillRect(x,yy+18,cw,2);});
   const nmO=t('csObj_'+f.k);
@@ -430,11 +432,13 @@ const CS_OBJ=[['whl',150000],['jet',41000],['hmp',30000],['fir',18000],['bus',11
 /* what you lifted, as a thing people know. With a seed it picks among the things that give a nice number (1 to 15), epic ones on big days; without one, the heaviest thing you outweigh /
    lo que levantaste, como algo conocido. Con semilla elige entre lo que da un número agradable (1 a 15), cosas épicas en los días grandes; sin semilla, lo más pesado que superaste */
 const CS_EPIC={whl:1,jet:1,hmp:1,fir:1,bus:1,trx:1,ele:1,orc:1,pck:1,b52:1,mbt:1,c13:1,f22:1,f35:1,a10:1,chn:1,f16:1,blk:1,hum:1,tmh:1}; // war machines and giants: big days get these / máquinas de guerra y gigantes: los días grandes las reciben
-const CS_LOL=[['gsd',34],['chi',2.3],['cor',12],['cap',50],['fgc',9],['rac',9],['gse',5],['pen',36],['fla',3],['trt',0.5],['tco',0.1],['bur',0.6],['piz',1],['pol',1.4],['tam',0.25],['pdc',0.1],['mre',0.7],['mon',0.5],['hlm',1.4],['pla',7],['m4r',3.4],['ruk',16],['sbg',18],['wtr',19],['amc',10],['bud',82],['cas',90]]; // funny things: can reach thousands of units / cosas graciosas: pueden llegar a miles de unidades
-function csFunObj(kg,seed){
-  if(seed!=null&&seed%5<2){ // 2 of 5 cards are the funny kind / 2 de cada 5 tarjetas son de las graciosas
-    const lol=CS_LOL.filter(function(o){const n=kg/o[1];return n>=2&&n<=20000;});
-    if(lol.length){const o=lol[Math.floor(seed/5)%lol.length];return{k:o[0],n:kg/o[1]};}
+const CS_LOL=[['gsd',34],['chi',2.3],['cor',12],['cap',50],['fgc',9],['rac',9],['gse',5],['pen',36],['fla',3],['trt',0.5],['tco',0.1],['bur',0.6],['piz',1],['pol',1.4],['tam',0.25],['pdc',0.1],['mre',0.7],['mon',0.5],['hlm',1.4],['pla',7],['m4r',3.4],['sbg',18],['wtr',19],['amc',10],['bud',100],['cas',90]]; // funny things: can reach thousands of units / cosas graciosas: pueden llegar a miles de unidades
+function csFunObj(kg,seed,lol){
+  if(lol){ // funny mode: only the funny things / modo gracioso: solo las cosas graciosas
+    const L=CS_LOL.filter(function(o){const n=kg/o[1];return n>=2&&n<=20000;});
+    if(L.length)return(function(o){return{k:o[0],n:kg/o[1]};})(seed!=null?L[seed%L.length]:L[0]);
+    const o=kg/CS_LOL[CS_LOL.length-1][1]<2?CS_LOL.slice().sort(function(a,b){return a[1]-b[1];})[0]:CS_LOL.slice().sort(function(a,b){return b[1]-a[1];})[0];
+    return{k:o[0],n:kg/o[1]};
   }
   const ok=CS_OBJ.filter(function(o){return kg/o[1]>=1;});
   if(!ok.length){const o=CS_OBJ[CS_OBJ.length-1];return{k:o[0],n:kg/o[1]};}
@@ -468,7 +472,7 @@ function csTierPill(g,v,xr,y){
 }
 function csFun(g,v){
   if(v.h)return csFunH(g,v);
-  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v)),y=v.B-640;
+  const W=v.W,kg=wkVol(v.wk),f=csFunObj(kg,csFunSeed(v),v.lol),y=v.B-640;
   csLogo(g,80,y-40,60,v.ink);
   csTierPill(g,v,W-80,y-36);
   csTxt(g,t('csFunT'),80,y+110,50,'700',v.sub);

@@ -3,7 +3,7 @@
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
  {v:'v1.1.61',items:[
-  {i:'😂',en:'<b>Funny cards:</b> your Fun share card now also says things like "2000 tortas", "180 German shepherds", "35 MREs" or "12 casualties on a litter" (28 new funny things: animals, food, army life).',es:'<b>Tarjetas graciosas:</b> tu tarjeta Fun ahora también dice cosas como «2000 tortas», «180 pastores alemanes», «35 MREs» o «12 heridos en camilla» (28 cosas graciosas nuevas: animales, comida y vida en el Army).'}
+  {i:'😂',en:'<b>Funny cards:</b> a new Serious / Funny switch in the share studio. Funny mode says things like "2000 tortas", "180 German shepherds", "35 MREs" or "12 casualties on a litter" (27 new things: animals, food, army life).',es:'<b>Tarjetas graciosas:</b> nuevo botón Serias / Graciosas en el estudio de compartir. El modo gracioso dice cosas como «2000 tortas», «180 pastores alemanes», «35 MREs» o «12 heridos en camilla» (27 cosas nuevas: animales, comida y vida en el Army).'}
  ]},
  {v:'v1.1.60',items:[
   {i:'⚡',en:'<b>Speed:</b> dates in long lists (History) are formatted with a cached formatter.',es:'<b>Velocidad:</b> las fechas en listas largas (Historial) usan un formateador guardado.'}

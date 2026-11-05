@@ -7,8 +7,8 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Nothing yet. / Nada todavía.
 
 ## v1.1.61 — 2026-10-30
-- **Funny cards:** your Fun share card now also says things like "2000 tortas", "180 German shepherds", "35 MREs" or "12 casualties on a litter" (28 new funny things: animals, food, army life).
-  **Tarjetas graciosas:** tu tarjeta Fun ahora también dice cosas como «2000 tortas», «180 pastores alemanes», «35 MREs» o «12 heridos en camilla» (28 cosas graciosas nuevas: animales, comida y vida en el Army).
+- **Funny cards:** a new Serious / Funny switch in the share studio. Funny mode says things like "2000 tortas", "180 German shepherds", "35 MREs" or "12 casualties on a litter" (27 new things: animals, food, army life).
+  **Tarjetas graciosas:** nuevo botón Serias / Graciosas en el estudio de compartir. El modo gracioso dice cosas como «2000 tortas», «180 pastores alemanes», «35 MREs» o «12 heridos en camilla» (27 cosas nuevas: animales, comida y vida en el Army).
 
 ## v1.1.60 — 2026-10-30
 - **Speed:** dates in long lists (History) are formatted with a cached formatter.
