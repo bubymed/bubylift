@@ -31,7 +31,7 @@ function rkTeaser(){
   if(!d.bw)b=rkAsk();
   else if(d.n<3||d.score==null)b='<p class="rk-ask">'+rkLockMsg(d.n)+'</p>';
   else{const s=d.cur!=null?d.cur:d.score,ix=rkIdx(s),top=ix>=RK_T.length-1,lo=RK_T[ix],hi=top?100:RK_T[ix+1],pct=top?100:Math.round((s-lo)/(hi-lo)*100);
-    return'<button class="card rk-tz" onclick="rkGo()"><div class="lbl">'+t('rkT')+'</div><div class="rk-hero"><span class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</span><b>'+s+' <small>'+t('rkPts')+'</small></b></div><div class="rk-bar"><u style="width:'+pct+'%"></u></div><p class="muted sm rk-nx">'+(top?t('rkTop'):t(hi-s===1?'rkNext1':'rkNext',hi-s,rkName(ix+1)))+'</p></button>';}
+    return'<button class="card rk-tz rk-tzh" style="--rc:var(--rk'+ix+')" onclick="rkGo()"><div class="lbl">'+t('rkT')+'</div><div class="rk-hero"><span class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</span><b>'+s+' <small>'+t('rkPts')+'</small></b></div><div class="rk-bar"><u style="width:'+pct+'%"></u></div><p class="muted sm rk-nx">'+(top?t('rkTop'):t(hi-s===1?'rkNext1':'rkNext',hi-s,rkName(ix+1)))+'</p></button>';}
   return'<div class="card rk-tz"><div class="lbl">'+t('rkT')+'</div>'+b+'</div>';
 }
 /* the whole ladder: what each rank asks for, which ones you passed / la escalera completa: qué pide cada rango y cuáles ya superaste */

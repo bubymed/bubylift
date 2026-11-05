@@ -828,3 +828,12 @@ button.rk-tz{cursor:pointer}
 .ana-fl{max-height:34vh;overflow-y:auto;overscroll-behavior:contain}
 
 .ana-grad{display:flex;align-items:center;gap:8px;margin:12px 0 2px;font-size:.74rem;font-weight:700;color:var(--dim)}.ana-grad i{flex:1;height:8px;border-radius:99px;background:linear-gradient(90deg,#f03c32,#ffc400,#2cbe50)}
+
+/* rank card on the workout home: tinted with the rank color so it stands out / tarjeta de rango en el inicio: teñida con el color del rango para destacar */
+.rk-tzh{--rc:var(--accent);padding:20px 18px 16px;border:1px solid var(--rc);background:linear-gradient(155deg,var(--panel2) 0%,var(--panel) 100%);background:linear-gradient(155deg,color-mix(in srgb,var(--rc) 34%,var(--panel)) 0%,color-mix(in srgb,var(--rc) 8%,var(--panel)) 75%);border-color:color-mix(in srgb,var(--rc) 60%,transparent);box-shadow:0 10px 34px -14px var(--rc),var(--shadow);text-align:center}
+.rk-tzh .lbl{color:var(--rc);letter-spacing:.14em;font-weight:800;text-align:center}
+.rk-tzh .rkn{font-size:3.1rem;text-shadow:0 0 28px color-mix(in srgb,var(--rc) 55%,transparent)}
+.rk-tzh .rkn2{font-size:2.6rem}.rk-tzh .rkn7{font-size:2.5rem}.rk-tzh .rkn10{font-size:2.6rem}
+.rk-tzh .rk-hero b{font-size:1.5rem;font-weight:800;color:var(--txt)}.rk-tzh .rk-hero small{font-size:.9rem;color:var(--dim)}
+.rk-tzh .rk-bar{height:12px;background:color-mix(in srgb,var(--rc) 20%,transparent);margin:14px 0 8px}.rk-tzh .rk-bar u{background:var(--rc);box-shadow:0 0 14px var(--rc)}
+.rk-tzh .rk-nx{text-align:center;color:var(--txt);opacity:.85;margin:0}
