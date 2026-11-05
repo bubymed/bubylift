@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.64',items:[
+  {i:'🏋️',en:'Body share card: crops to the half you trained (upper / lower / full) and has 3 detail levels: Quick, Detailed, Complete. Recovery map now uses a smooth red-to-green gradient.',es:'Tarjeta Cuerpo: se recorta a la mitad que entrenaste (arriba / abajo / completo) y tiene 3 niveles de detalle: Rápida, Detallada, Completa. El mapa de recuperación usa un degradado suave de rojo a verde.'}
+ ]},
  {v:'v1.1.63',items:[
   {i:'🎯',en:'Muscle data fixed: every exercise now has a main muscle, and ~30 wrong ones were corrected (hammer curls, cleans, snatches, pullovers, good mornings, jumps and drills, balance work).',es:'Datos musculares corregidos: todo ejercicio tiene músculo principal y se corrigieron ~30 errores (curl martillo, cleans, snatches, pullovers, buenos días, saltos y drills, equilibrio).'}
  ]},

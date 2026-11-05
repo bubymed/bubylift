@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.64 — 2026-10-30
+- Body share card: crops to the half you trained (upper / lower / full) and has 3 detail levels: Quick, Detailed, Complete. Recovery map now uses a smooth red-to-green gradient.
+  Tarjeta Cuerpo: se recorta a la mitad que entrenaste (arriba / abajo / completo) y tiene 3 niveles de detalle: Rápida, Detallada, Completa. El mapa de recuperación usa un degradado suave de rojo a verde.
+
 ## v1.1.63 — 2026-10-30
 - Muscle data fixed: every exercise now has a main muscle, and ~30 wrong ones were corrected (hammer curls, cleans, snatches, pullovers, good mornings, jumps and drills, balance work).
   Datos musculares corregidos: todo ejercicio tiene músculo principal y se corrigieron ~30 errores (curl martillo, cleans, snatches, pullovers, buenos días, saltos y drills, equilibrio).
