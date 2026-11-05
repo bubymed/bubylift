@@ -800,3 +800,28 @@ button.rk-tz{cursor:pointer}
 .rkl-r.now{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel2))}.rkl-r.todo{opacity:.72}
 .rkl-n{display:flex;flex-direction:column}.rkl-n .rkn{font-size:1.35rem}.rkl-n small{color:var(--dim);font-size:.78rem;font-weight:600;margin-top:2px}
 .rkl-s{font-size:.82rem;font-weight:700;color:var(--dim);text-align:right}.rkl-r.now .rkl-s{color:var(--accent)}.rkl-r.done .rkl-s{color:#30a050}
+
+/* ---------- anatomy figure (v1.1.62) / figura anatómica ---------- */
+:root{--an-main:var(--accent);--an-help:#2F9BFF;--an-stab:rgba(47,155,255,.30);--an-ok:#34c759;--an-mid:#ffcc00;--an-low:#ff453a;--an-none:#3a3a44;--an-sil:#22222a;--an-line:rgba(255,255,255,.2)}
+:root[data-mode="light"]{--an-help:#1F6FD6;--an-stab:rgba(31,111,214,.28);--an-ok:#1f9d45;--an-mid:#d9a300;--an-low:#d70015;--an-none:#c9c9d2;--an-sil:#dcdce3;--an-line:rgba(0,0,0,.2)}
+.ana{display:block;max-width:100%;height:auto}
+.ana .an-sil{fill:var(--an-sil)}
+.ana .an-m{stroke:var(--an-line);stroke-width:.9;transition:opacity .15s}
+.ana .an-m[onclick]{cursor:pointer}.ana .an-m[onclick]:active{opacity:.7}
+.ana .an-m.sel{stroke:var(--text);stroke-width:2.2}
+.ana-card{background:var(--panel);border-radius:18px;padding:12px 6px;margin-top:12px}
+.ana-pair{display:flex;justify-content:space-around;align-items:flex-start;gap:4px}
+.ana-pair.s{justify-content:flex-start;gap:2px;flex:none}
+.ana-big{display:flex;justify-content:center;padding:8px}
+.ana-card:has(.ana-pair.s){display:flex;gap:12px;align-items:flex-start;padding:12px}
+.ana-key{flex:1;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ana-r{display:flex;gap:9px;align-items:flex-start}.ana-r i{flex:none;width:12px;height:12px;border-radius:4px;margin-top:3px;border:1px solid var(--an-line)}
+.ana-r b{display:block;font-size:.82rem}.ana-r span{display:block;font-size:.78rem;color:var(--dim)}
+.rv-leg .none::before{background:var(--an-none)}
+.rv-view{margin:12px 0 0}
+.ana-sel{margin-top:12px;padding:14px;border-radius:16px;background:var(--panel)}
+.ana-st{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}.ana-st b{font-size:1.1rem}.ana-st span{font-size:.84rem;color:var(--dim)}
+.ana-ch{margin:10px 0 6px}
+.ana-sel .row,.ana-find .row{margin-top:10px}
+.ana-fh{display:flex;justify-content:space-between;align-items:baseline;margin:14px 2px 4px}.ana-fh b{font-size:1.15rem}
+.ana-fl{max-height:34vh;overflow-y:auto;overscroll-behavior:contain}

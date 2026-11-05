@@ -452,8 +452,8 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
    ok(w.eval("typeof wkPic==='function'&&typeof csRender==='function'"),'share studio is wired');
    {const wk0=ev("DATA.workouts[0]&&DATA.workouts[0].id");if(!wk0){ev("DATA.workouts.push({id:'cswk',t:Date.now()-1e6,end:Date.now(),name:'Push day',note:'',ex:[{eid:'bench',n:'Bench',sets:[{w:60,r:8,t:1,d:null,pr:1},{w:60,r:8,t:2,d:null}]}]})");}
     const id=ev("DATA.workouts[0].id");ev("HTMLCanvasElement.prototype.getContext=function(){return null;}");ev("wkPic('"+id+"')");
-    ok(doc.querySelectorAll('#sheet [data-k=style]').length===14,'share studio offers 14 styles');
-    ok(ev("CS_STYLES.length===14&&typeof csCopy==='function'&&typeof csPrCard==='function'&&typeof csFun==='function'&&csFunObj(2150).k==='tmh'&&csFunObj(50).k==='cem'&&csFunObj(8).k==='mel'&&CS.bg==='none'"),'styles list ok');
+    ok(doc.querySelectorAll('#sheet [data-k=style]').length===15,'share studio offers 15 styles');
+    ok(ev("CS_STYLES.length===15&&typeof csCopy==='function'&&typeof csPrCard==='function'&&typeof csFun==='function'&&csFunObj(2150).k==='tmh'&&csFunObj(50).k==='cem'&&csFunObj(8).k==='mel'&&CS.bg==='none'"),'styles list ok');
     ev("sheetClose()");}
    ev("DATA=JSON.parse("+JSON.stringify(sv)+");SET.units="+JSON.stringify(su)+";tab='workout';render()");}
   console.log('military v71');
@@ -1068,6 +1068,12 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(ev("fmtClock(4085)")==='1:08:05'&&ev("fmtClock(65)")==='1:05','workout clock shows hours past 60 minutes');
   ok(ev("weekStart(new Date(2026,10,4,15).getTime())===new Date(2026,10,2).getTime()&&weekStart(Date.now())===weekStart()"),'weekStart honors its argument (Monday start)');
   ok(ev("STR.sdT[0]!==STR.shT[0]&&/time/i.test(STR.sdT[0])&&/Share/.test(STR.shT[0])"),'short-day sheet and share sheet have their own titles');
+  ok(ev("(function(){var bad=0;['front','back'].forEach(function(f){ANA[f].s.forEach(function(x){if(x[0]&&x[0]!=='pec'&&x[0]!=='dlt'&&!MUS_BASE[x[0]])bad++;});});return bad===0&&ANA.front.s.length>40&&ANA.back.s.length>30})()"),'anatomy figure only uses known muscle codes');
+  ok(ev("(function(){var r=anaRoles('bench');return r.main.indexOf('chm')>=0&&r.help.indexOf('chu')>=0&&r.help.indexOf('sdf')>=0&&r.stab.length>=0&&r.main.indexOf('trm')<0})()"),'roles: bench main = mid chest, helpers = upper chest, front delts, triceps');
+  ok(ev("(function(){var s=anaSvg('front',100,function(k){return k==='chm'?'red':''},{sel:'chm',tap:'x'});return /<svg/.test(s)&&s.indexOf('clipPath')>0&&s.indexOf('data-m=\"chu\"')>0&&s.indexOf('data-m=\"sdl\"')>0&&s.indexOf('class=\"an-m sel\"')>0})()"),'figure draws split chest and shoulders with a selected part');
+  ok(ev("(function(){howOpen('bench');var h=document.getElementById('sheet').innerHTML;sheetClose();return h.indexOf('ana-card')>0&&/agonist|agonista/.test(h)})()"),'technique guide shows the body with roles');
+  ok(ev("(function(){DATA.workouts.unshift({id:'an1',t:Date.now()-36e5,end:Date.now()-18e5,name:'x',ex:[{eid:'bench',sets:[{w:100,r:5,done:true}]}]});REC_VIEW='b';ANA_REC='chm';var h=recCard();REC_VIEW='g';ANA_REC=null;DATA.workouts.shift();return h.indexOf('ana-pair')>0&&h.indexOf('ana-sel')>0&&h.indexOf('rv-grid')<0})()"),'recovery body view shows the figure and the selected muscle');
+  ok(ev("(function(){anaFind('qd');var h=document.getElementById('sheet').innerHTML;var n=anaExFor('qd').length;sheetClose();ANA_F.k=null;return h.indexOf('ana-fl')>0&&n>10&&/Quads|Cuádriceps/.test(h)})()"),'find by muscle lists exercises for the tapped muscle');
   ev("restSet(0,'45')");ok(ev("exRest(ACT.ex[0])")===45&&ev("SET.exRest.bench")===45,'rest can be set per exercise and is remembered');
   ev("ACT.acc=5000;ACT.sn=Date.now();ACT.pz=false;pauseClock()");var __p=ev("actMs()");
   ok(ev("ACT.pz")===true&&__p>=5000&&__p<5500,'pause freezes the stopwatch');
