@@ -509,7 +509,8 @@ function csBody(g,v){
   const hBars=hB(),hEx=hE(),room=rm()+40,hf=Math.max(240,Math.min(span>300?600:470,room-40)),y=v.B-(hStats+hTitle+hBars+hEx+hf+40+T);
   csLogo(g,80,y-30+T-60,60,v.ink);csTxt(g,v.d.date,W-80,y+T-60+30,34,'500',v.sub,'right');
   const fy=y+T,ww=ANA.front.vb.split(' ')[2]*hf/span,gap=70,x0=(W-2*ww-gap)/2;
-  ['front','back'].forEach(function(face,i){csFig(g,face,x0+i*(ww+gap),fy,hf,yr,col);});
+  const BK=['lat','ubk','trp','lbk','sdr','trl','trm','ham','gmx','gmd','clf'],ld=function(f){return keys.reduce(function(a,k){return a+((BK.indexOf(k)>=0)===(f==='back')?sc[k]:0);},0);};
+  (ld('back')>ld('front')?['back','front']:['front','back']).forEach(function(face,i){csFig(g,face,x0+i*(ww+gap),fy,hf,yr,col);}); // the side with most work goes first / el lado con más trabajo va primero
   let c=fy+hf+50;
   csTxt(g,t('csBodyT'),80,c,44,'700',v.sub);c+=85;
   const top=keys.slice(0,2).map(function(k){return t('ms_'+k);}),more=Math.max(0,keys.length-2);
