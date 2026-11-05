@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.66',items:[
+  {i:'🏅',en:'The Rank tab header now matches the home card: tinted with your rank\'s color, bigger name and glowing progress bar.',es:'La cabecera de la pestaña Rango ahora igual que la del inicio: teñida con el color de tu rango, nombre más grande y barra con brillo.'}
+ ]},
  {v:'v1.1.65',items:[
   {i:'🏅',en:'Your rank now stands out on the Workout home: card tinted with your rank\'s color, bigger name and glowing progress bar. Plus 2 new muscle share cards: Muscle map and Muscles.',es:'Tu rango ahora destaca en el inicio: tarjeta teñida con el color de tu rango, nombre más grande y barra con brillo. Y 2 tarjetas nuevas con músculos para compartir: Mapa y Músculos.'}
  ]},

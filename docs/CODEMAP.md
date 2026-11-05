@@ -133,7 +133,7 @@ Functions / Funciones: `cardIcon`:2, `cardFont`:9, `wkCardData`:10, `csvParse`:1
 Share studio: card styles, preview, PNG render, save/copy/share/Instagram story.  
 Estudio de compartir: estilos, vista previa, PNG, guardar/copiar/compartir/historia de Instagram.
 
-Functions / Funciones: `csRgba`:8, `csOpen`:13, `csAdv`:34, `csStory`:36, `csSet`:43, `csBgPhoto`:53, `csPhoto`:58, `csDraw`:66, `csPrep`:76, `csOut`:88, `csCrop`:97, `csFinal`:105, `csCopy`:106, `wkPic`:113, `csFit`:116, `csTxt`:121, `csNum`:123, `csLogo`:127, `csStats`:135, `csRender`:142, `csPanel`:170, `csPr`:184, `csClassic`:190, `csStack`:201, `csPoster`:210, `csChips`:220, `csLifts`:238, `csGiant`:256, `csVert`:272, `csRow`:289, `csDots`:304, `csGiantH`:325, `csDotsH`:338, `csListH`:340, `csFunH`:357, `csDuo`:370, `csBadge`:396, `csBar`:408, `csPrCard`:421, `csFunObj`:438, `csFunSeed`:458, `csTier`:466, `csTierPill`:467, `csFun`:475, `csFig`:491, `csBodySc`:500, `csBar`:509, `csBodyOne`:511, `csBodyRec`:522, `csBodyPill`:538, `csBody`:555
+Functions / Funciones: `csRgba`:8, `csOpen`:13, `csAdv`:34, `csStory`:36, `csSet`:43, `csBgPhoto`:53, `csPhoto`:58, `csDraw`:66, `csPrep`:76, `csOut`:88, `csCrop`:97, `csFinal`:105, `csCopy`:106, `wkPic`:113, `csFit`:116, `csTxt`:121, `csNum`:123, `csLogo`:127, `csStats`:135, `csRender`:142, `csPanel`:170, `csPr`:184, `csClassic`:190, `csStack`:201, `csPoster`:210, `csChips`:220, `csLifts`:238, `csGiant`:256, `csVert`:272, `csRow`:289, `csDots`:304, `csGiantH`:325, `csDotsH`:338, `csListH`:340, `csFunH`:357, `csDuo`:370, `csBadge`:396, `csBar`:408, `csPrCard`:421, `csFunObj`:438, `csFunSeed`:458, `csTier`:466, `csTierPill`:467, `csFun`:475, `csFig`:491, `csBodySc`:500, `csBar`:509, `csBodyOne`:511, `csBodyPill`:522, `csBody`:539
 
 ### `body.js`
 Body tab, More tab (settings, backup/import/export), Recovery tab, strength score (strData), sub-tabs with swipe.  
@@ -145,7 +145,7 @@ Functions / Funciones: `bwEma`:11, `bwRate`:12, `bwRange`:19, `bwStep`:20, `muW`
 Ranks (16), bodyweight ranks, XP level, muscle balance, rank ladder and celebration.  
 Rangos (16), rangos de peso corporal, nivel de XP, balance muscular, escalera de rangos y celebración.
 
-Functions / Funciones: `rkIdx`:5, `rkName`:6, `rkOpen`:7, `strInv`:9, `rkTarget`:15, `rkGoal`:20, `rkLockMsg`:26, `rkAsk`:27, `rkTeaser`:29, `rkGo`:38, `rkLadder`:39, `strCard`:50, `rkCheck`:72, `rkUp`:80, `xpData`:84, `xpCard`:90, `balData`:98, `radarSvg`:108, `balCard`:118, `bwTh`:129, `bwData`:130, `bwCard`:139
+Functions / Funciones: `rkIdx`:5, `rkName`:6, `rkOpen`:7, `strInv`:9, `rkTarget`:15, `rkGoal`:20, `rkLockMsg`:26, `rkAsk`:27, `rkTeaser`:29, `rkGo`:38, `rkLadder`:39, `strCard`:50, `rkCheck`:73, `rkUp`:81, `xpData`:85, `xpCard`:91, `balData`:99, `radarSvg`:109, `balCard`:119, `bwTh`:130, `bwData`:131, `bwCard`:140
 
 ### `anatomy.js`
 Anatomy figure: draws the body, muscle roles (agonist/synergist/stabilizer), Recovery body view, Find by muscle.  
