@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.60 — 2026-10-30
+- **Speed:** dates in long lists (History) are formatted with a cached formatter.
+  **Velocidad:** las fechas en listas largas (Historial) usan un formateador guardado.
+
 ## v1.1.59 — 2026-10-30
 - **Fixes:** the "How much time do you have?" sheet no longer shows the Share-the-app title and QR text; the workout clock shows hours past 60 minutes.
   **Arreglos:** la hoja «¿Cuánto tiempo tienes?» ya no muestra el título y texto de «Compartir la app»; el reloj del entrenamiento muestra horas pasados los 60 minutos.
