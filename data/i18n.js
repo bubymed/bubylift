@@ -904,7 +904,7 @@ csTotal:['Total lifted','Total levantado'],csPrNew:['NEW PERSONAL RECORD','NUEVO
  anaFront:['Front','Frente'],anaBack:['Back','Espalda'],anaNone:['Not trained yet','Sin entrenar'],anaTap:['Tap a muscle on the body.','Toca un músculo en el cuerpo.'],
  anaR_main:['Main muscle (agonist)','Músculo principal (agonista)'],anaR_help:['Helpers (synergists)','Ayudan (sinergistas)'],anaR_stab:['Stabilizers','Estabilizadores'],anaR_main_s:['main','principal'],anaR_help_s:['helper','ayuda'],
  anaFindT:['Find by muscle','Buscar por músculo'],anaFindN:['{0} exercises','{0} ejercicios'],anaFindBtn:['Find exercises','Buscar ejercicios'],recViewG:['Groups','Grupos'],recViewB:['Body','Cuerpo'],
- csS_body:['Body','Cuerpo'],csDetL:['Detail','Detalle'],csDet1:['Quick','Rápida'],csDet2:['Detailed','Detallada'],csDet3:['Complete','Completa'],csBodyT:['Today you trained','Hoy entrenaste'],csBodyMore:['+ {0} more','+ {0} más'],
+ csS_body:['Body','Cuerpo'],csS_bone:['Muscle map','Mapa'],csS_bpill:['Muscles','Músculos'],csPillL:['muscles worked','músculos trabajados'],csDetL:['Detail','Detalle'],csDet1:['Quick','Rápida'],csDet2:['Detailed','Detallada'],csDet3:['Complete','Completa'],csBodyT:['Today you trained','Hoy entrenaste'],csBodyMore:['+ {0} more','+ {0} más'],
  csCopy:['Copy','Copiar'],csCopied:['Copied — paste it on your story or post','Copiada — pégala en tu historia o publicación'],
  csS_classic:['Classic','Clásico'],csS_stack:['Stack','Apilado'],csS_poster:['Poster','Póster'],csS_chips:['Chips','Fichas'],csS_lifts:['Lifts','Ejercicios'],csS_badge:['Badge','Insignia'],csS_bar:['Bar','Barra'],
  csBgNone:['Transparent','Transparente'],csBgPhoto:['Photo','Foto'],csBgDark:['Dark','Oscuro'],

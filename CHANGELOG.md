@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.65 — 2026-10-30
+- Your rank now stands out on the Workout home: card tinted with your rank's color, bigger name and glowing progress bar. Plus 2 new muscle share cards: Muscle map and Muscles.
+  Tu rango ahora destaca en el inicio: tarjeta teñida con el color de tu rango, nombre más grande y barra con brillo. Y 2 tarjetas nuevas con músculos para compartir: Mapa y Músculos.
+
 ## v1.1.64 — 2026-10-30
 - Body share card: crops to the half you trained (upper / lower / full) and has 3 detail levels: Quick, Detailed, Complete. Recovery map now uses a smooth red-to-green gradient.
   Tarjeta Cuerpo: se recorta a la mitad que entrenaste (arriba / abajo / completo) y tiene 3 niveles de detalle: Rápida, Detallada, Completa. El mapa de recuperación usa un degradado suave de rojo a verde.

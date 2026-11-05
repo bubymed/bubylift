@@ -1,6 +1,6 @@
 /* Share studio (v95): transparent workout cards in 7 styles — put them over any photo or story, or add a photo here.
    Estudio de tarjetas (v95): tarjetas con fondo transparente en 7 estilos — ponlas sobre cualquier foto o historia, o agrega una foto aquí. */
-const CS_STYLES=['giant','vert','row','dots','classic','stack','poster','chips','lifts','badge','bar','pr','fun','duo','body'];
+const CS_STYLES=['giant','vert','row','dots','classic','stack','poster','chips','lifts','badge','bar','pr','fun','duo','body','bone','bpill'];
 const CS_H={giant:1,dots:1,lifts:1,fun:1,duo:1}; // styles that also come in a wide version / estilos que también tienen versión ancha
 const CS_CLEAN={giant:1,dots:1,vert:1,row:1}; // already big and bold: no panel needed / ya son grandes y claros: sin panel
 let CS=null;
@@ -155,7 +155,7 @@ function csRender(o,sc){
   /* soft shadow so text reads on any photo / sombra suave para leer sobre cualquier foto */
   const shadow=function(){g.shadowColor='transparent';g.shadowBlur=0;g.shadowOffsetY=0;}; // no glow behind letters: clean edges / sin brillo detrás de las letras: bordes limpios
   shadow(true);
-  const S=({giant:csGiant,vert:csVert,row:csRow,dots:csDots,classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,pr:csPrCard,fun:csFun,duo:csDuo,body:csBody})[o.style]||csClassic;
+  const S=({giant:csGiant,vert:csVert,row:csRow,dots:csDots,classic:csClassic,stack:csStack,poster:csPoster,chips:csChips,lifts:csLifts,badge:csBadge,bar:csBar,pr:csPrCard,fun:csFun,duo:csDuo,body:csBody,bone:csBodyOne,bpill:csBodyPill})[o.style]||csClassic;
   /* where the block sits: top, middle or bottom / dónde queda el bloque: arriba, centro o abajo */
   const dy=o.pos==='top'?Math.round(H*.26-(B-330)):(o.pos==='mid'?Math.round(H*.5-(B-330)):0);
   g.save();g.translate(0,dy);
@@ -495,6 +495,46 @@ function csFig(g,face,x,y,hf,yr,fill){ // figure scaled to height hf; soft fade 
   q.globalCompositeOperation='destination-out';
   [[yr[0]>vb[1]+1,0],[yr[1]<vb[1]+vb[3]-1,1]].forEach(function(e){if(!e[0])return;const f=Math.round(hf*.16),gr=q.createLinearGradient(0,e[1]?hf:0,0,e[1]?hf-f:f);gr.addColorStop(0,'rgba(0,0,0,1)');gr.addColorStop(1,'rgba(0,0,0,0)');q.fillStyle=gr;q.fillRect(0,e[1]?hf-f:0,w,f);});
   g.drawImage(c,x,y,w,hf);return w;
+}
+/* shared by the muscle cards: effective sets per muscle, colors, crop / común a las tarjetas de músculos: series efectivas por músculo, colores, recorte */
+function csBodySc(v){
+  const sc={};
+  (v.wk.ex||[]).forEach(function(x){const n=(x.sets||[]).filter(function(q){return q.done!==false&&(q.r>0||q.t>0);}).length;if(!n)return;(muW(x.eid,x.vr)||[]).forEach(function(m){sc[m[0]]=(sc[m[0]]||0)+n*m[1];});});
+  const keys=Object.keys(sc).filter(function(k){return MUS_BASE[k];}).sort(function(a,b){return sc[b]-sc[a];}),mx=keys.length?sc[keys[0]]:1;
+  const up=keys.some(function(k){return CS_UP.indexOf(k)>=0;}),lo=keys.some(function(k){return CS_LO.indexOf(k)>=0;});
+  const BK=['lat','ubk','trp','lbk','sdr','trl','trm','ham','gmx','gmd','clf'],ld=function(f){return keys.reduce(function(a,k){return a+((BK.indexOf(k)>=0)===(f==='back')?sc[k]:0);},0);};
+  return{sc:sc,keys:keys,mx:mx,yr:up&&!lo?[-5,182]:(lo&&!up?[128,360]:[-5,360]),lead:ld('back')>ld('front')?'back':'front',
+    col:function(k){const r=(sc[k]||0)/mx;return r>=.6?v.acc:(r>=.25?'#2F9BFF':(r>0?'rgba(47,155,255,.35)':'rgba(128,128,140,.30)'));}};
+}
+function csBar(g,x,y,w,r,c,ink){g.fillStyle=csRgba(ink,.14);g.beginPath();g.roundRect(x,y,w,22,11);g.fill();g.fillStyle=c;g.beginPath();g.roundRect(x,y,Math.max(22,w*r),22,11);g.fill();}
+/* One: a single big figure (the side with most work) + muscle bars / Uno: una figura grande (el lado con más trabajo) + barras */
+function csBodyOne(g,v){
+  const W=v.W,b=csBodySc(v),span=b.yr[1]-b.yr[0],hf=Math.min(span>300?820:640,v.B-420,420*span/164),y=v.B-hf-330;
+  csLogo(g,80,y-70,60,v.ink);csTxt(g,v.d.date,W-80,y-30,34,'500',v.sub,'right');
+  const ww=ANA[b.lead].vb.split(' ')[2]*hf/span;csFig(g,b.lead,80,y,hf,b.yr,b.col);
+  const x=80+ww+50,bw=W-80-x;let c=y+40;
+  csTxt(g,t('csBodyT'),x,c,40,'700',v.sub);c+=60;
+  const pitch=Math.max(84,Math.min(130,(hf-80)/6));b.keys.slice(0,Math.min(6,Math.floor((hf-60)/pitch))).forEach(function(k){csTxt(g,t('ms_'+k),x,c+4,36,'700',v.ink);csBar(g,x,c+22,bw,b.sc[k]/b.mx,b.col(k),v.ink);c+=pitch;});
+  const n=Math.min(3,v.stats.length),cw=(W-160)/Math.max(n,1);
+  v.stats.slice(0,3).forEach(function(q,i){const xx=80+i*cw,fp=csFit(g,q.v,cw-40,64,'800');csTxt(g,q.v,xx,v.B-60,fp,'800',v.ink);csTxt(g,q.l,xx,v.B-20,28,'500',v.sub);});
+}
+/* Pills: giant muscle count + chips / Píldoras: número gigante de músculos + etiquetas */
+function csBodyPill(g,v){
+  const W=v.W,b=csBodySc(v),span=b.yr[1]-b.yr[0],sq=v.H<1200,numH=sq?250:400,hf=Math.min(span>300?460:380,numH+30);
+  const pills=b.keys.slice(0,sq?6:9);g.font=cardFont(34,'700');let rows=1,xx=80;
+  pills.forEach(function(k){const pw=g.measureText(t('ms_'+k)).width+56;if(xx+pw>W-80){xx=80;rows++;}xx+=pw+16;});
+  const y=v.B-150-rows*84-numH-80;
+  csLogo(g,80,y-70,60,v.ink);csTxt(g,v.d.date,W-80,y-30,34,'500',v.sub,'right');
+  csTxt(g,t('csBodyT'),80,y+30,44,'700',v.sub);
+  const big=String(b.keys.length),fp=csFit(g,big,420,sq?220:300,'800');csTxt(g,big,80,y+(sq?230:300),fp,'800',v.acc);
+  csTxt(g,t('csPillL'),sq?80+g.measureText(big).width+30:80,y+(sq?215:380),sq?48:56,'800',v.ink);
+  const ww=ANA[b.lead].vb.split(' ')[2]*hf/span;csFig(g,b.lead,W-80-ww,y+60,hf,b.yr,b.col);
+  let x=80,c=y+numH+60;g.font=cardFont(34,'700');
+  pills.forEach(function(k){const nm=t('ms_'+k),pw=g.measureText(nm).width+56;if(x+pw>W-80){x=80;c+=84;}
+    g.fillStyle=csRgba(b.col(k),.22);g.beginPath();g.roundRect(x,c,pw,64,32);g.fill();g.strokeStyle=b.col(k);g.lineWidth=3;g.stroke();
+    csTxt(g,nm,x+28,c+43,34,'700',v.ink);x+=pw+16;});
+  const n=Math.min(3,v.stats.length),cw=(W-160)/Math.max(n,1);
+  v.stats.slice(0,3).forEach(function(q,i){const x2=80+i*cw,fq=csFit(g,q.v,cw-40,64,'800');csTxt(g,q.v,x2,v.B-60,fq,'800',v.ink);csTxt(g,q.l,x2,v.B-20,28,'500',v.sub);});
 }
 function csBody(g,v){
   const W=v.W,wk=v.wk,sc={},det=v.det;
