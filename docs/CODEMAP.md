@@ -132,7 +132,7 @@ Functions / Funciones: `cardIcon`:2, `cardFont`:9, `wkCardData`:10, `csvParse`:1
 Share studio: card styles, preview, PNG render, save/copy/share/Instagram story.  
 Estudio de compartir: estilos, vista previa, PNG, guardar/copiar/compartir/historia de Instagram.
 
-Functions / Funciones: `csRgba`:8, `csOpen`:13, `csAdv`:32, `csStory`:34, `csSet`:41, `csBgPhoto`:49, `csPhoto`:54, `csDraw`:62, `csPrep`:72, `csOut`:84, `csCrop`:93, `csFinal`:101, `csCopy`:102, `wkPic`:109, `csFit`:112, `csTxt`:117, `csNum`:119, `csLogo`:123, `csStats`:131, `csRender`:138, `csPanel`:166, `csPr`:180, `csClassic`:186, `csStack`:197, `csPoster`:206, `csChips`:216, `csLifts`:234, `csGiant`:252, `csVert`:268, `csRow`:285, `csDots`:300, `csGiantH`:321, `csDotsH`:334, `csListH`:336, `csFunH`:353, `csDuo`:366, `csBadge`:392, `csBar`:404, `csPrCard`:417, `csFunObj`:433, `csFunSeed`:447, `csTier`:455, `csTierPill`:456, `csFun`:464
+Functions / Funciones: `csRgba`:8, `csOpen`:13, `csAdv`:32, `csStory`:34, `csSet`:41, `csBgPhoto`:49, `csPhoto`:54, `csDraw`:62, `csPrep`:72, `csOut`:84, `csCrop`:93, `csFinal`:101, `csCopy`:102, `wkPic`:109, `csFit`:112, `csTxt`:117, `csNum`:119, `csLogo`:123, `csStats`:131, `csRender`:138, `csPanel`:166, `csPr`:180, `csClassic`:186, `csStack`:197, `csPoster`:206, `csChips`:216, `csLifts`:234, `csGiant`:252, `csVert`:268, `csRow`:285, `csDots`:300, `csGiantH`:321, `csDotsH`:334, `csListH`:336, `csFunH`:353, `csDuo`:366, `csBadge`:392, `csBar`:404, `csPrCard`:417, `csFunObj`:434, `csFunSeed`:452, `csTier`:460, `csTierPill`:461, `csFun`:469
 
 ### `body.js`
 Body tab, More tab (settings, backup/import/export), Recovery tab, strength score (strData), sub-tabs with swipe.  

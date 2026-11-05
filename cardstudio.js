@@ -430,7 +430,12 @@ const CS_OBJ=[['whl',150000],['jet',41000],['hmp',30000],['fir',18000],['bus',11
 /* what you lifted, as a thing people know. With a seed it picks among the things that give a nice number (1 to 15), epic ones on big days; without one, the heaviest thing you outweigh /
    lo que levantaste, como algo conocido. Con semilla elige entre lo que da un número agradable (1 a 15), cosas épicas en los días grandes; sin semilla, lo más pesado que superaste */
 const CS_EPIC={whl:1,jet:1,hmp:1,fir:1,bus:1,trx:1,ele:1,orc:1,pck:1,b52:1,mbt:1,c13:1,f22:1,f35:1,a10:1,chn:1,f16:1,blk:1,hum:1,tmh:1}; // war machines and giants: big days get these / máquinas de guerra y gigantes: los días grandes las reciben
+const CS_LOL=[['gsd',34],['chi',2.3],['cor',12],['cap',50],['fgc',9],['rac',9],['gse',5],['pen',36],['fla',3],['trt',0.5],['tco',0.1],['bur',0.6],['piz',1],['pol',1.4],['tam',0.25],['pdc',0.1],['mre',0.7],['mon',0.5],['hlm',1.4],['pla',7],['m4r',3.4],['ruk',16],['sbg',18],['wtr',19],['amc',10],['bud',82],['cas',90]]; // funny things: can reach thousands of units / cosas graciosas: pueden llegar a miles de unidades
 function csFunObj(kg,seed){
+  if(seed!=null&&seed%5<2){ // 2 of 5 cards are the funny kind / 2 de cada 5 tarjetas son de las graciosas
+    const lol=CS_LOL.filter(function(o){const n=kg/o[1];return n>=2&&n<=20000;});
+    if(lol.length){const o=lol[Math.floor(seed/5)%lol.length];return{k:o[0],n:kg/o[1]};}
+  }
   const ok=CS_OBJ.filter(function(o){return kg/o[1]>=1;});
   if(!ok.length){const o=CS_OBJ[CS_OBJ.length-1];return{k:o[0],n:kg/o[1]};}
   let pick=ok[0];
