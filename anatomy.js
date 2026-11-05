@@ -52,16 +52,18 @@ function anaExFor(code){
 }
 /* ----- Recovery: body view ----- */
 let ANA_REC=null;
+/* smooth red → yellow → green by recovery % (0 = just trained, 100 = ready) / color continuo rojo → amarillo → verde según % de recuperación */
+function anaRecCol(p){const h=Math.round(Math.max(0,Math.min(100,p))*1.3),l=document.documentElement.dataset.mode==='light'?40:50;return'hsl('+h+',78%,'+l+'%)';}
 function anaRecFill(r){
-  return function(k){const g=muGroup(k);if(!g)return'';const q=r.g[g].subs[k];if(!q||q.pct==null)return'';return q.pct>=100?'var(--an-ok)':(q.pct>=60?'var(--an-mid)':'var(--an-low)');};
+  return function(k){const g=muGroup(k);if(!g)return'';const q=r.g[g].subs[k];if(!q||q.pct==null)return'';return anaRecCol(q.pct);};
 }
 function anaRecHtml(r){
   const f=anaRecFill(r);
   let h='<div class="ana-card"><div class="ana-pair">'+anaSvg('front',150,f,{sel:ANA_REC,tap:'anaRecTap'})+anaSvg('back',150,f,{sel:ANA_REC,tap:'anaRecTap'})+'</div>'+
-    '<div class="rv-leg"><span class="ok">'+t('rlOk')+'</span><span class="mid">'+t('rlMid')+'</span><span class="low">'+t('rlLow')+'</span><span class="none">'+t('anaNone')+'</span></div></div>';
+    '<div class="ana-grad"><span>'+t('rlLow')+'</span><i></i><span>'+t('rlOk')+'</span></div><div class="rv-leg"><span class="none">'+t('anaNone')+'</span></div></div>';
   if(ANA_REC&&MUS_BASE[ANA_REC]){
     const k=ANA_REC,q=r.g[muGroup(k)].subs[k],p=q.pct==null?100:q.pct,c=p>=100?'ok':(p>=60?'mid':'low'),ex=anaExFor(k).slice(0,3);
-    h+='<div class="ana-sel rv-s '+c+'" style="--p:'+p+'"><div class="ana-st"><b>'+t('ms_'+k)+'</b><span>'+(q.pct==null?t('anaNone'):(p>=100?t('rlOk'):t('recIn',q.left)))+'</span></div><span class="rv-bar"><u style="width:'+p+'%"></u></span>'+
+    h+='<div class="ana-sel rv-s '+c+'" style="--p:'+p+';--c:'+anaRecCol(p)+'"><div class="ana-st"><b>'+t('ms_'+k)+'</b><span>'+(q.pct==null?t('anaNone'):(p>=100?t('rlOk'):t('recIn',q.left)))+'</span></div><span class="rv-bar"><u style="width:'+p+'%"></u></span>'+
       '<div class="ana-ch">'+ex.map(function(z){const e=exById(z[0]);return e?'<button class="chip" onclick="howOpen(\''+z[0]+'\',\'sheetClose\')">'+esc(LANG==='es'?e.es:e.en)+'</button>':'';}).join('')+'</div>'+
       '<div class="row"><button class="btn sm" onclick="anaFind(\''+k+'\')">'+t('anaFindBtn')+'</button><button class="btn pri sm" onclick="recSubTap(\''+k+'\')">'+t('recCtaB')+'</button></div></div>';
   }else h+='<p class="muted sm rv-hint">'+t('anaTap')+'</p>';
