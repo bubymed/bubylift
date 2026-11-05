@@ -837,3 +837,12 @@ button.rk-tz{cursor:pointer}
 .rk-tzh .rk-hero b{font-size:1.5rem;font-weight:800;color:var(--txt)}.rk-tzh .rk-hero small{font-size:.9rem;color:var(--dim)}
 .rk-tzh .rk-bar{height:12px;background:color-mix(in srgb,var(--rc) 20%,transparent);margin:14px 0 8px}.rk-tzh .rk-bar u{background:var(--rc);box-shadow:0 0 14px var(--rc)}
 .rk-tzh .rk-nx{text-align:center;color:var(--txt);opacity:.85;margin:0}
+
+/* Rank tab header: same rank-colored hero as the home card / cabecera de la pestaña Rango: mismo héroe con el color del rango que la tarjeta del inicio */
+.rkc{--rc:var(--accent);border:1px solid color-mix(in srgb,var(--rc) 55%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--rc) 30%,var(--panel)) 0%,color-mix(in srgb,var(--rc) 8%,var(--panel)) 38%,var(--panel) 62%);box-shadow:0 10px 34px -16px var(--rc),var(--shadow)}
+.rkc .str-top{justify-content:center;padding-top:10px}
+.rkc .rk-hero .rkn{font-size:3.1rem;color:var(--rc);text-shadow:0 0 28px color-mix(in srgb,var(--rc) 55%,transparent)}
+.rkc .rkn2{font-size:2.6rem}.rkc .rkn7{font-size:2.5rem}.rkc .rkn10{font-size:2.6rem}
+.rkc .rk-hero b{font-size:1.5rem;font-weight:800;color:var(--txt)}.rkc .rk-hero small{font-size:.9rem;color:var(--dim)}
+.rkc .rk-bar{height:12px;background:color-mix(in srgb,var(--rc) 20%,transparent);margin:14px 0 8px}.rkc .rk-bar u{background:var(--rc);box-shadow:0 0 14px var(--rc)}
+.rkc .rk-nx{text-align:center}

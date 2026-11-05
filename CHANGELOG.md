@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.66 — 2026-10-30
+- The Rank tab header now matches the home card: tinted with your rank's color, bigger name and glowing progress bar.
+  La cabecera de la pestaña Rango ahora igual que la del inicio: teñida con el color de tu rango, nombre más grande y barra con brillo.
+
 ## v1.1.65 — 2026-10-30
 - Your rank now stands out on the Workout home: card tinted with your rank's color, bigger name and glowing progress bar. Plus 2 new muscle share cards: Muscle map and Muscles.
   Tu rango ahora destaca en el inicio: tarjeta teñida con el color de tu rango, nombre más grande y barra con brillo. Y 2 tarjetas nuevas con músculos para compartir: Mapa y Músculos.

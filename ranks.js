@@ -53,6 +53,7 @@ function strCard(){
   if(!d.bw)return h+rkAsk()+'</div>';
   if(lock)return h+'<p class="rk-ask">'+rkLockMsg(d.n)+'</p></div>';
   const shown=d.cur!=null?d.cur:d.score,ix=rkIdx(shown),pk=rkIdx(d.score),top=ix>=RK_T.length-1,lo=RK_T[ix],hi=top?100:RK_T[ix+1],pct=top?100:Math.round((shown-lo)/(hi-lo)*100);
+  h=h.replace('class="card strc rkc"','class="card strc rkc" style="--rc:var(--rk'+ix+')"');
   h+='<div class="str-top rk-hero" role="button" tabindex="0" onclick="rkLadder()"><span class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</span><b>'+shown+' <small>'+t('rkPts')+'</small></b></div>';
   if(d.cur==null)h+='<p class="rk-back">'+t('rkAway',rkName(pk))+'</p>';
   else if(pk>ix)h+='<p class="rk-back">'+t('rkBack',rkName(pk))+'</p>';
