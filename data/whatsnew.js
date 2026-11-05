@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.63',items:[
+  {i:'🎯',en:'Muscle data fixed: every exercise now has a main muscle, and ~30 wrong ones were corrected (hammer curls, cleans, snatches, pullovers, good mornings, jumps and drills, balance work).',es:'Datos musculares corregidos: todo ejercicio tiene músculo principal y se corrigieron ~30 errores (curl martillo, cleans, snatches, pullovers, buenos días, saltos y drills, equilibrio).'}
+ ]},
  {v:'v1.1.62',items:[
   {i:'🫀',en:'<b>Body figure:</b> Recovery has a Body view (tap a muscle), the technique guide shows main muscle / helpers / stabilizers on the body, new Find by muscle, and a Body share card. Chest and shoulders are split (upper chest, side delts).',es:'<b>Figura del cuerpo:</b> Recuperación tiene vista de Cuerpo (toca un músculo), la guía de técnica muestra músculo principal / ayudan / estabilizadores en el cuerpo, nuevo Buscar por músculo y una tarjeta Cuerpo. Pecho y hombros están divididos (pecho superior, deltoides lateral).'}
  ]},

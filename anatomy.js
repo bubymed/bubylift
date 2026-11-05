@@ -30,6 +30,7 @@ function anaSvg(face,w,fill,o){
 function anaRoles(eid,vr){
   const w=muW(eid,vr)||[],r={main:[],help:[],stab:[]};
   w.forEach(q=>{(q[1]>=.9?r.main:(q[1]>=.5?r.help:r.stab)).push(q[0]);});
+  if(!r.main.length&&w.length){const t=w.reduce((a,b)=>b[1]>a[1]?b:a);[r.help,r.stab].forEach(l=>{const i=l.indexOf(t[0]);if(i>=0)l.splice(i,1);});r.main.push(t[0]);}// every exercise shows a main muscle / todo ejercicio muestra un principal
   return r;
 }
 function anaRoleFill(r){

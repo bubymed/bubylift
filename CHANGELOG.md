@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.63 — 2026-10-30
+- Muscle data fixed: every exercise now has a main muscle, and ~30 wrong ones were corrected (hammer curls, cleans, snatches, pullovers, good mornings, jumps and drills, balance work).
+  Datos musculares corregidos: todo ejercicio tiene músculo principal y se corrigieron ~30 errores (curl martillo, cleans, snatches, pullovers, buenos días, saltos y drills, equilibrio).
+
 ## v1.1.62 — 2026-10-30
 - **Body figure:** Recovery has a Body view (tap a muscle), the technique guide shows main muscle / helpers / stabilizers on the body, new Find by muscle, and a Body share card. Chest and shoulders are split (upper chest, side delts).
   **Figura del cuerpo:** Recuperación tiene vista de Cuerpo (toca un músculo), la guía de técnica muestra músculo principal / ayudan / estabilizadores en el cuerpo, nuevo Buscar por músculo y una tarjeta Cuerpo. Pecho y hombros están divididos (pecho superior, deltoides lateral).
