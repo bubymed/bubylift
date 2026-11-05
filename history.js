@@ -1,3 +1,6 @@
+/* History tab, line/bar charts, per-exercise Progress view and the calendar.
+   Pestaña Historial, gráficas de línea/barras, vista de Progreso por ejercicio y calendario.
+   Map of all files: docs/CODEMAP.md / Mapa de todos los archivos: docs/CODEMAP.md */
 'use strict';
 /* History and Progress tabs + small SVG charts.
    Pestañas Historial y Progreso + gráficas SVG pequeñas. */
