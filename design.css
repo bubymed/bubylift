@@ -827,4 +827,4 @@ button.rk-tz{cursor:pointer}
 .ana-fh{display:flex;justify-content:space-between;align-items:baseline;margin:14px 2px 4px}.ana-fh b{font-size:1.15rem}
 .ana-fl{max-height:34vh;overflow-y:auto;overscroll-behavior:contain}
 
-.ana-grad{display:flex;align-items:center;gap:8px;margin:12px 0 2px;font-size:.74rem;font-weight:700;color:var(--dim)}.ana-grad i{flex:1;height:8px;border-radius:99px;background:linear-gradient(90deg,hsl(0,78%,50%),hsl(65,78%,50%),hsl(130,78%,50%))}
+.ana-grad{display:flex;align-items:center;gap:8px;margin:12px 0 2px;font-size:.74rem;font-weight:700;color:var(--dim)}.ana-grad i{flex:1;height:8px;border-radius:99px;background:linear-gradient(90deg,#f03c32,#ffc400,#2cbe50)}

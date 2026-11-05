@@ -53,7 +53,11 @@ function anaExFor(code){
 /* ----- Recovery: body view ----- */
 let ANA_REC=null;
 /* smooth red → yellow → green by recovery % (0 = just trained, 100 = ready) / color continuo rojo → amarillo → verde según % de recuperación */
-function anaRecCol(p){const h=Math.round(Math.max(0,Math.min(100,p))*1.3),l=document.documentElement.dataset.mode==='light'?40:50;return'hsl('+h+',78%,'+l+'%)';}
+function anaRecCol(p){
+  const L=document.documentElement.dataset.mode==='light',S=L?[[240,60,50],[255,196,0],[44,190,80]]:[[255,69,58],[255,204,0],[52,199,89]],
+    x=Math.max(0,Math.min(100,p))/50,i=x>=1?1:0,f=x-i,a=S[i],b=S[i+1];
+  return'rgb('+a.map(function(v,n){return Math.round(v+(b[n]-v)*f);}).join(',')+')';
+}
 function anaRecFill(r){
   return function(k){const g=muGroup(k);if(!g)return'';const q=r.g[g].subs[k];if(!q||q.pct==null)return'';return anaRecCol(q.pct);};
 }
