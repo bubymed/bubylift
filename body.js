@@ -39,7 +39,7 @@ function recWin(sub,s){const f=s<=4?Math.max(.5,.5+s*.125):Math.min(1.75,1+(s-4)
 function recData(now){
   now=now||Date.now();
   const ev={};Object.keys(MUS_BASE).forEach(k=>{ev[k]=[];});let lastT=0;
-  DATA.workouts.slice().sort((x,y)=>(x.end||x.t)-(y.end||y.t)).forEach(wk=>{
+  DATA.workouts.filter(w=>isFinite(w.end||w.t)).sort((x,y)=>(x.end||x.t)-(y.end||y.t)).forEach(wk=>{
     const eff={},end=wk.end||wk.t;let any=0;
     wk.ex.forEach(x=>{const w=muW(x.eid,x.vr);if(!w)return;const n=x.sets.filter(q=>q.done!==false&&(q.r>0||q.t>0)).length;if(!n)return;any=1;w.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});});
     if(any&&end>lastT)lastT=end;

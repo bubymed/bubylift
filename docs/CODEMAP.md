@@ -103,7 +103,7 @@ Functions / Funciones: `tourMaybe`:13, `tourStart`:21, `tourDraw`:35, `tourGo`:4
 History tab, charts (lineSvg/barSvg), Progress tab per-exercise view, calendar.  
 Pestaña Historial, gráficas (lineSvg/barSvg), vista de Progreso por ejercicio, calendario.
 
-Functions / Funciones: `lineSvg`:9, `barSvg`:31, `spName`:45, `wkDur`:46, `wkPRs`:47, `wkCard`:48, `vHistory`:55, `wkText`:68, `openWk`:74, `repeatWk`:88, `shareWk`:94, `delWkAsk`:100, `loggedEx`:103, `bestSet`:108, `exSessions`:113, `metricFmt`:124, `openProg`:125, `setPm`:126, `closeProg`:127, `vProgress`:129, `featCharts`:148, `rmCalc`:159, `rmUpdate`:162, `vExProg`:167, `psSet`:188, `vProgTab`:189, `calOpen`:197, `calMove`:198, `calSel`:199, `calDraw`:200, `calHtml`:201
+Functions / Funciones: `lineSvg`:9, `barSvg`:31, `spName`:45, `wkDur`:46, `wkPRs`:47, `wkCard`:48, `vHistory`:56, `wkText`:69, `openWk`:75, `repeatWk`:89, `shareWk`:95, `delWkAsk`:101, `loggedEx`:104, `bestSet`:109, `exSessions`:114, `metricFmt`:125, `openProg`:126, `setPm`:127, `closeProg`:128, `vProgress`:130, `featCharts`:149, `rmCalc`:160, `rmUpdate`:163, `vExProg`:168, `psSet`:189, `vProgTab`:190, `calOpen`:198, `calMove`:199, `calSel`:200, `calDraw`:201, `calHtml`:202
 
 ### `goals.js`
 Goals with progress bars.  
@@ -133,7 +133,7 @@ Functions / Funciones: `cardIcon`:2, `cardFont`:9, `wkCardData`:10, `csvParse`:1
 Share studio: card styles, preview, PNG render, save/copy/share/Instagram story.  
 Estudio de compartir: estilos, vista previa, PNG, guardar/copiar/compartir/historia de Instagram.
 
-Functions / Funciones: `csRgba`:8, `csOpen`:13, `csAdv`:33, `csStory`:35, `csSet`:42, `csBgPhoto`:51, `csPhoto`:56, `csDraw`:64, `csPrep`:74, `csOut`:86, `csCrop`:95, `csFinal`:103, `csCopy`:104, `wkPic`:111, `csFit`:114, `csTxt`:119, `csNum`:121, `csLogo`:125, `csStats`:133, `csRender`:140, `csPanel`:168, `csPr`:182, `csClassic`:188, `csStack`:199, `csPoster`:208, `csChips`:218, `csLifts`:236, `csGiant`:254, `csVert`:270, `csRow`:287, `csDots`:302, `csGiantH`:323, `csDotsH`:336, `csListH`:338, `csFunH`:355, `csDuo`:368, `csBadge`:394, `csBar`:406, `csPrCard`:419, `csFunObj`:436, `csFunSeed`:456, `csTier`:464, `csTierPill`:465, `csFun`:473, `csBody`:487
+Functions / Funciones: `csRgba`:8, `csOpen`:13, `csAdv`:34, `csStory`:36, `csSet`:43, `csBgPhoto`:53, `csPhoto`:58, `csDraw`:66, `csPrep`:76, `csOut`:88, `csCrop`:97, `csFinal`:105, `csCopy`:106, `wkPic`:113, `csFit`:116, `csTxt`:121, `csNum`:123, `csLogo`:127, `csStats`:135, `csRender`:142, `csPanel`:170, `csPr`:184, `csClassic`:190, `csStack`:201, `csPoster`:210, `csChips`:220, `csLifts`:238, `csGiant`:256, `csVert`:272, `csRow`:289, `csDots`:304, `csGiantH`:325, `csDotsH`:338, `csListH`:340, `csFunH`:357, `csDuo`:370, `csBadge`:396, `csBar`:408, `csPrCard`:421, `csFunObj`:438, `csFunSeed`:458, `csTier`:466, `csTierPill`:467, `csFun`:475, `csFig`:491, `csBody`:499
 
 ### `body.js`
 Body tab, More tab (settings, backup/import/export), Recovery tab, strength score (strData), sub-tabs with swipe.  
@@ -151,7 +151,7 @@ Functions / Funciones: `rkIdx`:5, `rkName`:6, `rkOpen`:7, `strInv`:9, `rkTarget`
 Anatomy figure: draws the body, muscle roles (agonist/synergist/stabilizer), Recovery body view, Find by muscle.  
 Figura anatómica: dibuja el cuerpo, roles musculares (agonista/sinergista/estabilizador), vista de cuerpo en Recuperación, Buscar por músculo.
 
-Functions / Funciones: `anaSvg`:11, `anaRoles`:30, `anaRoleFill`:35, `anaGuide`:41, `anaExFor`:47, `anaRecFill`:54, `anaRecHtml`:57, `anaRecTap`:69, `anaFind`:72, `anaFindTap`:73, `anaFace`:74, `anaFindDraw`:75, `anaCanvas`:84
+Functions / Funciones: `anaSvg`:11, `anaRoles`:30, `anaRoleFill`:36, `anaGuide`:42, `anaExFor`:48, `anaRecCol`:56, `anaRecFill`:61, `anaRecHtml`:64, `anaRecTap`:76, `anaFind`:79, `anaFindTap`:80, `anaFace`:81, `anaFindDraw`:82, `anaCanvas`:91
 
 ### `variants.js`
 Exercise variations (grip, width): own records and muscle emphasis.  
