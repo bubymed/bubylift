@@ -820,8 +820,9 @@ button.rk-tz{cursor:pointer}
 .rv-leg .none::before{background:var(--an-none)}
 .rv-view{margin:12px 0 0}
 .ana-sel{margin-top:12px;padding:14px;border-radius:16px;background:var(--panel)}
+.ana-sel.rv-s{display:block;border-top:0;padding:14px;width:auto}.ana-sel.rv-s .rv-bar{display:block;margin:2px 0 8px}
+.ana-ch{display:flex;flex-wrap:wrap;gap:6px}
 .ana-st{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}.ana-st b{font-size:1.1rem}.ana-st span{font-size:.84rem;color:var(--dim)}
-.ana-ch{margin:10px 0 6px}
 .ana-sel .row,.ana-find .row{margin-top:10px}
 .ana-fh{display:flex;justify-content:space-between;align-items:baseline;margin:14px 2px 4px}.ana-fh b{font-size:1.15rem}
 .ana-fl{max-height:34vh;overflow-y:auto;overscroll-behavior:contain}
