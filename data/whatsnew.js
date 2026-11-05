@@ -2,6 +2,15 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.64',items:[
+  {i:'🏋️',en:'Body share card: crops to the half you trained (upper / lower / full) and has 3 detail levels: Quick, Detailed, Complete. Recovery map now uses a smooth red-to-green gradient.',es:'Tarjeta Cuerpo: se recorta a la mitad que entrenaste (arriba / abajo / completo) y tiene 3 niveles de detalle: Rápida, Detallada, Completa. El mapa de recuperación usa un degradado suave de rojo a verde.'}
+ ]},
+ {v:'v1.1.63',items:[
+  {i:'🎯',en:'Muscle data fixed: every exercise now has a main muscle, and ~30 wrong ones were corrected (hammer curls, cleans, snatches, pullovers, good mornings, jumps and drills, balance work).',es:'Datos musculares corregidos: todo ejercicio tiene músculo principal y se corrigieron ~30 errores (curl martillo, cleans, snatches, pullovers, buenos días, saltos y drills, equilibrio).'}
+ ]},
+ {v:'v1.1.62',items:[
+  {i:'🫀',en:'<b>Body figure:</b> Recovery has a Body view (tap a muscle), the technique guide shows main muscle / helpers / stabilizers on the body, new Find by muscle, and a Body share card. Chest and shoulders are split (upper chest, side delts).',es:'<b>Figura del cuerpo:</b> Recuperación tiene vista de Cuerpo (toca un músculo), la guía de técnica muestra músculo principal / ayudan / estabilizadores en el cuerpo, nuevo Buscar por músculo y una tarjeta Cuerpo. Pecho y hombros están divididos (pecho superior, deltoides lateral).'}
+ ]},
  {v:'v1.1.61',items:[
   {i:'😂',en:'<b>Funny cards:</b> a new Serious / Funny switch in the share studio. Funny mode says things like "2000 tortas", "180 German shepherds", "35 MREs" or "12 casualties on a litter" (26 new things: animals, food, army life).',es:'<b>Tarjetas graciosas:</b> nuevo botón Serias / Graciosas en el estudio de compartir. El modo gracioso dice cosas como «2000 tortas», «180 pastores alemanes», «35 MREs» o «12 heridos en camilla» (26 cosas nuevas: animales, comida y vida en el Army).'}
  ]},

@@ -4,7 +4,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.61';
+const APP_VER='v1.1.64';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -59,7 +59,7 @@ function lParse(s){const n=numParse(s);return n==null?null:(imp()?n/CM_IN:n);}
 const loc=()=>LANG==='es'?'es':'en-US';
 /* one Intl formatter per locale+options: creating one per call made long lists slow / un formateador Intl por idioma+opciones: crear uno por llamada hacía lentas las listas largas */
 const _dfc={};
-function dFmt(ts,o){o=o||{month:'short',day:'numeric',year:'numeric'};const l=loc(),k=l+JSON.stringify(o);let f=_dfc[k];if(!f){try{f=_dfc[k]=new Intl.DateTimeFormat(l,o);}catch(e){return new Date(ts).toLocaleDateString(l,o);}}return f.format(new Date(ts));}
+function dFmt(ts,o){o=o||{month:'short',day:'numeric',year:'numeric'};if(!isFinite(ts))return'';const l=loc(),k=l+JSON.stringify(o);let f=_dfc[k];if(!f){try{f=_dfc[k]=new Intl.DateTimeFormat(l,o);}catch(e){return new Date(ts).toLocaleDateString(l,o);}}return f.format(new Date(ts));}
 function dInput(ts){const d=new Date(ts);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function dFromInput(s){const p=String(s).split('-').map(Number);if(p.length!==3||p.some(isNaN))return Date.now();return new Date(p[0],p[1]-1,p[2],12,0,0).getTime();}
 function weekStart(ts){const d=new Date(ts==null?Date.now():ts);d.setHours(0,0,0,0);const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return d.getTime();}

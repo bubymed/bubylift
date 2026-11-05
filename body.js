@@ -39,7 +39,7 @@ function recWin(sub,s){const f=s<=4?Math.max(.5,.5+s*.125):Math.min(1.75,1+(s-4)
 function recData(now){
   now=now||Date.now();
   const ev={};Object.keys(MUS_BASE).forEach(k=>{ev[k]=[];});let lastT=0;
-  DATA.workouts.slice().sort((x,y)=>(x.end||x.t)-(y.end||y.t)).forEach(wk=>{
+  DATA.workouts.filter(w=>isFinite(w.end||w.t)).sort((x,y)=>(x.end||x.t)-(y.end||y.t)).forEach(wk=>{
     const eff={},end=wk.end||wk.t;let any=0;
     wk.ex.forEach(x=>{const w=muW(x.eid,x.vr);if(!w)return;const n=x.sets.filter(q=>q.done!==false&&(q.r>0||q.t>0)).length;if(!n)return;any=1;w.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});});
     if(any&&end>lastT)lastT=end;
@@ -98,14 +98,16 @@ function recCard(){
   const vals=REC_G.map(g=>r.g[g].pct==null?100:r.g[g].pct),avg=Math.round(vals.reduce((a,c)=>a+c,0)/vals.length);
   return'<div class="rv"><div class="rv-hero"'+skAttr(t('recT'),t('recPct',avg),t('recCtaB'),'recWorkout()')+'><div class="rv-ring" style="--p:'+avg+'"><b>'+avg+'<small>%</small></b></div><div class="rv-ht"><span class="hero-e">'+t('recT')+'</span><h3>'+t('recPct',avg)+'</h3>'+
     '<p>'+r.ready+'/'+REC_G.length+' '+t('recReady')+' · '+(r.days===0?t('recLastToday'):r.days+' '+t('recDays'))+'</p></div></div>'+
-    '<div class="rv-leg"><span class="ok">'+t('rlOk')+'</span><span class="mid">'+t('rlMid')+'</span><span class="low">'+t('rlLow')+'</span></div>'+
+    '<div class="seg rv-view"><button class="'+(REC_VIEW==='g'?'on':'')+'" onclick="recView(\'g\')">'+t('recViewG')+'</button><button class="'+(REC_VIEW==='b'?'on':'')+'" onclick="recView(\'b\')">'+t('recViewB')+'</button></div>'+
+    (REC_VIEW==='b'?anaRecHtml(r)+'</div>':'<div class="rv-leg"><span class="ok">'+t('rlOk')+'</span><span class="mid">'+t('rlMid')+'</span><span class="low">'+t('rlLow')+'</span></div>'+
     '<div class="rv-grid">'+REC_G.map((g,k)=>{const x=r.g[g],p=x.pct==null?100:x.pct,c=p>=100?'ok':(p>=60?'mid':'low'),op=REC_OPEN===g;
       let h='<button class="rv-t '+c+(op?' open':'')+'" aria-expanded="'+op+'" style="--p:'+p+';--i:'+k+'" onclick="recTap(\''+g+'\')"><span class="rv-r"><em>'+(p>=100?'✓':p+'%')+'</em></span><b>'+t('g_'+g)+'</b><small>'+(x.pct==null?t('recFresh'):(p>=100?t('recOk'):t('recIn',x.left)))+'</small><i class="rv-chv" aria-hidden="true">▾</i></button>';
       const oi=REC_G.indexOf(REC_OPEN);
       if(oi>=0&&Math.floor(oi/2)===Math.floor(k/2)&&(k%2===1||k===REC_G.length-1))h+=recSubs(r,REC_OPEN);
-      return h;}).join('')+'</div><p class="muted sm rv-hint">'+t('recTapGo')+'</p></div>';
+      return h;}).join('')+'</div><p class="muted sm rv-hint">'+t('recTapGo')+'</p></div>');
 }
-let REC_OPEN=null;
+let REC_OPEN=null,REC_VIEW='g';
+function recView(v){REC_VIEW=v;render();}
 /* the parts of one muscle, opened under the grid / las partes de un músculo, abiertas bajo la cuadrícula */
 function recSubs(r,g){
   const x=r.g[g];

@@ -6,6 +6,18 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.64 — 2026-10-30
+- Body share card: crops to the half you trained (upper / lower / full) and has 3 detail levels: Quick, Detailed, Complete. Recovery map now uses a smooth red-to-green gradient.
+  Tarjeta Cuerpo: se recorta a la mitad que entrenaste (arriba / abajo / completo) y tiene 3 niveles de detalle: Rápida, Detallada, Completa. El mapa de recuperación usa un degradado suave de rojo a verde.
+
+## v1.1.63 — 2026-10-30
+- Muscle data fixed: every exercise now has a main muscle, and ~30 wrong ones were corrected (hammer curls, cleans, snatches, pullovers, good mornings, jumps and drills, balance work).
+  Datos musculares corregidos: todo ejercicio tiene músculo principal y se corrigieron ~30 errores (curl martillo, cleans, snatches, pullovers, buenos días, saltos y drills, equilibrio).
+
+## v1.1.62 — 2026-10-30
+- **Body figure:** Recovery has a Body view (tap a muscle), the technique guide shows main muscle / helpers / stabilizers on the body, new Find by muscle, and a Body share card. Chest and shoulders are split (upper chest, side delts).
+  **Figura del cuerpo:** Recuperación tiene vista de Cuerpo (toca un músculo), la guía de técnica muestra músculo principal / ayudan / estabilizadores en el cuerpo, nuevo Buscar por músculo y una tarjeta Cuerpo. Pecho y hombros están divididos (pecho superior, deltoides lateral).
+
 ## v1.1.61 — 2026-10-30
 - **Funny cards:** a new Serious / Funny switch in the share studio. Funny mode says things like "2000 tortas", "180 German shepherds", "35 MREs" or "12 casualties on a litter" (26 new things: animals, food, army life).
   **Tarjetas graciosas:** nuevo botón Serias / Graciosas en el estudio de compartir. El modo gracioso dice cosas como «2000 tortas», «180 pastores alemanes», «35 MREs» o «12 heridos en camilla» (26 cosas nuevas: animales, comida y vida en el Army).
