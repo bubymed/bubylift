@@ -133,6 +133,17 @@ function libHow(id){howOpen(id,'libDraw');}
 const LIB_IMG={full:'deadlift',chest:'bench',back:'bbrow',shoulders:'ohp',arms:'dbcurl',legs:'squat',glutes:'hipthrust',core:'plank',stretch:'z_worlds_greatest_stretch',kb:'kbswing',db:'dbcurl',bb:'bench',cab:'cablefly',mach:'legpress',band:'bandpull',trx:'suprow',mb:'mbslam',bw:'pushup'};
 const SP_IMG={ul:'pullup',ppl:'bench',arn:'dbcurl',bro:'latpd',ulppl:'deadlift',fb:'squat',sl:'bbrow',ss:'deadlift',w531:'ohp',phul:'dbbench',gvt:'legpress'};
 function photoTh(id){return'<span class="hv-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>';}
+/* muscle-group tiles draw the anatomy figure instead of a photo / los grupos musculares dibujan la figura anatómica en vez de una foto */
+const LIB_ANA={full:['front',-5,365,'full'],chest:['front',-5,190,'chest'],back:['back',-5,200,'back'],shoulders:['front',-5,190,'shoulders'],arms:['front',-5,215,'arms'],legs:['front',165,200,'legs'],glutes:['back',130,235,'glutes'],core:['front',50,175,'core'],stretch:['front',-5,365,'full']};
+const LIB_ANA_W={arms:'bic1 trm1 frm.6 trl.6 sdf.3',stretch:'qd.6 ham.6 gmx.6 lat.6 chm.6 sdf.6 clf.5'};
+function libAnaSvg(k){
+  const c=LIB_ANA[k];if(!c||typeof anaSvg!=='function'||typeof ANA==='undefined')return'';
+  const m={};String(LIB_ANA_W[k]||(typeof MUS_DEF!=='undefined'&&MUS_DEF[c[3]])||'').split(' ').forEach(q=>{const r=/^([a-z]+)(\d*\.?\d+)$/.exec(q);if(r)m[r[1]]=+r[2];});
+  const f=code=>{const w=m[code];return w==null?'':(w>=.9?'var(--an-main)':'color-mix(in srgb,var(--an-main) '+Math.round(40+w*50)+'%,var(--an-sil))');};
+  const vb=ANA[c[0]].vb.split(' ').map(Number);
+  return anaSvg(c[0],90,f).replace(/viewBox="[^"]*"/,'viewBox="'+vb[0]+' '+c[1]+' '+vb[2]+' '+c[2]+'"').replace(/ width="\d+" height="\d+"/,' width="100%" height="100%" preserveAspectRatio="xMidYMid meet"');
+}
+function libMuscTiles(arr,cur,fn){return'<div class="lat lata">'+arr.map(k=>'<button class="lt-i lt-a'+(k===cur?' on':'')+'" onclick="'+fn+'(\''+k+'\')">'+libAnaSvg(k)+'<span>'+t('lib_'+k)+'</span></button>').join('')+'</div>';}
 function libTiles(arr,cur,fn){return'<div class="lat">'+arr.map(k=>'<button class="lt-i'+(k===cur?' on':'')+'" onclick="'+fn+'(\''+k+'\')" style="background-image:url(img/ex/'+(LIB_IMG[k]||'bench')+'-0.jpg)"><span>'+t('lib_'+k)+'</span></button>').join('')+'</div>';}
 function libChips(arr,cur,fn,lab,wrap){return'<div class="chips'+(wrap?' wrap':'')+'">'+arr.map((k,i)=>{const v=typeof k==='number'?k:k;return'<button class="chip'+(String(v)===String(cur)?' on':'')+'" onclick="'+fn+'(\''+v+'\')">'+lab(v)+'</button>';}).join('')+'</div>';}
 /* a numbered rank card grid, different from the pill buttons / cuadrícula de rangos numerados, distinta de los botones de píldora */
@@ -164,7 +175,7 @@ function libDraw(){
 function libFocusHtml(){
   const li=LIB.lv,items=libFocus(LIB.area,li,libHave());
   let h='<p class="muted sm">'+t('libFocusP')+'</p>'+
-    libStep(1,'libStep1')+libTiles(LIB_AREAS,LIB.area,'libArea')+'<div class="lsub"><span>'+t('libOrEq')+'</span></div>'+libTiles(LIB_EQ,LIB.area,'libArea')+
+    libStep(1,'libStep1')+libMuscTiles(LIB_AREAS,LIB.area,'libArea')+'<div class="lsub"><span>'+t('libOrEq')+'</span></div>'+libTiles(LIB_EQ,LIB.area,'libArea')+
     libStep(2,'libStep2')+libRanks(LIB.area,li,'libLv')+
     '<div class="card optb"><b>'+rk(LIB.area,li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
   h+=libStep(3,'libStep3');

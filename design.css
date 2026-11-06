@@ -857,3 +857,8 @@ button.rk-tz{cursor:pointer}
 .lat::-webkit-scrollbar{display:none}
 .lat .lt-i{flex:none;width:104px;aspect-ratio:1/.85;scroll-snap-align:start}
 @media(min-width:720px){.lat{grid-template-columns:none}}
+/* muscle tiles with the anatomy figure / casillas de músculo con la figura anatómica */
+.lt-i.lt-a{background:var(--panel);aspect-ratio:auto;height:128px;align-items:flex-end}
+.lt-i.lt-a::before{display:none}
+.lt-i.lt-a .ana{position:absolute;left:0;right:0;top:6px;bottom:26px;width:100%;height:calc(100% - 32px)}
+.lt-i.lt-a span{position:relative;color:var(--txt);text-align:center;padding:4px 6px;font-size:.78rem}
