@@ -622,7 +622,7 @@ function pickPoolF(f){
   }
 }
 function pickMenu(){
-  const row=(k,v,label,n)=>'<button class="pk-m" onclick="pickPick(\''+k+'\',\''+v+'\')"><b>'+esc(label)+'</b><small>'+n+'</small><i>›</i></button>',c=f=>pickPoolF(f).length;
+  const row=(k,v,label,n)=>'<button class="pk-m" onclick="pickPick(\''+k+'\',\''+v+'\')">'+(k==='g'&&typeof libAnaSvg==='function'?'<span class="pk-f">'+(LIB_ANA[v]?libAnaSvg(v):'')+'</span>':'')+'<b>'+esc(label)+'</b><small>'+n+'</small><i>›</i></button>',c=f=>pickPoolF(f).length;
   if(UI.pt==='mus')return EX_GROUPS.filter(g=>g!=='mobility').map(g=>row('g',g,t('g_'+g),c({t:'g',v:g}))).join('');
   const eq=['barbell','dumbbell','machine','cable','kettlebell','band','ball','suspension','other'];
   return row('all','',t('catAll'),c({t:'all'}))+row('recent','',t('catRecent'),c({t:'recent'}))+row('mine','',t('mineB'),c({t:'mine'}))+row('custom','',t('catCustom'),c({t:'custom'}))+

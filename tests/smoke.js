@@ -1090,6 +1090,9 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("restSet(0,'d');stopRest();ACT=null;saveAct();");
   const miss=[...new Set(w.__miss)];
   ok(miss.length===0,'no missing translation keys: '+miss.join(','));
+  /* muscle figure accuracy: back/front are left-right symmetric in muscle codes; every muscle a group tile lights is drawn on a face the tile shows */
+  ok(ev(`(function(){const bad=[],bb=d=>{const n=(d.match(/-?\\d+\\.?\\d*/g)||[]).map(Number),xs=n.filter((_,j)=>j%2===0),ys=n.filter((_,j)=>j%2===1);return{cx:(Math.min(...xs)+Math.max(...xs))/2,cy:(Math.min(...ys)+Math.max(...ys))/2,w:Math.max(...xs)-Math.min(...xs)};};['front','back'].forEach(f=>{const sh=ANA[f].s.map((x,i)=>Object.assign({i,k:x[0]},bb(x[1])));sh.forEach(a=>{if(!a.k||a.cx>=77)return;const m=sh.filter(b=>b!==a&&Math.abs(b.cx-(153.6-a.cx))<8&&Math.abs(b.cy-a.cy)<4&&Math.abs(b.w-a.w)<4)[0];if(m&&m.k!==a.k)bad.push(f+a.i+a.k+'/'+m.i+m.k);});});return bad.join(',');})()`)==='','figure muscle codes mirror left to right');
+  ok(ev(`(function(){const bad=[];Object.keys(LIB_ANA).forEach(k=>{const seen={};LIB_ANA[k].forEach(f=>ANA[f[0]].s.forEach(x=>{seen[x[0]]=1;if(x[0]==='pec'){seen.chu=1;seen.chm=1;}if(x[0]==='dlt'){seen.sdf=1;seen.sdl=1;}}));String(LIB_ANA_W[k]).split(' ').forEach(q=>{const c=q.replace(/[\\d.]+$/,'');if(!seen[c])bad.push(k+':'+c);});});return bad.join(',');})()`)==='','group tiles only light muscles that are drawn on their faces');
   ok(errors.length===0,'no JS errors: '+errors.slice(0,3).join(' | '));
   console.log('\n'+passed+' passed, '+fails.length+' failed');
   if(errors.length)console.log(errors.slice(0,8).join('\n'));
