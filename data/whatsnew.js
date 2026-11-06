@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.67',items:[
+  {i:'chart',en:'Filters and pickers now swipe sideways in one row instead of piling up: library tabs, muscle/equipment photos, chip rows and recovery zones.',es:'Los filtros ahora se deslizan de lado en una sola fila en vez de amontonarse: pestañas de la biblioteca, fotos de músculos/equipo, chips y zonas de recuperación.'}
+ ]},
  {v:'v1.1.66',items:[
   {i:'🏅',en:'The Rank tab header now matches the home card: tinted with your rank\'s color, bigger name and glowing progress bar.',es:'La cabecera de la pestaña Rango ahora igual que la del inicio: teñida con el color de tu rango, nombre más grande y barra con brillo.'}
  ]},

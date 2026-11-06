@@ -155,7 +155,7 @@ function libEqHtml(){
 }
 function libDraw(){
   let h='<div class="form lib"><div class="pick-h"><h3>'+t(LIB.tab==='focus'?'pkMusT':(LIB.tab==='split'?'pkSpT':(LIB.tab==='prog'?'pkPrT':'pkChT')))+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>';
-  h+='<div class="seg"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">'+ic('barbell')+' '+t('libFocusT')+'</button><button class="'+(LIB.tab==='split'?'on':'')+'" onclick="libTab(\'split\')">'+ic('arrows-shuffle')+' '+t('libSplitT')+'</button><button class="'+(LIB.tab==='prog'?'on':'')+'" onclick="libTab(\'prog\')">'+ic('trophy')+' '+t('libProgT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">'+ic('stopwatch')+' '+t('libChT')+'</button></div>';
+  h+='<div class="seg segsc"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">'+ic('barbell')+' '+t('libFocusT')+'</button><button class="'+(LIB.tab==='split'?'on':'')+'" onclick="libTab(\'split\')">'+ic('arrows-shuffle')+' '+t('libSplitT')+'</button><button class="'+(LIB.tab==='prog'?'on':'')+'" onclick="libTab(\'prog\')">'+ic('trophy')+' '+t('libProgT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">'+ic('stopwatch')+' '+t('libChT')+'</button></div>';
   h+=libEqHtml();
   h+=LIB.tab==='focus'?libFocusHtml():(LIB.tab==='split'?libSplitHtml():(LIB.tab==='prog'?libProgHtml():(LIB.sel?libChDetail():libChList())));
   h+='</div>';
