@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.67 — 2026-10-30
+- Filters and pickers now swipe sideways in one row instead of piling up: library tabs, equipment photos, chip rows and recovery zones. Muscle groups in the library now show the anatomy figure with the muscles highlighted instead of exercise photos.
+  Los filtros ahora se deslizan de lado en una sola fila en vez de amontonarse: pestañas de la biblioteca, fotos de equipo, chips y zonas de recuperación. Los grupos musculares de la biblioteca ahora muestran la figura anatómica con los músculos resaltados en vez de fotos de ejercicios.
+
 ## v1.1.66 — 2026-10-30
 - The Rank tab header now matches the home card: tinted with your rank's color, bigger name and glowing progress bar.
   La cabecera de la pestaña Rango ahora igual que la del inicio: teñida con el color de tu rango, nombre más grande y barra con brillo.

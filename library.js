@@ -133,6 +133,18 @@ function libHow(id){howOpen(id,'libDraw');}
 const LIB_IMG={full:'deadlift',chest:'bench',back:'bbrow',shoulders:'ohp',arms:'dbcurl',legs:'squat',glutes:'hipthrust',core:'plank',stretch:'z_worlds_greatest_stretch',kb:'kbswing',db:'dbcurl',bb:'bench',cab:'cablefly',mach:'legpress',band:'bandpull',trx:'suprow',mb:'mbslam',bw:'pushup'};
 const SP_IMG={ul:'pullup',ppl:'bench',arn:'dbcurl',bro:'latpd',ulppl:'deadlift',fb:'squat',sl:'bbrow',ss:'deadlift',w531:'ohp',phul:'dbbench',gvt:'legpress'};
 function photoTh(id){return'<span class="hv-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>';}
+/* muscle-group tiles draw the anatomy figure instead of a photo / los grupos musculares dibujan la figura anatómica en vez de una foto */
+/* group figure: which faces and crops show each group's muscles (every highlighted muscle must be visible) / figura por grupo: caras y recortes para que se vea cada músculo resaltado */
+const LIB_ANA={full:[['front',-5,365],['back',-5,365]],chest:[['front',-5,190]],back:[['back',-5,200]],shoulders:[['front',-5,190],['back',-5,190]],arms:[['front',-5,215],['back',-5,215]],legs:[['front',165,200],['back',165,200]],glutes:[['back',130,235]],core:[['front',50,175]],biceps:[['front',-5,215]],triceps:[['back',-5,215]],stretch:[['front',-5,365],['back',-5,365]]};
+const LIB_ANA_W={full:'chu1 chm1 sdf1 sdl1 bic1 frm1 abs1 obl1 qd1 add1 lat1 trp1 lbk1 sdr1 trl1 trm1 ham1 gmx1 gmd1 clf1',chest:'chu1 chm1',back:'lat1 trp1 lbk1 sdr.6',shoulders:'sdf1 sdl1 sdr1',arms:'bic1 frm.7 trl1 trm1',legs:'qd1 add.7 ham1 clf.6 gmd.5',glutes:'gmx1 gmd.8 ham.5',core:'abs1 obl.8',biceps:'bic1 frm.5',triceps:'trl1 trm1',stretch:'chu.6 chm.6 sdf.6 qd.6 ham.6 gmx.6 lat.6 clf.5'};
+function libAnaSvg(k){
+  const c=LIB_ANA[k];if(!c||typeof anaSvg!=='function'||typeof ANA==='undefined')return'';
+  const m={};String(LIB_ANA_W[k]||'').split(' ').forEach(q=>{const r=/^([a-z]+)(\d*\.?\d+)$/.exec(q);if(r)m[r[1]]=+r[2];});
+  const f=code=>{const w=m[code];return w==null?'':(w>=.9?'var(--an-main)':'color-mix(in srgb,var(--an-main) '+Math.round(40+w*50)+'%,var(--an-sil))');};
+  const one=x=>{const vb=ANA[x[0]].vb.split(' ').map(Number);return anaSvg(x[0],90,f).replace(/viewBox="[^"]*"/,'viewBox="'+vb[0]+' '+x[1]+' '+vb[2]+' '+x[2]+'"').replace(/ width="\d+" height="\d+"/,' width="100%" height="100%" preserveAspectRatio="xMidYMid meet"');};
+  return c.length>1?'<span class="la2">'+c.map(one).join('')+'</span>':one(c[0]);
+}
+function libMuscTiles(arr,cur,fn){return'<div class="lat lata">'+arr.map(k=>'<button class="lt-i lt-a'+(k===cur?' on':'')+'" onclick="'+fn+'(\''+k+'\')">'+libAnaSvg(k)+'<span>'+t('lib_'+k)+'</span></button>').join('')+'</div>';}
 function libTiles(arr,cur,fn){return'<div class="lat">'+arr.map(k=>'<button class="lt-i'+(k===cur?' on':'')+'" onclick="'+fn+'(\''+k+'\')" style="background-image:url(img/ex/'+(LIB_IMG[k]||'bench')+'-0.jpg)"><span>'+t('lib_'+k)+'</span></button>').join('')+'</div>';}
 function libChips(arr,cur,fn,lab,wrap){return'<div class="chips'+(wrap?' wrap':'')+'">'+arr.map((k,i)=>{const v=typeof k==='number'?k:k;return'<button class="chip'+(String(v)===String(cur)?' on':'')+'" onclick="'+fn+'(\''+v+'\')">'+lab(v)+'</button>';}).join('')+'</div>';}
 /* a numbered rank card grid, different from the pill buttons / cuadrícula de rangos numerados, distinta de los botones de píldora */
@@ -155,7 +167,7 @@ function libEqHtml(){
 }
 function libDraw(){
   let h='<div class="form lib"><div class="pick-h"><h3>'+t(LIB.tab==='focus'?'pkMusT':(LIB.tab==='split'?'pkSpT':(LIB.tab==='prog'?'pkPrT':'pkChT')))+'</h3><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>';
-  h+='<div class="seg"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">'+ic('barbell')+' '+t('libFocusT')+'</button><button class="'+(LIB.tab==='split'?'on':'')+'" onclick="libTab(\'split\')">'+ic('arrows-shuffle')+' '+t('libSplitT')+'</button><button class="'+(LIB.tab==='prog'?'on':'')+'" onclick="libTab(\'prog\')">'+ic('trophy')+' '+t('libProgT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">'+ic('stopwatch')+' '+t('libChT')+'</button></div>';
+  h+='<div class="seg segsc"><button class="'+(LIB.tab==='focus'?'on':'')+'" onclick="libTab(\'focus\')">'+ic('barbell')+' '+t('libFocusT')+'</button><button class="'+(LIB.tab==='split'?'on':'')+'" onclick="libTab(\'split\')">'+ic('arrows-shuffle')+' '+t('libSplitT')+'</button><button class="'+(LIB.tab==='prog'?'on':'')+'" onclick="libTab(\'prog\')">'+ic('trophy')+' '+t('libProgT')+'</button><button class="'+(LIB.tab==='ch'?'on':'')+'" onclick="libTab(\'ch\')">'+ic('stopwatch')+' '+t('libChT')+'</button></div>';
   h+=libEqHtml();
   h+=LIB.tab==='focus'?libFocusHtml():(LIB.tab==='split'?libSplitHtml():(LIB.tab==='prog'?libProgHtml():(LIB.sel?libChDetail():libChList())));
   h+='</div>';
@@ -164,7 +176,7 @@ function libDraw(){
 function libFocusHtml(){
   const li=LIB.lv,items=libFocus(LIB.area,li,libHave());
   let h='<p class="muted sm">'+t('libFocusP')+'</p>'+
-    libStep(1,'libStep1')+libTiles(LIB_AREAS,LIB.area,'libArea')+'<div class="lsub"><span>'+t('libOrEq')+'</span></div>'+libTiles(LIB_EQ,LIB.area,'libArea')+
+    libStep(1,'libStep1')+libMuscTiles(LIB_AREAS,LIB.area,'libArea')+'<div class="lsub"><span>'+t('libOrEq')+'</span></div>'+libTiles(LIB_EQ,LIB.area,'libArea')+
     libStep(2,'libStep2')+libRanks(LIB.area,li,'libLv')+
     '<div class="card optb"><b>'+rk(LIB.area,li)+' <span class="muted sm">'+t('rankOf',li+1)+'</span></b><p class="sm">'+t('lvd_'+li)+'</p></div>';
   h+=libStep(3,'libStep3');

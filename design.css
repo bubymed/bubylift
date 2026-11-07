@@ -846,3 +846,22 @@ button.rk-tz{cursor:pointer}
 .rkc .rk-hero b{font-size:1.5rem;font-weight:800;color:var(--txt)}.rkc .rk-hero small{font-size:.9rem;color:var(--dim)}
 .rkc .rk-bar{height:12px;background:color-mix(in srgb,var(--rc) 20%,transparent);margin:14px 0 8px}.rkc .rk-bar u{background:var(--rc);box-shadow:0 0 14px var(--rc)}
 .rkc .rk-nx{text-align:center}
+
+/* v1.1.67 one-line swipe rows for filters / filtros en una sola fila deslizable */
+.chips.wrap,.rh-zones{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;overscroll-behavior-x:contain;padding-right:28px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
+.chips.wrap::-webkit-scrollbar,.rh-zones::-webkit-scrollbar{display:none}
+.chips.wrap .chip,.rh-zones .btn{flex:none;white-space:nowrap;scroll-snap-align:start}
+.seg.segsc{overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity}.seg.segsc::-webkit-scrollbar{display:none}
+.seg.segsc button{flex:none;white-space:nowrap;scroll-snap-align:start;padding-left:14px;padding-right:14px}
+.lat{display:flex;grid-template-columns:none;gap:8px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;overscroll-behavior-x:contain;padding:2px 28px 2px 0;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
+.lat::-webkit-scrollbar{display:none}
+.lat .lt-i{flex:none;width:104px;aspect-ratio:1/.85;scroll-snap-align:start}
+@media(min-width:720px){.lat{grid-template-columns:none}}
+/* muscle tiles with the anatomy figure / casillas de músculo con la figura anatómica */
+.lt-i.lt-a{background:var(--panel);aspect-ratio:auto;height:128px;align-items:flex-end}
+.lt-i.lt-a::before{display:none}
+.lt-i.lt-a .ana{position:absolute;left:0;right:0;top:6px;bottom:26px;width:100%;height:calc(100% - 32px)}
+.lt-i.lt-a span{position:relative;color:var(--txt);text-align:center;padding:4px 6px;font-size:.78rem}
+.lat .lt-i.lt-a{width:84px}
+.lt-i.lt-a .la2{position:absolute;left:4px;right:4px;top:6px;bottom:26px;display:flex;gap:2px}.lt-i.lt-a .la2 .ana{position:static;flex:1;min-width:0;height:100%}
+.pk-f{flex:none;position:relative;width:46px;height:46px;border-radius:10px;background:var(--panel2);overflow:hidden;display:block;padding:3px}.pk-f .ana{position:static;display:block;width:100%;height:100%}.pk-f .la2{position:static;display:flex;gap:1px;width:100%;height:100%}.pk-f .la2 .ana{flex:1;min-width:0}
