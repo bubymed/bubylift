@@ -134,7 +134,9 @@ const LIB_IMG={full:'deadlift',chest:'bench',back:'bbrow',shoulders:'ohp',arms:'
 const SP_IMG={ul:'pullup',ppl:'bench',arn:'dbcurl',bro:'latpd',ulppl:'deadlift',fb:'squat',sl:'bbrow',ss:'deadlift',w531:'ohp',phul:'dbbench',gvt:'legpress'};
 function photoTh(id){return'<span class="hv-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>';}
 /* muscle-group tiles draw the anatomy figure instead of a photo / los grupos musculares dibujan la figura anatómica en vez de una foto */
-/* group figure: which faces and crops show each group's muscles (every highlighted muscle must be visible) / figura por grupo: caras y recortes para que se vea cada músculo resaltado */
+/* group figure: which faces and crops show each group's muscles (every highlighted muscle must be visible) / figura por grupo: caras y recortes para que se vea cada músculo resaltado
+   LIB_ANA[group] = faces to draw as [face, top y, height] crops of the 164x364.5 figure; LIB_ANA_W[group] = muscle codes lit, weight 1 = full color, less = lighter (codes: see header of data/musc.js). A test checks every lit code is drawn on a shown face.
+   LIB_ANA[grupo] = caras a dibujar como recortes [cara, y superior, alto]; LIB_ANA_W[grupo] = códigos encendidos, 1 = color pleno, menos = más claro. Una prueba verifica que cada código encendido esté dibujado en una cara visible. */
 const LIB_ANA={full:[['front',-5,365],['back',-5,365]],chest:[['front',-5,190]],back:[['back',-5,200]],shoulders:[['front',-5,190],['back',-5,190]],arms:[['front',-5,215],['back',-5,215]],legs:[['front',165,200],['back',165,200]],glutes:[['back',130,235]],core:[['front',50,175]],biceps:[['front',-5,215]],triceps:[['back',-5,215]],stretch:[['front',-5,365],['back',-5,365]]};
 const LIB_ANA_W={full:'chu1 chm1 sdf1 sdl1 bic1 frm1 abs1 obl1 qd1 add1 lat1 trp1 lbk1 sdr1 trl1 trm1 ham1 gmx1 gmd1 clf1',chest:'chu1 chm1',back:'lat1 trp1 lbk1 sdr.6',shoulders:'sdf1 sdl1 sdr1',arms:'bic1 frm.7 trl1 trm1',legs:'qd1 add.7 ham1 clf.6 gmd.5',glutes:'gmx1 gmd.8 ham.5',core:'abs1 obl.8',biceps:'bic1 frm.5',triceps:'trl1 trm1',stretch:'chu.6 chm.6 sdf.6 qd.6 ham.6 gmx.6 lat.6 clf.5'};
 function libAnaSvg(k){
