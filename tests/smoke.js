@@ -656,6 +656,16 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   w.planStart(0);
   ok(ev('ACT.pl')===0&&ev('ACT.ex.length')>=ev('DATA.plan.ds[0].ex.length'),'plan day starts workout with targets (+treadmill for fat loss)');
   ok(/Goal:/.test(main())&&/class="exmore"/.test(main()),'active view shows goal and the exercise menu button');w.exMenu(0);ok(/ⓘ/.test(sheetHtml())&&/↔/.test(sheetHtml()),'exercise menu has guide and swap');ok(!/moveUp|↑|↓/.test(sheetHtml()),'exercise menu has no up/down buttons');w.sheetClose();
+  {ev("SET.pcUnit='kg';SET.pcBar='oly';SET.pcSides=2;PC.n={}");w.pcOpen();
+   ev("pcAdd(20);pcAdd(20);pcAdd(5);pcAdd(1.25)");
+   ok(Math.abs(ev('pcTotal()')-(20+2*(40+5+1.25)))<1e-9&&/112\.5/.test(sheetHtml()),'plate calculator: bar plus both sides of plates');
+   ev("pcSub(20)");ok(Math.abs(ev('pcTotal()')-(20+2*(20+5+1.25)))<1e-9,'minus removes one plate');
+   ev("pcSetSides(1)");ok(Math.abs(ev('pcTotal()')-(20+26.25))<1e-9,'one side counts the plates once');
+   ev("pcSetSides(2);pcBar('ez')");ok(ev('pcBarW()')===9,'EZ bar weighs 9 kg');
+   ev("pcSetUnit('lb')");ok(ev('pcBarW()')===20&&ev('pcPlatesSum()')===0&&/lb/.test(sheetHtml()),'switching to lb changes the bar and starts the plates over');
+   ev("pcBar('cus');pcCus('12,5')");ok(ev('pcBarW()')===12.5,'custom bar weight');
+   ev("SET.pcUnit=null;SET.pcBar=null;SET.pcCus=null;PC.n={}");w.sheetClose();
+   ok(!!doc.getElementById('platefab'),'plate calculator button exists');}
   {const n0=ev('ACT.ex.length');if(n0>1){const e0=ev('ACT.ex[0].eid');ok(doc.querySelectorAll('.exc .pv-grip').length===n0,'live workout cards have drag handles');w.pvMove('act',0,0,1);ok(ev('ACT.ex[1].eid')===e0,'live workout exercise reorders');w.pvMove('act',0,1,0);}}
   w.howOpen(ev('ACT.ex[0].eid'));ok(/Common mistake/.test(sheetHtml()),'technique sheet opens');w.sheetClose();
   w.howOpen('burpee');ok(/Common mistake/.test(sheetHtml())&&!/General tips/.test(sheetHtml()),'burpee now has its own guide');w.sheetClose();

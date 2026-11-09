@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.79',items:[
+  {i:'barbell',en:'<b>Plate calculator</b>: a new round button next to the rest timer. Tap the plates you put on the bar and see the total, in kg or lb, for an Olympic, women\'s, EZ or hex bar, one side or both.',es:'<b>Calculadora de discos</b>: un botón redondo nuevo junto al cronómetro. Toca los discos que pusiste en la barra y mira el total, en kg o lb, para barra olímpica, de mujer, EZ o hexagonal, en un lado o en ambos.'}
+ ]},
  {v:'v1.1.78',items:[
   {i:'arrows-sort',en:'The same drag handle ⠿ now works while you train and when you build a routine. Up/down buttons are gone everywhere, and "Replace exercise" comes first in every exercise menu.',es:'La misma asa ⠿ para arrastrar ahora funciona mientras entrenas y al armar una rutina. Los botones de subir/bajar ya no existen, y "Reemplazar ejercicio" va primero en el menú de cada ejercicio.'}
  ]},
