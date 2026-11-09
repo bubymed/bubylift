@@ -290,7 +290,7 @@ function chDraw(){
   }else if(c.ty==='amrap'){
     h+='<div class="chclk" id="chclk">'+chClock(p.left)+'</div><div class="chr"><b>'+CHR.rounds+'</b> '+t('chRoundsL')+'</div>'+
       '<div class="card optb"><ol class="how">'+b.segs.map(s=>'<li>'+esc(chSegTxt(s))+'</li>').join('')+'</ol></div>'+
-      '<div class="row"><button class="btn pri big wide" onclick="chRound()">+1 '+t('chRoundsL')+'</button></div><div class="row"><button class="btn" onclick="chUndo()">−1</button><button class="btn" onclick="chEnd()">'+t('chFinishNow')+'</button></div>';
+      '<div class="row"><button class="btn pri big wide" onclick="chRound()">+1 '+t('chRoundsL')+'</button></div><div class="row"><button class="btn" aria-label="'+esc(t('undoB'))+'" onclick="chUndo()">−1</button><button class="btn" onclick="chEnd()">'+t('chFinishNow')+'</button></div>';
   }else if(c.ty==='emom'){
     const cur=b.segs[p.k%b.segs.length],nx=b.segs[(p.k+1)%b.segs.length];
     h+='<div class="chclk" id="chclk">'+chClock(p.left)+'</div><p class="center muted">'+t('chMinute',p.k+1,c.cap)+'</p><div class="chnow">'+esc(chSegTxt(cur))+'</div><p class="center muted sm">'+t('chNextUp')+': '+esc(chSegTxt(nx))+'</p><div class="row"><button class="btn" onclick="chEnd()">'+t('chFinishNow')+'</button></div>';
