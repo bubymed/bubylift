@@ -374,7 +374,19 @@ function undoToast(msg,snap){
   e.innerHTML=esc(msg)+' <button class="tundo" onclick="undoRun()">'+esc(t('undoB'))+'</button>';
   e.classList.add('on','undo');clearTimeout(toastT);toastT=setTimeout(()=>{e.classList.remove('on','undo');UNDO=null;},5500);
 }
+/* delete with undo: the change shows at once but is only committed (tombstone + cloud sync) when the undo window closes or the app is hidden,
+   so an undone delete never reaches the cloud / borrar con deshacer: el cambio se ve al instante pero solo se confirma (lápida + nube) al cerrarse la ventana o al ocultar la app */
+let UNDOP=null,UNDOT=0;
+function undoCommit(){clearTimeout(UNDOT);const p=UNDOP;UNDOP=null;if(p&&p.commit)p.commit();}
+function undoDo(msg,restore,commit){
+  undoCommit();UNDO=null;UNDOP={restore:restore,commit:commit};
+  const e=$('toast');if(e){e.innerHTML=esc(msg)+' <button class="tundo" onclick="undoRun()">'+esc(t('undoB'))+'</button>';e.classList.add('on','undo');clearTimeout(toastT);toastT=setTimeout(()=>{e.classList.remove('on','undo');},8000);}
+  UNDOT=setTimeout(undoCommit,8000);
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')undoCommit();});
+window.addEventListener('pagehide',undoCommit);
 function undoRun(){
+  if(UNDOP){clearTimeout(UNDOT);const p=UNDOP;UNDOP=null;const e0=$('toast');if(e0)e0.classList.remove('on','undo');p.restore();return;}
   const s=UNDO;UNDO=null;const e=$('toast');if(e)e.classList.remove('on','undo');
   if(!s||!ACT)return;try{ACT=JSON.parse(s);}catch(x){return;}
   saveAct();render();

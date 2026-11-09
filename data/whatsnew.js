@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.84',items:[
+  {i:'refresh',en:'<b>Undo a delete</b>: deleting a workout (after confirming) or a body entry now shows an Undo button for a few seconds, so a mistake is no longer permanent.',es:'<b>Deshacer un borrado</b>: al eliminar un entrenamiento (tras confirmar) o un registro de peso aparece un botón Deshacer unos segundos, así un error ya no es permanente.'}
+ ]},
  {v:'v1.1.83',items:[
   {i:'pencil',en:'<b>Full workout editing</b>: Edit now also changes the date and duration, and lets you add sets or exercises. Trophies are recalculated in order, so a record only counts if it really beat everything before it.',es:'<b>Edición completa</b>: Editar ahora también cambia la fecha y la duración, y permite agregar series o ejercicios. Los trofeos se recalculan en orden, así que un récord solo cuenta si de verdad superó todo lo anterior.'}
  ]},

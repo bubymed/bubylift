@@ -192,7 +192,11 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   w.go('history');w.saveWkAsRoutine(firstId);ok(ev('UI.rb&&UI.rb.ex.length>0'),'save workout as routine');ev('UI.rb=null');w.sheetClose();
   w.shareWk(firstId);
   const n0=ev('DATA.workouts.length');w.delWkAsk(firstId);doc.querySelector('.dlg-b .btn.danger').click();
-  ok(ev('DATA.workouts.length')===n0-1,'delete workout after confirm');
+  ok(ev('DATA.workouts.length')===n0-1&&!ev("!!(DATA.tomb&&DATA.tomb['"+firstId+"'])"),'delete workout shows at once, not committed yet');
+  w.undoRun();ok(ev('DATA.workouts.length')===n0&&ev('DATA.workouts.some(x=>x.id==="'+firstId+'")'),'undo brings the deleted workout back');
+  w.delWkAsk(firstId);doc.querySelector('.dlg-b .btn.danger').click();w.undoCommit();
+  ok(ev('DATA.workouts.length')===n0-1&&ev("!!DATA.tomb['"+firstId+"']"),'delete workout commits (tombstone) when the undo window closes');
+  ok(ev("(function(){var o=DATA.body;DATA.body=[{id:'bq1',t:Date.now(),w:80},{id:'bq2',t:Date.now()-864e5,w:81}];bodyDel('bq1');var a=DATA.body.length===1;undoRun();var b=DATA.body.length===2;bodyDel('bq1');undoCommit();var c=DATA.body.length===1&&!!DATA.tomb.bq1;DATA.body=o;return a&&b&&c;})()"),'body entry delete has undo and commits when the window closes');
 
   console.log('export / import');
   w.exportJSON();
