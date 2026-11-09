@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.85',items:[
+  {i:'layers',en:'<b>Shorter plan setup</b>: the full setup went from about 27 steps to about 20. The six fitness tests now sit on two screens, and the optional questions (phase, exercises to avoid, favorites, work posture) hide behind one "Fine-tune your plan?" step. Your plan is the same if you skip it.',es:'<b>Configuración más corta</b>: la configuración completa pasó de unos 27 pasos a unos 20. Las seis pruebas de condición física ahora están en dos pantallas, y las preguntas opcionales (fase, ejercicios a evitar, favoritos, postura en el trabajo) quedan detrás de un solo paso "¿Quieres afinar tu plan?". Tu plan es el mismo si lo saltas.'}
+ ]},
  {v:'v1.1.84',items:[
   {i:'refresh',en:'<b>Undo a delete</b>: deleting a workout (after confirming) or a body entry now shows an Undo button for a few seconds, so a mistake is no longer permanent.',es:'<b>Deshacer un borrado</b>: al eliminar un entrenamiento (tras confirmar) o un registro de peso aparece un botón Deshacer unos segundos, así un error ya no es permanente.'}
  ]},
