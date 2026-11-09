@@ -4,7 +4,8 @@ Bilingual summary of everything added or fixed, newest first.
 Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 
 ## Unreleased / Próximo
-- Nothing yet. / Nada todavía.
+- Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
+  Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
 ## v1.1.83 — 2026-11-09
 - Full workout editing: change the date (the time of day is kept, never in the future) and the duration, add sets or exercises. Trophies for the affected exercises are recomputed in time order across your whole history, so changing an old set can add or remove later records correctly.
