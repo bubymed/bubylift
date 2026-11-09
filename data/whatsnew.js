@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.90',items:[
+  {i:'search',en:'<b>Search your history</b>: type a workout name, an exercise or a note, or pick a muscle, to find past workouts fast.',es:'<b>Busca en tu historial</b>: escribe el nombre de un entrenamiento, un ejercicio o una nota, o elige un músculo, para encontrar entrenamientos pasados rápido.'}
+ ]},
  {v:'v1.1.89',items:[
   {i:'check',en:'<b>Stretching is not counted as sets</b>: stretch and mobility moves no longer add to your set totals, weekly summary or training load. A stretching-only session shows "8 moves" instead of sets.',es:'<b>El estiramiento no cuenta como series</b>: los movimientos de estiramiento y movilidad ya no suman a tus totales de series, al resumen semanal ni a la carga de entrenamiento. Una sesión solo de estiramiento muestra "8 movimientos" en vez de series.'}
  ]},

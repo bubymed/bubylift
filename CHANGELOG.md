@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.90 — 2026-11-09
+- History search: filter by workout name, exercise (English or Spanish, accents ignored) or note, and by muscle group; shows how many workouts match.
+  Búsqueda en el Historial: filtra por nombre del entrenamiento, ejercicio (inglés o español, sin acentos) o nota, y por grupo muscular; muestra cuántos entrenamientos coinciden.
+
 ## v1.1.89 — 2026-11-09
 - Stretch and mobility moves no longer count as sets: they were added to the History total, the weekly summary and the 7-day training load. A stretching-only session now shows "N moves"; "Repeat last" and the first-workout checks still see it as a session.
   Los movimientos de estiramiento y movilidad ya no cuentan como series: se sumaban al total del Historial, al resumen semanal y a la carga de 7 días. Una sesión solo de estiramiento ahora muestra "N movimientos"; "Repetir el último" y las revisiones del primer entrenamiento la siguen viendo como sesión.
