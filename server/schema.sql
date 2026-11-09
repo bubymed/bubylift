@@ -64,3 +64,24 @@ grant execute on function public.email_registered(text) to anon, authenticated;
 -- v0.99.1: los proyectos nuevos de Supabase no dan acceso a las tablas nuevas, así que las políticas por fila no bastan.
 grant select, insert, update, delete on public.user_data to authenticated;
 grant select, insert, update, delete on public.user_data, public.strava_tokens, public.strava_state to service_role;
+
+-- v1.1.72: anonymous usage counters / contadores anónimos de uso.
+-- Insert-only: the app can add rows but nobody can read them through the API (no select policy). Only the project owner reads them in the dashboard.
+-- Solo insertar: la app agrega filas pero nadie las lee por la API (sin política de select). Solo el dueño las ve en el panel.
+create table if not exists public.app_events (
+  id   bigint generated always as identity primary key,
+  t    timestamptz not null default now(),
+  ev   text not null,
+  did  text not null,   -- random id of this install, not linked to any account / id aleatorio de esta instalación, sin relación con cuentas
+  v    text,
+  lang text,
+  constraint app_events_ev   check (ev in ('guest_new','wk_done','prompt_first','prompt_rank','prompt_nag','tap_first','tap_rank','tap_nag','tap_bar','acct_new')),
+  constraint app_events_did  check (char_length(did) between 8 and 32),
+  constraint app_events_v    check (v is null or char_length(v) <= 16),
+  constraint app_events_lang check (lang is null or lang in ('en','es'))
+);
+alter table public.app_events enable row level security;
+drop policy if exists "add only" on public.app_events;
+create policy "add only" on public.app_events for insert to anon, authenticated with check (true);
+revoke all on public.app_events from anon, authenticated;
+grant insert on public.app_events to anon, authenticated;

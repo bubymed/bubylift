@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.72',items:[
+  {i:'shield-check',en:'Small behind-the-scenes improvements and an updated privacy text.',es:'Pequeñas mejoras internas y un texto de privacidad actualizado.'}
+ ]},
  {v:'v1.1.71',items:[
   {i:'cloud',en:'Trying it as a guest? After your first workout and when you rank up, you can now save your progress with one tap and open it on any phone.',es:'¿Lo estás probando como invitado? Después de tu primer entrenamiento y al subir de rango, ahora puedes guardar tu progreso con un toque y abrirlo en cualquier teléfono.'}
  ]},

@@ -460,6 +460,7 @@ function finishWk(){
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
   goalsCheck();rkCheck();
   saveData();
+  if(typeof trkGuest==='function')trkGuest('wk_done');
   ACT=null;saveAct();stopRest();unwake();
   render();
   const prs=[];wk.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr&&prs.indexOf(x.eid)<0)prs.push(x.eid);}));
