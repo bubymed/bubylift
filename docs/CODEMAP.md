@@ -112,6 +112,12 @@ Metas con barra de progreso.
 
 Functions / Funciones: `goalList`:5, `goalCur`:6, `goalPct`:16, `goalFmt`:21, `goalName`:22, `goalLeft`:28, `goalsCheck`:36, `goalsCard`:41, `goalEdit`:51, `goalDel`:56, `goalNew`:57, `goalKind`:62, `goalTarget`:67, `goalSave`:80
 
+### `platecalc.js`
+Plate calculator opened from the round button next to the rest timer.  
+Calculadora de discos que se abre con el botón redondo junto al cronómetro.
+
+Functions / Funciones: `pcTotal`, `plateFab`, `pcOpen`, `pcDraw`, `pcAdd`, `pcSub`, `pcClear`, `pcSetUnit`, `pcBar`, `pcSetSides`, `pcCus`
+
 ### `habit.js`
 Weekly streak, summary, calendar reminders.  
 Racha semanal, resumen, recordatorios de calendario.

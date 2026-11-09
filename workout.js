@@ -515,7 +515,7 @@ function startRest(sec,manual){
 }
 /* the always-there Rest button / el botón Descanso siempre visible */
 function restStart(){if(!ACT)return;const x=ACT.ex[Math.min(REST_LAST,ACT.ex.length-1)],r=x?exRest(x):null;startRest(r>0?r:(SET.rest||90),true);buzz(8);}
-function restFab(){const b=$('restfab');if(!b)return;const on=!!ACT&&tab==='workout'&&!REST&&!(ACT.guide&&!ACT.gOff);b.hidden=!on;if(on){const x=ACT.ex[Math.min(REST_LAST,ACT.ex.length-1)],r=x?exRest(x):null;b.innerHTML=ic('stopwatch')+'<span>'+fmtClock(r>0?r:(SET.rest||90))+'</span>';b.setAttribute('aria-label',t('restStartB'));}}
+function restFab(){if(typeof plateFab==='function')plateFab();const b=$('restfab');if(!b)return;const on=!!ACT&&tab==='workout'&&!REST&&!(ACT.guide&&!ACT.gOff);b.hidden=!on;if(on){const x=ACT.ex[Math.min(REST_LAST,ACT.ex.length-1)],r=x?exRest(x):null;b.innerHTML=ic('stopwatch')+'<span>'+fmtClock(r>0?r:(SET.rest||90))+'</span>';b.setAttribute('aria-label',t('restStartB'));}}
 function drawRest(){
   const b=$('restbar');if(!b)return;
   if(!REST){b.hidden=true;return;}
