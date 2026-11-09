@@ -120,7 +120,9 @@ function planShuffle(){
 /* ---------- adjust the plan from what was really logged / ajuste del plan con lo registrado ---------- */
 function adaptScan(p){
   const out=[];if(!p)return out;
-  const logs=planDone();
+  const logs=planDone(),now=Date.now(),stk=p.prof.stk||{};
+  // a deload note lasts 2 weeks, then the exercise goes back to its normal reason / la nota de descarga dura 2 semanas
+  p.ds.forEach(d=>d.ex.forEach(e=>{if(e.rz==='rzDeload'&&!(stk[e.eid]>now-14*864e5)){if(e.rz0)e.rz=e.rz0;else delete e.rz;delete e.rz0;}}));
   let shortN=0,rsN=0;
   p.ds.forEach((d,di)=>{
     const ss=logs.filter(w=>w.pl===di).sort((a,b)=>b.t-a.t).slice(0,3);
@@ -135,10 +137,12 @@ function adaptScan(p){
       if(ss.length>=3&&exMode(e.eid)==='wr'&&e.r==='m'&&at.every(x=>x&&x.sets.length)){
         const top=x=>Math.max.apply(null,x.sets.map(s=>(s.w||0)*1000+(s.r||0)));
         // newest first: stuck when the newest is not better than the oldest / más nueva primero: estancado si la nueva no supera a la vieja
-        if(top(at[0])<=top(at[2]))out.push({k:'stall:'+di+':'+e.eid,kind:'stall',d:di,eid:e.eid});
+        if(top(at[0])<=top(at[2])&&!(stk[e.eid]>now-21*864e5))out.push({k:'stall:'+di+':'+e.eid,kind:'stall',d:di,eid:e.eid,again:!!stk[e.eid]});
       }
     });
   });
+  const stl=out.filter(a=>a.kind==='stall'&&!a.again);
+  if(stl.length>=3){for(let i=out.length-1;i>=0;i--)if(stl.indexOf(out[i])>=0)out.splice(i,1);out.unshift({k:'dlw',kind:'dlw',list:stl.map(a=>({d:a.d,eid:a.eid}))});} // 3+ stuck lifts: one deload week for all / 3+ estancados: una semana de descarga para todos
   if(rsN>=3&&shortN/rsN>=0.5&&p.prof.vol!=='lo')out.unshift({k:'vol',kind:'vol',to:p.prof.vol==='hi'?'md':'lo'}); // first, so the cap below never hides it / primero, para que el límite no lo oculte
   return out.slice(0,6);
 }
@@ -148,6 +152,12 @@ function adaptApply(p,list){
     if(a.kind==='vol'){
       p.ds.forEach(d=>d.ex.forEach(e=>{if(e.sec==='rs'&&e.sets>2)e.sets--;}));
       pr.vol=a.to;n++;return;
+    }
+    if(a.kind==='dlw'||(a.kind==='stall'&&!a.again)){
+      // first plateau: keep the lift, lower the load ~10% for a week and rebuild; do not swap or ban it / primer estancamiento: mismo ejercicio, 10% menos de peso una semana
+      (a.kind==='dlw'?a.list:[a]).forEach(x=>{const dd=p.ds[x.d],ee=dd&&dd.ex.find(q=>q.eid===x.eid);if(!ee)return;
+        if(ee.rz!=='rzDeload')ee.rz0=ee.rz;ee.rz='rzDeload';(pr.stk=pr.stk||{})[x.eid]=Date.now();n++;});
+      return;
     }
     const d=p.ds[a.d],ei=d?d.ex.findIndex(e=>e.eid===a.eid):-1;if(ei<0)return;
     const have=pr.have,L=injLetters(pr.inj),skip={};
@@ -164,7 +174,7 @@ function adaptCk(i){const x=ADP[i];if(x)x.on=!x.on;chkDraw();}
 function adaptHtml(){
   if(!ADP.length)return'';
   return'<div class="lbl">'+t('adT')+'</div><p class="muted sm">'+t('adP')+'</p>'+
-    ADP.map((a,i)=>'<label class="adrow"><input type="checkbox" '+(a.on?'checked ':'')+'onchange="adaptCk('+i+')"> <span>'+esc(t('ad_'+a.kind,a.eid?exName(a.eid):'',a.to?t('vol_'+a.to):''))+'</span></label>').join('');
+    ADP.map((a,i)=>'<label class="adrow"><input type="checkbox" '+(a.on?'checked ':'')+'onchange="adaptCk('+i+')"> <span>'+esc(t('ad_'+(a.kind==='stall'&&!a.again?'stallDl':a.kind),a.eid?exName(a.eid):(a.list?a.list.length:''),a.to?t('vol_'+a.to):''))+'</span></label>').join('');
 }
 
 /* why each exercise is where it is / por qué cada ejercicio está donde está */

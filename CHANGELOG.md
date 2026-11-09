@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.74 — 2026-11-09
+- Plateaus: when a main lift shows no progress in 3 sessions, the check-in suggests keeping it with about 10% less weight for a week (a deload note on the exercise) instead of swapping and banning it. If 3 or more lifts stall, it suggests one deload week for all of them. Only a second plateau after that suggests a swap. Every suggestion can still be unchecked.
+  Estancamientos: cuando un ejercicio principal no progresa en 3 sesiones, el chequeo sugiere mantenerlo con cerca de 10% menos peso una semana (una nota de descarga en el ejercicio) en vez de cambiarlo y vetarlo. Si 3 o más se estancan, sugiere una sola semana de descarga para todos. Solo un segundo estancamiento después sugiere cambiarlo. Cada sugerencia se puede desmarcar.
+
 ## v1.1.73 — 2026-11-09
 - Plan quality pass. Every muscle now gets a weekly floor of direct sets (and a ceiling) in muscle, strength, fat-loss and general plans, so triceps, calves, glutes, biceps and shoulders are no longer left out; the floor follows your volume level, your level and your lower/upper emphasis.
   Mejora de la calidad de los planes. Cada músculo recibe ahora un piso semanal de series directas (y un techo) en los planes de músculo, fuerza, bajar grasa y salud general, así que tríceps, gemelos, glúteos, bíceps y hombros ya no se quedan fuera; el piso sigue tu nivel de volumen, tu nivel y tu énfasis inferior/superior.

@@ -622,6 +622,16 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
     return r;})()`);
   ok(AD.skip&&AD.applied&&AD.noKept,'plan adjusts: skipped exercise is found, swapped and not picked again ('+JSON.stringify(AD)+')');
   ok(AD.vol,'sets not finished two sessions in a row suggest lowering volume');
+  const DL=ev(`(function(){
+    const p=genPlan({goal:'strength',n:3,len:60,lvl:'some',have:HAVE_KEYS.slice(),sd:4});window.__sv=[DATA.plan,DATA.workouts];DATA.plan=p;p.t0=Date.now()-5e9;
+    const m=p.ds[0].ex.find(e=>e.r==='m'&&exMode(e.eid)==='wr');if(!m){DATA.plan=window.__sv[0];DATA.workouts=window.__sv[1];return{skip:1};}
+    DATA.workouts=[3,2,1].map(t=>({id:'s'+t,t:Date.now()-t*1e6,end:0,name:'x',ex:[{eid:m.eid,sets:[{w:100,r:5}]}],pl:0}));
+    const r={};let sc=adaptScan(p);const st=sc.find(a=>a.kind==='stall'&&a.eid===m.eid);r.found=!!st&&!st.again;
+    adaptApply(p,[st]);r.kept=p.ds[0].ex.some(e=>e.eid===m.eid)&&(p.prof.no||[]).indexOf(m.eid)<0&&m.rz==='rzDeload';
+    r.quiet=!adaptScan(p).some(a=>a.eid===m.eid);
+    p.prof.stk[m.eid]=Date.now()-30*864e5;sc=adaptScan(p);r.again=sc.some(a=>a.kind==='stall'&&a.eid===m.eid&&a.again);r.cleared=m.rz!=='rzDeload';
+    DATA.plan=window.__sv[0];DATA.workouts=window.__sv[1];return r;})()`);
+  ok(!DL.skip&&(DL.found&&DL.kept&&DL.quiet&&DL.again&&DL.cleared),'plateau: first stall keeps the lift with a deload note; a second stall later suggests a swap ('+JSON.stringify(DL)+')');
   const keys=ev(`(function(){const bad=[];window.__sv2=DATA.plan;const chk=k=>{if(!STR[k])bad.push(k);};[['muscle',1],['muscle',2],['muscle',3],['muscle',4],['strength',5],['fat',2]].forEach(a=>[2,3,4,5].forEach(n=>{const p=genPlan({goal:a[0],ph:a[1],n:n,len:75,lvl:'adv',have:HAVE_KEYS.slice(),focus:['glutes','arms'],work:'sit',avoid:['jump'],inj:['knee'],fav:['squat'],sh:1,skills:['speed','endurance','power'],emph:'low',sd:3});
     p.ds.forEach(d=>{(d.wy||[]).forEach(x=>chk(x.split('|')[0]));d.ex.forEach(e=>{if(e.sec&&!e.rz)bad.push('norz '+e.eid);if(e.rz)chk(e.rz);});});
     DATA.plan=p;planWhyCard(p);}));DATA.plan=window.__sv2;return bad.filter((x,i,a)=>a.indexOf(x)===i);})()`);
