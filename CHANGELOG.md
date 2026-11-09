@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.71 — 2026-11-08
+- Guests are invited to save their progress at the moments it matters: after their first finished workout and when they rank up. Short message, a clear "Maybe later" button, and never more than one prompt every 3 days (it also holds back the daily reminder).
+  A los invitados se les invita a guardar su progreso en los momentos que importan: después de su primer entrenamiento terminado y al subir de rango. Mensaje corto, botón claro "Quizás después" y nunca más de un aviso cada 3 días (también retrasa el recordatorio diario).
+
 ## v1.1.70 — 2026-10-30
 - Muscle model rebuilt: every shape on the body figure is now one real muscle (glute max/medius/TFL, three vasti + rectus femoris, gastrocnemius/soleus, serratus, teres, infraspinatus, neck, hip flexors, shin muscles...). Deep muscles (glute minimus, rhomboids, rotator cuff, transverse abdominis) get their own tappable row. All 863 exercise weights re-split.
   Modelo muscular rehecho: cada forma de la figura ahora es un músculo real (glúteo mayor/medio/TFL, tres vastos + recto femoral, gastrocnemio/sóleo, serrato, redondos, infraespinoso, cuello, flexores de cadera, músculos de la espinilla...). Los músculos profundos (glúteo menor, romboides, manguito rotador, transverso abdominal) tienen su propia fila para tocar. Se redistribuyeron los pesos de los 863 ejercicios.

@@ -472,6 +472,7 @@ function finishWk(){
 function fbDue(){return !SET.fbAsked&&DATA.workouts.some(w=>wkSets(w)>0)&&!!(DATA.plan||DATA.routines.length||DATA.workouts.some(w=>w.pl!=null));}
 function sumDone(){
   sheetClose();
+  if(typeof gwFirstDue==='function'&&gwFirstDue()){setTimeout(gwFirst,400);return;} // a guest's first workout: invite them to keep it; feedback waits for the next one / primer entrenamiento de un invitado: se invita a guardarlo; el feedback espera al siguiente
   if(fbDue())setTimeout(fbShow,400);
 }
 function fbShow(){

@@ -894,6 +894,8 @@ strT:['General strength','Fuerza general'],strBw:['Log your body weight and your
  wGuestP:['A quick look around. Your data stays only on this phone until you create an account.','Un vistazo rápido. Tus datos se quedan solo en este teléfono hasta que crees una cuenta.'],
  gnP:['You are using Bubylift as a guest. Your data lives on this phone: if you clear browser data or lose the phone, it is gone. Sign up or log in to keep it in your account and open it on any phone.','Estás usando Bubylift como invitado. Tus datos viven en este teléfono: si borras los datos del navegador o pierdes el teléfono, se pierden. Regístrate o inicia sesión para guardarlos en tu cuenta y abrirlos en cualquier teléfono.'],
  gnNo:['Maybe later','Quizás después'],
+ gwFT:['Your first workout counts','Tu primer entrenamiento cuenta'],gwFP:['Create your free account to keep it and open it on any phone.','Crea tu cuenta gratis para guardarlo y abrirlo en cualquier teléfono.'],
+ gwRkP:['Your rank goes where you go: save it and open it on any phone.','Tu rango va contigo: guárdalo y ábrelo en cualquier teléfono.'],gwRkB:['Save my rank','Guardar mi rango'],
  // v95 share studio
  csHint:['Save it as a transparent picture and place it over any photo or story — or add a photo here.','Guárdala como imagen transparente y ponla encima de cualquier foto o historia — o agrega una foto aquí.'],
  csStyleL:['Style','Estilo'],csBgL:['Background','Fondo'],csFmtL:['Size','Tamaño'],csColL:['Color','Color'],
