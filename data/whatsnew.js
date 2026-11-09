@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.86',items:[
+  {i:'chart',en:'<b>Smarter training load</b>: each muscle has its own weekly limit instead of one number for all. Core can take more sets than biceps, and the card now shows each count against its limit (for example Biceps 18/16).',es:'<b>Carga de entrenamiento más inteligente</b>: cada músculo tiene su propio límite semanal en lugar de un solo número. El core aguanta más series que el bíceps, y la tarjeta muestra cada conteo contra su límite (por ejemplo Bíceps 18/16).'}
+ ]},
  {v:'v1.1.85',items:[
   {i:'layers',en:'<b>Shorter plan setup</b>: the full setup went from about 27 steps to about 20. The six fitness tests now sit on two screens, and the optional questions (phase, exercises to avoid, favorites, work posture) hide behind one "Fine-tune your plan?" step. Your plan is the same if you skip it.',es:'<b>Configuración más corta</b>: la configuración completa pasó de unos 27 pasos a unos 20. Las seis pruebas de condición física ahora están en dos pantallas, y las preguntas opcionales (fase, ejercicios a evitar, favoritos, postura en el trabajo) quedan detrás de un solo paso "¿Quieres afinar tu plan?". Tu plan es el mismo si lo saltas.'}
  ]},
