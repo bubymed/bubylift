@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.91',items:[
+  {i:'undo',en:'<b>Undo for routines and your plan</b>: deleting a routine or your plan now shows an Undo button for a few seconds, just like workouts and body entries.',es:'<b>Deshacer para rutinas y tu plan</b>: al eliminar una rutina o tu plan aparece un botón Deshacer unos segundos, igual que con los entrenamientos y los registros de peso.'}
+ ]},
  {v:'v1.1.90',items:[
   {i:'search',en:'<b>Search your history</b>: type a workout name, an exercise or a note, or pick a muscle, to find past workouts fast.',es:'<b>Busca en tu historial</b>: escribe el nombre de un entrenamiento, un ejercicio o una nota, o elige un músculo, para encontrar entrenamientos pasados rápido.'}
  ]},

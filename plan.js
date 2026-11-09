@@ -1000,8 +1000,18 @@ function planCreate(){
 }
 
 /* ---------- routines: swipe to delete / edit ---------- */
-function planDelAsk(){ask(t('delPlan'),t('delete'),function(){if(DATA.plan&&DATA.plan.t0)clTomb('pl'+DATA.plan.t0);DATA.plan=null;saveData();render();toast(t('planDeleted'));},true);}
-function rtDelAsk(id){ask(t('delRoutine'),t('delete'),function(){DATA.routines=DATA.routines.filter(x=>x.id!==id);clTomb(id);saveData();render();},true);}
+function planDelAsk(){ask(t('delPlan'),t('delete'),function(){
+  if(!DATA.plan)return;const snap=JSON.stringify(DATA.plan),t0=DATA.plan.t0;
+  DATA.plan=null;jset(K_DATA,DATA);render();
+  undoDo(t('planDeleted'),function(){DATA.plan=JSON.parse(snap);jset(K_DATA,DATA);render();},function(){if(t0)clTomb('pl'+t0);DATA.plan=null;saveData();});
+},true);}
+function rtDelAsk(id){ask(t('delRoutine'),t('delete'),function(){rtDelDo(id);},true);}
+/* delete a routine with an Undo window, committed (tombstone + sync) when it closes / borrar una rutina con ventana de Deshacer, se confirma al cerrarse */
+function rtDelDo(id){
+  const snap=JSON.stringify(DATA.routines);
+  DATA.routines=DATA.routines.filter(x=>x.id!==id);jset(K_DATA,DATA);render();
+  undoDo(t('rtGone'),function(){DATA.routines=JSON.parse(snap);jset(K_DATA,DATA);render();},function(){DATA.routines=DATA.routines.filter(x=>x.id!==id);clTomb(id);saveData();});
+}
 function rtEdit(id){rbOpen(id);}
 
 /* ---------- periodic check-in / evaluación periódica ---------- */
