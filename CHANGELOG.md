@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.82 — 2026-11-09
+- Log a past workout by hand (History → "Log a past workout"): choose the date (not in the future), an optional duration, add exercises and sets, and save. It counts in streaks, goals and records like any other workout.
+  Registrar un entrenamiento pasado a mano (Historial → "Registrar un entrenamiento pasado"): elige la fecha (no futura), una duración opcional, agrega ejercicios y series y guarda. Cuenta en rachas, metas y récords como cualquier otro entrenamiento.
+
 ## v1.1.81 — 2026-11-09
 - Edit a saved workout (History → open a workout → Edit): fix a weight, reps, time or distance, remove a set, rename the workout or change its note. A set whose numbers you change loses its trophy so records stay honest; a workout cannot be left with zero sets (use Delete).
   Editar un entrenamiento guardado (Historial → abre un entrenamiento → Editar): corrige un peso, repeticiones, tiempo o distancia, quita una serie, cambia el nombre o la nota. Una serie cuyos números cambias pierde su trofeo para que los récords sean honestos; un entrenamiento no puede quedar sin series (usa Eliminar).

@@ -54,10 +54,11 @@ function wkCard(wk){
     '<small>'+(wk.ex.length?wk.ex.slice(0,3).map(x=>esc(exNameV(x.eid,x.vr,x.n))).join(' · ')+(wk.ex.length>3?' …':''):esc(spName(wk.sp)))+(wk.hr?' · '+ic('heart')+' '+wk.hr.a:'')+(wk.kcal?' · '+wk.kcal+' kcal':'')+'</small></span><span class="lc">›</span></button>'+xBtn('delWkAsk(\''+wk.id+'\')')+'</div>';
 }
 function vHistory(){
-  if(!DATA.workouts.length)return emptyState('clipboard-list',t('emptyHistT'),t('emptyHistP'),t('emStart'),"go('workout')");
+  const addB='<button class="btn wide" onclick="wkNewOpen()">＋ '+t('logPast')+'</button>';
+  if(!DATA.workouts.length)return emptyState('clipboard-list',t('emptyHistT'),t('emptyHistP'),t('emStart'),"go('workout')")+addB;
   const now=new Date(),ws=weekStart(now.getTime()),ms=new Date(now.getFullYear(),now.getMonth(),1).getTime();
   const wn=DATA.workouts.filter(w=>w.t>=ws).length,mn=DATA.workouts.filter(w=>w.t>=ms).length;
-  let h='<div class="stats card calc" role="button" tabindex="0" onclick="calOpen()"><div><b>'+wn+'</b><span>'+t('thisWeek')+'</span></div><div><b>'+mn+'</b><span>'+t('thisMonth')+'</span></div><div><b>'+DATA.workouts.length+'</b><span>'+t('total')+'</span></div><p class="calh">'+ic('calendar')+' '+t('calOpenB')+' ›</p></div>';
+  let h=addB+'<div class="stats card calc" role="button" tabindex="0" onclick="calOpen()"><div><b>'+wn+'</b><span>'+t('thisWeek')+'</span></div><div><b>'+mn+'</b><span>'+t('thisMonth')+'</span></div><div><b>'+DATA.workouts.length+'</b><span>'+t('total')+'</span></div><p class="calh">'+ic('calendar')+' '+t('calOpenB')+' ›</p></div>';
   let last='';
   DATA.workouts.forEach(wk=>{
     const lb=dFmt(wk.t,{month:'long',year:'numeric'});
@@ -107,8 +108,10 @@ function wkEditOpen(id){
 }
 function wkEditDraw(){
   const wk=WKE;if(!wk)return;
-  let h='<div class="form wke"><div class="pick-h"><h3>'+t('edit')+'</h3><button class="ico" onclick="wkEditCancel()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+  let h='<div class="form wke"><div class="pick-h"><h3>'+t(wk.isNew?'logPast':'edit')+'</h3><button class="ico" onclick="wkEditCancel()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
    '<label>'+t('name')+'<input id="wkeN" class="in wide" type="text" maxlength="60" value="'+esc(wk.name||'')+'" oninput="WKE.name=this.value"></label>';
+  if(wk.isNew)h+='<div class="row"><label>'+t('wkDate')+'<input class="in wide" type="date" value="'+dInput(wk.t)+'" max="'+dInput(Date.now())+'" onchange="wkeDate(this.value)"></label>'+
+   '<label>'+t('wkDurMin')+'<input class="in wide" type="text" inputmode="numeric" autocomplete="off" value="'+esc(wk.dur||'')+'" oninput="wkeDur(this.value)"></label></div>';
   wk.ex.forEach((x,xi)=>{
     const m=exMode(x.eid),c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
     h+='<div class="wke-ex">'+esc(exNameV(x.eid,x.vr,x.n))+'</div><div class="wke-s wke-h"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
@@ -116,10 +119,30 @@ function wkEditDraw(){
       const f1=m==='t'?'t':'w',f2=m==='t'?'d':'r',v1=st[f1]==null?'':(f1==='t'?fmtNum(st.t):wShow(st.w)),v2=st[f2]==null?'':(f2==='d'?dShow(st.d):String(st.r));
       h+='<div class="wke-s"><span>'+(si+1)+'</span><input class="in" type="text" inputmode="decimal" autocomplete="off" value="'+esc(v1)+'" oninput="wkeSet('+xi+','+si+',\''+f1+'\',this.value)"><input class="in" type="text" inputmode="'+(f2==='r'?'numeric':'decimal')+'" autocomplete="off" value="'+esc(v2)+'" oninput="wkeSet('+xi+','+si+',\''+f2+'\',this.value)"><button class="ico" onclick="wkeRm('+xi+','+si+')" aria-label="'+esc(t('delete'))+'">✕</button></div>';
     });
+    if(wk.isNew)h+='<button class="btn wide" onclick="wkeAddSet('+xi+')">＋ '+t('addSet')+'</button>';
   });
+  if(wk.isNew)h+='<button class="btn wide" onclick="wkeAddEx()">＋ '+t('addEx')+'</button>';
   h+='<label>'+t('note')+'<textarea class="note-in" rows="2" maxlength="500" oninput="WKE.note=this.value">'+esc(wk.note||'')+'</textarea></label>'+
     '<div class="row"><button class="btn pri" onclick="wkEditSave()">'+t('save')+'</button><button class="btn" onclick="wkEditCancel()">'+t('cancel')+'</button></div></div>';
   sheet(h);
+}
+/* log a workout you forgot to track: same editor, starts empty / registrar un entrenamiento que no anotaste: mismo editor, empieza vacío */
+function wkNewOpen(){WKE={id:uid(),isNew:1,t:dayNoon(Date.now()),dur:'',name:'',note:'',ex:[]};wkEditDraw();}
+function dayNoon(ts){const d=new Date(ts);return new Date(d.getFullYear(),d.getMonth(),d.getDate(),12,0,0).getTime();}
+function wkeDate(v){if(!WKE||!v)return;let ts=dFromInput(v);const today=dayNoon(Date.now());if(ts>today){ts=today;toast(t('noFuture'));wkEditDraw();}WKE.t=ts;}
+function wkeDur(v){if(!WKE)return;v=String(v).replace(/\D/g,'').slice(0,4);WKE.dur=v;}
+function wkeAddEx(){
+  pickEx(function(eid){
+    if(!WKE)return;const m=exMode(eid);
+    WKE.ex.push({eid:eid,n:exName(eid),sets:[m==='t'?{t:null,d:null}:{w:m==='bw'?0:null,r:null}]});
+    wkEditDraw();
+  },true);
+}
+function wkeAddSet(xi){
+  const x=WKE&&WKE.ex[xi];if(!x)return;
+  const l=x.sets[x.sets.length-1],m=exMode(x.eid);
+  x.sets.push(l?{w:l.w,r:l.r,t:l.t,d:l.d}:(m==='t'?{t:null,d:null}:{w:m==='bw'?0:null,r:null}));
+  wkEditDraw();
 }
 function wkeSet(xi,si,f,v){
   const st=WKE&&WKE.ex[xi]&&WKE.ex[xi].sets[si];if(!st)return;
@@ -133,7 +156,7 @@ function wkeRm(xi,si){
   x.sets.splice(si,1);if(!x.sets.length)WKE.ex.splice(xi,1);
   wkEditDraw();
 }
-function wkEditCancel(){const id=WKE&&WKE.id;WKE=null;if(id)openWk(id);else sheetClose();}
+function wkEditCancel(){const id=WKE&&WKE.id,nw=WKE&&WKE.isNew;WKE=null;if(id&&!nw)openWk(id);else sheetClose();}
 function wkEditSave(){
   const wk=WKE;if(!wk)return;
   for(const x of wk.ex){const m=exMode(x.eid);for(const s of x.sets){
@@ -141,6 +164,11 @@ function wkEditSave(){
     if(!ok){toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
   }}
   if(!wk.ex.length){toast(t('wkeNone'));return;}
+  if(wk.isNew){
+    const dur=parseInt(wk.dur,10)||0,o={id:wk.id,t:wk.t,end:dur>0?wk.t+dur*6e4:0,name:(wk.name||'').trim()||autoName(wk.t),note:(wk.note||'').trim(),ex:wk.ex.map(x=>{const e={eid:x.eid,n:x.n,sets:x.sets.map(s=>({w:s.w,r:s.r,t:s.t,d:s.d}))};if(x.vr)e.vr=x.vr;return e;})};
+    DATA.workouts.push(o);DATA.workouts.sort((a,b)=>b.t-a.t);goalsCheck();rkCheck();
+    saveData();WKE=null;sheetClose();render();toast(t('saved'));return;
+  }
   const old=DATA.workouts.find(w=>w.id===wk.id);if(!old){WKE=null;sheetClose();return;}
   // a trophy only stays on a set whose numbers did not change / el trofeo solo queda en una serie cuyos números no cambiaron
   const oe={};old.ex.forEach(x=>{oe[x.eid+'|'+(x.vr||'')]=x.sets;});

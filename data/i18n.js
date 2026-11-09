@@ -64,7 +64,7 @@ const STR={
  // workout: active
  wkNamePh:['Workout name (optional)','Nombre del entrenamiento (opcional)'],wkNotePh:['Workout notes (optional)','Notas del entrenamiento (opcional)'],
  setsDone:['{0}/{1} sets','{0}/{1} series'],finish:['Finish','Terminar'],cancelWk:['Cancel workout','Cancelar entrenamiento'],
- addEx:['Add exercise','Agregar ejercicio'],addSet:['Add set','Agregar serie'],saveRoutine:['Save as routine','Guardar como rutina'],saveRoutineS:['Save as routine','Guardar como rutina'],
+ addEx:['Add exercise','Agregar ejercicio'],noFuture:['That date is in the future — using today','Esa fecha es futura — se usa hoy'],logPast:['Log a past workout','Registrar un entrenamiento pasado'],wkDate:['Date','Fecha'],wkDurMin:['Duration (min, optional)','Duración (min, opcional)'],addSet:['Add set','Agregar serie'],saveRoutine:['Save as routine','Guardar como rutina'],saveRoutineS:['Save as routine','Guardar como rutina'],
  lastTime:['Last time ({0}): {1}','Última vez ({0}): {1}'],firstTime:['First time — no history yet','Primera vez — aún sin historial'],
  colSet:['SET','SERIE'],colPrev:['PREV','ANT.'],colReps:['REPS','REPS'],colMin:['MIN','MIN'],doneSet:['Mark set done','Marcar serie hecha'],
  needWR:['Enter weight and reps first','Escribe primero peso y repeticiones'],needReps:['Enter the reps first','Escribe primero las repeticiones'],needTime:['Enter the time first','Escribe primero el tiempo'],
