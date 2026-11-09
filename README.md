@@ -1,7 +1,7 @@
 # Bubylift — workout log / registro de entrenamientos
 
-A free workout, progress and body log that lives on your phone. **No ads, no tracking, account optional** — it works offline and installs like an app on Android and iPhone.
-Un registro gratis de entrenamientos, progreso y cuerpo que vive en tu teléfono. **Sin anuncios, sin rastreo, cuenta opcional** — funciona sin internet y se instala como app en Android y iPhone.
+A free workout, progress and body log that lives on your phone. **No ads, account optional** — it works offline and installs like an app on Android and iPhone.
+Un registro gratis de entrenamientos, progreso y cuerpo que vive en tu teléfono. **Sin anuncios, cuenta opcional** — funciona sin internet y se instala como app en Android y iPhone.
 
 **[▶ Open the app / Abrir la app](https://bubymed.github.io/bubylift/)** · User manual / Manual: [EN](docs/Bubylift-UserManual-v1.0-EN.pdf) · [ES](docs/Bubylift-Manual-v1.0-ES.pdf) · Architecture / Arquitectura: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Code map / Mapa del código: [docs/CODEMAP.md](docs/CODEMAP.md)
 
@@ -32,7 +32,7 @@ The app updates itself when a new version is published and shows what's new once
 La app se actualiza sola cuando se publica una versión nueva y muestra las novedades una vez.
 
 ## Privacy / Privacidad
-- No ads, no tracking. As a guest, **nothing leaves your phone**; the only thing that does is what you type in the optional feedback form, if you submit it. / Sin anuncios ni rastreo. Como invitado, **nada sale de tu teléfono**; lo único que sale es lo que escribas en el formulario opcional de comentarios, si lo envías.
+- No ads. / Sin anuncios.
 - With an e-mail account your data is encrypted on your phone (AES-256-GCM) before it is uploaded; with Google it is stored in your account without extra encryption. / Con una cuenta de correo tus datos se cifran en tu teléfono (AES-256-GCM) antes de subirse; con Google se guardan en tu cuenta sin cifrado adicional.
 - Guests: your log lives in the phone's local storage, so **export a backup now and then** (More → Back up my data). / Invitados: tu registro vive en el almacenamiento local del teléfono, así que **exporta un respaldo de vez en cuando** (Más → Respaldar mis datos).
 

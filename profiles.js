@@ -159,6 +159,7 @@ function pfGuest(tmp){
   const k=pfKeys(prof.id);
   try{localStorage.setItem(k.s,JSON.stringify({lang:LANG}));}catch(e){const m=$('gmsg');if(m)m.textContent=t('pfTxBad');return;}
   PFS.push(prof);pfSave();GS={};
+  if(tmp!==true){let seen=0;try{seen=localStorage.getItem('bl_gnew');localStorage.setItem('bl_gnew','1');}catch(e){}if(!seen)track('guest_new');}
   pfEnter(prof.id);
 }
 /* create account = one full-screen flow: name + avatar → e-mail + password → recovery key → in / crear cuenta = un flujo de pantalla completa */
@@ -244,19 +245,19 @@ function gwMark(){const n=String(Date.now());try{localStorage.setItem('bl_gw',n)
 function gwFirstDue(){return gwOk()&&DATA.workouts.length===1;}
 function gwFirst(){
   if(!gwOk()||!DATA.workouts.length)return false;
-  gwMark();
+  gwMark();trkGuest('prompt_first');
   const wk=DATA.workouts[0],n=typeof wkSets==='function'?wkSets(wk):0;
   sheet('<div class="sum"><div class="sum-e">☁️</div><h3>'+t('gwFT')+'</h3><p class="muted">'+t('gwFP')+'</p>'+
     (n?'<div class="stats"><div><b>'+n+'</b><span>'+t('sets')+'</span></div></div>':'')+
-    '<div class="row"><button class="btn pri wide" onclick="sheetClose();gSignup(1,{upg:true})">'+t('clCreate')+'</button></div>'+
+    '<div class="row"><button class="btn pri wide" onclick="track(\'tap_first\');sheetClose();gSignup(1,{upg:true})">'+t('clCreate')+'</button></div>'+
     '<div class="row"><button class="btn wide" onclick="sheetClose()">'+t('gnNo')+'</button></div></div>');
   return true;
 }
 /* inside the rank-up sheet: returns the save button html for guests, '' for everyone else / dentro de la hoja de rango: botón de guardar para invitados */
 function gwRank(){
   if(!gwOk())return'';
-  gwMark();
-  return'<p class="muted">'+t('gwRkP')+'</p><div class="row"><button class="btn pri wide" onclick="sheetClose();gSignup(1,{upg:true})">'+t('gwRkB')+'</button></div>';
+  gwMark();trkGuest('prompt_rank');
+  return'<p class="muted">'+t('gwRkP')+'</p><div class="row"><button class="btn pri wide" onclick="track(\'tap_rank\');sheetClose();gSignup(1,{upg:true})">'+t('gwRkB')+'</button></div>';
 }
 function guestNag(){
   const p=pfCur();if(!p||!p.g||(typeof CL!=='undefined'&&CL&&CL.dek))return;
@@ -268,7 +269,8 @@ function guestNag(){
     let last=0;try{last=+localStorage.getItem('bl_gn')||0;}catch(e){}
     if(Date.now()-last<864e5)return;
     try{localStorage.setItem('bl_gn',String(Date.now()));}catch(e){}
-    sheet('<div class="sum"><div class="sum-e">☁️</div><h3>'+t('gnCT')+'</h3><p class="muted">'+t('gnCP')+'</p><div class="row"><button class="btn pri wide" onclick="sheetClose();gSignup(1,{upg:true})">'+t('clCreate')+'</button></div><div class="row"><button class="btn wide" onclick="clAuthOpen(\'in\')">'+t('wIn')+'</button></div><button class="lnk-d" onclick="sheetClose()">'+t('gnNo')+'</button></div>');
+    track('prompt_nag');
+    sheet('<div class="sum"><div class="sum-e">☁️</div><h3>'+t('gnCT')+'</h3><p class="muted">'+t('gnCP')+'</p><div class="row"><button class="btn pri wide" onclick="track(\'tap_nag\');sheetClose();gSignup(1,{upg:true})">'+t('clCreate')+'</button></div><div class="row"><button class="btn wide" onclick="clAuthOpen(\'in\')">'+t('wIn')+'</button></div><button class="lnk-d" onclick="sheetClose()">'+t('gnNo')+'</button></div>');
   };
   window.__gnT=setTimeout(function(){show(0);},25000);
 }

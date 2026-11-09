@@ -12,7 +12,7 @@ function cloudOn(){const c=window.CLOUD_CFG;return !!(c&&c.url&&c.key&&/^https:\
 /* the session lives inside the profile's settings, so password-protected profiles keep it encrypted / la sesión vive dentro de los ajustes del perfil */
 function clLoad(){const o=SET&&SET.cl;CL=(o&&typeof o==='object'&&typeof o.uid==='string'&&typeof o.rt==='string')?o:null;CLK=null;try{const p=pfCur();if(CL&&CL.dek&&p&&!p.acct){p.acct=1;pfSave();}}catch(e){}}
 /* a guest that signs in becomes a normal profile named after the e-mail / el invitado que inicia sesión pasa a perfil normal */
-function clAdopt(){try{const q=pfCur();if(q&&!q.acct&&CL&&CL.email){q.acct=1;pfSave();}const p=pfCur();if(p&&p.g&&CL&&CL.email){p.g=0;p.tmp=0;const pr=window.__clProf;window.__clProf=null;const mine=pr&&pr.id===p.id;p.name=((mine&&pr.name)||CL.email.split('@')[0]||'Me').slice(0,20);if(mine&&pr.av)p.av=pfAv(pr.av);pfSave();if(typeof pfRenderAv==='function')pfRenderAv();if(typeof renderTabs==='function')renderTabs();}}catch(e){}}
+function clAdopt(){try{const q=pfCur();if(q&&!q.acct&&CL&&CL.email){q.acct=1;pfSave();}const p=pfCur();if(p&&p.g&&CL&&CL.email){track('acct_new');p.g=0;p.tmp=0;const pr=window.__clProf;window.__clProf=null;const mine=pr&&pr.id===p.id;p.name=((mine&&pr.name)||CL.email.split('@')[0]||'Me').slice(0,20);if(mine&&pr.av)p.av=pfAv(pr.av);pfSave();if(typeof pfRenderAv==='function')pfRenderAv();if(typeof renderTabs==='function')renderTabs();}}catch(e){}}
 function clSave(){if(CL){SET.cl=CL;saveSet();}}
 function clUnlink(){CL=null;CLK=null;if(SET&&SET.cl){delete SET.cl;saveSet();}}
 /* tombstones: remember deletions so another phone does not bring the item back / lápidas: recuerdan lo borrado */
@@ -439,9 +439,23 @@ async function stravaGet(id){
   }catch(e){toast(t('clFail'));}
 }
 
+/* anonymous counters: random id of this install, event name, version and language; no e-mail, account or workout data. Off when the browser sends Do Not Track.
+   contadores anónimos: id aleatorio de esta instalación, nombre del evento, versión e idioma; sin correo, cuenta ni datos de entrenamiento. Apagado si el navegador envía No rastrear. */
+function track(ev){
+  try{
+    if(!cloudOn()||navigator.doNotTrack==='1'||navigator.globalPrivacyControl)return;
+    let d='';try{d=localStorage.getItem('bl_did')||'';}catch(e){}
+    if(!/^[a-f0-9]{16}$/.test(d)){d=Array.from(crypto.getRandomValues(new Uint8Array(8))).map(function(b){return('0'+b.toString(16)).slice(-2);}).join('');try{localStorage.setItem('bl_did',d);}catch(e){}}
+    const c=window.CLOUD_CFG;
+    fetch(c.url+'/rest/v1/app_events',{method:'POST',keepalive:true,headers:{apikey:c.key,Authorization:'Bearer '+c.key,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({ev:ev,did:d,v:typeof APP_VER==='string'?APP_VER:null,lang:LANG==='es'?'es':'en'})}).catch(function(){});
+  }catch(e){}
+}
+/* only while the current profile is a guest / solo mientras el perfil actual es invitado */
+function trkGuest(ev){try{const p=typeof pfCur==='function'&&pfCur();if(p&&p.g)track(ev);}catch(e){}}
+
 /* slim reminder for guests: no account exists until they sign up or log in / aviso breve para invitados */
 function guestBar(){
   const p=typeof pfCur==='function'&&pfCur();
   if(!cloudOn()||!p||!p.g||(CL&&CL.dek))return'';
-  return'<div class="card guestbar"><span>'+t('gbT')+'</span><div class="row"><button class="btn pri sm" onclick="clAuthOpen(\'up\')">'+t('wSignUp')+'</button><button class="btn sm" onclick="clAuthOpen(\'in\')">'+t('wLogIn')+'</button></div></div>';
+  return'<div class="card guestbar"><span>'+t('gbT')+'</span><div class="row"><button class="btn pri sm" onclick="trkGuest(\'tap_bar\');clAuthOpen(\'up\')">'+t('wSignUp')+'</button><button class="btn sm" onclick="clAuthOpen(\'in\')">'+t('wLogIn')+'</button></div></div>';
 }

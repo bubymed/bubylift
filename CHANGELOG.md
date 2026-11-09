@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.72 — 2026-11-08
+- Anonymous usage counters to see how guests become accounts: new guest, workout finished, which prompt was shown, which one was tapped, account created. Only the event, a random install id, the version and the language are sent; never e-mail, account or workout data, and nothing is sent if the browser says Do Not Track. The privacy text no longer says "no tracking". New insert-only table `app_events` in `server/schema.sql`.
+  Contadores anónimos de uso para ver cómo los invitados pasan a cuentas: invitado nuevo, entrenamiento terminado, qué aviso se mostró, cuál se tocó, cuenta creada. Solo se envía el evento, un id aleatorio de la instalación, la versión y el idioma; nunca correo, cuenta ni datos de entrenamiento, y no se envía nada si el navegador dice No rastrear. El texto de privacidad ya no dice "sin rastreo". Tabla nueva `app_events` (solo insertar) en `server/schema.sql`.
+
 ## v1.1.71 — 2026-11-08
 - Guests are invited to save their progress at the moments it matters: after their first finished workout and when they rank up. Short message, a clear "Maybe later" button, and never more than one prompt every 3 days (it also holds back the daily reminder).
   A los invitados se les invita a guardar su progreso en los momentos que importan: después de su primer entrenamiento terminado y al subir de rango. Mensaje corto, botón claro "Quizás después" y nunca más de un aviso cada 3 días (también retrasa el recordatorio diario).

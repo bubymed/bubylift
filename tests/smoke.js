@@ -958,6 +958,22 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("sheetClose();PFS.find(function(x){return x.id==='gx';}).g=0;try{localStorage.removeItem('bl_gw');}catch(e){}");
   ok(ev("gwOk()")===false&&ev("gwRank()")==='','no win prompts for people with an account');
   ev("PFS.find(function(x){return x.id==='gx';}).g=1;try{localStorage.removeItem('bl_gw');}catch(e){}sheetClose();");
+  /* anonymous counters: only event, random install id, version, language; never for people with an account; off with Do Not Track */
+  ev("window.__tr=[];window.__of=window.fetch;window.fetch=function(u,o){window.__tr.push([u,JSON.parse(o.body)]);return Promise.resolve({ok:true});};try{localStorage.removeItem('bl_did');localStorage.removeItem('bl_gw');}catch(e){}");
+  ev("trkGuest('wk_done')");
+  ok(ev("__tr.length")===1&&/\/rest\/v1\/app_events$/.test(ev("__tr[0][0]"))&&ev("__tr[0][1].ev")==='wk_done'&&/^[a-f0-9]{16}$/.test(ev("__tr[0][1].did")),'guest counter sends the event with a random install id');
+  ok(ev("Object.keys(__tr[0][1]).sort().join()")==='did,ev,lang,v','counter carries no account, e-mail or workout data');
+  ev("track('guest_new')");
+  ok(ev("__tr[1][1].did")===ev("__tr[0][1].did"),'same install keeps the same id');
+  ev("PFS.find(function(x){return x.id==='gx';}).g=0;trkGuest('wk_done')");
+  ok(ev("__tr.length")===2,'no counters for people with an account');
+  ev("PFS.find(function(x){return x.id==='gx';}).g=1;Object.defineProperty(navigator,'doNotTrack',{value:'1',configurable:true});track('guest_new')");
+  ok(ev("__tr.length")===2,'Do Not Track turns the counters off');
+  ev("delete navigator.doNotTrack;sheetClose();DATA.workouts.unshift({id:'gwk2',t:Date.now(),ex:[{eid:'bench',sets:[{w:60,r:5,done:true}]}]});gwFirst();DATA.workouts.shift()");
+  ok(ev("__tr[__tr.length-1][1].ev")==='prompt_first','showing the first-workout prompt is counted');
+  ev("sheetClose();try{localStorage.removeItem('bl_gw');}catch(e){}rkUp(3)");
+  ok(ev("__tr[__tr.length-1][1].ev")==='prompt_rank','showing the rank-up prompt is counted');
+  ev("sheetClose();window.fetch=window.__of;try{localStorage.removeItem('bl_gw');localStorage.removeItem('bl_did');}catch(e){}");
   ev("window.setTimeout=window.__o.st;PFS.length=0;window.__o.pf.forEach(function(x){PFS.push(x);});PFID=window.__o.pid;CL=window.__o.cl;window.__gnT=0;sheetClose();");
   ev("gWelcome(1)");
   ok(/gBack\(\)/.test(doc.getElementById('gate').innerHTML),'welcome shows back link when coming from switch profile');
