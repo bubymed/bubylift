@@ -788,7 +788,13 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   w.planEdit(0,0);const s0=ev('DATA.plan.ds[0].ex[0].sets');w.peStep('sets',1);ok(ev('DATA.plan.ds[0].ex[0].sets')===s0+1,'plan editor changes sets');
   w.peStep('lo',-100);ok(ev('DATA.plan.ds[0].ex[0].lo')>=1,'rep range stays valid');
   const fx1=ev('DATA.plan.ds[0].ex[0].eid'),fx2=ev('DATA.plan.ds[0].ex[1].eid');
-  w.peMove(1);ok(ev('DATA.plan.ds[0].ex[1].eid')===fx1&&ev('DATA.plan.ds[0].ex[0].eid')===fx2,'plan exercise moves down');
+  w.planOpen(0);ok(doc.querySelectorAll('.pv-grip').length===ev('DATA.plan.ds[0].ex.length'),'every plan exercise has a drag handle');
+  const grip=doc.querySelector('.pv-grip[data-ei="0"]');grip.dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true}));
+  ok(ev('DATA.plan.ds[0].ex[1].eid')===fx1&&ev('DATA.plan.ds[0].ex[0].eid')===fx2,'plan exercise moves down with the handle keys');
+  w.pvReorder(0,1,0);ok(ev('DATA.plan.ds[0].ex[0].eid')===fx1,'dragging an exercise back puts it first');
+  w.planEdit(0,0);ok(/Replace exercise|Reemplazar/.test(sheetHtml())&&!/moveUp/.test(sheetHtml()),'editor leads with Replace and has no up/down buttons');
+  w.planSwapOpen(0,0);ok(/Search any exercise|Buscar cualquier/.test(sheetHtml()),'swap sheet lets you search every exercise');
+  w.planEdit(0,0);
   const dn0=ev('DATA.plan.ds[0].ex.length'),dn1=ev('DATA.plan.ds[1].ex.length');
   w.peMoveDay('1');ok(ev('DATA.plan.ds[0].ex.length')===dn0-1&&ev('DATA.plan.ds[1].ex.length')===dn1+1,'plan exercise moves to another day');
   w.dayRen(0);doc.getElementById('dayrn').value='Mi día <b>X</b>';w.dayRenSave(0);

@@ -669,9 +669,62 @@ function planExCards(d,di){
       '<div class="pv-b"><b>'+(ss?'<i class="ssl">'+ss+'</i>':'')+(e.mn?'<i class="mnl" title="'+esc(t('mainT'))+'">★</i> ':'')+esc(exName(e.eid))+'</b>'+
       '<div class="pv-pills"><span class="pv-p">'+esc(tgText(e))+'</span>'+(ln?'<span class="pv-p2">'+esc(ln)+'</span>':'')+'</div>'+
       (e.rz?'<small class="rz">↳ '+esc(rzText(e))+'</small>':'')+(e.cn?'<small class="warnt">⚠ '+esc(t('injCare',jointNames(e.cn)))+'</small>':'')+'</div>'+
-      '<button class="pv-play" onclick="event.stopPropagation();howOpen(\''+e.eid+'\',\'planOpen\')" aria-label="'+esc(t('howTo'))+'">'+ic('help-circle')+'</button></div>';
-  }).join('');
+      '<button class="pv-play" onclick="event.stopPropagation();howOpen(\''+e.eid+'\',\'planOpen\')" aria-label="'+esc(t('howTo'))+'">'+ic('help-circle')+'</button>'+
+      '<span class="pv-grip" role="button" tabindex="0" data-di="'+di+'" data-ei="'+ei+'" aria-label="'+esc(t('dragAria'))+'" onclick="event.stopPropagation()">⠿</span></div>';
+  }).join('')+(d.ex.length>1?'<p class="muted sm pv-dragh">'+t('dragHint')+'</p>':'');
 }
+/* drag an exercise by its handle to where it should go (touch, mouse or pen); arrow keys on the handle move it one step
+   arrastra un ejercicio por su asa adonde quieras (táctil, mouse o lápiz); las flechas del teclado lo mueven un paso */
+let PVD=null;
+function pvDragStart(ev){
+  const g=ev.target.closest&&ev.target.closest('.pv-grip');if(!g||(ev.button!=null&&ev.button>0))return;
+  const card=g.closest('.pv-ex'),cards=Array.prototype.slice.call(card.parentNode.querySelectorAll('.pv-ex'));
+  const ei=cards.indexOf(card);if(ei<0)return;
+  ev.preventDefault();
+  const sh=document.getElementById('sheet'),r0=cards.map(c=>c.getBoundingClientRect());
+  PVD={g:g,card:card,cards:cards,ei:ei,to:ei,y0:ev.clientY,y:ev.clientY,s0:sh?sh.scrollTop:0,sh:sh,r0:r0,di:+g.dataset.di,id:ev.pointerId,h:r0[ei].height+8};
+  try{g.setPointerCapture(ev.pointerId);}catch(e){}
+  card.classList.add('drag');cards.forEach(c=>{if(c!==card)c.classList.add('shift');});
+  if(navigator.vibrate)try{navigator.vibrate(8);}catch(e){}
+  PVD.raf=requestAnimationFrame(pvDragTick);
+}
+function pvDragMove(ev){if(PVD&&ev.pointerId===PVD.id){PVD.y=ev.clientY;ev.preventDefault();}}
+function pvDragTick(){
+  const D=PVD;if(!D)return;
+  if(D.sh){ // scroll the sheet when the finger is near its top or bottom edge / desplaza la hoja cerca de los bordes
+    const r=D.sh.getBoundingClientRect();
+    if(D.y<r.top+70)D.sh.scrollTop-=12;else if(D.y>r.bottom-70)D.sh.scrollTop+=12;
+  }
+  const dy=D.y-D.y0+(D.sh?D.sh.scrollTop-D.s0:0);
+  D.card.style.transform='translateY('+dy+'px) scale(1.02)';
+  const mid=D.r0[D.ei].top+D.r0[D.ei].height/2+dy;
+  let to=0;D.r0.forEach((r,i)=>{if(i!==D.ei&&r.top+r.height/2+(D.sh?0:0)<mid)to++;});
+  // card positions were measured at the start; the sheet scroll moves them, so compare in the same frame / las posiciones se midieron al inicio
+  D.to=to;
+  D.cards.forEach((c,i)=>{if(i===D.ei)return;c.style.transform=(D.to>D.ei&&i>D.ei&&i<=D.to)?'translateY('+(-D.h)+'px)':(D.to<D.ei&&i>=D.to&&i<D.ei)?'translateY('+D.h+'px)':'';});
+  D.raf=requestAnimationFrame(pvDragTick);
+}
+function pvDragEnd(ev){
+  const D=PVD;if(!D||(ev&&ev.pointerId!==D.id))return;
+  PVD=null;cancelAnimationFrame(D.raf);
+  D.card.classList.remove('drag');D.cards.forEach(c=>{c.classList.remove('shift');c.style.transform='';});
+  if(ev&&ev.type==='pointercancel'){return;}
+  if(D.to!==D.ei)pvReorder(D.di,D.ei,D.to);
+}
+function pvReorder(di,from,to){
+  const p=DATA.plan,a=p&&p.ds[di]&&p.ds[di].ex;if(!a||from<0||from>=a.length||to<0||to>=a.length||from===to)return;
+  const x=a.splice(from,1)[0];a.splice(to,0,x);
+  const nb=a[to-1]||a[to+1];if(nb&&nb.sec&&x.sec!==nb.sec)x.sec=nb.sec; // takes the section of its new neighbour / toma la sección de su nuevo vecino
+  saveData();planOpen(di);render();
+}
+function pvGripKey(ev){
+  const g=ev.target.closest&&ev.target.closest('.pv-grip');if(!g||(ev.key!=='ArrowUp'&&ev.key!=='ArrowDown'))return;
+  ev.preventDefault();const di=+g.dataset.di,ei=+g.dataset.ei,j=ei+(ev.key==='ArrowUp'?-1:1);
+  pvReorder(di,ei,j);
+  const n=document.querySelector('.pv-grip[data-ei="'+j+'"]');if(n)n.focus();
+}
+document.addEventListener('pointerdown',pvDragStart);document.addEventListener('pointermove',pvDragMove,{passive:false});
+document.addEventListener('pointerup',pvDragEnd);document.addEventListener('pointercancel',pvDragEnd);document.addEventListener('keydown',pvGripKey);
 
 /* ---------- full plan view and editing ---------- */
 let PV=0;
@@ -748,10 +801,10 @@ function peDraw(){
   sheet('<div class="form"><div class="pick-h"><h3>'+esc(exName(x.eid))+'</h3><button class="ico" onclick="planOpen()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     stp('sets',x.sets,1)+stp('lo',x.lo,x.u==='m'?0.5:1)+stp('hi',x.hi,x.u==='m'?0.5:1)+
     '<p class="muted sm">'+esc(tgText(x))+'</p>'+(x.rz?'<p class="sm rz">↳ '+esc(rzText(x))+'</p>':'')+
-    '<div class="row"><button class="btn" onclick="peMove(-1)"'+(PE.e<1?' disabled':'')+'>↑ '+t('moveUp')+'</button><button class="btn" onclick="peMove(1)"'+(PE.e>=p.ds[PE.d].ex.length-1?' disabled':'')+'>↓ '+t('moveDn')+'</button></div>'+
+    '<button class="btn pri wide" onclick="planSwapOpen('+PE.d+','+PE.e+')">↔ '+t('swapB')+'</button>'+
     '<label class="sm">'+t('moveDay')+' <select class="in" onchange="peMoveDay(this.value)"><option value="">—</option>'+p.ds.map((d,k)=>k===PE.d?'':'<option value="'+k+'">'+esc(dayName(k))+'</option>').join('')+'</select></label>'+
     '<div class="row"><button class="btn'+(tasteOf(x.eid)==='lk'?' on':'')+'" onclick="tasteLike(\''+x.eid+'\');peDraw()">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button class="btn" onclick="tasteDis(\'plan\','+PE.d+','+PE.e+')">'+ic('ban')+' '+t('tkDis')+'</button></div>'+
-    '<div class="row"><button class="btn" onclick="planSwapOpen('+PE.d+','+PE.e+')">↔ '+t('swapB')+'</button><button class="btn" onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('howTo')+'</button></div>'+
+    '<div class="row"><button class="btn" onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('howTo')+'</button></div>'+
     '<div class="row"><button class="btn pri" onclick="planOpen()">'+t('done')+'</button><button class="btn" onclick="peRemove()">'+t('remove')+'</button></div></div>');
 }
 function peStep(f,d){
@@ -759,11 +812,6 @@ function peStep(f,d){
   if(f==='sets')x.sets=Math.max(1,Math.min(8,x.sets+d));
   else{x[f]=Math.max(x.u==='m'?0.5:1,Math.min(x.u==='m'?120:60,x[f]+d));if(x.lo>x.hi){if(f==='lo')x.hi=x.lo;else x.lo=x.hi;}}
   saveData();peDraw();
-}
-function peMove(d){
-  const a=DATA.plan.ds[PE.d].ex,j=PE.e+d;
-  if(j<0||j>=a.length)return;
-  const x=a[PE.e];a[PE.e]=a[j];a[j]=x;PE.e=j;saveData();peDraw();
 }
 function peMoveDay(k){
   k=parseInt(k,10);const p=DATA.plan;
@@ -831,6 +879,7 @@ function swapDraw(){
   if(SW.mode==='plan')DATA.plan.ds[SW.d].ex.forEach(e=>{skip[e.eid]=1;});else ACT.ex.forEach(e=>{skip[e.eid]=1;});
   const c=swapCands(SW.eid,SW.have,L,skip,maxLv);
   sheet('<div class="form"><div class="pick-h"><h3>'+t('swapT')+'</h3><button class="ico" onclick="swapClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+    '<button class="btn pri wide" onclick="swapSearch()">🔍 '+t('swSearch')+'</button>'+
     '<p class="muted sm">'+t('swapP',esc(exName(SW.eid)))+'</p>'+
     '<div class="lbl">'+t('equipHave')+'</div>'+haveChips(SW.have,'swTog')+
     '<div class="row"><button class="btn sm" onclick="swPreset(\'gym\')">'+t('eqp_gym')+'</button><button class="btn sm" onclick="swPreset(\'db\')">'+t('eqp_db')+'</button><button class="btn sm" onclick="swPreset(\'home\')">'+t('eqp_home')+'</button><button class="btn sm" onclick="swPreset(\'none\')">'+t('eqp_none')+'</button></div>'+
@@ -838,6 +887,7 @@ function swapDraw(){
     (c.length?c.map(o=>'<div class="plex"><span><b>'+esc(exName(o.id))+'</b><small>'+t('e_'+exById(o.id).e)+(NEED[o.id]&&NEED[o.id]!==exById(o.id).e?' + '+t('hv_'+NEED[o.id]):'')+(o.sl?' · ⚠ '+esc(t('caution')):'')+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="swHow(\''+o.id+'\')">ⓘ</button><button class="btn sm pri" onclick="swapUse(\''+o.id+'\')">'+t('use')+'</button></div>').join(''):'<p class="muted">'+t('swapNone')+'</p>')+
     '<div class="row"><button class="btn" onclick="swSave()">'+t('equipSave')+'</button><button class="btn" onclick="swapClose()">'+t('cancel')+'</button></div></div>');
 }
+function swapSearch(){pickEx(function(eid){swapUse(eid);});}
 function swHow(id){howOpen(id,'swapDraw');}
 function swapClose(){if(SW.mode==='plan')peDraw();else sheetClose();}
 function swapUse(id){
