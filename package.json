@@ -4,10 +4,12 @@
   "description": "Bubylift: offline gym log PWA. Dev-only tooling (tests); the app itself has no build step.",
   "scripts": {
     "check": "python3 tools/check.py",
+    "lint": "node tools/lint.js",
     "smoke": "node tests/smoke.js",
-    "test": "python3 tools/check.py && node tests/smoke.js"
+    "test": "python3 tools/check.py && node tools/lint.js && node tests/smoke.js"
   },
   "devDependencies": {
+    "eslint": "^8.57.1",
     "jsdom": "^24.1.0"
   }
 }

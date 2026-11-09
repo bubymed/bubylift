@@ -21,5 +21,7 @@ jobs:
       - run: npm install --no-audit --no-fund
       - name: Translations, keys and version
         run: python3 tools/check.py
+      - name: Lint (undefined names, duplicate functions and keys)
+        run: node tools/lint.js
       - name: Smoke test (jsdom)
         run: node tests/smoke.js
