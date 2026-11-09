@@ -662,7 +662,7 @@ function pickTap(id){
 }
 function pickCommit(){const cb=UI.pickCb,a=(UI.pickSel||[]).slice();UI.pickCb=null;UI.pickSel=[];sheetClose();if(cb)a.forEach(cb);}
 function pickDone(eid){const cb=UI.pickCb;UI.pickCb=null;sheetClose();if(cb)cb(eid);}
-function pickCancel(){UI.pickCb=null;sheetClose();if(UI.rb)rbDraw();}
+function pickCancel(){UI.pickCb=null;sheetClose();if(UI.rb)rbDraw();else if(typeof WKE!=='undefined'&&WKE)wkEditDraw();}
 function customOpen(){
   sheet('<div class="form"><h3>'+t('customEx')+'</h3><label>'+t('name')+'<input id="cxn" class="in wide" type="text" maxlength="60"></label>'+
     '<label>'+t('group')+'<select id="cxg" class="in wide">'+EX_GROUPS.map(g=>'<option value="'+g+'">'+t('g_'+g)+'</option>').join('')+'</select></label>'+

@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.82',items:[
+  {i:'calendar',en:'<b>Log a past workout</b>: forgot to track a session? In History tap "Log a past workout", pick the date, add your exercises and sets, and save it.',es:'<b>Registra un entrenamiento pasado</b>: ¿olvidaste anotar una sesión? En Historial toca "Registrar un entrenamiento pasado", elige la fecha, agrega tus ejercicios y series y guárdalo.'}
+ ]},
  {v:'v1.1.81',items:[
   {i:'pencil',en:'<b>Edit a saved workout</b>: open it in History and tap Edit to fix a weight or reps, rename it, change the note or remove a set.',es:'<b>Edita un entrenamiento guardado</b>: ábrelo en Historial y toca Editar para corregir un peso o repeticiones, cambiar el nombre o la nota, o quitar una serie.'},
   {i:'check',en:'Many small fixes: "1 set" instead of "1 sets" (and 1 serie / 1 día in Spanish), volume shown as 25,133 lb, "trained today" only for today, typos like 1000000 kg are rejected, the "Bar" share-card style works again, the reminder file message is right, and the week math is correct across daylight-saving changes.',es:'Muchos arreglos pequeños: "1 serie" en vez de "1 series" (y 1 set / 1 day en inglés), volumen como 25,133 lb, "entrenaste hoy" solo para hoy, se rechazan errores como 1000000 kg, el estilo "Barra" de la tarjeta para compartir vuelve a funcionar, el mensaje del archivo de recordatorios es correcto y las semanas se calculan bien con el cambio de hora.'}
