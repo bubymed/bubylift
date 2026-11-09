@@ -380,8 +380,8 @@ let UNDOP=null,UNDOT=0;
 function undoCommit(){clearTimeout(UNDOT);const p=UNDOP;UNDOP=null;if(p&&p.commit)p.commit();}
 function undoDo(msg,restore,commit){
   undoCommit();UNDO=null;UNDOP={restore:restore,commit:commit};
-  const e=$('toast');if(e){e.innerHTML=esc(msg)+' <button class="tundo" onclick="undoRun()">'+esc(t('undoB'))+'</button>';e.classList.add('on','undo');clearTimeout(toastT);toastT=setTimeout(()=>{e.classList.remove('on','undo');},5500);}
-  UNDOT=setTimeout(undoCommit,5500);
+  const e=$('toast');if(e){e.innerHTML=esc(msg)+' <button class="tundo" onclick="undoRun()">'+esc(t('undoB'))+'</button>';e.classList.add('on','undo');clearTimeout(toastT);toastT=setTimeout(()=>{e.classList.remove('on','undo');},8000);}
+  UNDOT=setTimeout(undoCommit,8000);
 }
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')undoCommit();});
 window.addEventListener('pagehide',undoCommit);

@@ -72,7 +72,8 @@ function fmtClock(sec){sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/36
 
 /* ---------- UI plumbing: toast, sheet, confirm ---------- */
 let toastT=null;
-function toast(msg){const e=$('toast');if(!e)return;e.textContent=msg;e.classList.remove('undo');e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),2600);}
+function toast(msg){if(typeof undoCommit==='function')undoCommit(); // another message hides the Undo button, so the pending delete is final / otro mensaje oculta Deshacer, así que el borrado pendiente queda firme
+  const e=$('toast');if(!e)return;e.textContent=msg;e.classList.remove('undo');e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),2600);}
 /* redrawing the same sheet (a tap on a chip or tile) keeps the scroll position; a different sheet starts at the top
    volver a dibujar la misma hoja (tocar una ficha) conserva el desplazamiento; otra hoja empieza arriba */
 function sheetKey(){const e=$('sheet'),h=e.querySelector('h3,.wz-top');return h?h.textContent:(e.textContent||'').trim().slice(0,30);}

@@ -205,7 +205,8 @@ function wkEditSave(){
   saveData();WKE=null;sheetClose();render();toast(t('saved'));
   if(old)openWk(o.id);
 }
-function delWkAsk(id){
+function delWkAsk(id){if(!DATA.workouts.some(w=>w.id===id))return;ask(t('delWk'),t('delete'),function(){delWkDo(id);},true);}
+function delWkDo(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
   const snap=JSON.stringify(DATA.workouts),keys=wk.ex.map(xk);
   DATA.workouts=DATA.workouts.filter(w=>w.id!==id);

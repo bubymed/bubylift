@@ -104,7 +104,7 @@ const STR={
  // history
  emptyHistT:['Your story starts here','Tu historia empieza aquí'],emptyHistP:['Finish your first workout and it will show up here. Every one counts.','Termina tu primer entrenamiento y aparecerá aquí. Cada uno cuenta.'],
  thisWeek:['This week','Esta semana'],thisMonth:['This month','Este mes'],total:['Total','Total'],nSetsT:['{0} sets','{0} series'],
- repeat:['Repeat workout','Repetir entrenamiento'],share:['Share','Compartir'],delWk:['Delete this workout? You won\'t be able to get it back.','¿Eliminar este entrenamiento? No podrás recuperarlo.'],
+ repeat:['Repeat workout','Repetir entrenamiento'],share:['Share','Compartir'],delWk:['Delete this workout?','¿Eliminar este entrenamiento?'],
  // progress
  emptyProgT:['Your progress will show up here','Aquí verás tu progreso'],emptyProgP:['Log a few workouts and watch your lifts climb.','Registra unos cuantos entrenamientos y mira cómo suben tus levantamientos.'],
  workouts:['Workouts','Entrenamientos'],perWeek:['Workouts per week','Entrenamientos por semana'],sessions:['{0} sessions','{0} sesiones'],sessionsL:['Sessions','Sesiones'],
