@@ -93,12 +93,12 @@ const PAIR_PW={ // power-focused partner for phase 5 / compañero de potencia de
  S:['mbsoccer','mbchestthrow','mbslam']
 };
 const OP4={ // phase 4: heavy lifts / levantamientos pesados
- Q:['squat','legpress','hacksq','frontsq','gobsq'],
- H:['rdl','deadlift','hexdl','dbrdl','sldl'],
+ Q:['squat','frontsq','legpress','hacksq','gobsq'], // the main strength lifts come first, the goblet squat is the last resort / los levantamientos de fuerza primero
+ H:['deadlift','rdl','hexdl','dbrdl','sldl'],
  N:['sumosq','adduct','z_thigh_adductor'],
  G:['hipthrust','sumo','kbdl'],
  P:['bench','incbench','dbbench','dbinc','chestpress','declbench','decldb'],
- B:['bbrow','latpd','cablerow','bentrow','tbar','pullup','machrow','dbrow'],
+ B:['bbrow','pullup','latpd','cablerow','bentrow','tbar','machrow','dbrow'],
  S:['ohp','dbohp','machsp','latraise','reardelt','seatpress'],
  I:['bbcurl','hammer','cablecurl','ezcurl','dbcurl'],
  T:['cgbp','pushdown','skull','ropepd'],
@@ -157,16 +157,26 @@ const OCAP={ // resistance exercises per session length (30/45/60/75 min) / ejer
  1:[3,4,5,5],2:[4,6,8,8],3:[3,5,6,7],4:[2,3,4,5],5:[4,6,8,8]
 };
 
+const HINGE_RE=/^(deadlift|hexdl|sumo|sldl|goodmorn|rdl|dbrdl|kbdl)$/;
 function optPick(list,ctx,role,mu){
   let src=list||[];const own=styOwner();
   if(own&&mu&&role!=='c'&&role!=='z'&&role!=='y')src=src.concat(styExtras(own,mu));
   const fv=(ctx.fav&&mu&&role==='m')?ctx.fav.filter(id=>muOf(id)===mu):[]; // the person's favorite lifts come first / sus levantamientos favoritos van primero
   if(fv.length)src=fv.concat(src);
-  const c=src.filter((id,i,a)=>a.indexOf(id)===i).filter(id=>{const m=meta(id);return exById(id)&&m&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=1;});
+  const hinged=Object.keys(ctx.day).some(k=>HINGE_RE.test(k)); // one heavy hinge per day / una bisagra pesada por día
+  let c=src.filter((id,i,a)=>a.indexOf(id)===i).filter(id=>{const m=meta(id);return exById(id)&&m&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=1&&!planNo(id)&&!(hinged&&HINGE_RE.test(id));});
   const isF=id=>fv.indexOf(id)>=0?0:1;
   c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(isF(a)-isF(b))||(persLike(a)-persLike(b))||(own&&mu?styFit(own,a)-styFit(own,b):0)||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
   if(c.length&&isF(c[0])===0)return c[0];
-  const pk=persPick(c);if(mu&&role!=='c'&&role!=='z'&&role!=='y')styNote(pk,own);return pk;
+  const slot=mu&&role!=='c'&&role!=='z'&&role!=='y';
+  if(slot){const same=c.filter(id=>muOf(id)===mu);if(same.length)c=same;} // a move tagged as another muscle (a balance step-up in the quad slot) would not count for the slot / un movimiento de otro músculo no cuenta para el hueco
+  if(ctx.L&&c.length){const s0=stressLvl(c[0],ctx.L);c=c.filter(id=>stressLvl(id,ctx.L)===s0);} // with an injury, only the gentlest options compete / con lesión, solo compiten las opciones más suaves
+  if(ctx.ph===4&&role==='m'){ // max-strength mains keep the list order; only a heavy hinge is never repeated within the week / los principales de fuerza máxima siguen el orden; solo la bisagra pesada no se repite en la semana
+    const nh=c.filter(id=>!(HINGE_RE.test(id)&&(ctx.used[id]||0)>0));if(nh.length)c=nh;
+    const ix=id=>{const i=(list||[]).indexOf(id);return i<0?99:i;};c=c.slice().sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(ix(a)-ix(b)));
+  }else if(c.length>1){const m0=Math.min.apply(null,c.map(id=>ctx.used[id]||0));c=c.filter(id=>(ctx.used[id]||0)===m0);} // rotate: do not repeat a move that already has its turn this week / rota: no repite lo que ya salió esta semana
+  const pk=(ctx.ph===4&&role==='m'&&c.length)?c[0]:persPick(c); // max-strength main lifts follow the list order, not a dice roll / los principales de fuerza máxima siguen el orden de la lista
+  if(slot)styNote(pk,own);return pk;
 }
 function optTake(id,ctx){ctx.day[id]=1;ctx.used[id]=(ctx.used[id]||0)+1;return id;}
 /* build one item / arma un ejercicio */
@@ -179,6 +189,85 @@ function optItem(eid,o,ctx){
   return friendlyReps(PREFPROF?bwFix(it,PREFPROF):it);
 }
 
+/* --- weekly volume: a floor so no muscle is left without work, a ceiling so none is overdone ---
+   --- volumen semanal: un piso para que ningún músculo se quede sin trabajo y un techo para no pasarse --- */
+const OPT_FLOOR={lo:{Q:6,H:5,G:4,C:3,P:6,B:6,S:4,I:4,T:4},md:{Q:10,H:8,G:6,C:4,P:8,B:8,S:6,I:6,T:6},hi:{Q:12,H:10,G:8,C:6,P:10,B:10,S:8,I:8,T:8}}; // direct weekly sets for a muscle-building plan / series directas por semana
+const OPT_CEIL={lo:{M:12,m:8},md:{M:20,m:14},hi:{M:26,m:18}}; // M = big muscles (quads, hams, glutes, chest, back), m = the rest / M = músculos grandes
+function optFloor(prof,mu){
+  const gs=goalsOf(prof),T=OPT_FLOOR[prof.cond?'lo':(prof.vol||'md')]||OPT_FLOOR.md,b=T[mu]||0;
+  let k=0;
+  if(gs.some(g=>g==='muscle'||g==='bodybuilding'))k=1;
+  else if(gs.indexOf('strength')>=0)k='QHPBS'.indexOf(mu)>=0?0.75:0;
+  else k='QHGPBS'.indexOf(mu)>=0?0.6:0; // lose fat / general health: the big patterns, a smaller floor / bajar grasa y salud general: los patrones grandes, piso menor
+  if(k&&lvlEff(prof)==='new')k*=0.75;
+  const lowM='QHGC'.indexOf(mu)>=0,upM='PBSIT'.indexOf(mu)>=0; // the chosen emphasis keeps its meaning: more of one half, a little less of the other / el énfasis elegido conserva su sentido
+  if(prof.emph==='low')k*=lowM?1.2:0.75;else if(prof.emph==='up')k*=upM?1.2:0.75;
+  return Math.round(b*k);
+}
+/* a day that runs well past the chosen length is trimmed: accessory sets first, then accessories, then main-lift sets and rest
+   un día que se pasa de la duración elegida se recorta: primero series de accesorios, luego accesorios, luego series y descanso de los principales */
+function optFit(ds,prof,ph){
+  const LIX={30:0,45:1,60:2,75:3};
+  ds.forEach((d,di)=>{
+    const short=prof.sh>0&&di>=prof.n-prof.sh,dl=short?30:prof.len;
+    let g=40;
+    while(pvMins(d)>dl*1.1&&g-->0){
+      const rs=d.ex.filter(e=>e.sec==='rs'&&!e.ss);
+      let b=rs.filter(e=>e.r!=='m'&&e.sets>2).sort((x,y)=>y.sets-x.sets)[0];
+      if(b){b.sets--;continue;}
+      const accs=rs.filter(e=>e.r!=='m'&&!e.mn);
+      if(accs.length&&d.ex.filter(e=>e.sec==='rs').length>2){d.ex.splice(d.ex.lastIndexOf(accs[accs.length-1]),1);continue;}
+      b=rs.filter(e=>e.sets>3).sort((x,y)=>y.sets-x.sets)[0];
+      if(b){b.sets--;continue;}
+      b=rs.filter(e=>(e.rs|0)>120)[0];
+      if(b){b.rs=Math.max(120,(b.rs|0)-30);continue;}
+      break;
+    }
+  });
+}
+function optBalance(ds,prof,ph,base){
+  const LIX={30:0,45:1,60:2,75:3},capSets=ph===1?3:4,lower='QHGCN';
+  const dayCap=di=>{const short=prof.sh>0&&di>=prof.n-prof.sh,dl=short?30:prof.len;return{dl:dl,cap:OCAP[ph][LIX[dl]!=null?LIX[dl]:2]};};
+  const rsN=d=>d.ex.filter(e=>e.sec==='rs').length;
+  const list=mu=>ph===1?OP1[mu]:(ph===4?OP4[mu]:(ph===3?[]:OP2S[mu]));
+  'QPBHGSCTI'.split('').forEach(mu=>{
+    const f=optFloor(prof,mu);if(!f)return;
+    let tot=volOfDs(ds)[mu]||0,g=30;
+    while(tot<f&&g-->0){
+      // 1) one more set on a move it already has / una serie más en un ejercicio que ya tiene
+      let best=null;
+      ds.forEach(d=>d.ex.forEach(e=>{if(volCounts(e)&&muOf(e.eid)===mu&&!e.ss&&e.sets<capSets&&(ph<=3||e.r!=='m')&&(!best||e.sets<best.sets))best=e;}));
+      if(best){best.sets++;tot++;continue;}
+      // 2) or one new move on the day with the most room, if the session still fits its length / o un ejercicio nuevo en el día con más espacio
+      let added=false;
+      ds.map((d,di)=>di).sort((x,y)=>rsN(ds[x])-rsN(ds[y])).forEach(di=>{
+        if(added)return;
+        const d=ds[di],dc=dayCap(di),half=lower.indexOf(mu)>=0?lower:'PBSIT';
+        if(rsN(d)>=dc.cap+(dc.dl===30?0:Math.min(dc.dl>=60?2:1,Math.max(0,8-dc.cap)))||!d.ex.some(e=>e.sec==='rs'&&half.indexOf(muOf(e.eid))>=0))return;
+        const dayIds={};d.ex.forEach(e=>{dayIds[e.eid]=1;});
+        const ctx=Object.assign({day:dayIds,fav:[],ph:ph},base);
+        const id=optPick(list(mu),ctx,'a',mu)||pickFor(mu,'a',{have:base.have,L:base.L,maxLv:base.maxLv,used:base.used,day:dayIds,hy:false,test:'gen'});
+        if(!id)return;
+        const r=ph>=4?('SITC'.indexOf(mu)>=0?{lo:8,hi:12}:{lo:6,hi:10}):optReps(ph,'a',d.g||prof.goal,false);
+        const it=optItem(id,{sets:ph===1?2:3,lo:r.lo,hi:r.hi,r:'a',sec:'rs',tp:ph===1?'sl':(ph===5?'ex':'md'),rs:ph===1?60:(ph===5?120:(ph===4?90:60)),rz:'rzFloor'},ctx);
+        let at=d.ex.length;for(let i=d.ex.length-1;i>=0;i--){if(d.ex[i].sec==='rs'){at=i+1;break;}}
+        d.ex.splice(at,0,it);
+        if(pvMins(d)>dc.dl*1.1){d.ex.splice(at,1);return;}
+        base.used[id]=(base.used[id]||0)+1;tot+=it.sets;added=true;
+      });
+      if(!added)break;
+    }
+  });
+  const T=OPT_CEIL[prof.vol||'md']||OPT_CEIL.md;
+  'QHGCPBSIT'.split('').forEach(mu=>{
+    const cl='QHGPB'.indexOf(mu)>=0?T.M:T.m;let tot=volOfDs(ds)[mu]||0,g=40;
+    while(tot>cl&&g-->0){
+      let b=null;
+      ds.forEach(d=>d.ex.forEach(e=>{if(volCounts(e)&&muOf(e.eid)===mu&&!e.ss&&e.r!=='m'&&e.sets>2&&(!b||e.sets>b.sets))b=e;}));
+      if(!b)break;b.sets--;tot--;
+    }
+  });
+}
 function genOpt(prof){
   const ph=optPhase(prof),vi={lo:0,md:1,hi:2}[prof.vol]!=null?{lo:0,md:1,hi:2}[prof.vol]:1;
   const L=injLetters(prof.inj),lve=lvlEff(prof),maxLv=(prof.cond||lve==='new')?1:2,have=prof.have;
@@ -193,7 +282,7 @@ function genOpt(prof){
   const focusDays={};fm.forEach(m=>{focusDays[m]=0;});
   const ds=days.map((k,di)=>{
     const short=prof.sh>0&&di>=prof.n-prof.sh,dl=short?30:prof.len,cap=OCAP[ph][LIX[dl]!=null?LIX[dl]:2];
-    const g=dgoal[di],ctx={have:have,L:L,maxLv:maxLv,used:used,day:{},fav:ph>=2?prof.fav:[]},res=[],wyx={};
+    const g=dgoal[di],ctx={have:have,L:L,maxLv:maxLv,used:used,day:{},fav:ph>=2?prof.fav:[],ph:ph},res=[],wyx={};
     const alt=di%2===1; // alternate legs: squat day / hinge day / alterna piernas: sentadilla / bisagra
     let slots=[]; // [muscle, role]
     const famDay=!!(prof.split&&splitOk(prof.split,prof.n)&&OSLOTS[k]);
@@ -242,7 +331,7 @@ function genOpt(prof){
     const slotsAll=slots.concat(ex);
     // -- activation (core + balance) / activación
     const ac=[],actPh=ph>=5?5:(ph>=2?2:1);
-    const nCore=dl===30?1:2,nBal=sk.indexOf('balance')>=0?2:1;
+    const nCore=(fm.indexOf('A')>=0||(dl===75&&vi===2))?2:1,nBal=sk.indexOf('balance')>=0?2:1; // one core move to activate is enough: more core sets than that only eat the time of the big lifts / un ejercicio de core para activar basta
     const aset=ph===1?[1,2,2][vi]:(vi===0?1:2);
     for(let i=0;i<nCore;i++){
       const id=optPick(OACT_CORE[actPh],ctx,'c');if(!id)break;optTake(id,ctx);
@@ -266,6 +355,11 @@ function genOpt(prof){
     // -- resistance / resistencia
     const out=[];let grp=0;
     const rep=(role,power)=>optReps(ph,role,g,power);
+    // phase 4: only the main lifts are maximal (3-5 reps, long rest); accessories go 6-12 reps with 3 sets / fase 4: solo los principales son máximos
+    const p4item=(id,role,mu,extra)=>{
+      const hv=role==='m',sm='SITC'.indexOf(mu)>=0,r4=hv?{lo:3,hi:5}:(sm?{lo:8,hi:12}:{lo:6,hi:10});
+      return optItem(id,{sets:hv?Math.min(6,sets+(extra?1:0)):Math.max(2,Math.min(4,sets-2+(extra?1:0))),lo:r4.lo,hi:r4.hi,r:role,sec:'rs',tp:hv?'ex':'md',rs:hv?('SIT'.indexOf(mu)>=0?120:180):90,rz:curRz},ctx);
+    };
     let curRz='rzAcc';
     const mk=(id,role,extra,tp,rs,ss,power)=>{const r=rep(role,power),s=Math.min(6,sets+(extra?1:0));return optItem(id,{sets:s,lo:r.lo,hi:r.hi,r:role,sec:'rs',tp:tp,rs:rs,ss:ss,rz:curRz},ctx);};
     const fall=(mu,role)=>pickFor(mu,role,{have:have,L:L,maxLv:maxLv,used:used,day:ctx.day,hy:false,test:'gen'});
@@ -274,7 +368,7 @@ function genOpt(prof){
       curRz=s[3]||(extra?'rzFocus':(role==='m'?'rzMus':'rzAcc'));
       if(ph===1){
         const id=optPick(OP1[mu],ctx,role,mu)||fall(mu,role);if(!id)return;optTake(id,ctx);
-        out.push(mk(id,role,extra,'sl',0));
+        out.push(mk(id,role,extra,'sl',60)); // OPT phase 1 rest is 0-90 s: 60 s between sets, not none / el descanso de la fase 1 es 0-90 s: 60 s entre series
       }else if(ph===2||ph===5){
         const id=optPick(OP2S[mu],ctx,role,mu)||fall(mu,role);if(!id)return;optTake(id,ctx);
         const pw=ph===5,single=si>=slots.length; // extras are single exercises / los extras van solos
@@ -288,15 +382,15 @@ function genOpt(prof){
         }else out.push(mk(id,role,extra,ph===5?'ex':'md',ph===5?120:60));
       }else if(ph===3){
         const id=optPick([],ctx,role,mu)||fall(mu,role);if(!id)return;optTake(id,ctx);
-        out.push(mk(id,role,extra,'md',30));
+        out.push(mk(id,role,extra,'md',role==='m'?90:60)); // heavier compounds need a little more rest / los compuestos pesados piden un poco más de descanso
       }else{
         const id=optPick(OP4[mu],ctx,role,mu)||fall(mu,role);if(!id)return;optTake(id,ctx);
-        out.push(mk(id,role,extra,'ex',('SIT'.indexOf(mu)>=0)?300:180));
+        out.push(p4item(id,role,mu,extra));
       }
     });
     // -- client's choice / elección del cliente
     const cc=[];
-    if(dl>=45||fm.indexOf('A')>=0){
+    if((dl>=45&&di%2===0)||fm.indexOf('A')>=0){ // a hold on every other day: core gets enough weekly sets without crowding the session / una isométrica cada dos días
       const id=optPick(OCC,ctx,'c');
       if(id){optTake(id,ctx);cc.push(optItem(id,{sets:2,lo:0.5,hi:1,r:'c',sec:'cc',tp:'sl',rs:60,hold:[0.5,1],rz:'rzCc'},ctx));}
     }
@@ -324,9 +418,14 @@ function genOpt(prof){
     if(short)wy.push('wyShort');
     wy.push('wyOrd');
     if(di===0&&lve!==prof.lvl&&(prof.pu||prof.as))wy.push((prof.as&&asStabFail(prof)?'wyStab|':'wyLvl|')+lve);
-    const exs=ac.concat(skl,out,cc);
+    // lose fat: a short walk to finish every day of that goal, as the goal's description promises / bajar grasa: una caminata corta para cerrar cada día de esa meta
+    const cd=[];
+    if(g==='fat')cd.push({eid:avail('treadmill',have)?'treadmill':'walk',sets:1,lo:dl>=60?(lve==='new'?10:15):(dl===45?10:5),hi:dl>=60?(lve==='new'?15:25):(dl===45?15:10),u:'m',r:'e',cn:'',sec:'cd',rz:'rzWalk'}); // the walk shrinks on short days / la caminata se acorta en días cortos
+    const exs=ac.concat(skl,out,cd,cc);
     const dd=prof.mix?{k:k,g:g,ex:exs}:{k:k,ex:exs};dd.wy=wy.slice(0,8);return dd;
   });
+  optFit(ds,prof,ph);
+  optBalance(ds,prof,ph,{have:have,L:L,maxLv:maxLv,used:used});
   return{goal:prof.goal,n:prof.n,lvl:prof.lvl,t0:Date.now(),ct:0,cur:0,ds:ds,wd:defaultWd(ds),wu:0,checks:[],prof:prof,ph:ph,pt:Date.now()};
 }
 
@@ -413,7 +512,7 @@ function optWrap(pl,prof){
           if(!pu){e.lo=rr.lo;e.hi=rr.hi;bwFix(e,prof);}
           e.sets=Math.min(6,sets);
         }
-        e.tp=ph===1?'sl':(ph===5?'ex':'md');e.rs=ph===1?0:(ph===5?120:60);
+        e.tp=ph===1?'sl':(ph===5?'ex':'md');e.rs=ph===1?60:(ph===5?120:60);
         if(!main&&e.r==='m'){main=e;e.mn=1;e.rz='rzMain';}else e.rz=e.r==='m'?'rzMus':'rzAcc';
         grp.rs.push(e);
       }

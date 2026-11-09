@@ -164,7 +164,7 @@ function volRange(mu,vol,prof,ph){
   const c='QHGPB'.indexOf(mu)>=0?'M':mu==='A'?'A':'m',r=(VOLR[vol]||VOLR.md)[c],vf=(ph&&optPerf(prof))?1:volFactor(prof);
   if(ph){ // OPT: core is trained every session as activation / el core se entrena en cada sesión como activación
     const n=prof.n||3,vi={lo:0,md:1,hi:2}[vol]!=null?{lo:0,md:1,hi:2}[vol]:1;
-    if(mu==='A')return[[1,2,3][vi]*n,Math.round([4,6,8][vi]*n*(optPerf(prof)?1.5:1))];
+    if(mu==='A')return[[1,2,2][vi]*n,Math.round([3,4,5][vi]*n*(optPerf(prof)?1.5:1))]; // direct core sets: one activation move a day plus a hold every other day / series directas de core
     const o=OPT_VF[ph]||[1,1],fq=n>=4?(ph===3||ph===4?(n>=5?2.4:1.8):1.7):1; // more days = more weekly sets / más días = más series semanales
     const lw=('HGIT'.indexOf(mu)>=0?0.5:1)*(n<=2?0.45:1),up=mu==='S'?1.6:(mu==='G'?1.6:1); // hamstrings/glutes also work in squats; shoulders appear in every pair day / isquios y glúteos trabajan en otras; el hombro aparece en todos los días
     // performance plans are built around running or a test: strength only needs a base, so the floor is low / los planes de rendimiento giran en torno a la carrera o la prueba: la fuerza solo necesita una base
@@ -185,13 +185,17 @@ function volDone(){
 /* pick the best available exercise for a muscle slot / elige el mejor ejercicio disponible para un hueco */
 /* test-specific drills only appear for that test / los ejercicios propios de una prueba solo salen con esa prueba */
 const TESTONLY={sdcdrill:'aft',firecarry:'usmc',ammolift:'usmc'};
+/* imported moves a plan never picks on its own: they need a partner or are poor picks for a general plan (still in the library) / importados que el plan nunca elige solo */
+const PLAN_NO=/^z_.*(manual_hamstring|side_bend|barbell_twist|wrist_curl)/;
+const planNo=id=>PLAN_NO.test(id);
 /* conventional gear first: ball, bands, suspension... only fill in when nothing conventional is left / equipo convencional primero: pelota, bandas, suspensión... solo si no queda nada convencional */
 function isSpecial(id){const q=exById(id);return(q&&HAVE_SPECIAL.indexOf(q.e)>=0)||(NEED[id]&&HAVE_SPECIAL.indexOf(NEED[id])>=0)?1:0;}
 function pickFor(mu,role,ctx){
   const P=POOL[mu];if(!P)return null;
   const first=(ctx.hy&&HYFIRST[ctx.test]&&HYFIRST[ctx.test][mu+role])||[],own=styOwner();
+  const hingedDay=Object.keys(ctx.day||{}).some(k=>HINGE_RE.test(k)); // one heavy hinge per day / una bisagra pesada por día
   const list=first.concat(role==='m'?P.m.concat(P.a):P.a.concat(P.m),styExtras(own,mu)).filter((x,i,a)=>a.indexOf(x)===i);
-  const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&(!TESTONLY[id]||TESTONLY[id]===ctx.test)&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
+  const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&(!TESTONLY[id]||TESTONLY[id]===ctx.test)&&!planNo(id)&&!(hingedDay&&HINGE_RE.test(id))&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
   c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(persLike(a)-persLike(b))||(own?styFit(own,a)-styFit(own,b):0)||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
   // v49: on every third accessory pick, prefer an imported exercise that ties with the best one / cada tercera opción de accesorio prefiere un ejercicio importado empatado con la mejor
   if(c.length>1&&role!=='m'&&role!=='p'&&Object.keys(ctx.used).length%2===0){

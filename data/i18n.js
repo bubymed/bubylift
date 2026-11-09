@@ -807,6 +807,8 @@ strT:['General strength','Fuerza general'],strBw:['Log your body weight and your
  rzMus:['Trains your {0}. It covers a different movement pattern than the other lifts today, so the session stays balanced.','Trabaja tu {0}. Cubre un patrón de movimiento distinto al de los otros ejercicios de hoy, para que la sesión quede equilibrada.'],
  rzAcc:['Accessory for your {0}: a smaller or more focused move. It goes later because it tires you less and the big lifts need you fresh.','Complemento de tu {0}: un movimiento más pequeño o más específico. Va después porque cansa menos y los grandes necesitan que estés fresco.'],
  rzFocus:['Extra {0} work because you picked it as a focus.','Trabajo extra de {0} porque lo elegiste como enfoque.'],
+ rzFloor:['Extra {0} work so this muscle gets enough sets every week.','Trabajo extra de {0} para que este músculo reciba suficientes series cada semana.'],
+ rzWalk:['A short walk to finish, because your goal is to lose fat.','Una caminata corta para cerrar, porque tu meta es bajar grasa.'],
  rzEmphLow:['Extra glute work because you chose lower-body emphasis.','Más glúteo porque elegiste énfasis en tren inferior.'],
  rzEmphUp:['Extra arm work because you chose upper-body emphasis.','Más brazo porque elegiste énfasis en tren superior.'],
  rzSit:['Added because you sit most of the day: it works the muscles that sitting switches off.','Agregado porque pasas el día sentado: trabaja los músculos que estar sentado apaga.'],

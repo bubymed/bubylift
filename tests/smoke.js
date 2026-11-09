@@ -558,7 +558,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
         if(!d.ex.some(e=>e.sec==='ac'))r.bad.push('no activation '+a[0]+a[1]);
         if(d.ex.filter(e=>e.sec==='rs').length<2)r.bad.push('thin day '+a[0]+a[1]+' n'+n+' l'+len);
         d.ex.forEach(e=>{if(!exById(e.eid))r.bad.push('eid '+e.eid);
-          if(e.sec==='rs'&&a[1]===4&&e.hi>5)r.bad.push('P4 reps '+e.hi);
+          if(e.sec==='rs'&&a[1]===4&&(e.r==='m'?e.hi>5:(e.hi>12&&exMode(e.eid)!=='bw')))r.bad.push('P4 reps '+e.hi); // only the main lifts are maximal; accessories go 6-12 / solo los principales son máximos
           if(e.sec==='rs'&&exMode(e.eid)!=='bw'&&a[1]===1&&(e.lo!==12||e.hi!==20))r.bad.push('P1 reps '+e.lo+'-'+e.hi);
           if(e.sec==='rs'&&exMode(e.eid)!=='bw'&&a[1]===2&&(e.lo!==8||e.hi!==12))r.bad.push('P2 reps '+e.lo+'-'+e.hi);
           if(e.sets<1||e.sets>6)r.bad.push('sets '+e.sets);});
