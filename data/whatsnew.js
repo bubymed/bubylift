@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.74',items:[
+  {i:'trending-up',en:'Stuck on a lift? The check-in now suggests a lighter week (about 10% less weight) and building back up, instead of swapping the exercise right away.',es:'¿Estancado en un ejercicio? El chequeo ahora sugiere una semana más ligera (cerca de 10% menos peso) y volver a subir, en vez de cambiar el ejercicio de inmediato.'}
+ ]},
  {v:'v1.1.73',items:[
   {i:'target',en:'Better plans: every muscle now gets enough sets each week (no more missing triceps, calves or glutes), strength days fit your session time, and rest times match what you see.',es:'Mejores planes: cada músculo recibe suficientes series por semana (sin tríceps, gemelos o glúteos olvidados), los días de fuerza caben en tu tiempo y el descanso coincide con lo que ves.'},
   {i:'walk',en:'Lose fat plans now end each day with a short walk, as promised.',es:'Los planes de bajar grasa ahora cierran cada día con una caminata corta, como se prometía.'}
