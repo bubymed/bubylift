@@ -68,7 +68,7 @@ const WQ=[
  {id:'race',ic:'🏃',title:()=>t('psRace'),sub:()=>t('psRaceP'),show:()=>goalsOf(PW).indexOf('runner')>=0,body:()=>wzOne('race',RACES,PW.race,v=>t('rc_'+v),v=>WZ_IC.race[v])},
  {id:'test',ic:'🎖️',title:()=>t('psTest'),sub:()=>t('wzTestS'),show:()=>goalsOf(PW).indexOf('military')>=0,body:()=>wzOne('test',TESTS,PW.test,v=>t('te_'+v),v=>WZ_IC.test[v],v=>t('ted_'+v),'c1')},
  {id:'tw',ic:'📅',title:()=>t('psTw'),sub:()=>t('wzTwS'),show:()=>goalsOf(PW).indexOf('military')>=0,body:()=>wzOne('tw',TW,PW.tw,v=>v?t('psTwN',v):t('psTwNone'),v=>v?'📅':'🚫')},
- {id:'focus',ic:'🔍',title:()=>t('psFocus'),sub:()=>t('psFocusP'),multi:1,body:()=>wzMany('focus',Object.keys(FOCUS_MU),v=>t('fm_'+v),v=>WZ_IC.focus[v],3)},
+ {id:'focus',ic:'🔍',title:()=>t('psFocus'),sub:()=>t('psFocusP'),multi:1,body:()=>anaPick(FOCUS_FIG,PW.focus,g=>wzTogM('focus',g,3))+wzMany('focus',Object.keys(FOCUS_MU),v=>t('fm_'+v),null,3,'wz-fl')},
  {id:'ff',ic:'🔁',title:()=>t('psFreq'),sub:()=>t('psFreqP'),show:()=>PW.focus.length>0,body:()=>wzOne('ff',[1,2,3,4],PW.ff,v=>t('psDaysN',v),()=>'')},
  {id:'skills',ic:'⚡',title:()=>t('psSkill'),sub:()=>t('psSkillP'),multi:1,show:()=>false,body:()=>wzMany('skills',SKILLS,v=>t('sk_'+v),v=>WZ_IC.skill[v],2)},
  {id:'n',ic:'📆',title:()=>t('psDays'),sub:()=>t('wzDaysS'),body:()=>wzOne('n',[2,3,4,5],PW.n,v=>t('psDaysN',v),()=>'')},

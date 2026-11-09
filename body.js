@@ -66,10 +66,10 @@ function recData(now){
 }
 /* training load: hard sets per week, this week vs your last 3 weeks, and per-muscle weekly sets / carga de entrenamiento: series duras por semana */
 function loadData(now){
-  now=now||Date.now();const W=7*864e5,wk=[0,0,0,0],mus={};REC_G.forEach(g=>{mus[g]=0;});
+  now=now||Date.now();const W=7*864e5,wk=[0,0,0,0],mus={},eff={};REC_G.forEach(g=>{mus[g]=0;});
   DATA.workouts.forEach(w=>{
     const end=w.end||w.t,age=now-end;if(age<0||age>=4*W)return;const k=Math.floor(age/W);
-    w.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(!n)return;wk[k]+=n;if(k===0&&g&&mus[g]!=null)mus[g]+=n;});
+    w.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(!n)return;wk[k]+=n;if(k===0&&g&&mus[g]!=null)mus[g]+=n;if(k===0){const mw=muW(x.eid,x.vr);if(mw)mw.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});}});
   });
   const a=wk[0],ch=(wk[1]+wk[2]+wk[3])/3,ratio=ch>0?a/ch:null;
   const up=(x,y)=>x>0&&y>=x*1.1,c4=up(wk[3],wk[2])&&up(wk[2],wk[1])&&up(wk[1],wk[0]),c3=up(wk[2],wk[1])&&up(wk[1],wk[0]);
@@ -79,7 +79,7 @@ function loadData(now){
   else if((ratio!=null&&ratio>=1.5&&a>=20)||top>=26||c4)lv='over';
   else if((ratio!=null&&ratio>=1.3&&a>=15)||hi.length||c3)lv='high';
   else if(ratio!=null&&ch>=10&&ratio<.6)lv='low';
-  return{wk:wk,mus:mus,hi:hi,lv:lv,ratio:ratio,climb:c4?4:(c3?3:0)};
+  return{wk:wk,mus:mus,eff:eff,hi:hi,lv:lv,ratio:ratio,climb:c4?4:(c3?3:0)};
 }
 function loadCard(){
   const d=loadData();if(d.lv==='none')return'';
@@ -88,7 +88,7 @@ function loadCard(){
   if(d.climb)why.push(t('ldClimb',d.climb));
   if(d.hi.length)why.push(t('ldMus',d.hi.map(g=>t('g_'+g)+' ('+d.mus[g]+')').join(', ')));
   return'<div class="card ldc '+d.lv+'"><div class="lbl">'+t('ldT')+'</div><div class="ld-top"><span class="ld-chip">'+t('ldL_'+d.lv)+'</span><b>'+t('ldSets',d.wk[0])+'</b></div><p class="ld-msg">'+t('ldM_'+d.lv)+'</p>'+
-    '<div class="ld-bars">'+[3,2,1,0].map(k=>'<div class="'+(k===0?'now':'')+'"><u style="height:'+Math.max(4,Math.round(d.wk[k]/mx*100))+'%"></u><small>'+d.wk[k]+'</small><em>'+(k===0?t('ldNow'):t('ldAgo',k))+'</em></div>').join('')+'</div>'+
+    '<div class="ana-card ana-ld">'+anaHeat(k=>{const f=(d.eff[k]||0)/(MUS_TGT[k]||8);return f<.05?'':(f>=1.6?'rgb(255,69,58)':'color-mix(in srgb,var(--an-main) '+Math.round(25+Math.min(1,f)*70)+'%,var(--an-sil))');},null,null,130)+'<div class="ana-grad ld-grad"><span>'+t('ldLegLo')+'</span><i></i><span>'+t('ldLegHi')+'</span></div></div>'+'<div class="ld-bars">'+[3,2,1,0].map(k=>'<div class="'+(k===0?'now':'')+'"><u style="height:'+Math.max(4,Math.round(d.wk[k]/mx*100))+'%"></u><small>'+d.wk[k]+'</small><em>'+(k===0?t('ldNow'):t('ldAgo',k))+'</em></div>').join('')+'</div>'+
     (why.length?'<ul class="ld-why">'+why.map(x=>'<li>'+x+'</li>').join('')+'</ul>':'')+
     '<details class="dtl pv-dt"><summary><b>'+t('ldInfoT')+'</b></summary><p class="muted sm">'+t('ldInfo')+'</p></details></div>';
 }
@@ -106,7 +106,7 @@ function recCard(){
       if(oi>=0&&Math.floor(oi/2)===Math.floor(k/2)&&(k%2===1||k===REC_G.length-1))h+=recSubs(r,REC_OPEN);
       return h;}).join('')+'</div><p class="muted sm rv-hint">'+t('recTapGo')+'</p></div>');
 }
-let REC_OPEN=null,REC_VIEW='g';
+let REC_OPEN=null,REC_VIEW='b';
 function recView(v){REC_VIEW=v;render();}
 /* the parts of one muscle, opened under the grid / las partes de un músculo, abiertas bajo la cuadrícula */
 function recSubs(r,g){

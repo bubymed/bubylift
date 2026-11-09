@@ -21,6 +21,7 @@ function strSet(k,v){STX[k]=v;if(k==='min')STX.min=+v;render();}
 function strIsDyn(id){return STRETCH_DYN.indexOf(id)>=0;}
 /* cool-down by muscle group: each group maps to the stretch areas that relax it / cool down por grupo muscular: cada grupo usa las zonas de estiramiento que lo relajan */
 const CG_KEYS=['legs','chest','back','shoulders','arms','core'];
+const CG_FIG={legs:['qd','ham','clf','add','gmx','gmd'],chest:['chu','chm'],back:['lat','ubk','trp','lbk'],shoulders:['sdf','sdl','sdr'],arms:['bic','frm','trl','trm'],core:['abs','obl']}; // muscle codes per cool-down group, for the figure / códigos por grupo del cool down, para la figura
 const CG_AREAS={legs:['quad','ham','hip','calf'],chest:['chest'],back:['back'],shoulders:['shoulder'],arms:['arms'],core:['core']};
 /* workout muscle group (exercise group) → cool-down group / grupo del ejercicio → grupo del cool down */
 const CG_FROM={chest:['chest'],back:['back'],shoulders:['shoulders'],biceps:['arms'],triceps:['arms'],legs:['legs'],glutes:['legs'],core:['core'],full:CG_KEYS,power:['legs'],cardio:['legs']};
@@ -50,7 +51,7 @@ function cgToggle(k){
   const i=STX.cdg.indexOf(k);if(i>=0)STX.cdg.splice(i,1);else STX.cdg.push(k);render();
 }
 function cgChips(){
-  return'<p class="muted sm cgw">'+t('cgW')+'</p><div class="chips wrap cgc">'+CG_KEYS.map(k=>'<button class="chip'+(STX.cdg.indexOf(k)>=0?' on':'')+'" onclick="cgToggle(\''+k+'\')">'+t('cgG_'+k)+'</button>').join('')+'</div><p class="muted sm">'+t('cgHint')+'</p>';
+  return'<p class="muted sm cgw">'+t('cgW')+'</p>'+anaPick(CG_FIG,STX.cdg,cgToggle)+'<div class="chips wrap cgc">'+CG_KEYS.map(k=>'<button class="chip'+(STX.cdg.indexOf(k)>=0?' on':'')+'" onclick="cgToggle(\''+k+'\')">'+t('cgG_'+k)+'</button>').join('')+'</div><p class="muted sm">'+t('cgHint')+'</p>';
 }
 /* from the "workout saved" sheet: open the cool-down already set for what you trained / desde "entrenamiento guardado": abre el cool down listo para lo que entrenaste */
 function cgAfter(id){

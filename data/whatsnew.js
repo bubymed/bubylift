@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.68',items:[
+  {i:'target',en:'Tap the body to pick your plan focus and cool-down muscles; Balance and Load are now body heat maps; Recovery opens on the body view.',es:'Toca el cuerpo para elegir el enfoque del plan y los músculos del cool down; Equilibrio y Carga son mapas de calor del cuerpo; Recuperación abre en la vista del cuerpo.'}
+ ]},
  {v:'v1.1.67',items:[
   {i:'chart',en:'Filters and pickers now swipe sideways in one row instead of piling up: library tabs, muscle/equipment photos, chip rows and recovery zones.',es:'Los filtros ahora se deslizan de lado en una sola fila en vez de amontonarse: pestañas de la biblioteca, fotos de músculos/equipo, chips y zonas de recuperación.'}
  ]},
