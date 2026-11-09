@@ -98,7 +98,7 @@ const SPLITS={
 };
 const FOCUS_MU={glutes:['G'],quads:['Q'],hams:['H'],calves:['C'],inner:['N'],chest:['P'],back:['B'],shoulders:['S'],arms:['I','T'],abs:['A']};
 /* focus group -> muscle codes drawn on the figure / grupo de enfoque -> códigos que se dibujan en la figura */
-const FOCUS_FIG={glutes:['gmx','gmd'],quads:['qd'],hams:['ham'],calves:['clf'],inner:['add'],chest:['chu','chm'],back:['lat','ubk','trp','lbk'],shoulders:['sdf','sdl','sdr'],arms:['bic','frm','trl','trm'],abs:['abs','obl']};
+const FOCUS_FIG={glutes:['gmx','gmd','gmn','tfl'],quads:['rf','vl','vm','sar'],hams:['bfm','smt'],calves:['gas','sol','tib','per'],inner:['add'],chest:['chu','chm','ser'],back:['lat','ter','inf','rho','trp','lbk','ql','nck'],shoulders:['sdf','sdl','sdr','rtc'],arms:['bic','bra','brd','frm','trl','trm'],abs:['abs','tva','obl']};
 const PGOALS=['muscle','bodybuilding','strength','fat','general','hybrid','military','runner'],PLVLS=['new','some','adv'],PEMPH=['bal','low','up'],ALLEMPH=['bal','low','up','hy','run','bb'],RACES=['5k','10k','half','full','fit'],RACEF={'5k':0.8,'10k':1,half:1.3,full:1.6,fit:0.8},PSEX=['f','m','x'],TESTS=['aft','usmc','gen'],TW=[0,4,8,12,16];
 /* short coaching notes shown under an exercise / notas cortas bajo un ejercicio */
 const SKILLS=['strength','power','speed','endurance','balance'];

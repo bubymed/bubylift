@@ -6,6 +6,9 @@ const ANA_C=154.23; // the front view is mirrored around this x / la vista front
 /* cut lines (left side; the right side is mirrored): chest into upper/lower, shoulder cap into side/front / líneas de corte */
 const ANA_CUT={u:[[30,20],[80,20],[80,43],[62,44],[48,48],[33,58]],l:[[80,43],[62,44],[48,48],[33,58],[30,80],[80,80]],a:[[0,3],[70,73],[0,73]],f:[[0,3],[70,73],[70,0],[0,0]]};
 const anaPoly=(p,m)=>'M '+p.map(q=>(m?+(ANA_C-q[0]).toFixed(1):q[0])+','+q[1]).join(' L ')+' Z';
+/* which face shows a part best (most shapes; ties go to the front) / qué cara muestra mejor una parte (más formas; empate: frente) */
+const ANA_DOM=(function(){const n={};['front','back'].forEach(f=>ANA[f].s.forEach(x=>{const k=x[0]==='pec'?'chm':(x[0]==='dlt'?'sdl':x[0]);if(!k)return;(n[k]=n[k]||{front:0,back:0})[f]++;}));const r={};Object.keys(n).forEach(k=>{r[k]=n[k].back>n[k].front?'back':'front';});return r;})();
+const anaDomFace=k=>ANA_DOM[k]||'front';
 let _anaN=0;
 /* the figure as SVG. fill(code) gives a CSS color; o.sel highlights a part; o.tap names a function called with the part's code / el cuerpo en SVG */
 function anaSvg(face,w,fill,o){
@@ -25,6 +28,11 @@ function anaSvg(face,w,fill,o){
     else b+=P(k,dd);
   });
   return'<svg class="ana" viewBox="'+d.vb+'" width="'+w+'" height="'+h+'" role="img" aria-label="'+esc(t(face==='front'?'anaFront':'anaBack'))+'">'+defs+b+'</svg>';
+}
+/* deep muscles have no shape on the figure, so they get their own tappable row / los músculos profundos no tienen forma en la figura: tienen su propia fila para tocar
+   col(code) gives an optional CSS color for the dot / col(código) da un color opcional para el punto */
+function anaDeepRow(fn,sel,col){
+  return'<div class="ana-deep"><span class="muted sm">'+t('anaDeep')+'</span><div class="chips wrap">'+MUS_DEEP.map(k=>{const c=col?col(k):'';return'<button class="chip'+(sel===k?' on':'')+'" onclick="'+fn+'(\''+k+'\')">'+(c?'<i class="dd" style="background:'+c+'"></i>':'')+esc(t('ms_'+k))+'</button>';}).join('')+'</div></div>';
 }
 /* roles of an exercise: weight 1 = main (agonist), .5–.8 = helpers (synergists), less = stabilizers / papeles de un ejercicio */
 function anaRoles(eid,vr){
@@ -75,7 +83,7 @@ function anaRecFill(r){
 function anaRecHtml(r){
   const f=anaRecFill(r);
   let h='<div class="ana-card"><div class="ana-pair">'+anaSvg('front',150,f,{sel:ANA_REC,tap:'anaRecTap'})+anaSvg('back',150,f,{sel:ANA_REC,tap:'anaRecTap'})+'</div>'+
-    '<div class="ana-grad"><span>'+t('rlLow')+'</span><i></i><span>'+t('rlOk')+'</span></div><div class="rv-leg"><span class="none">'+t('anaNone')+'</span></div></div>';
+    '<div class="ana-grad"><span>'+t('rlLow')+'</span><i></i><span>'+t('rlOk')+'</span></div><div class="rv-leg"><span class="none">'+t('anaNone')+'</span></div>'+anaDeepRow('anaRecTap',ANA_REC,anaRecFill(r))+'</div>';
   if(ANA_REC&&MUS_BASE[ANA_REC]){
     const k=ANA_REC,q=r.g[muGroup(k)].subs[k],p=q.pct==null?100:q.pct,c=p>=100?'ok':(p>=60?'mid':'low'),ex=anaExFor(k).slice(0,3);
     h+='<div class="ana-sel rv-s '+c+'" style="--p:'+p+';--c:'+anaRecCol(p)+'"><div class="ana-st"><b>'+t('ms_'+k)+'</b><span>'+(q.pct==null?t('anaNone'):(p>=100?t('rlOk'):t('recIn',q.left)))+'</span></div><span class="rv-bar"><u style="width:'+p+'%"></u></span>'+
@@ -87,7 +95,7 @@ function anaRecHtml(r){
 function anaRecTap(k){ANA_REC=ANA_REC===k?null:k;render();}
 /* ----- Find by muscle ----- */
 let ANA_F={face:'front',k:null};
-function anaFind(k){if(k){ANA_F.k=k;ANA_F.face=['lat','trp','lbk','sdr','trl','trm','ham','gmx','gmd','clf'].indexOf(k)>=0?'back':'front';}anaFindDraw();}
+function anaFind(k){if(k){ANA_F.k=k;ANA_F.face=anaDomFace(k);}anaFindDraw();}
 function anaFindTap(k){ANA_F.k=ANA_F.k===k?null:k;anaFindDraw();}
 function anaFace(f){ANA_F.face=f;anaFindDraw();}
 function anaFindDraw(){

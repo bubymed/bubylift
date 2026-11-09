@@ -4,7 +4,7 @@ const VAR_OPT={pull:['under','neut','wide','close'],pullb:['under','wide','close
 const VAR_FOR={latpd:'pull',cablerow:'pull',machrow:'pull',bbrow:'pullb',bentrow:'pullb',tbar:'pullb',pullup:'pullup',bench:'press',incbench:'press',declbench:'press',ohp:'ohp',pushup:'press',dbbench:'pressdb',dbinc:'pressdb',bbcurl:'curl',ezcurl:'curl',dbcurl:'curld',hammer:'curld',cablecurl:'curld',inccurl:'curld',dbohp:'shp',arnold:'shp',latraise:'shp',frontraise:'shp'};
 const VAR_MG={pull:'pull',pullb:'pull',pullup:'pull',press:'press',pressdb:'press',curl:'curl',curld:'curl',ohp:'ohp'};
 /* change in muscle weight per variation / cambio del peso muscular por variante */
-const VAR_MOD={pull:{under:'bic.3 lat.1',neut:'frm.2 bic.1',wide:'lat.2 ubk-.1',close:'bic.1 lat-.1 ubk.1'},press:{wide:'chm.2 trl-.2 sdf-.1',close:'trl.35 chm-.15',neut:'trl.15 chm-.05'},curl:{wide:'bic.15 frm-.1',close:'bic.1 frm.1',seat:'bic.1'},ohp:{wide:'sdl.15 trl-.1',close:'trl.25 sdf.05',seat:'sdf.1'}};
+const VAR_MOD={pull:{under:'bic.3 lat.1',neut:'frm.2 bic.1',wide:'lat.2 rho-.1',close:'bic.1 lat-.1 rho.1'},press:{wide:'chm.2 trl-.2 sdf-.1',close:'trl.35 chm-.15',neut:'trl.15 chm-.05'},curl:{wide:'bic.15 frm-.1',close:'bic.1 frm.1',seat:'bic.1'},ohp:{wide:'sdl.15 trl-.1',close:'trl.25 sdf.05',seat:'sdf.1'}};
 function exVars(eid){return VAR_OPT[VAR_FOR[eid]]||[];}
 function xk(x){return x.eid+(x.vr?'~'+x.vr:'');} // key of an entry: records and "last time" are kept per variation / clave de un ejercicio: récords y "última vez" por variante
 function varName(v){return t('var_'+v);}

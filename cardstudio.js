@@ -487,7 +487,7 @@ function csFun(g,v){
 /* 11 · body: both sides of the body painted by what you trained today (main = accent, helpers = blue, light work = faint blue) /
    cuerpo: los dos lados del cuerpo pintados con lo que entrenaste hoy (principal = acento, ayudan = azul, trabajo ligero = azul tenue) */
 /* Body card: crops to the trained half, 3 detail levels (quick / detailed / complete) / tarjeta Cuerpo: recorta a la mitad entrenada, 3 niveles de detalle */
-const CS_UP=['chu','chm','lat','ubk','trp','lbk','sdf','sdl','sdr','bic','frm','trl','trm','abs','obl'],CS_LO=['qd','ham','clf','add','gmx','gmd'];
+const CS_LO=MUS_SUB.legs.concat(MUS_SUB.glutes),CS_UP=Object.keys(MUS_BASE).filter(function(k){return CS_LO.indexOf(k)<0;}); // upper / lower body parts, from the muscle groups / partes de tren superior e inferior, según los grupos
 function csFig(g,face,x,y,hf,yr,fill){ // figure scaled to height hf; soft fade where it is cut / figura a altura hf; borde difuminado donde se corta
   const d=ANA[face],vb=d.vb.split(' ').map(Number),k=hf/(yr[1]-yr[0]),w=vb[2]*k,c=document.createElement('canvas');
   c.width=Math.ceil(w);c.height=Math.ceil(hf);const q=c.getContext('2d');
@@ -502,7 +502,7 @@ function csBodySc(v){
   (v.wk.ex||[]).forEach(function(x){const n=(x.sets||[]).filter(function(q){return q.done!==false&&(q.r>0||q.t>0);}).length;if(!n)return;(muW(x.eid,x.vr)||[]).forEach(function(m){sc[m[0]]=(sc[m[0]]||0)+n*m[1];});});
   const keys=Object.keys(sc).filter(function(k){return MUS_BASE[k];}).sort(function(a,b){return sc[b]-sc[a];}),mx=keys.length?sc[keys[0]]:1;
   const up=keys.some(function(k){return CS_UP.indexOf(k)>=0;}),lo=keys.some(function(k){return CS_LO.indexOf(k)>=0;});
-  const BK=['lat','ubk','trp','lbk','sdr','trl','trm','ham','gmx','gmd','clf'],ld=function(f){return keys.reduce(function(a,k){return a+((BK.indexOf(k)>=0)===(f==='back')?sc[k]:0);},0);};
+  const ld=function(f){return keys.reduce(function(a,k){return a+((anaDomFace(k)==='back')===(f==='back')?sc[k]:0);},0);};
   return{sc:sc,keys:keys,mx:mx,yr:up&&!lo?[-5,182]:(lo&&!up?[128,360]:[-5,360]),lead:ld('back')>ld('front')?'back':'front',
     col:function(k){const r=(sc[k]||0)/mx;return r>=.6?v.acc:(r>=.25?'#2F9BFF':(r>0?'rgba(47,155,255,.35)':'rgba(128,128,140,.30)'));}};
 }
@@ -549,7 +549,7 @@ function csBody(g,v){
   const hBars=hB(),hEx=hE(),room=rm()+40,hf=Math.max(240,Math.min(span>300?600:470,room-40)),y=v.B-(hStats+hTitle+hBars+hEx+hf+40+T);
   csLogo(g,80,y-30+T-60,60,v.ink);csTxt(g,v.d.date,W-80,y+T-60+30,34,'500',v.sub,'right');
   const fy=y+T,ww=ANA.front.vb.split(' ')[2]*hf/span,gap=70,x0=(W-2*ww-gap)/2;
-  const BK=['lat','ubk','trp','lbk','sdr','trl','trm','ham','gmx','gmd','clf'],ld=function(f){return keys.reduce(function(a,k){return a+((BK.indexOf(k)>=0)===(f==='back')?sc[k]:0);},0);};
+  const ld=function(f){return keys.reduce(function(a,k){return a+((anaDomFace(k)==='back')===(f==='back')?sc[k]:0);},0);};
   (ld('back')>ld('front')?['back','front']:['front','back']).forEach(function(face,i){csFig(g,face,x0+i*(ww+gap),fy,hf,yr,col);}); // the side with most work goes first / el lado con más trabajo va primero
   let c=fy+hf+50;
   csTxt(g,t('csBodyT'),80,c,44,'700',v.sub);c+=85;
