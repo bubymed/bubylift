@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.83 — 2026-11-09
+- Full workout editing: change the date (the time of day is kept, never in the future) and the duration, add sets or exercises. Trophies for the affected exercises are recomputed in time order across your whole history, so changing an old set can add or remove later records correctly.
+  Edición completa: cambia la fecha (se conserva la hora, nunca futura) y la duración, agrega series o ejercicios. Los trofeos de los ejercicios afectados se recalculan en orden cronológico en todo tu historial, así que cambiar una serie antigua suma o quita récords posteriores correctamente.
+
 ## v1.1.82 — 2026-11-09
 - Log a past workout by hand (History → "Log a past workout"): choose the date (not in the future), an optional duration, add exercises and sets, and save. It counts in streaks, goals and records like any other workout.
   Registrar un entrenamiento pasado a mano (Historial → "Registrar un entrenamiento pasado"): elige la fecha (no futura), una duración opcional, agrega ejercicios y series y guarda. Cuenta en rachas, metas y récords como cualquier otro entrenamiento.

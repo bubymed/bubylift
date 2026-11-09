@@ -104,7 +104,7 @@ Functions / Funciones: `tourMaybe`:13, `tourStart`:21, `tourDraw`:35, `tourGo`:4
 History tab, charts (lineSvg/barSvg), Progress tab per-exercise view, calendar.  
 Pestaña Historial, gráficas (lineSvg/barSvg), vista de Progreso por ejercicio, calendario.
 
-Functions / Funciones: `lineSvg`:9, `barSvg`:31, `spName`:45, `wkDur`:46, `wkPRs`:47, `wkCard`:48, `vHistory`:56, `wkText`:70, `openWk`:76, `repeatWk`:90, `shareWk`:96, `wkEditOpen`:105, `wkEditDraw`:109, `wkNewOpen`:130, `dayNoon`:131, `wkeDate`:132, `wkeDur`:133, `wkeAddEx`:134, `wkeAddSet`:141, `wkeSet`:147, `wkeRm`:154, `wkEditCancel`:159, `wkEditSave`:160, `delWkAsk`:180, `loggedEx`:183, `bestSet`:188, `exSessions`:193, `metricFmt`:204, `openProg`:205, `setPm`:206, `closeProg`:207, `vProgress`:209, `featCharts`:228, `rmCalc`:239, `rmUpdate`:242, `vExProg`:247, `psSet`:268, `vProgTab`:269, `calOpen`:277, `calMove`:278, `calSel`:279, `calDraw`:280, `calHtml`:281
+Functions / Funciones: `lineSvg`:9, `barSvg`:31, `spName`:45, `wkDur`:46, `wkPRs`:47, `wkCard`:48, `vHistory`:56, `wkText`:70, `openWk`:76, `repeatWk`:90, `shareWk`:96, `wkEditOpen`:105, `wkEditDraw`:111, `dayNoon`:132, `wkNewOpen`:133, `wkeDate`:135, `wkeDur`:143, `wkeAddEx`:144, `wkeAddSet`:151, `wkeSet`:157, `wkeRm`:164, `wkEditCancel`:169, `prRecalc`:172, `wkEditSave`:184, `delWkAsk`:208, `loggedEx`:211, `bestSet`:216, `exSessions`:221, `metricFmt`:232, `openProg`:233, `setPm`:234, `closeProg`:235, `vProgress`:237, `featCharts`:256, `rmCalc`:267, `rmUpdate`:270, `vExProg`:275, `psSet`:296, `vProgTab`:297, `calOpen`:305, `calMove`:306, `calSel`:307, `calDraw`:308, `calHtml`:309
 
 ### `goals.js`
 Goals with progress bars.  
