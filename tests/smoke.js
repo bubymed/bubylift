@@ -712,6 +712,8 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(fz.lowLow>fz.lowUp,'lower-body emphasis: more lower than upper work ('+fz.lowLow+' vs '+fz.lowUp+')');
   ok(fz.upUp>fz.upLow,'upper-body emphasis: more upper than lower work ('+fz.upUp+' vs '+fz.upLow+')');
   ok(fz.cDays>=2,'chest focus trains chest at least twice a week ('+fz.cDays+')');
+  const inn=ev(`(function(){const out=[];[3,4].forEach(n=>{const p=genPlan({goal:'muscle',emph:'low',n:n,len:60,lvl:'some',have:HAVE_PRESETS.gym,focus:['inner']});out.push(p.ds.filter(d=>d.ex.some(e=>muOf(e.eid)==='N')).length);});return out;})()`);
+  ok(inn[0]>=2&&inn[1]>=2,'inner-thigh focus trains adductors at least twice a week ('+inn+')');
   const lenT=ev(`(function(){const a=genPlan({goal:'muscle',emph:'bal',n:3,len:30,lvl:'some',have:HAVE_PRESETS.gym}),b=genPlan({goal:'muscle',emph:'bal',n:3,len:75,lvl:'some',have:HAVE_PRESETS.gym});return[a.ds[0].ex.filter(e=>e.sec==='rs').length,b.ds[0].ex.filter(e=>e.sec==='rs').length];})()`);
   ok(lenT[0]<=4&&lenT[1]>lenT[0],'session length changes the number of exercises ('+lenT+')');
   const cond=ev(`(function(){const p=genPlan({goal:'strength',emph:'bal',n:3,len:60,lvl:'adv',have:HAVE_PRESETS.gym,cond:1});return p.ds[0].ex.every(e=>meta(e.eid).lv===1);})()`);

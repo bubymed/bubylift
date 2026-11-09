@@ -50,6 +50,7 @@ function optReps(ph,role,goal,power){
 const OP1={ // phase 1: patterns, stable and light / patrones estables y ligeros
  Q:['ballsq','gobsq','bodysq','balstepup','stepup','bwstepup','legpress','bwlunge','revlunge'],
  H:['sldl','goodmorn','dbrdl','bandrdl','kbdl','hexdl','rdl'],
+ N:['sladd','z_band_hip_adductions','latlunge','adduct','z_cable_hip_adduction','z_thigh_adductor'],
  G:['ballbridge','slbridge','glutebr','bandbridge','hipthrust','frogpump'],
  P:['incpush','pushup','kneepush','bandpress','cablepress','ballpress','dbbench','chestpress'],
  B:['bandrow','invrow','suprow','cablerow','ballrow','dbrow','machrow','latpd'],
@@ -61,6 +62,7 @@ const OP1={ // phase 1: patterns, stable and light / patrones estables y ligeros
 const OP2S={ // strength-focused exercise of a superset / ejercicio de fuerza del superset
  Q:['legpress','gobsq','squat','hacksq','frontsq','stepup'],
  H:['dbrdl','rdl','deadlift','hexdl','goodmorn','legcurl'],
+ N:['adduct','z_thigh_adductor','sumosq','latlunge','z_cable_hip_adduction'],
  G:['hipthrust','glutebr','kbdl','sumo'],
  P:['chestpress','dbbench','bench','dbinc','incbench','cablepress'],
  B:['latpd','cablerow','machrow','dbrow','bbrow','assistpu','pullup'],
@@ -72,6 +74,7 @@ const OP2S={ // strength-focused exercise of a superset / ejercicio de fuerza de
 const PAIR_ST={ // stability-focused partner (same motion, less stable) / compañero de estabilidad (mismo movimiento, menos estable)
  Q:['slsquat','balsqtd','balstepup','ballunge','latstep','bwlunge'],
  H:['sldl','balrdl','slbridge','legcurlball'],
+ N:['sladd','z_band_hip_adductions','copenhagen'],
  G:['slbridge','ballbridge','bandkick'],
  P:['pushup','ballpush','susppush','ballpress','incpush','kneepush'],
  B:['ballrow','suprow','invrow','bandrow','dbrow'],
@@ -83,6 +86,7 @@ const PAIR_ST={ // stability-focused partner (same motion, less stable) / compa�
 const PAIR_PW={ // power-focused partner for phase 5 / compañero de potencia de la fase 5
  Q:['squatjump','tuckjump','boxjump','depthjump','lungejump','powerstep','jumpsquatband'],
  H:['tuckjump','kbpower','broadjump','kbswing','squatjump'],
+ N:['latlunge','sumosq','copenhagen'],
  G:['broadjump','kbpower','skaterjump'],
  P:['mbchestpass','plyopush','mbchestthrow'],
  B:['mbwood','mbslam','mbrot'],
@@ -91,6 +95,7 @@ const PAIR_PW={ // power-focused partner for phase 5 / compañero de potencia de
 const OP4={ // phase 4: heavy lifts / levantamientos pesados
  Q:['squat','legpress','hacksq','frontsq','gobsq'],
  H:['rdl','deadlift','hexdl','dbrdl','sldl'],
+ N:['sumosq','adduct','z_thigh_adductor'],
  G:['hipthrust','sumo','kbdl'],
  P:['bench','incbench','dbbench','dbinc','chestpress','declbench','decldb'],
  B:['bbrow','latpd','cablerow','bentrow','tbar','pullup','machrow','dbrow'],
@@ -182,7 +187,7 @@ function genOpt(prof){
   const sets=(prof.split&&splitOk(prof.split,prof.n)&&ph===1)?Math.max(2,OPT_SETS[ph][vi]):OPT_SETS[ph][vi],used={};
   const fm=[];prof.focus.forEach(k=>FOCUS_MU[k].forEach(m=>{if(fm.indexOf(m)<0)fm.push(m);}));
   const sk=prof.skills||[],em=prof.em0||prof.emph;
-  const lowerL='QHGC',upperL='PBSIT';
+  const lowerL='QHGCN',upperL='PBSIT';
   // which focus muscles each day already trains / qué músculos de enfoque trabaja ya cada día
   const want=Math.min(prof.ff||2,prof.n);
   const focusDays={};fm.forEach(m=>{focusDays[m]=0;});

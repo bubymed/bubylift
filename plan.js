@@ -40,12 +40,13 @@ function injBadge(eid){
 function jointNames(L){return L.split('').map(c=>t('j_'+c)).join(', ');}
 
 /* ---------- builder data ---------- */
-const MUS_LOWER='QHGC',MUS_UPPER='PBSIT';
+const MUS_LOWER='QHGCN',MUS_UPPER='PBSIT';
 const POOL={
  Q:{m:['squat','legpress','gobsq','hacksq','frontsq','boxsq','bodysq','ballsq','bwstepup'],a:['bulgsplit','stepup','revlunge','legext','latstep','splitsq','lunge','bwlunge','bwstepup','sledpush','slsquat','bodysq','ballsq']},
  H:{m:['rdl','dbrdl','deadlift','hexdl','kbdl','bandrdl','sldl','goodmorn','legcurl','legcurlball'],a:['legcurl','seatlc','sldl','legcurlball','bandrdl','rdl','goodmorn']},
  G:{m:['hipthrust','sumo','glutebr','slbridge','bandbridge','kbdl'],a:['cablekick','bandwalk','frogpump','slbridge','ballbridge','donkeykick','abduct','bandkick','firehydrant','clamshell','glutebr','bandbridge','hipthrust']},
  C:{m:['calf','seatcalf','calfdb'],a:['calf','seatcalf','calfdb']},
+ N:{m:['adduct','z_thigh_adductor','sumosq','latlunge','z_cable_hip_adduction','copenhagen'],a:['sladd','z_band_hip_adductions','copenhagen','latlunge','adduct','z_cable_hip_adduction','z_thigh_adductor','sumosq']},
  P:{m:['bench','dbbench','chestpress','incbench','dbinc','pushup','incpush','kneepush','bandpress','cablepress'],a:['dbinc','incbench','cablefly','dbfly','pecdeck','pushup','cablepress','declbench','hrpushup','incpush','ballpress','bandpress','susppush','dip','kneepush']},
  B:{m:['latpd','cablerow','bbrow','machrow','dbrow','pullup','assistpu','invrow','suprow','bandrow'],a:['dbrow','cablerow','machrow','straightpd','closepd','facepull','tbar','bentrow','bandrow','suprow','supermanback','hyperext','assistpu','latpd','shrug']},
  S:{m:['dbohp','machsp','ohp','seatpress','arnold','pikepush','bandohp'],a:['latraise','cablelat','reardelt','revfly','scaption','frontraise','bandlat','bandpull','facepull','cubanrot','bandextrot','uprow']},
@@ -95,9 +96,9 @@ const SPLITS={
  bb:{2:['bbFull','bbFull'],3:['bbFull','bbFull','bbFull'],4:['bbUp','bbLow','bbUp','bbLow2'],5:['bbPush','bbPull','bbLow','bbUp','bbLow2']},
  hy:{2:['hyStr','hyRunI'],3:['hyStr','hyRunI','hyCap'],4:['hyStrU','hyRunI','hyStrL','hyCap'],5:['hyStrU','hyRunI','hyStrL','hyCap','hyRunE']}
 };
-const FOCUS_MU={glutes:['G'],quads:['Q'],hams:['H'],calves:['C'],chest:['P'],back:['B'],shoulders:['S'],arms:['I','T'],abs:['A']};
+const FOCUS_MU={glutes:['G'],quads:['Q'],hams:['H'],calves:['C'],inner:['N'],chest:['P'],back:['B'],shoulders:['S'],arms:['I','T'],abs:['A']};
 /* focus group -> muscle codes drawn on the figure / grupo de enfoque -> códigos que se dibujan en la figura */
-const FOCUS_FIG={glutes:['gmx','gmd'],quads:['qd'],hams:['ham'],calves:['clf'],chest:['chu','chm'],back:['lat','ubk','trp','lbk'],shoulders:['sdf','sdl','sdr'],arms:['bic','frm','trl','trm'],abs:['abs','obl']};
+const FOCUS_FIG={glutes:['gmx','gmd'],quads:['qd'],hams:['ham'],calves:['clf'],inner:['add'],chest:['chu','chm'],back:['lat','ubk','trp','lbk'],shoulders:['sdf','sdl','sdr'],arms:['bic','frm','trl','trm'],abs:['abs','obl']};
 const PGOALS=['muscle','bodybuilding','strength','fat','general','hybrid','military','runner'],PLVLS=['new','some','adv'],PEMPH=['bal','low','up'],ALLEMPH=['bal','low','up','hy','run','bb'],RACES=['5k','10k','half','full','fit'],RACEF={'5k':0.8,'10k':1,half:1.3,full:1.6,fit:0.8},PSEX=['f','m','x'],TESTS=['aft','usmc','gen'],TW=[0,4,8,12,16];
 /* short coaching notes shown under an exercise / notas cortas bajo un ejercicio */
 const SKILLS=['strength','power','speed','endurance','balance'];
@@ -325,7 +326,7 @@ function genPlan(prof0){
     // too few options for this equipment/injuries: fill with other safe exercises of the same half of the body / pocos ejercicios: completa con otros seguros de la misma mitad del cuerpo
     if(ex.length<3){
       const upperDay=specs[di].some(s=>MUS_UPPER.indexOf(s[0])>=0)&&!specs[di].some(s=>MUS_LOWER.indexOf(s[0])>=0);
-      const order=upperDay?['P','B','S','A','T','I']:(specs[di].some(s=>MUS_UPPER.indexOf(s[0])>=0)?['Q','P','B','H','G','A','S']:['Q','H','G','C','A']);
+      const order=upperDay?['P','B','S','A','T','I']:(specs[di].some(s=>MUS_UPPER.indexOf(s[0])>=0)?['Q','P','B','H','G','A','S']:['Q','H','G','C','N','A']);
       for(let r=0;r<3&&ex.length<3;r++)order.forEach(mu=>{
         if(ex.length>=Math.min(3,maxEx))return;
         const id=pickFor(mu,'a',ctx);if(!id)return;
