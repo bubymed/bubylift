@@ -51,7 +51,7 @@ function startWorkout(o){
   ACT={id:uid(),t0:Date.now(),name:(o&&o.name)||'',note:'',ex:[]};
   if(o&&o.pl!=null)ACT.pl=o.pl;
   if(o&&o.guide)ACT.guide=1;
-  ((o&&o.ex)||[]).forEach(x=>addExTo(x.eid,x.sets,x.n,x.tg));
+  ((o&&o.ex)||[]).forEach(x=>addExTo(x.eid,x.sets,x.n,x.tg,x));
   saveAct();wake();tab='workout';renderTabs();render();window.scrollTo(0,0);pgAnim();
   if(!o)setTimeout(function(){if(ACT&&!ACT.ex.length)pickEx(null,true);},120);
 }
@@ -114,11 +114,18 @@ function barSet(i,kg){
   SET.barPref=SET.barPref||{};SET.barPref[x.eid]=kg>0?kg:0;jset(K_SET,SET);
   saveAct();sheetClose();render();
 }
-function addExTo(eid,nSets,nm,tg){
+/* src: the entry this one repeats (a saved workout or routine); it keeps the variation, the multiplier and the bar / src: el ejercicio que se repite; conserva la variante, el multiplicador y la barra */
+function addExTo(eid,nSets,nm,tg,src){
   const e=exById(eid),x={eid:eid,n:e?e.en:(nm||eid),sets:Array.from({length:Math.max(1,nSets||1)},()=>newSet())};
   x.v=2; // new weight model: bar + dumbbells counted / modelo nuevo de peso: barra + mancuernas contadas
   {const b=barDef(eid);if(b>0)x.bar=b;}
   {const m=mulDef(eid);if(m>1)x.mul=m;}
+  if(src){
+    if(src.vr)x.vr=src.vr;
+    if(src.v===2||src.keep){delete x.bar;delete x.mul;} // saved with the new model: absent means none / guardado con el modelo nuevo: ausente significa ninguno
+    if(src.bar>0)x.bar=src.bar;
+    if(src.mul>1)x.mul=src.mul;
+  }
   if(tg){x.tg=tg;const sg=sugg(eid,tg);if(sg&&sg.w!=null)x.sg=sg.w;}
   ACT.ex.push(x);
 }
@@ -152,7 +159,7 @@ function exploreList(){
     r('barbell','pkMusT','pkMusP',"libGo('focus')")+r('arrows-shuffle','pkSpT','pkSpP',"libGo('split')")+r('trophy','pkPrT','pkPrP',"libGo('prog')")+r('stopwatch','pkChT','pkChP',"libGo('ch')")+'</div>';
 }
 /* start again with the same exercises and set counts as your last workout / empezar otra vez con los mismos ejercicios y series del último entrenamiento */
-function repeatLast(){const w=DATA.workouts.find(x=>x.ex&&x.ex.length&&wkSets(x)>0);if(!w)return;startWorkout({name:w.name||'',ex:w.ex.map(x=>({eid:x.eid,sets:Math.max(1,x.sets.length),n:x.n}))});}
+function repeatLast(){const w=DATA.workouts.find(x=>x.ex&&x.ex.length&&wkSets(x)>0);if(!w)return;startWorkout({name:w.name||'',ex:w.ex.map(x=>({eid:x.eid,sets:Math.max(1,x.sets.length),n:x.n,vr:x.vr,mul:x.mul,bar:x.bar,v:x.v}))});}
 function vStart(){
   let h='';
   if(needBackup())h+='<div class="card warn"><b>'+t('bkT')+'</b><p>'+t('bkP')+'</p><div class="row"><button class="btn pri sm" onclick="exportJSON()">'+t('exportBackup')+'</button><button class="btn sm" onclick="bkLater()">'+t('later')+'</button></div></div>';
@@ -690,9 +697,11 @@ function customSave(){
 
 /* ---------- routines ---------- */
 function saveAsRoutine(){UI.rb={id:null,name:ACT.name||'',ex:ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.length}))};rbDraw();}
-function saveWkAsRoutine(id){const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;UI.rb={id:null,name:wk.name||'',ex:wk.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.length}))};rbDraw();}
+/* a routine line keeps the variation, multiplier and bar of the exercise it came from / una línea de rutina conserva la variante, el multiplicador y la barra */
+function rbKeep(x,sets){const o={eid:x.eid,n:x.n,sets:sets};if(x.vr)o.vr=x.vr;if(x.mul>1)o.mul=x.mul;if(x.bar>0)o.bar=x.bar;if(x.v===2||x.keep)o.keep=1;return o;}
+function saveWkAsRoutine(id){const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;UI.rb={id:null,name:wk.name||'',ex:wk.ex.map(x=>rbKeep(x,x.sets.length))};rbDraw();}
 function rbOpen(id){
-  if(id){const r=DATA.routines.find(x=>x.id===id);if(!r)return;UI.rb={id:r.id,name:r.name,ex:r.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets}))};}
+  if(id){const r=DATA.routines.find(x=>x.id===id);if(!r)return;UI.rb={id:r.id,name:r.name,ex:r.ex.map(x=>rbKeep(x,x.sets))};}
   else UI.rb={id:null,name:'',ex:[]};
   rbDraw();
 }

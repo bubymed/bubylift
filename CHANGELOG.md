@@ -7,6 +7,12 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.87 — 2026-11-09
+- Repeat workout, "Repeat last", Save as routine and starting a routine now keep each exercise's variation (grip/width), dumbbell multiplier and bar weight (they were reset to defaults).
+  Repetir entrenamiento, "Repetir el último", Guardar como rutina e iniciar una rutina ahora conservan la variante (agarre/ancho), el multiplicador de mancuernas y el peso de la barra de cada ejercicio (se reiniciaban a los valores por defecto).
+- Fix: importing a backup or loading/syncing cloud data dropped the variation (`vr`) from saved workouts, so records per variation were merged into the base exercise. The cleaners now keep it (workouts and routines).
+  Corrección: al importar un respaldo o cargar/sincronizar datos de la nube se perdía la variante (`vr`) de los entrenamientos guardados, y los récords por variante se mezclaban con el ejercicio base. Ahora se conserva (entrenamientos y rutinas).
+
 ## v1.1.86 — 2026-11-09
 - Training load: per-muscle weekly limits instead of a flat 20 sets (chest 20, back 22, shoulders 20, biceps 16, triceps 16, legs 22, glutes 20, core 30). The card shows each count against its limit, e.g. "Biceps (18/16)". "Overload" from a single muscle now means 6 sets above its own limit. Core no longer triggers "High" at 21 sets.
   Carga de entrenamiento: límites semanales por músculo en vez de 20 series fijas (pecho 20, espalda 22, hombros 20, bíceps 16, tríceps 16, piernas 22, glúteos 20, core 30). La tarjeta muestra cada conteo contra su límite, p. ej. "Bíceps (18/16)". "Sobrecarga" por un solo músculo ahora es 6 series sobre su propio límite. El core ya no activa "Alta" con 21 series.

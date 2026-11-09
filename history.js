@@ -91,7 +91,7 @@ function repeatWk(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
   if(ACT){toast(t('finishFirst'));return;}
   sheetClose();
-  startWorkout({name:wk.name,ex:wk.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.length}))});
+  startWorkout({name:wk.name,ex:wk.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.length,vr:x.vr,mul:x.mul,bar:x.bar,v:x.v}))});
 }
 function shareWk(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
