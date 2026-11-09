@@ -205,7 +205,14 @@ function wkEditSave(){
   saveData();WKE=null;sheetClose();render();toast(t('saved'));
   if(old)openWk(o.id);
 }
-function delWkAsk(id){ask(t('delWk'),t('delete'),function(){DATA.workouts=DATA.workouts.filter(w=>w.id!==id);clTomb(id);saveData();render();},true);}
+function delWkAsk(id){
+  const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
+  const snap=JSON.stringify(DATA.workouts),keys=wk.ex.map(xk);
+  DATA.workouts=DATA.workouts.filter(w=>w.id!==id);
+  prRecalc(keys); // a later set may now be the record / una serie posterior puede ser ahora el récord
+  jset(K_DATA,DATA);sheetClose();render();
+  undoDo(t('wkGone'),function(){DATA.workouts=JSON.parse(snap);jset(K_DATA,DATA);render();},function(){DATA.workouts=DATA.workouts.filter(w=>w.id!==id);clTomb(id);saveData();});
+}
 
 /* ---------- progress ---------- */
 function loggedEx(){

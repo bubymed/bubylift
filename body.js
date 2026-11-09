@@ -239,7 +239,12 @@ function bodySave(){
   if(ex){if(o.w!=null)ex.w=o.w;if(o.bf!=null)ex.bf=o.bf;if(o.m)ex.m=Object.assign({},ex.m,o.m);if(o.note)ex.note=o.note;saveData();toast(t('bwUpd'));render();return;}
   DATA.body.push(o);DATA.body.sort((a,b)=>b.t-a.t);goalsCheck();saveData();toast(t('saved'));render();
 }
-function bodyDel(id){ask(t('delEntry'),t('delete'),function(){DATA.body=DATA.body.filter(b=>b.id!==id);clTomb(id);saveData();render();},true);}
+function bodyDel(id){
+  const snap=JSON.stringify(DATA.body);
+  DATA.body=DATA.body.filter(b=>b.id!==id);
+  jset(K_DATA,DATA);render();
+  undoDo(t('entryGone'),function(){DATA.body=JSON.parse(snap);jset(K_DATA,DATA);render();},function(){DATA.body=DATA.body.filter(b=>b.id!==id);clTomb(id);saveData();});
+}
 function goalSet(){
   const v=$('bg').value.trim();
   if(!v){SET.goal=null;}else{const g=wParse(v);if(g==null||g<=0||g>700){toast(t('needBody'));return;}SET.goal=g;}
