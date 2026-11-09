@@ -95,7 +95,7 @@ function xpCard(){
     '<details class="dtl pv-dt"><summary><b>'+t('xpInfoT')+'</b></summary><p class="muted sm">'+t('xpInfo')+'</p></details></div>';
 }
 /* muscle balance: weekly effective sets per part over the last 4 weeks, against a modest target / equilibrio muscular: series efectivas por semana de cada parte en las últimas 4 semanas, contra una meta modesta */
-const MUS_TGT={chu:6,chm:8,lat:8,ubk:8,trp:4,lbk:4,sdf:4,sdl:8,sdr:6,bic:8,frm:4,trl:6,trm:6,qd:10,ham:8,clf:6,add:4,gmx:8,gmd:4,abs:8,obl:4};
+const MUS_TGT={chu:6,chm:8,ser:3,lat:8,ter:4,inf:4,rho:6,trp:4,nck:2,lbk:4,ql:3,sdf:4,sdl:8,sdr:6,rtc:3,bic:8,bra:5,brd:3,frm:4,trl:6,trm:6,rf:6,vl:8,vm:8,sar:2,add:4,bfm:6,smt:6,gas:4,sol:3,tib:2,per:2,hfl:3,gmx:8,gmd:4,gmn:3,tfl:3,abs:8,tva:4,obl:4}; // weekly effective sets per muscle / series efectivas por semana
 function balData(now){
   now=now||Date.now();
   const ws=DATA.workouts.filter(w=>{const e=w.end||w.t;return e>=now-28*864e5&&e<=now;}),eff={};
@@ -123,7 +123,7 @@ function balCard(){
   if(d.n<3)return h0+'<p class="muted sm">'+t('balLock')+'</p></div>';
   const weak=Object.keys(d.subs).filter(k=>d.subs[k].pct<100).sort((a,b)=>d.subs[a].pct-d.subs[b].pct).slice(0,3);
   const sel=BAL_SEL&&d.subs[BAL_SEL]?BAL_SEL:null,q=sel&&d.subs[sel];
-  return h0+'<div class="ana-card ana-bal">'+anaHeat(k=>d.subs[k]?anaRecCol(d.subs[k].pct):'','balTap',sel)+'<div class="ana-grad"><span>'+t('balLegLo')+'</span><i></i><span>'+t('balLegHi')+'</span></div>'+
+  return h0+'<div class="ana-card ana-bal">'+anaHeat(k=>d.subs[k]?anaRecCol(d.subs[k].pct):'','balTap',sel)+'<div class="ana-grad"><span>'+t('balLegLo')+'</span><i></i><span>'+t('balLegHi')+'</span></div>'+anaDeepRow('balTap',sel,k=>d.subs[k]?anaRecCol(d.subs[k].pct):'')+
     (q?'<div class="ana-sel"><div class="ana-st"><b>'+t('ms_'+sel)+'</b><span>'+t('balSets',(Math.round(q.wk*10)/10),MUS_TGT[sel])+'</span></div></div>':'<p class="muted sm rv-hint">'+t('anaTap')+'</p>')+'</div>'+
     '<div class="bal-w"><b>'+t('balWeak')+'</b>'+(weak.length?weak.map(k=>'<div class="bal-r"><span><b>'+t('ms_'+k)+'</b><small>'+t('balSets',(Math.round(d.subs[k].wk*10)/10),MUS_TGT[k])+'</small></span><button class="btn sm" onclick="recWorkout(null,\''+k+'\')">'+t('recSubTrain')+'</button></div>').join(''):'<p class="muted sm">'+t('balGood')+'</p>')+'</div>'+
     '<details class="dtl pv-dt"><summary><b>'+t('balInfoT')+'</b></summary><p class="muted sm">'+t('balInfo')+'</p></details></div>';

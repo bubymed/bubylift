@@ -5,9 +5,13 @@ Genera data/musc.js: qué subgrupos musculares trabaja cada ejercicio (pesos 0-1
 Las reglas se aplican de arriba abajo sobre el nombre en inglés; gana la primera que coincida."""
 import re,json,subprocess,sys,os
 R=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..')
-SUBS={'chest':['chu','chm'],'back':['lat','ubk','trp','lbk'],'shoulders':['sdf','sdl','sdr'],'biceps':['bic','frm'],'triceps':['trl','trm'],'legs':['qd','ham','clf','add'],'glutes':['gmx','gmd'],'core':['abs','obl']}
+SUBS={'chest':['chu','chm','ser'],'back':['lat','ter','inf','rho','trp','lbk','ql','nck'],'shoulders':['sdf','sdl','sdr','rtc'],'biceps':['bic','bra','brd','frm'],'triceps':['trl','trm'],'legs':['rf','vl','vm','sar','add','bfm','smt','gas','sol','tib','per','hfl'],'glutes':['gmx','gmd','gmn','tfl'],'core':['abs','tva','obl']}
+# deep muscles: tracked, but no surface shape on the figure / músculos profundos: se registran, pero no tienen forma en la figura
+DEEP=['gmn','rho','rtc','tva']
+# coarse code used by the rules below -> fine codes / código grueso de las reglas -> códigos finos
+KIDS={'qd':['rf','vl','vm'],'ham':['bfm','smt'],'clf':['gas','sol'],'ubk':['rho','ter','inf']}
 # base recovery hours per subgroup / horas base de recuperación por subgrupo
-BASE={'chu':48,'chm':48,'lat':60,'ubk':48,'trp':48,'lbk':72,'sdf':48,'sdl':36,'sdr':36,'bic':48,'frm':24,'trl':48,'trm':48,'qd':60,'ham':72,'clf':24,'add':48,'gmx':60,'gmd':36,'abs':36,'obl':36}
+BASE={'chu':48,'chm':48,'ser':36,'lat':60,'ter':48,'inf':36,'rho':48,'trp':48,'lbk':72,'ql':48,'nck':24,'sdf':48,'sdl':36,'sdr':36,'rtc':36,'bic':48,'bra':48,'brd':24,'frm':24,'trl':48,'trm':48,'rf':60,'vl':60,'vm':60,'sar':24,'add':48,'bfm':72,'smt':72,'gas':36,'sol':24,'tib':24,'per':24,'hfl':36,'gmx':60,'gmd':36,'gmn':36,'tfl':36,'abs':36,'tva':24,'obl':36}
 # group default when no rule matches / valor por defecto del grupo
 DEF={'chest':'chm1 chu.4 trm.4 sdf.3','back':'lat1 ubk.6 bic.4 lbk.2','shoulders':'sdf.8 sdl.8 trm.4','biceps':'bic1 frm.4','triceps':'trm1 trl.6','legs':'qd1 gmx.5 ham.3','glutes':'gmx1 gmd.4 ham.3','core':'abs1 obl.4','full':'qd.5 gmx.5 lbk.4 ubk.4 sdf.3 abs.3','power':'qd.6 gmx.5 clf.3','balance':'qd.6 gmx.5 gmd.5 clf.3 abs.2'}
 SKIP={'mobility','cardio'}
@@ -218,6 +222,65 @@ RULES=[
  (r'hop',['balance'],'qd1 gmx.7 gmd.6 clf.6 abs.3'),
  (r'balance|pose|stance|tandem',['balance'],'gmd1 clf.6 qd.4 gmx.4 abs.3'),
 ]
+
+RF_ALL=r'extension|sissy|sprint|run|jog|bike|cycl|stair|kick|jump|hop|bound|knee raise|knee/hip|high knee|leg raise|mountain|climb|step mill|elliptical'
+RF_LOW=r'hack|leg press|narrow stance|sumo|wide stance|plie'
+HFL=[(r'hip flexion|knee raise|knee/hip|leg raise|hanging|knee up|leg lift|knee tuck|knee hip|pike|v-up|jackknife|janda',.9),(r'sit-?up|flutter|scissor|jack-?knife|tuck|reverse crunch|mountain|climb|high knee|march|bicycle|air bike|leg pull-in|leg pull in',.6),(r'sprint|kick|jog|run|bound|hurdle|stair|step mill|skip',.4)]
+def split(d,n):
+    """coarse weights -> fine weights (what muscle part does each coarse code mean for THIS exercise) / pesos gruesos -> finos"""
+    o={}
+    def put(k,v):
+        v=round(min(v,1),2)
+        if v>0:o[k]=max(o.get(k,0),v)
+    for k,v in d.items():
+        if k=='qd':
+            f=1 if re.search(RF_ALL,n) else (.55 if re.search(RF_LOW,n) else .7)
+            put('vl',v);put('vm',v);put('rf',v*f)
+        elif k=='ham':put('bfm',v);put('smt',v)
+        elif k=='clf':
+            if re.search(r'seated|bent.?knee|donkey',n):put('sol',v);put('gas',v*.35)
+            elif re.search(r'jump|sprint|hop|bound|skip|run',n):put('gas',v);put('sol',v*.5)
+            else:put('gas',v);put('sol',v*.7)
+        elif k=='ubk':
+            put('rho',v);put('ter',v*.7)
+            put('inf',v*(.8 if re.search(r'rear|reverse fl|face pull|external|back fl|pull-apart',n) else .5))
+        elif k=='lbk':
+            put('lbk',v)
+            if re.search(r'side bend|suitcase|windmill|farmer',n):put('ql',v*.8)
+            elif v>=.5:put('ql',v*.4)
+        elif k=='bic':
+            put('bic',v)
+            if re.search(r'hammer|reverse|zottman',n):put('bra',1);put('brd',.8)
+            else:put('bra',v*(.8 if re.search(r'curl',n) else .4))
+        elif k=='frm':
+            put('frm',v)
+            if v>=.3:put('brd',v*.5)
+        elif k=='abs':
+            if 'vacuum' in n:put('tva',1);put('abs',.3)
+            else:put('abs',v);put('tva',v*.6)
+        elif k=='gmd':
+            put('gmd',v);put('gmn',v*.8)
+            put('tfl',v*(.6 if re.search(r'abduct|side leg|clam|hydrant|monster|band walk|lateral|skater|side',n) else .4) if v>=.5 else 0)
+        else:put(k,v)
+    # extras that depend on the movement itself / extras que dependen del movimiento
+    if re.search(r'external rotation|cuban rot',n):put('inf',1);put('rtc',1)
+    if re.search(r'internal rotation',n):put('rtc',1)
+    if 'isometric neck' in n:put('nck',1);o['trp']=min(o.get('trp',0),.5)
+    if re.search(r'shrug|upright',n) and o.get('trp',0)>=.8:put('nck',.3)
+    if d.get('lat',0)>=.7 and 'ter' not in o:put('ter',d['lat']*.5)
+    if o.get('chm',0)>=.5 and re.search(r'push-?up|push up|plank|crawl|dip|handstand|pike|mountain|climb|burpee',n):put('ser',.6)
+    elif o.get('chm',0)>=.9:put('ser',.3)
+    if d.get('lat',0)>=.9 and re.search(r'pullover|straight-arm',n):put('ser',.4)
+    if max(o.get('sdf',0),o.get('sdl',0))>=.9 and 'rtc' not in o:put('rtc',.6 if re.search(r'lateral|raise|scapt|front',n) else .4)
+    elif re.search(r'rear|reverse fl|face pull',n):put('rtc',.3)
+    if re.search(r'side bend|suitcase|windmill|side plank|side bridge',n):put('ql',.8)
+    elif re.search(r'hyperext|back extension|superman|good morning',n):put('ql',.6)
+    for rx,v in HFL:
+        if re.search(rx,n):put('hfl',v);break
+    if re.search(r'lunge|split squat|step-?up|cossack|pistol|bulgarian',n) and 'rf' in o:put('sar',.3)
+    if re.search(r'run|sprint|walk|hike|stair|jump rope|skip|step mill|treadmill|trail',n):put('tib',.3)
+    if re.search(r'lateral|skater|balance|bosu|carioca|cone|ladder|shuttle|single.leg hop|ankle|side hop',n) and any(c in o for c in ('vl','gas','gmd')):put('per',.4)
+    return o
 def weights(eid,name,g):
     if g in SKIP:return None
     n=name.lower()
@@ -246,28 +309,36 @@ console.log(JSON.stringify(f()));"""],cwd=R).decode())
     for e in ex:
         w=weights(e[0],e[1],e[3])
         if w is None:continue
-        d=topd(norm(w))  # every exercise has a main muscle / todo ejercicio tiene músculo principal
+        d=topd(split(norm(w),e[1].lower()))  # every exercise has a main muscle / todo ejercicio tiene músculo principal
         lines.append(" %s:'%s'"%(e[0],' '.join('%s%s'%(k,('%g'%v).lstrip('0')) for k,v in d.items())))
     out="""/* Muscle map for the recovery view (v1.1.47): which subgroup each exercise trains and how much (1 = main, .5 = helper).
    Generated by tools/gen_musc.py from the exercise names; edit the rules there, not this file. Exercises without an entry fall back to their group.
    Mapa muscular para la vista de recuperación (v1.1.47): qué subgrupo trabaja cada ejercicio y cuánto (1 = principal, .5 = ayuda).
    Generado por tools/gen_musc.py a partir de los nombres; edita las reglas allí, no este archivo. Los ejercicios sin entrada usan su grupo.
 
-   Muscle codes / Códigos de músculo:
-   chu upper chest / pecho superior · chm mid+lower chest / pecho medio e inferior · lat lats / dorsales · ubk upper back / espalda alta
-   trp traps / trapecios · lbk lower back / espalda baja · sdf front delts / deltoides frontal · sdl side delts / lateral · sdr rear delts / posterior
-   bic biceps / bíceps · frm forearms / antebrazos · trl triceps long head / tríceps cabeza larga · trm triceps side+inner / tríceps lateral e interna
-   qd quads / cuádriceps · ham hamstrings / isquiotibiales · clf calves / pantorrillas · add adductors / aductores
-   gmx glute max / glúteo mayor · gmd side glutes / glúteo medio · abs abs / abdominales · obl obliques / oblicuos
+   Muscle codes / Códigos de músculo (surface muscles have a shape on the figure, deep ones are marked D / los superficiales tienen forma en la figura, los profundos llevan D):
+   chu upper chest / pecho superior · chm mid+lower chest / pecho medio e inferior · ser serratus anterior / serrato anterior
+   lat lats / dorsal ancho · ter teres major / redondo mayor · inf infraspinatus + teres minor / infraespinoso + redondo menor · rho rhomboids D / romboides D
+   trp trapezius / trapecio · nck neck (SCM, scalenes) / cuello (ECM, escalenos) · lbk erector spinae / erectores · ql quadratus lumborum / cuadrado lumbar
+   sdf front delts / deltoides frontal · sdl side delts / lateral · sdr rear delts / posterior · rtc rotator cuff (supraspinatus, subscapularis) D / manguito rotador D
+   bic biceps / bíceps · bra brachialis / braquial · brd brachioradialis / braquiorradial · frm forearm flexors+extensors / antebrazo
+   trl triceps long head / tríceps cabeza larga · trm triceps side+inner / tríceps lateral e interna
+   rf rectus femoris / recto femoral · vl vastus lateralis / vasto lateral · vm vastus medialis / vasto medial · sar sartorius / sartorio
+   add adductors + gracilis / aductores + grácil · bfm biceps femoris / bíceps femoral · smt semitendinosus + semimembranosus / semitendinoso + semimembranoso
+   gas gastrocnemius / gastrocnemio · sol soleus / sóleo · tib tibialis anterior / tibial anterior · per peroneals / peroneos · hfl hip flexors (iliopsoas, pectineus) / flexores de cadera
+   gmx gluteus maximus / glúteo mayor · gmd gluteus medius / glúteo medio · gmn gluteus minimus D / glúteo menor D · tfl TFL + IT band / TFL + banda iliotibial
+   abs rectus abdominis / recto abdominal · tva transversus abdominis D / transverso abdominal D · obl obliques / oblicuos
    Weight bands (anatomy.js anaRoles): >= .9 main (agonist) · .5-.8 helper (synergist) · < .5 stabilizer. Every exercise has at least one main muscle.
    Bandas de peso (anatomy.js anaRoles): >= .9 principal (agonista) · .5-.8 ayuda (sinergista) · < .5 estabilizador. Todo ejercicio tiene al menos un músculo principal. */
 const MUS_SUB=%s;
+const MUS_DEEP=%s; // no shape on the figure / sin forma en la figura
+const MUS_KIDS=%s; // old coarse code -> fine codes (variations, old data) / código grueso antiguo -> finos
 const MUS_BASE=%s;
 const MUS_DEF=%s;
 const EXMU={
 %s
 };
-"""%(json.dumps(SUBS,separators=(',',':')),json.dumps(BASE,separators=(',',':')),json.dumps({g:topw(DEF[g]) for g in DEF},separators=(',',':')),",\n".join(lines))
+"""%(json.dumps(SUBS,separators=(',',':')),json.dumps(DEEP,separators=(',',':')),json.dumps(KIDS,separators=(',',':')),json.dumps(BASE,separators=(',',':')),json.dumps({g:' '.join('%s%s'%(k,('%g'%v).lstrip('0')) for k,v in topd(split(norm(DEF[g]),'')).items()) for g in DEF},separators=(',',':')),",\n".join(lines))
     open(os.path.join(R,'data','musc.js'),'w').write(out)
     print(len(lines),'exercises mapped')
 main()

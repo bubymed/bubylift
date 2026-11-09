@@ -21,7 +21,7 @@ function strSet(k,v){STX[k]=v;if(k==='min')STX.min=+v;render();}
 function strIsDyn(id){return STRETCH_DYN.indexOf(id)>=0;}
 /* cool-down by muscle group: each group maps to the stretch areas that relax it / cool down por grupo muscular: cada grupo usa las zonas de estiramiento que lo relajan */
 const CG_KEYS=['legs','chest','back','shoulders','arms','core'];
-const CG_FIG={legs:['qd','ham','clf','add','gmx','gmd'],chest:['chu','chm'],back:['lat','ubk','trp','lbk'],shoulders:['sdf','sdl','sdr'],arms:['bic','frm','trl','trm'],core:['abs','obl']}; // muscle codes per cool-down group, for the figure / códigos por grupo del cool down, para la figura
+const CG_FIG={legs:['rf','vl','vm','sar','add','bfm','smt','gas','sol','tib','per','hfl','gmx','gmd','gmn','tfl'],chest:['chu','chm','ser'],back:['lat','ter','inf','rho','trp','lbk','ql','nck'],shoulders:['sdf','sdl','sdr','rtc'],arms:['bic','bra','brd','frm','trl','trm'],core:['abs','tva','obl']}; // muscle codes per cool-down group, for the figure / códigos por grupo del cool down, para la figura
 const CG_AREAS={legs:['quad','ham','hip','calf'],chest:['chest'],back:['back'],shoulders:['shoulder'],arms:['arms'],core:['core']};
 /* workout muscle group (exercise group) → cool-down group / grupo del ejercicio → grupo del cool down */
 const CG_FROM={chest:['chest'],back:['back'],shoulders:['shoulders'],biceps:['arms'],triceps:['arms'],legs:['legs'],glutes:['legs'],core:['core'],full:CG_KEYS,power:['legs'],cardio:['legs']};

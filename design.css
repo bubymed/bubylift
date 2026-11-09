@@ -871,3 +871,6 @@ button.rk-tz{cursor:pointer}
 .ana-ld .ana-grad{margin-top:8px}
 .wgrid.wz-fl{grid-template-columns:repeat(3,1fr)}
 .ld-grad i{background:linear-gradient(90deg,color-mix(in srgb,var(--an-main) 25%,var(--an-sil)),var(--an-main) 62%,rgb(255,69,58))!important}
+
+/* v1.1.70 deep muscles row / fila de músculos profundos */
+.ana-deep{margin:8px 0 2px;text-align:center}.ana-deep .chips{justify-content:center;margin-top:4px}.ana-deep .chip{font-size:12px;padding:5px 10px}.ana-deep .dd{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
