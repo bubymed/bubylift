@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.75',items:[
+  {i:'shield-check',en:'Quick setup now also asks about injuries and health (pregnancy, blood pressure, heart), so nobody gets a plan that ignores them.',es:'El arranque rápido ahora también pregunta por lesiones y salud (embarazo, presión, corazón), para que nadie reciba un plan que las ignore.'}
+ ]},
  {v:'v1.1.74',items:[
   {i:'trending-up',en:'Stuck on a lift? The check-in now suggests a lighter week (about 10% less weight) and building back up, instead of swapping the exercise right away.',es:'¿Estancado en un ejercicio? El chequeo ahora sugiere una semana más ligera (cerca de 10% menos peso) y volver a subir, en vez de cambiar el ejercicio de inmediato.'}
  ]},

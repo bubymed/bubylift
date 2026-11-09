@@ -332,7 +332,7 @@ const STR={
  qsT:['Let\'s build your plan','Armemos tu plan'],
  qsS:['Takes about a minute — and you can change anything later.','Toma como un minuto, y después puedes cambiar lo que quieras.'],
  qsFast:['Quick','Rápido'],
- qsFastD:['Just 4 questions: goal, style, days and level. We handle the rest.','Solo 4 preguntas: meta, estilo, días y nivel. Nosotros hacemos el resto.'],
+ qsFastD:['A few questions: goal, style, days, level and health. We handle the rest.','Pocas preguntas: meta, estilo, días, nivel y salud. Nosotros hacemos el resto.'],
  qsFull:['Custom','Personalizado'],
  qsFullD:['Go deeper: focus muscle groups, injuries, tests, equipment and more.','Ve más a fondo: grupos musculares de enfoque, lesiones, pruebas, equipo y más.'],
  qsNote:['Quick setup — everything else uses balanced settings that work for most people.','Arranque rápido: lo demás usa ajustes equilibrados que le funcionan a la mayoría.'],
