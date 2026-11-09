@@ -116,11 +116,15 @@ function radarSvg(vals,labels){
     s+='<circle class="rd-d" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5"/><text class="rd-t" x="'+q[0].toFixed(1)+'" y="'+(q[1]+4).toFixed(1)+'" text-anchor="'+an+'">'+esc(labels[i])+'</text>';});
   return s+'</svg>';
 }
+let BAL_SEL=null;
+function balTap(k){BAL_SEL=BAL_SEL===k?null:k;render();}
 function balCard(){
   const d=balData(),h0='<div class="card balc"><div class="lbl">'+t('balT')+'</div>';
   if(d.n<3)return h0+'<p class="muted sm">'+t('balLock')+'</p></div>';
   const weak=Object.keys(d.subs).filter(k=>d.subs[k].pct<100).sort((a,b)=>d.subs[a].pct-d.subs[b].pct).slice(0,3);
-  return h0+radarSvg(REC_G.map(g=>d.g[g]),REC_G.map(g=>t('g_'+g)))+
+  const sel=BAL_SEL&&d.subs[BAL_SEL]?BAL_SEL:null,q=sel&&d.subs[sel];
+  return h0+'<div class="ana-card ana-bal">'+anaHeat(k=>d.subs[k]?anaRecCol(d.subs[k].pct):'','balTap',sel)+'<div class="ana-grad"><span>'+t('balLegLo')+'</span><i></i><span>'+t('balLegHi')+'</span></div>'+
+    (q?'<div class="ana-sel"><div class="ana-st"><b>'+t('ms_'+sel)+'</b><span>'+t('balSets',(Math.round(q.wk*10)/10),MUS_TGT[sel])+'</span></div></div>':'<p class="muted sm rv-hint">'+t('anaTap')+'</p>')+'</div>'+
     '<div class="bal-w"><b>'+t('balWeak')+'</b>'+(weak.length?weak.map(k=>'<div class="bal-r"><span><b>'+t('ms_'+k)+'</b><small>'+t('balSets',(Math.round(d.subs[k].wk*10)/10),MUS_TGT[k])+'</small></span><button class="btn sm" onclick="recWorkout(null,\''+k+'\')">'+t('recSubTrain')+'</button></div>').join(''):'<p class="muted sm">'+t('balGood')+'</p>')+'</div>'+
     '<details class="dtl pv-dt"><summary><b>'+t('balInfoT')+'</b></summary><p class="muted sm">'+t('balInfo')+'</p></details></div>';
 }

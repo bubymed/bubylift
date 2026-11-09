@@ -38,6 +38,17 @@ function anaRoleFill(r){
   return k=>m[k]||'';
 }
 const anaNames=a=>a.map(k=>t('ms_'+k)).join(', ');
+/* tappable group picker (plan focus, cool-down): map = group -> muscle codes; sel = chosen groups; cb(group) runs when a part is tapped.
+   Parts outside the map stay gray and do nothing / selector tocable por grupo: map = grupo -> códigos; sel = grupos elegidos; cb(grupo) al tocar una parte */
+let ANA_PK_MAP={},ANA_PK_CB=null;
+function anaPick(map,sel,cb){
+  ANA_PK_MAP=map;ANA_PK_CB=cb;
+  const f=c=>{const g=Object.keys(map).find(k=>map[k].indexOf(c)>=0);return!g?'':(sel.indexOf(g)>=0?'var(--an-main)':'color-mix(in srgb,var(--an-main) 16%,var(--an-sil))');};
+  return'<div class="ana-card ana-pk"><div class="ana-pair">'+anaSvg('front',138,f,{tap:'anaPkTap'})+anaSvg('back',138,f,{tap:'anaPkTap'})+'</div><p class="muted sm rv-hint">'+t('anaTap')+'</p></div>';
+}
+function anaPkTap(c){const g=Object.keys(ANA_PK_MAP).find(k=>ANA_PK_MAP[k].indexOf(c)>=0);if(g&&ANA_PK_CB)ANA_PK_CB(g);}
+/* both sides of the body painted by fill(code), with an optional tap handler name and selected part / ambos lados del cuerpo pintados con fill(código) */
+function anaHeat(fill,tap,sel,w){return'<div class="ana-pair">'+anaSvg('front',w||150,fill,{tap:tap,sel:sel})+anaSvg('back',w||150,fill,{tap:tap,sel:sel})+'</div>';}
 /* technique guide block: both sides of the body, small, and what each color means / bloque de la guía de técnica */
 function anaGuide(eid,vr){
   const r=anaRoles(eid,vr);if(!r.main.length&&!r.help.length)return'';

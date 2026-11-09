@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.68 — 2026-10-30
+- Tap the body to pick your plan focus and cool-down muscles; Balance and Load are now body heat maps; Recovery opens on the body view.
+  Toca el cuerpo para elegir el enfoque del plan y los músculos del cool down; Equilibrio y Carga son mapas de calor del cuerpo; Recuperación abre en la vista del cuerpo.
+
 ## v1.1.67 — 2026-10-30
 - Filters and pickers now swipe sideways in one row instead of piling up: library tabs, equipment photos, chip rows and recovery zones. Muscle groups in the library now show the anatomy figure with the muscles highlighted instead of exercise photos.
   Los filtros ahora se deslizan de lado en una sola fila en vez de amontonarse: pestañas de la biblioteca, fotos de equipo, chips y zonas de recuperación. Los grupos musculares de la biblioteca ahora muestran la figura anatómica con los músculos resaltados en vez de fotos de ejercicios.

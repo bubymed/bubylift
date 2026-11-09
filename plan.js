@@ -96,6 +96,8 @@ const SPLITS={
  hy:{2:['hyStr','hyRunI'],3:['hyStr','hyRunI','hyCap'],4:['hyStrU','hyRunI','hyStrL','hyCap'],5:['hyStrU','hyRunI','hyStrL','hyCap','hyRunE']}
 };
 const FOCUS_MU={glutes:['G'],quads:['Q'],hams:['H'],calves:['C'],chest:['P'],back:['B'],shoulders:['S'],arms:['I','T'],abs:['A']};
+/* focus group -> muscle codes drawn on the figure / grupo de enfoque -> códigos que se dibujan en la figura */
+const FOCUS_FIG={glutes:['gmx','gmd'],quads:['qd'],hams:['ham'],calves:['clf'],chest:['chu','chm'],back:['lat','ubk','trp','lbk'],shoulders:['sdf','sdl','sdr'],arms:['bic','frm','trl','trm'],abs:['abs','obl']};
 const PGOALS=['muscle','bodybuilding','strength','fat','general','hybrid','military','runner'],PLVLS=['new','some','adv'],PEMPH=['bal','low','up'],ALLEMPH=['bal','low','up','hy','run','bb'],RACES=['5k','10k','half','full','fit'],RACEF={'5k':0.8,'10k':1,half:1.3,full:1.6,fit:0.8},PSEX=['f','m','x'],TESTS=['aft','usmc','gen'],TW=[0,4,8,12,16];
 /* short coaching notes shown under an exercise / notas cortas bajo un ejercicio */
 const SKILLS=['strength','power','speed','endurance','balance'];
@@ -886,7 +888,7 @@ function pwPreset(k){PW.have=HAVE_PRESETS[k].slice();wizDraw();}
 function wch(key,vals,cur,lab){return'<div class="chips wrap">'+vals.map(v=>'<button class="chip'+(cur===v?' on':'')+'" onclick="pwSet(\''+key+'\','+(typeof v==='number'?v:'\''+v+'\'')+')">'+esc(lab(v))+'</button>').join('')+'</div>';}
 function wchm(key,vals,lab,max){return'<div class="chips wrap">'+vals.map(v=>'<button class="chip'+(PW[key].indexOf(v)>=0?' on':'')+'" onclick="pwTog(\''+key+'\',\''+v+'\''+(max?','+max:'')+')">'+esc(lab(v))+'</button>').join('')+'</div>';}
 function focusBlock(){
-  return'<div class="lbl">'+t('psFocus')+'</div>'+wchm('focus',Object.keys(FOCUS_MU),v=>t('fm_'+v),3)+'<p class="muted sm">'+t('psFocusP')+'</p>'+
+  return'<div class="lbl">'+t('psFocus')+'</div>'+anaPick(FOCUS_FIG,PW.focus,g=>pwTog('focus',g,3))+wchm('focus',Object.keys(FOCUS_MU),v=>t('fm_'+v),3)+'<p class="muted sm">'+t('psFocusP')+'</p>'+
     (PW.focus.length?'<div class="lbl">'+t('psFreq')+'</div>'+wch('ff',[1,2,3,4],PW.ff,v=>t('psDaysN',v))+'<p class="muted sm">'+t('psFreqP')+'</p>':'')+
     '<div class="lbl">'+t('psSkill')+'</div>'+wchm('skills',SKILLS,v=>t('sk_'+v),2)+'<p class="muted sm">'+t('psSkillP')+'</p>';
 }
