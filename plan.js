@@ -197,6 +197,11 @@ function pickFor(mu,role,ctx){
   const list=first.concat(role==='m'?P.m.concat(P.a):P.a.concat(P.m),styExtras(own,mu)).filter((x,i,a)=>a.indexOf(x)===i);
   const c=list.filter(id=>{const m=meta(id);return exById(id)&&m&&(!TESTONLY[id]||TESTONLY[id]===ctx.test)&&!planNo(id)&&!(hingedDay&&HINGE_RE.test(id))&&m.lv<=ctx.maxLv&&avail(id,ctx.have)&&!ctx.day[id]&&!prefBad(id)&&stressLvl(id,ctx.L)<=(role==='p'?0:1);});
   c.sort((a,b)=>(stressLvl(a,ctx.L)-stressLvl(b,ctx.L))||(persLike(a)-persLike(b))||(own?styFit(own,a)-styFit(own,b):0)||(isSpecial(a)-isSpecial(b))||((ctx.used[a]||0)-(ctx.used[b]||0)));
+  // test prep: the events' own moves (hand-release push-up, trap-bar deadlift, drag, plank) win the slot, rotating so none repeats more than twice a week / preparación de prueba: los movimientos de cada evento ganan el hueco y rotan
+  if(first.length){
+    const f=c.filter(id=>first.indexOf(id)>=0&&(ctx.used[id]||0)<2).sort((a,b)=>((ctx.used[a]||0)-(ctx.used[b]||0))||(first.indexOf(a)-first.indexOf(b)));
+    if(f.length){styNote(f[0],own);return f[0];}
+  }
   // v49: on every third accessory pick, prefer an imported exercise that ties with the best one / cada tercera opción de accesorio prefiere un ejercicio importado empatado con la mejor
   if(c.length>1&&role!=='m'&&role!=='p'&&Object.keys(ctx.used).length%2===0){
     const k=x=>stressLvl(x,ctx.L)+'/'+(ctx.used[x]||0),j=c.findIndex(x=>x.slice(0,2)==='z_'&&k(x)===k(c[0]));

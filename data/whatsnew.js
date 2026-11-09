@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.76',items:[
+  {i:'medal',en:'Army test plans (AFT) now practice the real events: hand-release push-ups, trap-bar deadlift, sprint-drag-carry and plank.',es:'Los planes para la prueba del Ejército (AFT) ahora practican los eventos reales: flexiones con liberación de manos, peso muerto con barra hexagonal, sprint-arrastre-carga y plancha.'}
+ ]},
  {v:'v1.1.75',items:[
   {i:'shield-check',en:'Quick setup now also asks about injuries and health (pregnancy, blood pressure, heart), so nobody gets a plan that ignores them.',es:'El arranque rápido ahora también pregunta por lesiones y salud (embarazo, presión, corazón), para que nadie reciba un plan que las ignore.'}
  ]},

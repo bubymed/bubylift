@@ -622,6 +622,9 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
     return r;})()`);
   ok(AD.skip&&AD.applied&&AD.noKept,'plan adjusts: skipped exercise is found, swapped and not picked again ('+JSON.stringify(AD)+')');
   ok(AD.vol,'sets not finished two sessions in a row suggest lowering volume');
+  const AFT=ev(`(function(){const p=genPlan({goal:'military',test:'aft',n:4,len:60,lvl:'some',have:HAVE_KEYS.slice(),sd:3});const all=p.ds.map(d=>d.ex.map(e=>e.eid).join(' ')).join(' ');
+    return{hr:/hrpushup/.test(all),dead:/hexdl/.test(all),drag:/sdcdrill/.test(all)&&/sleddrag/.test(all),plank:/plank/.test(all)};})()`);
+  ok(AFT.hr&&AFT.dead&&AFT.drag&&AFT.plank,'AFT plan trains the test events: hand-release push-up, trap-bar deadlift, drag and carry, plank ('+JSON.stringify(AFT)+')');
   const DL=ev(`(function(){
     const p=genPlan({goal:'strength',n:3,len:60,lvl:'some',have:HAVE_KEYS.slice(),sd:4});window.__sv=[DATA.plan,DATA.workouts];DATA.plan=p;p.t0=Date.now()-5e9;
     const m=p.ds[0].ex.find(e=>e.r==='m'&&exMode(e.eid)==='wr');if(!m){DATA.plan=window.__sv[0];DATA.workouts=window.__sv[1];return{skip:1};}
