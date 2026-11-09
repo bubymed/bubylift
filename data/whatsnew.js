@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.78',items:[
+  {i:'arrows-sort',en:'The same drag handle ⠿ now works while you train and when you build a routine. Up/down buttons are gone everywhere, and "Replace exercise" comes first in every exercise menu.',es:'La misma asa ⠿ para arrastrar ahora funciona mientras entrenas y al armar una rutina. Los botones de subir/bajar ya no existen, y "Reemplazar ejercicio" va primero en el menú de cada ejercicio.'}
+ ]},
  {v:'v1.1.77',items:[
   {i:'arrows-sort',en:'Reorder exercises by dragging the ⠿ handle to where you want them, and replace any exercise by searching the whole library. The last block of each session is now called "Optional".',es:'Reordena los ejercicios arrastrando el asa ⠿ adonde quieras y reemplaza cualquiera buscando en toda la biblioteca. El último bloque de cada sesión ahora se llama "Opcional".'}
  ]},

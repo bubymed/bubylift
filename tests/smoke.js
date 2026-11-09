@@ -655,7 +655,8 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(ev("Object.keys(HOWTO).every(k=>!!exById(k))"),'howto ids exist in library');
   w.planStart(0);
   ok(ev('ACT.pl')===0&&ev('ACT.ex.length')>=ev('DATA.plan.ds[0].ex.length'),'plan day starts workout with targets (+treadmill for fat loss)');
-  ok(/Goal:/.test(main())&&/class="exmore"/.test(main()),'active view shows goal and the exercise menu button');w.exMenu(0);ok(/ⓘ/.test(sheetHtml())&&/↔/.test(sheetHtml()),'exercise menu has guide and swap');w.sheetClose();
+  ok(/Goal:/.test(main())&&/class="exmore"/.test(main()),'active view shows goal and the exercise menu button');w.exMenu(0);ok(/ⓘ/.test(sheetHtml())&&/↔/.test(sheetHtml()),'exercise menu has guide and swap');ok(!/moveUp|↑|↓/.test(sheetHtml()),'exercise menu has no up/down buttons');w.sheetClose();
+  {const n0=ev('ACT.ex.length');if(n0>1){const e0=ev('ACT.ex[0].eid');ok(doc.querySelectorAll('.exc .pv-grip').length===n0,'live workout cards have drag handles');w.pvMove('act',0,0,1);ok(ev('ACT.ex[1].eid')===e0,'live workout exercise reorders');w.pvMove('act',0,1,0);}}
   w.howOpen(ev('ACT.ex[0].eid'));ok(/Common mistake/.test(sheetHtml()),'technique sheet opens');w.sheetClose();
   w.howOpen('burpee');ok(/Common mistake/.test(sheetHtml())&&!/General tips/.test(sheetHtml()),'burpee now has its own guide');w.sheetClose();
   ev("ACT.ex.forEach((x,i)=>x.sets.forEach((s,j)=>{if(exMode(x.eid)==='wr'){sv(i,j,'w','50');sv(i,j,'r',String(x.tg.hi));}else if(exMode(x.eid)==='t'){sv(i,j,'t','10');}else{sv(i,j,'r','10');}tgSet(i,j);}))");
@@ -800,7 +801,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   w.dayRen(0);doc.getElementById('dayrn').value='Mi día <b>X</b>';w.dayRenSave(0);
   ok(ev('DATA.plan.ds[0].nm')==='Mi día <b>X</b>'&&!/<b>X<\/b>/.test(doc.getElementById('sheet').innerHTML),'day renamed and escaped');
   w.dayRen(0);doc.getElementById('dayrn').value='';w.dayRenSave(0);ok(ev('DATA.plan.ds[0].nm')===undefined,'empty name restores original');
-  ev("rbOpen();UI.rb.name='T';UI.rb.ex=[{eid:'bench',n:'a',sets:3},{eid:'squat',n:'b',sets:3}]");w.rbMove(0,1);ok(ev('UI.rb.ex[0].eid')==='squat','routine exercise reorders');w.sheetClose();
+  ev("rbOpen();UI.rb.name='T';UI.rb.ex=[{eid:'bench',n:'a',sets:3},{eid:'squat',n:'b',sets:3}]");w.pvMove('rb',0,0,1);ok(ev('UI.rb.ex[0].eid')==='squat','routine exercise reorders');w.sheetClose();
   w.planSwapOpen(0,0);ok(/Swap it/.test(sheetHtml()),'plan swap sheet opens');
   const o2=ev("swapCands(SW.eid,SW.have,curInjL(),{},2)[0].id");w.swapUse(o2);ok(ev('DATA.plan.ds[0].ex[0].eid')===o2,'plan swap replaces the exercise');
   w.sheetClose();

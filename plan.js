@@ -665,24 +665,34 @@ function planExCards(d,di){
     if(e.sec&&e.sec!==last){h+='<div class="secl">'+t('sec_'+e.sec)+'</div>';}
     last=e.sec||last;
     const ss=optSsLabel(d,ei),ln=optLine(e);
-    return h+'<div class="pv-ex" role="button" tabindex="0" style="--i:'+(n++)+'" onclick="planEdit('+di+','+ei+')">'+pvTh(e.eid)+
+    return h+'<div class="pv-ex" data-dcard="1" role="button" tabindex="0" style="--i:'+(n++)+'" onclick="planEdit('+di+','+ei+')">'+pvTh(e.eid)+
       '<div class="pv-b"><b>'+(ss?'<i class="ssl">'+ss+'</i>':'')+(e.mn?'<i class="mnl" title="'+esc(t('mainT'))+'">★</i> ':'')+esc(exName(e.eid))+'</b>'+
       '<div class="pv-pills"><span class="pv-p">'+esc(tgText(e))+'</span>'+(ln?'<span class="pv-p2">'+esc(ln)+'</span>':'')+'</div>'+
       (e.rz?'<small class="rz">↳ '+esc(rzText(e))+'</small>':'')+(e.cn?'<small class="warnt">⚠ '+esc(t('injCare',jointNames(e.cn)))+'</small>':'')+'</div>'+
       '<button class="pv-play" onclick="event.stopPropagation();howOpen(\''+e.eid+'\',\'planOpen\')" aria-label="'+esc(t('howTo'))+'">'+ic('help-circle')+'</button>'+
-      '<span class="pv-grip" role="button" tabindex="0" data-di="'+di+'" data-ei="'+ei+'" aria-label="'+esc(t('dragAria'))+'" onclick="event.stopPropagation()">⠿</span></div>';
+      '<span class="pv-grip" role="button" tabindex="0" data-k="plan" data-di="'+di+'" data-ei="'+ei+'" aria-label="'+esc(t('dragAria'))+'" onclick="event.stopPropagation()">⠿</span></div>';
   }).join('')+(d.ex.length>1?'<p class="muted sm pv-dragh">'+t('dragHint')+'</p>':'');
 }
-/* drag an exercise by its handle to where it should go (touch, mouse or pen); arrow keys on the handle move it one step
-   arrastra un ejercicio por su asa adonde quieras (táctil, mouse o lápiz); las flechas del teclado lo mueven un paso */
+/* drag an exercise by its handle to where it should go (touch, mouse or pen); arrow keys on the handle move it one step.
+   One system for the plan, the live workout and the routine builder: a handle with data-k (plan | act | rb) inside a card marked data-dcard.
+   arrastra un ejercicio por su asa adonde quieras; las flechas del teclado lo mueven un paso. Un solo sistema para el plan, el entrenamiento y las rutinas */
 let PVD=null;
+function pvScroller(el){
+  for(let n=el.parentElement;n&&n!==document.body;n=n.parentElement){const o=getComputedStyle(n).overflowY;if((o==='auto'||o==='scroll')&&n.scrollHeight>n.clientHeight+1)return n;}
+  return document.scrollingElement||document.documentElement;
+}
 function pvDragStart(ev){
   const g=ev.target.closest&&ev.target.closest('.pv-grip');if(!g||(ev.button!=null&&ev.button>0))return;
-  const card=g.closest('.pv-ex'),cards=Array.prototype.slice.call(card.parentNode.querySelectorAll('.pv-ex'));
-  const ei=cards.indexOf(card);if(ei<0)return;
+  const card=g.closest('[data-dcard]');if(!card)return;
+  const par=card.parentNode,list=()=>Array.prototype.slice.call(par.querySelectorAll(':scope > [data-dcard]'));
+  let cards=list();const ei=cards.indexOf(card);if(ei<0)return;
   ev.preventDefault();
-  const sh=document.getElementById('sheet'),r0=cards.map(c=>c.getBoundingClientRect());
-  PVD={g:g,card:card,cards:cards,ei:ei,to:ei,y0:ev.clientY,y:ev.clientY,s0:sh?sh.scrollTop:0,sh:sh,r0:r0,di:+g.dataset.di,id:ev.pointerId,h:r0[ei].height+8};
+  const sh=pvScroller(card),isDoc=sh===document.scrollingElement||sh===document.documentElement;
+  const top0=card.getBoundingClientRect().top;
+  if(par.classList.contains('dcol')===false)par.classList.add('dcol'); // tall cards fold to their header while dragging / las tarjetas altas se pliegan a su encabezado
+  const top1=card.getBoundingClientRect().top;if(Math.abs(top1-top0)>1)sh.scrollTop+=top1-top0; // keep the grabbed card where the finger is / la tarjeta agarrada se queda bajo el dedo
+  const r0=cards.map(c=>c.getBoundingClientRect());
+  PVD={g:g,card:card,par:par,cards:cards,ei:ei,to:ei,y0:ev.clientY,y:ev.clientY,s0:sh.scrollTop,sh:sh,isDoc:isDoc,r0:r0,k:g.dataset.k||'plan',di:+g.dataset.di||0,id:ev.pointerId,h:r0[ei].height+8};
   try{g.setPointerCapture(ev.pointerId);}catch(e){}
   card.classList.add('drag');cards.forEach(c=>{if(c!==card)c.classList.add('shift');});
   if(navigator.vibrate)try{navigator.vibrate(8);}catch(e){}
@@ -691,15 +701,12 @@ function pvDragStart(ev){
 function pvDragMove(ev){if(PVD&&ev.pointerId===PVD.id){PVD.y=ev.clientY;ev.preventDefault();}}
 function pvDragTick(){
   const D=PVD;if(!D)return;
-  if(D.sh){ // scroll the sheet when the finger is near its top or bottom edge / desplaza la hoja cerca de los bordes
-    const r=D.sh.getBoundingClientRect();
-    if(D.y<r.top+70)D.sh.scrollTop-=12;else if(D.y>r.bottom-70)D.sh.scrollTop+=12;
-  }
-  const dy=D.y-D.y0+(D.sh?D.sh.scrollTop-D.s0:0);
+  {const top=D.isDoc?0:D.sh.getBoundingClientRect().top,bot=D.isDoc?window.innerHeight:D.sh.getBoundingClientRect().bottom; // scroll when the finger is near an edge / desplaza cerca de los bordes
+   if(D.y<top+70)D.sh.scrollTop-=12;else if(D.y>bot-70)D.sh.scrollTop+=12;}
+  const dy=D.y-D.y0+(D.sh.scrollTop-D.s0);
   D.card.style.transform='translateY('+dy+'px) scale(1.02)';
   const mid=D.r0[D.ei].top+D.r0[D.ei].height/2+dy;
-  let to=0;D.r0.forEach((r,i)=>{if(i!==D.ei&&r.top+r.height/2+(D.sh?0:0)<mid)to++;});
-  // card positions were measured at the start; the sheet scroll moves them, so compare in the same frame / las posiciones se midieron al inicio
+  let to=0;D.r0.forEach((r,i)=>{if(i!==D.ei&&r.top+r.height/2<mid)to++;});
   D.to=to;
   D.cards.forEach((c,i)=>{if(i===D.ei)return;c.style.transform=(D.to>D.ei&&i>D.ei&&i<=D.to)?'translateY('+(-D.h)+'px)':(D.to<D.ei&&i>=D.to&&i<D.ei)?'translateY('+D.h+'px)':'';});
   D.raf=requestAnimationFrame(pvDragTick);
@@ -707,9 +714,23 @@ function pvDragTick(){
 function pvDragEnd(ev){
   const D=PVD;if(!D||(ev&&ev.pointerId!==D.id))return;
   PVD=null;cancelAnimationFrame(D.raf);
-  D.card.classList.remove('drag');D.cards.forEach(c=>{c.classList.remove('shift');c.style.transform='';});
-  if(ev&&ev.type==='pointercancel'){return;}
-  if(D.to!==D.ei)pvReorder(D.di,D.ei,D.to);
+  D.par.classList.remove('dcol');D.card.classList.remove('drag');D.cards.forEach(c=>{c.classList.remove('shift');c.style.transform='';});
+  if(ev&&ev.type==='pointercancel')return;
+  if(D.to!==D.ei)pvMove(D.k,D.di,D.ei,D.to);
+}
+/* move item `from` to `to` in the right list / mueve el elemento de `from` a `to` en la lista que toca */
+function pvMove(k,di,from,to){
+  if(k==='act'){
+    const a=ACT&&ACT.ex;if(!a||from<0||from>=a.length||to<0||to>=a.length||from===to)return;
+    const x=a.splice(from,1)[0];a.splice(to,0,x);
+    const nb=a[to-1]||a[to+1];if(nb&&nb.tg&&nb.tg.sec&&x.tg&&x.tg.sec!==nb.tg.sec)x.tg.sec=nb.tg.sec;
+    saveAct();render();return;
+  }
+  if(k==='rb'){
+    const a=UI.rb&&UI.rb.ex;if(!a||from<0||from>=a.length||to<0||to>=a.length||from===to)return;
+    a.splice(to,0,a.splice(from,1)[0]);rbDraw();return;
+  }
+  pvReorder(di,from,to);
 }
 function pvReorder(di,from,to){
   const p=DATA.plan,a=p&&p.ds[di]&&p.ds[di].ex;if(!a||from<0||from>=a.length||to<0||to>=a.length||from===to)return;
@@ -719,9 +740,9 @@ function pvReorder(di,from,to){
 }
 function pvGripKey(ev){
   const g=ev.target.closest&&ev.target.closest('.pv-grip');if(!g||(ev.key!=='ArrowUp'&&ev.key!=='ArrowDown'))return;
-  ev.preventDefault();const di=+g.dataset.di,ei=+g.dataset.ei,j=ei+(ev.key==='ArrowUp'?-1:1);
-  pvReorder(di,ei,j);
-  const n=document.querySelector('.pv-grip[data-ei="'+j+'"]');if(n)n.focus();
+  ev.preventDefault();const k=g.dataset.k||'plan',di=+g.dataset.di||0,ei=+g.dataset.ei,j=ei+(ev.key==='ArrowUp'?-1:1);
+  pvMove(k,di,ei,j);
+  const n=document.querySelector('.pv-grip[data-k="'+k+'"][data-ei="'+j+'"]');if(n)n.focus();
 }
 document.addEventListener('pointerdown',pvDragStart);document.addEventListener('pointermove',pvDragMove,{passive:false});
 document.addEventListener('pointerup',pvDragEnd);document.addEventListener('pointercancel',pvDragEnd);document.addEventListener('keydown',pvGripKey);
