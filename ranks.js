@@ -79,7 +79,8 @@ function rkCheck(){
   }catch(e){}
 }
 function rkUp(ix){
-  sheet('<div class="form rkup"><div class="rk-big">'+ic('trophy')+'<h2>'+t('rkUpT')+'</h2><b class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</b><p class="muted">'+t('rkUpP',esc(rkName(ix)))+'</p></div><div class="row"><button class="btn pri" onclick="sheetClose();go(\'progress\')">'+t('rkUpGo')+'</button><button class="btn" onclick="sheetClose()">'+t('close')+'</button></div></div>');
+  const g=typeof gwRank==='function'?gwRank():''; // guests get a "save my rank" button / los invitados ven "Guardar mi rango"
+  sheet('<div class="form rkup"><div class="rk-big">'+ic('trophy')+'<h2>'+t('rkUpT')+'</h2><b class="rkn rkn'+ix+'">'+esc(rkName(ix))+'</b><p class="muted">'+t('rkUpP',esc(rkName(ix)))+'</p></div>'+g+'<div class="row"><button class="btn'+(g?'':' pri')+'" onclick="sheetClose();go(\'progress\')">'+t('rkUpGo')+'</button><button class="btn" onclick="sheetClose()">'+t('close')+'</button></div></div>');
 }
 /* consistency level: XP from sessions, sets and records; it never goes down / nivel de constancia: XP por sesiones, series y récords; nunca baja */
 function xpData(){

@@ -232,6 +232,32 @@ async function suGo(){
 function clAuthBackIn(){gSignin((GS&&GS.em)||'','');}
 /* a guest turns into a real profile: same data, now protected / el invitado pasa a perfil real: mismos datos, ahora protegidos */
 function gSave(){const p=pfCur();if(!p||!p.g)return;GS={};sheetClose();gSignup(1,{upg:true});}
+/* guest prompts tied to a win (first finished workout, rank up): one at a time, never two within 3 days, and they hold back the daily nudge
+   avisos a invitados ligados a un logro (primer entrenamiento, subir de rango): de uno en uno, nunca dos en 3 días, y retrasan el aviso diario */
+function gwOk(){
+  const p=typeof pfCur==='function'&&pfCur();
+  if(!p||!p.g||!(typeof cloudOn==='function'&&cloudOn())||(typeof CL!=='undefined'&&CL&&CL.dek))return false;
+  let last=0;try{last=+localStorage.getItem('bl_gw')||0;}catch(e){}
+  return Date.now()-last>=3*864e5;
+}
+function gwMark(){const n=String(Date.now());try{localStorage.setItem('bl_gw',n);localStorage.setItem('bl_gn',n);}catch(e){}}
+function gwFirstDue(){return gwOk()&&DATA.workouts.length===1;}
+function gwFirst(){
+  if(!gwOk()||!DATA.workouts.length)return false;
+  gwMark();
+  const wk=DATA.workouts[0],n=typeof wkSets==='function'?wkSets(wk):0;
+  sheet('<div class="sum"><div class="sum-e">☁️</div><h3>'+t('gwFT')+'</h3><p class="muted">'+t('gwFP')+'</p>'+
+    (n?'<div class="stats"><div><b>'+n+'</b><span>'+t('sets')+'</span></div></div>':'')+
+    '<div class="row"><button class="btn pri wide" onclick="sheetClose();gSignup(1,{upg:true})">'+t('clCreate')+'</button></div>'+
+    '<div class="row"><button class="btn wide" onclick="sheetClose()">'+t('gnNo')+'</button></div></div>');
+  return true;
+}
+/* inside the rank-up sheet: returns the save button html for guests, '' for everyone else / dentro de la hoja de rango: botón de guardar para invitados */
+function gwRank(){
+  if(!gwOk())return'';
+  gwMark();
+  return'<p class="muted">'+t('gwRkP')+'</p><div class="row"><button class="btn pri wide" onclick="sheetClose();gSignup(1,{upg:true})">'+t('gwRkB')+'</button></div>';
+}
 function guestNag(){
   const p=pfCur();if(!p||!p.g||(typeof CL!=='undefined'&&CL&&CL.dek))return;
   if(!(typeof cloudOn==='function'&&cloudOn())||window.__gnT)return;

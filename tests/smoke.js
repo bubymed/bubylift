@@ -942,6 +942,22 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("gateHide()");
   ev("sheetClose();window.__gnT=0;guestNag();window.__q[window.__q.length-1][0]()");
   ok(!/clAuthOpen/.test(sheetHtml())||doc.getElementById('sheetov').hidden,'nudge not repeated within a day');
+  /* guest prompts tied to a win: first workout + rank up */
+  ev("sheetClose();try{localStorage.removeItem('bl_gw');localStorage.removeItem('bl_gn');}catch(e){}");
+  ok(ev("gwOk()")===true,'win prompt allowed for a cloud guest');
+  ev("DATA.workouts.unshift({id:'gwk1',t:Date.now(),ex:[{eid:'bench',sets:[{w:60,r:5,done:true}]}]})");
+  ok(ev("gwFirstDue()")===true,'first workout of a guest is due for the prompt');
+  ev("gwFirst()");
+  ok(/gSignup\(1/.test(sheetHtml())&&/first workout counts/.test(sheetHtml())&&/Maybe later/.test(sheetHtml()),'first workout prompt offers create account and a clear dismiss button');
+  ok(ev("gwOk()")===false&&ev("gwFirst()")===false&&ev("gwFirstDue()")===false,'win prompts never repeat within 3 days');
+  ev("DATA.workouts.shift()");
+  ev("sheetClose();try{localStorage.removeItem('bl_gw');}catch(e){}rkUp(3)");
+  ok(/Save my rank/.test(sheetHtml())&&/See my rank/.test(sheetHtml()),'rank up offers guests to save their rank');
+  ev("sheetClose();rkUp(3)");
+  ok(!/Save my rank/.test(sheetHtml()),'rank up does not nag a guest twice in a row');
+  ev("sheetClose();PFS.find(function(x){return x.id==='gx';}).g=0;try{localStorage.removeItem('bl_gw');}catch(e){}");
+  ok(ev("gwOk()")===false&&ev("gwRank()")==='','no win prompts for people with an account');
+  ev("PFS.find(function(x){return x.id==='gx';}).g=1;try{localStorage.removeItem('bl_gw');}catch(e){}sheetClose();");
   ev("window.setTimeout=window.__o.st;PFS.length=0;window.__o.pf.forEach(function(x){PFS.push(x);});PFID=window.__o.pid;CL=window.__o.cl;window.__gnT=0;sheetClose();");
   ev("gWelcome(1)");
   ok(/gBack\(\)/.test(doc.getElementById('gate').innerHTML),'welcome shows back link when coming from switch profile');

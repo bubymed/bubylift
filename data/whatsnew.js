@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.71',items:[
+  {i:'cloud',en:'Trying it as a guest? After your first workout and when you rank up, you can now save your progress with one tap and open it on any phone.',es:'¿Lo estás probando como invitado? Después de tu primer entrenamiento y al subir de rango, ahora puedes guardar tu progreso con un toque y abrirlo en cualquier teléfono.'}
+ ]},
  {v:'v1.1.70',items:[
   {i:'body',en:'Muscle model rebuilt: every shape on the body figure is now one real muscle (glute max/medius/TFL, three vasti + rectus femoris, gastrocnemius/soleus, serratus, teres, infraspinatus, neck, hip flexors, shin muscles...). Deep muscles (glute minimus, rhomboids, rotator cuff, transverse abdominis) get their own tappable row. All 863 exercise weights re-split.',es:'Modelo muscular rehecho: cada forma de la figura ahora es un músculo real (glúteo mayor/medio/TFL, tres vastos + recto femoral, gastrocnemio/sóleo, serrato, redondos, infraespinoso, cuello, flexores de cadera, músculos de la espinilla...). Los músculos profundos (glúteo menor, romboides, manguito rotador, transverso abdominal) tienen su propia fila para tocar. Se redistribuyeron los pesos de los 863 ejercicios.'}
  ]},
