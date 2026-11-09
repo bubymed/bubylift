@@ -104,13 +104,15 @@ function shareWk(id){
 let WKE=null;
 function wkEditOpen(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
-  WKE=JSON.parse(JSON.stringify(wk));WKE.ex.forEach(x=>x.sets.forEach((s,i)=>{s._i=i;}));wkEditDraw();
+  WKE=JSON.parse(JSON.stringify(wk));
+  const d=wkDur(wk);WKE.dur=d>0?String(Math.max(1,Math.round(d/60))):'';WKE.dur0=WKE.dur;
+  wkEditDraw();
 }
 function wkEditDraw(){
   const wk=WKE;if(!wk)return;
   let h='<div class="form wke"><div class="pick-h"><h3>'+t(wk.isNew?'logPast':'edit')+'</h3><button class="ico" onclick="wkEditCancel()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
-   '<label>'+t('name')+'<input id="wkeN" class="in wide" type="text" maxlength="60" value="'+esc(wk.name||'')+'" oninput="WKE.name=this.value"></label>';
-  if(wk.isNew)h+='<div class="row"><label>'+t('wkDate')+'<input class="in wide" type="date" value="'+dInput(wk.t)+'" max="'+dInput(Date.now())+'" onchange="wkeDate(this.value)"></label>'+
+   '<label>'+t('name')+'<input id="wkeN" class="in wide" type="text" maxlength="60" value="'+esc(wk.name||'')+'" oninput="WKE.name=this.value"></label>'+
+   '<div class="row"><label>'+t('wkDate')+'<input class="in wide" type="date" value="'+dInput(wk.t)+'" max="'+dInput(Date.now())+'" onchange="wkeDate(this.value)"></label>'+
    '<label>'+t('wkDurMin')+'<input class="in wide" type="text" inputmode="numeric" autocomplete="off" value="'+esc(wk.dur||'')+'" oninput="wkeDur(this.value)"></label></div>';
   wk.ex.forEach((x,xi)=>{
     const m=exMode(x.eid),c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
@@ -119,17 +121,25 @@ function wkEditDraw(){
       const f1=m==='t'?'t':'w',f2=m==='t'?'d':'r',v1=st[f1]==null?'':(f1==='t'?fmtNum(st.t):wShow(st.w)),v2=st[f2]==null?'':(f2==='d'?dShow(st.d):String(st.r));
       h+='<div class="wke-s"><span>'+(si+1)+'</span><input class="in" type="text" inputmode="decimal" autocomplete="off" value="'+esc(v1)+'" oninput="wkeSet('+xi+','+si+',\''+f1+'\',this.value)"><input class="in" type="text" inputmode="'+(f2==='r'?'numeric':'decimal')+'" autocomplete="off" value="'+esc(v2)+'" oninput="wkeSet('+xi+','+si+',\''+f2+'\',this.value)"><button class="ico" onclick="wkeRm('+xi+','+si+')" aria-label="'+esc(t('delete'))+'">✕</button></div>';
     });
-    if(wk.isNew)h+='<button class="btn wide" onclick="wkeAddSet('+xi+')">＋ '+t('addSet')+'</button>';
+    h+='<button class="btn wide" onclick="wkeAddSet('+xi+')">＋ '+t('addSet')+'</button>';
   });
-  if(wk.isNew)h+='<button class="btn wide" onclick="wkeAddEx()">＋ '+t('addEx')+'</button>';
-  h+='<label>'+t('note')+'<textarea class="note-in" rows="2" maxlength="500" oninput="WKE.note=this.value">'+esc(wk.note||'')+'</textarea></label>'+
+  h+='<button class="btn wide" onclick="wkeAddEx()">＋ '+t('addEx')+'</button>'+
+    '<label>'+t('note')+'<textarea class="note-in" rows="2" maxlength="500" oninput="WKE.note=this.value">'+esc(wk.note||'')+'</textarea></label>'+
     '<div class="row"><button class="btn pri" onclick="wkEditSave()">'+t('save')+'</button><button class="btn" onclick="wkEditCancel()">'+t('cancel')+'</button></div></div>';
   sheet(h);
 }
 /* log a workout you forgot to track: same editor, starts empty / registrar un entrenamiento que no anotaste: mismo editor, empieza vacío */
-function wkNewOpen(){WKE={id:uid(),isNew:1,t:dayNoon(Date.now()),dur:'',name:'',note:'',ex:[]};wkEditDraw();}
 function dayNoon(ts){const d=new Date(ts);return new Date(d.getFullYear(),d.getMonth(),d.getDate(),12,0,0).getTime();}
-function wkeDate(v){if(!WKE||!v)return;let ts=dFromInput(v);const today=dayNoon(Date.now());if(ts>today){ts=today;toast(t('noFuture'));wkEditDraw();}WKE.t=ts;}
+function wkNewOpen(){WKE={id:uid(),isNew:1,t:dayNoon(Date.now()),dur:'',name:'',note:'',ex:[]};wkEditDraw();}
+/* changing the date keeps the time of day / cambiar la fecha conserva la hora del día */
+function wkeDate(v){
+  if(!WKE||!v)return;
+  let ts=dFromInput(v);const today=dayNoon(Date.now());
+  if(ts>today){ts=today;toast(t('noFuture'));}
+  const o=new Date(WKE.t),d=new Date(ts);d.setHours(o.getHours(),o.getMinutes(),o.getSeconds(),0);
+  WKE.t=Math.min(d.getTime(),Date.now());
+  if(ts===today)wkEditDraw();
+}
 function wkeDur(v){if(!WKE)return;v=String(v).replace(/\D/g,'').slice(0,4);WKE.dur=v;}
 function wkeAddEx(){
   pickEx(function(eid){
@@ -157,6 +167,20 @@ function wkeRm(xi,si){
   wkEditDraw();
 }
 function wkEditCancel(){const id=WKE&&WKE.id,nw=WKE&&WKE.isNew;WKE=null;if(id&&!nw)openWk(id);else sheetClose();}
+/* trophies: a set is a record when it beats everything done before it. Recomputed in time order for the given exercises after any change to history
+   trofeos: una serie es récord si supera todo lo anterior. Se recalcula en orden cronológico para los ejercicios dados tras cualquier cambio */
+function prRecalc(keys){
+  const best={};
+  DATA.workouts.slice().sort((a,b)=>a.t-b.t).forEach(wk=>wk.ex.forEach(x=>{
+    const k=xk(x);if(keys&&keys.indexOf(k)<0)return;
+    const m=exMode(x.eid);
+    x.sets.forEach(s=>{
+      const sc=setScore(m,s),b=best[k]||0;
+      if(b>0&&sc>b)s.pr=1;else delete s.pr;
+      if(sc>b)best[k]=sc;
+    });
+  }));
+}
 function wkEditSave(){
   const wk=WKE;if(!wk)return;
   for(const x of wk.ex){const m=exMode(x.eid);for(const s of x.sets){
@@ -164,18 +188,22 @@ function wkEditSave(){
     if(!ok){toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
   }}
   if(!wk.ex.length){toast(t('wkeNone'));return;}
-  if(wk.isNew){
-    const dur=parseInt(wk.dur,10)||0,o={id:wk.id,t:wk.t,end:dur>0?wk.t+dur*6e4:0,name:(wk.name||'').trim()||autoName(wk.t),note:(wk.note||'').trim(),ex:wk.ex.map(x=>{const e={eid:x.eid,n:x.n,sets:x.sets.map(s=>({w:s.w,r:s.r,t:s.t,d:s.d}))};if(x.vr)e.vr=x.vr;return e;})};
-    DATA.workouts.push(o);DATA.workouts.sort((a,b)=>b.t-a.t);goalsCheck();rkCheck();
-    saveData();WKE=null;sheetClose();render();toast(t('saved'));return;
-  }
-  const old=DATA.workouts.find(w=>w.id===wk.id);if(!old){WKE=null;sheetClose();return;}
-  // a trophy only stays on a set whose numbers did not change / el trofeo solo queda en una serie cuyos números no cambiaron
-  const oe={};old.ex.forEach(x=>{oe[x.eid+'|'+(x.vr||'')]=x.sets;});
-  wk.ex.forEach(x=>{const os=oe[x.eid+'|'+(x.vr||'')]||[];x.sets.forEach(s=>{const o=os[s._i];if(s.pr&&!(o&&o.w===s.w&&o.r===s.r))delete s.pr;delete s._i;});});
-  wk.name=(wk.name||'').trim()||old.name||autoName(old.t);wk.note=(wk.note||'').trim();
-  DATA.workouts[DATA.workouts.indexOf(old)]=wk;
-  saveData();WKE=null;sheetClose();render();toast(t('saved'));openWk(wk.id);
+  const old=wk.isNew?null:DATA.workouts.find(w=>w.id===wk.id);
+  if(!wk.isNew&&!old){WKE=null;sheetClose();return;}
+  const dur=parseInt(wk.dur,10)||0;
+  let end=0;
+  if(old&&wk.dur===wk.dur0)end=old.end>old.t?old.end+(wk.t-old.t):0; // duration untouched: keep exact length, shift with the date
+  else if(dur>0)end=wk.t+dur*6e4;
+  const keys=[];
+  const o=Object.assign({},wk);delete o.isNew;delete o.dur;delete o.dur0;
+  o.end=end;o.name=(wk.name||'').trim()||(old&&old.name)||autoName(wk.t);o.note=(wk.note||'').trim();
+  o.ex=wk.ex.map(x=>{const e=Object.assign({},x);e.sets=x.sets.map(s=>{const q={w:s.w,r:s.r,t:s.t,d:s.d};if(s.ty)q.ty=s.ty;return q;});keys.push(xk(e));return e;});
+  if(old){old.ex.forEach(x=>{if(keys.indexOf(xk(x))<0)keys.push(xk(x));});DATA.workouts[DATA.workouts.indexOf(old)]=o;}
+  else DATA.workouts.push(o);
+  DATA.workouts.sort((a,b)=>b.t-a.t);
+  prRecalc(keys);goalsCheck();rkCheck();
+  saveData();WKE=null;sheetClose();render();toast(t('saved'));
+  if(old)openWk(o.id);
 }
 function delWkAsk(id){ask(t('delWk'),t('delete'),function(){DATA.workouts=DATA.workouts.filter(w=>w.id!==id);clTomb(id);saveData();render();},true);}
 

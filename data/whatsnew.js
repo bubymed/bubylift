@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.83',items:[
+  {i:'pencil',en:'<b>Full workout editing</b>: Edit now also changes the date and duration, and lets you add sets or exercises. Trophies are recalculated in order, so a record only counts if it really beat everything before it.',es:'<b>Edición completa</b>: Editar ahora también cambia la fecha y la duración, y permite agregar series o ejercicios. Los trofeos se recalculan en orden, así que un récord solo cuenta si de verdad superó todo lo anterior.'}
+ ]},
  {v:'v1.1.82',items:[
   {i:'calendar',en:'<b>Log a past workout</b>: forgot to track a session? In History tap "Log a past workout", pick the date, add your exercises and sets, and save it.',es:'<b>Registra un entrenamiento pasado</b>: ¿olvidaste anotar una sesión? En Historial toca "Registrar un entrenamiento pasado", elige la fecha, agrega tus ejercicios y series y guárdalo.'}
  ]},
