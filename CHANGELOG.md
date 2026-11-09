@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.77 — 2026-11-09
+- Plan editing: drag the ⠿ handle on an exercise card to move it anywhere in the day (the sheet scrolls when you reach its edge; arrow keys on the handle also work). The ↑/↓ buttons are gone. The exercise editor now leads with a big "Replace exercise" button, and the replace sheet has a "Search any exercise" button that opens the full library, above the suggestions. The "Your choice" block is now "Optional".
+  Edición del plan: arrastra el asa ⠿ de un ejercicio para moverlo a cualquier lugar del día (la hoja se desplaza al llegar a su borde; las flechas del teclado en el asa también funcionan). Se quitaron los botones ↑/↓. El editor ahora empieza con un botón grande "Reemplazar ejercicio", y la hoja de reemplazo tiene un botón "Buscar cualquier ejercicio" que abre toda la biblioteca, arriba de las sugerencias. El bloque "A tu elección" ahora es "Opcional".
+
 ## v1.1.76 — 2026-11-09
 - Military test plans: the moves that mirror each test's events (AFT: hand-release push-up, trap-bar deadlift, sprint-drag-carry drill, drag, plank; USMC: pull-ups, push-ups, ammo lift, fire carry) were listed first but then lost to the general sorting, so they almost never appeared. They now win their slot and rotate, at most twice a week each.
   Planes para pruebas militares: los movimientos que imitan los eventos de cada prueba (AFT: flexión con liberación de manos, peso muerto con barra hexagonal, sprint-arrastre-carga, arrastre, plancha; USMC: dominadas, flexiones, levantamiento de munición, carga de bombero) iban primero en la lista pero el orden general los descartaba, así que casi nunca salían. Ahora ganan su hueco y rotan, como máximo dos veces por semana cada uno.

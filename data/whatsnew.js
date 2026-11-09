@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.77',items:[
+  {i:'arrows-sort',en:'Reorder exercises by dragging the ⠿ handle to where you want them, and replace any exercise by searching the whole library. The last block of each session is now called "Optional".',es:'Reordena los ejercicios arrastrando el asa ⠿ adonde quieras y reemplaza cualquiera buscando en toda la biblioteca. El último bloque de cada sesión ahora se llama "Opcional".'}
+ ]},
  {v:'v1.1.76',items:[
   {i:'medal',en:'Army test plans (AFT) now practice the real events: hand-release push-ups, trap-bar deadlift, sprint-drag-carry and plank.',es:'Los planes para la prueba del Ejército (AFT) ahora practican los eventos reales: flexiones con liberación de manos, peso muerto con barra hexagonal, sprint-arrastre-carga y plancha.'}
  ]},
