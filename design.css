@@ -893,7 +893,7 @@ button.rk-tz{cursor:pointer}
 body.resting #platefab{bottom:calc(var(--tab-h) + 140px + env(safe-area-inset-bottom))}
 @media(min-width:1100px){#platefab{bottom:88px}body.resting #platefab{bottom:146px}}
 .pcalc .pick-h{gap:8px}.pc-u{display:flex;gap:6px;margin-left:auto}
-.pc-bar{display:flex;align-items:center;height:68px;margin:2px 0 0;overflow:hidden}
+.pc-bar{display:flex;align-items:center;height:56px;margin:2px 0 0;overflow:hidden}
 .pc-shaft{flex:none;width:34%;height:12px;border-radius:6px 0 0 6px;background:linear-gradient(#9aa0a6,#6b7076)}
 .pc-stack{display:flex;align-items:center;gap:2px;padding-left:2px;min-width:0}
 .pc-d{display:block;flex:none;width:11px;border-radius:3px;border:1px solid rgba(0,0,0,.35)}
@@ -910,4 +910,8 @@ body.resting #platefab{bottom:calc(var(--tab-h) + 140px + env(safe-area-inset-bo
 .pc-tl{display:block;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
 .pc-tv{display:block;font-size:2.2rem;line-height:1.1;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
 .pc-tot small{color:var(--dim)}
-.pcalc .chips{display:flex;flex-wrap:wrap;gap:8px;overflow:visible}
+.pcalc .chips{display:flex;flex-wrap:wrap;gap:6px;overflow:visible}.pcalc .chip{padding:7px 12px;min-height:38px}.pcalc .chip small{opacity:.7;font-size:.72rem;margin-left:2px}
+.pc-tg{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 0;padding:10px 12px;border-radius:14px;background:var(--panel2)}
+.pc-tg>div{display:flex;flex-direction:column;gap:1px;min-width:0}.pc-tg b{font-size:.98rem}.pc-tg small{color:var(--dim)}
+.pc-tg .btn{flex:none}
+.pc-row{display:flex;align-items:center;gap:10px;margin-top:8px}.pc-row .lbl{margin:0}

@@ -3,7 +3,18 @@
 const PC_PLATES={kg:[0.5,1.25,2.5,5,10,15,20,25],lb:[1.25,2.5,5,10,25,35,45]}; // smallest to heaviest / del más pequeño al más pesado
 const PC_COL={25:'#d62828',20:'#1d4ed8',15:'#e8b100',10:'#16a34a',5:'#f1f1ee',2.5:'#4b5563',1.25:'#6b7280',0.5:'#9ca3af'}; // kg plates use the competition colors / los discos en kg usan los colores de competencia
 const PC_BARS=[['oly',20,45],['wom',15,35],['ez',9,20],['hex',25,55],['train',7,15],['none',0,0]]; // [key, kg, lb]
-let PC={n:{},open:0};
+let PC={n:{},open:0,foc:null};
+/* the weight box you touched last, or the first empty weight set: that is where "Use in set" puts the number / la casilla de peso que tocaste por última vez, o la primera serie vacía: ahí pone el número "Usar en la serie" */
+document.addEventListener('focusin',function(ev){const el=ev.target;if(el&&el.dataset&&el.dataset.k==='w'&&el.dataset.i!=null&&el.classList.contains('in'))PC.foc={i:+el.dataset.i,j:+el.dataset.j};});
+function pcOk(i,j){const x=typeof ACT!=='undefined'&&ACT&&ACT.ex[i];return!!x&&!!x.sets[j]&&exMode(x.eid)==='wr'&&!isDb(x);}
+function pcTarget(){
+  if(typeof ACT==='undefined'||!ACT)return null;
+  if(PC.foc&&pcOk(PC.foc.i,PC.foc.j))return{i:PC.foc.i,j:PC.foc.j,sel:1};
+  for(let i=0;i<ACT.ex.length;i++)for(let j=0;j<ACT.ex[i].sets.length;j++){const s=ACT.ex[i].sets[j];if(pcOk(i,j)&&s.w==null&&!s.done)return{i:i,j:j,sel:0};}
+  return null;
+}
+function pcBarEx(x){return barOf(x)>0||barDef(x.eid)>0;} // a barbell exercise: the app adds its own bar / ejercicio de barra: la app suma su propia barra
+
 function pcUnit(){return SET.pcUnit==='lb'||SET.pcUnit==='kg'?SET.pcUnit:(imp()?'lb':'kg');}
 function pcSides(){return SET.pcSides===1?1:2;}
 function pcBarKey(){return SET.pcBar||'oly';}
@@ -22,27 +33,51 @@ function plateFab(){
   b.hidden=!on;document.body.classList.toggle('resting',!!(typeof REST!=='undefined'&&REST));
   if(on&&!b.innerHTML){b.innerHTML=ic('barbell');b.setAttribute('aria-label',t('pcT'));}
 }
-function pcOpen(){PC.open=1;pcDraw();}
+function pcOpen(){
+  PC.open=1;const g=pcTarget(),x=g&&ACT.ex[g.i];
+  if(x&&pcBarEx(x)){ // start with the bar this exercise uses / empieza con la barra que usa este ejercicio
+    const kg=barOf(x)>0?barOf(x):barDef(x.eid),u=pcUnit(),w=u==='lb'?kg*KG_LB:kg,b=PC_BARS.find(q=>Math.abs((u==='lb'?q[2]:q[1])-w)<0.5&&q[1]>0);
+    if(b)SET.pcBar=b[0];else{SET.pcBar='cus';SET.pcCus=Math.round(w*100)/100;}
+    jset(K_SET,SET);
+  }
+  pcDraw();
+}
+function pcBarKg(){const w=pcBarW();return pcUnit()==='lb'?w/KG_LB:w;}
+/* put the number in the set: with a bar, only the plates (the app adds the bar); with no bar, everything / pone el número en la serie: con barra, solo los discos; sin barra, todo */
+function pcUse(){
+  const g=pcTarget();if(!g)return;const x=ACT.ex[g.i],u=pcUnit(),bar=pcBarEx(x);
+  if(bar){const kg=pcBarKg();if(Math.abs(kg-barOf(x))>0.05){reScale(x,kg>0?kg:0,mulOf(x));SET.barPref=SET.barPref||{};SET.barPref[x.eid]=kg>0?kg:0;jset(K_SET,SET);}}
+  const val=bar?pcPlatesSum()*pcSides():pcTotal(),inApp=u==='kg'?(imp()?val*KG_LB:val):(imp()?val:val/KG_LB);
+  sv(g.i,g.j,'w',String(fmtNum(inApp,2)));
+  PC.foc=null;PC.n={};sheetClose();exRedraw(g.i);buzz(8);
+  toast(t('pcUsed',exName(x.eid,x.n),g.j+1));
+}
 function pcDraw(){
   const u=pcUnit(),bk=pcBarKey(),pl=PC_PLATES[u],mx=pl[pl.length-1],sides=pcSides();
   const chip=(on,fn,label)=>'<button class="chip'+(on?' on':'')+'" onclick="'+fn+'">'+label+'</button>';
-  const bars=PC_BARS.map(b=>{const w=u==='lb'?b[2]:b[1];return chip(bk===b[0],"pcBar('"+b[0]+"')",esc(t('pc_'+b[0]))+(w?' · '+w+' '+u:''));}).join('')+chip(bk==='cus',"pcBar('cus')",esc(t('pc_cus')));
+  const bars=PC_BARS.map(b=>{const w=u==='lb'?b[2]:b[1];return chip(bk===b[0],"pcBar('"+b[0]+"')",esc(t('pcs_'+b[0]))+(w?' <small>'+w+'</small>':''));}).join('')+chip(bk==='cus',"pcBar('cus')",esc(t('pc_cus')));
   // one side of the bar: heaviest next to the collar / un lado de la barra: el más pesado junto al tope
-  const stack=pl.slice().reverse().map(v=>{const c=PC.n[v]||0,h=18+Math.round(v/mx*44);let s='';for(let i=0;i<Math.min(c,8);i++)s+='<i class="pc-d" style="height:'+h+'px;background:'+(u==='kg'?(PC_COL[v]||'#6b7280'):'#3a3f47')+'"></i>';return s;}).join('');
+  const stack=pl.slice().reverse().map(v=>{const c=PC.n[v]||0,h=16+Math.round(v/mx*34);let s='';for(let i=0;i<Math.min(c,8);i++)s+='<i class="pc-d" style="height:'+h+'px;background:'+(u==='kg'?(PC_COL[v]||'#6b7280'):'#3a3f47')+'"></i>';return s;}).join('');
   const grid=pl.map(v=>{
     const c=PC.n[v]||0,sz=40+Math.round(v/mx*30),bg=u==='kg'?(PC_COL[v]||'#6b7280'):'#3a3f47',fg=(u==='kg'&&v===5)?'#222':'#fff';
     return'<div class="pc-c"><button class="pc-p" style="width:'+sz+'px;height:'+sz+'px;background:'+bg+';color:'+fg+'" onclick="pcAdd('+v+')" aria-label="'+esc(t('pcAddA',v+' '+u))+'">'+v+(c?'<em>'+c+'</em>':'')+'</button>'+
       '<button class="pc-m" onclick="pcSub('+v+')" aria-label="'+esc(t('pcSubA',v+' '+u))+'"'+(c?'':' disabled')+'>−</button></div>';}).join('');
   const tot=pcTotal(),other=u==='kg'?tot*KG_LB:tot/KG_LB,ps=pcPlatesSum();
   sheet('<div class="form pcalc"><div class="pick-h"><h3>'+t('pcT')+'</h3><span class="pc-u">'+chip(u==='kg',"pcSetUnit('kg')",'kg')+chip(u==='lb',"pcSetUnit('lb')",'lb')+'</span><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
-    '<div class="lbl">'+t('pcBarL')+'</div><div class="chips wrap">'+bars+'</div>'+
+    pcTgHtml(ps,sides,u)+
+    '<div class="lbl">'+t('pcBarL')+' · '+esc(t('pc_'+bk))+' '+pcFmt(pcBarW())+' '+u+'</div><div class="chips wrap">'+bars+'</div>'+
     (bk==='cus'?'<label class="sm">'+t('pcCusP')+' ('+u+') <input id="pccus" class="in" type="text" inputmode="decimal" autocomplete="off" value="'+esc(SET.pcCus!=null?String(SET.pcCus):'')+'" oninput="pcCus(this.value)"></label>':'')+
-    '<div class="lbl">'+t('pcSidesL')+'</div><div class="chips">'+chip(sides===2,'pcSetSides(2)',t('pcBoth'))+chip(sides===1,'pcSetSides(1)',t('pcOne'))+'</div>'+
+    '<div class="pc-row"><span class="lbl">'+t('pcSidesL')+'</span><div class="chips">'+chip(sides===2,'pcSetSides(2)',t('pcBoth'))+chip(sides===1,'pcSetSides(1)',t('pcOne'))+'</div></div>'+
     '<div class="pc-bar" aria-hidden="true"><span class="pc-shaft"></span><span class="pc-stack">'+stack+'</span></div><p class="muted sm pc-cap">'+t(sides===2?'pcEach':'pcOneCap')+(ps?' · '+pcFmt(ps)+' '+u:'')+'</p>'+
     '<div class="pc-g">'+grid+'</div><p class="muted sm">'+t('pcTap')+'</p>'+
     '<div class="pc-tot"><div class="pc-tw"><span class="pc-tl">'+t('pcTotal')+'</span><b class="pc-tv">'+pcFmt(tot)+' '+u+'</b></div>'+
     '<div class="pc-act"><button class="btn" onclick="pcClear()"'+(ps?'':' disabled')+'>'+t('pcClear')+'</button><button class="btn pri" onclick="sheetClose()">'+t('done')+'</button></div>'+
     '<div class="pc-bd muted sm">≈ '+pcFmt(other)+' '+(u==='kg'?'lb':'kg')+' · '+esc(t('pcBarW',pcFmt(pcBarW())+' '+u))+(ps?' + '+sides+' × '+pcFmt(ps)+' '+u:'')+'</div></div></div>');
+}
+function pcTgHtml(ps,sides,u){
+  const g=pcTarget();if(!g)return'';const x=ACT.ex[g.i],bar=pcBarEx(x);
+  return'<div class="pc-tg"><div><small>'+t(g.sel?'pcTgSel':'pcTgAuto')+'</small><b>'+esc(exName(x.eid,x.n))+' · '+t('pcSetN',g.j+1)+'</b>'+
+    '<small>'+t(bar?'pcPlatesOnly':'pcAll',pcFmt(bar?ps*sides:pcTotal())+' '+u)+'</small></div><button class="btn pri" onclick="pcUse()">'+t('pcUse')+'</button></div>';
 }
 function pcAdd(v){PC.n[v]=Math.min(20,(PC.n[v]||0)+1);if(navigator.vibrate&&SET.hap!==false)try{navigator.vibrate(6);}catch(e){}pcDraw();}
 function pcSub(v){if(PC.n[v]>0){PC.n[v]--;if(!PC.n[v])delete PC.n[v];}pcDraw();}

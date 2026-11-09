@@ -666,6 +666,18 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
    ev("pcBar('cus');pcCus('12,5')");ok(ev('pcBarW()')===12.5,'custom bar weight');
    ev("SET.pcUnit=null;SET.pcBar=null;SET.pcCus=null;PC.n={}");w.sheetClose();
    ok(!!doc.getElementById('platefab'),'plate calculator button exists');}
+  {const U=ev(`(function(){
+    const u0=SET.units;SET.units='metric';SET.pcUnit='kg';SET.pcBar='oly';SET.pcSides=2;PC.n={};PC.foc=null;
+    let ix=-1;ACT.ex.forEach((x,i)=>{if(ix<0&&exMode(x.eid)==='wr'&&!isDb(x)&&pcBarEx(x))ix=i;});
+    if(ix<0)return{skip:1};
+    ACT.ex.forEach((q,i)=>{if(i!==ix)q.sets.forEach(s=>{if(s.w==null)s.w=1;});});const x=ACT.ex[ix];x.sets.forEach(s=>{s.w=null;s.done=false;});
+    const r={};pcOpen();r.auto=pcTarget()&&pcTarget().i===ix&&pcTarget().sel===0&&/Use in set|Usar en la serie/.test(document.getElementById('sheet').innerHTML);
+    pcAdd(20);pcAdd(5);pcUse();
+    const bar=barOf(x);
+    r.w0=x.sets[0].w;r.bar=bar;r.noDouble=Math.abs(x.sets[0].w-(bar+50))<0.01;
+    PC.foc={i:ix,j:1};pcOpen();r.sel=pcTarget().j===1&&pcTarget().sel===1;pcAdd(10);pcUse();r.second=Math.abs(x.sets[1].w-(bar+20))<0.01&&x.sets[0].w===r.w0;
+    PC.n={};PC.foc=null;SET.pcUnit=null;SET.pcBar=null;SET.pcCus=null;SET.units=u0;sheetClose();return r;})()`);
+   ok(!U.skip&&(U.auto&&U.noDouble&&U.sel&&U.second),'plate calculator fills the first empty set (plates only, bar added once) or the box you tapped ('+JSON.stringify(U)+')');}
   {const n0=ev('ACT.ex.length');if(n0>1){const e0=ev('ACT.ex[0].eid');ok(doc.querySelectorAll('.exc .pv-grip').length===n0,'live workout cards have drag handles');w.pvMove('act',0,0,1);ok(ev('ACT.ex[1].eid')===e0,'live workout exercise reorders');w.pvMove('act',0,1,0);}}
   w.howOpen(ev('ACT.ex[0].eid'));ok(/Common mistake/.test(sheetHtml()),'technique sheet opens');w.sheetClose();
   w.howOpen('burpee');ok(/Common mistake/.test(sheetHtml())&&!/General tips/.test(sheetHtml()),'burpee now has its own guide');w.sheetClose();
