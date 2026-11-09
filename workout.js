@@ -709,7 +709,7 @@ function rbDraw(){
   const r=UI.rb;
   sheet('<div class="form"><h3>'+t(r.id?'editRoutine':'newRoutine')+'</h3><label>'+t('name')+'<input class="in wide" type="text" maxlength="60" value="'+esc(r.name)+'" oninput="UI.rb.name=this.value"></label>'+
     '<div class="lbl">'+t('exercises')+'</div>'+
-    (r.ex.length?r.ex.map((x,i)=>'<div class="rbx" data-dcard="1"><b>'+esc(exName(x.eid,x.n))+'</b><span class="rbs"><button class="ico" onclick="rbSets('+i+',-1)">−</button><span>'+t('nSets',x.sets)+'</span><button class="ico" onclick="rbSets('+i+',1)">＋</button></span><span class="pv-grip" role="button" tabindex="0" data-k="rb" data-ei="'+i+'" aria-label="'+esc(t('dragAria'))+'">⠿</span>'+xBtn('rbDel('+i+')',1)+'</div>').join(''):'<p class="muted">'+t('noEx')+'</p>')+
+    (r.ex.length?r.ex.map((x,i)=>'<div class="rbx" data-dcard="1"><b>'+esc(exName(x.eid,x.n))+'</b><span class="rbs"><button class="ico" aria-label="'+esc(t('aDec')+' · '+t('sets'))+'" onclick="rbSets('+i+',-1)">−</button><span>'+t('nSets',x.sets)+'</span><button class="ico" aria-label="'+esc(t('aInc')+' · '+t('sets'))+'" onclick="rbSets('+i+',1)">＋</button></span><span class="pv-grip" role="button" tabindex="0" data-k="rb" data-ei="'+i+'" aria-label="'+esc(t('dragAria'))+'">⠿</span>'+xBtn('rbDel('+i+')',1)+'</div>').join(''):'<p class="muted">'+t('noEx')+'</p>')+
     '<button class="btn wide" onclick="rbAdd()">＋ '+t('addEx')+'</button>'+
     '<div class="row"><button class="btn pri" onclick="rbSave()">'+t('save')+'</button><button class="btn" onclick="UI.rb=null;sheetClose()">'+t('cancel')+'</button>'+(r.id?'<button class="btn danger" onclick="rbRemove()">'+t('delete')+'</button>':'')+'</div></div>');
 }

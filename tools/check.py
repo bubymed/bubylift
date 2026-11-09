@@ -75,6 +75,17 @@ for r in rows:
     if r[1] not in gset: err(f"exercise {r[0]} has unknown group {r[1]}")
     if r[3] not in ("", "bw", "t", "wr"): err(f"exercise {r[0]} has unknown mode {r[3]}")
 
+# 5) accessibility: a button whose only content is a symbol (✕ − + ...) needs an aria-label so a screen reader can say what it does
+# accesibilidad: un botón cuyo único contenido es un símbolo necesita aria-label
+import glob
+for jf in sorted(glob.glob(os.path.join(ROOT, "*.js"))):
+    for n, line in enumerate(open(jf, encoding="utf-8"), 1):
+        for m in re.finditer(r"<button([^>]*)>(.*?)</button>", line):
+            at, inner = m.group(1), m.group(2)
+            if "aria-label" in at or "title=" in at: continue
+            txt = re.sub(r"<[^>]+>", "", inner)
+            if re.search(r"[A-Za-z]{2,}|t\(|esc\(|ic\(|'\s*\+|\+\s*'", inner): continue   # has a text label / tiene texto
+            if txt.strip(" '+\\"): err(f"icon-only button without aria-label: {os.path.basename(jf)}:{n} ({txt.strip()[:12]})")
 if errors:
     print("FAILED / FALLÓ"); [print(" -", e) for e in errors]; sys.exit(1)
 print(f"OK / BIEN — {app_ver}, {len(keys)} strings, {len(ids)} exercises, {len(used)} keys in use")

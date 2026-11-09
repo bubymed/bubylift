@@ -807,7 +807,7 @@ function tasteDis(mode,a,b){
 }
 function tasteOpen(){
   const pr=tastePr();if(!pr){sheetClose();return;}
-  const row=(id,k)=>'<div class="plex"><span><b>'+esc(exName(id))+'</b></span><button class="btn sm" onclick="tasteDel(\''+k+'\',\''+id+'\')">✕</button></div>';
+  const row=(id,k)=>'<div class="plex"><span><b>'+esc(exName(id))+'</b></span><button class="btn sm" aria-label="'+esc(t('delete'))+'" onclick="tasteDel(\''+k+'\',\''+id+'\')">✕</button></div>';
   sheet('<div class="form"><div class="pick-h"><h3>'+t('tkBtn')+'</h3><button class="ico" onclick="planOpen()" aria-label="'+esc(t('close'))+'">✕</button></div><p class="muted sm">'+t('tkP')+'</p>'+
     '<div class="lbl">'+ic('heart')+' '+t('tkLikeH')+'</div>'+((pr.lk||[]).length?pr.lk.map(i=>row(i,'lk')).join(''):'<p class="muted sm">'+t('tkNone')+'</p>')+
     '<div class="lbl">'+ic('ban')+' '+t('tkDisH')+'</div>'+((pr.no||[]).length?pr.no.map(i=>row(i,'no')).join(''):'<p class="muted sm">'+t('tkNone')+'</p>')+
@@ -818,7 +818,7 @@ let PE={d:0,e:0};
 function planEdit(d,e){PE={d:d,e:e};peDraw();}
 function peDraw(){
   const p=DATA.plan,x=p&&p.ds[PE.d]&&p.ds[PE.d].ex[PE.e];if(!x){planOpen();return;}
-  const stp=(f,v,step)=>'<div class="pe-r"><span>'+t('pe_'+f)+'</span><span class="pe-s"><button class="stp" onclick="peStep(\''+f+'\','+(-step)+')">−</button><b>'+fmtNum(v,1)+'</b><button class="stp" onclick="peStep(\''+f+'\','+step+')">+</button></span></div>';
+  const stp=(f,v,step)=>'<div class="pe-r"><span>'+t('pe_'+f)+'</span><span class="pe-s"><button class="stp" aria-label="'+esc(t('aDec')+' · '+t('pe_'+f))+'" onclick="peStep(\''+f+'\','+(-step)+')">−</button><b>'+fmtNum(v,1)+'</b><button class="stp" aria-label="'+esc(t('aInc')+' · '+t('pe_'+f))+'" onclick="peStep(\''+f+'\','+step+')">+</button></span></div>';
   sheet('<div class="form"><div class="pick-h"><h3>'+esc(exName(x.eid))+'</h3><button class="ico" onclick="planOpen()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     stp('sets',x.sets,1)+stp('lo',x.lo,x.u==='m'?0.5:1)+stp('hi',x.hi,x.u==='m'?0.5:1)+
     '<p class="muted sm">'+esc(tgText(x))+'</p>'+(x.rz?'<p class="sm rz">↳ '+esc(rzText(x))+'</p>':'')+

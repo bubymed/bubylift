@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.88 — 2026-11-09
+- Accessibility: the icon-only buttons now have an accessible name (routine editor + and −, plan editor + and −, remove a taste/favorite ✕, the −1 rounds undo). `tools/check.py` now fails if a button with only a symbol has no aria-label, so new ones cannot slip in.
+  Accesibilidad: los botones solo con ícono ahora tienen nombre accesible (+ y − del editor de rutinas, + y − del editor de planes, quitar un gusto/favorito ✕, el −1 de las rondas). `tools/check.py` ahora falla si un botón con solo un símbolo no tiene aria-label, así no se cuelan nuevos.
+
 ## v1.1.87 — 2026-11-09
 - Repeat workout, "Repeat last", Save as routine and starting a routine now keep each exercise's variation (grip/width), dumbbell multiplier and bar weight (they were reset to defaults).
   Repetir entrenamiento, "Repetir el último", Guardar como rutina e iniciar una rutina ahora conservan la variante (agarre/ancho), el multiplicador de mancuernas y el peso de la barra de cada ejercicio (se reiniciaban a los valores por defecto).
