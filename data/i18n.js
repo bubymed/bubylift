@@ -119,7 +119,7 @@ const STR={
  toGo:['{0} to go','Faltan {0}'],goalReached:['Goal reached 🎉','Meta alcanzada 🎉'],entries:['Entries','Registros'],nMeas:['{0} measurements','{0} medidas'],
  // more
  language:['Language','Idioma'],appearance:['Appearance','Apariencia'],thSystem:['System','Sistema'],thDark:['Dark','Oscuro'],thLight:['Light','Claro'],units:['Units','Unidades'],
- restTimer:['Start rest by itself after each set','Iniciar el descanso solo tras cada serie'],restStartB:['Start rest timer','Iniciar descanso'],restLen:['Default rest','Descanso por defecto'],sound:['Sound & vibration','Sonido y vibración'],
+ restTimer:['Start rest by itself after each set','Iniciar el descanso automáticamente tras cada serie'],restStartB:['Start rest timer','Iniciar descanso'],restLen:['Default rest','Descanso por defecto'],sound:['Sound & vibration','Sonido y vibración'],
  yourData:['Your data','Tus datos'],dataP:['{0} workouts and {1} body entries are stored on this device.','{0} entrenamientos y {1} registros del cuerpo se guardan en este dispositivo.'],
  exportBackup:['Back up my data (.json)','Respaldar mis datos (.json)'],exportCsv:['Export my workouts (.csv)','Exportar mis entrenamientos (.csv)'],importBackup:['Restore a backup','Restaurar un respaldo'],exported:['Your file is ready ✓','Tu archivo está listo ✓'],
  lastBackup:['Last backup: {0}','Último respaldo: {0}'],noBackup:['No backup yet.','Aún no hay respaldo.'],
@@ -376,7 +376,7 @@ const STR={
  gNowLift:['Your best so far: {0}','Tu mejor marca hasta ahora: {0}'],
  gNowReps:['Your best so far: {0} reps','Tu mejor marca hasta ahora: {0} repeticiones'],
  gTarget:['Target','Meta'],
- gBad:['Type a number for your goal','Escribe un número para tu meta'],
+ gBad:['Type a number for your goal','Escribe un número para tu meta'],wkeNone:['A workout needs at least one set. To remove it, use Delete.','Un entrenamiento necesita al menos una serie. Para quitarlo, usa Eliminar.'],tooBig:['That number is too large. Check it and try again.','Ese número es demasiado grande. Revísalo e inténtalo de nuevo.'],
  libStyT:['Quick pick by style','Elegir rápido por estilo'],
  stOne:['{0} week in a row — great start!','{0} semana seguida. ¡Buen comienzo!'],
  stN:['{0} weeks in a row — keep it up!','{0} semanas seguidas. ¡Sigue así!'],
@@ -396,7 +396,7 @@ const STR={
  rmGo:['Add to calendar','Agregar al calendario'],
  rmN:['Open the file with your calendar app. The app works offline, so it cannot ring by itself.','Abre el archivo con tu app de calendario. La app funciona sin internet, así que no puede sonar sola.'],
  rmDesc:['Time to train.','Hora de entrenar.'],
- rmDone:['Reminder file ready — open it to add it to your calendar','Archivo del recordatorio listo — ábrelo para agregarlo a tu calendario'],
+ rmFile:['Reminder file ready — open it to add it to your calendar','Archivo del recordatorio listo — ábrelo para agregarlo a tu calendario'],
  enT:['How do you feel today?','¿Cómo te sientes hoy?'],
  enP:['Your answer changes today\'s workout only.','Tu respuesta cambia solo el entrenamiento de hoy.'],
  en_good:['Full of energy','Con energía'],
@@ -675,7 +675,7 @@ strT:['General strength','Fuerza general'],strBw:['Log your body weight and your
  sec_rs:['Resistance training','Entrenamiento de resistencia'],
  sec_cc:['Optional','Opcional'],
  optWu:['Warm-up','Calentamiento'],
- optCd:['Cool down','Cool down'],
+ optCd:['Cool down','Enfriamiento'],
  optCardio:['5 minutes of easy cardio','5 minutos de cardio suave'],
  optCardioCd:['5 minutes of easy cardio, slowing down gradually','5 minutos de cardio suave, bajando el ritmo poco a poco'],
  optFoam:['Foam roll: {0} (hold tender spots 30 seconds)','Rodillo de espuma: {0} (mantén 30 segundos en los puntos sensibles)'],
@@ -1124,8 +1124,8 @@ csTotal:['Total lifted','Total levantado'],csPrNew:['NEW PERSONAL RECORD','NUEVO
  rk_run_4:['Cheetah','Guepardo'],
  rk_run_5:['Lightning','Relámpago'],
  strIntro:['Stretching and mobility on their own: quick sessions by focus and time, or every stretch by body area. Move into each position slowly, stop at gentle tension (never pain) and keep breathing.','Estiramiento y movilidad por separado: sesiones rápidas por enfoque y tiempo, o todos los estiramientos por zona del cuerpo. Entra despacio en cada posición, para en una tensión suave (nunca dolor) y sigue respirando.'],
- cgW:['What did you train?','¿Qué entrenaste?'],cgHint:['None selected = whole body.','Sin elegir = todo el cuerpo.'],cgG_legs:['Legs','Piernas'],cgG_chest:['Chest','Pecho'],cgG_back:['Back','Espalda'],cgG_shoulders:['Shoulders','Hombros'],cgG_arms:['Arms','Brazos'],cgG_core:['Core','Core'],cgAfter:['Cool down','Cool down'], strSess:['Sessions','Sesiones'],strArea:['By body area','Por zona'],strStep1:['Choose a focus','Elige un enfoque'],strStep2:['Choose the time','Elige el tiempo'],strStep3:['Your session','Tu sesión'],strStepA:['Choose a body area','Elige una zona del cuerpo'],strStepB:['Stretches and mobility moves','Estiramientos y movilidad'],
- strT_full:['Full body','Cuerpo completo'],strT_lower:['Lower body','Parte baja'],strT_upper:['Upper body','Parte alta'],strT_back:['Back & core','Espalda y core'],strT_warm:['Warm-up (dynamic)','Calentamiento (dinámico)'],strT_cool:['Cool down','Cool down'],
+ cgW:['What did you train?','¿Qué entrenaste?'],cgHint:['None selected = whole body.','Sin elegir = todo el cuerpo.'],cgG_legs:['Legs','Piernas'],cgG_chest:['Chest','Pecho'],cgG_back:['Back','Espalda'],cgG_shoulders:['Shoulders','Hombros'],cgG_arms:['Arms','Brazos'],cgG_core:['Core','Core'],cgAfter:['Cool down','Enfriamiento'], strSess:['Sessions','Sesiones'],strArea:['By body area','Por zona'],strStep1:['Choose a focus','Elige un enfoque'],strStep2:['Choose the time','Elige el tiempo'],strStep3:['Your session','Tu sesión'],strStepA:['Choose a body area','Elige una zona del cuerpo'],strStepB:['Stretches and mobility moves','Estiramientos y movilidad'],
+ strT_full:['Full body','Cuerpo completo'],strT_lower:['Lower body','Parte baja'],strT_upper:['Upper body','Parte alta'],strT_back:['Back & core','Espalda y core'],strT_warm:['Warm-up (dynamic)','Calentamiento (dinámico)'],strT_cool:['Cool down','Enfriamiento'],
  stEqT:['Equipment for stretching','Equipo para estirar'],stEqW:['Tap what you have. Floor and wall are always included. Chair stretches only show if you tap Chair.','Toca lo que tengas. El piso y la pared siempre cuentan. Los estiramientos en silla solo salen si tocas Silla.'],stEq_roller:['Foam roller','Rodillo de espuma'],stEq_band:['Band','Banda'],stEq_bench:['Bench','Banco'],stEq_bar:['Pull-up bar','Barra de dominadas'],stEq_ball:['Stability ball','Pelota'],stEq_chair:['Chair','Silla'],
  strA_ham:['Hamstrings','Isquiotibiales'],strA_hip:['Hips & glutes','Cadera y glúteos'],strA_quad:['Quads & hip flexors','Cuádriceps y flexores de cadera'],strA_calf:['Calves & ankles','Pantorrillas y tobillos'],strA_shoulder:['Shoulders & neck','Hombros y cuello'],strA_chest:['Chest','Pecho'],strA_back:['Back','Espalda'],strA_arms:['Arms & wrists','Brazos y muñecas'],strA_core:['Core & trunk','Abdomen y tronco'],
  strMin:['{0} min','{0} min'],strPlan:['{0} moves · about {1} min · {2} s each','{0} movimientos · unos {1} min · {2} s cada uno'],strHoldS:['Hold {0} s','Sostén {0} s'],strRepsN:['{0} slow reps','{0} repeticiones lentas'],strDyn:['Dynamic','Dinámico'],strStatic:['Hold','Sostener'],
@@ -1347,9 +1347,18 @@ csTotal:['Total lifted','Total levantado'],csPrNew:['NEW PERSONAL RECORD','NUEVO
  ch_engine:['Engine Builder','Constructor de motor'],
  chd_engine:['30 minutes of running, wall balls, carries and burpee jumps. Trains the steady effort that Hyrox-style races ask for.','30 minutos de carrera, wall balls, acarreos y saltos con burpee. Entrena el esfuerzo constante que piden las carreras estilo Hyrox.']
 };
+/* singular forms: "1 set", not "1 sets" / formas en singular: "1 serie", no "1 series" */
+const PL1={en:{sets:'set',days:'day',weeks:'week',workouts:'workout',exercises:'exercise',reps:'rep',minutes:'minute',sessions:'session',moves:'move',entries:'entry',rounds:'round',seconds:'second',times:'time',goals:'goal'},
+ es:{series:'serie',días:'día',semanas:'semana',entrenamientos:'entrenamiento',ejercicios:'ejercicio',repeticiones:'repetición',minutos:'minuto',sesiones:'sesión',movimientos:'movimiento',registros:'registro',rondas:'ronda',segundos:'segundo',veces:'vez',metas:'meta'}};
+const STR1={undone:["{0} set isn't marked done and won't be saved. Finish anyway?","Hay {0} serie sin marcar que no se guardará. ¿Terminar de todos modos?"],awT:["Welcome back! It's been {0} day.","¡Qué bueno verte de vuelta! Ha pasado {0} día."],
+ gLeftR:["{0} rep to go","Te falta {0} repetición"],gLeftS:["{0} workout to go","Te falta {0} entrenamiento"],stN:["{0} week in a row — keep it up!","{0} semana seguida. ¡Sigue así!"],chStreak:["{0} week in a row. That's what consistency looks like.","{0} semana seguida. Así se ve la constancia."],bwEta:["At this pace you reach your goal in about {0} week.","A este ritmo llegas a tu meta en {0} semana."]};
 function t(k){
   const e=STR[k];if(!e)return k;
-  let s=e[LANG==='es'?1:0];
-  for(let i=1;i<arguments.length;i++)s=s.split('{'+(i-1)+'}').join(arguments[i]);
-  return s;
+  const es=LANG==='es',o=arguments.length>1&&arguments[1]==1&&STR1[k];
+  let s=(o||e)[es?1:0];
+  for(let i=1;i<arguments.length;i++){
+    if(arguments[i]==1&&!(o&&i===1))s=s.replace(new RegExp('\\{'+(i-1)+'\\}(\\s+)([A-Za-zÁ-úñ]+)(?![A-Za-zÁ-úñ])','g'),function(m,sp,w){const q=PL1[es?'es':'en'][w];return q?'{'+(i-1)+'}'+sp+q:m;});
+    s=s.split('{'+(i-1)+'}').join(arguments[i]);
+  }
+  return es?s:s.replace(/\b1 body entries\b/g,'1 body entry');
 }

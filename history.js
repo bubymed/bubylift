@@ -50,7 +50,7 @@ function wkCard(wk){
   const d=wkDur(wk),pr=wkPRs(wk),vol=wkVol(wk),dt=new Date(wk.t);
   return'<div class="wkw"><button class="lrow wkrow" onclick="openWk(\''+wk.id+'\')"><span class="dchip"><b>'+dt.getDate()+'</b><small>'+esc(dFmt(wk.t,{month:'short'}).replace('.',''))+'</small></span>'+
     '<span class="lt2"><b>'+esc(wk.name||dFmt(wk.t,{weekday:'long'}))+(pr?' <span class="pr">'+ic('trophy')+' '+pr+'</span>':'')+'</b>'+
-    '<small>'+(d?fmtDur(d)+(wk.ex.length?' · ':''):'')+(wk.ex.length?t('nSetsT',wkSets(wk)):'')+(vol?' · '+wShow(vol)+' '+wUnit():'')+'</small>'+
+    '<small>'+(d?fmtDur(d)+(wk.ex.length?' · ':''):'')+(wk.ex.length?t('nSetsT',wkSets(wk)):'')+(vol?' · '+vShow(vol)+' '+wUnit():'')+'</small>'+
     '<small>'+(wk.ex.length?wk.ex.slice(0,3).map(x=>esc(exNameV(x.eid,x.vr,x.n))).join(' · ')+(wk.ex.length>3?' …':''):esc(spName(wk.sp)))+(wk.hr?' · '+ic('heart')+' '+wk.hr.a:'')+(wk.kcal?' · '+wk.kcal+' kcal':'')+'</small></span><span class="lc">›</span></button>'+xBtn('delWkAsk(\''+wk.id+'\')')+'</div>';
 }
 function vHistory(){
@@ -76,14 +76,14 @@ function openWk(id){
   const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
   const d=wkDur(wk);
   let h='<div class="wkd"><h3>'+esc(wk.name)+'</h3><p class="muted">'+esc(dFmt(wk.t,{weekday:'long',month:'long',day:'numeric',year:'numeric'}))+'</p>'+
-    '<div class="stats">'+(d?'<div><b>'+fmtDur(d)+'</b><span>'+t('duration')+'</span></div>':'')+'<div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>'+
+    '<div class="stats">'+(d?'<div><b>'+fmtDur(d)+'</b><span>'+t('duration')+'</span></div>':'')+'<div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+vShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>'+
     ((wk.hr||wk.kcal)?'<div class="stats svst">'+(wk.hr?'<div><b>'+wk.hr.a+'</b><span>'+t('svAvg')+'</span></div><div><b>'+wk.hr.m+'</b><span>'+t('svMax')+'</span></div>':'')+(wk.kcal?'<div><b>'+wk.kcal+'</b><span>kcal</span></div>':'')+'</div>'+(wk.sv?'<p class="muted sm c">Powered by Strava</p>':''):'');
   wk.ex.forEach(x=>{
     const m=exMode(x.eid);
     h+='<div class="wkd-ex"><b>'+esc(exNameV(x.eid,x.vr,x.n))+'</b>'+x.sets.map((s,i)=>'<div class="wkd-s"><span>'+(i+1)+'</span><span>'+esc(fmtSet(m,s))+'</span>'+(s.pr?'<i class="pr">'+ic('trophy')+'</i>':'')+'</div>').join('')+'</div>';
   });
   if(wk.note)h+='<p class="wkd-note">'+esc(wk.note)+'</p>';
-  h+='<div class="menu"><button onclick="repeatWk(\''+id+'\')">↻ '+t('repeat')+'</button><button onclick="saveWkAsRoutine(\''+id+'\')">☰ '+t('saveRoutineS')+'</button>'+(typeof stravaOn==='function'&&stravaOn()?'<button onclick="stravaGet(\''+id+'\')">♥ '+t('svGet')+'</button>':'')+'<button onclick="shareWk(\''+id+'\')">⇪ '+t('share')+'</button><button onclick="wkPic(\''+id+'\')">'+ic('share')+' '+t('cdBtn')+'</button><button class="danger" onclick="delWkAsk(\''+id+'\')">'+ic('trash')+' '+t('delete')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>';
+  h+='<div class="menu"><button onclick="repeatWk(\''+id+'\')">↻ '+t('repeat')+'</button><button onclick="saveWkAsRoutine(\''+id+'\')">☰ '+t('saveRoutineS')+'</button>'+(typeof stravaOn==='function'&&stravaOn()?'<button onclick="stravaGet(\''+id+'\')">♥ '+t('svGet')+'</button>':'')+'<button onclick="wkEditOpen(\''+id+'\')">'+ic('pencil')+' '+t('edit')+'</button><button onclick="shareWk(\''+id+'\')">⇪ '+t('share')+'</button><button onclick="wkPic(\''+id+'\')">'+ic('share')+' '+t('cdBtn')+'</button><button class="danger" onclick="delWkAsk(\''+id+'\')">'+ic('trash')+' '+t('delete')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button></div>';
   sheet(h);
 }
 function repeatWk(id){
@@ -97,6 +97,57 @@ function shareWk(id){
   const txt=wkText(wk);
   if(navigator.share){navigator.share({text:txt}).catch(()=>{});return;}
   try{navigator.clipboard.writeText(txt).then(()=>toast(t('copied')),()=>toast(t('copyFail')));}catch(e){toast(t('copyFail'));}
+}
+/* edit a saved workout: fix a typo in weight or reps, rename it, change the note, or remove a set
+   editar un entrenamiento guardado: corregir un peso o repeticiones, cambiar el nombre o la nota, o quitar una serie */
+let WKE=null;
+function wkEditOpen(id){
+  const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;
+  WKE=JSON.parse(JSON.stringify(wk));WKE.ex.forEach(x=>x.sets.forEach((s,i)=>{s._i=i;}));wkEditDraw();
+}
+function wkEditDraw(){
+  const wk=WKE;if(!wk)return;
+  let h='<div class="form wke"><div class="pick-h"><h3>'+t('edit')+'</h3><button class="ico" onclick="wkEditCancel()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
+   '<label>'+t('name')+'<input id="wkeN" class="in wide" type="text" maxlength="60" value="'+esc(wk.name||'')+'" oninput="WKE.name=this.value"></label>';
+  wk.ex.forEach((x,xi)=>{
+    const m=exMode(x.eid),c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
+    h+='<div class="wke-ex">'+esc(exNameV(x.eid,x.vr,x.n))+'</div><div class="wke-s wke-h"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
+    x.sets.forEach((st,si)=>{
+      const f1=m==='t'?'t':'w',f2=m==='t'?'d':'r',v1=st[f1]==null?'':(f1==='t'?fmtNum(st.t):wShow(st.w)),v2=st[f2]==null?'':(f2==='d'?dShow(st.d):String(st.r));
+      h+='<div class="wke-s"><span>'+(si+1)+'</span><input class="in" type="text" inputmode="decimal" autocomplete="off" value="'+esc(v1)+'" oninput="wkeSet('+xi+','+si+',\''+f1+'\',this.value)"><input class="in" type="text" inputmode="'+(f2==='r'?'numeric':'decimal')+'" autocomplete="off" value="'+esc(v2)+'" oninput="wkeSet('+xi+','+si+',\''+f2+'\',this.value)"><button class="ico" onclick="wkeRm('+xi+','+si+')" aria-label="'+esc(t('delete'))+'">✕</button></div>';
+    });
+  });
+  h+='<label>'+t('note')+'<textarea class="note-in" rows="2" maxlength="500" oninput="WKE.note=this.value">'+esc(wk.note||'')+'</textarea></label>'+
+    '<div class="row"><button class="btn pri" onclick="wkEditSave()">'+t('save')+'</button><button class="btn" onclick="wkEditCancel()">'+t('cancel')+'</button></div></div>';
+  sheet(h);
+}
+function wkeSet(xi,si,f,v){
+  const st=WKE&&WKE.ex[xi]&&WKE.ex[xi].sets[si];if(!st)return;
+  v=String(v).trim();let n=null;
+  if(v!==''){if(f==='w')n=wParse(v);else if(f==='d')n=dParse(v);else if(f==='r'){n=parseInt(v,10);if(!(n>=0))n=null;}else n=numParse(v);}
+  if(n!=null&&n>({w:1500,r:999,t:1440,d:1000}[f]||1e9)){n=null;toast(t('tooBig'));}
+  st[f]=n;
+}
+function wkeRm(xi,si){
+  const x=WKE&&WKE.ex[xi];if(!x)return;
+  x.sets.splice(si,1);if(!x.sets.length)WKE.ex.splice(xi,1);
+  wkEditDraw();
+}
+function wkEditCancel(){const id=WKE&&WKE.id;WKE=null;if(id)openWk(id);else sheetClose();}
+function wkEditSave(){
+  const wk=WKE;if(!wk)return;
+  for(const x of wk.ex){const m=exMode(x.eid);for(const s of x.sets){
+    const ok=m==='t'?(s.t!=null&&s.t>0):(m==='bw'?(s.r!=null&&s.r>0):(s.w!=null&&s.r!=null&&s.r>0));
+    if(!ok){toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
+  }}
+  if(!wk.ex.length){toast(t('wkeNone'));return;}
+  const old=DATA.workouts.find(w=>w.id===wk.id);if(!old){WKE=null;sheetClose();return;}
+  // a trophy only stays on a set whose numbers did not change / el trofeo solo queda en una serie cuyos números no cambiaron
+  const oe={};old.ex.forEach(x=>{oe[x.eid+'|'+(x.vr||'')]=x.sets;});
+  wk.ex.forEach(x=>{const os=oe[x.eid+'|'+(x.vr||'')]||[];x.sets.forEach(s=>{const o=os[s._i];if(s.pr&&!(o&&o.w===s.w&&o.r===s.r))delete s.pr;delete s._i;});});
+  wk.name=(wk.name||'').trim()||old.name||autoName(old.t);wk.note=(wk.note||'').trim();
+  DATA.workouts[DATA.workouts.indexOf(old)]=wk;
+  saveData();WKE=null;sheetClose();render();toast(t('saved'));openWk(wk.id);
 }
 function delWkAsk(id){ask(t('delWk'),t('delete'),function(){DATA.workouts=DATA.workouts.filter(w=>w.id!==id);clTomb(id);saveData();render();},true);}
 
@@ -131,10 +182,10 @@ function vProgress(){
   if(!DATA.workouts.length)return goalsCard()+strCard()+bwCard()+emptyState('chart-bar',t('emptyProgT'),t('emptyProgP'),t('emStart'),"go('workout')");
   if(UI.prog)return vExProg(UI.prog);
   const now=Date.now(),ws=weekStart(now),vals=[],labels=[];
-  for(let i=7;i>=0;i--){const a=ws-i*7*864e5,b=a+7*864e5;vals.push(DATA.workouts.filter(w=>w.t>=a&&w.t<b).length);labels.push(dFmt(a,{month:'numeric',day:'numeric'}));}
+  for(let i=7;i>=0;i--){const a=wkOff(ws,-i),b=wkOff(ws,1-i);vals.push(DATA.workouts.filter(w=>w.t>=a&&w.t<b).length);labels.push(dFmt(a,{month:'numeric',day:'numeric'}));}
   let vol=0,sets=0;DATA.workouts.forEach(w=>{vol+=wkVol(w);sets+=wkSets(w);});
   const pt=UI.pt||'sum';
-  let h=streakCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
+  let h=streakCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+vShow(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
   h+='<div class="card"><b>'+t('perWeek')+'</b>'+barSvg(vals,labels)+'</div>';
   const rk=strCard()+bwCard()+xpCard()+balCard();
   let ex=featCharts()+rmCalc()+'<div class="sec"><h2>'+t('exercises')+'</h2></div><div class="lgrp">';
