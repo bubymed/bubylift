@@ -31,6 +31,17 @@ function wzAs(k){
     return wzOpt("wzAs_('"+k+"','"+v+"')",on,v==='x'?'🤷':'',t(v==='x'?'as_x':(k==='pu'?'pu_'+v:'as_'+k+'_'+v)),'');
   }),'c1');
 }
+/* several start-assessment questions on ONE screen, as chip rows / varias pruebas de inicio en UNA pantalla, en filas de opciones */
+function wzAsGrp(ks){
+  return ks.map(k=>{
+    const vals=WZ_AS[k].concat(['x']);
+    return'<div class="wz-as"><div class="lbl">'+esc(t('as_'+k))+'</div><p class="muted sm">'+esc(t('as_'+k+'_s'))+'</p><div class="chips">'+vals.map(v=>{
+      const stored=(k==='pu'&&v==='x')?'':v,on=!!(PW.a&&PW.a[k])&&PW[k]===stored;
+      return'<button class="chip'+(on?' on':'')+'" onclick="wzAs_(\''+k+'\',\''+v+'\')">'+esc(t(v==='x'?'as_x':(k==='pu'?'pu_'+v:'as_'+k+'_'+v)))+'</button>';
+    }).join('')+'</div></div>';
+  }).join('');
+}
+const wzReady=q=>q.ks?q.ks.every(k=>PW.a&&PW.a[k]):(!q.req||!!(PW.a&&PW.a[q.id]));
 function wzAs_(k,v){PW[k]=(k==='pu'&&v==='x')?'':v;PW.a=PW.a||{};PW.a[k]=1;wizDraw();}
 function wzAsNote(){
   if(!AS_KEYS.every(k=>PW.a&&PW.a[k]))return'';
@@ -81,16 +92,9 @@ const WQ=[
     return wzOne('sh',a,PW.sh|0,v=>t('shN',v),()=>'');}},
  {id:'vol',ic:'📊',title:()=>t('psVol'),sub:()=>t('wzVolS'),body:()=>wzOne('vol',['lo','md','hi'],PW.vol,v=>t('vol_'+v),v=>WZ_IC.vol[v],v=>t('vold_'+v),'c1')},
  {id:'lvl',ic:'📈',title:()=>t('psLvl'),sub:()=>t('wzLvlS'),body:()=>wzOne('lvl',PLVLS,PW.lvl,v=>t('pl_'+v),v=>WZ_IC.lvl[v],v=>t('pld_'+v),'c1')},
- {id:'pl',req:1,ic:'🧱',title:()=>t('as_pl'),sub:()=>t('as_pl_s'),body:()=>wzAs('pl')},
- {id:'bal',req:1,ic:'🧘',title:()=>t('as_bal'),sub:()=>t('as_bal_s'),body:()=>wzAs('bal')},
- {id:'sq',req:1,ic:'🦵',title:()=>t('as_sq'),sub:()=>t('as_sq_s'),body:()=>wzAs('sq')},
- {id:'pu',req:1,ic:'🤸',title:()=>t('as_pu'),sub:()=>t('as_pu_s'),body:()=>wzAs('pu')},
- {id:'pull',req:1,ic:'🧗',title:()=>t('as_pull'),sub:()=>t('as_pull_s'),body:()=>wzAs('pull')},
- {id:'leg',req:1,ic:'🏋️',title:()=>t('as_leg'),sub:()=>t('as_leg_s'),body:()=>wzAs('leg')},
+ {id:'chk1',ks:['pl','bal','sq'],ic:'🧱',title:()=>t('chkMov'),sub:()=>t('chkS'),body:()=>wzAsGrp(['pl','bal','sq'])},
+ {id:'chk2',ks:['pu','pull','leg'],ic:'🏋️',title:()=>t('chkStr'),sub:()=>t('chkS'),body:()=>wzAsGrp(['pu','pull','leg'])},
  {id:'hist',req:1,ic:'📆',title:()=>t('as_hist'),sub:()=>t('as_hist_s'),body:()=>wzAs('hist')+wzAsNote()},
- {id:'ph',ic:'🎯',title:()=>t('phT'),sub:()=>t('wzPhS'),body:()=>{
-    const al=optAllowed(PW),auto=optPhase(Object.assign({},PW,{ph:0}));
-    return wzGrid([wzOpt("wzPick('ph',0)",!PW.ph,'🤖',t('phAuto'),t('phAutoP',auto,t('ph_'+auto)))].concat(al.map(v=>wzOpt("wzPick('ph',"+v+")",PW.ph===v,String(v),t('ph_'+v),t('phd_'+v)))),'c1');}},
  {id:'sty',ic:'🏋️',title:()=>t('psSty'),sub:()=>t('psStyP'),multi:1,body:()=>{
     const card=k=>{
       const s=STY[k],on=PW.sty.indexOf(k)>=0,i=PW.sty.indexOf(k);
@@ -112,6 +116,10 @@ const WQ=[
   }},
  {id:'inj',ic:'🩹',title:()=>t('psInj'),sub:()=>t('psInjP'),multi:1,body:()=>wzMany('inj',Object.keys(INJ),v=>t('inj_'+v),()=>'🩹',0,'c2')+'<p class="muted sm">'+t('psInjN')+'</p>'},
  {id:'cond',ic:'🔄',title:()=>t('psCond'),sub:()=>t('wzCondS'),body:()=>wzOne('cond',[0,1],PW.cond,v=>v?t('psCondB'):t('wzNo'),v=>v?'🔄':'👍','','c1')+(PW.cond?'<div class="card warn"><p>'+t('condNote')+'</p></div>':'')},
+ {id:'more',ic:'🎛️',title:()=>t('moreT'),sub:()=>t('moreS'),body:()=>wzGrid([wzOpt('pwMore(0)',!wzMoreOn(),'⚡',t('moreNo'),t('moreNoD')),wzOpt('pwMore(1)',wzMoreOn(),'🎛️',t('moreYes'),t('moreYesD'))],'c1')},
+ {id:'ph',ic:'🎯',title:()=>t('phT'),sub:()=>t('wzPhS'),body:()=>{
+    const al=optAllowed(PW),auto=optPhase(Object.assign({},PW,{ph:0}));
+    return wzGrid([wzOpt("wzPick('ph',0)",!PW.ph,'🤖',t('phAuto'),t('phAutoP',auto,t('ph_'+auto)))].concat(al.map(v=>wzOpt("wzPick('ph',"+v+")",PW.ph===v,String(v),t('ph_'+v),t('phd_'+v)))),'c1');}},
  {id:'avoid',ic:'🚫',title:()=>t('psAvoid'),sub:()=>t('psAvoidP'),multi:1,body:()=>wzMany('avoid',AVOID,v=>t('av_'+v),v=>WZ_IC.avoid[v],0,'c2')},
  {id:'fav',ic:'⭐',title:()=>t('psFav'),sub:()=>t('psFavP'),multi:1,show:()=>optOn(PW),body:()=>wzMany('fav',MAINS.filter(k=>exById(k)),v=>exName(v),()=>'⭐',4,'c2')},
  {id:'work',ic:'🪑',title:()=>t('psWork'),sub:()=>t('psWorkP'),body:()=>wzOne('work',['','sit','stand'],PW.work,v=>t('wk_'+(v||'none')),v=>WZ_IC.work[v],()=>'','c1')},
@@ -119,13 +127,17 @@ const WQ=[
 ];
 /* quick start: only the questions that matter most / arranque rápido: solo lo más importante */
 const QK=['mode','goal','race','test','sty','n','lvl','inj','cond','sum']; // inj + cond: safety questions are never skipped / las preguntas de seguridad no se saltan
-const wzList=()=>WQ.filter(q=>(!q.show||q.show())&&(!PW.quick||QK.indexOf(q.id)>=0));
+/* the optional fine-tuning questions only show when asked for (or when editing a plan that already uses them) / las preguntas opcionales de ajuste solo salen si se piden (o si el plan ya las usa) */
+const WZ_EXTRA=['ph','avoid','fav','work'];
+const wzMoreOn=()=>PW.more!==undefined&&PW.more!==null?!!PW.more:!!((PW.avoid&&PW.avoid.length)||(PW.fav&&PW.fav.length)||PW.work||PW.ph);
+const wzList=()=>WQ.filter(q=>(!q.show||q.show())&&(!PW.quick||QK.indexOf(q.id)>=0)&&(WZ_EXTRA.indexOf(q.id)<0||wzMoreOn()));
+function pwMore(v){PW.more=v;wzGo(1);}
 function pwQuick(v){PW.quick=v;wzGo(1);}
 function pwFull(){PW.quick=0;PW.q='sex';wizDraw();}
 function wzIdx(l){const i=l.findIndex(q=>q.id===PW.q);return i<0?0:i;}
 function wzGo(d){
   const l0=wzList(),q0=l0[wzIdx(l0)];
-  if(d>0&&q0.req&&!(PW.a&&PW.a[q0.id])){toast(t('asNeed'));return;}
+  if(d>0&&!wzReady(q0)){toast(t('asNeed'));return;}
   const l=wzList(),i=wzIdx(l),j=Math.max(0,Math.min(l.length-1,i+d));
   PW.q=l[j].id;wizDraw();
 }
@@ -158,6 +170,6 @@ function wzDraw(){
     '<div class="wz-bar"><i style="width:'+pct+'%"></i></div><button class="ico" onclick="sheetClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<div class="wz-in'+(fresh?' fresh':'')+'"><div class="wz-ic">'+q.ic+'</div><h2 class="wz-q">'+esc(q.title())+'</h2><p class="wz-s">'+esc(q.sub())+'</p>'+
     '<div class="wz-body">'+q.body()+'</div></div>'+
-    '<div class="wz-foot"><button class="btn pri wide"'+((q.req&&!(PW.a&&PW.a[q.id]))?' disabled':'')+' onclick="'+(last?'planCreate()':'wzGo(1)')+'">'+nextLbl+'</button></div></div>');
+    '<div class="wz-foot"><button class="btn pri wide"'+(wzReady(q)?'':' disabled')+' onclick="'+(last?'planCreate()':'wzGo(1)')+'">'+nextLbl+'</button></div></div>');
   $('sheet').classList.add('wzs');if(!fresh)$('sheet').scrollTop=st;
 }

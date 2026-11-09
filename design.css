@@ -923,3 +923,6 @@ body.resting #platefab{bottom:calc(var(--tab-h) + 140px + env(safe-area-inset-bo
 .wke-h{font-size:.72rem;letter-spacing:.06em;color:var(--dim);margin:0}
 .wke-h span{text-align:center}
 .wke textarea{margin-top:4px}
+
+/* assessment rows on one wizard screen: chips wrap instead of scrolling / filas de prueba en una pantalla del asistente: las opciones se acomodan en vez de deslizarse */
+.wz-as{margin:0 0 14px}.wz-as .chips{flex-wrap:wrap;overflow:visible;padding-right:0}.wz-as .chip{white-space:normal;text-align:left}

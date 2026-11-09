@@ -62,7 +62,7 @@ Functions / Funciones: `asStabFail`:10, `asStr`:11, `asLevel`:12, `prefBad`:32, 
 Plan questionnaire, one question per screen.  
 Cuestionario del plan, una pregunta por pantalla.
 
-Functions / Funciones: `wzOpt`:20, `wzGrid`:24, `wzAs`:27, `wzAs_`:34, `wzAsNote`:35, `wzOne`:41, `wzMany`:45, `wzPick`:48, `wzTogM`:51, `pwQuick`:123, `pwFull`:124, `wzIdx`:125, `wzGo`:126, `wzSummary`:132, `wzDraw`:151
+Functions / Funciones: `wzOpt`:20, `wzGrid`:24, `wzAs`:27, `wzAsGrp`:35, `wzAs_`:45, `wzAsNote`:46, `wzOne`:52, `wzMany`:56, `wzPick`:59, `wzTogM`:62, `pwMore`:134, `pwQuick`:135, `pwFull`:136, `wzIdx`:137, `wzGo`:138, `wzSummary`:144, `wzDraw`:163
 
 ### `faq.js`
 Help / feedback sheet.  
