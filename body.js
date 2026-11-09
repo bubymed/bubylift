@@ -71,21 +71,24 @@ function loadData(now){
     const end=w.end||w.t,age=now-end;if(age<0||age>=4*W)return;const k=Math.floor(age/W);
     w.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(!n)return;wk[k]+=n;if(k===0&&g&&mus[g]!=null)mus[g]+=n;if(k===0){const mw=muW(x.eid,x.vr);if(mw)mw.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});}});
   });
-  const a=wk[0],ch=(wk[1]+wk[2]+wk[3])/3,ratio=ch>0?a/ch:null;
-  const up=(x,y)=>x>0&&y>=x*1.1,c4=up(wk[3],wk[2])&&up(wk[2],wk[1])&&up(wk[1],wk[0]),c3=up(wk[2],wk[1])&&up(wk[1],wk[0]);
+  /* weeks before your first logged workout are not "rest", they are empty: only fully covered weeks form the baseline, and a spike needs 2+ of them / las semanas antes de tu primer entreno no son descanso, están vacías: solo las semanas completas cuentan y hacen falta 2 */
+  const first=DATA.workouts.reduce((m,w)=>Math.min(m,w.t||m),now),cov=[true,1,2,3].map((k,i)=>i===0||first<=now-(i+1)*W),base=[1,2,3].filter(k=>cov[k]);
+  const a=wk[0],ch=(base.length?base.reduce((n,k)=>n+wk[k],0)/base.length:0),ratio=base.length>=2&&ch>0?a/ch:null,learn=base.length<2&&a>0;
+  const up=(x,y)=>x>0&&y>=x*1.1,c4=cov[3]&&up(wk[3],wk[2])&&up(wk[2],wk[1])&&up(wk[1],wk[0]),c3=cov[2]&&up(wk[2],wk[1])&&up(wk[1],wk[0]);
   const hi=REC_G.filter(g=>mus[g]>20).sort((x,y)=>mus[y]-mus[x]),top=hi.length?mus[hi[0]]:0;
   let lv='ok';
   if(a<1)lv='none';
   else if((ratio!=null&&ratio>=1.5&&a>=20)||top>=26||c4)lv='over';
   else if((ratio!=null&&ratio>=1.3&&a>=15)||hi.length||c3)lv='high';
   else if(ratio!=null&&ch>=10&&ratio<.6)lv='low';
-  return{wk:wk,mus:mus,eff:eff,hi:hi,lv:lv,ratio:ratio,climb:c4?4:(c3?3:0)};
+  return{wk:wk,mus:mus,eff:eff,hi:hi,lv:lv,ratio:ratio,learn:learn,climb:c4?4:(c3?3:0)};
 }
 function loadCard(){
   const d=loadData();if(d.lv==='none')return'';
   const mx=Math.max.apply(null,d.wk.concat([1])),why=[];
-  if(d.ratio!=null&&d.ratio>=1.3)why.push(t('ldRatio',Math.min(200,Math.round((d.ratio-1)*100))));
+  if(d.ratio!=null&&d.ratio>=1.3)why.push(t('ldRatio',Math.round((d.ratio-1)*100)));
   if(d.climb)why.push(t('ldClimb',d.climb));
+  if(d.learn)why.push(t('ldLearn'));
   if(d.hi.length)why.push(t('ldMus',d.hi.map(g=>t('g_'+g)+' ('+d.mus[g]+')').join(', ')));
   return'<div class="card ldc '+d.lv+'"><div class="lbl">'+t('ldT')+'</div><div class="ld-top"><span class="ld-chip">'+t('ldL_'+d.lv)+'</span><b>'+t('ldSets',d.wk[0])+'</b></div><p class="ld-msg">'+t('ldM_'+d.lv)+'</p>'+
     '<div class="ana-card ana-ld">'+anaHeat(k=>{const f=(d.eff[k]||0)/(MUS_TGT[k]||8);return f<.05?'':(f>=1.6?'rgb(255,69,58)':'color-mix(in srgb,var(--an-main) '+Math.round(25+Math.min(1,f)*70)+'%,var(--an-sil))');},null,null,130)+'<div class="ana-grad ld-grad"><span>'+t('ldLegLo')+'</span><i></i><span>'+t('ldLegHi')+'</span></div></div>'+'<div class="ld-bars">'+[3,2,1,0].map(k=>'<div class="'+(k===0?'now':'')+'"><u style="height:'+Math.max(4,Math.round(d.wk[k]/mx*100))+'%"></u><small>'+d.wk[k]+'</small><em>'+(k===0?t('ldNow'):t('ldAgo',k))+'</em></div>').join('')+'</div>'+

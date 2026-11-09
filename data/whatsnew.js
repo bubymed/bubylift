@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.80',items:[
+  {i:'chart',en:'<b>Training load fixed</b>: new users no longer see a false "Overload". Weeks before your first workout are not counted as rest, and the app needs 2 full weeks of history before it flags a jump in volume. The card now says "last 7 days" because that is what it measures.',es:'<b>Carga de entrenamiento corregida</b>: los usuarios nuevos ya no ven una "Sobrecarga" falsa. Las semanas antes de tu primer entreno no cuentan como descanso, y la app necesita 2 semanas completas de historial para avisar de un salto de volumen. La tarjeta ahora dice "últimos 7 días" porque eso es lo que mide.'}
+ ]},
  {v:'v1.1.79',items:[
   {i:'barbell',en:'<b>Plate calculator</b>: a new round button next to the rest timer. Tap the plates you put on the bar and see the total, in kg or lb, for an Olympic, women\'s, EZ or hex bar, one side or both. "Use in set" puts the plates in the box you tapped (or the first empty set), and the app adds the bar once.',es:'<b>Calculadora de discos</b>: un botón redondo nuevo junto al cronómetro. Toca los discos que pusiste en la barra y mira el total, en kg o lb, para barra olímpica, de mujer, EZ o hexagonal, en un lado o en ambos. "Usar en la serie" pone los discos en la casilla que tocaste (o en la primera serie vacía) y la app suma la barra una sola vez.'}
  ]},
