@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.78 — 2026-11-09
+- One drag system everywhere: the ⠿ handle now also reorders exercises in the live workout (cards fold to their header while dragging so long lists are easy to move through) and in the routine builder. The ↑/↓ buttons are removed from the exercise menu and the routine builder, and "Replace exercise" leads the exercise menu.
+  Un solo sistema de arrastre: el asa ⠿ ahora también reordena ejercicios en el entrenamiento en vivo (las tarjetas se pliegan a su encabezado mientras arrastras, para recorrer listas largas) y en el armado de rutinas. Se quitaron los botones ↑/↓ del menú del ejercicio y de las rutinas, y "Reemplazar ejercicio" encabeza el menú del ejercicio.
+
 ## v1.1.77 — 2026-11-09
 - Plan editing: drag the ⠿ handle on an exercise card to move it anywhere in the day (the sheet scrolls when you reach its edge; arrow keys on the handle also work). The ↑/↓ buttons are gone. The exercise editor now leads with a big "Replace exercise" button, and the replace sheet has a "Search any exercise" button that opens the full library, above the suggestions. The "Your choice" block is now "Optional".
   Edición del plan: arrastra el asa ⠿ de un ejercicio para moverlo a cualquier lugar del día (la hoja se desplaza al llegar a su borde; las flechas del teclado en el asa también funcionan). Se quitaron los botones ↑/↓. El editor ahora empieza con un botón grande "Reemplazar ejercicio", y la hoja de reemplazo tiene un botón "Buscar cualquier ejercicio" que abre toda la biblioteca, arriba de las sugerencias. El bloque "A tu elección" ahora es "Opcional".

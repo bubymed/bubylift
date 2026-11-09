@@ -266,7 +266,7 @@ function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(xk(x)),pv=le?le.x.sets:[];
   const bar=m==='wr'?barOf(x):0,ml=m==='wr'?mulOf(x):1,pw=v=>v==null?'':wShow(Math.max(0,(v-bar)/ml));
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'">'+exImgs(x.eid,'this.remove()')+'</button>':'';
-  let h='<section class="exc" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+varChip(i,x)+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button></div>';
+  let h='<section class="exc" data-dcard="1" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+varChip(i,x)+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button>'+(ACT.ex.length>1?'<span class="pv-grip" role="button" tabindex="0" data-k="act" data-ei="'+i+'" aria-label="'+esc(t('dragAria'))+'">⠿</span>':'')+'</div>';
   h+=suggLine(x);
   {const rn=repNote(x.eid,m);if(rn)h+='<p class="muted sm rn">'+esc(t(rn))+'</p>';}
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
@@ -391,13 +391,10 @@ function nextInView(i,j){
 function exMenu(i){
   const x=ACT.ex[i];
   sheet('<h3>'+esc(exNameV(x.eid,x.vr,x.n))+'</h3><div class="menu">'+
-    (exVars(x.eid).length?'<button onclick="varOpen('+i+')">⚙ '+t('varB')+'</button>':'')+'<button onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button><button onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button>'+
-    (i>0?'<button onclick="exMove('+i+',-1)">↑ '+t('moveUp')+'</button>':'')+
-    (i<ACT.ex.length-1?'<button onclick="exMove('+i+',1)">↓ '+t('moveDown')+'</button>':'')+
+    '<button class="pri" onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button>'+(exVars(x.eid).length?'<button onclick="varOpen('+i+')">⚙ '+t('varB')+'</button>':'')+'<button onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button>'+
     '<button onclick="tasteLike(\''+x.eid+'\');exMenu('+i+')">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button onclick="tasteDis(\'act\','+i+')">'+ic('ban')+' '+t('tkDis')+'</button>'+
     '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+''+(exMode(x.eid)==='wr'?'<button onclick="barMenu('+i+')">🏋 '+t('barTitle')+'</button>':'')+(exMode(x.eid)==='wr'&&isDb(x)?'<button onclick="mulMenu('+i+')">🏋 '+t('mulTitle')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
-function exMove(i,d){const a=ACT.ex,j=i+d;if(j<0||j>=a.length)return;const x=a[i];a[i]=a[j];a[j]=x;saveAct();sheetClose();render();}
 /* remove one set (the swipe-left uses this); the last set left is emptied instead / quitar una serie (lo usa deslizar a la izquierda); si queda una sola, se vacía */
 function rmSetAt(i,j){
   const x=ACT&&ACT.ex[i];if(!x||!x.sets[j])return;
@@ -689,13 +686,12 @@ function rbDraw(){
   const r=UI.rb;
   sheet('<div class="form"><h3>'+t(r.id?'editRoutine':'newRoutine')+'</h3><label>'+t('name')+'<input class="in wide" type="text" maxlength="60" value="'+esc(r.name)+'" oninput="UI.rb.name=this.value"></label>'+
     '<div class="lbl">'+t('exercises')+'</div>'+
-    (r.ex.length?r.ex.map((x,i)=>'<div class="rbx"><b>'+esc(exName(x.eid,x.n))+'</b><span class="rbs"><button class="ico" onclick="rbSets('+i+',-1)">−</button><span>'+t('nSets',x.sets)+'</span><button class="ico" onclick="rbSets('+i+',1)">＋</button></span><button class="ico" onclick="rbMove('+i+',-1)" aria-label="'+esc(t('moveUp'))+'"'+(i<1?' disabled':'')+'>↑</button><button class="ico" onclick="rbMove('+i+',1)" aria-label="'+esc(t('moveDn'))+'"'+(i>=r.ex.length-1?' disabled':'')+'>↓</button>'+xBtn('rbDel('+i+')',1)+'</div>').join(''):'<p class="muted">'+t('noEx')+'</p>')+
+    (r.ex.length?r.ex.map((x,i)=>'<div class="rbx" data-dcard="1"><b>'+esc(exName(x.eid,x.n))+'</b><span class="rbs"><button class="ico" onclick="rbSets('+i+',-1)">−</button><span>'+t('nSets',x.sets)+'</span><button class="ico" onclick="rbSets('+i+',1)">＋</button></span><span class="pv-grip" role="button" tabindex="0" data-k="rb" data-ei="'+i+'" aria-label="'+esc(t('dragAria'))+'">⠿</span>'+xBtn('rbDel('+i+')',1)+'</div>').join(''):'<p class="muted">'+t('noEx')+'</p>')+
     '<button class="btn wide" onclick="rbAdd()">＋ '+t('addEx')+'</button>'+
     '<div class="row"><button class="btn pri" onclick="rbSave()">'+t('save')+'</button><button class="btn" onclick="UI.rb=null;sheetClose()">'+t('cancel')+'</button>'+(r.id?'<button class="btn danger" onclick="rbRemove()">'+t('delete')+'</button>':'')+'</div></div>');
 }
 function rbAdd(){pickEx(function(eid){const e=exById(eid);UI.rb.ex.push({eid:eid,n:e?e.en:eid,sets:3});rbDraw();},true);}
 function rbSets(i,d){const x=UI.rb.ex[i];x.sets=Math.max(1,Math.min(20,x.sets+d));rbDraw();}
-function rbMove(i,d){const a=UI.rb.ex,j=i+d;if(j<0||j>=a.length)return;const x=a[i];a[i]=a[j];a[j]=x;rbDraw();}
 function rbDel(i){UI.rb.ex.splice(i,1);rbDraw();}
 function rbSave(){
   const r=UI.rb;if(!r.name.trim()){toast(t('needName'));return;}
