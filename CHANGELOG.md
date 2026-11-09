@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.76 — 2026-11-09
+- Military test plans: the moves that mirror each test's events (AFT: hand-release push-up, trap-bar deadlift, sprint-drag-carry drill, drag, plank; USMC: pull-ups, push-ups, ammo lift, fire carry) were listed first but then lost to the general sorting, so they almost never appeared. They now win their slot and rotate, at most twice a week each.
+  Planes para pruebas militares: los movimientos que imitan los eventos de cada prueba (AFT: flexión con liberación de manos, peso muerto con barra hexagonal, sprint-arrastre-carga, arrastre, plancha; USMC: dominadas, flexiones, levantamiento de munición, carga de bombero) iban primero en la lista pero el orden general los descartaba, así que casi nunca salían. Ahora ganan su hueco y rotan, como máximo dos veces por semana cada uno.
+
 ## v1.1.75 — 2026-11-09
 - Quick setup no longer skips safety: it now asks about injuries and about health conditions or returning after a long break (with the doctor note), in addition to goal, style, days and level.
   El arranque rápido ya no se salta la seguridad: ahora pregunta por lesiones y por condiciones de salud o regreso tras mucho tiempo (con la nota del médico), además de meta, estilo, días y nivel.
