@@ -506,7 +506,7 @@ function csBodySc(v){
   return{sc:sc,keys:keys,mx:mx,yr:up&&!lo?[-5,182]:(lo&&!up?[128,360]:[-5,360]),lead:ld('back')>ld('front')?'back':'front',
     col:function(k){const r=(sc[k]||0)/mx;return r>=.6?v.acc:(r>=.25?'#2F9BFF':(r>0?'rgba(47,155,255,.35)':'rgba(128,128,140,.30)'));}};
 }
-function csBar(g,x,y,w,r,c,ink){g.fillStyle=csRgba(ink,.14);g.beginPath();g.roundRect(x,y,w,22,11);g.fill();g.fillStyle=c;g.beginPath();g.roundRect(x,y,Math.max(22,w*r),22,11);g.fill();}
+function csFill(g,x,y,w,r,c,ink){g.fillStyle=csRgba(ink,.14);g.beginPath();g.roundRect(x,y,w,22,11);g.fill();g.fillStyle=c;g.beginPath();g.roundRect(x,y,Math.max(22,w*r),22,11);g.fill();}
 /* One: a single big figure (the side with most work) + muscle bars / Uno: una figura grande (el lado con más trabajo) + barras */
 function csBodyOne(g,v){
   const W=v.W,b=csBodySc(v),span=b.yr[1]-b.yr[0],hf=Math.min(span>300?820:640,v.B-420,420*span/164),y=v.B-hf-330;
@@ -514,7 +514,7 @@ function csBodyOne(g,v){
   const ww=ANA[b.lead].vb.split(' ')[2]*hf/span;csFig(g,b.lead,80,y,hf,b.yr,b.col);
   const x=80+ww+50,bw=W-80-x;let c=y+40;
   csTxt(g,t('csBodyT'),x,c,40,'700',v.sub);c+=60;
-  const pitch=Math.max(84,Math.min(130,(hf-80)/6));b.keys.slice(0,Math.min(6,Math.floor((hf-60)/pitch))).forEach(function(k){csTxt(g,t('ms_'+k),x,c+4,36,'700',v.ink);csBar(g,x,c+22,bw,b.sc[k]/b.mx,b.col(k),v.ink);c+=pitch;});
+  const pitch=Math.max(84,Math.min(130,(hf-80)/6));b.keys.slice(0,Math.min(6,Math.floor((hf-60)/pitch))).forEach(function(k){csTxt(g,t('ms_'+k),x,c+4,36,'700',v.ink);csFill(g,x,c+22,bw,b.sc[k]/b.mx,b.col(k),v.ink);c+=pitch;});
   const n=Math.min(3,v.stats.length),cw=(W-160)/Math.max(n,1);
   v.stats.slice(0,3).forEach(function(q,i){const xx=80+i*cw,fp=csFit(g,q.v,cw-40,64,'800');csTxt(g,q.v,xx,v.B-60,fp,'800',v.ink);csTxt(g,q.l,xx,v.B-20,28,'500',v.sub);});
 }

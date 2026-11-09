@@ -133,8 +133,9 @@ function needBackup(){
 }
 function weekStrip(){
   const ws=weekStart(Date.now()),td=new Date().getDay(),days=[];
-  for(let i=0;i<7;i++){const a=ws+i*864e5,d=new Date(a+432e5);
-    days.push({l:d.toLocaleDateString(LANG==='es'?'es':'en',{weekday:'narrow'}).toUpperCase(),on:DATA.workouts.some(w=>w.t>=a&&w.t<a+864e5),today:new Date(a+432e5).toDateString()===new Date().toDateString()});}
+  const at=n=>{const x=new Date(ws);x.setDate(x.getDate()+n);return x.getTime();}; // calendar days, safe across daylight-saving changes / días de calendario, sin errores por cambio de hora
+  for(let i=0;i<7;i++){const a=at(i),b=at(i+1),d=new Date(a+432e5);
+    days.push({l:d.toLocaleDateString(LANG==='es'?'es':'en',{weekday:'narrow'}).toUpperCase(),on:DATA.workouts.some(w=>w.t>=a&&w.t<b),today:d.toDateString()===new Date().toDateString()});}
   const s=streakInfo(),n=days.filter(d=>d.on).length;
   return'<div class="card wkstrip"><div class="ws-top"><b>'+t('thisWeek')+'</b><span class="muted sm">'+(s.n?ic('bolt')+' '+t(s.n===1?'stOne':'stN',s.n):t('wsCount',n,s.tg))+'</span></div><div class="ws-days">'+days.map(d=>'<div class="ws-d'+(d.on?' on':'')+(d.today?' td':'')+'"><span>'+d.l+'</span><i>'+(d.on?ic('check'):'')+'</i></div>').join('')+'</div></div>';
 }
@@ -307,6 +308,7 @@ function sv(i,j,f,v){
     else if(f==='r'){n=parseInt(v,10);if(!(n>=0))n=null;}
     else n=numParse(v);
   }
+  if(n!=null&&n>({w:1500,r:999,t:1440,d:1000}[f]||1e9)){n=null;toast(t('tooBig'));} // typos like 1000000 never reach your totals / un error de dedo no llega a tus totales
   if(f==='w'&&n!=null){const bx=ACT.ex[i];if(exMode(bx.eid)==='wr')n=n*mulOf(bx)+barOf(bx);}
   s[f]=n;
   if(n==null&&s.done){s.done=false;delete s.pr;const r=document.querySelectorAll('#exc'+i+' .srow:not(.hd)')[j];if(r){r.classList.remove('done');r.querySelectorAll('.in').forEach(q=>q.classList.remove('dn'));}}
@@ -462,7 +464,7 @@ function finishWk(){
   render();
   const prs=[];wk.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr&&prs.indexOf(x.eid)<0)prs.push(x.eid);}));
   sheet('<div class="sum"><div class="sum-e">🎉</div><h3>'+t('wkSaved')+'</h3><p class="cheer">'+wkCheer(wk,prs)+'</p><p class="muted">'+esc(wk.name)+'</p>'+
-    '<div class="stats"><div><b>'+fmtDur((end-wk.t)/1000)+'</b><span>'+t('duration')+'</span></div><div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+wShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>'+
+    '<div class="stats"><div><b>'+fmtDur((end-wk.t)/1000)+'</b><span>'+t('duration')+'</span></div><div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+vShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>'+
     (prs.length?'<p class="prs">'+ic('trophy')+' '+t('prsT')+': '+prs.map(e=>esc(exName(e))).join(', ')+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="sumDone()">'+t('done')+'</button><button class="btn" onclick="saveWkAsRoutine(\''+wk.id+'\')">'+t('saveRoutineS')+'</button><button class="btn" onclick="wkPic(\''+wk.id+'\')">'+ic('share')+' '+t('cdBtn')+'</button><button class="btn" onclick="cgAfter(\''+wk.id+'\')">'+ic('heart')+' '+t('cgAfter')+'</button></div></div>');
 }

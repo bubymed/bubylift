@@ -4,7 +4,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.80';
+const APP_VER='v1.1.81';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -49,6 +49,8 @@ function saveAct(){
 const imp=()=>SET.units==='imperial';
 const wUnit=()=>imp()?'lb':'kg',dUnit=()=>imp()?'mi':'km',lUnit=()=>imp()?'in':'cm';
 function wShow(kg){if(kg==null||isNaN(kg))return'';return fmtNum(imp()?kg*KG_LB:kg,1);}
+/* training volume: whole number with thousands separator (25,133 lb, not 25132.7) / volumen: número entero con separador de miles */
+function vShow(kg){if(kg==null||isNaN(kg))return'';const v=Math.round(imp()?kg*KG_LB:kg);try{return v.toLocaleString(loc());}catch(e){return String(v);}}
 function wParse(s){const n=numParse(s);return n==null?null:(imp()?n/KG_LB:n);}
 function dShow(km){if(km==null||isNaN(km))return'';return fmtNum(imp()?km*KM_MI:km,2);}
 function dParse(s){const n=numParse(s);return n==null?null:(imp()?n/KM_MI:n);}
@@ -62,6 +64,8 @@ const _dfc={};
 function dFmt(ts,o){o=o||{month:'short',day:'numeric',year:'numeric'};if(!isFinite(ts))return'';const l=loc(),k=l+JSON.stringify(o);let f=_dfc[k];if(!f){try{f=_dfc[k]=new Intl.DateTimeFormat(l,o);}catch(e){return new Date(ts).toLocaleDateString(l,o);}}return f.format(new Date(ts));}
 function dInput(ts){const d=new Date(ts);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function dFromInput(s){const p=String(s).split('-').map(Number);if(p.length!==3||p.some(isNaN))return Date.now();return new Date(p[0],p[1]-1,p[2],12,0,0).getTime();}
+/* the Monday 00:00 that is n weeks from a Monday 00:00, safe across daylight-saving changes / el lunes 00:00 que queda a n semanas, sin errores por cambio de hora */
+function wkOff(ws,n){const d=new Date(ws);d.setDate(d.getDate()+7*n);return d.getTime();}
 function weekStart(ts){const d=new Date(ts==null?Date.now():ts);d.setHours(0,0,0,0);const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return d.getTime();}
 function fmtDur(sec){sec=Math.max(0,Math.round(sec));const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60);return h?h+'h '+String(m).padStart(2,'0')+'m':m+'m';}
 function fmtClock(sec){sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(s).padStart(2,'0');}

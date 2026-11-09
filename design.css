@@ -915,3 +915,11 @@ body.resting #platefab{bottom:calc(var(--tab-h) + 140px + env(safe-area-inset-bo
 .pc-tg>div{display:flex;flex-direction:column;gap:1px;min-width:0}.pc-tg b{font-size:.98rem}.pc-tg small{color:var(--dim)}
 .pc-tg .btn{flex:none}
 .pc-row{display:flex;align-items:center;gap:10px;margin-top:8px}.pc-row .lbl{margin:0}
+/* edit a saved workout / editar un entrenamiento guardado */
+.wke-ex{margin:16px 0 4px;font-weight:700}
+.wke-s{display:grid;grid-template-columns:30px 1fr 1fr 44px;gap:8px;align-items:center;margin:6px 0}
+.wke-s>span:first-child{text-align:center;color:var(--dim)}
+.wke-s .in{min-height:46px;text-align:center;width:100%}
+.wke-h{font-size:.72rem;letter-spacing:.06em;color:var(--dim);margin:0}
+.wke-h span{text-align:center}
+.wke textarea{margin-top:4px}

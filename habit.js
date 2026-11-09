@@ -1,6 +1,6 @@
 /* Habit helpers (v68): weekly streak, weekly summary, calendar reminders.
    Ayudas de hábito (v68): racha semanal, resumen semanal y recordatorios en el calendario. */
-function wkCount(ws){return DATA.workouts.filter(w=>w.t>=ws&&w.t<ws+7*864e5).length;}
+function wkCount(ws){return DATA.workouts.filter(w=>w.t>=ws&&w.t<wkOff(ws,1)).length;}
 /* weekly goal: the plan's days per week, or 3 / meta semanal: días del plan, o 3 */
 function wkTarget(){return DATA.plan?DATA.plan.n:3;}
 function wkMin(){return Math.max(1,Math.ceil(wkTarget()*0.67));}
@@ -10,12 +10,12 @@ function streakInfo(){
   const now=Date.now(),cw=weekStart(now),min=wkMin();
   if(!DATA.workouts.length)return{n:0,cur:0,min:min,tg:wkTarget(),grace:0};
   const cur=wkCount(cw);
-  let n=cur>=min?1:0,grace=0,w=cw-7*864e5,first=DATA.workouts[DATA.workouts.length-1].t;
-  while(w+7*864e5>first){
+  let n=cur>=min?1:0,grace=0,w=wkOff(cw,-1),first=DATA.workouts[DATA.workouts.length-1].t;
+  while(wkOff(w,1)>first){
     if(wkCount(w)>=min)n++;
     else if(!grace&&n>0){grace=1;}
     else break;
-    w-=7*864e5;
+    w=wkOff(w,-1);
   }
   return{n:n,cur:cur,min:min,tg:wkTarget(),grace:grace};
 }
@@ -25,14 +25,14 @@ function streakCard(){
   return'<div class="card streak"><span class="st-n">'+ic('bolt')+' '+s.n+'</span><span class="st-t"><b>'+t(s.n===1?'stOne':'stN',s.n)+'</b><small>'+(left?t('stLeft',s.cur,s.tg,left):t('stOk',s.cur,s.tg))+(s.grace?' · '+t('stGrace'):'')+'</small></span></div>';
 }
 function wkStats(ws){
-  const a=DATA.workouts.filter(w=>w.t>=ws&&w.t<ws+7*864e5);
+  const a=DATA.workouts.filter(w=>w.t>=ws&&w.t<wkOff(ws,1));
   let sets=0,vol=0,prs=0,ms=0;
   a.forEach(w=>{sets+=wkSets(w);vol+=wkVol(w);w.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr)prs++;}));ms+=Math.max(0,(w.end||w.t)-w.t);});
   return{n:a.length,sets:sets,vol:vol,prs:prs,ms:ms};
 }
 function wkSumDue(){
   const cw=weekStart(Date.now());if(SET.wkSeen===cw)return false;
-  return wkCount(cw-7*864e5)>0;
+  return wkCount(wkOff(cw,-1))>0;
 }
 function wkSumCard(){
   if(!wkSumDue())return'';
@@ -40,12 +40,12 @@ function wkSumCard(){
 }
 function wkSumHide(){SET.wkSeen=weekStart(Date.now());saveSet();render();}
 function wkSumOpen(){
-  const cw=weekStart(Date.now()),a=wkStats(cw-7*864e5),b=wkStats(cw-14*864e5),s=streakInfo();
+  const cw=weekStart(Date.now()),a=wkStats(wkOff(cw,-1)),b=wkStats(wkOff(cw,-2)),s=streakInfo();
   const ar=(x,y)=>x>y?'↑ ':(x<y?'↓ ':'= ');
   SET.wkSeen=cw;saveSet();
   sheet('<div class="form"><div class="pick-h"><h3>'+t('wsT')+'</h3><button class="ico" onclick="sheetClose();render()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<div class="stats card"><div><b>'+a.n+'</b><span>'+t('workouts')+'</span></div><div><b>'+a.sets+'</b><span>'+t('sets')+'</span></div><div><b>'+a.prs+'</b><span>PR</span></div></div>'+
-    '<p class="muted sm">'+t('workouts')+': '+ar(a.n,b.n)+t('wsVs',b.n)+' · '+t('volume')+': '+wShow(a.vol)+' '+wUnit()+' '+ar(a.vol,b.vol)+t('wsVs',wShow(b.vol)+' '+wUnit())+'</p>'+
+    '<p class="muted sm">'+t('workouts')+': '+ar(a.n,b.n)+t('wsVs',b.n)+' · '+t('volume')+': '+vShow(a.vol)+' '+wUnit()+' '+ar(a.vol,b.vol)+t('wsVs',vShow(b.vol)+' '+wUnit())+'</p>'+
     '<p><b>'+t(s.n===1?'stOne':'stN',s.n)+'</b></p><p class="muted sm">'+t('wsNext',DATA.plan?t('planToday'):'')+'</p>'+
     '<div class="row"><button class="btn pri" onclick="sheetClose();render()">'+t('done')+'</button></div></div>');
 }
@@ -69,6 +69,6 @@ function remSave(){
     ev.push('BEGIN:VEVENT','UID:bubylift-'+wd+'-'+ds+'@bubylift','DTSTAMP:'+ds+'T000000Z','DTSTART:'+ds+'T'+hh+mm+'00','DURATION:PT1H','RRULE:FREQ=WEEKLY;BYDAY='+BY[wd],'SUMMARY:Bubylift 🏋️','DESCRIPTION:'+t('rmDesc'),'BEGIN:VALARM','TRIGGER:PT0M','ACTION:DISPLAY','DESCRIPTION:Bubylift','END:VALARM','END:VEVENT');
   });
   ev.push('END:VCALENDAR');
-  sheetClose();fileOut('bubylift-reminders.ics',ev.join('\r\n'),'text/calendar');toast(t('rmDone'));
+  sheetClose();fileOut('bubylift-reminders.ics',ev.join('\r\n'),'text/calendar');toast(t('rmFile'));
 }
 function habitCards(){return wkSumCard()+streakCard();}

@@ -62,7 +62,7 @@ function recData(now){
     if(!tr.length)return;
     x.pct=Math.min.apply(null,tr.map(k=>x.subs[k].pct));x.left=Math.max.apply(null,tr.map(k=>x.subs[k].left));x.t=Math.max.apply(null,tr.map(k=>x.subs[k].t));x.n=Math.round(Math.max.apply(null,tr.map(k=>x.subs[k].s)));
   });
-  return{g:o,last:lastT,days:lastT?Math.floor((now-lastT)/864e5):null,ready:REC_G.filter(g=>o[g].pct==null||o[g].pct>=100).length};
+  return{g:o,last:lastT,days:lastT?(function(){const a=new Date(now),c=new Date(lastT);a.setHours(0,0,0,0);c.setHours(0,0,0,0);return Math.round((a-c)/864e5);})():null,ready:REC_G.filter(g=>o[g].pct==null||o[g].pct>=100).length};
 }
 /* training load: hard sets per week, this week vs your last 3 weeks, and per-muscle weekly sets / carga de entrenamiento: series duras por semana */
 function loadData(now){
@@ -227,6 +227,7 @@ function vBody(){
 }
 function bodySave(){
   const o={id:uid(),t:dFromInput($('bd').value)};
+  if(dInput(o.t)>dInput(Date.now()))o.t=Date.now(); // a date in the future would become your "current" weight / una fecha futura sería tu peso "actual"
   const w=wParse($('bw').value),bf=numParse($('bf').value);
   if(w!=null&&w>0&&w<700)o.w=w;
   if(bf!=null&&bf>0&&bf<100)o.bf=bf;
