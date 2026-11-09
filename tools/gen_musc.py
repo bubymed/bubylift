@@ -154,6 +154,8 @@ RULES=[
  (r'romanian|stiff|deadlift|pull through|one-legged deadlift',['legs'],RDL),
  (r'calf|donkey',['legs'],'clf1'),
  (r'abduct',['legs'],'gmd1 gmx.3'),
+ (r'copenhagen',None,'add1 obl.5 abs.4 gmd.3'),
+ (r'sumo squat',None,'qd1 gmx.8 add.7 ham.3 lbk.2'),
  (r'adduct',['legs'],'add1'),
  (r'monster walk',['legs'],'gmd1 gmx.5 qd.3'),
  (r'hip flexion',['legs'],'qd.5 abs.5'),

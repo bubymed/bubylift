@@ -277,7 +277,7 @@ const STR={
  fm_glutes:['Glutes','Glúteos'],
  fm_quads:['Quads','Cuádriceps'],
  fm_hams:['Hamstrings','Femorales'],
- fm_calves:['Calves','Pantorrillas'],
+ fm_calves:['Calves','Pantorrillas'],fm_inner:['Inner thighs','Muslo interno'],
  fm_chest:['Chest','Pecho'],
  fm_back:['Back','Espalda'],
  fm_shoulders:['Shoulders','Hombros'],

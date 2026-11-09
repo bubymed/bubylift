@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.69 — 2026-10-30
+- Inner thighs (adductors) are now a plan focus you can tap on the body figure, with new exercises: Copenhagen plank, sumo squat, side-lying adduction.
+  Muslo interno (aductores) ahora es un enfoque del plan que puedes tocar en la figura, con ejercicios nuevos: plancha Copenhague, sentadilla sumo y aducción acostado de lado.
+
 ## v1.1.68 — 2026-10-30
 - Tap the body to pick your plan focus and cool-down muscles; Balance and Load are now body heat maps; Recovery opens on the body view.
   Toca el cuerpo para elegir el enfoque del plan y los músculos del cool down; Equilibrio y Carga son mapas de calor del cuerpo; Recuperación abre en la vista del cuerpo.

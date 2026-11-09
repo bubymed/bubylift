@@ -70,6 +70,9 @@ const EXLIB=[
  ['calf','Standing Calf Raise','Elevación de talones de pie','legs','machine'],
  ['seatcalf','Seated Calf Raise','Elevación de talones sentado','legs','machine'],
  ['adduct','Hip Adduction Machine','Máquina de aductores','legs','machine'],
+ ['copenhagen','Copenhagen Plank','Plancha Copenhague','legs','bodyweight','t'],
+ ['sumosq','Sumo Squat','Sentadilla sumo','legs','dumbbell'],
+ ['sladd','Side-Lying Hip Adduction','Aducción de cadera acostado de lado','legs','bodyweight'],
  ['abduct','Hip Abduction Machine','Máquina de abductores','legs','machine'],
  // glutes / glúteos
  ['hipthrust','Hip Thrust','Hip thrust (empuje de cadera)','glutes','barbell'],

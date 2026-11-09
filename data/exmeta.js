@@ -1,7 +1,7 @@
 /* Exercise metadata used by the plan builder, substitutions and injury warnings.
    Metadatos de ejercicios para el armador de planes, las sustituciones y los avisos por lesión.
    EXM[id] = muscle letter + level digit + stress pairs.
-   muscle: Q quads · H hamstrings/hinge · G glutes · C calves · P chest · B back · S shoulders · I biceps · T triceps · A core · W power · F full body · Z balance · K cardio
+   muscle: N inner thighs/adductors · Q quads · H hamstrings/hinge · G glutes · C calves · P chest · B back · S shoulders · I biceps · T triceps · A core · W power · F full body · Z balance · K cardio
    level: 1 = fine for beginners · 2 = needs some experience
    stress: joint letter + 1 (go light / pain-free range) or 2 (not recommended with an injury there)
    joints: k knee · b low back · s shoulder · e elbow · w wrist · h hip · a ankle/foot · n neck
@@ -20,12 +20,13 @@ const EXM={
  bbcurl:'I1e1w1',ezcurl:'I1e1',dbcurl:'I1e1',hammer:'I1e1',preacher:'I1e1',cablecurl:'I1e1',inccurl:'I1e1s1',concurl:'I1e1',bandcurl:'I1e1',seatdbcurl:'I1e1',
  cgbp:'T2s1e1w1',pushdown:'T1e1',ropepd:'T1e1',skull:'T2e2',ohext:'T1e1s1',cableohext:'T1e1s1',benchdip:'T1s2e1w1',kickback:'T1e1',lyingext:'T2e2',bandpd:'T1e1',diamondpu:'T2w2e1',
  // quads
- squat:'Q2k1b1h1a1',frontsq:'Q2k1w1b1',overheadsq:'Q2k1b1s1',boxsq:'Q2k1b1',gobsq:'Q1k1',legpress:'Q1k1',hacksq:'Q2k1',lunge:'Q1k2h1',fwdlunge:'Q1k2h1',revlunge:'Q1k1h1',latlunge:'Q1k1h1',
+ copenhagen:'N2h1',sumosq:'N1k1h1',sladd:'N1h1',
+ squat:'Q2k1b1h1a1',frontsq:'Q2k1w1b1',overheadsq:'Q2k1b1s1',boxsq:'Q2k1b1',gobsq:'Q1k1',legpress:'Q1k1',hacksq:'Q2k1',lunge:'Q1k2h1',fwdlunge:'Q1k2h1',revlunge:'Q1k1h1',latlunge:'N1k1h1',
  splitsq:'Q1k2h1',bulgsplit:'Q2k2h1',stepup:'Q1k1',latstep:'Q1k1',legext:'Q1k2',bodysq:'Q1k1',ballsq:'Q1k1',slsquat:'Q2k2a1',sledpush:'Q1k1a1',bwlunge:'Q1k1h1',bwstepup:'Q1k1',sqpress:'F2k1s1',
  // hamstrings / hinge
  rdl:'H2b1',deadlift:'H2b2h1',hexdl:'H2b1h1',goodmorn:'H2b2',sldl:'H2b1a1',dbrdl:'H1b1',sleddrag:'D1k1a1',sdcdrill:'D1k1a1b1',ruck:'K1k1a1b1s1',firecarry:'D2b1k1',ammolift:'S1s2n1',lowcrawl:'D1w1s1',legcurl:'H1',seatlc:'H1',legcurlball:'H1',bandrdl:'H1b1',
  // glutes
- sumo:'G2b1h1k1',hipthrust:'G1',glutebr:'G1',slbridge:'G1',ballbridge:'G1',frogpump:'G1',firehydrant:'G1',donkeykick:'G1',clamshell:'G1',bandwalk:'G1',kbdl:'G1b1',cablekick:'G1',abduct:'G1h1',adduct:'G1h1',bandbridge:'G1',bandkick:'G1',
+ sumo:'G2b1h1k1',hipthrust:'G1',glutebr:'G1',slbridge:'G1',ballbridge:'G1',frogpump:'G1',firehydrant:'G1',donkeykick:'G1',clamshell:'G1',bandwalk:'G1',kbdl:'G1b1',cablekick:'G1',abduct:'G1h1',adduct:'N1h1',bandbridge:'G1',bandkick:'G1',
  // calves
  calf:'C1a1',seatcalf:'C1a1',calfdb:'C1a1',
  // core
