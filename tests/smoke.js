@@ -269,7 +269,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(/A plan made for you/.test(main()),'no plan: start screen offers to create one');
   const goq=id=>{ev("PW.q='"+id+"';wizDraw()");};
   w.planSetup();ok(/build your plan/.test(sheetHtml()),'wizard starts by asking quick or custom');
-  w.pwQuick(1);ok(ev("wzList().map(q=>q.id).join()")==='mode,goal,n,lvl,sty,sum'&&/Pick the one that matters/.test(sheetHtml()),'quick start has only the main questions');
+  w.pwQuick(1);ok(ev("wzList().map(q=>q.id).join()")==='mode,goal,n,lvl,sty,inj,cond,sum'&&/Pick the one that matters/.test(sheetHtml()),'quick start has only the main questions plus injuries and health');
   w.pwFull();ok(ev("PW.quick")===0&&ev('wzList().length')>15,'customize more returns to all questions');
   goq('mode');w.pwQuick(0);ok(/Pick the one that matters/.test(sheetHtml()),'custom opens at the first of many single questions');
   w.pwSet('sex','f');ok(ev("PW.emph")==='low','woman preselects lower-body emphasis (can be changed)');

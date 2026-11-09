@@ -6,6 +6,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 ## Unreleased / Próximo
 - Nothing yet. / Nada todavía.
 
+## v1.1.75 — 2026-11-09
+- Quick setup no longer skips safety: it now asks about injuries and about health conditions or returning after a long break (with the doctor note), in addition to goal, style, days and level.
+  El arranque rápido ya no se salta la seguridad: ahora pregunta por lesiones y por condiciones de salud o regreso tras mucho tiempo (con la nota del médico), además de meta, estilo, días y nivel.
+
 ## v1.1.74 — 2026-11-09
 - Plateaus: when a main lift shows no progress in 3 sessions, the check-in suggests keeping it with about 10% less weight for a week (a deload note on the exercise) instead of swapping and banning it. If 3 or more lifts stall, it suggests one deload week for all of them. Only a second plateau after that suggests a swap. Every suggestion can still be unchecked.
   Estancamientos: cuando un ejercicio principal no progresa en 3 sesiones, el chequeo sugiere mantenerlo con cerca de 10% menos peso una semana (una nota de descarga en el ejercicio) en vez de cambiarlo y vetarlo. Si 3 o más se estancan, sugiere una sola semana de descarga para todos. Solo un segundo estancamiento después sugiere cambiarlo. Cada sugerencia se puede desmarcar.

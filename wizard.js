@@ -118,7 +118,7 @@ const WQ=[
  {id:'sum',ic:'✅',title:()=>t('psSum'),sub:()=>t('wzSumS'),body:()=>wzSummary()}
 ];
 /* quick start: only the questions that matter most / arranque rápido: solo lo más importante */
-const QK=['mode','goal','race','test','sty','n','lvl','sum'];
+const QK=['mode','goal','race','test','sty','n','lvl','inj','cond','sum']; // inj + cond: safety questions are never skipped / las preguntas de seguridad no se saltan
 const wzList=()=>WQ.filter(q=>(!q.show||q.show())&&(!PW.quick||QK.indexOf(q.id)>=0));
 function pwQuick(v){PW.quick=v;wzGo(1);}
 function pwFull(){PW.quick=0;PW.q='sex';wizDraw();}
