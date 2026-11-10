@@ -869,7 +869,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   w.swipeDone(cardEl,120);ok(/Pick the day/.test(sheetHtml()),'swipe right lets you pick another day');w.sheetClose();
   w.swipeDone(cardEl,-30);ok(ev('!!document.getElementById("sheet").innerHTML')===false||true,'short swipe does nothing');
   ev("DATA.routines.push({id:'rt1',name:'Test R',ex:[{eid:'bench',n:'Bench',sets:3}]});saveData();render()");
-  const rtEl=doc.querySelector('.card.rt.swp-in[data-a="rt1"]');ok(!!rtEl&&rtEl.getAttribute('data-l')==='rtDelAsk','routine card is swipeable');
+  const rtEl=doc.querySelector('.card.rt.swp-in[data-a="rt1"]');ok(!!rtEl&&rtEl.getAttribute('data-l')==='rtDelAsk','routine card is swipeable');ok(!!rtEl&&!rtEl.querySelector('.xdel'),'routine card has no X next to Edit (delete lives in Edit and in the swipe)');
   w.swipeDone(rtEl,-120);ok(/Delete this routine/.test(sheetHtml()),'swipe left on a routine asks to delete');w.askOk();ok(ev("DATA.routines.some(r=>r.id==='rt1')")===false,'routine deleted');
   // backward compatibility with v3 plans
   const v3=ev(`cleanPlan({goal:'muscle',n:3,lvl:'new',t0:1,ds:[{k:'fullA',ex:[{eid:'gobsq',sets:3,lo:10,hi:12,u:'r',r:'m'}]},{k:'fullB',ex:[{eid:'legpress',sets:3,lo:10,hi:12,u:'r',r:'m'}]},{k:'fullC',ex:[{eid:'stepup',sets:3,lo:10,hi:12,u:'r',r:'m'}]}],checks:[]})`);
