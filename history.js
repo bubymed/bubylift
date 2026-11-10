@@ -59,14 +59,32 @@ function vHistory(){
   const now=new Date(),ws=weekStart(now.getTime()),ms=new Date(now.getFullYear(),now.getMonth(),1).getTime();
   const wn=DATA.workouts.filter(w=>w.t>=ws).length,mn=DATA.workouts.filter(w=>w.t>=ms).length;
   let h=addB+'<div class="stats card calc" role="button" tabindex="0" onclick="calOpen()"><div><b>'+wn+'</b><span>'+t('thisWeek')+'</span></div><div><b>'+mn+'</b><span>'+t('thisMonth')+'</span></div><div><b>'+DATA.workouts.length+'</b><span>'+t('total')+'</span></div><p class="calh">'+ic('calendar')+' '+t('calOpenB')+' ›</p></div>';
-  let last='';
-  DATA.workouts.forEach(wk=>{
+  const grs=[];DATA.workouts.forEach(w=>w.ex.forEach(x=>{const e=exById(x.eid);if(e&&e.g&&grs.indexOf(e.g)<0)grs.push(e.g);}));
+  const gOrder=EX_GROUPS.filter(g=>grs.indexOf(g)>=0);
+  h+='<div class="hsr"><input id="hq" class="in wide" type="search" inputmode="search" autocomplete="off" maxlength="40" placeholder="'+esc(t('hSearchPh'))+'" value="'+esc(UI.hq||'')+'" oninput="hSearch(this.value)" aria-label="'+esc(t('hSearchPh'))+'">'+
+    (gOrder.length>1?'<select id="hg" class="in" onchange="hGroup(this.value)" aria-label="'+esc(t('hAll'))+'"><option value="">'+t('hAll')+'</option>'+gOrder.map(g=>'<option value="'+g+'"'+(UI.hg===g?' selected':'')+'>'+t('g_'+g)+'</option>').join('')+'</select>':'')+'</div>';
+  return h+'<div id="hlist">'+histList()+'</div>';
+}
+/* the list below the search box: filtered by name or exercise (any language, accents ignored) and by muscle group / la lista bajo el buscador: filtrada por nombre o ejercicio (cualquier idioma, sin acentos) y por grupo muscular */
+function wkMatch(wk,q,g){
+  if(g&&!wk.ex.some(x=>{const e=exById(x.eid);return e&&e.g===g;}))return false;
+  if(!q)return true;
+  if(norm(wk.name).indexOf(q)>=0||norm(wk.note).indexOf(q)>=0)return true;
+  return wk.ex.some(x=>{const e=exById(x.eid);return norm(x.n).indexOf(q)>=0||(e&&(norm(e.en).indexOf(q)>=0||norm(e.es).indexOf(q)>=0));});
+}
+function histList(){
+  const q=norm((UI.hq||'').trim()),g=UI.hg||'',all=DATA.workouts.filter(w=>isFinite(w.t)),a=all.filter(w=>wkMatch(w,q,g));
+  if(!a.length)return'<div class="card tip"><p class="muted">'+t('hNone')+'</p></div>';
+  let h=(q||g)?'<p class="muted sm hcnt">'+t('hCount',a.length)+'</p>':'',last='';
+  a.forEach(wk=>{
     const lb=dFmt(wk.t,{month:'long',year:'numeric'});
     if(lb!==last){if(last)h+='</div>';h+='<div class="sec"><h2>'+esc(lb)+'</h2></div><div class="lgrp">';last=lb;}
     h+=wkCard(wk);
   });
   return h+'</div>';
 }
+function hSearch(v){UI.hq=String(v).slice(0,40);const l=document.getElementById('hlist');if(l)l.innerHTML=histList();}
+function hGroup(v){UI.hg=v||'';const l=document.getElementById('hlist');if(l)l.innerHTML=histList();}
 function wkText(wk){
   let s=wk.name+' — '+dFmt(wk.t)+'\n';
   wk.ex.forEach(x=>{const m=exMode(x.eid);s+='\n'+exNameV(x.eid,x.vr,x.n)+'\n';x.sets.forEach((st,i)=>{s+='  '+(i+1)+') '+fmtSet(m,st)+(st.pr?' 🏆':'')+'\n';});});
