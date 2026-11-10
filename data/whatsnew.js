@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.92',items:[
+  {i:'layers',en:'<b>Stretching has its own tab</b>: History now separates Workouts from Stretch & mobility, so your lifting log is not mixed with stretching sessions. The tab appears once you have a stretching session.',es:'<b>El estiramiento tiene su propia pestaña</b>: el Historial ahora separa Entrenamientos de Estiramiento y movilidad, así tu registro de pesas no se mezcla con las sesiones de estiramiento. La pestaña aparece cuando tienes una sesión de estiramiento.'}
+ ]},
  {v:'v1.1.91',items:[
   {i:'undo',en:'<b>Undo for routines and your plan</b>: deleting a routine or your plan now shows an Undo button for a few seconds, just like workouts and body entries.',es:'<b>Deshacer para rutinas y tu plan</b>: al eliminar una rutina o tu plan aparece un botón Deshacer unos segundos, igual que con los entrenamientos y los registros de peso.'}
  ]},
