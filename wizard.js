@@ -158,7 +158,34 @@ function wzSummary(){
     (PW.inj.length?row('🩹',t('planInj',PW.inj.map(k=>t('inj_'+k)).join(', '))):'')+
     (PW.avoid.length?row('🚫',t('sumAvoid',PW.avoid.map(k=>t('av_'+k)).join(', '))):'')+
     (optOn(PW)&&PW.fav.length?row('⭐',t('sumFav',PW.fav.map(k=>exName(k)).join(', '))):'')+
-    (PW.work?row(WZ_IC.work[PW.work],t('wk_'+PW.work)):'')+'</ul><p class="muted sm">'+t('planNote')+'</p>'+(PW.quick?'<p class="muted sm">'+t('qsNote')+'</p><div class="row"><button class="btn" onclick="pwFull()">🎛️ '+t('qsMore')+'</button></div>':'');
+    (PW.work?row(WZ_IC.work[PW.work],t('wk_'+PW.work)):'')+'</ul>'+wzPreview()+'<p class="muted sm">'+t('planNote')+'</p>'+(PW.quick?'<p class="muted sm">'+t('qsNote')+'</p><div class="row"><button class="btn" onclick="pwFull()">🎛️ '+t('qsMore')+'</button></div>':'');
+}
+/* an unfinished setup is kept for a week so closing the sheet does not lose your answers / una configuración sin terminar se guarda una semana para no perder tus respuestas al cerrar */
+const WZ_KEEP=7*864e5;
+function wzDraftKey(){return K_DATA+'_wz';}
+function wzDraftSave(){
+  if(PW.mini)return;
+  const c=Object.assign({},PW);delete c._lq;
+  jset(wzDraftKey(),{ts:Date.now(),pw:c});
+}
+function wzDraftClear(){try{localStorage.removeItem(wzDraftKey());}catch(e){}}
+/* offer to continue a saved setup: returns true when the question was shown / ofrece continuar una configuración guardada: devuelve true si mostró la pregunta */
+function wzDraftAsk(){
+  const d=jget(wzDraftKey(),null);
+  if(!d||!d.pw||Date.now()-d.ts>WZ_KEEP||!d.pw.q||['mode','goal'].indexOf(d.pw.q)>=0){if(d)wzDraftClear();return false;}
+  sheet('<div class="sum"><div class="sum-e">📝</div><h3>'+t('wzResT')+'</h3><p class="muted">'+t('wzResP')+'</p>'+
+    '<div class="row"><button class="btn pri" onclick="wzDraftUse()">'+t('wzResYes')+'</button><button class="btn" onclick="wzDraftNo()">'+t('wzResNo')+'</button></div></div>');
+  return true;
+}
+function wzDraftUse(){const d=jget(wzDraftKey(),null);if(d&&d.pw)PW=Object.assign(PW,d.pw);PW.mini=0;wizDraw();}
+function wzDraftNo(){wzDraftClear();wizDraw();}
+/* what the plan will look like, before you create it / cómo se verá el plan, antes de crearlo */
+function wzPreview(){
+  try{
+    const p=genPlan(wzProf());if(!p||!p.ds||!p.ds.length)return'';
+    const nm=(d,i)=>{if(d.nm)return d.nm;let same=0,idx=0;p.ds.forEach((x,j)=>{if(x.k===d.k){same++;if(j<i)idx++;}});return t('pd_'+d.k)+(same>1?' '+String.fromCharCode(65+idx):'');};
+    return'<div class="lbl">'+t('wzPrevT')+'</div><ul class="wsum">'+p.ds.map((d,i)=>'<li><span class="wi">'+(i+1)+'</span><span>'+esc(nm(d,i))+' · '+t('planExN',d.ex.length)+'</span></li>').join('')+'</ul>';
+  }catch(e){return'';}
 }
 function wzDraw(){
   const l=wzList(),i=wzIdx(l),q=l[i];PW.q=q.id;
@@ -172,4 +199,5 @@ function wzDraw(){
     '<div class="wz-body">'+q.body()+'</div></div>'+
     '<div class="wz-foot"><button class="btn pri wide"'+(wzReady(q)?'':' disabled')+' onclick="'+(last?'planCreate()':'wzGo(1)')+'">'+nextLbl+'</button></div></div>');
   $('sheet').classList.add('wzs');if(!fresh)$('sheet').scrollTop=st;
+  wzDraftSave();
 }
