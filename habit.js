@@ -30,6 +30,17 @@ function wkStats(ws){
   a.forEach(w=>{sets+=wkSets(w);vol+=wkVol(w);w.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr)prs++;}));ms+=Math.max(0,(w.end||w.t)-w.t);});
   return{n:a.length,sets:sets,vol:vol,prs:prs,ms:ms};
 }
+/* what stood out in a week: the records (best set of each exercise) and the muscle you trained most / lo que destacó de una semana: los récords y el músculo más trabajado */
+function wkHighlights(ws){
+  const a=DATA.workouts.filter(w=>w.t>=ws&&w.t<wkOff(ws,1)),prs={},gs={};
+  a.forEach(w=>w.ex.forEach(x=>{
+    const e=exById(x.eid),m=exMode(x.eid);
+    if(e&&e.g&&e.g!=='mobility'&&e.g!=='cardio')gs[e.g]=(gs[e.g]||0)+x.sets.length;
+    x.sets.forEach(st=>{if(!st.pr)return;const k=xk(x),sc=setScore(m,st);if(!prs[k]||sc>prs[k].sc)prs[k]={sc:sc,eid:x.eid,vr:x.vr,n:x.n,m:m,set:st};});
+  }));
+  const top=Object.keys(gs).sort((p,q)=>gs[q]-gs[p])[0];
+  return{prs:Object.keys(prs).map(k=>prs[k]).sort((p,q)=>q.sc-p.sc),top:top?{g:top,n:gs[top]}:null};
+}
 function wkSumDue(){
   const cw=weekStart(Date.now());if(SET.wkSeen===cw)return false;
   return wkCount(wkOff(cw,-1))>0;
@@ -40,12 +51,15 @@ function wkSumCard(){
 }
 function wkSumHide(){SET.wkSeen=weekStart(Date.now());saveSet();render();}
 function wkSumOpen(){
-  const cw=weekStart(Date.now()),a=wkStats(wkOff(cw,-1)),b=wkStats(wkOff(cw,-2)),s=streakInfo();
+  const cw=weekStart(Date.now()),a=wkStats(wkOff(cw,-1)),b=wkStats(wkOff(cw,-2)),s=streakInfo(),hl=wkHighlights(wkOff(cw,-1));
   const ar=(x,y)=>x>y?'↑ ':(x<y?'↓ ':'= ');
   SET.wkSeen=cw;saveSet();
   sheet('<div class="form"><div class="pick-h"><h3>'+t('wsT')+'</h3><button class="ico" onclick="sheetClose();render()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<div class="stats card"><div><b>'+a.n+'</b><span>'+t('workouts')+'</span></div><div><b>'+a.sets+'</b><span>'+t('sets')+'</span></div><div><b>'+a.prs+'</b><span>PR</span></div></div>'+
     '<p class="muted sm">'+t('workouts')+': '+ar(a.n,b.n)+t('wsVs',b.n)+' · '+t('volume')+': '+vShow(a.vol)+' '+wUnit()+' '+ar(a.vol,b.vol)+t('wsVs',vShow(b.vol)+' '+wUnit())+'</p>'+
+    (a.ms>0?'<p class="muted sm">'+t('wsTime')+': <b>'+fmtDur(a.ms/1000)+'</b></p>':'')+
+    (hl.top?'<p class="muted sm">'+t('wsTop',t('g_'+hl.top.g),hl.top.n)+'</p>':'')+
+    (hl.prs.length?'<div class="lbl">'+ic('trophy')+' '+t('wsRecs')+'</div><ul class="ld-why">'+hl.prs.slice(0,5).map(r=>'<li><b>'+esc(exNameV(r.eid,r.vr,r.n))+'</b> · '+esc(fmtSet(r.m,r.set))+'</li>').join('')+(hl.prs.length>5?'<li class="muted">+'+(hl.prs.length-5)+'</li>':'')+'</ul>':'')+
     '<p><b>'+t(s.n===1?'stOne':'stN',s.n)+'</b></p><p class="muted sm">'+t('wsNext',DATA.plan?t('planToday'):'')+'</p>'+
     '<div class="row"><button class="btn pri" onclick="sheetClose();render()">'+t('done')+'</button></div></div>');
 }
