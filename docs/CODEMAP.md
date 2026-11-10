@@ -116,7 +116,7 @@ Functions / Funciones: `goalList`:5, `goalCur`:6, `goalPct`:16, `goalFmt`:21, `g
 Weekly streak, summary, calendar reminders.  
 Racha semanal, resumen, recordatorios de calendario.
 
-Functions / Funciones: `wkCount`:3, `wkTarget`:5, `wkMin`:6, `streakInfo`:9, `streakCard`:22, `wkStats`:27, `wkSumDue`:33, `wkSumCard`:37, `wkSumHide`:41, `wkSumOpen`:42, `remOpen`:54, `remSave`:61, `habitCards`:74
+Functions / Funciones: `wkCount`:3, `wkTarget`:5, `wkMin`:6, `streakInfo`:9, `streakCard`:22, `wkStats`:27, `wkHighlights`:34, `wkSumDue`:44, `wkSumCard`:48, `wkSumHide`:52, `wkSumOpen`:53, `remOpen`:68, `remSave`:75, `habitCards`:88
 
 ### `aft.js`
 Army AFT panel.  

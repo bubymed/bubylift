@@ -387,7 +387,7 @@ const STR={
  wsP:['See how last week went.','Mira cómo te fue la semana pasada.'],
  wsOpen:['See how I did','Ver cómo me fue'],
  wsHide:['Hide','Ocultar'],
- wsVs:['(before: {0})','(antes: {0})'],
+ wsVs:['(before: {0})','(antes: {0})'],wsTime:['Time trained','Tiempo entrenado'],wsTop:['Most trained: {0} ({1} sets)','Más trabajado: {0} ({1} series)'],wsRecs:['Records that week','Récords de esa semana'],
  wsNext:['Keep it going this week. {0}','Sigue así esta semana. {0}'],
  rmT:['Reminders','Recordatorios'],
  rmP:['Adds a weekly event to your phone\'s calendar on your training days, and the calendar alerts you.','Agrega un evento semanal al calendario de tu teléfono en tus días de entrenamiento, y el calendario te avisa.'],

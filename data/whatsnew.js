@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.94',items:[
+  {i:'chart',en:'<b>Richer weekly recap</b>: "Your last week" now names the records you set, the muscle you trained most and the time you trained, not just the totals.',es:'<b>Resumen semanal más completo</b>: "Tu semana pasada" ahora nombra los récords que lograste, el músculo que más trabajaste y el tiempo que entrenaste, no solo los totales.'}
+ ]},
  {v:'v1.1.93',items:[
   {i:'info',en:'<b>Clearer errors</b>: when a number is missing, the field is now outlined in red and focused instead of only showing a message that disappears. Works in the live workout, the workout editor, the routine name, the custom exercise name and the body entry.',es:'<b>Errores más claros</b>: cuando falta un número, el campo ahora se marca en rojo y se enfoca en vez de solo mostrar un mensaje que desaparece. Funciona en el entrenamiento en vivo, el editor de entrenamientos, el nombre de la rutina, el nombre del ejercicio propio y el registro de peso.'}
  ]},
