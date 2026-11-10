@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.105 — 2026-11-10
+- Touch polish from the Apple HIG / Material 3 review: no double-tap zoom delay, no pull-to-refresh mid-workout, no accidental text selection on buttons, a visible focus ring for keyboard users, a 44 px touch area on the header buttons, and the floating tab bar stays clear of the notch in landscape.
+  Pulido táctil de la revisión con Apple HIG / Material 3: sin retraso por doble toque, sin recargar al deslizar hacia abajo en pleno entrenamiento, sin selección de texto accidental en los botones, foco visible para usuarios de teclado, área táctil de 44 px en los botones del encabezado y la barra flotante queda libre del notch en horizontal.
+
 ## v1.1.104 — 2026-11-09
 - Timed holds (plank, wall sit...) use MIN + SEC boxes; history shows m:ss.
   Los isométricos con tiempo (plancha, sentadilla en pared...) usan casillas MIN + SEG; el historial muestra m:ss.
