@@ -301,7 +301,7 @@ function exCard(i,x){
       if(m==='wr'&&sg.w!=null&&x.sg==null&&s.w==null)p1=pw(sg.w);
     }
     const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" enterkeyhint="next" data-i="'+i+'" data-j="'+j+'" data-k="'+k+'" onfocus="this.select()" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
-    const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+(d<0?'−':'+')+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
+    const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+esc(t(d<0?'aDec':'aInc'))+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
     const inp=inp0;
     h+='<div class="srow'+(s.done?' done':'')+'"><button class="sn tyb'+(s.ty?' ty-'+s.ty:'')+'" aria-label="'+esc(t('tyAria'))+'" onclick="cycTy('+i+','+j+')">'+(s.ty?s.ty.toUpperCase():(j+1))+(s.pr?'<i class="pr" title="PR">'+ic('trophy')+'</i>':'')+'</button>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('chkAria'))+'" onclick="tgSet('+i+','+j+')">'+ic('check')+'</button></div>';
   });
@@ -352,6 +352,13 @@ document.addEventListener('keydown',function(ev){
   const ins=[].slice.call(card.querySelectorAll('.srow .in[data-i]')),k=ins.indexOf(el);
   if(k>=0&&ins[k+1])ins[k+1].focus();else el.blur();
 });
+/* after a rejected tap, outline the missing number(s) in that set / tras un toque rechazado, marca el o los números que faltan */
+function errSetRow(i,j,m,s){
+  const row=document.querySelectorAll('#exc'+i+' .srow:not(.hd)')[j];if(!row)return;
+  const need=m==='t'?['t']:(m==='bw'?['r']:[s.w==null?'w':'',!(s.r>0)?'r':''].filter(Boolean));
+  let first=null;need.forEach(k=>{const el=row.querySelector('.in[data-k="'+k+'"]');if(el){if(!first)first=el;el.classList.add('bad');el.addEventListener('input',function(){el.classList.remove('bad');},{once:true});}});
+  if(first){try{first.focus({preventScroll:true});}catch(e){}}
+}
 function tgSet(i,j){REST_LAST=i;
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);
   unlockAudio();
@@ -365,7 +372,7 @@ function tgSet(i,j){REST_LAST=i;
       else{if(s.w==null&&ph.w!=null&&m!=='bw')s.w=ph.w;if(s.w==null&&m==='bw'&&ph.w)s.w=ph.w;if(s.r==null&&ph.r!=null)s.r=ph.r;}
     }
     const ok=m==='t'?(s.t!=null&&s.t>0):(m==='bw'?(s.r!=null&&s.r>0):(s.w!=null&&s.r!=null&&s.r>0));
-    if(!ok){s.w=bk.w;s.r=bk.r;s.t=bk.t;s.d=bk.d;toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
+    if(!ok){s.w=bk.w;s.r=bk.r;s.t=bk.t;s.d=bk.d;toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));errSetRow(i,j,m,s);return;}
     const prev=bestScore(xk(x),m,s),sc=setScore(m,s);
     s.done=true;if(!ACT.ts){ACT.ts=ACT.t0&&actTotals().done>1?ACT.t0:Date.now();ACT.sn=ACT.ts;ACT.acc=0;ACT.pz=false;}else if(ACT.pz){ACT.pz=false;ACT.sn=Date.now();}
     if(prev>0&&sc>prev){s.pr=true;toast(m==='wr'?t('newPR2',wShow(Math.round(sc))+' '+wUnit(),wShow(Math.round(sc-prev))+' '+wUnit()):t('newPR'));}else delete s.pr;
@@ -696,7 +703,7 @@ function customOpen(){
     '<div class="row"><button class="btn pri" onclick="customSave()">'+t('save')+'</button><button class="btn" onclick="drawPick()">'+t('cancel')+'</button></div></div>');
 }
 function customSave(){
-  const n=($('cxn').value||'').trim();if(!n){toast(t('needName'));return;}
+  const n=($('cxn').value||'').trim();if(!n){toast(t('needName'));errField($('cxn'));return;}
   const c={id:'c_'+uid(),n:n,g:$('cxg').value,e:'other',m:$('cxm').value};
   DATA.custom.push(c);saveData();
   pickDone(c.id);
@@ -714,7 +721,7 @@ function rbOpen(id){
 }
 function rbDraw(){
   const r=UI.rb;
-  sheet('<div class="form"><h3>'+t(r.id?'editRoutine':'newRoutine')+'</h3><label>'+t('name')+'<input class="in wide" type="text" maxlength="60" value="'+esc(r.name)+'" oninput="UI.rb.name=this.value"></label>'+
+  sheet('<div class="form"><h3>'+t(r.id?'editRoutine':'newRoutine')+'</h3><label>'+t('name')+'<input id="rbn" class="in wide" type="text" maxlength="60" value="'+esc(r.name)+'" oninput="UI.rb.name=this.value"></label>'+
     '<div class="lbl">'+t('exercises')+'</div>'+
     (r.ex.length?r.ex.map((x,i)=>'<div class="rbx" data-dcard="1"><b>'+esc(exName(x.eid,x.n))+'</b><span class="rbs"><button class="ico" aria-label="'+esc(t('aDec')+' · '+t('sets'))+'" onclick="rbSets('+i+',-1)">−</button><span>'+t('nSets',x.sets)+'</span><button class="ico" aria-label="'+esc(t('aInc')+' · '+t('sets'))+'" onclick="rbSets('+i+',1)">＋</button></span><span class="pv-grip" role="button" tabindex="0" data-k="rb" data-ei="'+i+'" aria-label="'+esc(t('dragAria'))+'">⠿</span>'+xBtn('rbDel('+i+')',1)+'</div>').join(''):'<p class="muted">'+t('noEx')+'</p>')+
     '<button class="btn wide" onclick="rbAdd()">＋ '+t('addEx')+'</button>'+
@@ -724,7 +731,7 @@ function rbAdd(){pickEx(function(eid){const e=exById(eid);UI.rb.ex.push({eid:eid
 function rbSets(i,d){const x=UI.rb.ex[i];x.sets=Math.max(1,Math.min(20,x.sets+d));rbDraw();}
 function rbDel(i){UI.rb.ex.splice(i,1);rbDraw();}
 function rbSave(){
-  const r=UI.rb;if(!r.name.trim()){toast(t('needName'));return;}
+  const r=UI.rb;if(!r.name.trim()){toast(t('needName'));errField($('rbn'));return;}
   if(!r.ex.length){toast(t('needEx'));return;}
   const o={id:r.id||uid(),name:r.name.trim(),ex:r.ex};
   const k=DATA.routines.findIndex(x=>x.id===o.id);

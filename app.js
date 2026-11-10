@@ -4,7 +4,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.92';
+const APP_VER='v1.1.93';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -72,6 +72,13 @@ function fmtClock(sec){sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/36
 
 /* ---------- UI plumbing: toast, sheet, confirm ---------- */
 let toastT=null;
+/* mark an input as wrong: red outline, focus, scroll to it; clears itself when you type / marca un campo como incorrecto: borde rojo, foco y desplazamiento; se quita al escribir */
+function errField(el){
+  if(!el||!el.classList)return;
+  el.classList.add('bad');
+  try{el.focus({preventScroll:true});el.scrollIntoView({block:'center',behavior:'smooth'});}catch(e){}
+  el.addEventListener('input',function(){el.classList.remove('bad');},{once:true});
+}
 function toast(msg){if(typeof undoCommit==='function')undoCommit(); // another message hides the Undo button, so the pending delete is final / otro mensaje oculta Deshacer, así que el borrado pendiente queda firme
   const e=$('toast');if(!e)return;e.textContent=msg;e.classList.remove('undo');e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),2600);}
 /* redrawing the same sheet (a tap on a chip or tile) keeps the scroll position; a different sheet starts at the top
