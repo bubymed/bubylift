@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.102 — 2026-11-09
+- Compact rank card on the workout home (one row + thin bar).
+  Tarjeta de rango compacta en el inicio (una fila + barra delgada).
+
 ## v1.1.101 — 2026-11-09
 - Removed the delete X from routine cards (too close to Edit); delete stays in Edit and in the swipe.
   Se quitó la X de borrar de las tarjetas de rutina (muy cerca de Editar); borrar sigue en Editar y al deslizar.
