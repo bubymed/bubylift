@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.104',items:[
+  {i:'⏱️',en:'Holds like the plank now have a minutes box and a seconds box. Cardio keeps minutes and distance.',es:'Los isométricos como la plancha ahora tienen una casilla de minutos y otra de segundos. El cardio conserva minutos y distancia.'}
+ ]},
  {v:'v1.1.103',items:[
   {i:'🕸️',en:'The balance radar is back: under the body model in Muscle balance, a chart shows how even your training is across 8 muscle groups.',es:'Volvió el radar de equilibrio: debajo del modelo del cuerpo en Equilibrio muscular, una gráfica muestra qué tan parejo es tu entrenamiento en 8 grupos musculares.'}
  ]},
