@@ -53,18 +53,25 @@ function wkCard(wk){
     '<small>'+(d?fmtDur(d)+(wk.ex.length?' · ':''):'')+wkCountTxt(wk)+(vol?' · '+vShow(vol)+' '+wUnit():'')+'</small>'+
     '<small>'+(wk.ex.length?wk.ex.slice(0,3).map(x=>esc(exNameV(x.eid,x.vr,x.n))).join(' · ')+(wk.ex.length>3?' …':''):esc(spName(wk.sp)))+(wk.hr?' · '+ic('heart')+' '+wk.hr.a:'')+(wk.kcal?' · '+wk.kcal+' kcal':'')+'</small></span><span class="lc">›</span></button>'+xBtn('delWkAsk(\''+wk.id+'\')')+'</div>';
 }
+/* a session made only of stretching/mobility moves lives in its own tab / una sesión solo de estiramiento y movilidad vive en su propia pestaña */
+function wkKind(wk){return wk.ex.length&&wk.ex.every(x=>isMobEx(x.eid))?'s':'w';}
+function histSet(){const k=UI.ht==='s'?'s':'w';return DATA.workouts.filter(w=>isFinite(w.t)&&wkKind(w)===k);}
 function vHistory(){
   const addB='<button class="btn wide" onclick="wkNewOpen()">＋ '+t('logPast')+'</button>';
   if(!DATA.workouts.length)return emptyState('clipboard-list',t('emptyHistT'),t('emptyHistP'),t('emStart'),"go('workout')")+addB;
+  const nS=DATA.workouts.filter(w=>isFinite(w.t)&&wkKind(w)==='s').length;if(!nS)UI.ht='w'; // no stretch sessions: nothing to switch to / sin sesiones de estiramiento: no hay a dónde cambiar
+  const isS=UI.ht==='s',list=histSet();
   const now=new Date(),ws=weekStart(now.getTime()),ms=new Date(now.getFullYear(),now.getMonth(),1).getTime();
-  const wn=DATA.workouts.filter(w=>w.t>=ws).length,mn=DATA.workouts.filter(w=>w.t>=ms).length;
-  let h=addB+'<div class="stats card calc" role="button" tabindex="0" onclick="calOpen()"><div><b>'+wn+'</b><span>'+t('thisWeek')+'</span></div><div><b>'+mn+'</b><span>'+t('thisMonth')+'</span></div><div><b>'+DATA.workouts.length+'</b><span>'+t('total')+'</span></div><p class="calh">'+ic('calendar')+' '+t('calOpenB')+' ›</p></div>';
-  const grs=[];DATA.workouts.forEach(w=>w.ex.forEach(x=>{const e=exById(x.eid);if(e&&e.g&&grs.indexOf(e.g)<0)grs.push(e.g);}));
-  const gOrder=EX_GROUPS.filter(g=>grs.indexOf(g)>=0);
+  const wn=list.filter(w=>w.t>=ws).length,mn=list.filter(w=>w.t>=ms).length;
+  let h=(isS?'':addB)+(nS?'<div class="seg hseg" role="tablist"><button role="tab" aria-selected="'+!isS+'" class="'+(isS?'':'on')+'" onclick="hTab(\'w\')">'+t('hTabW')+'</button><button role="tab" aria-selected="'+isS+'" class="'+(isS?'on':'')+'" onclick="hTab(\'s\')">'+t('hTabS')+'</button></div>':'')+
+    '<div class="stats card calc" role="button" tabindex="0" onclick="calOpen()"><div><b>'+wn+'</b><span>'+t('thisWeek')+'</span></div><div><b>'+mn+'</b><span>'+t('thisMonth')+'</span></div><div><b>'+list.length+'</b><span>'+t('total')+'</span></div><p class="calh">'+ic('calendar')+' '+t('calOpenB')+' ›</p></div>';
+  const grs=[];list.forEach(w=>w.ex.forEach(x=>{const e=exById(x.eid);if(e&&e.g&&grs.indexOf(e.g)<0)grs.push(e.g);}));
+  const gOrder=isS?[]:EX_GROUPS.filter(g=>grs.indexOf(g)>=0);
   h+='<div class="hsr"><input id="hq" class="in wide" type="search" inputmode="search" autocomplete="off" maxlength="40" placeholder="'+esc(t('hSearchPh'))+'" value="'+esc(UI.hq||'')+'" oninput="hSearch(this.value)" aria-label="'+esc(t('hSearchPh'))+'">'+
     (gOrder.length>1?'<select id="hg" class="in" onchange="hGroup(this.value)" aria-label="'+esc(t('hAll'))+'"><option value="">'+t('hAll')+'</option>'+gOrder.map(g=>'<option value="'+g+'"'+(UI.hg===g?' selected':'')+'>'+t('g_'+g)+'</option>').join('')+'</select>':'')+'</div>';
   return h+'<div id="hlist">'+histList()+'</div>';
 }
+function hTab(k){UI.ht=k==='s'?'s':'w';UI.hq='';UI.hg='';render();}
 /* the list below the search box: filtered by name or exercise (any language, accents ignored) and by muscle group / la lista bajo el buscador: filtrada por nombre o ejercicio (cualquier idioma, sin acentos) y por grupo muscular */
 function wkMatch(wk,q,g){
   if(g&&!wk.ex.some(x=>{const e=exById(x.eid);return e&&e.g===g;}))return false;
@@ -73,8 +80,8 @@ function wkMatch(wk,q,g){
   return wk.ex.some(x=>{const e=exById(x.eid);return norm(x.n).indexOf(q)>=0||(e&&(norm(e.en).indexOf(q)>=0||norm(e.es).indexOf(q)>=0));});
 }
 function histList(){
-  const q=norm((UI.hq||'').trim()),g=UI.hg||'',all=DATA.workouts.filter(w=>isFinite(w.t)),a=all.filter(w=>wkMatch(w,q,g));
-  if(!a.length)return'<div class="card tip"><p class="muted">'+t('hNone')+'</p></div>';
+  const q=norm((UI.hq||'').trim()),g=UI.hg||'',all=histSet(),a=all.filter(w=>wkMatch(w,q,g));
+  if(!a.length)return'<div class="card tip"><p class="muted">'+t(all.length||UI.ht==='s'?'hNone':'hNoneW')+'</p></div>';
   let h=(q||g)?'<p class="muted sm hcnt">'+t('hCount',a.length)+'</p>':'',last='';
   a.forEach(wk=>{
     const lb=dFmt(wk.t,{month:'long',year:'numeric'});
