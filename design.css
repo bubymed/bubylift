@@ -948,3 +948,19 @@ body.resting #platefab{bottom:calc(var(--tab-h) + 140px + env(safe-area-inset-bo
 
 /* balance radar under the anatomy model / radar de equilibrio debajo del modelo anatómico */
 .bal-rd{margin:14px 0 4px;padding-top:12px;border-top:1px solid var(--line)}.bal-rd .radar{max-width:340px}.bal-rd p{margin:2px 0 0;text-align:center}
+
+/* touch polish, per Apple HIG / Material 3 / pulido táctil, según Apple HIG / Material 3
+   - no double-tap zoom delay while logging sets quickly / sin retraso ni zoom por doble toque al registrar series rápido
+   - no pull-to-refresh in the middle of a workout / sin recargar al deslizar hacia abajo en pleno entrenamiento
+   - buttons are not text: no accidental selection or callout on fast taps / los botones no son texto: sin selección ni menú al tocar rápido
+   - visible focus ring for keyboard and switch users (touch never shows it) / foco visible para teclado y control por interruptor (con el dedo no aparece) */
+html{touch-action:manipulation;overscroll-behavior-y:contain}
+button,.btn,.chip,.chk,.stp,#tabbar{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+:where(button,a,summary,[tabindex]):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header icon buttons: 36px circle, 44px touch area / botones del encabezado: círculo de 36px, área táctil de 44px */
+.avbtn{position:relative}
+.avbtn::after{content:"";position:absolute;inset:-4px}
+
+/* phone landscape: keep the floating tab bar clear of the notch / horizontal en el teléfono: la barra flotante no queda bajo el notch */
+@media(max-width:1099px){#tabbar{left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right))}}

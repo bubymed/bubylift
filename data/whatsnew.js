@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.105',items:[
+  {i:'👆',en:'Smoother taps: no zoom delay when you log sets fast, no accidental refresh when you pull down mid-workout, and bigger touch areas on the top buttons.',es:'Toques más fluidos: sin retraso de zoom al registrar series rápido, sin recargar por accidente al deslizar hacia abajo en pleno entrenamiento y áreas táctiles más grandes en los botones de arriba.'}
+ ]},
  {v:'v1.1.104',items:[
   {i:'⏱️',en:'Holds like the plank now have a minutes box and a seconds box. Cardio keeps minutes and distance.',es:'Los isométricos como la plancha ahora tienen una casilla de minutos y otra de segundos. El cardio conserva minutos y distancia.'}
  ]},
