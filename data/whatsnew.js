@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.103',items:[
+  {i:'🕸️',en:'The balance radar is back: under the body model in Muscle balance, a chart shows how even your training is across 8 muscle groups.',es:'Volvió el radar de equilibrio: debajo del modelo del cuerpo en Equilibrio muscular, una gráfica muestra qué tan parejo es tu entrenamiento en 8 grupos musculares.'}
+ ]},
  {v:'v1.1.102',items:[
   {i:'🛠️',en:'The rank card on the Workout screen is now compact, so your plan and workout buttons show sooner.',es:'La tarjeta de rango en Entrenar ahora es compacta, así tu plan y los botones de entrenar aparecen antes.'}
  ]},
