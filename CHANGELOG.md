@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.96 — 2026-11-09
+- Reverse plate calculator: enter a target total, get plates per side (closest below if not exact).
+  Calculadora de discos inversa: escribe el total y te da los discos por lado (el más cercano por debajo si no es exacto).
+
 ## v1.1.95 — 2026-11-09
 - Plan wizard: answers are saved as you go and reopening offers Continue / Start over (7 days, per profile); the summary previews the training days with their exercise counts. The preview and the final plan use the same seed, so they match. Creating the plan clears the saved setup.
   Asistente del plan: las respuestas se guardan sobre la marcha y al reabrir ofrece Continuar / Empezar de nuevo (7 días, por perfil); el resumen muestra los días de entrenamiento con su número de ejercicios. La vista previa y el plan final usan la misma semilla, así que coinciden. Crear el plan borra la configuración guardada.
