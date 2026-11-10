@@ -930,3 +930,8 @@ body.resting #platefab{bottom:calc(var(--tab-h) + 140px + env(safe-area-inset-bo
 /* history search / buscador del historial */
 .hsr{display:flex;gap:8px;margin:12px 0 4px}.hsr input{flex:1;min-width:0}.hsr select{flex:none;width:auto;max-width:42%}.hcnt{margin:6px 4px 0}
 .hseg{margin:12px 0 4px}
+
+/* a field that needs fixing / un campo que hay que corregir */
+.in.bad,input.bad,textarea.bad{border-color:var(--red)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--red) 28%,transparent)!important;animation:badshake .28s}
+@keyframes badshake{20%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+@media(prefers-reduced-motion:reduce){.in.bad,input.bad,textarea.bad{animation:none}}

@@ -238,7 +238,7 @@ function bodySave(){
   const m={};MEAS.forEach(k=>{const v=lParse($('bm_'+k).value);if(v!=null&&v>0&&v<500)m[k]=v;});
   if(Object.keys(m).length)o.m=m;
   const n=$('bn').value.trim();if(n)o.note=n;
-  if(o.w==null&&o.bf==null&&!o.m){toast(t('needBody'));return;}
+  if(o.w==null&&o.bf==null&&!o.m){toast(t('needBody'));errField($('bw'));return;}
   const day=dInput(o.t),ex=DATA.body.find(b=>dInput(b.t)===day); // one entry per day: update it / una entrada por día: se actualiza
   if(ex){if(o.w!=null)ex.w=o.w;if(o.bf!=null)ex.bf=o.bf;if(o.m)ex.m=Object.assign({},ex.m,o.m);if(o.note)ex.note=o.note;saveData();toast(t('bwUpd'));render();return;}
   DATA.body.push(o);DATA.body.sort((a,b)=>b.t-a.t);goalsCheck();saveData();toast(t('saved'));render();

@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.93 — 2026-11-09
+- Field errors: a missing or invalid number is outlined in red and focused (live workout done-tap, workout editor, routine name, custom exercise name, body entry); the outline clears when you fix it. The +/- steppers in the live workout now have readable names for screen readers.
+  Errores en el campo: un número faltante o inválido se marca en rojo y se enfoca (toque de ✓ en el entrenamiento en vivo, editor de entrenamientos, nombre de rutina, nombre del ejercicio propio, registro de peso); el borde se quita al corregirlo. Los botones +/- del entrenamiento en vivo ahora tienen nombres legibles para lectores de pantalla.
+
 ## v1.1.92 — 2026-11-09
 - History tabs: Workouts and Stretch & mobility. A session made only of stretching/mobility moves goes to its own tab (a lift with a cool-down stays a workout). Counts, search and the muscle filter follow the active tab; the tab appears once a stretching session exists.
   Pestañas del Historial: Entrenamientos y Estiramiento y movilidad. Una sesión hecha solo de movimientos de estiramiento/movilidad va a su propia pestaña (una pesa con enfriamiento sigue siendo un entrenamiento). Los conteos, la búsqueda y el filtro de músculo siguen la pestaña activa; la pestaña aparece cuando existe una sesión de estiramiento.

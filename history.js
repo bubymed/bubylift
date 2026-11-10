@@ -144,7 +144,8 @@ function wkEditDraw(){
     h+='<div class="wke-ex">'+esc(exNameV(x.eid,x.vr,x.n))+'</div><div class="wke-s wke-h"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
     x.sets.forEach((st,si)=>{
       const f1=m==='t'?'t':'w',f2=m==='t'?'d':'r',v1=st[f1]==null?'':(f1==='t'?fmtNum(st.t):wShow(st.w)),v2=st[f2]==null?'':(f2==='d'?dShow(st.d):String(st.r));
-      h+='<div class="wke-s"><span>'+(si+1)+'</span><input class="in" type="text" inputmode="decimal" autocomplete="off" value="'+esc(v1)+'" oninput="wkeSet('+xi+','+si+',\''+f1+'\',this.value)"><input class="in" type="text" inputmode="'+(f2==='r'?'numeric':'decimal')+'" autocomplete="off" value="'+esc(v2)+'" oninput="wkeSet('+xi+','+si+',\''+f2+'\',this.value)"><button class="ico" onclick="wkeRm('+xi+','+si+')" aria-label="'+esc(t('delete'))+'">✕</button></div>';
+      const bd=wk.tried?wkeBad(m,st):[],c=f=>bd.indexOf(f)>=0?' bad':'';
+      h+='<div class="wke-s"><span>'+(si+1)+'</span><input class="in'+c(f1)+'" data-wk="'+xi+'-'+si+'-'+f1+'" type="text" inputmode="decimal" autocomplete="off" value="'+esc(v1)+'" oninput="wkeSet('+xi+','+si+',\''+f1+'\',this.value)"><input class="in'+c(f2)+'" data-wk="'+xi+'-'+si+'-'+f2+'" type="text" inputmode="'+(f2==='r'?'numeric':'decimal')+'" autocomplete="off" value="'+esc(v2)+'" oninput="wkeSet('+xi+','+si+',\''+f2+'\',this.value)"><button class="ico" onclick="wkeRm('+xi+','+si+')" aria-label="'+esc(t('delete'))+'">✕</button></div>';
     });
     h+='<button class="btn wide" onclick="wkeAddSet('+xi+')">＋ '+t('addSet')+'</button>';
   });
@@ -185,6 +186,7 @@ function wkeSet(xi,si,f,v){
   if(v!==''){if(f==='w')n=wParse(v);else if(f==='d')n=dParse(v);else if(f==='r'){n=parseInt(v,10);if(!(n>=0))n=null;}else n=numParse(v);}
   if(n!=null&&n>({w:1500,r:999,t:1440,d:1000}[f]||1e9)){n=null;toast(t('tooBig'));}
   st[f]=n;
+  if(WKE.tried){const el=document.querySelector('[data-wk="'+xi+'-'+si+'-'+f+'"]');if(el)el.classList.toggle('bad',wkeBad(exMode(WKE.ex[xi].eid),st).indexOf(f)>=0);}
 }
 function wkeRm(xi,si){
   const x=WKE&&WKE.ex[xi];if(!x)return;
@@ -206,11 +208,13 @@ function prRecalc(keys){
     });
   }));
 }
+/* which numbers of a set are missing (after a first failed save they are outlined) / qué números de una serie faltan (tras un guardado fallido se marcan) */
+function wkeBad(m,s){return m==='t'?(s.t!=null&&s.t>0?[]:['t']):(m==='bw'?(s.r!=null&&s.r>0?[]:['r']):[s.w==null?'w':'',s.r!=null&&s.r>0?'':'r'].filter(Boolean));}
 function wkEditSave(){
   const wk=WKE;if(!wk)return;
-  for(const x of wk.ex){const m=exMode(x.eid);for(const s of x.sets){
-    const ok=m==='t'?(s.t!=null&&s.t>0):(m==='bw'?(s.r!=null&&s.r>0):(s.w!=null&&s.r!=null&&s.r>0));
-    if(!ok){toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));return;}
+  for(let xi=0;xi<wk.ex.length;xi++){const x=wk.ex[xi],m=exMode(x.eid);for(let si=0;si<x.sets.length;si++){
+    const bd=wkeBad(m,x.sets[si]);
+    if(bd.length){wk.tried=1;toast(t(m==='t'?'needTime':(m==='bw'?'needReps':'needWR')));wkEditDraw();errField(document.querySelector('[data-wk="'+xi+'-'+si+'-'+bd[0]+'"]'));return;}
   }}
   if(!wk.ex.length){toast(t('wkeNone'));return;}
   const old=wk.isNew?null:DATA.workouts.find(w=>w.id===wk.id);
@@ -220,7 +224,7 @@ function wkEditSave(){
   if(old&&wk.dur===wk.dur0)end=old.end>old.t?old.end+(wk.t-old.t):0; // duration untouched: keep exact length, shift with the date
   else if(dur>0)end=wk.t+dur*6e4;
   const keys=[];
-  const o=Object.assign({},wk);delete o.isNew;delete o.dur;delete o.dur0;
+  const o=Object.assign({},wk);delete o.isNew;delete o.dur;delete o.dur0;delete o.tried;
   o.end=end;o.name=(wk.name||'').trim()||(old&&old.name)||autoName(wk.t);o.note=(wk.note||'').trim();
   o.ex=wk.ex.map(x=>{const e=Object.assign({},x);e.sets=x.sets.map(s=>{const q={w:s.w,r:s.r,t:s.t,d:s.d};if(s.ty)q.ty=s.ty;return q;});keys.push(xk(e));return e;});
   if(old){old.ex.forEach(x=>{if(keys.indexOf(xk(x))<0)keys.push(xk(x));});DATA.workouts[DATA.workouts.indexOf(old)]=o;}
