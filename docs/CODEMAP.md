@@ -146,7 +146,7 @@ Functions / Funciones: `bwEma`:11, `bwRate`:12, `bwRange`:19, `bwStep`:20, `muW`
 Ranks (16), bodyweight ranks, XP level, muscle balance, rank ladder and celebration.  
 Rangos (16), rangos de peso corporal, nivel de XP, balance muscular, escalera de rangos y celebración.
 
-Functions / Funciones: `rkIdx`:5, `rkName`:6, `rkOpen`:7, `strInv`:9, `rkTarget`:15, `rkGoal`:20, `rkLockMsg`:26, `rkAsk`:27, `rkTeaser`:29, `rkGo`:38, `rkLadder`:39, `strCard`:50, `rkCheck`:73, `rkUp`:81, `xpData`:86, `xpCard`:92, `balData`:100, `radarSvg`:110, `balTap`:121, `balCard`:122, `bwTh`:135, `bwData`:136, `bwCard`:145
+Functions / Funciones: `rkIdx`:5, `rkName`:6, `rkOpen`:7, `strInv`:9, `rkTarget`:15, `rkGoal`:20, `rkLockMsg`:26, `rkAsk`:27, `rkTeaser`:29, `rkGo`:38, `rkLadder`:39, `strCard`:50, `rkCheck`:73, `rkUp`:81, `xpData`:86, `xpCard`:92, `balData`:100, `radarSvg`:110, `balTap`:121, `balCard`:122, `bwTh`:136, `bwData`:137, `bwCard`:146
 
 ### `anatomy.js`
 Anatomy figure: draws the body, muscle roles (agonist/synergist/stabilizer), Recovery body view, Find by muscle.  

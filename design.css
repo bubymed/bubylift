@@ -945,3 +945,6 @@ body.resting #platefab{bottom:calc(var(--tab-h) + 140px + env(safe-area-inset-bo
 
 /* reverse plate calculator / calculadora inversa de discos */
 .pc-rev{display:flex;gap:8px;align-items:flex-end;margin:10px 0 4px}.pc-rev label{flex:1;min-width:0}.pc-rev .in{width:100%;margin-top:4px}.pc-revm{margin:4px 0 8px;font-weight:600}.pc-revm.ok{color:var(--green)}.pc-revm.warn{color:var(--warn)}
+
+/* balance radar under the anatomy model / radar de equilibrio debajo del modelo anatómico */
+.bal-rd{margin:14px 0 4px;padding-top:12px;border-top:1px solid var(--line)}.bal-rd .radar{max-width:340px}.bal-rd p{margin:2px 0 0;text-align:center}
