@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.101',items:[
+  {i:'🛠️',en:'Routine cards no longer have the X next to Edit. To delete a routine, open Edit or swipe the card.',es:'Las tarjetas de rutina ya no tienen la X junto a Editar. Para borrar una rutina, abre Editar o desliza la tarjeta.'}
+ ]},
  {v:'v1.1.100',items:[
   {i:'🛠️',en:'The plate calculator button now shows only while you are in a workout.',es:'El botón de la calculadora de discos ahora solo aparece durante un entrenamiento.'}
  ]},
