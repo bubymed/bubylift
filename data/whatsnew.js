@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.95',items:[
+  {i:'layers',en:'<b>Plan setup remembers you</b>: if you close the setup halfway, it offers to pick up where you stopped (kept for a week). The last screen now shows a preview of your training days before you tap Build my plan.',es:'<b>La configuración del plan te recuerda</b>: si cierras la configuración a la mitad, te ofrece seguir donde te quedaste (se guarda una semana). La última pantalla ahora muestra una vista previa de tus días de entrenamiento antes de tocar Crear mi plan.'}
+ ]},
  {v:'v1.1.94',items:[
   {i:'chart',en:'<b>Richer weekly recap</b>: "Your last week" now names the records you set, the muscle you trained most and the time you trained, not just the totals.',es:'<b>Resumen semanal más completo</b>: "Tu semana pasada" ahora nombra los récords que lograste, el músculo que más trabajaste y el tiempo que entrenaste, no solo los totales.'}
  ]},

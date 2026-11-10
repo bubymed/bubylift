@@ -936,6 +936,7 @@ function planSetup(){
   PW=Object.assign({step:1,touched:!!DATA.plan,fresh:!DATA.plan},JSON.parse(JSON.stringify(base)));
   PW.a={};if(PW.as)AS_KEYS.forEach(k=>{PW.a[k]=1;});
   PW.tw=0;if(PW.td>Date.now()){const w=(PW.td-Date.now())/(7*864e5);PW.tw=TW.slice(1).reduce((a,b)=>Math.abs(b-w)<Math.abs(a-w)?b:a);}
+  if(wzDraftAsk())return;
   wizDraw();
 }
 function pwSet(k,v){
@@ -990,11 +991,16 @@ function focusApply(){
   const prof=normProf(Object.assign({},DATA.plan.prof,{focus:PW.focus,ff:PW.ff,skills:PW.skills}));
   const old=DATA.plan,p=genPlan(prof);p.checks=old.checks;DATA.plan=p;saveData();render();planOpen();toast(t('planReady'));
 }
+/* the profile the wizard answers describe; the random seed is fixed once so the preview and the final plan are the same / el perfil que describen las respuestas; la semilla se fija una vez para que la vista previa y el plan final sean iguales */
+function wzProf(){
+  if(!PW.sd)PW.sd=(Math.random()*1e6|0)+1;
+  return normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,sty:PW.sty,stp:PW.stp,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,avoid:PW.avoid,fav:PW.fav,work:PW.work,sh:PW.sh,pu:PW.pu,as:AS_KEYS.every(k=>PW.a&&PW.a[k])?1:0,pl:PW.pl,bal:PW.bal,sq:PW.sq,pull:PW.pull,leg:PW.leg,hist:PW.hist,split:PW.split,sd:PW.sd||((Math.random()*1e6|0)+1),rt:PW.rt,no:PW.no,lk:PW.lk,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
+}
 function planCreate(){
-  const prof=normProf({sex:PW.sex,goal:PW.goal,mix:PW.mix,sty:PW.sty,stp:PW.stp,emph:PW.em0||PW.emph,focus:PW.focus,ff:PW.ff,skills:PW.skills,race:PW.race,n:PW.n,len:PW.len,vol:PW.vol,ph:PW.ph,lvl:PW.lvl,have:PW.have,inj:PW.inj,cond:PW.cond,avoid:PW.avoid,fav:PW.fav,work:PW.work,sh:PW.sh,pu:PW.pu,as:AS_KEYS.every(k=>PW.a&&PW.a[k])?1:0,pl:PW.pl,bal:PW.bal,sq:PW.sq,pull:PW.pull,leg:PW.leg,hist:PW.hist,split:PW.split,sd:PW.sd||((Math.random()*1e6|0)+1),rt:PW.rt,no:PW.no,lk:PW.lk,test:PW.test,td:PW.tw?Date.now()+PW.tw*7*864e5:0});
+  const prof=wzProf();
   const old=DATA.plan,p=genPlan(prof);
   if(old){p.checks=old.checks;}
-  DATA.plan=p;saveData();render();
+  DATA.plan=p;saveData();wzDraftClear();render();
   const few=p.ds.some(d=>d.ex.length<3);
   planOpen();toast(t(few?'planFew':'planReady'));
 }
