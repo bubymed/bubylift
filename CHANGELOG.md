@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.99 — 2026-11-09
+- Fix: dragging an exercise by its handle inside a sheet no longer triggers swipe-to-close.
+  Arreglo: arrastrar un ejercicio por su agarre dentro de una hoja ya no activa el deslizar para cerrar.
+
 ## v1.1.98 — 2026-11-09
 - Barbell weight is typed as the total (bar included); plates-only typing removed. Bar is chosen in the plate calculator, preselected and remembered per exercise.
   El peso con barra se escribe como total (barra incluida); se quitó el modo de solo discos. La barra se elige en la calculadora de discos, preseleccionada y recordada por ejercicio.

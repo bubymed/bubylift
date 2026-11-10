@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.99',items:[
+  {i:'🛠️',en:'Fixed: moving an exercise inside a routine no longer drags the whole panel down.',es:'Arreglado: mover un ejercicio dentro de una rutina ya no arrastra todo el panel hacia abajo.'}
+ ]},
  {v:'v1.1.98',items:[
   {i:'🏋️',en:'<b>Weight is now the total, bar included</b>, like other apps: for 225 lb on the bar, type 225. Your saved workouts do not change. Pick your bar in the plate calculator; it is remembered per exercise.',es:'<b>El peso ahora es el total, con la barra incluida</b>, como en otras apps: si la barra pesa 225 lb en total, escribe 225. Tus entrenamientos guardados no cambian. Elige tu barra en la calculadora de discos; se recuerda por ejercicio.'}
  ]},
