@@ -11,6 +11,10 @@ function exMap(){if(!EXMAP){EXMAP={};EXLIB.forEach(a=>{EXMAP[a[0]]={id:a[0],en:a
 function exById(id){const m=exMap();if(m[id])return m[id];const c=DATA.custom.find(x=>x.id===id);return c?{id:c.id,en:c.n,es:c.n,g:c.g,e:c.e||'other',m:c.m||'wr',custom:true}:null;}
 function exName(id,fb){const e=exById(id);return e?(LANG==='es'?e.es:e.en):(fb||id);}
 function exMode(id){const e=exById(id);return e?e.m:'wr';}
+/* holds (plank, wall sit...): minutes and seconds boxes; cardio keeps minutes and distance / isométricos (plancha, sentadilla en pared...): casillas de minutos y segundos; el cardio conserva minutos y distancia */
+function isHold(id){const e=exById(id);return!!e&&e.m==='t'&&e.g!=='cardio';}
+function tSplit(t){if(t==null)return null;const sc=Math.round(t*60);return[Math.floor(sc/60),sc%60];}
+function tShow(t){if(t==null)return'';return Number.isInteger(Math.round(t*600)/600)?fmtNum(t)+' min':fmtClock(Math.round(t*60));}
 function newSet(){return{w:null,r:null,t:null,d:null,done:false};}
 
 /* ---------- scoring / PR logic ---------- */
@@ -41,13 +45,13 @@ function wkCountTxt(wk){const n=wkSets(wk);if(n>0)return t('nSetsT',n);const m=w
 function wkCountBox(wk){const n=wkSets(wk),m=n>0?0:wkMoves(wk);return'<div><b>'+(m||n)+'</b><span>'+t(m?'moves':'sets')+'</span></div>';}
 function fmtSet(m,s){
   if(!s)return'—';
-  if(m==='t')return(s.t!=null?fmtNum(s.t)+' min':'')+(s.d?(s.t!=null?' · ':'')+dShow(s.d)+' '+dUnit():'');
+  if(m==='t')return tShow(s.t)+(s.d?(s.t!=null?' · ':'')+dShow(s.d)+' '+dUnit():'');
   if(m==='bw')return(s.w?'+'+wShow(s.w)+' '+wUnit()+' × ':'')+(s.r!=null?s.r:'');
   return wShow(s.w)+' '+wUnit()+' × '+s.r;
 }
 function fmtPrev(m,s){
   if(!s)return'—';
-  if(m==='t')return(s.t!=null?fmtNum(s.t):'')+(s.d?'·'+dShow(s.d):'');
+  if(m==='t')return(s.t!=null?(Number.isInteger(Math.round(s.t*600)/600)?fmtNum(s.t):fmtClock(Math.round(s.t*60))):'')+(s.d?'·'+dShow(s.d):'');
   if(m==='bw')return s.w?'+'+wShow(s.w)+'×'+s.r:String(s.r!=null?s.r:'—');
   return wShow(s.w)+'×'+s.r;
 }
@@ -279,7 +283,7 @@ function exCard(i,x){
   {const rn=repNote(x.eid,m);if(rn)h+='<p class="muted sm rn">'+esc(t(rn))+'</p>';}
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
   h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'<button class="lnk-d" onclick="restPick('+i+')">⏱ '+(exRest(x)===0?t('restOff'):fmtClock(exRest(x)!=null?exRest(x):(SET.rest||90)))+'</button></div>';
-  const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
+  const hd=m==='t'&&isHold(x.eid),c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=hd?t('colSec'):(m==='t'?dUnit().toUpperCase():t('colReps'));
   if(m==='wr'&&!isDb(x)&&exById(x.eid)&&exById(x.eid).e==='barbell'&&!noBar(exById(x.eid)))h+='<div class="barln"><button class="lnk-d" onclick="pcOpenEx('+i+')">🏋 '+esc(t('barTot'))+'</button></div>';
   if(m==='wr'&&isDb(x))h+='<div class="barln"><button class="lnk-d" onclick="mulMenu('+i+')">🏋 '+esc(t(ml>1?'mulOn':'mulOff'))+'</button></div>';
   h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
@@ -287,7 +291,8 @@ function exCard(i,x){
   x.sets.forEach((s,j)=>{
     const ph=pv[j]||(pv.length?pv[pv.length-1]:null)||(j>0?x.sets[j-1]:null);
     let f1,f2,p1,p2,k1,k2;
-    if(m==='t'){k1='t';k2='d';f1=s.t!=null?fmtNum(s.t):'';f2=dShow(s.d);p1=ph&&ph.t!=null?fmtNum(ph.t):'';p2=ph&&ph.d?dShow(ph.d):'';}
+    if(hd){k1='tm';k2='ts';const a=tSplit(s.t),b=ph?tSplit(ph.t):null;f1=a?String(a[0]):'';f2=a?String(a[1]):'';p1=b?String(b[0]):'';p2=b?String(b[1]):'';}
+    else if(m==='t'){k1='t';k2='d';f1=s.t!=null?fmtNum(s.t):'';f2=dShow(s.d);p1=ph&&ph.t!=null?fmtNum(ph.t):'';p2=ph&&ph.d?dShow(ph.d):'';}
     else{k1='w';k2='r';f1=m==='wr'?pw(s.w):wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?(m==='wr'?pw(ph.w):wShow(ph.w)):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=pw(x.sg);}
     if((m==='wr'||m==='bw')&&sg&&!s.done&&s.ty!=='w'&&!x.sets.slice(0,j).some(q=>q.r!=null)){ // suggestion, unless an earlier set already shows what you do today / sugerencia, salvo que una serie anterior ya muestre lo de hoy
       if(sg.r&&s.r==null)p2=String(sg.r);
@@ -296,7 +301,7 @@ function exCard(i,x){
     const inp0=(k,v,p,mode)=>'<input class="in'+(s.done?' dn':'')+'" type="text" inputmode="'+mode+'" autocomplete="off" enterkeyhint="next" data-i="'+i+'" data-j="'+j+'" data-k="'+k+'" onfocus="this.select()" value="'+esc(v)+'" placeholder="'+esc(p)+'" oninput="sv('+i+','+j+',\''+k+'\',this.value)">';
     const stb=(k,d)=>'<button class="stp" tabindex="-1" aria-label="'+esc(t(d<0?'aDec':'aInc'))+'" onclick="stepSet('+i+','+j+',\''+k+'\','+d+')">'+(d<0?'−':'+')+'</button>';
     const inp=inp0;
-    h+='<div class="srow'+(s.done?' done':'')+'"><button class="sn tyb'+(s.ty?' ty-'+s.ty:'')+'" aria-label="'+esc(t('tyAria'))+'" onclick="cycTy('+i+','+j+')">'+(s.ty?s.ty.toUpperCase():(j+1))+(s.pr?'<i class="pr" title="PR">'+ic('trophy')+'</i>':'')+'</button>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,k2==='r'?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('chkAria'))+'" onclick="tgSet('+i+','+j+')">'+ic('check')+'</button></div>';
+    h+='<div class="srow'+(s.done?' done':'')+'"><button class="sn tyb'+(s.ty?' ty-'+s.ty:'')+'" aria-label="'+esc(t('tyAria'))+'" onclick="cycTy('+i+','+j+')">'+(s.ty?s.ty.toUpperCase():(j+1))+(s.pr?'<i class="pr" title="PR">'+ic('trophy')+'</i>':'')+'</button>'+inp(k1,f1,p1,'decimal')+inp(k2,f2,p2,(k2==='r'||k2==='ts')?'numeric':'decimal')+'<button class="chk" aria-label="'+esc(t('chkAria'))+'" onclick="tgSet('+i+','+j+')">'+ic('check')+'</button></div>';
   });
   h+='<button class="btn sm wide" onclick="addSet('+i+')">＋ '+t('addSet')+'</button></section>';
   return h;
@@ -310,6 +315,11 @@ function clrSet(i,j){
 }
 function sv(i,j,f,v){
   const s=ACT.ex[i].sets[j];v=String(v).trim();let n=null;
+  if(f==='tm'||f==='ts'){ // minutes and seconds share one number, the time in minutes / minutos y segundos comparten un número, el tiempo en minutos
+    const row=document.querySelectorAll('#exc'+i+' .srow:not(.hd)')[j],o=row&&row.querySelector('.in[data-k="'+(f==='tm'?'ts':'tm')+'"]'),ov=o?String(o.value).trim():(()=>{const a=tSplit(s.t);return a?String(a[f==='tm'?1:0]):'';})();
+    const mm=parseInt(f==='tm'?v:ov,10),ss=parseInt(f==='ts'?v:ov,10);
+    n=(isNaN(mm)&&isNaN(ss))?null:((mm>0?mm:0)*60+(ss>0?ss:0))/60;f='t';v='';
+  }
   if(v!==''){
     if(f==='w')n=wParse(v);else if(f==='d')n=dParse(v);
     else if(f==='r'){n=parseInt(v,10);if(!(n>=0))n=null;}
@@ -348,7 +358,7 @@ document.addEventListener('keydown',function(ev){
 /* after a rejected tap, outline the missing number(s) in that set / tras un toque rechazado, marca el o los números que faltan */
 function errSetRow(i,j,m,s){
   const row=document.querySelectorAll('#exc'+i+' .srow:not(.hd)')[j];if(!row)return;
-  const need=m==='t'?['t']:(m==='bw'?['r']:[s.w==null?'w':'',!(s.r>0)?'r':''].filter(Boolean));
+  const need=m==='t'?[isHold(ACT.ex[i].eid)?'tm':'t']:(m==='bw'?['r']:[s.w==null?'w':'',!(s.r>0)?'r':''].filter(Boolean));
   let first=null;need.forEach(k=>{const el=row.querySelector('.in[data-k="'+k+'"]');if(el){if(!first)first=el;el.classList.add('bad');el.addEventListener('input',function(){el.classList.remove('bad');},{once:true});}});
   if(first){try{first.focus({preventScroll:true});}catch(e){}}
 }
