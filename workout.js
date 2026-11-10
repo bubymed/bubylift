@@ -72,7 +72,8 @@ function legacyFix(){
   }));
   return ch;
 }
-/* barbell weight: you type the plates, the bar is added for you / peso de la barra: tú escribes los discos, la barra se suma sola */
+/* barbell weight: you type the total, bar included, like every other app. The bar of each exercise is only remembered for the plate calculator
+   peso con barra: escribes el total, con la barra incluida, como en las demás apps. La barra de cada ejercicio solo se recuerda para la calculadora de discos */
 /* plate exercises are labeled barbell but use no bar / ejercicios con disco están como barra pero no usan barra */
 function noBar(e){const n=(e&&e.en||'').toLowerCase();return/\bplate\b/.test(n)&&!/movers/.test(n);}
 function barDef(eid){
@@ -95,30 +96,22 @@ function mulMenu(i){
   const x=ACT.ex[i];if(!x)return;const cur=mulOf(x);
   sheet('<h3>'+esc(t('mulTitle'))+'</h3><p class="muted sm">'+esc(t('mulHelp'))+'</p><div class="menu"><button'+(cur===2?' class="on"':'')+' onclick="mulSet('+i+',2)">'+(cur===2?'✓ ':'')+esc(t('mul2'))+'</button><button'+(cur===1?' class="on"':'')+' onclick="mulSet('+i+',1)">'+(cur===1?'✓ ':'')+esc(t('mul1'))+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
-/* change bar / dumbbell count: what you typed stays, the total follows / al cambiar barra o mancuernas: lo escrito se queda y el total se recalcula */
-function reScale(x,nb,nm){
-  const ob=barOf(x),om=mulOf(x);
-  x.sets.forEach(s=>{if(s.w!=null){const p=Math.max(0,(s.w-ob)/om);s.w=p*nm+nb;}});
-  if(x.sg!=null){const p=Math.max(0,(x.sg-ob)/om);x.sg=p*nm+nb;}
-  if(nb>0)x.bar=nb;else delete x.bar;
+/* change the dumbbell count: what you typed stays, the total follows / al cambiar una o dos mancuernas: lo escrito se queda y el total se recalcula */
+function reScale(x,nm){
+  const om=mulOf(x);
+  x.sets.forEach(s=>{if(s.w!=null)s.w=s.w/om*nm;});
+  if(x.sg!=null)x.sg=x.sg/om*nm;
   if(nm>1)x.mul=nm;else delete x.mul;
+}
+/* the bar this exercise uses, remembered for the plate calculator; the numbers in the sets do not change / la barra que usa este ejercicio, recordada para la calculadora; los números de las series no cambian */
+function barKeep(x,kg){
+  if(!x)return;if(kg>0)x.bar=kg;else delete x.bar;
+  SET.barPref=SET.barPref||{};SET.barPref[x.eid]=kg>0?kg:0;jset(K_SET,SET);saveAct();
 }
 function mulSet(i,n){
   const x=ACT.ex[i];if(!x)return;
-  reScale(x,barOf(x),n);
+  reScale(x,n);
   SET.mulPref=SET.mulPref||{};SET.mulPref[x.eid]=n>1?2:1;jset(K_SET,SET);
-  saveAct();sheetClose();render();
-}
-function barPresets(){return imp()?[0,15,20,25,35,45,55].map(v=>v/KG_LB):[0,7,10,15,20,25];}
-function barTxt(kg){return kg>0?wShow(kg)+' '+wUnit():t('barNone');}
-function barMenu(i){
-  const x=ACT.ex[i];if(!x)return;const cur=barOf(x);
-  sheet('<h3>'+esc(t('barTitle'))+'</h3><p class="muted sm">'+esc(t('barHelp'))+'</p><div class="menu">'+barPresets().map(v=>'<button'+(Math.abs(v-cur)<0.05?' class="on"':'')+' onclick="barSet('+i+','+v+')">'+(Math.abs(v-cur)<0.05?'✓ ':'')+esc(barTxt(v))+'</button>').join('')+'</div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
-}
-function barSet(i,kg){
-  const x=ACT.ex[i];if(!x)return;
-  reScale(x,kg>0?kg:0,mulOf(x));
-  SET.barPref=SET.barPref||{};SET.barPref[x.eid]=kg>0?kg:0;jset(K_SET,SET);
   saveAct();sheetClose();render();
 }
 /* src: the entry this one repeats (a saved workout or routine); it keeps the variation, the multiplier and the bar / src: el ejercicio que se repite; conserva la variante, el multiplicador y la barra */
@@ -279,7 +272,7 @@ function repNote(eid,m){
 }
 function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(xk(x)),pv=le?le.x.sets:[];
-  const bar=m==='wr'?barOf(x):0,ml=m==='wr'?mulOf(x):1,pw=v=>v==null?'':wShow(Math.max(0,(v-bar)/ml));
+  const ml=m==='wr'?mulOf(x):1,pw=v=>v==null?'':wShow(Math.max(0,v/ml));
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'">'+exImgs(x.eid,'this.remove()')+'</button>':'';
   let h='<section class="exc" data-dcard="1" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+varChip(i,x)+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button>'+(ACT.ex.length>1?'<span class="pv-grip" role="button" tabindex="0" data-k="act" data-ei="'+i+'" aria-label="'+esc(t('dragAria'))+'">⠿</span>':'')+'</div>';
   h+=suggLine(x);
@@ -287,7 +280,7 @@ function exCard(i,x){
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
   h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'<button class="lnk-d" onclick="restPick('+i+')">⏱ '+(exRest(x)===0?t('restOff'):fmtClock(exRest(x)!=null?exRest(x):(SET.rest||90)))+'</button></div>';
   const c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=m==='t'?dUnit().toUpperCase():t('colReps');
-  if(m==='wr'&&(bar>0||exById(x.eid)&&exById(x.eid).e==='barbell'&&!noBar(exById(x.eid))))h+='<div class="barln"><button class="lnk-d" onclick="barMenu('+i+')">🏋 '+esc(bar>0?t('barOn',barTxt(bar)):t('barOff'))+'</button></div>';
+  if(m==='wr'&&!isDb(x)&&exById(x.eid)&&exById(x.eid).e==='barbell'&&!noBar(exById(x.eid)))h+='<div class="barln"><button class="lnk-d" onclick="pcOpenEx('+i+')">🏋 '+esc(t('barTot'))+'</button></div>';
   if(m==='wr'&&isDb(x))h+='<div class="barln"><button class="lnk-d" onclick="mulMenu('+i+')">🏋 '+esc(t(ml>1?'mulOn':'mulOff'))+'</button></div>';
   h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
   const sg=(m==='wr'||m==='bw')?sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'}):null;
@@ -323,7 +316,7 @@ function sv(i,j,f,v){
     else n=numParse(v);
   }
   if(n!=null&&n>({w:1500,r:999,t:1440,d:1000}[f]||1e9)){n=null;toast(t('tooBig'));} // typos like 1000000 never reach your totals / un error de dedo no llega a tus totales
-  if(f==='w'&&n!=null){const bx=ACT.ex[i];if(exMode(bx.eid)==='wr')n=n*mulOf(bx)+barOf(bx);}
+  if(f==='w'&&n!=null){const bx=ACT.ex[i];if(exMode(bx.eid)==='wr')n=n*mulOf(bx);}
   s[f]=n;
   if(n==null&&s.done){s.done=false;delete s.pr;const r=document.querySelectorAll('#exc'+i+' .srow:not(.hd)')[j];if(r){r.classList.remove('done');r.querySelectorAll('.in').forEach(q=>q.classList.remove('dn'));}}
   saveAct();updTop();
@@ -334,8 +327,8 @@ function stepSet(i,j,f,d){
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);if(m==='t')return;
   const pv=lastEx(xk(x)),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
   if(f==='w'){
-    const br=m==='wr'?barOf(x):0;let b=s.w;if(b==null)b=(m==='wr'&&x.sg!=null)?x.sg:(ph&&ph.w!=null?ph.w:br);
-    const st=wInc(),ml=m==='wr'?mulOf(x):1;let dv=Math.max(0,(b-br)/ml);dv=Math.max(0,Math.round((dv+d*st)/st)*st);s.w=dv*ml+br;
+    let b=s.w;if(b==null)b=(m==='wr'&&x.sg!=null)?x.sg:(ph&&ph.w!=null?ph.w:(m==='wr'?barOf(x)-wInc()*d:0)); // an empty barbell set starts at the empty bar / una serie vacía con barra empieza en la barra sola
+    const st=wInc(),ml=m==='wr'?mulOf(x):1;let dv=Math.max(0,b/ml);dv=Math.max(0,Math.round((dv+d*st)/st)*st);s.w=dv*ml;
   }else{
     let b=s.r;if(b==null)b=ph&&ph.r!=null?ph.r:(x.tg&&x.tg.u==='r'?x.tg.lo:0);
     s.r=Math.max(0,Math.min(999,b+d));
@@ -428,7 +421,7 @@ function exMenu(i){
   sheet('<h3>'+esc(exNameV(x.eid,x.vr,x.n))+'</h3><div class="menu">'+
     '<button class="pri" onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button>'+(exVars(x.eid).length?'<button onclick="varOpen('+i+')">⚙ '+t('varB')+'</button>':'')+'<button onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button>'+
     '<button onclick="tasteLike(\''+x.eid+'\');exMenu('+i+')">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button onclick="tasteDis(\'act\','+i+')">'+ic('ban')+' '+t('tkDis')+'</button>'+
-    '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+''+(exMode(x.eid)==='wr'?'<button onclick="barMenu('+i+')">🏋 '+t('barTitle')+'</button>':'')+(exMode(x.eid)==='wr'&&isDb(x)?'<button onclick="mulMenu('+i+')">🏋 '+t('mulTitle')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
+    '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+''+(exMode(x.eid)==='wr'&&!isDb(x)?'<button onclick="sheetClose();pcOpenEx('+i+')">🏋 '+t('pcT')+'</button>':'')+(exMode(x.eid)==='wr'&&isDb(x)?'<button onclick="mulMenu('+i+')">🏋 '+t('mulTitle')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
 /* remove one set (the swipe-left uses this); the last set left is emptied instead / quitar una serie (lo usa deslizar a la izquierda); si queda una sola, se vacía */
 function rmSetAt(i,j){

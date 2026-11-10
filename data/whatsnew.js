@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.98',items:[
+  {i:'🏋️',en:'<b>Weight is now the total, bar included</b>, like other apps: for 225 lb on the bar, type 225. Your saved workouts do not change. Pick your bar in the plate calculator; it is remembered per exercise.',es:'<b>El peso ahora es el total, con la barra incluida</b>, como en otras apps: si la barra pesa 225 lb en total, escribe 225. Tus entrenamientos guardados no cambian. Elige tu barra en la calculadora de discos; se recuerda por ejercicio.'}
+ ]},
  {v:'v1.1.97',items:[
   {i:'👋',en:'First screen: Continue as guest is now the main button, so you can start training in one tap.',es:'Primera pantalla: Continuar como invitado es ahora el botón principal, para empezar a entrenar con un toque.'}
  ]},

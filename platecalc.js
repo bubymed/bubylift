@@ -13,7 +13,7 @@ function pcTarget(){
   for(let i=0;i<ACT.ex.length;i++)for(let j=0;j<ACT.ex[i].sets.length;j++){const s=ACT.ex[i].sets[j];if(pcOk(i,j)&&s.w==null&&!s.done)return{i:i,j:j,sel:0};}
   return null;
 }
-function pcBarEx(x){return barOf(x)>0||barDef(x.eid)>0;} // a barbell exercise: the app adds its own bar / ejercicio de barra: la app suma su propia barra
+function pcBarEx(x){return barOf(x)>0||barDef(x.eid)>0;} // a barbell exercise: the calculator starts with its bar / ejercicio de barra: la calculadora empieza con su barra
 
 function pcUnit(){return SET.pcUnit==='lb'||SET.pcUnit==='kg'?SET.pcUnit:(imp()?'lb':'kg');}
 function pcSides(){return SET.pcSides===1?1:2;}
@@ -43,11 +43,15 @@ function pcOpen(){
   pcDraw();
 }
 function pcBarKg(){const w=pcBarW();return pcUnit()==='lb'?w/KG_LB:w;}
-/* put the number in the set: with a bar, only the plates (the app adds the bar); with no bar, everything / pone el número en la serie: con barra, solo los discos; sin barra, todo */
+/* the bar picked here is remembered for the exercise the calculator is working on / la barra elegida aquí se recuerda para el ejercicio en el que trabaja la calculadora */
+function pcKeepBar(){const g=pcTarget(),x=g&&ACT.ex[g.i];if(x&&pcBarEx(x)&&Math.abs(pcBarKg()-barOf(x))>0.05)barKeep(x,pcBarKg());}
+/* open on one exercise: its first set without a weight, or the last one / abrir en un ejercicio: su primera serie sin peso, o la última */
+function pcOpenEx(i){const x=ACT&&ACT.ex[i];if(!x)return;let j=x.sets.findIndex(s=>!s.done&&s.w==null);if(j<0)j=x.sets.findIndex(s=>!s.done);if(j<0)j=x.sets.length-1;PC.foc={i:i,j:j};PC.n={};PC.rev=null;pcOpen();}
+/* put the number in the set: always the total, bar included / pone el número en la serie: siempre el total, con la barra incluida */
 function pcUse(){
-  const g=pcTarget();if(!g)return;const x=ACT.ex[g.i],u=pcUnit(),bar=pcBarEx(x);
-  if(bar){const kg=pcBarKg();if(Math.abs(kg-barOf(x))>0.05){reScale(x,kg>0?kg:0,mulOf(x));SET.barPref=SET.barPref||{};SET.barPref[x.eid]=kg>0?kg:0;jset(K_SET,SET);}}
-  const val=bar?pcPlatesSum()*pcSides():pcTotal(),inApp=u==='kg'?(imp()?val*KG_LB:val):(imp()?val:val/KG_LB);
+  const g=pcTarget();if(!g)return;const x=ACT.ex[g.i],u=pcUnit();
+  pcKeepBar();
+  const val=pcTotal(),inApp=u==='kg'?(imp()?val*KG_LB:val):(imp()?val:val/KG_LB);
   sv(g.i,g.j,'w',String(fmtNum(inApp,2)));
   PC.foc=null;PC.n={};sheetClose();exRedraw(g.i);buzz(8);
   toast(t('pcUsed',exName(x.eid,x.n),g.j+1));
@@ -97,14 +101,14 @@ function pcDraw(){
     '<div class="pc-bd muted sm">≈ '+pcFmt(other)+' '+(u==='kg'?'lb':'kg')+' · '+esc(t('pcBarW',pcFmt(pcBarW())+' '+u))+(ps?' + '+sides+' × '+pcFmt(ps)+' '+u:'')+'</div></div></div>');
 }
 function pcTgHtml(ps,sides,u){
-  const g=pcTarget();if(!g)return'';const x=ACT.ex[g.i],bar=pcBarEx(x);
+  const g=pcTarget();if(!g)return'';const x=ACT.ex[g.i];
   return'<div class="pc-tg"><div><small>'+t(g.sel?'pcTgSel':'pcTgAuto')+'</small><b>'+esc(exName(x.eid,x.n))+' · '+t('pcSetN',g.j+1)+'</b>'+
-    '<small>'+t(bar?'pcPlatesOnly':'pcAll',pcFmt(bar?ps*sides:pcTotal())+' '+u)+'</small></div><button class="btn pri" onclick="pcUse()">'+t('pcUse')+'</button></div>';
+    '<small>'+t('pcAll',pcFmt(pcTotal())+' '+u)+'</small></div><button class="btn pri" onclick="pcUse()">'+t('pcUse')+'</button></div>';
 }
 function pcAdd(v){PC.n[v]=Math.min(20,(PC.n[v]||0)+1);if(navigator.vibrate&&SET.hap!==false)try{navigator.vibrate(6);}catch(e){}pcDraw();}
 function pcSub(v){if(PC.n[v]>0){PC.n[v]--;if(!PC.n[v])delete PC.n[v];}pcDraw();}
 function pcClear(){PC.n={};PC.rev=null;pcDraw();}
 function pcSetUnit(u){if(u===pcUnit())return;SET.pcUnit=u;PC.n={};PC.rev=null;jset(K_SET,SET);pcDraw();} // the plate sets differ, so the count starts over / los juegos de discos son distintos, se empieza de cero
-function pcBar(k){SET.pcBar=k;jset(K_SET,SET);pcDraw();const el=$('pccus');if(el)el.focus();}
+function pcBar(k){SET.pcBar=k;jset(K_SET,SET);pcKeepBar();pcDraw();const el=$('pccus');if(el)el.focus();}
 function pcSetSides(n){SET.pcSides=n;jset(K_SET,SET);pcDraw();}
 function pcCus(v){const n=numParse(v);SET.pcCus=n==null||n<0?0:Math.min(n,500);jset(K_SET,SET);const el=document.querySelector('.pc-tv');if(el){const u=pcUnit();el.textContent=pcFmt(pcTotal())+' '+u;}}
