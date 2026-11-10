@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.97',items:[
+  {i:'👋',en:'First screen: Continue as guest is now the main button, so you can start training in one tap.',es:'Primera pantalla: Continuar como invitado es ahora el botón principal, para empezar a entrenar con un toque.'}
+ ]},
  {v:'v1.1.96',items:[
   {i:'🏋️',en:'Plate calculator works backwards: type the weight you want and it tells you the plates per side.',es:'La calculadora de discos funciona al revés: escribe el peso que quieres y te dice los discos por lado.'}
  ]},

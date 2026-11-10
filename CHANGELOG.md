@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.97 — 2026-11-09
+- First screen puts Continue as guest first and primary; sign up / log in / Google below.
+  La primera pantalla pone Continuar como invitado primero y como principal; registro / inicio / Google debajo.
+
 ## v1.1.96 — 2026-11-09
 - Reverse plate calculator: enter a target total, get plates per side (closest below if not exact).
   Calculadora de discos inversa: escribe el total y te da los discos por lado (el más cercano por debajo si no es exacto).
