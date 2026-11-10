@@ -4,7 +4,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.98';
+const APP_VER='v1.1.99';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -323,12 +323,14 @@ function bootApp(){
   sh.addEventListener('touchstart',e=>{
     on=false;dy=0;
     if(e.touches.length!==1||sh.scrollTop>0||sh.classList.contains('pks')||$('sheetov').classList.contains('pks')||(typeof pfCur==='function'&&pfCur()&&pfCur().tmp))return;
+    if(e.target.closest&&e.target.closest('.pv-grip'))return; // dragging an exercise by its handle must not drag the sheet too / arrastrar un ejercicio por su agarre no debe arrastrar también la hoja
     const a=document.activeElement;if(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))return;
     inner=e.target.closest?e.target.closest('.rkl-list'):null;
     y0=e.touches[0].clientY;t0=Date.now();on='wait';
   },{passive:true});
   sh.addEventListener('touchmove',e=>{
     if(!on)return;
+    if(typeof PVD!=='undefined'&&PVD){on=false;sh.style.transition='';sh.style.transform='';return;}
     const d=e.touches[0].clientY-y0;
     if(on==='wait'){if(d<-6){on=false;return;}if(d<8)return;if(sh.scrollTop>0||(inner&&inner.scrollTop>0)){on=false;return;}on=true;sh.style.transition='none';}
     dy=Math.max(0,d);sh.style.transform='translateY('+dy+'px)';
