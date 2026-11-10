@@ -26,10 +26,10 @@ function pcBarW(){
 function pcPlatesSum(){let s=0;Object.keys(PC.n).forEach(k=>{s+=(+k)*PC.n[k];});return s;}
 function pcTotal(){return pcBarW()+pcPlatesSum()*pcSides();}
 function pcFmt(v){return fmtNum(v,2);}
-/* round button next to the rest timer: only on the Workout tab / botón redondo junto al cronómetro: solo en la pestaña Entrenar */
+/* round button next to the rest timer: only on the Workout tab while a workout is in progress / botón redondo junto al cronómetro: solo en la pestaña Entrenar y con un entrenamiento en curso */
 function plateFab(){
   const b=$('platefab');if(!b)return;
-  const on=tab==='workout'&&!(ACT&&ACT.guide&&!ACT.gOff);
+  const on=tab==='workout'&&!!ACT&&!(ACT.guide&&!ACT.gOff); // only during a workout / solo durante un entrenamiento
   b.hidden=!on;document.body.classList.toggle('resting',!!(typeof REST!=='undefined'&&REST));
   if(on&&!b.innerHTML){b.innerHTML=ic('barbell');b.setAttribute('aria-label',t('pcT'));}
 }

@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.100',items:[
+  {i:'🛠️',en:'The plate calculator button now shows only while you are in a workout.',es:'El botón de la calculadora de discos ahora solo aparece durante un entrenamiento.'}
+ ]},
  {v:'v1.1.99',items:[
   {i:'🛠️',en:'Fixed: moving an exercise inside a routine no longer drags the whole panel down.',es:'Arreglado: mover un ejercicio dentro de una rutina ya no arrastra todo el panel hacia abajo.'}
  ]},
