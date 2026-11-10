@@ -52,6 +52,26 @@ function pcUse(){
   PC.foc=null;PC.n={};sheetClose();exRedraw(g.i);buzz(8);
   toast(t('pcUsed',exName(x.eid,x.n),g.j+1));
 }
+/* reverse: type the total you want and get the plates for each side. Exact when the plate set allows it, otherwise the closest weight below
+   inverso: escribes el total que quieres y te da los discos de cada lado. Exacto si los discos lo permiten, si no, el peso más cercano por debajo */
+function pcSolve(per,u){
+  const pl=PC_PLATES[u].map(v=>Math.round(v*4)),tg=Math.floor(per*4+1e-6),dp=new Array(tg+1).fill(-1),ch=new Array(tg+1).fill(0);
+  dp[0]=0;
+  for(let a=1;a<=tg;a++)for(let k=0;k<pl.length;k++){const p=pl[k];if(a>=p&&dp[a-p]>=0&&(dp[a]<0||dp[a-p]+1<dp[a])){dp[a]=dp[a-p]+1;ch[a]=k;}}
+  let a=tg;while(a>0&&dp[a]<0)a--;
+  const n={};let r=a;while(r>0){const k=ch[r],v=PC_PLATES[u][k];n[v]=(n[v]||0)+1;r-=pl[k];}
+  return{n:n,got:a/4};
+}
+function pcReverse(){
+  const el=$('pcrev'),v=numParse(el?el.value:''),u=pcUnit(),bar=pcBarW(),sides=pcSides();
+  PC.rev={in:el?el.value:''};
+  if(v==null||v<=0||v>2000){PC.rev.m=['pcRevBad'];pcDraw();return;}
+  if(v<bar-1e-6){PC.rev.m=['pcRevLow',pcFmt(bar),u];pcDraw();return;}
+  const per=(v-bar)/sides,r=pcSolve(per,u),got=bar+r.got*sides;
+  PC.n=r.n;
+  PC.rev.m=Math.abs(got-v)<1e-6?['pcRevOk',pcFmt(got),u]:['pcRevNear',pcFmt(v),u,pcFmt(got),pcFmt(v-got)];
+  pcDraw();
+}
 function pcDraw(){
   const u=pcUnit(),bk=pcBarKey(),pl=PC_PLATES[u],mx=pl[pl.length-1],sides=pcSides();
   const chip=(on,fn,label)=>'<button class="chip'+(on?' on':'')+'" onclick="'+fn+'">'+label+'</button>';
@@ -68,6 +88,8 @@ function pcDraw(){
     '<div class="lbl">'+t('pcBarL')+' · '+esc(t('pc_'+bk))+' '+pcFmt(pcBarW())+' '+u+'</div><div class="chips wrap">'+bars+'</div>'+
     (bk==='cus'?'<label class="sm">'+t('pcCusP')+' ('+u+') <input id="pccus" class="in" type="text" inputmode="decimal" autocomplete="off" value="'+esc(SET.pcCus!=null?String(SET.pcCus):'')+'" oninput="pcCus(this.value)"></label>':'')+
     '<div class="pc-row"><span class="lbl">'+t('pcSidesL')+'</span><div class="chips">'+chip(sides===2,'pcSetSides(2)',t('pcBoth'))+chip(sides===1,'pcSetSides(1)',t('pcOne'))+'</div></div>'+
+    '<div class="pc-rev"><label class="sm">'+t('pcRevL',u)+' <input id="pcrev" class="in" type="text" inputmode="decimal" autocomplete="off" placeholder="'+(u==='kg'?'102.5':'225')+'" value="'+esc((PC.rev&&PC.rev.in)||'')+'" onkeydown="if(event.key===\'Enter\'){event.preventDefault();pcReverse();}"></label><button class="btn" onclick="pcReverse()">'+t('pcRevB')+'</button></div>'+
+    (PC.rev&&PC.rev.m?'<p class="sm pc-revm'+(PC.rev.m[0]==='pcRevOk'?' ok':' warn')+'" role="status">'+esc(t.apply(null,PC.rev.m))+'</p>':'')+
     '<div class="pc-bar" aria-hidden="true"><span class="pc-shaft"></span><span class="pc-stack">'+stack+'</span></div><p class="muted sm pc-cap">'+t(sides===2?'pcEach':'pcOneCap')+(ps?' · '+pcFmt(ps)+' '+u:'')+'</p>'+
     '<div class="pc-g">'+grid+'</div><p class="muted sm">'+t('pcTap')+'</p>'+
     '<div class="pc-tot"><div class="pc-tw"><span class="pc-tl">'+t('pcTotal')+'</span><b class="pc-tv">'+pcFmt(tot)+' '+u+'</b></div>'+
@@ -81,8 +103,8 @@ function pcTgHtml(ps,sides,u){
 }
 function pcAdd(v){PC.n[v]=Math.min(20,(PC.n[v]||0)+1);if(navigator.vibrate&&SET.hap!==false)try{navigator.vibrate(6);}catch(e){}pcDraw();}
 function pcSub(v){if(PC.n[v]>0){PC.n[v]--;if(!PC.n[v])delete PC.n[v];}pcDraw();}
-function pcClear(){PC.n={};pcDraw();}
-function pcSetUnit(u){if(u===pcUnit())return;SET.pcUnit=u;PC.n={};jset(K_SET,SET);pcDraw();} // the plate sets differ, so the count starts over / los juegos de discos son distintos, se empieza de cero
+function pcClear(){PC.n={};PC.rev=null;pcDraw();}
+function pcSetUnit(u){if(u===pcUnit())return;SET.pcUnit=u;PC.n={};PC.rev=null;jset(K_SET,SET);pcDraw();} // the plate sets differ, so the count starts over / los juegos de discos son distintos, se empieza de cero
 function pcBar(k){SET.pcBar=k;jset(K_SET,SET);pcDraw();const el=$('pccus');if(el)el.focus();}
 function pcSetSides(n){SET.pcSides=n;jset(K_SET,SET);pcDraw();}
 function pcCus(v){const n=numParse(v);SET.pcCus=n==null||n<0?0:Math.min(n,500);jset(K_SET,SET);const el=document.querySelector('.pc-tv');if(el){const u=pcUnit();el.textContent=pcFmt(pcTotal())+' '+u;}}

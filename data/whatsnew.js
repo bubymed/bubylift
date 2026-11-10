@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.96',items:[
+  {i:'🏋️',en:'Plate calculator works backwards: type the weight you want and it tells you the plates per side.',es:'La calculadora de discos funciona al revés: escribe el peso que quieres y te dice los discos por lado.'}
+ ]},
  {v:'v1.1.95',items:[
   {i:'layers',en:'<b>Plan setup remembers you</b>: if you close the setup halfway, it offers to pick up where you stopped (kept for a week). The last screen now shows a preview of your training days before you tap Build my plan.',es:'<b>La configuración del plan te recuerda</b>: si cierras la configuración a la mitad, te ofrece seguir donde te quedaste (se guarda una semana). La última pantalla ahora muestra una vista previa de tus días de entrenamiento antes de tocar Crear mi plan.'}
  ]},
