@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.91 — 2026-11-09
+- Undo for deleting a routine (from the list or the editor) or the plan, same pattern as workouts: confirm first, then 8 seconds to undo; the tombstone and cloud sync are committed when the window closes.
+  Deshacer al eliminar una rutina (desde la lista o el editor) o el plan, mismo patrón que los entrenamientos: primero confirmas, luego 8 segundos para deshacer; la lápida y la sincronización se confirman al cerrarse la ventana.
+
 ## v1.1.90 — 2026-11-09
 - History search: filter by workout name, exercise (English or Spanish, accents ignored) or note, and by muscle group; shows how many workouts match.
   Búsqueda en el Historial: filtra por nombre del entrenamiento, ejercicio (inglés o español, sin acentos) o nota, y por grupo muscular; muestra cuántos entrenamientos coinciden.
