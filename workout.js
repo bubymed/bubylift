@@ -31,7 +31,14 @@ function setVol(s){return s.ty==='w'?0:(s.w||0)*(s.r||0);}
 const SET_TY=['','w','d','f'];
 function cycTy(i,j){const s=ACT.ex[i].sets[j];if(!s)return;const k=(SET_TY.indexOf(s.ty||'')+1)%SET_TY.length;if(SET_TY[k])s.ty=SET_TY[k];else delete s.ty;if(s.ty==='w'){delete s.pr;}saveAct();render();}
 function wkVol(wk){let v=0;wk.ex.forEach(x=>x.sets.forEach(s=>{v+=setVol(s);}));return v;}
-function wkSets(wk){let n=0;wk.ex.forEach(x=>{n+=x.sets.length;});return n;}
+/* stretching and mobility moves are not training sets: they stay out of every sets total / los estiramientos y la movilidad no son series de entrenamiento: no suman a ningún total de series */
+function isMobEx(eid){const e=exById(eid);return !!e&&e.g==='mobility';}
+function wkSets(wk){let n=0;wk.ex.forEach(x=>{if(!isMobEx(x.eid))n+=x.sets.length;});return n;}
+function wkMoves(wk){let n=0;wk.ex.forEach(x=>{if(isMobEx(x.eid)&&x.sets.length)n++;});return n;}
+function wkAnySets(wk){let n=0;wk.ex.forEach(x=>{n+=x.sets.length;});return n;}
+/* "12 sets", or "8 moves" for a stretching-only session / "12 series", o "8 movimientos" si solo fue estiramiento */
+function wkCountTxt(wk){const n=wkSets(wk);if(n>0)return t('nSetsT',n);const m=wkMoves(wk);return m>0?t('nMovesT',m):'';}
+function wkCountBox(wk){const n=wkSets(wk),m=n>0?0:wkMoves(wk);return'<div><b>'+(m||n)+'</b><span>'+t(m?'moves':'sets')+'</span></div>';}
 function fmtSet(m,s){
   if(!s)return'—';
   if(m==='t')return(s.t!=null?fmtNum(s.t)+' min':'')+(s.d?(s.t!=null?' · ':'')+dShow(s.d)+' '+dUnit():'');
@@ -159,7 +166,7 @@ function exploreList(){
     r('barbell','pkMusT','pkMusP',"libGo('focus')")+r('arrows-shuffle','pkSpT','pkSpP',"libGo('split')")+r('trophy','pkPrT','pkPrP',"libGo('prog')")+r('stopwatch','pkChT','pkChP',"libGo('ch')")+'</div>';
 }
 /* start again with the same exercises and set counts as your last workout / empezar otra vez con los mismos ejercicios y series del último entrenamiento */
-function repeatLast(){const w=DATA.workouts.find(x=>x.ex&&x.ex.length&&wkSets(x)>0);if(!w)return;startWorkout({name:w.name||'',ex:w.ex.map(x=>({eid:x.eid,sets:Math.max(1,x.sets.length),n:x.n,vr:x.vr,mul:x.mul,bar:x.bar,v:x.v}))});}
+function repeatLast(){const w=DATA.workouts.find(x=>x.ex&&x.ex.length&&wkAnySets(x)>0);if(!w)return;startWorkout({name:w.name||'',ex:w.ex.map(x=>({eid:x.eid,sets:Math.max(1,x.sets.length),n:x.n,vr:x.vr,mul:x.mul,bar:x.bar,v:x.v}))});}
 function vStart(){
   let h='';
   if(needBackup())h+='<div class="card warn"><b>'+t('bkT')+'</b><p>'+t('bkP')+'</p><div class="row"><button class="btn pri sm" onclick="exportJSON()">'+t('exportBackup')+'</button><button class="btn sm" onclick="bkLater()">'+t('later')+'</button></div></div>';
@@ -167,7 +174,7 @@ function vStart(){
   h+=wkSumCard();
   h+=rkTeaser();
   h+=(DATA.plan?planCard():hero0())+recCta();
-  const lw0=DATA.workouts.find(w=>w.ex&&w.ex.length&&wkSets(w)>0);
+  const lw0=DATA.workouts.find(w=>w.ex&&w.ex.length&&wkAnySets(w)>0);
   if(lw0)h+='<button class="btn wide" onclick="repeatLast()">↺ '+t('repLast')+(lw0.name?' · '+esc(lw0.name):'')+'</button>';
   h+='<button class="btn wide emptyb" onclick="startWorkout()">'+ic('pencil')+' '+t('pkOwnT')+'</button>';
   h+=mobCard();
@@ -483,12 +490,12 @@ function finishWk(){
   render();
   const prs=[];wk.ex.forEach(x=>x.sets.forEach(s=>{if(s.pr&&prs.indexOf(x.eid)<0)prs.push(x.eid);}));
   sheet('<div class="sum"><div class="sum-e">🎉</div><h3>'+t('wkSaved')+'</h3><p class="cheer">'+wkCheer(wk,prs)+'</p><p class="muted">'+esc(wk.name)+'</p>'+
-    '<div class="stats"><div><b>'+fmtDur((end-wk.t)/1000)+'</b><span>'+t('duration')+'</span></div><div><b>'+wkSets(wk)+'</b><span>'+t('sets')+'</span></div><div><b>'+vShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>'+
+    '<div class="stats"><div><b>'+fmtDur((end-wk.t)/1000)+'</b><span>'+t('duration')+'</span></div>'+wkCountBox(wk)+'<div><b>'+vShow(wkVol(wk))+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>'+
     (prs.length?'<p class="prs">'+ic('trophy')+' '+t('prsT')+': '+prs.map(e=>esc(exName(e))).join(', ')+'</p>':'')+
     '<div class="row"><button class="btn pri" onclick="sumDone()">'+t('done')+'</button><button class="btn" onclick="saveWkAsRoutine(\''+wk.id+'\')">'+t('saveRoutineS')+'</button><button class="btn" onclick="wkPic(\''+wk.id+'\')">'+ic('share')+' '+t('cdBtn')+'</button><button class="btn" onclick="cgAfter(\''+wk.id+'\')">'+ic('heart')+' '+t('cgAfter')+'</button></div></div>');
 }
 /* one-time feedback pop up: after the first routine/plan AND the first logged set / pop up de feedback una sola vez */
-function fbDue(){return !SET.fbAsked&&DATA.workouts.some(w=>wkSets(w)>0)&&!!(DATA.plan||DATA.routines.length||DATA.workouts.some(w=>w.pl!=null));}
+function fbDue(){return !SET.fbAsked&&DATA.workouts.some(w=>wkAnySets(w)>0)&&!!(DATA.plan||DATA.routines.length||DATA.workouts.some(w=>w.pl!=null));}
 function sumDone(){
   sheetClose();
   if(typeof gwFirstDue==='function'&&gwFirstDue()){setTimeout(gwFirst,400);return;} // a guest's first workout: invite them to keep it; feedback waits for the next one / primer entrenamiento de un invitado: se invita a guardarlo; el feedback espera al siguiente

@@ -73,7 +73,7 @@ function loadData(now){
   now=now||Date.now();const W=7*864e5,wk=[0,0,0,0],mus={},eff={};REC_G.forEach(g=>{mus[g]=0;});
   DATA.workouts.forEach(w=>{
     const end=w.end||w.t,age=now-end;if(age<0||age>=4*W)return;const k=Math.floor(age/W);
-    w.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(!n)return;wk[k]+=n;if(k===0&&g&&mus[g]!=null)mus[g]+=n;if(k===0){const mw=muW(x.eid,x.vr);if(mw)mw.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});}});
+    w.ex.forEach(x=>{const e=exById(x.eid),g=e&&e.g;const n=x.sets.filter(s=>s.done!==false&&(s.r>0||s.t>0)).length;if(!n||g==='mobility')return;wk[k]+=n;if(k===0&&g&&mus[g]!=null)mus[g]+=n;if(k===0){const mw=muW(x.eid,x.vr);if(mw)mw.forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});}});
   });
   /* weeks before your first logged workout are not "rest", they are empty: only fully covered weeks form the baseline, and a spike needs 2+ of them / las semanas antes de tu primer entreno no son descanso, están vacías: solo las semanas completas cuentan y hacen falta 2 */
   const first=DATA.workouts.reduce((m,w)=>Math.min(m,w.t||m),now),cov=[true,1,2,3].map((k,i)=>i===0||first<=now-(i+1)*W),base=[1,2,3].filter(k=>cov[k]);

@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.89 — 2026-11-09
+- Stretch and mobility moves no longer count as sets: they were added to the History total, the weekly summary and the 7-day training load. A stretching-only session now shows "N moves"; "Repeat last" and the first-workout checks still see it as a session.
+  Los movimientos de estiramiento y movilidad ya no cuentan como series: se sumaban al total del Historial, al resumen semanal y a la carga de 7 días. Una sesión solo de estiramiento ahora muestra "N movimientos"; "Repetir el último" y las revisiones del primer entrenamiento la siguen viendo como sesión.
+
 ## v1.1.88 — 2026-11-09
 - Accessibility: the icon-only buttons now have an accessible name (routine editor + and −, plan editor + and −, remove a taste/favorite ✕, the −1 rounds undo). `tools/check.py` now fails if a button with only a symbol has no aria-label, so new ones cannot slip in.
   Accesibilidad: los botones solo con ícono ahora tienen nombre accesible (+ y − del editor de rutinas, + y − del editor de planes, quitar un gusto/favorito ✕, el −1 de las rondas). `tools/check.py` ahora falla si un botón con solo un símbolo no tiene aria-label, así no se cuelan nuevos.

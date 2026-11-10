@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.89',items:[
+  {i:'check',en:'<b>Stretching is not counted as sets</b>: stretch and mobility moves no longer add to your set totals, weekly summary or training load. A stretching-only session shows "8 moves" instead of sets.',es:'<b>El estiramiento no cuenta como series</b>: los movimientos de estiramiento y movilidad ya no suman a tus totales de series, al resumen semanal ni a la carga de entrenamiento. Una sesión solo de estiramiento muestra "8 movimientos" en vez de series.'}
+ ]},
  {v:'v1.1.88',items:[
   {i:'info',en:'<b>Better for screen readers</b>: the icon-only buttons (the + and − in the routine editor and plan editor, remove a favorite, the −1 rounds undo) now have names that a screen reader can read out.',es:'<b>Mejor para lectores de pantalla</b>: los botones solo con ícono (el + y − del editor de rutinas y de planes, quitar un favorito, el −1 de las rondas) ahora tienen nombres que un lector de pantalla puede leer.'}
  ]},
