@@ -313,6 +313,11 @@ CUR = {}
 def alias(eid, *names):
     if eid not in info: print('!! alias: not found', eid, file=sys.stderr); return
     CUR[eid] = list(names)
+TOP = {}
+def top(*ids):
+    for i in ids:
+        if i not in info: print('!! top: not found', i, file=sys.stderr)
+        else: TOP[i] = 2
 VAR = {}
 OLD = {}
 def old(eid, name):
@@ -377,6 +382,17 @@ def variant_parent(r):
         if best is None or sc > best[0]: best = (sc, b['id'])
     return best[1] if best else None
 
+def staples():
+    """staple lifts: hand-written aliases or a place in a progression chain; search lists them first for new users / básicos: alias a mano o en una cadena"""
+    st = {}
+    for k in CUR:
+        if not k.startswith('z_') and k in info: st[k] = 1
+    for c in CHAINS:
+        for k in c:
+            if not k.startswith('z_'): st[k] = 1
+    st.update(TOP)
+    return st
+
 def build():
     fix_chain_difficulty()
     by_key = collections.defaultdict(list)
@@ -414,9 +430,10 @@ if __name__ == '__main__':
             "   EXDUP[hidden id] = id shown instead in the picker (same exercise imported twice; ids are never removed) / id que se muestra en su lugar en el selector\n"
             "   EXOLD[old english name, lowercase] = id (names renamed in the library, so old CSV exports still import) / nombres renombrados, para importar CSV viejos\n"
             "   EXVAR[variant id] = parent id (only shown when you search the parent or open its guide) / variante -> ejercicio padre\n"
+            "   EXSTAPLE[id] = 1 for staple lifts (search ranks them first) / básicos que la búsqueda pone primero\n"
             "   EXSYN[typed word] = words to look for in the English name, separated by |  (search only, never shown) / EXSYN[palabra escrita] = palabras a buscar en el nombre en inglés\n"
             "   Rule-made guide, not reviewed one by one. / Guía hecha por reglas, no revisada uno por uno. */\n")
-    open(os.path.join(ROOT, 'data', 'exinfo.js'), 'w', encoding='utf-8').write(hdr2 + js('EXTAX', tax) + js('EXEQ', eqm) + js('EXALI', ali) + js('EXSYN', SEARCH) + js('EXDUP', DUP) + js('EXOLD', OLD) + js('EXVAR', VAR))
+    open(os.path.join(ROOT, 'data', 'exinfo.js'), 'w', encoding='utf-8').write(hdr2 + js('EXTAX', tax) + js('EXEQ', eqm) + js('EXALI', ali) + js('EXSYN', SEARCH) + js('EXDUP', DUP) + js('EXOLD', OLD) + js('EXVAR', VAR) + js('EXSTAPLE', staples()))
     sz = lambda f: os.path.getsize(os.path.join(ROOT, 'data', f))
     print('%d exercises, %d chains | exrel %d B, exinfo %d B | equipment rows %d, alias rows %d' % (len(rel), len(CHAINS), sz('exrel.js'), sz('exinfo.js'), len(eqm), len(ali)))
     for eid in sys.argv[1:]:

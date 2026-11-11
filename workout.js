@@ -622,23 +622,84 @@ function pickPool(){
   EXLIB.map(a=>exById(a[0])).filter(Boolean).sort((a,b)=>rk(a)-rk(b)).forEach(e=>{if(!e)return;if((dup[e.id]||vr[e.id])&&!used[e.id])return;const k=exKey(e);if(seen[k])return;seen[k]=1;out.push(e);});
   return out.concat(DATA.custom.filter(c=>!c.del).map(c=>exById(c.id)));
 }
-/* other names (abbreviations, synonyms) used by search / otros nombres (abreviaturas, sinónimos) que usa la búsqueda */
-const _aliC={};
-function aliN(e){if(_aliC[e.id]===undefined)_aliC[e.id]=typeof EXALI!=='undefined'&&EXALI[e.id]?norm(EXALI[e.id].replace(/;/g,' ; ')):'';return _aliC[e.id];}
-/* typed word -> words in the English name (EXSYN, search only) / palabra escrita -> palabras del nombre en inglés */
-function synHit(e,q){const s=typeof EXSYN!=='undefined'&&EXSYN[q];if(!s||e.custom)return false;const en=' '+norm(e.en).replace(/-/g,' ');return s.split('|').some(w=>w.indexOf('g:')===0?e.g===w.slice(2):en.indexOf(' '+w.replace(/-/g,' '))>=0);} // word start only: "lat" must not hit "flat" / solo al inicio de palabra
-function exRank(e,tok){
-  const nm=norm(LANG==='es'?e.es:e.en),other=norm(LANG==='es'?e.en:e.es),ws=nm.split(' ');let sc=0;
-  for(const q of tok){
-    if(nm===q)sc+=0;else if(nm.indexOf(q)===0)sc+=1;else if(ws.some(w=>w.indexOf(q)===0))sc+=2;else if(nm.indexOf(q)>=0)sc+=4;
-    else if(other.indexOf(q)>=0)sc+=6;
-    else if(nm.replace(/-/g,'').indexOf(q)>=0||other.replace(/-/g,'').indexOf(q)>=0)sc+=4; // pushup = push-up
-    else if(aliN(e).indexOf(q)>=0)sc+=7;
-    else if(synHit(e,q))sc+=7;
-    else{const meta=norm(t('g_'+e.g)+' '+t('e_'+e.e));if(meta.indexOf(q)>=0)sc+=8;else return -1;}
+/* ---------- exercise search / búsqueda de ejercicios ----------
+   Each exercise is indexed once as word lists per field (current-language name, other-language name, aliases, group/equipment labels).
+   Matching is at word starts only; plurals are folded on both sides; a token that is not a known word or prefix is corrected to the
+   nearest word in the app's vocabulary (typos); muscle words prefer that muscle group; ties go to what you use, then staple lifts.
+   Cada ejercicio se indexa una vez como listas de palabras por campo. Coincidencia al inicio de palabra; plurales en ambos lados; un
+   término que no es palabra ni prefijo se corrige a la palabra más cercana del vocabulario; las palabras de músculo prefieren ese grupo;
+   los empates van a lo que usas y luego a los básicos. */
+const SR_STOP={de:1,del:1,con:1,en:1,al:1,a:1,la:1,el:1,los:1,las:1,y:1,the:1,with:1,on:1,of:1,to:1,and:1,'&':1};
+const SR_EQW={barbell:1,dumbbell:1,cable:1,machine:1,kettlebell:1,band:1,smith:1,barra:1,mancuerna:1,polea:1,maquina:1,pesa:1,rusa:1,banda:1,db:1,bb:1,kb:1};
+let _sx=null;
+function srWords(s){return norm(s).replace(/[-/(),.:+]/g,' ').split(/\s+/).filter(w=>w&&!SR_STOP[w]);}
+function srFold(w){return w.length>4&&/[^aeiou]es$/.test(w)?w.slice(0,-2):(w.length>3&&/s$/.test(w)&&!/ss$/.test(w)?w.slice(0,-1):w);}
+function srIdx(){
+  const key=LANG+':'+DATA.custom.length+':'+DATA.custom.map(c=>c.n+(c.del?'x':'')).join('|').length;
+  if(_sx&&_sx.k===key)return _sx;
+  const ex={},voc={},add=w=>{voc[w]=(voc[w]||0)+1;const g=srFold(w);if(g!==w)voc[g]=(voc[g]||0)+1;};
+  const one=e=>{if(!e)return;const es=LANG==='es';
+    const f={c:srWords(es?e.es:e.en),o:srWords(es?e.en:e.es),a:srWords(typeof EXALI!=='undefined'&&EXALI[e.id]?EXALI[e.id].replace(/;/g,' '):''),m:srWords(t('g_'+e.g)+' '+t('e_'+e.e)),en:' '+srWords(e.en).join(' ')+' '};
+    ['c','o','a','m'].forEach(k=>{f[k]=f[k].map(w=>[w,srFold(w)]);f[k].forEach(p=>{add(p[0]);});});ex[e.id]=f;};
+  EXLIB.forEach(r=>one(exById(r[0])));DATA.custom.forEach(c=>one(exById(c.id)));
+  if(typeof EXSYN!=='undefined')Object.keys(EXSYN).forEach(add);
+  _sx={k:key,ex:ex,voc:Object.keys(voc),cnt:voc,fix:{}};return _sx;
+}
+/* edit distance with swaps, stopped early above the limit / distancia de edición con transposiciones, se corta al pasar el límite */
+function srDist(a,b,max){
+  if(Math.abs(a.length-b.length)>max)return max+1;
+  const m=a.length,n=b.length;let p2=null,p=[],c;for(let j=0;j<=n;j++)p.push(j);
+  for(let i=1;i<=m;i++){c=[i];let lo=i;for(let j=1;j<=n;j++){let v=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));if(p2&&i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])v=Math.min(v,p2[j-2]+1);c.push(v);if(v<lo)lo=v;}if(lo>max)return max+1;p2=p;p=c;}
+  return p[n];
+}
+/* a token the vocabulary does not know -> its closest word (only for 4+ letters; the last, still-typed token only when 5+) */
+function srFix(q,last){
+  const X=srIdx();if(X.fix[q+last]!==undefined)return X.fix[q+last];
+  let best=[];const fq=srFold(q);
+  if(!X.voc.some(w=>w.indexOf(q)===0||w.indexOf(fq)===0)&&q.length>=(last?5:4)){
+    const max=q.length>=7?2:1;let bd=max+1;
+    X.voc.forEach(w=>{if(w[0]!==q[0]&&!(q.length>=6&&w[1]===q[1]))return;const d=srDist(q,w,max);if(d<bd){bd=d;best=[w];}else if(d===bd&&d<=max)best.push(w);});
+    best.sort((a,b)=>X.cnt[b]-X.cnt[a]);best=best.slice(0,4); // every word at the closest distance, most common first / todas las palabras a la menor distancia
   }
-  /* among equal matches: curated before imported, lifts before stretches (unless you are picking stretches) / a igual coincidencia: curados antes que importados, ejercicios antes que estiramientos */
-  return sc*100+nm.length+(/^z_/.test(e.id)?30:0)+(e.g==='mobility'&&UI.pt!=='mob'?40:0);
+  X.fix[q+last]=best;return best;
+}
+/* cost of one query token in one field: 0 exact word, 1 word prefix; -1 no match / costo de un término en un campo */
+function srIn(words,q,fq,pre){
+  let c=-1;for(const p of words){if(p[0]===q||p[1]===q||p[1]===fq||p[0]===fq)return 0;if(pre&&(p[0].indexOf(q)===0||p[0].indexOf(fq)===0))c=1;}
+  return c;
+}
+let _srUse=null;
+function srUse(){const L=DATA.workouts,k=L.length+':'+(L[0]?L[0].id:'');if(_srUse&&_srUse.k===k)return _srUse.v;const v={};L.forEach(w=>w.ex.forEach(x=>{v[x.eid]=(v[x.eid]||0)+1;}));_srUse={k:k,v:v};return v;}
+function exRank(e,tok){
+  const X=srIdx(),f=X.ex[e.id];if(!f)return -1;
+  let sc=0,fixed=0;const eff=[];
+  for(let i=0;i<tok.length;i++){
+    let q=norm(tok[i]).replace(/-/g,'');if(!q||SR_STOP[q])continue;
+    const last=i===tok.length-1;let fq=srFold(q),best=99;
+    const tryQ=(q,fq,pen)=>{
+      const syn=typeof EXSYN!=='undefined'&&(EXSYN[q]||EXSYN[fq]);let grp='';
+      if(syn)syn.split('|').forEach(w=>{if(w.indexOf('g:')===0){grp=w.slice(2);if(e.g===grp)best=Math.min(best,pen);}else if(f.en.indexOf(' '+w.replace(/-/g,' '))>=0)best=Math.min(best,2+pen);});
+      let c=srIn(f.c,q,fq,true);if(c>=0)best=Math.min(best,c+pen+(grp&&e.g!==grp?3:0));
+      c=srIn(f.o,q,fq,true);if(c>=0)best=Math.min(best,c+2+pen+(grp&&e.g!==grp?3:0));
+      c=srIn(f.a,q,fq,q.length>=3);if(c>=0)best=Math.min(best,c+1+pen); // hand-written aliases are real names / los alias escritos a mano son nombres reales
+      c=srIn(f.m,q,fq,q.length>=3);if(c>=0)best=Math.min(best,c+5+pen);
+      // "pushup" = "push-up", "pullup" = "pull up": glue two neighbouring words / pega dos palabras vecinas
+      if(best===99&&q.length>=5){[f.c,f.o].forEach((W,k)=>{for(let j=0;j+1<W.length;j++){const g=W[j][0]+W[j+1][0];if(g===q||g===fq||(last&&g.indexOf(q)===0))best=Math.min(best,1+k*2+pen);}});}
+    };
+    tryQ(q,fq,0);
+    let used=fq;
+    if(best===99){const ws=srFix(q,last);if(ws.length){fixed=1;ws.forEach(w=>{const b0=best;tryQ(w,srFold(w),2);if(best<b0)used=srFold(w);});}}
+    eff.push(used);
+    if(best===99)return -1;
+    sc+=best;
+  }
+  /* tie-breaks: what you use, staple lifts, curated, shorter names; variations and stretches after / desempates */
+  const u=srUse()[e.id]||0,st=typeof EXSTAPLE!=='undefined'&&EXSTAPLE[e.id];
+  /* the plain version: name minus equipment words equals the query ("Barbell Curl" for "curl", "Remo con barra" for "remo") / la versión básica */
+  const core=f.c.map(p=>p[1]).filter(w=>!SR_EQW[w]),qs=eff.filter(x=>x&&!SR_STOP[x]&&!SR_EQW[x]);
+  const plain=core.length&&core.length===qs.length&&core.every(w=>qs.indexOf(w)>=0);
+  let r=sc*10-Math.min(6,Math.round(2.5*Math.log2(1+u)))-(st===2?7:st?4:0)-(plain?5:0)+(/^z_/.test(e.id)?2:0)+(typeof EXVAR!=='undefined'&&EXVAR[e.id]?2:0)+(e.g==='mobility'&&UI.pt!=='mob'?6:0)+fixed;
+  return Math.max(0,(r+20))*100+f.c.length*4+Math.min(40,(LANG==='es'?e.es:e.en).length);
 }
 const PK_PAGE=80;
 function pkScroll(){const l=$('exlist');if(!l||!$('pkmore'))return;if(l.scrollTop+l.clientHeight>l.scrollHeight-900){const y=l.scrollTop;UI.pkN=(UI.pkN||PK_PAGE)+160;l.innerHTML=exListHtml();l.scrollTop=y;}}
@@ -648,16 +709,12 @@ function exListHtml(){
   const f=pickFx(),pool=pickPoolF(f),nmf=e=>norm(LANG==='es'?e.es:e.en);
   let list,h='',last='';
   if(tok.length){
-    /* search sees variants too (you may only know the grip: "wide grip"); each sits right under its main exercise when that one matches as well
-       la búsqueda también ve las variantes (a veces solo sabes el agarre); cada una va justo debajo de su ejercicio principal si también coincide */
-    const vk=pkVarKids(),have={},rk=e=>exRank(e,tok);
-    pool.forEach(e=>{have[e.id]=1;});
-    const vars=Object.keys(typeof EXVAR!=='undefined'?EXVAR:{}).filter(id=>!have[id]).map(exById).filter(v=>v&&pickPoolF(f,[v]).length).map(v=>({e:v,r:rk(v)})).filter(x=>x.r>=0);
-    const main=pool.map(e=>({e:e,r:rk(e)})).filter(x=>x.r>=0);
-    const vr={};vars.forEach(x=>{vr[x.e.id]=x;});
-    const shown={};main.forEach(x=>{shown[x.e.id]=1;});
-    const all=main.concat(vars.filter(x=>!shown[EXVAR[x.e.id]])).sort((a,b)=>a.r-b.r);
-    list=[];all.forEach(x=>{list.push(x.e);(vk[x.e.id]||[]).forEach(id=>{if(vr[id]&&shown[x.e.id]){list.push(vr[id].e);}});});
+    /* search also sees variations (you may only know the grip: "wide grip"); a small penalty keeps them below the main lift
+       la búsqueda también ve las variantes (a veces solo sabes el agarre); una pequeña penalización las deja bajo el ejercicio principal */
+    const have={},rk=e=>exRank(e,tok);pool.forEach(e=>{have[e.id]=1;});
+    const vars=Object.keys(typeof EXVAR!=='undefined'?EXVAR:{}).filter(id=>!have[id]).map(exById).filter(v=>v&&pickPoolF(f,[v]).length);
+    list=pool.concat(vars).map(e=>({e:e,r:rk(e)})).filter(x=>x.r>=0).sort((a,b)=>a.r-b.r).map(x=>x.e);
+    const nmSeen={};list=list.filter(e=>{const k=norm(LANG==='es'?e.es:e.en);if(nmSeen[k])return false;nmSeen[k]=1;return true;}); // no repeated names / sin nombres repetidos
   }
   else if(f.t==='mine'||f.t==='recent'){const ids=f.t==='mine'?mineIds():recentIds();list=pool.slice().sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));}
   else list=pool.slice().sort((a,b)=>nmf(a).localeCompare(nmf(b)));

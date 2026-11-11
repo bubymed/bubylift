@@ -77,7 +77,8 @@ function wkMatch(wk,q,g){
   if(g&&!wk.ex.some(x=>{const e=exById(x.eid);return e&&e.g===g;}))return false;
   if(!q)return true;
   if(norm(wk.name).indexOf(q)>=0||norm(wk.note).indexOf(q)>=0)return true;
-  return wk.ex.some(x=>{const e=exById(x.eid);return norm(x.n).indexOf(q)>=0||(e&&(norm(e.en).indexOf(q)>=0||norm(e.es).indexOf(q)>=0));});
+  const tok=q.split(/\s+/).filter(Boolean); // same matcher as the exercise picker: typos, plurals, synonyms / el mismo buscador que el selector
+  return wk.ex.some(x=>{const e=exById(x.eid);return norm(x.n).indexOf(q)>=0||(e&&exRank(e,tok)>=0);});
 }
 function histList(){
   const q=norm((UI.hq||'').trim()),g=UI.hg||'',all=histSet(),a=all.filter(w=>wkMatch(w,q,g));
