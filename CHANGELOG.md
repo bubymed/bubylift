@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.117 — 2026-11-10
+- Opens lighter: the what's-new notes and the imported technique guides now load after the app is open instead of before (22% less to load at start).
+  Abre m\u00e1s ligera: las novedades y las gu\u00edas de t\u00e9cnica importadas ahora se cargan despu\u00e9s de abrir la app, no antes (22% menos que cargar al inicio).
+
 ## v1.1.116 — 2026-11-10
 - **Bodyweight progressions**: when you hit the top of the range on every set two sessions in a row (push-ups, pull-ups, dips\u2026), the workout offers the next harder version with one tap. If the last two sessions were very hard, it offers the easier one so you can build up. It respects your equipment and injuries.
   **Progresiones con peso corporal**: cuando llegas al tope en todas las series dos sesiones seguidas (lagartijas, dominadas, fondos\u2026), el entrenamiento te ofrece la versi\u00f3n m\u00e1s dif\u00edcil con un toque. Si las dos \u00faltimas sesiones fueron muy duras, te ofrece la m\u00e1s f\u00e1cil para avanzar. Respeta tu equipo y tus lesiones.
