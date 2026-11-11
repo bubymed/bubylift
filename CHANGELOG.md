@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.119 — 2026-11-10
+- Rehab moves now have their own details in the guide: body area, difficulty, equipment, and easier and harder steps taken from the phases of their rehab plan.
+  Los ejercicios de rehabilitaci\u00f3n ahora tienen sus detalles en la gu\u00eda: zona del cuerpo, dificultad, equipo, y pasos m\u00e1s f\u00e1ciles y m\u00e1s dif\u00edciles seg\u00fan las fases de su plan de rehabilitaci\u00f3n.
+
 ## v1.1.118 — 2026-11-10
 - **Up next tells you how much**: each suggestion shows sets \u00d7 reps and a weight from your last time (or a starting range the first time). And when a lift has not improved in 3+ weeks, its card says so and suggests a variation to try or a 10% reset.
   **Sigue te dice cu\u00e1nto**: cada sugerencia muestra series \u00d7 repeticiones y un peso seg\u00fan la \u00faltima vez (o un rango inicial la primera vez). Y cuando un ejercicio no mejora en 3+ semanas, su tarjeta te avisa y sugiere una variante o bajar un 10%.
