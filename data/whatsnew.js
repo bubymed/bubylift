@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.114',items:[
+  {i:'🔎',en:'Search also fixes typos in short words like "remp" or "pusj".',es:'La búsqueda también corrige errores en palabras cortas como "remp" o "pusj".'}
+ ]},
  {v:'v1.1.113',items:[
   {i:'🔎',en:'<b>Much better search</b>: finds exercises even with typos ("benh press", "sentadila"), plurals ("lunges", "elevaciones laterales"), Spanish or English names, nicknames and abbreviations (lagartijas, cuclillas, RDL, OHP, DB). Muscle words show that muscle first ("pecho" = chest exercises), the common lift comes first ("curl" = Barbell Curl, "remo" = Remo con barra), what you use most rises to the top, and repeated names are gone. History search uses the same engine.',es:'<b>Búsqueda mucho mejor</b>: encuentra ejercicios aunque escribas con errores ("benh press", "sentadila"), en plural ("lunges", "elevaciones laterales"), en español o inglés, apodos y abreviaturas (lagartijas, cuclillas, RDL, OHP, DB). Las palabras de músculo muestran primero ese músculo ("pecho" = ejercicios de pecho), sale primero el ejercicio común ("curl" = curl con barra, "remo" = remo con barra), lo que más usas sube arriba, y ya no hay nombres repetidos. La búsqueda del historial usa el mismo motor.'}
  ]},
