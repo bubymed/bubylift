@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.115',items:[
+  {i:'\u2601\ufe0f',en:'<b>Safer sync between phones</b>: if you edit a workout, routine, body entry or custom exercise on one phone while offline, that edit is no longer overwritten by an older copy when another phone synced in between. The copy changed last always wins.',es:'<b>Sincronizaci\\u00f3n m\\u00e1s segura entre tel\\u00e9fonos</b>: si editas un entrenamiento, rutina, registro corporal o ejercicio propio en un tel\\u00e9fono sin conexi\\u00f3n, esa edici\\u00f3n ya no se pierde porque otro tel\\u00e9fono sincroniz\\u00f3 en medio. Siempre gana la copia que cambi\\u00f3 al final.'}
+ ]},
  {v:'v1.1.114',items:[
   {i:'🔎',en:'Search also fixes typos in short words like "remp" or "pusj".',es:'La búsqueda también corrige errores en palabras cortas como "remp" o "pusj".'}
  ]},
