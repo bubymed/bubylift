@@ -1054,6 +1054,41 @@ function chkSave(){
 }
 
 /* ---------- technique guide ---------- */
+/* related exercises: pattern, difficulty, progressions, similar and equipment swaps (data/exrel.js, made by tools/gen_exrel.py)
+   ejercicios relacionados: patrón, dificultad, progresiones, parecidos y cambios de equipo (data/exrel.js, hecho por tools/gen_exrel.py) */
+function exRelOf(eid){const s=typeof EXREL!=='undefined'&&EXREL[eid];if(!s)return null;const a=s.split('|'),L=x=>x?x.split(' '):[];return{pat:a[0],uni:a[1]==='U',diff:+a[2],sim:L(a[3]),sw:L(a[4]),up:L(a[5]),dn:L(a[6]),gn:L(a[7]).map(x=>{const p=x.split(':');return{id:p[0],j:(p[1]||'').split('')};})};}
+function exTaxOf(eid){const s=typeof EXTAX!=='undefined'&&EXTAX[eid];if(!s)return null;const a=s.split('|');return{fam:a[0],mech:a[1],force:a[2],plane:a[3],pos:a[4],ang:a[5],load:a[6],reg:a[7],flags:a[8]||''};}
+function exEqOf(eid){const s=typeof EXEQ!=='undefined'&&EXEQ[eid];if(!s)return null;const a=s.split('|'),L=x=>x?x.split(' '):[];return{need:L(a[0]),opt:L(a[1]),sup:L(a[2]),ast:L(a[3])};}
+function exAliasOf(eid){const s=typeof EXALI!=='undefined'&&EXALI[eid];return s?s.split(';'):[];}
+function exTaxHtml(eid){
+  const x=exTaxOf(eid);if(!x)return'';
+  const bits=[t('fam_'+x.fam)];
+  if(x.mech!=='-')bits.push(t('mc_'+x.mech));
+  if(x.force==='S'||((x.force==='P'||x.force==='L')&&x.fam!=='push'&&x.fam!=='pull'))bits.push(t('fc_'+x.force));
+  bits.push(t('pl_'+x.plane));
+  if(x.fam!=='mobility'&&x.fam!=='cardio')bits.push(t('ps_'+x.pos)+(x.ang?' · '+t('an_'+x.ang):''));
+  bits.push(t('lt_'+x.load));bits.push(t('rg_'+x.reg));
+  if(x.flags.indexOf('A')>=0)bits.push(t('fl_A'));if(x.flags.indexOf('W')>=0)bits.push(t('fl_W'));
+  return'<div class="chips rel">'+bits.map(b=>'<span class="chip sm">'+esc(b)+'</span>').join('')+'</div>';
+}
+function exEqHtml(eid){
+  const q=exEqOf(eid);if(!q)return'';
+  const row=(lbl,l)=>l.length?'<div class="lbl">'+lbl+'</div><div class="chips rel">'+l.map(c=>'<span class="chip sm">'+esc(t('q_'+c))+'</span>').join('')+'</div>':'';
+  return row(t('eqNeed'),q.need)+row(t('eqOpt'),q.opt)+row(t('eqSup'),q.sup)+row(t('eqAst'),q.ast);
+}
+function exRelHtml(eid,back){
+  const r=exRelOf(eid);if(!r)return'';
+  const es=LANG==='es',al=exAliasOf(eid);
+  const go=id=>"howOpen('"+id+"'"+(back?",'"+back+"'":'')+")";
+  const row=(lbl,ids,eq,extra)=>{const l=ids.filter(id=>exById(id));if(!l.length)return'';return'<div class="lbl">'+lbl+'</div><div class="chips rel">'+l.map(id=>{const x=exById(id);return'<button class="chip" onclick="'+go(id)+'">'+esc(es?x.es:x.en)+(eq?' <span class="muted">· '+esc(t('e_'+x.e))+'</span>':'')+(extra&&extra[id]?' <span class="muted">· '+esc(extra[id])+'</span>':'')+'</button>';}).join('')+'</div>';};
+  const gx={};r.gn.forEach(g=>{gx[g.id]=t('relGentleOn',g.j.map(j=>t('j_'+j)).join(', '));});
+  const body=row(t('relEasier'),r.up)+row(t('relHarder'),r.dn)+row(t('relSim'),r.sim)+row(t('relSwap'),r.sw,1)+row(t('relGentle'),r.gn.map(g=>g.id),0,gx);
+  return'<div class="lbl">'+t('taxTitle')+'</div>'+
+    '<p class="muted sm">'+esc(t('pt_'+r.pat.replace(/ /g,'_')))+' · '+esc(t('df_'+r.diff))+(r.pat==='mobility'||r.pat==='cardio'?'':' · '+esc(t(r.uni?'relUni':'relBoth')))+'</p>'+
+    exTaxHtml(eid)+exEqHtml(eid)+
+    (al.length?'<div class="lbl">'+t('aliasLbl')+'</div><p class="muted sm">'+esc(al.join(' · '))+'</p>':'')+
+    (body?'<div class="lbl">'+t('relTitle')+'</div>'+body+'<p class="muted sm">'+t('relNote')+'</p>':'');
+}
 function howOpen(eid,back){
   const e=exById(eid);if(!e)return;
   const es=LANG==='es',src=HOWTO[eid],gen=HOWGEN[e.g]||HOWGEN.full;
@@ -1066,6 +1101,7 @@ function howOpen(eid,back){
     (EXPHOTO.has(eid)?'<div class="eximg">'+exImgs(eid)+'</div>':'')+
     '<div class="lbl">'+t('howSteps')+'</div><ol class="how">'+steps.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>'+
     (mis?'<div class="lbl">'+t('howMis')+'</div><p>'+esc(mis)+'</p>':(src?'':'<p class="muted sm">'+t('howGen')+'</p>'))+
+    exRelHtml(eid,back)+
     '<p class="muted sm">'+esc(HOWSAFE[es?1:0])+'</p>'+
     '<div class="row"><button class="btn pri" onclick="'+(back||'sheetClose')+'()">'+t('done')+'</button></div></div>');
 }

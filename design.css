@@ -863,6 +863,8 @@ button.rk-tz{cursor:pointer}
 .chips.wrap,.rh-zones{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;overscroll-behavior-x:contain;padding-right:28px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
 .chips.wrap::-webkit-scrollbar,.rh-zones::-webkit-scrollbar{display:none}
 .chips.wrap .chip,.rh-zones .btn{flex:none;white-space:nowrap;scroll-snap-align:start}
+/* guide: relation chips wrap onto several lines instead of scrolling / guía: las etiquetas de relaciones se acomodan en varias líneas */
+.chips.rel{flex-wrap:wrap;overflow:visible;padding-right:0;-webkit-mask-image:none;mask-image:none}.chips.rel .chip{white-space:normal;text-align:left}
 .seg.segsc{overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity}.seg.segsc::-webkit-scrollbar{display:none}
 .seg.segsc button{flex:none;white-space:nowrap;scroll-snap-align:start;padding-left:14px;padding-right:14px}
 .lat{display:flex;grid-template-columns:none;gap:8px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;overscroll-behavior-x:contain;padding:2px 28px 2px 0;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}

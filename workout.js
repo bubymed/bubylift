@@ -615,11 +615,15 @@ function pickPool(){
   EXLIB.map(a=>exById(a[0])).sort((a,b)=>(/^z_/.test(a.id)?1:0)-(/^z_/.test(b.id)?1:0)).forEach(e=>{if(!e)return;const k=exKey(e);if(seen[k])return;seen[k]=1;out.push(e);});
   return out.concat(DATA.custom.map(c=>exById(c.id)));
 }
+/* other names (abbreviations, synonyms) used by search / otros nombres (abreviaturas, sinónimos) que usa la búsqueda */
+const _aliC={};
+function aliN(e){if(_aliC[e.id]===undefined)_aliC[e.id]=typeof EXALI!=='undefined'&&EXALI[e.id]?norm(EXALI[e.id].replace(/;/g,' ; ')):'';return _aliC[e.id];}
 function exRank(e,tok){
   const nm=norm(LANG==='es'?e.es:e.en),other=norm(LANG==='es'?e.en:e.es),ws=nm.split(' ');let sc=0;
   for(const q of tok){
     if(nm===q)sc+=0;else if(nm.indexOf(q)===0)sc+=1;else if(ws.some(w=>w.indexOf(q)===0))sc+=2;else if(nm.indexOf(q)>=0)sc+=4;
     else if(other.indexOf(q)>=0)sc+=6;
+    else if(aliN(e).indexOf(q)>=0)sc+=7;
     else{const meta=norm(t('g_'+e.g)+' '+t('e_'+e.e));if(meta.indexOf(q)>=0)sc+=8;else return -1;}
   }
   return sc*100+nm.length;

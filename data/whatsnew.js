@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.107',items:[
+  {i:'🧭',en:'<b>Every exercise now has its own map</b>: movement type, difficulty, equipment needed, support and assistance, other names, similar exercises, swaps for missing equipment, easier and harder steps, and gentler options for a sore joint. Search also finds abbreviations and synonyms (DB, OHP, lagartijas…).',es:'<b>Cada ejercicio ahora tiene su mapa</b>: tipo de movimiento, dificultad, equipo necesario, soporte y asistencia, otros nombres, ejercicios parecidos, cambios si falta equipo, pasos más fáciles y más difíciles, y opciones más suaves para una articulación adolorida. La búsqueda también entiende abreviaturas y sinónimos (DB, OHP, lagartijas…).'}
+ ]},
  {v:'v1.1.105',items:[
   {i:'👆',en:'Smoother taps: no zoom delay when you log sets fast, no accidental refresh when you pull down mid-workout, and bigger touch areas on the top buttons.',es:'Toques más fluidos: sin retraso de zoom al registrar series rápido, sin recargar por accidente al deslizar hacia abajo en pleno entrenamiento y áreas táctiles más grandes en los botones de arriba.'}
  ]},
