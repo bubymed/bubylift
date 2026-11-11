@@ -1085,7 +1085,8 @@ function exRelHtml(eid,back){
   const go=id=>"howOpen('"+id+"'"+(back?",'"+back+"'":'')+")";
   const row=(lbl,ids,eq,extra)=>{const l=ids.filter(id=>exById(id));if(!l.length)return'';return'<div class="lbl">'+lbl+'</div><div class="chips rel">'+l.map(id=>{const x=exById(id);return'<button class="chip" onclick="'+go(id)+'">'+esc(es?x.es:x.en)+(eq?' <span class="muted">· '+esc(t('e_'+x.e))+'</span>':'')+(extra&&extra[id]?' <span class="muted">· '+esc(extra[id])+'</span>':'')+'</button>';}).join('')+'</div>';};
   const gx={};r.gn.forEach(g=>{gx[g.id]=t('relGentleOn',g.j.map(j=>t('j_'+j)).join(', '));});
-  const body=row(t('relEasier'),r.up)+row(t('relHarder'),r.dn)+row(t('relSim'),r.sim)+row(t('relSwap'),r.sw,1)+row(t('relGentle'),r.gn.map(g=>g.id),0,gx);
+  const vk=typeof pkVarKids==='function'?(pkVarKids()[eid]||[]):[],par=typeof EXVAR!=='undefined'&&EXVAR[eid]?[EXVAR[eid]]:[];
+  const body=row(t('relVar'),vk,1)+row(t('relParent'),par)+row(t('relEasier'),r.up)+row(t('relHarder'),r.dn)+row(t('relSim'),r.sim)+row(t('relSwap'),r.sw,1)+row(t('relGentle'),r.gn.map(g=>g.id),0,gx);
   return'<div class="lbl">'+t('taxTitle')+'</div>'+
     '<p class="muted sm">'+esc(t('pt_'+r.pat.replace(/ /g,'_')))+' · '+esc(t('df_'+r.diff))+(r.pat==='mobility'||r.pat==='cardio'?'':' · '+esc(t(r.uni?'relUni':'relBoth')))+'</p>'+
     exTaxHtml(eid)+exEqHtml(eid)+

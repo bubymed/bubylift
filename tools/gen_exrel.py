@@ -313,6 +313,7 @@ CUR = {}
 def alias(eid, *names):
     if eid not in info: print('!! alias: not found', eid, file=sys.stderr); return
     CUR[eid] = list(names)
+VAR = {}
 OLD = {}
 def old(eid, name):
     if eid not in info: print('!! old: not found', eid, file=sys.stderr); return
@@ -346,11 +347,42 @@ def fix_chain_difficulty():
             for x, y in zip(c, c[1:]):
                 if info[y]['diff'] < info[x]['diff']: info[y]['diff'] = info[x]['diff']; ch = True
 
+
+# ---------------------------------------------------------------- variants / variantes
+# An imported exercise whose name is a curated exercise's name plus only grip, side, angle, position or equipment words
+# ("Wide-Grip Lat Pulldown", "Box Squat with Chains") is a variant of it. The picker hides variants from general browsing
+# and search, and shows them when you search the parent's name or open the parent's guide.
+# Un ejercicio importado cuyo nombre es el de uno curado más solo palabras de agarre, lado, ángulo, posición o equipo es una variante.
+VAR_OK = set(('wide narrow close medium grip reverse alternate alternating one two arm arms single leg seated standing incline decline lying flat '
+              'with band bands chain chains rope attachment v bar handle smith machine cable leverage kettlebell kettlebells dumbbell dumbbells barbell '
+              'weighted speed deficit pin pins off neutral palms palm in up down hammer ez overhand underhand supinated pronated low high '
+              'stance front back side elevated feet bench box on to a the of version chest triceps pulley iso plate plates ball exercise suspended '
+              'trx kneeling floor medium knee knees s').split())
+VAR_EQ = set('band bands smith machine cable leverage kettlebell kettlebells dumbbell dumbbells barbell ez bar plate ball'.split())
+def variant_parent(r):
+    if not r['id'].startswith('z_') or r['id'] in DUP or r['g'] in ('mobility', 'cardio'): return None
+    words = lambda n: [re.sub(r's$', '', w) for w in re.findall(r'[a-z]+', n.lower().replace('flyes', 'fly').replace('flies', 'fly'))]
+    tv = words(r['en']); best = None
+    for b in rows:
+        if b['id'].startswith('z_') or b['g'] != r['g'] or b['pat'] != r['pat']: continue
+        wb = words(b['en'])
+        if not [w for w in wb if w not in VAR_OK]: continue
+        rest = list(tv)
+        ok = True
+        for w in wb:                                   # every parent word except the equipment must be there / todas las palabras del padre salvo el equipo
+            if w in rest: rest.remove(w)
+            elif w not in VAR_EQ: ok = False; break
+        if not ok or any(w not in VAR_OK for w in rest): continue
+        sc = len([w for w in wb if w in tv])
+        if best is None or sc > best[0]: best = (sc, b['id'])
+    return best[1] if best else None
+
 def build():
     fix_chain_difficulty()
     by_key = collections.defaultdict(list)
     for r in rows: by_key[exkey(r)].append(r)
     rel, tax, eqm, ali = {}, {}, {}, {}
+    VAR.update({r['id']: variant_parent(r) for r in rows if variant_parent(r)})
     for r in rows:
         up, dn = chain_nb(r['id'])
         up = up[:3] or auto_dir(r, False)
@@ -381,9 +413,10 @@ if __name__ == '__main__':
             "   EXALI[id] = other names for the exercise, separated by ;  (shown in the guide, used by search) / otros nombres del ejercicio, separados por ;\n"
             "   EXDUP[hidden id] = id shown instead in the picker (same exercise imported twice; ids are never removed) / id que se muestra en su lugar en el selector\n"
             "   EXOLD[old english name, lowercase] = id (names renamed in the library, so old CSV exports still import) / nombres renombrados, para importar CSV viejos\n"
+            "   EXVAR[variant id] = parent id (only shown when you search the parent or open its guide) / variante -> ejercicio padre\n"
             "   EXSYN[typed word] = words to look for in the English name, separated by |  (search only, never shown) / EXSYN[palabra escrita] = palabras a buscar en el nombre en inglés\n"
             "   Rule-made guide, not reviewed one by one. / Guía hecha por reglas, no revisada uno por uno. */\n")
-    open(os.path.join(ROOT, 'data', 'exinfo.js'), 'w', encoding='utf-8').write(hdr2 + js('EXTAX', tax) + js('EXEQ', eqm) + js('EXALI', ali) + js('EXSYN', SEARCH) + js('EXDUP', DUP) + js('EXOLD', OLD))
+    open(os.path.join(ROOT, 'data', 'exinfo.js'), 'w', encoding='utf-8').write(hdr2 + js('EXTAX', tax) + js('EXEQ', eqm) + js('EXALI', ali) + js('EXSYN', SEARCH) + js('EXDUP', DUP) + js('EXOLD', OLD) + js('EXVAR', VAR))
     sz = lambda f: os.path.getsize(os.path.join(ROOT, 'data', f))
     print('%d exercises, %d chains | exrel %d B, exinfo %d B | equipment rows %d, alias rows %d' % (len(rel), len(CHAINS), sz('exrel.js'), sz('exinfo.js'), len(eqm), len(ali)))
     for eid in sys.argv[1:]:

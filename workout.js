@@ -238,7 +238,7 @@ function vActive(){
   h+='<button class="btn wide" onclick="pickEx(null,true)">＋ '+t('addEx')+'</button>';
   h+='<button class="lnk-d" onclick="cancelAsk()">'+t('cancelWk')+'</button>';
   h+='<textarea class="note-in" rows="2" maxlength="500" placeholder="'+esc(t('wkNotePh'))+'" oninput="ACT.note=this.value;saveAct()">'+esc(ACT.note)+'</textarea>';
-  if(ACT.ex.length)h+='<button class="btn wide" onclick="saveAsRoutine()">'+t('saveRoutine')+'</button>';
+  /* "Save as routine" lives on the finish screen only (it was here twice) / "Guardar como rutina" solo en la pantalla final */
   h+='<div class="fab-sp" aria-hidden="true"></div>'; // room so the floating timer and plate buttons never cover the last button / espacio para que los botones flotantes no tapen el último botón
   return h;
 }
@@ -612,13 +612,14 @@ function exThumb(id){return typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id)?'<span
 function exRow(e,srch){const on=UI.pickMulti&&(UI.pickSel||[]).indexOf(e.id)>=0,al=LANG==='es'?e.en:e.es,nm=LANG==='es'?e.es:e.en,sub=srch&&al&&norm(al)!==norm(nm)?t('alsoCalled',al):t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+injBadge(e.id);return'<button class="exrow exth'+(on?' sel':'')+'" data-id="'+e.id+'" onclick="pickTap(\''+e.id+'\')">'+exThumb(e.id)+'<span class="ex-tx"><b>'+esc(nm)+'</b><small>'+esc(sub)+'</small></span>'+(e.custom?'<span class="exedit" role="button" tabindex="0" aria-label="'+esc(t('cxEdit'))+'" onclick="event.stopPropagation();customOpen(\''+e.id+'\')">✎</span>':'')+(UI.pickMulti?'<i class="exck">'+(on?'✓':'')+'</i>':'')+'</button>';}
 /* same exercise imported twice (Pull-Up / Pullups): show it once / el mismo ejercicio importado dos veces: se muestra una vez */
 function exKey(e){return norm(e.en).replace(/[^a-z0-9 ]/g,'').split(' ').map(w=>w.replace(/(ups|up)$/,'up').replace(/s$/,'')).join('')+'|'+e.g;}
-let _pkU=null;
+let _pkU=null,_pkVK=null;
+function pkVarKids(){if(_pkVK)return _pkVK;const o={};if(typeof EXVAR!=='undefined')Object.keys(EXVAR).forEach(k=>{(o[EXVAR[k]]=o[EXVAR[k]]||[]).push(k);});return(_pkVK=o);}
 function pkUsed(){const L=DATA.workouts,k=L.length+':'+(L[0]?L[0].id:'');if(_pkU&&_pkU.k===k)return _pkU.v;const v={};L.forEach(wk=>wk.ex.forEach(x=>{v[x.eid]=1;}));_pkU={k:k,v:v};return v;}
 function pickPool(){
   const seen={},out=[];
-  const dup=typeof EXDUP!=='undefined'?EXDUP:{},used=pkUsed(); // a hand-listed duplicate stays hidden unless you already logged it / un duplicado listado a mano queda oculto salvo que ya lo hayas registrado
+  const dup=typeof EXDUP!=='undefined'?EXDUP:{},vr=typeof EXVAR!=='undefined'?EXVAR:{},used=pkUsed(); // variants hide from browsing too, unless logged / las variantes también se ocultan, salvo registradas // a hand-listed duplicate stays hidden unless you already logged it / un duplicado listado a mano queda oculto salvo que ya lo hayas registrado
   const rk=e=>used[e.id]?0:(/^z_/.test(e.id)?2:1); // what you logged wins over a look-alike, then curated / lo que registraste gana a su gemelo, luego lo curado
-  EXLIB.map(a=>exById(a[0])).filter(Boolean).sort((a,b)=>rk(a)-rk(b)).forEach(e=>{if(!e)return;if(dup[e.id]&&!used[e.id])return;const k=exKey(e);if(seen[k])return;seen[k]=1;out.push(e);});
+  EXLIB.map(a=>exById(a[0])).filter(Boolean).sort((a,b)=>rk(a)-rk(b)).forEach(e=>{if(!e)return;if((dup[e.id]||vr[e.id])&&!used[e.id])return;const k=exKey(e);if(seen[k])return;seen[k]=1;out.push(e);});
   return out.concat(DATA.custom.filter(c=>!c.del).map(c=>exById(c.id)));
 }
 /* other names (abbreviations, synonyms) used by search / otros nombres (abreviaturas, sinónimos) que usa la búsqueda */
@@ -646,7 +647,18 @@ function exListHtml(){
   if(!tok.length&&UI.pt!=='all'&&!UI.pf)return pickMenu();
   const f=pickFx(),pool=pickPoolF(f),nmf=e=>norm(LANG==='es'?e.es:e.en);
   let list,h='',last='';
-  if(tok.length)list=pool.map(e=>({e:e,r:exRank(e,tok)})).filter(x=>x.r>=0).sort((a,b)=>a.r-b.r).map(x=>x.e);
+  if(tok.length){
+    /* search sees variants too (you may only know the grip: "wide grip"); each sits right under its main exercise when that one matches as well
+       la búsqueda también ve las variantes (a veces solo sabes el agarre); cada una va justo debajo de su ejercicio principal si también coincide */
+    const vk=pkVarKids(),have={},rk=e=>exRank(e,tok);
+    pool.forEach(e=>{have[e.id]=1;});
+    const vars=Object.keys(typeof EXVAR!=='undefined'?EXVAR:{}).filter(id=>!have[id]).map(exById).filter(v=>v&&pickPoolF(f,[v]).length).map(v=>({e:v,r:rk(v)})).filter(x=>x.r>=0);
+    const main=pool.map(e=>({e:e,r:rk(e)})).filter(x=>x.r>=0);
+    const vr={};vars.forEach(x=>{vr[x.e.id]=x;});
+    const shown={};main.forEach(x=>{shown[x.e.id]=1;});
+    const all=main.concat(vars.filter(x=>!shown[EXVAR[x.e.id]])).sort((a,b)=>a.r-b.r);
+    list=[];all.forEach(x=>{list.push(x.e);(vk[x.e.id]||[]).forEach(id=>{if(vr[id]&&shown[x.e.id]){list.push(vr[id].e);}});});
+  }
   else if(f.t==='mine'||f.t==='recent'){const ids=f.t==='mine'?mineIds():recentIds();list=pool.slice().sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));}
   else list=pool.slice().sort((a,b)=>nmf(a).localeCompare(nmf(b)));
   const letters=!tok.length&&f.t!=='mine'&&f.t!=='recent';
@@ -664,8 +676,8 @@ function exListHtml(){
 }
 /* which exercises a view shows: stretches & mobility only when asked for / qué ejercicios muestra cada vista: estiramientos solo si se piden */
 function pickFx(){return UI.pt==='all'||!UI.pf?{t:'all'}:UI.pf;}
-function pickPoolF(f){
-  const P=pickPool().filter(Boolean),nm=e=>e.g!=='mobility';
+function pickPoolF(f,src){
+  const P=(src||pickPool()).filter(Boolean),nm=e=>e.g!=='mobility';
   switch(f.t){
     case 'g':return P.filter(e=>e.g===f.v);
     case 'e':return P.filter(e=>e.e===f.v&&nm(e));
