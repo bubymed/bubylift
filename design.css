@@ -901,6 +901,8 @@ button.rk-tz{cursor:pointer}
 #platefab[hidden]{display:none}
 body.resting #platefab{bottom:calc(var(--tab-h) + 140px + env(safe-area-inset-bottom))}
 @media(min-width:1100px){#platefab{bottom:88px}body.resting #platefab{bottom:146px}}
+/* phones: plate button on the left, level with the rest timer, so it never sits over a set's ✓ / teléfono: el botón de discos va a la izquierda, a la altura del descanso, para no tapar el ✓ */
+@media(max-width:1099px){#platefab,body.resting #platefab{right:auto;left:16px;bottom:calc(var(--tab-h) + 22px + env(safe-area-inset-bottom))}}
 .pcalc .pick-h{gap:8px}.pc-u{display:flex;gap:6px;margin-left:auto}
 .pc-bar{display:flex;align-items:center;height:56px;margin:2px 0 0;overflow:hidden}
 .pc-shaft{flex:none;width:34%;height:12px;border-radius:6px 0 0 6px;background:linear-gradient(#9aa0a6,#6b7076)}
