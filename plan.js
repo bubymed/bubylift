@@ -473,9 +473,30 @@ function suggLine(x){
     const s2=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});
     if(s2&&s2.w!=null)h+='<button class="btn sm sgbtn" onclick="useSugg('+si+')">'+esc(t('sgUse',wShow(s2.w)+' '+wUnit()))+'</button>';
   }
+  if(si>=0)h+=progLine(x,si);
   if(L&&stressLvl(x.eid,L))h+='<div class="goalln warnln">⚠ '+esc(t(stressLvl(x.eid,L)>=2?'injNo':'injCare',jointNames(stressJoints(x.eid,L,1))))+'</div>';
   return h;
 }
+
+/* bodyweight moves: when every set hit the top of the range twice in a row, offer the next harder version from its progression;
+   when the last two sessions stayed far under the range, offer the easier one. Weighted lifts progress by load instead.
+   peso corporal: si todas las series llegaron al tope dos veces seguidas, ofrece la versión más difícil; si quedaron muy por debajo, la más fácil */
+function progPick(ids,L,hv){return(ids||[]).find(id=>exById(id)&&avail(id,hv)&&stressLvl(id,L)<2&&exMode(id)==='bw')||null;}
+function progState(eid,tg){
+  if(exMode(eid)!=='bw')return null;
+  const lo=tg&&tg.lo>0?tg.lo:6,hi=tg&&tg.hi>0?tg.hi:15,a=lastEx(eid),b=a&&lastEx(eid,a.wk.t);
+  if(!a||!b)return null;
+  const all=(le,f)=>le.x.sets.length&&le.x.sets.filter(q=>q.ty!=='w').every(q=>f(q.r||0));
+  if(all(a,r=>r>=hi)&&all(b,r=>r>=hi))return'up';
+  if(all(a,r=>r<Math.max(2,Math.ceil(lo/2)))&&all(b,r=>r<Math.max(2,Math.ceil(lo/2))))return'down';
+  return null;
+}
+function progLine(x,i){
+  const st=progState(x.eid,x.tg),r=st&&typeof exRelOf==='function'&&exRelOf(x.eid);if(!r||x.sets.some(q=>q.done))return'';
+  const to=progPick(st==='up'?r.dn:r.up,curInjL(),curHave());if(!to)return'';
+  return'<div class="goalln"><span class="sg">'+esc(t(st==='up'?'prgUp':'prgDown',exName(to)))+'</span><br><button class="btn sm sgbtn" onclick="progUse('+i+',\''+to+'\')">'+esc(t('prgUse'))+'</button></div>';
+}
+function progUse(i,id){SW={mode:'act',i:i,eid:ACT.ex[i].eid,have:curHave().slice()};swapUse(id);}
 
 /* ---------- progress through the plan ---------- */
 function planDone(){const p=DATA.plan;return p?DATA.workouts.filter(w=>w.pl!=null&&w.t>=p.t0):[];}
