@@ -966,3 +966,8 @@ button,.btn,.chip,.chk,.stp,#tabbar{-webkit-user-select:none;user-select:none;-w
 
 /* phone landscape: keep the floating tab bar clear of the notch / horizontal en el teléfono: la barra flotante no queda bajo el notch */
 @media(max-width:1099px){#tabbar{left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right))}}
+
+/* Up next card in the active workout / tarjeta Sigue en el entrenamiento activo */
+.nx{padding:12px 14px}.nx-h{margin-bottom:6px}.nx-r{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line,rgba(127,127,127,.18))}.nx-r:first-of-type{border-top:0}
+.nx-n{flex:1;min-width:0;text-align:left;background:none;border:0;padding:0;color:inherit;font:inherit}.nx-n b{display:block}.nx-n small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.nx-x{flex:none;opacity:.6}

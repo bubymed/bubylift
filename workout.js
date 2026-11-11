@@ -234,6 +234,7 @@ function vActive(){
     h+=exCard(i,x);
   });
   if(pl)h+='<details class="card optd"><summary>'+t('optCd')+'</summary>'+optWarm(pl.ds[ACT.pl],pl,true).replace(/^<div class="card optb"><b>[^<]*<\/b>/,'<div>')+'</details>';
+  if(typeof nxHtml==='function')h+=nxHtml();
   h+='<button class="btn wide" onclick="pickEx(null,true)">＋ '+t('addEx')+'</button>';
   h+='<button class="lnk-d" onclick="cancelAsk()">'+t('cancelWk')+'</button>';
   h+='<textarea class="note-in" rows="2" maxlength="500" placeholder="'+esc(t('wkNotePh'))+'" oninput="ACT.note=this.value;saveAct()">'+esc(ACT.note)+'</textarea>';
