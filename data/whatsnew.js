@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.119',items:[
+  {i:'\ud83e\ude79',en:'Rehab moves now have their own details in the guide: body area, difficulty, equipment, and easier and harder steps taken from the phases of their rehab plan.',es:'Los ejercicios de rehabilitaci\\u00f3n ahora tienen sus detalles en la gu\\u00eda: zona del cuerpo, dificultad, equipo, y pasos m\\u00e1s f\\u00e1ciles y m\\u00e1s dif\\u00edciles seg\\u00fan las fases de su plan de rehabilitaci\\u00f3n.'}
+ ]},
  {v:'v1.1.118',items:[
   {i:'\ud83c\udfaf',en:'<b>Up next tells you how much</b>: each suggestion shows sets \\u00d7 reps and a weight from your last time (or a starting range the first time). And when a lift has not improved in 3+ weeks, its card says so and suggests a variation to try or a 10% reset.',es:'<b>Sigue te dice cu\\u00e1nto</b>: cada sugerencia muestra series \\u00d7 repeticiones y un peso seg\\u00fan la \\u00faltima vez (o un rango inicial la primera vez). Y cuando un ejercicio no mejora en 3+ semanas, su tarjeta te avisa y sugiere una variante o bajar un 10%.'}
  ]},

@@ -1107,7 +1107,7 @@ function exTaxHtml(eid){
   if(x.mech!=='-')bits.push(t('mc_'+x.mech));
   if(x.force==='S'||((x.force==='P'||x.force==='L')&&x.fam!=='push'&&x.fam!=='pull'))bits.push(t('fc_'+x.force));
   bits.push(t('pl_'+x.plane));
-  if(x.fam!=='mobility'&&x.fam!=='cardio')bits.push(t('ps_'+x.pos)+(x.ang?' · '+t('an_'+x.ang):''));
+  if(x.fam!=='mobility'&&x.fam!=='cardio'&&x.pos!=='rh')bits.push(t('ps_'+x.pos)+(x.ang?' · '+t('an_'+x.ang):''));
   bits.push(t('lt_'+x.load));bits.push(t('rg_'+x.reg));
   if(x.flags.indexOf('A')>=0)bits.push(t('fl_A'));if(x.flags.indexOf('W')>=0)bits.push(t('fl_W'));
   return'<div class="chips rel">'+bits.map(b=>'<span class="chip sm">'+esc(b)+'</span>').join('')+'</div>';
