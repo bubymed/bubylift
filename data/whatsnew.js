@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.116',items:[
+  {i:'\ud83d\udcc8',en:'<b>Bodyweight progressions</b>: when you hit the top of the range on every set two sessions in a row (push-ups, pull-ups, dips\\u2026), the workout offers the next harder version with one tap. If the last two sessions were very hard, it offers the easier one so you can build up. It respects your equipment and injuries.',es:'<b>Progresiones con peso corporal</b>: cuando llegas al tope en todas las series dos sesiones seguidas (lagartijas, dominadas, fondos\\u2026), el entrenamiento te ofrece la versi\\u00f3n m\\u00e1s dif\\u00edcil con un toque. Si las dos \\u00faltimas sesiones fueron muy duras, te ofrece la m\\u00e1s f\\u00e1cil para avanzar. Respeta tu equipo y tus lesiones.'}
+ ]},
  {v:'v1.1.115',items:[
   {i:'\u2601\ufe0f',en:'<b>Safer sync between phones</b>: if you edit a workout, routine, body entry or custom exercise on one phone while offline, that edit is no longer overwritten by an older copy when another phone synced in between. The copy changed last always wins.',es:'<b>Sincronizaci\\u00f3n m\\u00e1s segura entre tel\\u00e9fonos</b>: si editas un entrenamiento, rutina, registro corporal o ejercicio propio en un tel\\u00e9fono sin conexi\\u00f3n, esa edici\\u00f3n ya no se pierde porque otro tel\\u00e9fono sincroniz\\u00f3 en medio. Siempre gana la copia que cambi\\u00f3 al final.'}
  ]},
