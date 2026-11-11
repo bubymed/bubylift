@@ -388,7 +388,7 @@ function cleanRt(x){
 }
 function cleanCx(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||!x.n)return null;
-  return{id:String(x.id),n:String(x.n).slice(0,60),g:EX_GROUPS.indexOf(x.g)>=0?x.g:'full',e:'other',m:['wr','bw','t'].indexOf(x.m)>=0?x.m:'wr'};
+  return{id:String(x.id),n:String(x.n).slice(0,60),g:EX_GROUPS.indexOf(x.g)>=0?x.g:'full',e:(typeof CX_EQ!=='undefined'&&CX_EQ.indexOf(x.e)>=0)?x.e:'other',m:['wr','bw','t'].indexOf(x.m)>=0?x.m:'wr',del:x.del?1:0};
 }
 function cleanGoals(a){
   if(!Array.isArray(a))return[];

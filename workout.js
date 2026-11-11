@@ -614,7 +614,7 @@ function exKey(e){return norm(e.en).replace(/[^a-z0-9 ]/g,'').split(' ').map(w=>
 function pickPool(){
   const seen={},out=[];
   EXLIB.map(a=>exById(a[0])).sort((a,b)=>(/^z_/.test(a.id)?1:0)-(/^z_/.test(b.id)?1:0)).forEach(e=>{if(!e)return;const k=exKey(e);if(seen[k])return;seen[k]=1;out.push(e);});
-  return out.concat(DATA.custom.map(c=>exById(c.id)));
+  return out.concat(DATA.custom.filter(c=>!c.del).map(c=>exById(c.id)));
 }
 /* other names (abbreviations, synonyms) used by search / otros nombres (abreviaturas, sinónimos) que usa la búsqueda */
 const _aliC={};
@@ -732,12 +732,13 @@ function customSave(){
   }
   const c=Object.assign({id:'c_'+uid()},v);
   DATA.custom.push(c);saveData();
+  if(UI.pickMulti&&UI.pickCb&&(UI.pickSel||[]).length){UI.pickSel.push(c.id);pickCommit();return;} // keep what was already ticked / conserva lo ya marcado
   pickDone(c.id);
 }
 function customDel(id){
   const c=DATA.custom.find(x=>x.id===id);if(!c)return;
   ask(t('cxDelAsk',c.n),t('delete'),function(){
-    DATA.custom=DATA.custom.filter(x=>x.id!==id);saveData();
+    c.del=1;saveData(); // hidden, not removed: past workouts keep its name and how it is tracked, and sync cannot bring it back / oculto, no borrado
     if(typeof _MW!=='undefined')delete _MW[id];
     toast(t('cxGone'));customAfter();
   },true);
