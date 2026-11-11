@@ -648,10 +648,16 @@ function exListHtml(){
   const f=pickFx(),pool=pickPoolF(f),nmf=e=>norm(LANG==='es'?e.es:e.en);
   let list,h='',last='';
   if(tok.length){
-    list=pool.map(e=>({e:e,r:exRank(e,tok)})).filter(x=>x.r>=0).sort((a,b)=>a.r-b.r).map(x=>x.e);
-    /* variants appear right under their parent when the search also matches the parent / las variantes salen bajo su ejercicio padre si la búsqueda también lo encuentra */
-    const vk=pkVarKids(),have={};list.forEach(e=>{have[e.id]=1;});
-    list=list.reduce((o,e)=>{o.push(e);(vk[e.id]||[]).forEach(id=>{const v=exById(id);if(v&&!have[id]&&pickPoolF(f,[v]).length&&exRank(v,tok)>=0){have[id]=1;o.push(v);}});return o;},[]);
+    /* search sees variants too (you may only know the grip: "wide grip"); each sits right under its main exercise when that one matches as well
+       la búsqueda también ve las variantes (a veces solo sabes el agarre); cada una va justo debajo de su ejercicio principal si también coincide */
+    const vk=pkVarKids(),have={},rk=e=>exRank(e,tok);
+    pool.forEach(e=>{have[e.id]=1;});
+    const vars=Object.keys(typeof EXVAR!=='undefined'?EXVAR:{}).filter(id=>!have[id]).map(exById).filter(v=>v&&pickPoolF(f,[v]).length).map(v=>({e:v,r:rk(v)})).filter(x=>x.r>=0);
+    const main=pool.map(e=>({e:e,r:rk(e)})).filter(x=>x.r>=0);
+    const vr={};vars.forEach(x=>{vr[x.e.id]=x;});
+    const shown={};main.forEach(x=>{shown[x.e.id]=1;});
+    const all=main.concat(vars.filter(x=>!shown[EXVAR[x.e.id]])).sort((a,b)=>a.r-b.r);
+    list=[];all.forEach(x=>{list.push(x.e);(vk[x.e.id]||[]).forEach(id=>{if(vr[id]&&shown[x.e.id]){list.push(vr[id].e);}});});
   }
   else if(f.t==='mine'||f.t==='recent'){const ids=f.t==='mine'?mineIds():recentIds();list=pool.slice().sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));}
   else list=pool.slice().sort((a,b)=>nmf(a).localeCompare(nmf(b)));
