@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.118 — 2026-11-10
+- **Up next tells you how much**: each suggestion shows sets \u00d7 reps and a weight from your last time (or a starting range the first time). And when a lift has not improved in 3+ weeks, its card says so and suggests a variation to try or a 10% reset.
+  **Sigue te dice cu\u00e1nto**: cada sugerencia muestra series \u00d7 repeticiones y un peso seg\u00fan la \u00faltima vez (o un rango inicial la primera vez). Y cuando un ejercicio no mejora en 3+ semanas, su tarjeta te avisa y sugiere una variante o bajar un 10%.
+
 ## v1.1.117 — 2026-11-10
 - Opens lighter: the what's-new notes and the imported technique guides now load after the app is open instead of before (22% less to load at start).
   Abre m\u00e1s ligera: las novedades y las gu\u00edas de t\u00e9cnica importadas ahora se cargan despu\u00e9s de abrir la app, no antes (22% menos que cargar al inicio).

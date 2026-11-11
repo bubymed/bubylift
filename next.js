@@ -108,11 +108,19 @@ function nxHtml(){
   if(!_nxMemo||_nxMemo.sig!==sig)_nxMemo={sig:sig,r:nxCalc()};
   const r=_nxMemo.r;if(!r.list.length)return'';
   const rows=r.list.map(c=>{
-    const e=c.e,g=muGroup(c.top),w=c.why,rs=t(w[0],g?t('g_'+g):'')+(w[2]?' · '+t(w[2]):'');
-    return'<div class="nx-r"><button class="nx-n" onclick="howOpen(\''+e.id+'\')"><b>'+esc(exName(e.id,e.en))+'</b><small>'+esc(rs)+' · '+esc(t('e_'+e.e))+'</small></button>'+
+    const e=c.e,g=muGroup(c.top),w=c.why,rs=t(w[0],g?t('g_'+g):'')+(w[2]?' · '+t(w[2]):''),ds=nxDose(e.id);
+    return'<div class="nx-r"><button class="nx-n" onclick="howOpen(\''+e.id+'\')"><b>'+esc(exName(e.id,e.en))+'</b><small>'+esc(rs)+' · '+esc(t('e_'+e.e))+'</small>'+(ds?'<small class="nx-d">'+esc(ds)+'</small>':'')+'</button>'+
       '<button class="btn sm" onclick="nxAdd(\''+e.id+'\')">＋ '+t('nxAdd')+'</button><button class="ico nx-x" aria-label="'+esc(t('nxSkip'))+'" onclick="nxSkip(\''+e.id+'\')">✕</button></div>';
   }).join('');
   return'<section class="card nx"><div class="nx-h"><b>'+t('nxTitle')+'</b></div>'+rows+'</section>';
+}
+/* how much: sets × reps and a weight from your last time (or a starting range the first time) / cuánto: series × repeticiones y un peso */
+function nxDose(eid){
+  const m=exMode(eid);if(m==='t')return'';
+  const le=lastEx(eid),n=le&&le.x.sets.length?Math.min(5,le.x.sets.length):3,s=sugg(eid,{lo:6,hi:12,u:'r'});if(!s||!s.r)return'';
+  if(m!=='wr')return t('nxDoseBw',n,s.r);
+  if(s.w!=null)return t('nxDose',n,s.r,wShow(s.w)+' '+wUnit());
+  const rg=firstRange(eid,s.r);return rg?t('nxDoseNew',n,s.r,wShow(rg[0])+'–'+wShow(rg[1])+' '+wUnit()):t('nxDoseBw',n,s.r);
 }
 function nxAdd(eid){
   if(!ACT)return;const le=lastEx(eid);
