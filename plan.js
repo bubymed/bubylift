@@ -474,6 +474,7 @@ function suggLine(x){
     if(s2&&s2.w!=null)h+='<button class="btn sm sgbtn" onclick="useSugg('+si+')">'+esc(t('sgUse',wShow(s2.w)+' '+wUnit()))+'</button>';
   }
   if(si>=0)h+=progLine(x,si);
+  if(si>=0&&!x.sets.some(q=>q.done))h+=stallLine(x);
   if(L&&stressLvl(x.eid,L))h+='<div class="goalln warnln">⚠ '+esc(t(stressLvl(x.eid,L)>=2?'injNo':'injCare',jointNames(stressJoints(x.eid,L,1))))+'</div>';
   return h;
 }
@@ -497,6 +498,22 @@ function progLine(x,i){
   return'<div class="goalln"><span class="sg">'+esc(t(st==='up'?'prgUp':'prgDown',exName(to)))+'</span><br><button class="btn sm sgbtn" onclick="progUse('+i+',\''+to+'\')">'+esc(t('prgUse'))+'</button></div>';
 }
 function progUse(i,id){SW={mode:'act',i:i,eid:ACT.ex[i].eid,have:curHave().slice()};swapUse(id);}
+/* plateau: the best estimated max of the last 4 sessions is no better than before them, over 3+ weeks -> suggest a variation or a reset
+   estancamiento: el mejor máximo estimado de las últimas 4 sesiones no supera al anterior, en 3+ semanas -> sugiere una variante o bajar peso */
+function stallInfo(eid){
+  if(exMode(eid)!=='wr')return null;
+  const S=[];for(const wk of DATA.workouts){const x=wk.ex.find(y=>xk(y)===eid);if(x){const b=Math.max.apply(null,x.sets.map(s=>s.ty==='w'?0:e1rm(s.w,s.r)).concat(0));if(b>0)S.push({t:wk.t,b:b});if(S.length>=6)break;}}
+  if(S.length<5)return null;
+  const last4=S.slice(0,4),before=S.slice(4),wks=(last4[0].t-last4[3].t)/6048e5;
+  if(wks<3||Math.max.apply(null,last4.map(q=>q.b))>Math.max.apply(null,before.map(q=>q.b))*1.005)return null;
+  const r=typeof exRelOf==='function'&&exRelOf(eid),L=curInjL(),hv=curHave();
+  const alt=r?(r.sw.concat(r.sim)).find(id=>exById(id)&&avail(id,hv)&&stressLvl(id,L)<2):null;
+  return{w:Math.round(wks),alt:alt};
+}
+function stallLine(x){
+  const s=stallInfo(x.eid);if(!s)return'';
+  return'<div class="goalln"><span class="sg">'+esc(t(s.alt?'stallAlt':'stall',s.w,s.alt?exName(s.alt):''))+'</span></div>';
+}
 
 /* ---------- progress through the plan ---------- */
 function planDone(){const p=DATA.plan;return p?DATA.workouts.filter(w=>w.pl!=null&&w.t>=p.t0):[];}
