@@ -8,7 +8,9 @@ const ANA_CUT={u:[[30,20],[80,20],[80,43],[62,44],[48,48],[33,58]],l:[[80,43],[6
 const anaPoly=(p,m)=>'M '+p.map(q=>(m?+(ANA_C-q[0]).toFixed(1):q[0])+','+q[1]).join(' L ')+' Z';
 /* which face shows a part best (most shapes; ties go to the front) / qué cara muestra mejor una parte (más formas; empate: frente) */
 const ANA_DOM=(function(){const n={};['front','back'].forEach(f=>ANA[f].s.forEach(x=>{const k=x[0]==='pec'?'chm':(x[0]==='dlt'?'sdl':x[0]);if(!k)return;(n[k]=n[k]||{front:0,back:0})[f]++;}));const r={};Object.keys(n).forEach(k=>{r[k]=n[k].back>n[k].front?'back':'front';});return r;})();
-const anaDomFace=k=>ANA_DOM[k]||'front';
+/* ties (same number of shapes on both sides) and deep muscles with no shape: the side you actually see them from / empates y músculos profundos sin forma: el lado desde el que realmente se ven */
+const ANA_SIDE={lat:'back',trp:'back',trm:'back',rho:'back',rtc:'back',gmn:'back',tva:'front'};
+const anaDomFace=k=>ANA_SIDE[k]||ANA_DOM[k]||'front';
 let _anaN=0;
 /* the figure as SVG. fill(code) gives a CSS color; o.sel highlights a part; o.tap names a function called with the part's code / el cuerpo en SVG */
 function anaSvg(face,w,fill,o){

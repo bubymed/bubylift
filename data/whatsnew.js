@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.109',items:[
+  {i:'✎',en:'<b>Edit your own exercises</b> (name, group, equipment, tracking) or delete them, and the <b>Custom</b> button is now always at the top of the exercise picker (it also offers to create what you searched). Share cards now show the <b>back</b> view first when you trained lats, traps, rhomboids or triceps.',es:'<b>Edita tus ejercicios propios</b> (nombre, grupo, equipo, tipo de registro) o elimínalos, y el botón <b>Propio</b> ahora está siempre arriba en el selector de ejercicios (también te ofrece crear lo que buscaste). Las tarjetas para compartir ahora muestran primero la vista de <b>espalda</b> cuando entrenas dorsales, trapecio, romboides o tríceps.'}
+ ]},
  {v:'v1.1.108',items:[
   {i:'➡️',en:'<b>Up next</b>: during a workout the app suggests what to do after the exercises you already have, based on what you trained, muscle recovery, push/pull and leg balance, your equipment and injuries. Add it or skip it.',es:'<b>Sigue</b>: durante el entrenamiento la app sugiere qué hacer después de los ejercicios que ya llevas, según lo que trabajaste, la recuperación muscular, el balance de empuje/jalón y de piernas, tu equipo y tus lesiones. Añádelo u omítelo.'}
  ]},
