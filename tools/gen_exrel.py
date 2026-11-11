@@ -27,47 +27,47 @@ EXMU = {}
 for m in re.finditer(r"^\s*(\w+):'([^']*)',?\s*$", rd('data/musc.js').split('const EXMU={')[1], re.M):
     EXMU[m[1]] = {p[0]: float(p[1]) for p in re.findall(r'([a-z]+)([\d.]+)', m[2])}
 
-# movement pattern: first match wins, then the group decides / patrón de movimiento: gana la primera coincidencia y luego manda el grupo
-PAT = [
- ('mobility', None, lambda r: r['g'] == 'mobility'),
- ('cardio', None, lambda r: r['g'] == 'cardio'),
- ('carry', r'carry|farmer|suitcase|yoke|waiter|sled|drag|crawl', None),
- ('calf raise', r'calf|heel raise|toe raise|tibialis', None),
- ('power', r'jump|hop|bound|plyo|box jump|skater|burpee|clap|slam|throw|swing|snatch|clean|jerk|high pull|thruster|wall ball|chest pass|man maker|skip', None),
- ('rotation', r'woodchop|chop|twist|rotation|russian|landmine rot|pallof|anti-rot|windmill|turkish|iron cross|judo|car driver|wiper|figure 8|pass between', None),
- ('hip abduction', r'abduct|clamshell|hydrant|side leg|monster|lateral band|side-lying leg raise', None),
- ('hip adduction', r'adduct|copenhagen', None),
- ('hip extension', r'kick|donkey|frog pump|hip lift|butt-up|glute kick', None),
- ('knee flexion', r'leg curl|hamstring curl|nordic', None),
- ('knee extension', r'leg extension|sissy', None),
- ('hinge', r'deadlift|rdl|romanian|good morning|hip thrust|glute bridge|bridge|pull.through|hyperext|back extension|reverse hyper|stiff|hip hinge|glute ham', None),
- ('lunge', r'lunge|split squat|step-?up|step up|bulgarian|cossack|pistol|single.leg squat|skater squat', None),
- ('squat', r'squat|leg press|hack|wall sit|goblet|box squat', None),
- ('vertical pull', r'pull-?up|chin-?up|pulldown|pull-down|lat pull|muscle-up|rope climb|pullover', None),
- ('vertical push', r'overhead press|shoulder press|military|arnold|push press|handstand|pike push|landmine press|z press|cuban|bradford|bent press|kettlebell press|dip', None),
- ('horizontal push', r'bench|push-?up|chest press|fly|flye|pec deck|crossover|cross over|floor press|svend|squeeze press|chest push|incline.*press|decline.*press', None),
- ('horizontal pull', r'row|face pull|inverted|pull-apart|rear delt|reverse fly|reverse flye|y raise|t raise|low-pulley', None),
- ('core flexion', r'crunch|sit-?up|v-up|leg raise|knee raise|toe touch|ab wheel|rollout|jackknife|reverse crunch|hanging|hip raise|elbow to knee|cocoon|heel touch|flutter|pull-in|hip flexion', None),
- ('shoulder raise', r'lateral raise|front raise|raise|shrug|upright|scaption', None),
- ('arm flexion', r'curl|hammer|pronation|supination', None),
- ('arm extension', r'tricep|triceps|skull|pushdown|kickback|jm press|close.grip', None),
- ('core stability', r'plank|dead bug|bird dog|hollow|bear|stability|hold|vacuum|bracing|superman|iso-ab|side bend', None),
-]
-GROUP_FALL = {'chest': 'horizontal push', 'back': 'horizontal pull', 'shoulders': 'shoulder raise', 'biceps': 'arm flexion',
-              'triceps': 'arm extension', 'core': 'core stability', 'glutes': 'hinge', 'legs': 'squat',
-              'balance': 'balance', 'power': 'power', 'full': 'full body', 'cardio': 'cardio', 'mobility': 'mobility'}
+# movement pattern: the library group narrows the choice, then the name decides (first match wins); a name alone is too ambiguous
+# ("bench" in a wrist curl, "fly" in a rear-delt fly, "kickback" for triceps and glutes).
+# patrón de movimiento: el grupo de la biblioteca acota y luego decide el nombre (gana la primera coincidencia); el nombre solo es ambiguo.
+POWER_RX = r'jump|hop\b|bound|plyo|skater|burpee|clap|slam|throw|toss|swing|snatch|jerk|thruster|wall ball|chest pass|man maker|\bskip|push press|high pull'
+BY_GROUP = {
+ 'chest': [('power', r'chest pass|plyo|clap|throw|chest push|bench sprint'), ('vertical push', r'\bdips?\b'), ('vertical pull', r'pullover'), ('horizontal push', r'')],
+ 'back': [('vertical pull', r'pull.?ups?\b|chin.?ups?\b|chins?\b|pulldown|pull-down|lat pull|muscle.up|rope climb|pullover|straight-arm|high pulley|high-pulley|pushdown'),
+          ('shoulder raise', r'shrug|upright'), ('hinge', r'deadlift|good morning|hyperext|back extension|rack pull|superman|reverse hyper'),
+          ('power', r'snatch|clean|jerk|sumo high pull'), ('horizontal pull', r'')],
+ 'shoulders': [('power', r'snatch|clean|jerk|thruster|push press'), ('full body', r'get-up|combo'),
+               ('horizontal pull', r'rear.delt|reverse.*fl|back fl|face pull|pull-apart|bent.over|rear lateral|lying rear|\by raise|\bt raise|straight raises on incline'),
+               ('shoulder rotation', r'rotation|cuban|car driver|rotator|l-fly'),
+               ('vertical push', r'press|handstand|pike|bradford'), ('shoulder raise', r'')],
+ 'biceps': [('power', r'clean'), ('arm flexion', r'')],
+ 'triceps': [('vertical push', r'\bdips?\b'), ('horizontal push', r'bench press|close-?grip.*press|push-?up|board press|floor press|jm press|tate press'), ('arm extension', r'')],
+ 'legs': [('calf raise', r'calf|heel raise|toe raise|tibialis|donkey calf'), ('knee flexion', r'leg curl|hamstring|nordic|glute-ham|glute ham'), ('knee extension', r'leg extension|sissy'),
+          ('hip adduction', r'adduct|copenhagen'), ('hip abduction', r'abduct|monster|band walk'), ('core flexion', r'hip flexion'),
+          ('power', r'jump|hop\b|bound|jerk|snatch|skater|swing'), ('carry', r'sled|prowler|yoke|farmer'),
+          ('lunge', r'lunge|split squat|step.?ups?|bulgarian|pistol|cossack|single.leg squat|one.leg.*squat'),
+          ('squat', r'squat|leg press|hack|wall sit'), ('power', r'clean'),
+          ('hinge', r'deadlift|rdl|romanian|good morning|stiff|pull.through|hip hinge|hyperext|back extension'), ('squat', r'')],
+ 'glutes': [('hip abduction', r'abduct|clamshell|hydrant|side-lying|monster|lateral band|side leg'), ('core flexion', r'flutter'),
+            ('hip extension', r'kickback|donkey|frog pump|hip lift|glute kick|butt'), ('lunge', r'lunge|step-?ups?|split squat|bulgarian'),
+            ('squat', r'squat'), ('hinge', r'')],
+ 'core': [('carry', r'carry|crawl'), ('power', r'throw|slam|toss'), ('vertical push', r'bent press'),
+          ('rotation', r'twist|rotation|chop|russian|windmill|wiper|oblique|side bend|pallof press with rot|judo|figure 8|pass between|cable lift|180|spell caster'),
+          ('core flexion', r'crunch|sit-?up'),
+          ('core stability', r'plank|dead bug|bird dog|hollow|hold|vacuum|pallof|stir|bridge|rollout|ab wheel|fallout|iso-ab|bracing|superman|bear|body saw|l-sit'),
+          ('core flexion', r'')],
+ 'full': [('carry', r'carry|farmer|yoke|sled'), ('power', POWER_RX + r'|clean'), ('full body', r'')],
+ 'power': [('hinge', r'deadlift|stiff'), ('squat', r'squat$|olympic squat|frankenstein'), ('power', r'')],
+ 'balance': [('balance', r'')], 'cardio': [('cardio', r'')], 'mobility': [('mobility', r'')],
+}
 UNI = r'single|one-arm|one arm|one-leg|one leg|unilateral|alternating|lunge|split squat|step-?up|pistol|bulgarian|cossack|suitcase|windmill|staggered|side-lying'
 ADV = r'pistol|muscle-up|one-arm|one arm|handstand|planche|front lever|back lever|nordic|dragon flag|snatch|clean|jerk|iron cross|human flag|man maker|turkish|box jump.*depth|depth jump|ring|weighted pull|kipping'
 
 def pattern(r):
     n = r['en'].lower()
-    for name, rx, fn in PAT:
-        if fn is not None:
-            if fn(r): return name
-        elif re.search(rx, n):
-            return name
-    if r['g'] == 'shoulders' and 'press' in n: return 'vertical push'
-    return GROUP_FALL.get(r['g'], 'other')
+    for name, rx in BY_GROUP.get(r['g'], []):
+        if not rx or re.search(rx, n): return name
+    return 'other'
 
 def difficulty(r):
     """1 beginner · 2 needs some experience · 3 advanced / 1 principiante · 2 con algo de experiencia · 3 avanzado"""
@@ -117,6 +117,7 @@ def pick(a, cands, k, per_eq):
     out, eqc = [], collections.Counter()
     for s, i in cands:
         b = info[i]
+        if i in DUP: continue                                       # hidden duplicate of a curated exercise / duplicado oculto
         if jac(a['tk'], b['tk']) >= .85 and out: continue            # same exercise written another way / mismo ejercicio escrito distinto
         if any(jac(info[o]['tk'], b['tk']) >= .85 for o in out): continue
         if eqc[b['eq']] >= per_eq: continue
@@ -132,11 +133,15 @@ def similar(a, k=4):
     c.sort(key=lambda x: (-x[0], x[1]))
     return pick(a, c, k, 2)
 
+def mech_of(r):
+    if 'mech' not in r: r['mech'] = taxonomy(r).split('|')[1]
+    return r['mech']
+
 def swaps(a, k=3):
     """same movement and main muscle with other equipment (if yours is missing) / mismo movimiento y músculo con otro equipo (si te falta el tuyo)"""
     if a['g'] == 'mobility': return []
     c = [(score(a, b), b['id']) for b in rows if b['id'] != a['id'] and b['pat'] == a['pat'] and b['eq'] != a['eq']
-         and b['g'] == a['g'] and (b['mm'] == a['mm'] or cos(a['w'], b['w']) >= .85)]
+         and b['g'] == a['g'] and (b['mm'] == a['mm'] or cos(a['w'], b['w']) >= .85) and mech_of(b) == mech_of(a)]  # a big lift is never swapped for a single-joint move / un básico nunca se cambia por uno de una articulación
     c = [x for x in c if x[0] >= MIN_SCORE]
     c.sort(key=lambda x: (-x[0], x[1]))
     return pick(a, c, k, 1)
@@ -198,12 +203,12 @@ def gentler(a, k=3):
     return ['%s:%s' % (i, lm[i]) for i in got]
 
 # ---------------------------------------------------------------- taxonomy / taxonomía
-FAMILY = {'horizontal push': 'push', 'vertical push': 'push', 'arm extension': 'push', 'horizontal pull': 'pull', 'vertical pull': 'pull',
+FAMILY = {'shoulder rotation': 'shoulders', 'hip extension': 'legs', 'horizontal push': 'push', 'vertical push': 'push', 'arm extension': 'push', 'horizontal pull': 'pull', 'vertical pull': 'pull',
           'arm flexion': 'pull', 'shoulder raise': 'shoulders', 'squat': 'legs', 'lunge': 'legs', 'hinge': 'legs', 'knee flexion': 'legs',
           'knee extension': 'legs', 'calf raise': 'legs', 'hip abduction': 'legs', 'hip adduction': 'legs', 'core flexion': 'core',
           'core stability': 'core', 'rotation': 'core', 'carry': 'full', 'power': 'full', 'full body': 'full', 'balance': 'core',
           'cardio': 'cardio', 'mobility': 'mobility', 'other': 'other'}
-ISO = {'shoulder raise', 'arm flexion', 'arm extension', 'knee flexion', 'knee extension', 'calf raise', 'hip abduction', 'hip adduction', 'core flexion'}
+ISO = {'shoulder rotation', 'hip extension', 'shoulder raise', 'arm flexion', 'arm extension', 'knee flexion', 'knee extension', 'calf raise', 'hip abduction', 'hip adduction', 'core flexion'}
 PUSH = {'horizontal push', 'vertical push', 'arm extension', 'squat', 'lunge', 'knee extension', 'calf raise'}
 PULL = {'horizontal pull', 'vertical pull', 'arm flexion', 'knee flexion', 'hinge'}
 FRONTAL = r'lateral|side|abduct|adduct|cossack|jumping jack|windmill|copenhagen|clamshell|hydrant|monster|upright|y raise'
@@ -212,7 +217,7 @@ def taxonomy(r):
     n = r['en'].lower(); pat = r['pat']; w = r['w']
     fam = FAMILY.get(pat, 'other')
     big = sum(1 for v in w.values() if v >= .5)
-    mech = 'I' if (pat in ISO or (big <= 2 and pat not in ('hinge', 'squat', 'lunge', 'horizontal push', 'vertical push', 'horizontal pull', 'vertical pull'))) else 'C'
+    mech = 'I' if (pat in ISO or re.search(r'\bfly|flye|flies|raise|kickback|pullover|pushdown|shrug|crossover|pec deck|butterfly|straight-arm|pull-apart|hyperext|back extension|superman|reverse hyper', n) or (big <= 2 and pat not in ('hinge', 'squat', 'lunge', 'horizontal push', 'vertical push', 'horizontal pull', 'vertical pull'))) else 'C'
     if pat in ('mobility', 'cardio'): mech = '-'
     force = 'S' if (r['mode'] == 't' or re.search(r'\bhold|isometric|wall sit|plank|hollow|dead hang|bridge hold|l-sit|bracing', n)) else 'P' if pat in PUSH else 'L' if pat in PULL else 'O'
     plane = 'F' if re.search(FRONTAL, n) else 'T' if re.search(TRANSV, n) else 'S'
@@ -221,7 +226,8 @@ def taxonomy(r):
     if re.search(r'hanging|pull-?up|chin-?up|dead hang|muscle-up|rope climb|toes to bar|knee raise.*hang', n): pos = 'hang'
     elif re.search(r'kneeling|half-kneeling|tall kneeling', n): pos = 'kneel'
     elif re.search(r'prone|face down|superman|reverse hyper|back extension|hyperext|bird dog|bear|push-?up|pushup|plank|mountain climber|burpee|inverted|\bdip\b', n): pos = 'prone'
-    elif re.search(r'lying|supine|bench press|skull|floor press|crunch|sit-?up|bridge|hip thrust|leg raise|dead bug|hollow|pullover|fly\b|flye|on back|flat bench|incline|decline|v-up|leg curl.*lying|lying', n) and not re.search(r'seated|standing', n): pos = 'lie'
+    elif re.search(r'lying|supine|bench press|skull|floor press|crunch|sit-?up|bridge|hip thrust|leg raise|dead bug|hollow|pullover|on back|flat bench|incline|decline|v-up|leg curl.*lying|lying', n) and not re.search(r'seated|standing', n): pos = 'lie'
+    elif r['g'] == 'chest' and re.search(r'\bfly|flye', n) and r['eq'] == 'dumbbell': pos = 'lie'
     elif re.search(r'seated|sitting|machine|leg press|leg extension|pec deck|chest press|pulldown|lat pull|cable row|low row', n): pos = 'sit'
     else: pos = 'stand'
     ang = 'inc' if 'incline' in n else 'dec' if 'decline' in n else ''
@@ -283,86 +289,65 @@ def equipment(r):
     return ' '.join(need), ' '.join(opt), ' '.join(sup), ' '.join(ast)
 
 # ---------------------------------------------------------------- aliases / alias
-ABBR = [(r'\bdumbbell\b', ['DB']), (r'\bbarbell\b', ['BB']), (r'\bkettlebell\b', ['KB']), (r'\bromanian deadlift\b', ['RDL']),
-        (r'\bstiff-?legged deadlift\b', ['SLDL']), (r'\boverhead press\b', ['OHP']), (r'\bsingle[- ]leg\b', ['SL']), (r'\bsingle[- ]arm\b', ['SA']),
-        (r'\bez[- ]bar\b', ['EZ']), (r'\bglute[- ]ham raise\b', ['GHR'])]
-SYN = [
- (r'push-?ups?\b', ['pushup', 'press-up', 'lagartijas', 'flexiones de brazos', 'planchas de pecho']),
- (r'pull-?ups?\b', ['pullup', 'chin up', 'dominadas']),
- (r'chin-?ups?\b', ['chinup', 'dominadas supinas']),
- (r'\bdips?\b', ['fondos', 'parallel bar dip']),
- (r'\blunges?\b', ['zancadas', 'estocadas', 'desplantes']),
- (r'\bsquats?\b', ['sentadillas', 'cuclillas']),
- (r'deadlift', ['peso muerto', 'dead lift']),
- (r'romanian', ['rumano', 'RDL']),
- (r'\bshrugs?\b', ['encogimientos', 'trapezio']),
- (r'calf raise', ['gemelos', 'pantorrillas', 'talones', 'heel raise']),
- (r'sit-?ups?\b', ['abdominales', 'situps']),
- (r'crunch', ['abdominales', 'encogimiento abdominal']),
- (r'\bplank\b', ['plancha', 'isométrico abdominal']),
- (r'bench press', ['press de banca', 'press banco plano', 'press pecho']),
- (r'hip thrust', ['empuje de cadera', 'puente de glúteo con barra']),
- (r'glute bridge', ['puente de glúteos', 'elevación de cadera']),
- (r'pulldown|pull-down', ['jalón al pecho', 'jalones', 'lat pulldown']),
- (r'\brows?\b', ['remo', 'remos']),
- (r'\bfly\b|flye|flies', ['aperturas', 'cruces']),
- (r'lateral raise', ['elevaciones laterales', 'vuelos laterales', 'side raise']),
- (r'front raise', ['elevaciones frontales']),
- (r'skull ?crusher', ['rompecráneos', 'press francés', 'extensión de tríceps acostado']),
- (r'tricep', ['tríceps']),
- (r'bicep', ['bíceps']),
- (r'kickback', ['patada', 'patada de tríceps']),
- (r'leg curl', ['curl femoral', 'flexión de pierna', 'isquiotibiales']),
- (r'leg extension', ['extensión de cuádriceps', 'extensión de pierna']),
- (r'leg press', ['prensa de pierna', 'prensa']),
- (r'overhead press|shoulder press|military press', ['press militar', 'press de hombro', 'press arriba']),
- (r'face pull', ['jalón a la cara', 'face pulls']),
- (r'good morning', ['buenos días']),
- (r'pullover', ['pull over', 'pullover']),
- (r'burpee', ['burpees']),
- (r'jumping jack', ['saltos de tijera', 'polichinelas']),
- (r'mountain climber', ['escaladores', 'alpinista']),
- (r'step-?up', ['subidas al cajón', 'subir banco']),
- (r'farmer', ['paseo del granjero', 'cargada']),
- (r'wall sit', ['sentadilla en pared', 'silla en la pared']),
- (r'bird dog', ['perro de caza', 'bird-dog']),
- (r'dead bug', ['bicho muerto']),
- (r'russian twist', ['giro ruso', 'torsión rusa']),
- (r'woodchop|wood chop', ['leñador', 'hachazo']),
- (r'hammer curl', ['curl martillo']),
- (r'preacher', ['predicador', 'banco scott']),
- (r'upright row', ['remo al mentón', 'remo vertical']),
- (r'clamshell', ['almeja', 'concha']),
- (r'nordic', ['curl nórdico', 'nordic curl']),
- (r'turkish get', ['levantamiento turco', 'get up turco']),
-]
-EN_ALT = {'pushup', 'press-up', 'pullup', 'chin up', 'chinup', 'parallel bar dip', 'dead lift', 'RDL', 'heel raise', 'situps', 'lat pulldown', 'side raise',
-          'pull over', 'pullover', 'face pulls', 'burpees', 'bird-dog', 'nordic curl'}
+# search-only synonyms: what a person types -> words that ARE in the English name (matched at a word start), or g:<group>. Not shown anywhere.
+# sinónimos solo para buscar: lo que la persona escribe -> una palabra que SÍ está en el nombre en inglés. No se muestran.
+SEARCH = {
+ 'db': 'dumbbell', 'bb': 'barbell', 'kb': 'kettlebell', 'ez': 'ez-bar|ez bar', 'ohp': 'overhead press|shoulder press', 'rdl': 'romanian deadlift', 'sldl': 'stiff-legged|stiff leg',
+ 'ghr': 'glute ham|glute-ham', 'pressup': 'push-up', 'pressups': 'push-up', 'pushup': 'push-up|pushup', 'pushups': 'push-up|pushup', 'pullup': 'pull-up|pullup', 'pullups': 'pull-up|pullup',
+ 'chinup': 'chin-up', 'chinups': 'chin-up', 'chins': 'chin', 'situp': 'sit-up', 'situps': 'sit-up', 'stepup': 'step-up|step up', 'stepups': 'step-up|step up',
+ 'skullcrusher': 'skull', 'skullcrushers': 'skull', 'military': 'military|overhead press', 'pulldowns': 'pulldown', 'flye': 'fly', 'flyes': 'fly', 'flies': 'fly', 'pec': 'g:chest',
+ 'lats': 'lat pull|pulldown|pull-up', 'abs': 'g:core', 'delts': 'g:shoulders', 'traps': 'shrug', 'hamstrings': 'leg curl|hamstring|romanian', 'quads': 'leg extension|squat', 'calves': 'calf',
+ 'glutes': 'g:glutes', 'tricep': 'g:triceps', 'bicep': 'g:biceps',
+ 'lagartijas': 'push-up|pushup', 'lagartija': 'push-up|pushup', 'planchas': 'push-up|plank', 'cuclillas': 'squat', 'cuclilla': 'squat', 'desplantes': 'lunge', 'desplante': 'lunge',
+ 'estocadas': 'lunge', 'estocada': 'lunge', 'tijeras': 'lunge|scissor', 'zancadas': 'lunge', 'barras': 'pull-up|chin-up', 'pantorrillas': 'calf', 'pantorrilla': 'calf', 'gemelos': 'calf',
+ 'chamorros': 'calf', 'abdominales': 'crunch|sit-up', 'abdominal': 'crunch|sit-up', 'lumbares': 'back extension|hyperext|superman', 'jalones': 'pulldown', 'encogimientos': 'shrug',
+ 'rompecraneos': 'skull', 'predicador': 'preacher', 'scott': 'preacher', 'aperturas': 'fly|pec deck|crossover', 'cristos': 'fly', 'vuelos': 'raise', 'pajaros': 'rear delt|reverse fl',
+ 'patada': 'kickback|donkey', 'patadas': 'kickback|donkey', 'puente': 'bridge|hip thrust', 'granjero': 'farmer', 'escaladores': 'mountain climber', 'alpinistas': 'mountain climber',
+ 'polichinelas': 'jumping jack', 'sentadillas': 'squat', 'dominadas': 'pull-up|chin-up|pullup', 'fondos': 'dip', 'remos': 'row', 'flexiones': 'push-up|pushup', 'curls': 'curl',
+ 'femoral': 'leg curl|hamstring', 'femorales': 'leg curl|hamstring', 'cuadriceps': 'leg extension|squat|leg press', 'gluteo': 'g:glutes', 'gluteos': 'g:glutes',
+ 'biceps': 'g:biceps', 'triceps': 'g:triceps', 'trapecio': 'shrug', 'trapecios': 'shrug', 'hombros': 'g:shoulders', 'pecho': 'g:chest',
+ 'espalda': 'g:back', 'pierna': 'g:legs', 'piernas': 'g:legs', 'prensa': 'leg press', 'polea': 'cable', 'mancuerna': 'dumbbell', 'mancuernas': 'dumbbell',
+ 'barra': 'barbell', 'pesa': 'kettlebell|dumbbell', 'liga': 'band', 'ligas': 'band', 'banda': 'band',
+}
+CUR = {}
+def alias(eid, *names):
+    if eid not in info: print('!! alias: not found', eid, file=sys.stderr); return
+    CUR[eid] = list(names)
+OLD = {}
+def old(eid, name):
+    if eid not in info: print('!! old: not found', eid, file=sys.stderr); return
+    OLD[name.replace("\\'", "'").lower()] = eid
+DUP = {}
+def same(hidden, shown):
+    if hidden not in info or shown not in info: print('!! same: not found', hidden, shown, file=sys.stderr); return
+    DUP[hidden] = shown; CUR.setdefault(shown, []).append(info[hidden]['en'])
+exec(open(os.path.join(ROOT, 'tools', 'exalias.py'), encoding='utf-8').read())
 def norm(s): return re.sub(r'[^a-z0-9 ]', '', ''.join(c for c in __import__('unicodedata').normalize('NFD', s.lower()) if __import__('unicodedata').category(c) != 'Mn')).strip()
 def exkey(r):
     return ' '.join(re.sub(r's$', '', re.sub(r'(ups|up)$', 'up', w)) for w in norm(r['en']).split()) + '|' + r['g']
 def aliases(r, by_key):
+    """hand-written names first, then the same exercise written another way in the library; abbreviations live in SEARCH / primero los escritos a mano y luego duplicados de la biblioteca; las abreviaturas van en SEARCH"""
     en, es = r['en'], r['es']
     seen = {norm(en), norm(es)}; out = []
     def put(x):
         k = norm(x)
         if k and k not in seen and len(out) < 5: seen.add(k); out.append(x.replace(';', ','))
-    for rx, ab in ABBR:
-        if re.search(rx, en, re.I):
-            for a in ab: put(re.sub(rx, a, en, count=1, flags=re.I))
-    for rx, alt in SYN:
-        if re.search(rx, en, re.I):
-            for a in alt[:3]:
-                if a in EN_ALT: put(re.sub(rx, a, en, count=1, flags=re.I))
-                else:
-                    if ' ' not in a and norm(a)[:6] in norm(es): continue
-                    put(a)
-    # the same exercise written differently in the library / el mismo ejercicio escrito distinto en la biblioteca
+    for a in CUR.get(r['id'], []): put(a)
     for o in by_key.get(exkey(r), []):
         if o['id'] != r['id']: put(o['en'])
     return ';'.join(out)
 
+def fix_chain_difficulty():
+    """the hand-written order is the truth: a later step is never rated easier than an earlier one / el orden escrito a mano manda"""
+    ch = True
+    while ch:
+        ch = False
+        for c in CHAINS:
+            for x, y in zip(c, c[1:]):
+                if info[y]['diff'] < info[x]['diff']: info[y]['diff'] = info[x]['diff']; ch = True
+
 def build():
+    fix_chain_difficulty()
     by_key = collections.defaultdict(list)
     for r in rows: by_key[exkey(r)].append(r)
     rel, tax, eqm, ali = {}, {}, {}, {}
@@ -379,7 +364,8 @@ def build():
     return rel, tax, eqm, ali
 
 def js(name, d):
-    return 'const %s={\n' % name + ',\n'.join(" %s:%s" % (k, json.dumps(v, ensure_ascii=False)) for k, v in d.items()) + '\n};\n'
+    key = lambda k: k if re.fullmatch(r'[A-Za-z_]\w*', k) else json.dumps(k, ensure_ascii=False)
+    return 'const %s={\n' % name + ',\n'.join(" %s:%s" % (key(k), json.dumps(v, ensure_ascii=False)) for k, v in d.items()) + '\n};\n'
 
 if __name__ == '__main__':
     rel, tax, eqm, ali = build()
@@ -392,9 +378,12 @@ if __name__ == '__main__':
     hdr2 = ("/* GENERATED by tools/gen_exrel.py: do not edit by hand / GENERADO por tools/gen_exrel.py: no lo edites a mano.\n"
             "   EXTAX[id] = 'family|mechanic C compound I isolation|force P push L pull S static O other|plane S sagittal F frontal T transverse|position|bench angle|load type|region|flags C compound U unilateral A assisted W weighted'\n"
             "   EXEQ[id]  = 'needed|optional|support (holds you or the setup)|assistance (makes it easier or safer)'  codes separated by spaces\n"
-            "   EXALI[id] = other names for the exercise, separated by ;  (used by search) / otros nombres del ejercicio, separados por ;  (los usa la búsqueda)\n"
+            "   EXALI[id] = other names for the exercise, separated by ;  (shown in the guide, used by search) / otros nombres del ejercicio, separados por ;\n"
+            "   EXDUP[hidden id] = id shown instead in the picker (same exercise imported twice; ids are never removed) / id que se muestra en su lugar en el selector\n"
+            "   EXOLD[old english name, lowercase] = id (names renamed in the library, so old CSV exports still import) / nombres renombrados, para importar CSV viejos\n"
+            "   EXSYN[typed word] = words to look for in the English name, separated by |  (search only, never shown) / EXSYN[palabra escrita] = palabras a buscar en el nombre en inglés\n"
             "   Rule-made guide, not reviewed one by one. / Guía hecha por reglas, no revisada uno por uno. */\n")
-    open(os.path.join(ROOT, 'data', 'exinfo.js'), 'w', encoding='utf-8').write(hdr2 + js('EXTAX', tax) + js('EXEQ', eqm) + js('EXALI', ali))
+    open(os.path.join(ROOT, 'data', 'exinfo.js'), 'w', encoding='utf-8').write(hdr2 + js('EXTAX', tax) + js('EXEQ', eqm) + js('EXALI', ali) + js('EXSYN', SEARCH) + js('EXDUP', DUP) + js('EXOLD', OLD))
     sz = lambda f: os.path.getsize(os.path.join(ROOT, 'data', f))
     print('%d exercises, %d chains | exrel %d B, exinfo %d B | equipment rows %d, alias rows %d' % (len(rel), len(CHAINS), sz('exrel.js'), sz('exinfo.js'), len(eqm), len(ali)))
     for eid in sys.argv[1:]:

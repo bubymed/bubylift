@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.111 — 2026-11-10
+- **Fixes and polish**: "Up next" now follows your split (a back day stays on back and biceps). Exercises are classified better (rear-delt fly is a pull, not a push). Cleaner "also known as" names, and search understands lagartijas, desplantes, pantorrillas, DB, OHP and more. Duplicate exercises are hidden. The floating buttons no longer cover the last button, the workout header shows the full volume, the swap sheet shows options first, and long lists (picker, history) open faster.
+  **Arreglos y pulido**: "Sigue" ahora respeta tu rutina dividida (un día de espalda sigue con espalda y bíceps). Los ejercicios están mejor clasificados (las aperturas posteriores son jalón, no empuje). Alias más limpios, y la búsqueda entiende lagartijas, desplantes, pantorrillas, DB, OHP y más. Se ocultan ejercicios duplicados. Los botones flotantes ya no tapan el último botón, el encabezado muestra el volumen completo, el cambio de ejercicio muestra primero las opciones, y las listas largas (selector, historial) abren más rápido.
+
 ## v1.1.110 — 2026-11-10
 - Easier to read: orange buttons and text have more contrast, especially in light mode and in bright light.
   Más fácil de leer: los botones y textos naranjas tienen más contraste, sobre todo en modo claro y con mucha luz.

@@ -71,7 +71,7 @@ function vHistory(){
     (gOrder.length>1?'<select id="hg" class="in" onchange="hGroup(this.value)" aria-label="'+esc(t('hAll'))+'"><option value="">'+t('hAll')+'</option>'+gOrder.map(g=>'<option value="'+g+'"'+(UI.hg===g?' selected':'')+'>'+t('g_'+g)+'</option>').join('')+'</select>':'')+'</div>';
   return h+'<div id="hlist">'+histList()+'</div>';
 }
-function hTab(k){UI.ht=k==='s'?'s':'w';UI.hq='';UI.hg='';render();}
+function hTab(k){UI.hN=0;UI.ht=k==='s'?'s':'w';UI.hq='';UI.hg='';render();}
 /* the list below the search box: filtered by name or exercise (any language, accents ignored) and by muscle group / la lista bajo el buscador: filtrada por nombre o ejercicio (cualquier idioma, sin acentos) y por grupo muscular */
 function wkMatch(wk,q,g){
   if(g&&!wk.ex.some(x=>{const e=exById(x.eid);return e&&e.g===g;}))return false;
@@ -83,15 +83,18 @@ function histList(){
   const q=norm((UI.hq||'').trim()),g=UI.hg||'',all=histSet(),a=all.filter(w=>wkMatch(w,q,g));
   if(!a.length)return'<div class="card tip"><p class="muted">'+t(all.length||UI.ht==='s'?'hNone':'hNoneW')+'</p></div>';
   let h=(q||g)?'<p class="muted sm hcnt">'+t('hCount',a.length)+'</p>':'',last='';
-  a.forEach(wk=>{
+  /* draw 40 workouts first; more on demand (hundreds of cards made the tab slow) / primero 40; más al pedirlos */
+  const cap=UI.hN||40,more=a.length-cap;
+  a.slice(0,cap).forEach(wk=>{
     const lb=dFmt(wk.t,{month:'long',year:'numeric'});
     if(lb!==last){if(last)h+='</div>';h+='<div class="sec"><h2>'+esc(lb)+'</h2></div><div class="lgrp">';last=lb;}
     h+=wkCard(wk);
   });
-  return h+'</div>';
+  return h+'</div>'+(more>0?'<button class="btn wide" onclick="hMore()">'+t('hMore',Math.min(more,80))+'</button>':'');
 }
-function hSearch(v){UI.hq=String(v).slice(0,40);const l=document.getElementById('hlist');if(l)l.innerHTML=histList();}
-function hGroup(v){UI.hg=v||'';const l=document.getElementById('hlist');if(l)l.innerHTML=histList();}
+function hMore(){UI.hN=(UI.hN||40)+80;const l=document.getElementById('hlist');if(l)l.innerHTML=histList();}
+function hSearch(v){UI.hN=0;UI.hq=String(v).slice(0,40);const l=document.getElementById('hlist');if(l)l.innerHTML=histList();}
+function hGroup(v){UI.hN=0;UI.hg=v||'';const l=document.getElementById('hlist');if(l)l.innerHTML=histList();}
 function wkText(wk){
   let s=wk.name+' — '+dFmt(wk.t)+'\n';
   wk.ex.forEach(x=>{const m=exMode(x.eid);s+='\n'+exNameV(x.eid,x.vr,x.n)+'\n';x.sets.forEach((st,i)=>{s+='  '+(i+1)+') '+fmtSet(m,st)+(st.pr?' 🏆':'')+'\n';});});
