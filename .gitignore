@@ -3,3 +3,4 @@
 # local tooling output / salida de herramientas locales
 node_modules/
 .DS_Store
+__pycache__/
