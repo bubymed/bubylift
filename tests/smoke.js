@@ -23,6 +23,9 @@ vc.on('error',(...a)=>errors.push('console.error: '+a.join(' ')));
   await new Promise(r=>w.addEventListener('load',r));
   await new Promise(r=>setTimeout(r,300));
   const ev=c=>w.eval(c);
+  // big files load after start in the app; the test page has no network, so run them here like the browser would
+  ok(w.eval("typeof WHATSNEW==='undefined'&&typeof HOWTO.z_3_4_sit_up==='undefined'"),'start: what\'s new and imported guides are not part of the first load');
+  ['data/whatsnew.js','data/howto6.js'].forEach(f=>{const sc=doc.createElement('script');sc.textContent=fs.readFileSync(path.join(ROOT,f),'utf8');doc.head.appendChild(sc);w.eval("LAZY['"+f+"']=Promise.resolve(true)");});
   const main=()=>doc.getElementById('main').innerHTML;
   const sheetHtml=()=>doc.getElementById('sheet').innerHTML;
   w.__miss=[];

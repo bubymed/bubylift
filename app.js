@@ -1,10 +1,11 @@
+/* global WHATSNEW */
 /* Core of the app: storage, units, language, theme, sheets, tabs/router, install and auto-update. Loaded first; every other file builds on it.
    Núcleo de la app: almacenamiento, unidades, idioma, tema, hojas, pestañas/navegación, instalación y auto-actualización. Se carga primero; todo lo demás se apoya en él.
    Map of all files: docs/CODEMAP.md / Mapa de todos los archivos: docs/CODEMAP.md */
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.116';
+const APP_VER='v1.1.117';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -245,6 +246,14 @@ async function instNative(){
 
 /* ---------- What's new (data/whatsnew.js): once per version, and from More → What's new ---------- */
 /* v0.95 → 95, v1.0 → 1000, old 'v90' → 90 (so 1.0 sorts after 0.99) / v0.95 → 95, v1.0 → 1000, el viejo 'v90' → 90 (así 1.0 va después de 0.99) */
+/* big data files that are not needed to open the app load later: what's new (only after an update) and the imported technique guides
+   archivos grandes que no hacen falta para abrir la app se cargan después: novedades (solo tras actualizar) y las guías importadas */
+const LAZY={};
+function lazyJs(src){
+  if(!LAZY[src])LAZY[src]=new Promise(res=>{const s=document.createElement('script');s.src=src;s.onload=()=>res(true);s.onerror=()=>{delete LAZY[src];res(false);};document.head.appendChild(s);});
+  return LAZY[src];
+}
+const howMore=()=>{const had=typeof HOWTO!=='undefined'&&!!HOWTO.z_3_4_sit_up;return lazyJs('data/howto6.js').then(ok=>{if(ok&&!had&&typeof render==='function'&&tab==='workout'&&typeof ACT!=='undefined'&&ACT&&$('sheetov').hidden)render();return ok;});}; // redraw once, only when the cues just arrived / redibuja una vez, solo si las guías acaban de llegar
 function wnVnum(v){const m=String(v||'').match(/(\d+)(?:\.(\d+))?(?:\.(\d+))?/);if(!m)return 0;return m[2]!=null?(+m[1])*1e6+(+m[2])*1e3+(+m[3]||0):(+m[1])*1e3;}
 function wnPending(){
   if(typeof WHATSNEW==='undefined')return[];
@@ -254,6 +263,7 @@ function wnPending(){
 }
 function wnDone(){SET.wnSeen=APP_VER;saveSet();sheetClose();}
 function wnShow(force){
+  if(typeof WHATSNEW==='undefined'){lazyJs('data/whatsnew.js').then(ok=>{if(ok)wnShow(force);});return;}
   const list=force?(typeof WHATSNEW!=='undefined'?WHATSNEW.slice(0,3):[]):wnPending();
   if(!list.length){if(!force&&SET.wnSeen!==APP_VER){SET.wnSeen=APP_VER;saveSet();}return;}
   const items=list.flatMap(e=>e.items.map(x=>Object.assign({v:e.v},x)));
@@ -292,7 +302,8 @@ function bootApp(){
   setTimeout(autoUpd,1500);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){autoUpd();if(ACT)wake();}});
   setTimeout(instUpd,0);
-  setTimeout(()=>wnInit(0),1200);
+  setTimeout(()=>{if(SET.wnSeen!==APP_VER)wnInit(0);},1200); // what's new only loads after an update / novedades solo se cargan tras actualizar
+  setTimeout(()=>{(window.requestIdleCallback||setTimeout)(()=>howMore(),2500);},1500);
   setTimeout(()=>{try{tourMaybe(0);}catch(e){}},2000);
   setTimeout(()=>{try{guestNag();}catch(e){}},4500);
   setTimeout(()=>{try{welcomeInit(0);}catch(e){}},9000);

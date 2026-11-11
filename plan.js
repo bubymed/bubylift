@@ -1116,6 +1116,7 @@ function exRelHtml(eid,back){
 }
 function howOpen(eid,back){
   const e=exById(eid);if(!e)return;
+  if(!HOWTO[eid]&&/^z_/.test(eid)&&!LAZY['data/howto6.js+']){LAZY['data/howto6.js+']=1;howMore().then(()=>{delete LAZY['data/howto6.js+'];howOpen(eid,back);});return;} // imported guides arrive a moment after start / las guías importadas llegan un momento después
   const es=LANG==='es',src=HOWTO[eid],gen=HOWGEN[e.g]||HOWGEN.full;
   const steps=(src?src[es?1:0]:gen[es?1:0]).split('|');
   const mis=src?src[es?3:2]:'';
