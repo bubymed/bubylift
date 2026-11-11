@@ -3,22 +3,33 @@
 const NX_BIG=['chm','chu','lat','trp','rf','vl','vm','gmx','bfm','smt','abs'],NX_K=3,NX_MINOR=['frm','nck','tib','per','sar','ql','brd','bra','hfl','ser','rtc','tva','gmn'];
 let _nxMemo=null;
 function nxSession(){
-  const eff={},fam={push:0,pull:0,quad:0,post:0},reg={up:0,lo:0},ids={},comp={n:0};let tot=0,lastEq='';
+  const eff={},fam={push:0,pull:0,quad:0,post:0},arm={push:0,pull:0},reg={up:0,lo:0},ids={},comp={n:0};let tot=0,lastEq='';
   ACT.ex.forEach(x=>{
     ids[x.eid]=1;const e=exById(x.eid);if(e)lastEq=e.e;
     const n=x.sets.reduce((a,s)=>a+(s.ty==='w'?0:(s.done?1:.5)),0);if(!n)return;tot+=n;
     (muW(x.eid,x.vr)||[]).forEach(m=>{eff[m[0]]=(eff[m[0]]||0)+n*m[1];});
     const tx=exTaxOf(x.eid),rl=exRelOf(x.eid);
-    if(rl){if(rl.pat==='horizontal push'||rl.pat==='vertical push')fam.push+=n;else if(rl.pat==='horizontal pull'||rl.pat==='vertical pull')fam.pull+=n;else if(rl.pat==='squat'||rl.pat==='lunge'||rl.pat==='knee extension')fam.quad+=n;else if(rl.pat==='hinge'||rl.pat==='knee flexion')fam.post+=n;}
+    if(rl){if(rl.pat==='horizontal push'||rl.pat==='vertical push')fam.push+=n;else if(rl.pat==='horizontal pull'||rl.pat==='vertical pull')fam.pull+=n;else if(rl.pat==='squat'||rl.pat==='lunge'||rl.pat==='knee extension')fam.quad+=n;else if(rl.pat==='hinge'||rl.pat==='knee flexion')fam.post+=n;else if(rl.pat==='arm flexion')arm.pull+=n;else if(rl.pat==='arm extension'||rl.pat==='shoulder raise')arm.push+=n;}
     if(tx){if(tx.reg==='up'||tx.reg==='lo')reg[tx.reg]+=n;if(tx.mech==='C')comp.n++;}
   });
-  return{eff:eff,fam:fam,reg:reg,ids:ids,comp:comp.n,tot:tot,lastEq:lastEq};
+  return{eff:eff,fam:fam,arm:arm,reg:reg,ids:ids,comp:comp.n,tot:tot,lastEq:lastEq};
+}
+/* does this person usually press and pull in the same workout? (last 20 sessions) Unknown history counts as yes. / ¿suele empujar y jalar en el mismo entrenamiento? */
+const NX_PULLF=['horizontal pull','vertical pull','arm flexion'],NX_PUSHF=['horizontal push','vertical push','arm extension','shoulder raise'];
+let _nxMix=null;
+function nxMixes(){
+  const L=DATA.workouts,key=L.length+':'+(L[0]?L[0].id:'');
+  if(_nxMix&&_nxMix.k===key)return _nxMix.v;
+  let both=0,n=0;
+  L.slice(0,20).forEach(wk=>{let p=0,q=0;wk.ex.forEach(x=>{const r=exRelOf(x.eid);if(!r)return;if(r.pat==='horizontal push'||r.pat==='vertical push')p++;else if(r.pat==='horizontal pull'||r.pat==='vertical pull')q++;});if(p+q>=2){n++;if(p&&q)both++;}});
+  const v=n<4?true:both/n>=.4;_nxMix={k:key,v:v};return v;
 }
 function nxCos(a,b){let d=0,na=0,nb=0;a.forEach(q=>{na+=q[1]*q[1];const o=b.find(z=>z[0]===q[0]);if(o)d+=q[1]*o[1];});b.forEach(q=>{nb+=q[1]*q[1];});return na&&nb?d/Math.sqrt(na*nb):0;}
 function nxCalc(){
   const S=nxSession(),rec=recData(),hv=curHave(),L=curInjL(),skip=ACT.nxSkip||[],use={};
   DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{use[x.eid]=(use[x.eid]||0)+1;}));
   const novice=DATA.workouts.length<4,seen={};
+  const mixes=nxMixes(),ft=S.fam.push+S.fam.pull+S.arm.push+S.arm.pull,sp=S.fam.push+S.arm.push,theme=ft>=1?(sp/ft>=.7?'push':(sp/ft<=.3?'pull':'')):'';
   Object.keys(S.ids).forEach(id=>{const e=exById(id);if(e)seen[exKey(e)]=1;const r=exRelOf(id);if(r)r.sim.forEach(s=>{S.ids[s]=1;});});
   const C=[];
   pickPool().forEach(e=>{
@@ -41,14 +52,20 @@ function nxCalc(){
     if(tx){
       /* push / pull only counts the big presses and rows or pulldowns, not curls or raises / empuje y jalón solo cuentan press y remos o jalones, no curls ni elevaciones */
       const pp=rl&&(rl.pat==='horizontal push'||rl.pat==='vertical push'),pl=rl&&(rl.pat==='horizontal pull'||rl.pat==='vertical pull');
-      if(pl&&S.fam.push-S.fam.pull>=2){sc+=14;bal='nxPull';}
-      else if(pp&&S.fam.pull-S.fam.push>=2){sc+=14;bal='nxPush';}
+      if(mixes){ // you train push and pull in the same session: keep them even / entrenas empuje y jalón el mismo día: se equilibran
+        if(pl&&S.fam.push-S.fam.pull>=2){sc+=14;bal='nxPull';}
+        else if(pp&&S.fam.pull-S.fam.push>=2){sc+=14;bal='nxPush';}
+      }else if(theme){ // you train them on separate days: stay with today's side (and its arms and shoulders) / los separas por día: sigue con el lado de hoy
+        const shr=rl&&rl.pat==='shoulder raise'&&(e.g!=='shoulders'||/upright|shrug|row/i.test(e.en)); // shrugs and upright rows pull / encogimientos y remo al mentón jalan
+        const side=shr||NX_PULLF.indexOf(rl?rl.pat:'')>=0?'pull':(NX_PUSHF.indexOf(rl?rl.pat:'')>=0?'push':'');
+        if(side===theme){sc+=12;bal=fresh>.5?'nxDay':'';}else if(side)sc-=16;
+      }
       const qd=rl&&(rl.pat==='squat'||rl.pat==='lunge'||rl.pat==='knee extension'),ps=rl&&(rl.pat==='hinge'||rl.pat==='knee flexion');
       if(ps&&S.fam.quad-S.fam.post>=2){sc+=14;bal='nxPost';}
       else if(qd&&S.fam.post-S.fam.quad>=2){sc+=14;bal='nxQuad';}
       /* same half of the body as the workout so far: an upper day stays upper, a leg day stays legs / la misma mitad del cuerpo */
       const rt=S.reg.up+S.reg.lo;
-      if(rt>=3&&(tx.reg==='up'||tx.reg==='lo')){const sh=S.reg[tx.reg]/rt;if(sh>=.7)sc+=14;else if(sh<=.3)sc-=14;}
+      if(rt>=1&&(tx.reg==='up'||tx.reg==='lo')){const sh=S.reg[tx.reg]/rt;if(sh>=.7)sc+=14;else if(sh<=.3)sc-=14;}
       /* 5 · big lifts first, then single-joint work for what you already trained / primero los básicos, luego aislamiento */
       if(S.comp===0&&tx.mech==='C')sc+=8;
       else if(S.comp===0&&tx.mech==='I')sc-=4;
@@ -58,7 +75,7 @@ function nxCalc(){
     if(mains.some(q=>NX_BIG.indexOf(q[0])>=0))sc+=4;
     const u=use[e.id]||0;sc+=Math.min(8,3*Math.log2(1+u));
     if(rl&&rl.diff>=3&&!u)sc-=8;
-    if(/^z_/.test(e.id)&&!u)sc-=6;                                  // curated moves first / primero los ejercicios curados
+    if(/^z_/.test(e.id)&&!u)sc-=12;                                  // curated moves first / primero los ejercicios curados
     if(mains.every(q=>NX_MINOR.indexOf(q[0])>=0)&&!u)sc-=12;       // small muscles are not the first pick / los músculos pequeños no van primero
     if(novice&&rl&&rl.diff>=2&&!u)sc-=10;
     if(lv===1)sc-=8;

@@ -867,16 +867,17 @@ function planAddEx(di){
 /* ---------- substitutions: "I don't have this equipment" / sustituciones: "no tengo este equipo" ---------- */
 let SW={mode:'act',i:0,d:0,e:0,eid:'',have:[]};
 function swapCands(eid,have,L,skip,maxLv){
-  const mu=muOf(eid),ex0=exById(eid),g0=ex0?ex0.g:'',m0=exMode(eid);
+  const mu=muOf(eid),ex0=exById(eid),g0=ex0?ex0.g:'',m0=exMode(eid),p0=exRelOf(eid);
   const out=[];
   EXLIB.forEach(r=>{
     const id=r[0];if(id===eid||skip[id])return;
     const m=meta(id);if(!m||m.mu!==mu||m.lv>maxLv||!avail(id,have))return;
     const sl=stressLvl(id,L);if(sl>=2)return;
-    out.push({id:id,sl:sl,same:(r[3]===g0?0:1)+(exMode(id)===m0?0:1)});
+    const rl=exRelOf(id);
+    out.push({id:id,sl:sl,pt:rl&&p0&&rl.pat===p0.pat?0:1,same:(r[3]===g0?0:1)+(exMode(id)===m0?0:1)}); // pt: same movement pattern first (a pulldown for a pulldown) / primero el mismo patrón de movimiento
   });
   const sty=DATA.plan&&DATA.plan.prof&&DATA.plan.prof.sty&&DATA.plan.prof.sty[0]&&STY[DATA.plan.prof.sty[0]]?DATA.plan.prof.sty[0]:'';
-  out.sort((a,b)=>(a.sl-b.sl)||(sty?styFit(sty,a.id)-styFit(sty,b.id):0)||(a.same-b.same));
+  out.sort((a,b)=>(a.sl-b.sl)||(a.pt-b.pt)||(sty?styFit(sty,a.id)-styFit(sty,b.id):0)||(a.same-b.same));
   return out.slice(0,14);
 }
 function swapOpen(i){
@@ -887,8 +888,8 @@ function planSwapOpen(d,e){
   const x=DATA.plan&&DATA.plan.ds[d]&&DATA.plan.ds[d].ex[e];if(!x)return;
   SW={mode:'plan',d:d,e:e,eid:x.eid,have:curHave().slice()};swapDraw();
 }
-function swTog(k){const a=SW.have,i=a.indexOf(k);if(i>=0)a.splice(i,1);else a.push(k);swapDraw();}
-function swPreset(k){SW.have=HAVE_PRESETS[k].slice();swapDraw();}
+function swTog(k){SW.eq=true;const a=SW.have,i=a.indexOf(k);if(i>=0)a.splice(i,1);else a.push(k);swapDraw();}
+function swPreset(k){SW.eq=true;SW.have=HAVE_PRESETS[k].slice();swapDraw();}
 function swSave(){
   const p=profNow();
   if(p)p.have=SW.have.slice();else SET.have=SW.have.slice();
@@ -902,11 +903,13 @@ function swapDraw(){
   sheet('<div class="form"><div class="pick-h"><h3>'+t('swapT')+'</h3><button class="ico" onclick="swapClose()" aria-label="'+esc(t('close'))+'">✕</button></div>'+
     '<button class="btn pri wide" onclick="swapSearch()">🔍 '+t('swSearch')+'</button>'+
     '<p class="muted sm">'+t('swapP',esc(exName(SW.eid)))+'</p>'+
-    '<div class="lbl">'+t('equipHave')+'</div>'+haveChips(SW.have,'swTog')+
-    '<div class="row"><button class="btn sm" onclick="swPreset(\'gym\')">'+t('eqp_gym')+'</button><button class="btn sm" onclick="swPreset(\'db\')">'+t('eqp_db')+'</button><button class="btn sm" onclick="swPreset(\'home\')">'+t('eqp_home')+'</button><button class="btn sm" onclick="swPreset(\'none\')">'+t('eqp_none')+'</button></div>'+
     '<div class="lbl">'+t('swapOpts')+'</div>'+
     (c.length?c.map(o=>'<div class="plex"><span><b>'+esc(exName(o.id))+'</b><small>'+t('e_'+exById(o.id).e)+(NEED[o.id]&&NEED[o.id]!==exById(o.id).e?' + '+t('hv_'+NEED[o.id]):'')+(o.sl?' · ⚠ '+esc(t('caution')):'')+'</small></span><button class="ico" aria-label="'+esc(t('howTo'))+'" onclick="swHow(\''+o.id+'\')">ⓘ</button><button class="btn sm pri" onclick="swapUse(\''+o.id+'\')">'+t('use')+'</button></div>').join(''):'<p class="muted">'+t('swapNone')+'</p>')+
-    '<div class="row"><button class="btn" onclick="swSave()">'+t('equipSave')+'</button><button class="btn" onclick="swapClose()">'+t('cancel')+'</button></div></div>');
+    /* the options come first; equipment is one tap away instead of a long list to scroll past every time / primero las opciones; el equipo queda a un toque */
+    '<details class="dtl"'+(SW.eq||!c.length?' open':'')+' ontoggle="SW.eq=this.open"><summary>'+t('equipHave')+'</summary>'+haveChips(SW.have,'swTog')+
+    '<div class="row"><button class="btn sm" onclick="swPreset(\'gym\')">'+t('eqp_gym')+'</button><button class="btn sm" onclick="swPreset(\'db\')">'+t('eqp_db')+'</button><button class="btn sm" onclick="swPreset(\'home\')">'+t('eqp_home')+'</button><button class="btn sm" onclick="swPreset(\'none\')">'+t('eqp_none')+'</button></div>'+
+    '<div class="row"><button class="btn" onclick="swSave()">'+t('equipSave')+'</button></div></details>'+
+    '<div class="row"><button class="btn" onclick="swapClose()">'+t('cancel')+'</button></div></div>');
 }
 function swapSearch(){pickEx(function(eid){swapUse(eid);});}
 function swHow(id){howOpen(id,'swapDraw');}
