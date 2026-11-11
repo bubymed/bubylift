@@ -971,3 +971,6 @@ button,.btn,.chip,.chk,.stp,#tabbar{-webkit-user-select:none;user-select:none;-w
 .nx{padding:12px 14px}.nx-h{margin-bottom:6px}.nx-r{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line,rgba(127,127,127,.18))}.nx-r:first-of-type{border-top:0}
 .nx-n{flex:1;min-width:0;text-align:left;background:none;border:0;padding:0;color:inherit;font:inherit}.nx-n b{display:block}.nx-n small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
 .nx-x{flex:none;opacity:.6}
+/* custom exercises: always-visible create button in the picker header, edit pencil on your own rows / ejercicios propios: botón de crear siempre visible en el encabezado, lápiz de editar en los tuyos */
+.pick-h .pk-cx{margin-left:auto;margin-right:8px;white-space:nowrap}
+.exrow .exedit{flex:none;margin-left:auto;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:var(--panel);font-size:1rem}

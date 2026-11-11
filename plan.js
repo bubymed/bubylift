@@ -1103,7 +1103,7 @@ function howOpen(eid,back){
     (mis?'<div class="lbl">'+t('howMis')+'</div><p>'+esc(mis)+'</p>':(src?'':'<p class="muted sm">'+t('howGen')+'</p>'))+
     exRelHtml(eid,back)+
     '<p class="muted sm">'+esc(HOWSAFE[es?1:0])+'</p>'+
-    '<div class="row"><button class="btn pri" onclick="'+(back||'sheetClose')+'()">'+t('done')+'</button></div></div>');
+    '<div class="row"><button class="btn pri" onclick="'+(back||'sheetClose')+'()">'+t('done')+'</button>'+(e.custom?'<button class="btn" onclick="customOpen(\''+eid+'\')">✎ '+t('edit')+'</button>':'')+'</div></div>');
 }
 
 

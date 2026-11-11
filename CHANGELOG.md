@@ -7,11 +7,15 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
-## v1.1.108 — 2026-10-30
+## v1.1.109 — 2026-11-10
+- **Edit your own exercises** (name, group, equipment, tracking) or delete them, and the **Custom** button is now always at the top of the exercise picker (it also offers to create what you searched). Share cards now show the **back** view first when you trained lats, traps, rhomboids or triceps.
+  **Edita tus ejercicios propios** (nombre, grupo, equipo, tipo de registro) o elimínalos, y el botón **Propio** ahora está siempre arriba en el selector de ejercicios (también te ofrece crear lo que buscaste). Las tarjetas para compartir ahora muestran primero la vista de **espalda** cuando entrenas dorsales, trapecio, romboides o tríceps.
+
+## v1.1.108 — 2026-11-10
 - **Up next**: during a workout the app suggests what to do after the exercises you already have, based on what you trained, muscle recovery, push/pull and leg balance, your equipment and injuries. Add it or skip it.
   **Sigue**: durante el entrenamiento la app sugiere qué hacer después de los ejercicios que ya llevas, según lo que trabajaste, la recuperación muscular, el balance de empuje/jalón y de piernas, tu equipo y tus lesiones. Añádelo u omítelo.
 
-## v1.1.107 — 2026-10-30
+## v1.1.107 — 2026-11-10
 - **Every exercise now has its own map**: movement type, difficulty, equipment needed, support and assistance, other names, similar exercises, swaps for missing equipment, easier and harder steps, and gentler options for a sore joint. Search also finds abbreviations and synonyms (DB, OHP, lagartijas…).
   **Cada ejercicio ahora tiene su mapa**: tipo de movimiento, dificultad, equipo necesario, soporte y asistencia, otros nombres, ejercicios parecidos, cambios si falta equipo, pasos más fáciles y más difíciles, y opciones más suaves para una articulación adolorida. La búsqueda también entiende abreviaturas y sinónimos (DB, OHP, lagartijas…).
 

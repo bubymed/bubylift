@@ -430,7 +430,7 @@ function nextInView(i,j){
 function exMenu(i){
   const x=ACT.ex[i];
   sheet('<h3>'+esc(exNameV(x.eid,x.vr,x.n))+'</h3><div class="menu">'+
-    '<button class="pri" onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button>'+(exVars(x.eid).length?'<button onclick="varOpen('+i+')">⚙ '+t('varB')+'</button>':'')+'<button onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button>'+
+    '<button class="pri" onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button>'+(exVars(x.eid).length?'<button onclick="varOpen('+i+')">⚙ '+t('varB')+'</button>':'')+'<button onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button>'+(x.eid.indexOf('c_')===0?'<button onclick="customOpen(\''+x.eid+'\')">✎ '+t('cxEdit')+'</button>':'')+
     '<button onclick="tasteLike(\''+x.eid+'\');exMenu('+i+')">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button onclick="tasteDis(\'act\','+i+')">'+ic('ban')+' '+t('tkDis')+'</button>'+
     '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+''+(exMode(x.eid)==='wr'&&!isDb(x)?'<button onclick="sheetClose();pcOpenEx('+i+')">🏋 '+t('pcT')+'</button>':'')+(exMode(x.eid)==='wr'&&isDb(x)?'<button onclick="mulMenu('+i+')">🏋 '+t('mulTitle')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
@@ -608,13 +608,13 @@ function xBtn(call,inl){return'<button class="xdel'+(inl?' inl':'')+'" onclick="
 function exAnimOn(id){return typeof EXANIM!=='undefined'&&EXANIM.has(id);}
 function exImgs(id,own){return exAnimOn(id)?'<img class="a" src="img/ex/a/'+id+'.webp" alt="" loading="lazy" onerror="this.src=\'img/ex/'+id+'-0.jpg\'">':'<img src="img/ex/'+id+'-0.jpg" alt="" onerror="'+(own||'this.parentNode.remove()')+'"><img class="b" src="img/ex/'+id+'-1.jpg" alt="" onerror="this.remove()">';}
 function exThumb(id){return typeof EXPHOTO!=='undefined'&&EXPHOTO.has(id)?'<span class="ex-th" style="background-image:url(img/ex/'+id+'-0.jpg)"></span>':'<span class="ex-th ex-no">'+ic('barbell')+'</span>';}
-function exRow(e,srch){const on=UI.pickMulti&&(UI.pickSel||[]).indexOf(e.id)>=0,al=LANG==='es'?e.en:e.es,nm=LANG==='es'?e.es:e.en,sub=srch&&al&&norm(al)!==norm(nm)?t('alsoCalled',al):t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+injBadge(e.id);return'<button class="exrow exth'+(on?' sel':'')+'" data-id="'+e.id+'" onclick="pickTap(\''+e.id+'\')">'+exThumb(e.id)+'<span class="ex-tx"><b>'+esc(nm)+'</b><small>'+esc(sub)+'</small></span>'+(UI.pickMulti?'<i class="exck">'+(on?'✓':'')+'</i>':'')+'</button>';}
+function exRow(e,srch){const on=UI.pickMulti&&(UI.pickSel||[]).indexOf(e.id)>=0,al=LANG==='es'?e.en:e.es,nm=LANG==='es'?e.es:e.en,sub=srch&&al&&norm(al)!==norm(nm)?t('alsoCalled',al):t('g_'+e.g)+' · '+t('e_'+e.e)+(e.custom?' · '+t('custom'):'')+injBadge(e.id);return'<button class="exrow exth'+(on?' sel':'')+'" data-id="'+e.id+'" onclick="pickTap(\''+e.id+'\')">'+exThumb(e.id)+'<span class="ex-tx"><b>'+esc(nm)+'</b><small>'+esc(sub)+'</small></span>'+(e.custom?'<span class="exedit" role="button" tabindex="0" aria-label="'+esc(t('cxEdit'))+'" onclick="event.stopPropagation();customOpen(\''+e.id+'\')">✎</span>':'')+(UI.pickMulti?'<i class="exck">'+(on?'✓':'')+'</i>':'')+'</button>';}
 /* same exercise imported twice (Pull-Up / Pullups): show it once / el mismo ejercicio importado dos veces: se muestra una vez */
 function exKey(e){return norm(e.en).replace(/[^a-z0-9 ]/g,'').split(' ').map(w=>w.replace(/(ups|up)$/,'up').replace(/s$/,'')).join('')+'|'+e.g;}
 function pickPool(){
   const seen={},out=[];
   EXLIB.map(a=>exById(a[0])).sort((a,b)=>(/^z_/.test(a.id)?1:0)-(/^z_/.test(b.id)?1:0)).forEach(e=>{if(!e)return;const k=exKey(e);if(seen[k])return;seen[k]=1;out.push(e);});
-  return out.concat(DATA.custom.map(c=>exById(c.id)));
+  return out.concat(DATA.custom.filter(c=>!c.del).map(c=>exById(c.id)));
 }
 /* other names (abbreviations, synonyms) used by search / otros nombres (abreviaturas, sinónimos) que usa la búsqueda */
 const _aliC={};
@@ -644,7 +644,7 @@ function exListHtml(){
   });
   let sn=0;
   if(tok.length&&f.t==='all'){sn=pickPoolF({t:'str'}).filter(e=>exRank(e,tok)>=0).length;if(sn)h+='<button class="pk-more" onclick="pickPick(\'str\',\'\',1)">'+t('seeStr',sn)+'</button>';}
-  if(!list.length&&!sn)h+='<p class="muted pk-none">'+t('noMatch')+'</p>';
+  if(!list.length&&!sn)h+='<p class="muted pk-none">'+t('noMatch')+'</p>'+(tok.length?'<button class="btn pri wide" onclick="customOpen()">＋ '+t('cxCreate',esc(UI.q.trim()))+'</button>':'');
   return h+'<button class="pk-more pk-own" onclick="customOpen()">＋ '+t('customEx')+'</button>';
 }
 /* which exercises a view shows: stretches & mobility only when asked for / qué ejercicios muestra cada vista: estiramientos solo si se piden */
@@ -679,7 +679,7 @@ function pickBar(){
 }
 function drawPick(){
   const sub=UI.pt!=='all'&&UI.pf,x='<button class="ico" onclick="pickCancel()" aria-label="'+esc(t('close'))+'">✕</button>';
-  const head=sub?'<div class="pick-h"><button class="ico" onclick="pickBack()" aria-label="'+esc(t('back'))+'">←</button><h3>'+esc(pfLabel())+'</h3>'+x+'</div>':'<div class="pick-h"><h3>'+t('addEx')+'</h3>'+x+'</div>';
+  const head=sub?'<div class="pick-h"><button class="ico" onclick="pickBack()" aria-label="'+esc(t('back'))+'">←</button><h3>'+esc(pfLabel())+'</h3><button class="btn sm pk-cx" onclick="customOpen()">＋ '+t('customShort')+'</button>'+x+'</div>':'<div class="pick-h"><h3>'+t('addEx')+'</h3><button class="btn sm pk-cx" onclick="customOpen()">＋ '+t('customShort')+'</button>'+x+'</div>';
   const tabs=sub?'':'<div class="pk-tabs">'+[['all','tabAll'],['mus','tabMus'],['cat','tabCat']].map(a=>'<button class="'+(UI.pt===a[0]?'on':'')+'" onclick="pickTab(\''+a[0]+'\')">'+t(a[1])+'</button>').join('')+'</div>';
   sheet('<div class="pick">'+head+tabs+'<div id="exlist" class="exlist pk-list">'+exListHtml()+'</div><div class="pk-bot">'+pickBar()+
     '<input id="exq" class="in wide pk-q" type="search" enterkeyhint="search" autocomplete="off" placeholder="'+esc(t('searchEx'))+'" value="'+esc(UI.q)+'" oninput="exSearch(this.value)"></div></div>');
@@ -704,17 +704,44 @@ function pickTap(id){
 function pickCommit(){const cb=UI.pickCb,a=(UI.pickSel||[]).slice();UI.pickCb=null;UI.pickSel=[];sheetClose();if(cb)a.forEach(cb);}
 function pickDone(eid){const cb=UI.pickCb;UI.pickCb=null;sheetClose();if(cb)cb(eid);}
 function pickCancel(){UI.pickCb=null;sheetClose();if(UI.rb)rbDraw();else if(typeof WKE!=='undefined'&&WKE)wkEditDraw();}
-function customOpen(){
-  sheet('<div class="form"><h3>'+t('customEx')+'</h3><label>'+t('name')+'<input id="cxn" class="in wide" type="text" maxlength="60"></label>'+
-    '<label>'+t('group')+'<select id="cxg" class="in wide">'+EX_GROUPS.map(g=>'<option value="'+g+'">'+t('g_'+g)+'</option>').join('')+'</select></label>'+
-    '<label>'+t('trackAs')+'<select id="cxm" class="in wide"><option value="wr">'+t('m_wr')+'</option><option value="bw">'+t('m_bw')+'</option><option value="t">'+t('m_t')+'</option></select></label>'+
-    '<div class="row"><button class="btn pri" onclick="customSave()">'+t('save')+'</button><button class="btn" onclick="drawPick()">'+t('cancel')+'</button></div></div>');
+/* custom exercises: create from the picker (name prefilled from the search) or edit/delete one you made / ejercicios propios: crear desde el selector (con el nombre de la búsqueda) o editar/eliminar uno tuyo */
+const CX_EQ=['bodyweight','barbell','dumbbell','machine','cable','kettlebell','band','ball','suspension','other'];
+function customOpen(id){
+  const c=id?DATA.custom.find(x=>x.id===id):null,q=(UI.q||'').trim();
+  UI.cxEdit=c?c.id:null;
+  const nm=c?c.n:(q?q.charAt(0).toUpperCase()+q.slice(1):'');
+  sheet('<div class="form"><h3>'+t(c?'cxEdit':'customEx')+'</h3><label>'+t('name')+'<input id="cxn" class="in wide" type="text" maxlength="60" value="'+esc(nm)+'"></label>'+
+    '<label>'+t('group')+'<select id="cxg" class="in wide">'+EX_GROUPS.map(g=>'<option value="'+g+'"'+(c&&c.g===g?' selected':'')+'>'+t('g_'+g)+'</option>').join('')+'</select></label>'+
+    '<label>'+t('cxEquip')+'<select id="cxe" class="in wide">'+CX_EQ.map(g=>'<option value="'+g+'"'+(c&&(c.e||'other')===g?' selected':'')+'>'+t('e_'+g)+'</option>').join('')+'</select></label>'+
+    '<label>'+t('trackAs')+'<select id="cxm" class="in wide">'+['wr','bw','t'].map(m=>'<option value="'+m+'"'+(c&&(c.m||'wr')===m?' selected':'')+'>'+t('m_'+m)+'</option>').join('')+'</select></label>'+
+    '<div class="row"><button class="btn pri" onclick="customSave()">'+t('save')+'</button><button class="btn" onclick="customCancel()">'+t('cancel')+'</button></div>'+
+    (c?'<button class="lnk-d" onclick="customDel(\''+c.id+'\')">'+t('cxDel')+'</button>':'')+'</div>');
+  if(!c&&!nm)setTimeout(function(){const i=$('cxn');if(i)i.focus();},60);
 }
+function customCancel(){if(UI.pickCb)drawPick();else sheetClose();}
+function customAfter(){if(UI.pickCb)pickRedraw();else{sheetClose();render();}}
 function customSave(){
   const n=($('cxn').value||'').trim();if(!n){toast(t('needName'));errField($('cxn'));return;}
-  const c={id:'c_'+uid(),n:n,g:$('cxg').value,e:'other',m:$('cxm').value};
+  const v={n:n,g:$('cxg').value,e:$('cxe').value,m:$('cxm').value},id=UI.cxEdit;
+  if(id){
+    const c=DATA.custom.find(x=>x.id===id);if(!c)return;
+    Object.assign(c,v);saveData();
+    if(typeof _MW!=='undefined')delete _MW[id];
+    if(ACT)ACT.ex.forEach(x=>{if(x.eid===id)x.n=n;});
+    UI.cxEdit=null;saveAct();toast(t('cxSaved'));customAfter();return;
+  }
+  const c=Object.assign({id:'c_'+uid()},v);
   DATA.custom.push(c);saveData();
+  if(UI.pickMulti&&UI.pickCb&&(UI.pickSel||[]).length){UI.pickSel.push(c.id);pickCommit();return;} // keep what was already ticked / conserva lo ya marcado
   pickDone(c.id);
+}
+function customDel(id){
+  const c=DATA.custom.find(x=>x.id===id);if(!c)return;
+  ask(t('cxDelAsk',c.n),t('delete'),function(){
+    c.del=1;saveData(); // hidden, not removed: past workouts keep its name and how it is tracked, and sync cannot bring it back / oculto, no borrado
+    if(typeof _MW!=='undefined')delete _MW[id];
+    toast(t('cxGone'));customAfter();
+  },true);
 }
 
 /* ---------- routines ---------- */
