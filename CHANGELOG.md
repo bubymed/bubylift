@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.110 — 2026-11-10
+- Easier to read: orange buttons and text have more contrast, especially in light mode and in bright light.
+  Más fácil de leer: los botones y textos naranjas tienen más contraste, sobre todo en modo claro y con mucha luz.
+
 ## v1.1.109 — 2026-11-10
 - **Edit your own exercises** (name, group, equipment, tracking) or delete them, and the **Custom** button is now always at the top of the exercise picker (it also offers to create what you searched). Share cards now show the **back** view first when you trained lats, traps, rhomboids or triceps.
   **Edita tus ejercicios propios** (nombre, grupo, equipo, tipo de registro) o elimínalos, y el botón **Propio** ahora está siempre arriba en el selector de ejercicios (también te ofrece crear lo que buscaste). Las tarjetas para compartir ahora muestran primero la vista de **espalda** cuando entrenas dorsales, trapecio, romboides o tríceps.

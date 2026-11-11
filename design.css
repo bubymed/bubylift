@@ -3,12 +3,12 @@
    Loaded last: it overrides the older blocks in style.css / se carga al final y reemplaza bloques anteriores. */
 :root{
   --bg:#000;--panel:#1C1C1E;--panel2:#2C2C2E;--line:rgba(255,255,255,.12);--txt:#fff;--dim:#98989F;--muted:#98989F;
-  --accent:#FF6A2B;--on-accent:#fff;--accent2:#E8430C;--green:#32D74B;--red:#FF453A;--warn:#FFB340;
+  --accent:#FF6A2B;--on-accent:#1A0A00;--accent2:#E8430C;--green:#32D74B;--red:#FF453A;--warn:#FFB340;
   --radius:20px;--tab-h:56px;--shadow:none;
 }
 :root[data-mode="light"]{
   --bg:#F2F2F7;--panel:#fff;--panel2:#EEEEF3;--line:rgba(60,60,67,.14);--txt:#000;--dim:#6C6C70;--muted:#6C6C70;
-  --accent:#E6500F;--on-accent:#fff;--accent2:#C73D05;--green:#1F9D45;--red:#D70015;--warn:#B35C00;
+  --accent:#B93A08;--on-accent:#fff;--accent2:#9E2F04;--green:#1F9D45;--red:#D70015;--warn:#B35C00;
   --shadow:0 1px 2px rgba(0,0,0,.05);
 }
 body{font-size:17px;letter-spacing:-.01em;background:var(--bg)}
