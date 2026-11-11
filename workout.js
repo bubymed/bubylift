@@ -652,11 +652,11 @@ function srDist(a,b,max){
   for(let i=1;i<=m;i++){c=[i];let lo=i;for(let j=1;j<=n;j++){let v=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));if(p2&&i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])v=Math.min(v,p2[j-2]+1);c.push(v);if(v<lo)lo=v;}if(lo>max)return max+1;p2=p;p=c;}
   return p[n];
 }
-/* a token the vocabulary does not know -> its closest word (only for 4+ letters; the last, still-typed token only when 5+) */
+/* a token the vocabulary does not know -> its closest words (4+ letters; a word still being typed is left alone while it is the start of a real word) */
 function srFix(q,last){
   const X=srIdx();if(X.fix[q+last]!==undefined)return X.fix[q+last];
   let best=[];const fq=srFold(q);
-  if(!X.voc.some(w=>w.indexOf(q)===0||w.indexOf(fq)===0)&&q.length>=(last?5:4)){
+  if(!X.voc.some(w=>w.indexOf(q)===0||w.indexOf(fq)===0)&&q.length>=4){
     const max=q.length>=7?2:1;let bd=max+1;
     X.voc.forEach(w=>{if(w[0]!==q[0]&&!(q.length>=6&&w[1]===q[1]))return;const d=srDist(q,w,max);if(d<bd){bd=d;best=[w];}else if(d===bd&&d<=max)best.push(w);});
     best.sort((a,b)=>X.cnt[b]-X.cnt[a]);best=best.slice(0,4); // every word at the closest distance, most common first / todas las palabras a la menor distancia
