@@ -72,11 +72,20 @@ function clClean(d){
   o._u=isFinite(d._u)?+d._u:0;
   return o;
 }
+/* every workout, routine, body entry and custom exercise carries u = when it was last changed on this phone, so an edit made offline
+   is not overwritten by an older copy just because the other phone synced later / cada elemento lleva u = cuándo cambió por última vez */
+let CLHS=null;
+const clItemKey=x=>{const u=x.u;delete x.u;const s=JSON.stringify(x);if(u!==undefined)x.u=u;return s;};
+function clStamp(){
+  const now=Date.now(),first=!CLHS;if(first)CLHS={};
+  CL_KEYS.forEach(k=>(DATA[k]||[]).forEach(x=>{if(!x||!x.id)return;const s=clItemKey(x),h=k+':'+x.id;if(!first&&CLHS[h]!==s)x.u=now;CLHS[h]=s;}));
+}
+function clStampSync(){CLHS=null;clStamp();} // after applying the merged copy: nothing here is a new local edit / tras aplicar la copia combinada
 function clMerge(a,b){ // a = this phone, b = cloud / a = este teléfono, b = nube
   const tomb=Object.assign({},b.tomb,a.tomb),newer=(a._u||0)>=(b._u||0),out={tomb:tomb};
   CL_KEYS.forEach(k=>{
     const m={};
-    (newer?b[k].concat(a[k]):a[k].concat(b[k])).forEach(x=>{if(!tomb[x.id])m[x.id]=x;}); // later entries win / gana el último
+    (newer?b[k].concat(a[k]):a[k].concat(b[k])).forEach(x=>{if(tomb[x.id])return;const o=m[x.id];if(!o||(x.u||0)>=(o.u||0))m[x.id]=x;}); // the copy changed last wins, then the newer phone / gana la copia cambiada al final, luego el teléfono más reciente
     out[k]=Object.keys(m).map(i=>m[i]);
   });
   out.plan=newer?(a.plan||b.plan):(b.plan||a.plan);
@@ -94,7 +103,7 @@ function clApply(m){
   CLAPPLY=true;
   CL_KEYS.forEach(k=>{DATA[k]=m[k];});DATA.plan=m.plan;DATA.goals=m.goals;DATA.aft=m.aft||undefined;DATA.tomb=m.tomb;
   try{legacyFix();}catch(e){}
-  saveData();
+  saveData();clStampSync();
   let ch=false;const ms=m.set,ma=m.act;
   if(ms&&ms.v&&(ms.t||0)>(SET._st||0)){CL_SET.forEach(k=>{if(ms.v[k]!==undefined)SET[k]=ms.v[k];else delete SET[k];});SET._st=ms.t;SET._sh=clSetHash();jset(K_SET,SET);ch=true;}
   if(ma&&(ma.u||0)>(SET._au||0)){ACT=ma.d;SET._au=ma.u;LASTACT=ACT?JSON.stringify(ACT):'';if(ACT)jset(K_ACT,ACT);else jdel(K_ACT);jset(K_SET,SET);ch=true;}
@@ -149,6 +158,7 @@ function clSchedule(){
   clearTimeout(CLT);CLT=setTimeout(()=>{CLT=0;cloudSync(false);},2500);
 }
 function clInit(){
+  clStamp(); // remember how every item looks now, so the next save can tell what changed / recuerda cómo está cada elemento
   if(!cloudOn())return;
   clLoad();clHash();
   if(window.__clGo){const m=window.__clGo;window.__clGo=null;setTimeout(()=>clAuthOpen(m),400);}

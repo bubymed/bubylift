@@ -4,7 +4,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.114';
+const APP_VER='v1.1.115';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -36,7 +36,7 @@ function loadAll(){
   LANG=SET.lang==='es'?'es':'en';
 }
 function saveSet(){if(typeof clSetTouch==='function')clSetTouch();jset(K_SET,SET);try{localStorage.setItem('bl_lang',SET.lang);localStorage.setItem('bl_theme',SET.theme||'system');}catch(e){}}
-function saveData(){if(!CLAPPLY)DATA._u=Date.now();const r=jset(K_DATA,DATA);if(typeof clSchedule==='function')clSchedule();return r;}
+function saveData(){if(!CLAPPLY){DATA._u=Date.now();if(typeof clStamp==='function')clStamp();}const r=jset(K_DATA,DATA);if(typeof clSchedule==='function')clSchedule();return r;}
 function jdel(k){try{localStorage.removeItem(k);}catch(e){}}
 let LASTACT='';
 function saveAct(){
