@@ -1204,6 +1204,15 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ev("pauseClock()");ok(ev("ACT.pz")===false&&ev("actMs()")>=__p,'resume keeps the saved time');
   ev("REST&&(REST.end=Date.now()+60000);restPause()");ok(ev("REST.pz")===true&&ev("REST.left")>55000,'rest timer pauses');
   ev("restPause()");ok(ev("REST.pz")===false,'rest timer resumes');
+  // v1.1.107 exercise relations, taxonomy, equipment and aliases (rule-made from our own data)
+  ok(ev("(function(){var bad=[];Object.keys(EXREL).forEach(function(k){var a=EXREL[k].split('|');if(a.length!==8||!exById(k))bad.push(k);[3,4,5,6,7].forEach(function(i){(a[i]?a[i].split(' '):[]).forEach(function(x){if(!exById(x.split(':')[0]))bad.push(k+'>'+x)})});if(!/^[a-z ]+$/.test(a[0])||!(+a[2]>=1&&+a[2]<=3))bad.push(k+'!')});return bad.length===0&&Object.keys(EXREL).length===EXLIB.filter(function(e){return !/^rh_/.test(e[0])}).length})()"),'relations: every row has 8 fields, valid ids and difficulty 1-3, one per library exercise (rehab moves excluded)');
+  ok(ev("(function(){var bad=[];EXLIB.forEach(function(e){if(!/^rh_/.test(e[0])&&!EXTAX[e[0]])bad.push(e[0])});return bad.length===0})()"),'taxonomy: every library exercise has one');
+  ok(ev("(function(){var seen={},bad=0;Object.keys(EXREL).forEach(function(k){seen[EXREL[k].split('|')[0]]=1;});Object.keys(seen).forEach(function(p){t('pt_'+p.replace(/ /g,'_'))});Object.keys(EXTAX).forEach(function(k){var a=EXTAX[k].split('|');t('fam_'+a[0]);if(a[1]!=='-')t('mc_'+a[1]);if('PLS'.indexOf(a[2])>=0)t('fc_'+a[2]);t('pl_'+a[3]);t('ps_'+a[4]);if(a[5])t('an_'+a[5]);t('lt_'+a[6]);t('rg_'+a[7])});Object.keys(EXEQ).forEach(function(k){EXEQ[k].replace(/\\|/g,' ').split(' ').filter(Boolean).forEach(function(c){t('q_'+c)})});return true})()"),'taxonomy and equipment vocab all have labels');
+  ok(ev("(function(){howOpen('pullup');var h=document.getElementById('sheet').innerHTML;sheetClose();return /Movement details|Detalles del movimiento/.test(h)&&/Pull-up bar|Barra de dominadas/.test(h)&&/Alternatives|Alternativas/.test(h)})()"),'guide shows movement details, equipment and alternatives');
+  ok(ev("exRelOf('legraise').pat")==='core flexion'&&ev("exRelOf('bench').pat")==='horizontal push','pattern: hanging leg raise is core, not shoulder');
+  ok(ev("exRelOf('pushup').up.indexOf('kneepush')>=0&&exRelOf('pushup').dn.length>0&&exRelOf('pullup').up.indexOf('assistpu')>=0"),'progressions: push-up and pull-up have easier and harder steps');
+  ok(ev("(function(){var n=0;Object.keys(EXREL).forEach(function(k){if(EXREL[k].split('|')[7])n++});return n>150})()"),'injury: many exercises list gentler alternatives');
+  ok(ev("exRank(exById('pushup'),['lagartijas'])>=0&&exRank(exById('dbcurl'),['db'])>=0&&exRank(exById('pushup'),['zzzzqq'])<0"),'search finds exercises by alias and abbreviation');
   ev("restSet(0,'d');stopRest();ACT=null;saveAct();");
   const miss=[...new Set(w.__miss)];
   ok(miss.length===0,'no missing translation keys: '+miss.join(','));
