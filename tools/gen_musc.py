@@ -117,7 +117,7 @@ RULES=[
  (r'pirate',['shoulders'],'sdf.6 sdl.6 sdr.4 obl.3'),
  (r'car drivers',['shoulders'],'sdf.7 sdl.5 sdr.3 frm.3 abs.2'),
  (r'linear jammer|landmine',['shoulders'],'qd.5 gmx.4 sdf1 trm.6 abs.3'),
- (r'rear|reverse (machine )?fl|back flyes|pull-apart|bent over low pulley|rear delt|rear lateral',['shoulders'],'sdr1 ubk.6 trp.3 sdl.3'),
+ (r'rear|reverse (machine )?fl|back fl(y|ies)|pull-apart|bent over low pulley|rear delt|rear lateral',['shoulders'],'sdr1 ubk.6 trp.3 sdl.3'),
  (r'barbell rear delt row|rear-delt rows|row to neck',['shoulders'],'sdr1 ubk.7 lat.3 bic.3 trp.4'),
  (r'handstand|pike',['shoulders'],'sdf1 sdl.6 trm.7 chu.4 abs.2'),
  (r'behind neck|behind the neck',['shoulders'],'sdl1 sdf.7 sdr.3 trm.7 trp.3'),

@@ -289,30 +289,34 @@ def equipment(r):
     return ' '.join(need), ' '.join(opt), ' '.join(sup), ' '.join(ast)
 
 # ---------------------------------------------------------------- aliases / alias
-# search-only synonyms: what a person types -> a word that IS in the English name. Not shown anywhere.
+# search-only synonyms: what a person types -> words that ARE in the English name (matched at a word start), or g:<group>. Not shown anywhere.
 # sinónimos solo para buscar: lo que la persona escribe -> una palabra que SÍ está en el nombre en inglés. No se muestran.
 SEARCH = {
  'db': 'dumbbell', 'bb': 'barbell', 'kb': 'kettlebell', 'ez': 'ez-bar|ez bar', 'ohp': 'overhead press|shoulder press', 'rdl': 'romanian deadlift', 'sldl': 'stiff-legged|stiff leg',
  'ghr': 'glute ham|glute-ham', 'pressup': 'push-up', 'pressups': 'push-up', 'pushup': 'push-up|pushup', 'pushups': 'push-up|pushup', 'pullup': 'pull-up|pullup', 'pullups': 'pull-up|pullup',
  'chinup': 'chin-up', 'chinups': 'chin-up', 'chins': 'chin', 'situp': 'sit-up', 'situps': 'sit-up', 'stepup': 'step-up|step up', 'stepups': 'step-up|step up',
- 'skullcrusher': 'skull', 'skullcrushers': 'skull', 'military': 'military|overhead press', 'pulldowns': 'pulldown', 'flye': 'fly', 'flyes': 'fly', 'flies': 'fly', 'pec': 'pec|chest|fly',
- 'lats': 'lat ', 'abs': 'crunch|sit-up|ab ', 'delts': 'delt|shoulder|lateral raise', 'traps': 'shrug', 'hamstrings': 'leg curl|hamstring|romanian', 'quads': 'leg extension|squat', 'calves': 'calf',
- 'glutes': 'glute|hip thrust', 'tricep': 'tricep', 'bicep': 'curl',
+ 'skullcrusher': 'skull', 'skullcrushers': 'skull', 'military': 'military|overhead press', 'pulldowns': 'pulldown', 'flye': 'fly', 'flyes': 'fly', 'flies': 'fly', 'pec': 'g:chest',
+ 'lats': 'lat pull|pulldown|pull-up', 'abs': 'g:core', 'delts': 'g:shoulders', 'traps': 'shrug', 'hamstrings': 'leg curl|hamstring|romanian', 'quads': 'leg extension|squat', 'calves': 'calf',
+ 'glutes': 'g:glutes', 'tricep': 'g:triceps', 'bicep': 'g:biceps',
  'lagartijas': 'push-up|pushup', 'lagartija': 'push-up|pushup', 'planchas': 'push-up|plank', 'cuclillas': 'squat', 'cuclilla': 'squat', 'desplantes': 'lunge', 'desplante': 'lunge',
  'estocadas': 'lunge', 'estocada': 'lunge', 'tijeras': 'lunge|scissor', 'zancadas': 'lunge', 'barras': 'pull-up|chin-up', 'pantorrillas': 'calf', 'pantorrilla': 'calf', 'gemelos': 'calf',
  'chamorros': 'calf', 'abdominales': 'crunch|sit-up', 'abdominal': 'crunch|sit-up', 'lumbares': 'back extension|hyperext|superman', 'jalones': 'pulldown', 'encogimientos': 'shrug',
  'rompecraneos': 'skull', 'predicador': 'preacher', 'scott': 'preacher', 'aperturas': 'fly|pec deck|crossover', 'cristos': 'fly', 'vuelos': 'raise', 'pajaros': 'rear delt|reverse fl',
  'patada': 'kickback|donkey', 'patadas': 'kickback|donkey', 'puente': 'bridge|hip thrust', 'granjero': 'farmer', 'escaladores': 'mountain climber', 'alpinistas': 'mountain climber',
  'polichinelas': 'jumping jack', 'sentadillas': 'squat', 'dominadas': 'pull-up|chin-up|pullup', 'fondos': 'dip', 'remos': 'row', 'flexiones': 'push-up|pushup', 'curls': 'curl',
- 'femoral': 'leg curl|hamstring', 'femorales': 'leg curl|hamstring', 'cuadriceps': 'leg extension|squat|leg press', 'gluteo': 'glute|hip thrust', 'gluteos': 'glute|hip thrust',
- 'biceps': 'curl', 'triceps': 'tricep|pushdown|skull|dip', 'trapecio': 'shrug', 'trapecios': 'shrug', 'hombros': 'shoulder|lateral raise|overhead press', 'pecho': 'chest|bench|fly|push-up',
- 'espalda': 'row|pulldown|pull-up', 'pierna': 'squat|leg|lunge', 'piernas': 'squat|leg|lunge', 'prensa': 'leg press', 'polea': 'cable', 'mancuerna': 'dumbbell', 'mancuernas': 'dumbbell',
+ 'femoral': 'leg curl|hamstring', 'femorales': 'leg curl|hamstring', 'cuadriceps': 'leg extension|squat|leg press', 'gluteo': 'g:glutes', 'gluteos': 'g:glutes',
+ 'biceps': 'g:biceps', 'triceps': 'g:triceps', 'trapecio': 'shrug', 'trapecios': 'shrug', 'hombros': 'g:shoulders', 'pecho': 'g:chest',
+ 'espalda': 'g:back', 'pierna': 'g:legs', 'piernas': 'g:legs', 'prensa': 'leg press', 'polea': 'cable', 'mancuerna': 'dumbbell', 'mancuernas': 'dumbbell',
  'barra': 'barbell', 'pesa': 'kettlebell|dumbbell', 'liga': 'band', 'ligas': 'band', 'banda': 'band',
 }
 CUR = {}
 def alias(eid, *names):
     if eid not in info: print('!! alias: not found', eid, file=sys.stderr); return
     CUR[eid] = list(names)
+OLD = {}
+def old(eid, name):
+    if eid not in info: print('!! old: not found', eid, file=sys.stderr); return
+    OLD[name.replace("\\'", "'").lower()] = eid
 DUP = {}
 def same(hidden, shown):
     if hidden not in info or shown not in info: print('!! same: not found', hidden, shown, file=sys.stderr); return
@@ -360,7 +364,8 @@ def build():
     return rel, tax, eqm, ali
 
 def js(name, d):
-    return 'const %s={\n' % name + ',\n'.join(" %s:%s" % (k, json.dumps(v, ensure_ascii=False)) for k, v in d.items()) + '\n};\n'
+    key = lambda k: k if re.fullmatch(r'[A-Za-z_]\w*', k) else json.dumps(k, ensure_ascii=False)
+    return 'const %s={\n' % name + ',\n'.join(" %s:%s" % (key(k), json.dumps(v, ensure_ascii=False)) for k, v in d.items()) + '\n};\n'
 
 if __name__ == '__main__':
     rel, tax, eqm, ali = build()
@@ -375,9 +380,10 @@ if __name__ == '__main__':
             "   EXEQ[id]  = 'needed|optional|support (holds you or the setup)|assistance (makes it easier or safer)'  codes separated by spaces\n"
             "   EXALI[id] = other names for the exercise, separated by ;  (shown in the guide, used by search) / otros nombres del ejercicio, separados por ;\n"
             "   EXDUP[hidden id] = id shown instead in the picker (same exercise imported twice; ids are never removed) / id que se muestra en su lugar en el selector\n"
+            "   EXOLD[old english name, lowercase] = id (names renamed in the library, so old CSV exports still import) / nombres renombrados, para importar CSV viejos\n"
             "   EXSYN[typed word] = words to look for in the English name, separated by |  (search only, never shown) / EXSYN[palabra escrita] = palabras a buscar en el nombre en inglés\n"
             "   Rule-made guide, not reviewed one by one. / Guía hecha por reglas, no revisada uno por uno. */\n")
-    open(os.path.join(ROOT, 'data', 'exinfo.js'), 'w', encoding='utf-8').write(hdr2 + js('EXTAX', tax) + js('EXEQ', eqm) + js('EXALI', ali) + js('EXSYN', SEARCH) + js('EXDUP', DUP))
+    open(os.path.join(ROOT, 'data', 'exinfo.js'), 'w', encoding='utf-8').write(hdr2 + js('EXTAX', tax) + js('EXEQ', eqm) + js('EXALI', ali) + js('EXSYN', SEARCH) + js('EXDUP', DUP) + js('EXOLD', OLD))
     sz = lambda f: os.path.getsize(os.path.join(ROOT, 'data', f))
     print('%d exercises, %d chains | exrel %d B, exinfo %d B | equipment rows %d, alias rows %d' % (len(rel), len(CHAINS), sz('exrel.js'), sz('exinfo.js'), len(eqm), len(ali)))
     for eid in sys.argv[1:]:

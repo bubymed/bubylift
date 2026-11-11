@@ -24,12 +24,21 @@ function nxMixes(){
   L.slice(0,20).forEach(wk=>{let p=0,q=0;wk.ex.forEach(x=>{const r=exRelOf(x.eid);if(!r)return;if(r.pat==='horizontal push'||r.pat==='vertical push')p++;else if(r.pat==='horizontal pull'||r.pat==='vertical pull')q++;});if(p+q>=2){n++;if(p&&q)both++;}});
   const v=n<4?true:both/n>=.4;_nxMix={k:key,v:v};return v;
 }
+/* upper/lower: 'full' if most sessions train both halves, 'split' if they keep to one, '' when there is not enough history / tren superior e inferior */
+let _nxRM=null;
+function nxRegMix(){
+  const L=DATA.workouts,key=L.length+':'+(L[0]?L[0].id:'');
+  if(_nxRM&&_nxRM.k===key)return _nxRM.v;
+  let both=0,n=0;
+  L.slice(0,20).forEach(wk=>{let u=0,l=0;wk.ex.forEach(x=>{const tx=exTaxOf(x.eid);if(!tx)return;if(tx.reg==='up')u++;else if(tx.reg==='lo')l++;});if(u+l>=2){n++;if(u&&l)both++;}});
+  const v=n<4?'':(both/n>=.5?'full':'split');_nxRM={k:key,v:v};return v;
+}
 function nxCos(a,b){let d=0,na=0,nb=0;a.forEach(q=>{na+=q[1]*q[1];const o=b.find(z=>z[0]===q[0]);if(o)d+=q[1]*o[1];});b.forEach(q=>{nb+=q[1]*q[1];});return na&&nb?d/Math.sqrt(na*nb):0;}
 function nxCalc(){
   const S=nxSession(),rec=recData(),hv=curHave(),L=curInjL(),skip=ACT.nxSkip||[],use={};
   DATA.workouts.forEach(wk=>wk.ex.forEach(x=>{use[x.eid]=(use[x.eid]||0)+1;}));
   const novice=DATA.workouts.length<4,seen={};
-  const mixes=nxMixes(),ft=S.fam.push+S.fam.pull+S.arm.push+S.arm.pull,sp=S.fam.push+S.arm.push,theme=ft>=1?(sp/ft>=.7?'push':(sp/ft<=.3?'pull':'')):'';
+  const RM=nxRegMix(),mixes=nxMixes(),ft=S.fam.push+S.fam.pull+S.arm.push+S.arm.pull,sp=S.fam.push+S.arm.push,theme=ft>=1?(sp/ft>=.7?'push':(sp/ft<=.3?'pull':'')):'';
   Object.keys(S.ids).forEach(id=>{const e=exById(id);if(e)seen[exKey(e)]=1;const r=exRelOf(id);if(r)r.sim.forEach(s=>{S.ids[s]=1;});});
   const C=[];
   pickPool().forEach(e=>{
@@ -65,7 +74,7 @@ function nxCalc(){
       else if(qd&&S.fam.post-S.fam.quad>=2){sc+=14;bal='nxQuad';}
       /* same half of the body as the workout so far: an upper day stays upper, a leg day stays legs / la misma mitad del cuerpo */
       const rt=S.reg.up+S.reg.lo;
-      if(rt>=1&&(tx.reg==='up'||tx.reg==='lo')){const sh=S.reg[tx.reg]/rt;if(sh>=.7)sc+=14;else if(sh<=.3)sc-=14;}
+      if(RM!=='full'&&rt>=(RM==='split'?1:3)&&(tx.reg==='up'||tx.reg==='lo')){const sh=S.reg[tx.reg]/rt;if(sh>=.7)sc+=14;else if(sh<=.3)sc-=14;}
       /* 5 · big lifts first, then single-joint work for what you already trained / primero los básicos, luego aislamiento */
       if(S.comp===0&&tx.mech==='C')sc+=8;
       else if(S.comp===0&&tx.mech==='I')sc-=4;

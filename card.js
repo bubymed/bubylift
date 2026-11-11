@@ -26,6 +26,7 @@ function csvParse(txt){
 function eidByName(nm){
   nm=String(nm||'').trim().toLowerCase().replace(/^'/,'');if(!nm)return null;
   const hit=EXLIB.find(r=>String(r[1]).toLowerCase()===nm||String(r[2]).toLowerCase()===nm);if(hit)return hit[0];
+  if(typeof EXOLD!=='undefined'&&EXOLD[nm])return EXOLD[nm]; // renamed exercises: old CSV exports still match / ejercicios renombrados
   const cx=(DATA.custom||[]).find(c=>String(c.n).toLowerCase()===nm);return cx?cx.id:null;
 }
 function exMatch(nm){

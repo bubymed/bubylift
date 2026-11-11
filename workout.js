@@ -617,25 +617,27 @@ function pkUsed(){const L=DATA.workouts,k=L.length+':'+(L[0]?L[0].id:'');if(_pkU
 function pickPool(){
   const seen={},out=[];
   const dup=typeof EXDUP!=='undefined'?EXDUP:{},used=pkUsed(); // a hand-listed duplicate stays hidden unless you already logged it / un duplicado listado a mano queda oculto salvo que ya lo hayas registrado
-  EXLIB.map(a=>exById(a[0])).sort((a,b)=>(/^z_/.test(a.id)?1:0)-(/^z_/.test(b.id)?1:0)).forEach(e=>{if(!e)return;if(dup[e.id]&&!used[e.id])return;const k=exKey(e);if(seen[k])return;seen[k]=1;out.push(e);});
+  const rk=e=>used[e.id]?0:(/^z_/.test(e.id)?2:1); // what you logged wins over a look-alike, then curated / lo que registraste gana a su gemelo, luego lo curado
+  EXLIB.map(a=>exById(a[0])).filter(Boolean).sort((a,b)=>rk(a)-rk(b)).forEach(e=>{if(!e)return;if(dup[e.id]&&!used[e.id])return;const k=exKey(e);if(seen[k])return;seen[k]=1;out.push(e);});
   return out.concat(DATA.custom.filter(c=>!c.del).map(c=>exById(c.id)));
 }
 /* other names (abbreviations, synonyms) used by search / otros nombres (abreviaturas, sinónimos) que usa la búsqueda */
 const _aliC={};
 function aliN(e){if(_aliC[e.id]===undefined)_aliC[e.id]=typeof EXALI!=='undefined'&&EXALI[e.id]?norm(EXALI[e.id].replace(/;/g,' ; ')):'';return _aliC[e.id];}
 /* typed word -> words in the English name (EXSYN, search only) / palabra escrita -> palabras del nombre en inglés */
-function synHit(e,q){const s=typeof EXSYN!=='undefined'&&EXSYN[q];if(!s||e.custom)return false;const en=norm(e.en);return s.split('|').some(w=>en.indexOf(w)>=0);}
+function synHit(e,q){const s=typeof EXSYN!=='undefined'&&EXSYN[q];if(!s||e.custom)return false;const en=' '+norm(e.en).replace(/-/g,' ');return s.split('|').some(w=>w.indexOf('g:')===0?e.g===w.slice(2):en.indexOf(' '+w.replace(/-/g,' '))>=0);} // word start only: "lat" must not hit "flat" / solo al inicio de palabra
 function exRank(e,tok){
   const nm=norm(LANG==='es'?e.es:e.en),other=norm(LANG==='es'?e.en:e.es),ws=nm.split(' ');let sc=0;
   for(const q of tok){
     if(nm===q)sc+=0;else if(nm.indexOf(q)===0)sc+=1;else if(ws.some(w=>w.indexOf(q)===0))sc+=2;else if(nm.indexOf(q)>=0)sc+=4;
     else if(other.indexOf(q)>=0)sc+=6;
-    else if(nm.replace(/-/g,'').indexOf(q)>=0||nm.replace(/-/g,' ').indexOf(q)>=0)sc+=4; // pushup = push-up
+    else if(nm.replace(/-/g,'').indexOf(q)>=0||other.replace(/-/g,'').indexOf(q)>=0)sc+=4; // pushup = push-up
     else if(aliN(e).indexOf(q)>=0)sc+=7;
     else if(synHit(e,q))sc+=7;
     else{const meta=norm(t('g_'+e.g)+' '+t('e_'+e.e));if(meta.indexOf(q)>=0)sc+=8;else return -1;}
   }
-  return sc*100+nm.length;
+  /* among equal matches: curated before imported, lifts before stretches (unless you are picking stretches) / a igual coincidencia: curados antes que importados, ejercicios antes que estiramientos */
+  return sc*100+nm.length+(/^z_/.test(e.id)?30:0)+(e.g==='mobility'&&UI.pt!=='mob'?40:0);
 }
 const PK_PAGE=80;
 function pkScroll(){const l=$('exlist');if(!l||!$('pkmore'))return;if(l.scrollTop+l.clientHeight>l.scrollHeight-900){const y=l.scrollTop;UI.pkN=(UI.pkN||PK_PAGE)+160;l.innerHTML=exListHtml();l.scrollTop=y;}}
