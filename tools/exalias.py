@@ -214,3 +214,11 @@ old('z_triceps_pushdown_rope_attachment', 'Triceps Pushdown - Rope Attachment')
 old('z_triceps_pushdown_v_bar_attachment', 'Triceps Pushdown - V-Bar Attachment')
 old('z_upright_row_with_bands', 'Upright Row - With Bands')
 old('z_wide_grip_pulldown_behind_the_neck', 'Wide-Grip Pulldown Behind The Neck')
+same('z_pullups', 'pullup')
+same('z_pushups', 'pushup')
+
+# The lifts most people mean when they type a short word ("bench", "curl", "row"): search lists them first.
+# Los ejercicios que la mayoría quiere decir con una palabra corta: la búsqueda los pone primero.
+top('bench', 'squat', 'deadlift', 'ohp', 'pullup', 'chinup', 'bbrow', 'latpd', 'cablerow', 'dbrow', 'dbbench', 'incbench', 'dbinc', 'dbcurl', 'bbcurl',
+    'hammer', 'pushdown', 'skull', 'latraise', 'legpress', 'legcurl', 'legext', 'rdl', 'hipthrust', 'lunge', 'calf', 'plank', 'crunch', 'pushup', 'dip',
+    'facepull', 'dbohp', 'gobsq', 'bulgsplit', 'frontsq', 'shrug', 'dbfly', 'cablefly', 'ohext', 'preacher')
