@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.122 — 2026-11-10
+- **New recovery plan: inner thigh / groin pain (adductors)**, in 4 phases from squeeze isometrics to the Copenhagen exercise and return to sport. The recovery plans section is now called **Injuries** (in Mobility), and Body › Muscles has a shortcut: "Pain or an injury?".
+  **Plan nuevo: dolor en la ingle o la cara interna del muslo (aductores)**, en 4 fases desde apretar sin moverte hasta el ejercicio Copenhague y el regreso al deporte. La sección de planes de recuperación ahora se llama **Lesiones** (en Movilidad), y Cuerpo › Músculos tiene un acceso directo: "¿Dolor o una lesión?".
+
 ## v1.1.121 — 2026-11-10
 - Stretches that need gear now say so: the stick stretches (Round the World, Chest and Front of Shoulder) need "Stick or broom", Adductor/Groin needs a partner, On-Your-Back Quad needs a bench and the chair stretches need a chair. They only show up in your sessions when you tick that gear in Mobility.
   Los estiramientos que necesitan algo ya lo dicen: los de palo (Alrededor del mundo, Pecho y hombro frontal) piden "Palo o escoba", Aductores pide un compañero, Cuádriceps boca arriba pide un banco y los de silla piden una silla. Solo salen en tus sesiones cuando marcas ese equipo en Movilidad.

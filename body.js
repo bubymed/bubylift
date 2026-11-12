@@ -185,10 +185,13 @@ function recCta(){
   if(!r.last||!rd.length)return'';
   return'<div class="card rec-cta"><div><b>'+t('recCtaT')+'</b><small>'+rd.slice(0,4).map(g=>t('g_'+g)).join(' · ')+'</small></div><button class="btn pri sm" onclick="recWorkout()">'+t('recCtaB')+'</button></div>';
 }
+/* a way into the rehab plans from the muscle screen, where people look when something hurts / acceso a los planes de rehabilitación desde la pantalla de músculos */
+function rhEntry(){return'<button class="card rhc rh-entry" onclick="rhFromBody()"><span class="rh-em">🩹</span><span class="rhc-t"><b>'+t('rhCardT')+'</b><small>'+t('rhCardS',typeof REHAB!=='undefined'?REHAB.length:0)+'</small></span></button>';}
+function rhFromBody(){STX.sec='rehab';RH.plan=null;go('stretch');window.scrollTo(0,0);}
 function vBody(){
   const today=dInput(Date.now()),last=DATA.body.find(b=>b.w),sg=d=>(d>0?'+':'')+fmtNum(d,1);
   const toU=kg=>imp()?kg*KG_LB:kg;
-  const REC=recCard()+loadCard();
+  const REC=recCard()+loadCard()+rhEntry();
   /* two tabs: Muscles (recovery, load and balance share the body figure) and Weight & measurements (the log lives under the chart)
      dos pestañas: Músculos (recuperación, carga y equilibrio usan la figura) y Peso y medidas (el registro va bajo la gráfica) */
   const bodyTabs=(rec,wt,lg)=>{const c=UI.bt==='wt'||UI.bt==='log'?'wt':'rec';return subBar('bt',[['rec',t('bsMus')],['wt',t('bsWtM')]],c)+subWrap(c==='wt'?wt+lg:rec+balCard());};

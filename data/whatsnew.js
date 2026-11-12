@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.122',items:[
+  {i:'🩹',en:'<b>New recovery plan: inner thigh / groin pain (adductors)</b>, in 4 phases from squeeze isometrics to the Copenhagen exercise and return to sport. The recovery plans section is now called <b>Injuries</b> (in Mobility), and Body › Muscles has a shortcut: "Pain or an injury?".',es:'<b>Plan nuevo: dolor en la ingle o la cara interna del muslo (aductores)</b>, en 4 fases desde apretar sin moverte hasta el ejercicio Copenhague y el regreso al deporte. La sección de planes de recuperación ahora se llama <b>Lesiones</b> (en Movilidad), y Cuerpo › Músculos tiene un acceso directo: "¿Dolor o una lesión?".'}
+ ]},
  {v:'v1.1.121',items:[
   {i:'🧘',en:'Stretches that need gear now say so: the stick stretches (Round the World, Chest and Front of Shoulder) need "Stick or broom", Adductor/Groin needs a partner, On-Your-Back Quad needs a bench and the chair stretches need a chair. They only show up in your sessions when you tick that gear in Mobility.',es:'Los estiramientos que necesitan algo ya lo dicen: los de palo (Alrededor del mundo, Pecho y hombro frontal) piden "Palo o escoba", Aductores pide un compañero, Cuádriceps boca arriba pide un banco y los de silla piden una silla. Solo salen en tus sesiones cuando marcas ese equipo en Movilidad.'}
  ]},

@@ -12,6 +12,8 @@ Object.assign(REHAB_SRC,{
  neck:{t:"Blanpied PR et al. Neck Pain: Revision 2017. Clinical Practice Guidelines. J Orthop Sports Phys Ther 2017;47(7):A1–A83.",u:"https://www.jospt.org/doi/10.2519/jospt.2017.0302"},
  cuff:{t:"Desmeules F et al. Rotator Cuff Tendinopathy Diagnosis, Nonsurgical Medical Care, and Rehabilitation: A Clinical Practice Guideline. J Orthop Sports Phys Ther 2025;55(4):235–274.",u:"https://doi.org/10.2519/jospt.2025.13182"},
  cuffp:{t:"Saint Louis University Sports Medicine. Rotator cuff tendinosis non-operative treatment protocol (three phases: mobility, strengthening, function).",u:"https://slu.edu/medicine/orthopaedic-surgery/-pdf/rotator_cuff_tear_tendinosis_non-operative_treatment_protocol_slu.pdf"},
+ groin:{t:"Mass General Brigham. Rehabilitation protocol for athletic pubalgia, non-operative management (criteria-based phases: pain under 2/10, symmetrical hip motion, Copenhagen adduction progressions, return-to-running and sport criteria).",u:"https://www.massgeneralbrigham.org/content/dam/unified-xwalk/pdf/patient-education/english/rehabilitation-protocol-for-athletic-pubalgia-non-operative-management.pdf"},
+ holmich:{t:"Hölmich P et al. Effectiveness of active physical training as treatment for long-standing adductor-related groin pain in athletes: randomised trial. Lancet 1999;353:439–443.",u:"https://pubmed.ncbi.nlm.nih.gov/9989713/"},
  elbow:{t:"Mass General Brigham. Rehabilitation protocol for medial and lateral epicondylitis (phases, progression and return criteria).",u:"https://www.massgeneralbrigham.org/content/dam/unified-xwalk/pdf/patient-education/english/rehabilitation-protocol-for-medial-lateral-epicondylitis.pdf"}
 });
 
@@ -352,6 +354,74 @@ REHAB.push(
   src:["hams","rx3"]
  },
  {
+  id:"groin",zone:"hip",em:"🦵",
+  name:["Inner thigh / groin pain (adductor strain)","Dolor en la ingle o la cara interna del muslo (aductores)"],
+  sub:["Adductor-related groin pain or a pulled groin","Dolor de aductores o tirón en la ingle"],
+  intro:["Pain on the inside of the thigh or in the groin, often after kicking, sprinting, cutting or a big side step. The best-supported treatment is active training: squeeze work for the inner thigh, hip and trunk strength, then the Copenhagen exercise and a gradual return to running. In a classic trial, 79% of athletes with long-standing groin pain returned to sport with active training, versus 14% with passive treatment.","Dolor en la cara interna del muslo o en la ingle, a menudo después de patear, correr rápido, cambiar de dirección o dar un paso lateral grande. El tratamiento mejor respaldado es el entrenamiento activo: apretar con la cara interna del muslo, fuerza de cadera y tronco, luego el ejercicio Copenhague y un regreso gradual a correr. En un ensayo clásico, el 79% de los atletas con dolor de ingle de larga duración volvió al deporte con entrenamiento activo, contra el 14% con tratamiento pasivo."],
+  evid:["Evidence: a randomised trial for active training in long-standing groin pain, plus a criteria-based hospital protocol. The exact doses are conventional ones.","Evidencia: un ensayo aleatorizado para el entrenamiento activo en el dolor de ingle de larga duración, más un protocolo hospitalario por criterios. Las dosis exactas son las convencionales."],
+  flags:[
+   ["A pop with immediate severe pain, large bruising on the inner thigh, or you cannot walk","Un chasquido con dolor intenso inmediato, un moretón grande en la cara interna del muslo o no puedes caminar"],
+   ["A lump in the groin that grows when you cough or strain (possible hernia)","Un bulto en la ingle que crece al toser o hacer fuerza (posible hernia)"],
+   ["Deep hip pain when you bend the hip and turn it inward, or the hip catches or locks","Dolor profundo en la cadera al doblarla y girarla hacia adentro, o la cadera se traba"],
+   ["Pain in the testicle or lower belly, fever, or pain when you pee","Dolor en el testículo o en el bajo vientre, fiebre o dolor al orinar"],
+   ["Swelling or pain in one calf (possible blood clot)","Hinchazón o dolor en una sola pantorrilla (posible coágulo)"]
+  ],
+  phases:[
+   {
+    n:["Calm it: squeeze isometrics","Calma: apretar sin moverte"],wk:["Weeks 0–2 · daily","Semanas 0–2 · a diario"],
+    goal:["Settle the pain and switch the inner thigh back on without stretching it hard.","Calmar el dolor y volver a activar la cara interna del muslo sin estirarla fuerte."],
+    ex:[
+     {id:"rh_ballsq",sets:5,secs:10,note:["Start gently and build up to a firm squeeze. Pain 2/10 or less.","Empieza suave y sube hasta apretar firme. Dolor de 2/10 o menos."]},
+     {id:"rh_bridgehold",sets:3,secs:20},
+     {id:"rh_sideabd",sets:3,r:12,side:1},
+     {id:"deadbug",sets:3,r:8,side:1},
+     {id:"balsl",sets:3,secs:20,side:1}
+    ],
+    tip:["Avoid kicking, sprinting, wide side steps and deep adductor stretching for now. Walking, bike and pool are fine if they do not hurt.","Evita por ahora patear, correr rápido, pasos laterales amplios y estirar fuerte los aductores. Caminar, bici y alberca están bien si no duelen."],
+    adv:[["Pain 2/10 or less during the exercises","Dolor de 2/10 o menos durante los ejercicios"],["Firm ball squeeze without pain","Apretar fuerte la pelota sin dolor"],["Hip moves the same on both sides","La cadera se mueve igual en los dos lados"]]
+   },
+   {
+    n:["Build strength","Fuerza"],wk:["Weeks 2–6 · 3 days/week","Semanas 2–6 · 3 días por semana"],
+    goal:["Load the inner thigh through more range, add hip and trunk strength, and start easy jogging.","Cargar la cara interna del muslo en más rango, sumar fuerza de cadera y tronco, y empezar a trotar suave."],
+    ex:[
+     {id:"sladd",sets:3,r:12,side:1},
+     {id:"copenhagen",sets:3,secs:15,side:1,note:["Short lever first: top knee on the bench. Move to the foot only when this is easy and pain-free.","Primero palanca corta: la rodilla de arriba sobre el banco. Pasa al pie solo cuando esto sea fácil y sin dolor."]},
+     {id:"gobsq",sets:3,r:10},
+     {id:"rdl",sets:3,r:10},
+     {id:"sideplank",sets:3,secs:25,side:1}
+    ],
+    tip:["Jog only when it is pain-free; increase time before speed.","Trota solo si no duele; aumenta el tiempo antes que la velocidad."],
+    run:1,
+    adv:[["Pain-free jogging","Trotar sin dolor"],["Pain-free strength work","Ejercicios de fuerza sin dolor"],["Hip strength within about 80% of the other side","Fuerza de cadera a un 80% del otro lado, aproximadamente"]]
+   },
+   {
+    n:["Speed and side-to-side","Velocidad y movimientos laterales"],wk:["Weeks 4–10 · 3 days/week","Semanas 4–10 · 3 días por semana"],
+    goal:["Full Copenhagen, lateral lunges and loaded squats, then faster running, side steps and changes of direction.","Copenhague completo, zancadas laterales y sentadillas con peso, luego correr más rápido, pasos laterales y cambios de dirección."],
+    ex:[
+     {id:"copenhagen",sets:3,r:8,side:1,note:["Long lever: top foot on the bench, lift and lower with control.","Palanca larga: el pie de arriba sobre el banco, sube y baja con control."]},
+     {id:"latlunge",sets:3,r:8,side:1},
+     {id:"sumosq",sets:3,r:10},
+     {id:"splitsq",sets:3,r:10,side:1},
+     {id:"pallof",sets:3,r:10,side:1}
+    ],
+    tip:["Add shuffles, zig-zags and accelerations at 60%, then 80%, then full speed, all pain-free.","Añade desplazamientos laterales, zigzag y aceleraciones al 60%, luego al 80% y luego a toda velocidad, todo sin dolor."],
+    adv:[["10 Copenhagen reps per side without pain","10 repeticiones de Copenhague por lado sin dolor"],["Sprints and changes of direction at full speed without pain","Sprints y cambios de dirección a toda velocidad sin dolor"],["Hip strength within about 90% of the other side","Fuerza de cadera a un 90% del otro lado, aproximadamente"]]
+   },
+   {
+    n:["Return to sport","Regreso al deporte"],wk:["Weeks 6+ · gradual","Semanas 6+ · gradual"],
+    goal:["Sport drills, kicking and cutting at full speed; keep the Copenhagen work going to prevent it coming back.","Ejercicios del deporte, patear y cambiar de dirección a toda velocidad; sigue con el Copenhague para que no regrese."],
+    ex:[
+     {id:"copenhagen",sets:2,r:10,side:1},
+     {id:"latlunge",sets:3,r:10,side:1},
+     {id:"z_lateral_cone_hops",sets:3,r:8}
+    ],
+    tip:["Non-contact practice first, then full practice, then games. Keep 1–2 Copenhagen sessions a week.","Primero práctica sin contacto, luego práctica completa y luego partidos. Mantén 1–2 sesiones de Copenhague por semana."],
+    adv:[]
+   }
+  ],
+  src:["groin","holmich"]
+ },
+ {
   id:"lowback",zone:"spine",em:"🦴",
   name:["Low back pain","Dolor de espalda baja"],
   sub:["Non-specific low back pain","Dolor lumbar inespecífico"],
@@ -656,7 +726,8 @@ REHAB_EX.push(
  ["rh_wristcurl","Wrist Flexion Curl","Curl de muñeca (flexión)","biceps","dumbbell","wr"],
  ["rh_pronsup","Forearm Rotation (hammer)","Rotación de antebrazo (martillo)","biceps","dumbbell","wr"],
  ["rh_wriststretch","Wrist Extensor Stretch","Estiramiento de extensores de muñeca","mobility","bodyweight","t"],
- ["rh_gripsq","Towel Grip Squeeze","Apretar una toalla enrollada","biceps","bodyweight","bw"]
+ ["rh_gripsq","Towel Grip Squeeze","Apretar una toalla enrollada","biceps","bodyweight","bw"],
+ ["rh_ballsq","Adductor Ball Squeeze","Apretar una pelota con las rodillas (aductores)","legs","bodyweight","t"]
 );
 Object.assign(REHAB_HOW,{
  rh_isocalf:["Stand on one foot next to a wall, hands on it for balance.|Rise onto the ball of the foot about 5–7 cm, knee straight, and hold that position.|Hold for the time shown, then lower slowly. Rest 2 minutes between holds.","De pie sobre un pie junto a una pared, con las manos apoyadas para el equilibrio.|Sube sobre la punta del pie unos 5–7 cm, con la rodilla recta, y sostén esa posición.|Sostén el tiempo indicado y baja despacio. Descansa 2 minutos entre sostenidos.","Letting the heel drop or bending the knee.","Dejar caer el talón o doblar la rodilla."],
@@ -690,6 +761,7 @@ Object.assign(REHAB_HOW,{
  rh_wristcurl:["Rest the forearm on a table, palm up, wrist off the edge, holding a light dumbbell.|Curl the wrist up, then lower slowly.|Keep the forearm still on the table.","Apoya el antebrazo en una mesa, palma hacia arriba y la muñeca fuera del borde, con una mancuerna ligera.|Flexiona la muñeca hacia arriba y baja despacio.|Mantén el antebrazo quieto sobre la mesa.","Lifting the forearm off the table.","Levantar el antebrazo de la mesa."],
  rh_pronsup:["Hold a hammer or a light dumbbell by one end with the elbow bent 90° at your side.|Slowly rotate the forearm so the palm faces up, then down.|Keep the elbow tucked and move in a controlled way.","Sostén un martillo o una mancuerna ligera por un extremo con el codo doblado 90° a tu costado.|Gira el antebrazo despacio para que la palma mire hacia arriba y luego hacia abajo.|Mantén el codo pegado y muévete con control.","Swinging the elbow away from the body.","Balancear el codo lejos del cuerpo."],
  rh_wriststretch:["Hold the arm in front of you, palm down, and bend the wrist so the fingers point to the floor.|With the other hand, gently pull the hand toward you until you feel a stretch on top of the forearm.|Hold the time shown. Start with the elbow bent 90°, later the elbow straight.","Sostén el brazo frente a ti con la palma hacia abajo y dobla la muñeca para que los dedos apunten al piso.|Con la otra mano, jala suavemente la mano hacia ti hasta sentir un estiramiento en la parte superior del antebrazo.|Sostén el tiempo indicado. Empieza con el codo doblado 90° y luego con el codo estirado.","Pulling into sharp pain.","Jalar hasta sentir dolor punzante."],
+ rh_ballsq:["Lie on your back with knees bent and feet flat. Put a ball, rolled towel or pillow between your knees.|Squeeze the knees together, no movement, and keep breathing.|Hold the time shown, then relax fully between reps.","Acuéstate boca arriba con las rodillas dobladas y los pies apoyados. Pon una pelota, toalla enrollada o almohada entre las rodillas.|Aprieta las rodillas hacia adentro sin moverte y sigue respirando.|Sostén el tiempo indicado y relaja por completo entre repeticiones.","Squeezing into sharp groin pain or holding your breath.","Apretar hasta sentir dolor punzante en la ingle o aguantar la respiración."],
  rh_gripsq:["Roll a small towel or use a soft ball.|Squeeze gently for about 5 seconds, then release.|Keep the wrist straight.","Enrolla una toalla pequeña o usa una pelota blanda.|Aprieta con suavidad unos 5 segundos y suelta.|Mantén la muñeca recta.","Squeezing hard enough to hurt the elbow.","Apretar tan fuerte que duela el codo."]
 });
 (function(){REHAB_EX.forEach(function(a){if(!EXLIB.some(function(b){return b[0]===a[0];}))EXLIB.push(a);});for(const k in REHAB_HOW)if(!HOWTO[k])HOWTO[k]=REHAB_HOW[k];})();

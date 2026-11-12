@@ -1075,7 +1075,8 @@ const EXTAX={
  rh_wristcurl:"rehab|I|O|S|rh||free|up|",
  rh_pronsup:"rehab|I|O|T|rh||free|up|",
  rh_wriststretch:"rehab|I|S|S|rh||body|up|",
- rh_gripsq:"rehab|I|O|S|rh||body|up|"
+ rh_gripsq:"rehab|I|O|S|rh||body|up|",
+ rh_ballsq:"rehab|I|S|F|rh||body|lo|"
 };
 const EXEQ={
  bench:"barbell plates bench|wraps|rack|spotter",
@@ -2130,7 +2131,8 @@ const EXEQ={
  rh_wristcurl:"dumbbells|||",
  rh_pronsup:"dumbbells|||",
  rh_wriststretch:"none|mat||",
- rh_gripsq:"none|||"
+ rh_gripsq:"none|||",
+ rh_ballsq:"none|||"
 };
 const EXALI={
  bench:"Flat bench press;Press de banca;Press de pecho plano",
