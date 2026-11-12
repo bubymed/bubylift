@@ -243,6 +243,7 @@ def taxonomy(r):
     return '|'.join((fam, mech, force, plane, pos, ang, eqc, region, flags))
 
 # ---------------------------------------------------------------- equipment needed / support / assistance / equipo
+NEED_JS = dict(re.findall(r"(\w+):'(\w+)'", open(os.path.join(ROOT, 'data', 'exmeta.js'), encoding='utf-8').read().split('const NEED={')[1].split('}')[0]))
 def equipment(r):
     n = r['en'].lower(); pat = r['pat']; eq = r['eq']
     need, opt, sup, ast = [], [], [], []
@@ -283,6 +284,8 @@ def equipment(r):
         if re.search(r'pulldown|pushdown|curl|crunch|kickback|extension', n): add(need, 'handle')
         if re.search(r'tricep|pushdown', n): add(opt, 'rope')
         if re.search(r'face pull', n): add(need, 'rope')
+    xn = NEED_JS.get(r['id'])                                  # hand-listed extra need from data/exmeta.js NEED / necesidad extra listada a mano
+    if xn: add(need, {'bar': 'pullbar', 'machine': 'assistmachine'}.get(xn, xn))
     for l in (opt, sup, ast): l[:] = [x for x in l if x not in need]
     for l in (sup, ast): l[:] = [x for x in l if x not in opt]
     if not need and eq == 'bodyweight': need = ['none']

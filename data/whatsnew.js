@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.121',items:[
+  {i:'🧘',en:'Stretches that need gear now say so: the stick stretches (Round the World, Chest and Front of Shoulder) need "Stick or broom", Adductor/Groin needs a partner, On-Your-Back Quad needs a bench and the chair stretches need a chair. They only show up in your sessions when you tick that gear in Mobility.',es:'Los estiramientos que necesitan algo ya lo dicen: los de palo (Alrededor del mundo, Pecho y hombro frontal) piden "Palo o escoba", Aductores pide un compañero, Cuádriceps boca arriba pide un banco y los de silla piden una silla. Solo salen en tus sesiones cuando marcas ese equipo en Movilidad.'}
+ ]},
  {v:'v1.1.120',items:[
   {i:'🗂️',en:'<b>Tidier layout</b>: Body now has two tabs, Muscles (recovery, training load and muscle balance, all on the body figure) and Weight & measurements (your log sits under the chart). The Rank tab only shows ranks; the consistency level moved to Summary next to your streak; the 1RM calculator is under Tools at the end of Exercises. Big volume totals no longer wrap.',es:'<b>Todo en su lugar</b>: Cuerpo ahora tiene dos pestañas, Músculos (recuperación, carga y equilibrio muscular, todo en la figura) y Peso y medidas (tu registro va bajo la gráfica). Rango solo muestra rangos; el nivel de constancia pasó a Resumen junto a tu racha; la calculadora de máximo está en Herramientas al final de Ejercicios. Los totales de volumen grandes ya no se parten.'}
  ]},
