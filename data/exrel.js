@@ -1045,7 +1045,7 @@ const EXREL={
  rh_declinesq:"rehab knee|B|3|splitsq latstep sldl||rh_stepdown legpress z_chair_squat|balhop z_single_leg_hop_progression z_lateral_cone_hops|",
  rh_isoabd:"rehab hip|B|1|rh_sideabd glutebr balsl|||bandwalk slbridge bwstepup|",
  rh_hamiso:"rehab hip|B|1|rh_bridgehold plank sideplank|||rh_slidercurl rh_bridgewalk slbridge|",
- rh_bridgehold:"rehab hip|B|1|rh_hamiso plank sideplank|||rh_slidercurl rh_bridgewalk slbridge|",
+ rh_bridgehold:"rehab hip|B|1|rh_hamiso rh_ballsq rh_sideabd|||rh_slidercurl rh_bridgewalk slbridge|",
  rh_bridgewalk:"rehab hip|B|2|rh_slidercurl slbridge bwstepup||rh_hamiso rh_bridgehold plank|rh_nordic sldl splitsq|",
  rh_slidercurl:"rehab hip|B|2|rh_bridgewalk slbridge bwstepup||rh_hamiso rh_bridgehold plank|rh_nordic sldl splitsq|",
  rh_nordic:"rehab hip|B|3|sldl splitsq||rh_slidercurl rh_bridgewalk slbridge|z_hurdle_hops z_side_hop_sprint z_lateral_cone_hops|",
@@ -1070,5 +1070,6 @@ const EXREL={
  rh_wristcurl:"rehab arm|B|3|rh_eccwrist rh_pronsup rh_bandrow||rh_wriststretch rh_wallangel||",
  rh_pronsup:"rehab arm|B|3|rh_eccwrist rh_wristcurl rh_bandrow||rh_wriststretch rh_wallangel||",
  rh_wriststretch:"rehab arm|B|2|rh_wallangel||rh_wristisoext rh_scapsqueeze rh_gripsq|rh_eccwrist rh_wristcurl rh_pronsup|",
- rh_gripsq:"rehab arm|B|1|rh_wristisoext rh_scapsqueeze|||rh_wriststretch rh_wallangel|"
+ rh_gripsq:"rehab arm|B|1|rh_wristisoext rh_scapsqueeze|||rh_wriststretch rh_wallangel|",
+ rh_ballsq:"rehab hip|B|1|rh_bridgehold rh_sideabd deadbug|||sladd copenhagen gobsq|"
 };
