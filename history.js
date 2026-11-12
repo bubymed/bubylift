@@ -275,6 +275,8 @@ function openProg(eid){UI.prog=eid;UI.pm=METRICS[exMode(eid)][0][0];render();win
 function setPm(k){UI.pm=k;render();}
 function closeProg(){UI.prog=null;render();window.scrollTo(0,0);}
 
+/* big totals fit their box: 1,151,805 -> 1.15 M, 245,300 -> 245 k / los totales grandes caben en su caja */
+function vShort(kg){const x=imp()?kg*KG_LB:kg,n=v=>{try{return v.toLocaleString(loc(),{maximumFractionDigits:2});}catch(e){return String(v);}};return x>=1e6?n(Math.round(x/1e4)/100)+' M':x>=1e5?n(Math.round(x/1e3))+' k':vShow(kg);}
 function vProgress(){
   if(!DATA.workouts.length)return goalsCard()+strCard()+bwCard()+emptyState('chart-bar',t('emptyProgT'),t('emptyProgP'),t('emStart'),"go('workout')");
   if(UI.prog)return vExProg(UI.prog);
@@ -282,15 +284,16 @@ function vProgress(){
   for(let i=7;i>=0;i--){const a=wkOff(ws,-i),b=wkOff(ws,1-i);vals.push(DATA.workouts.filter(w=>w.t>=a&&w.t<b).length);labels.push(dFmt(a,{month:'numeric',day:'numeric'}));}
   let vol=0,sets=0;DATA.workouts.forEach(w=>{vol+=wkVol(w);sets+=wkSets(w);});
   const pt=UI.pt||'sum';
-  let h=streakCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+vShow(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
+  let h=streakCard()+xpCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+vShort(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
   h+='<div class="card"><b>'+t('perWeek')+'</b>'+barSvg(vals,labels)+'</div>';
-  const rk=strCard()+bwCard()+xpCard()+balCard();
-  let ex=featCharts()+rmCalc()+'<div class="sec"><h2>'+t('exercises')+'</h2></div><div class="lgrp">';
+  const rk=strCard()+bwCard(); // consistency level moved to Summary, muscle balance to Body > Muscles / constancia a Resumen, equilibrio a Cuerpo > Músculos
+  let ex=featCharts()+'<div class="sec"><h2>'+t('exercises')+'</h2></div><div class="lgrp">';
   loggedEx().forEach(o=>{
     const m=exMode(o.eid),b=bestSet(o.eid);
     ex+='<button class="lrow" onclick="openProg(\''+o.eid+'\')">'+(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(o.eid)?photoTh(o.eid):'<span class="li">'+ic('barbell')+'</span>')+'<span class="lt2"><b>'+esc(exName(o.eid,o.n))+'</b><small>'+t('sessions',o.cnt)+(b?' · '+t(m==='t'?'longest':'best')+': '+esc(fmtSet(m,b)):'')+'</small></span><span class="lc">›</span></button>';
   });
   ex+='</div>';
+  ex+='<details class="dtl tools"><summary>'+t('toolsT')+'</summary>'+rmCalc()+'</details>'; // calculators folded at the end / calculadoras plegadas al final
   return subBar('pt',[['sum',t('psOv')],['rank',t('psRank')],['ex',t('psEx')]],pt)+subWrap(pt==='rank'?rk:(pt==='ex'?ex:h));
 }
 /* Top lifts with a chart right on the Progress home / las ejercicios principales con gráfica en Progreso */

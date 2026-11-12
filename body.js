@@ -189,7 +189,9 @@ function vBody(){
   const today=dInput(Date.now()),last=DATA.body.find(b=>b.w),sg=d=>(d>0?'+':'')+fmtNum(d,1);
   const toU=kg=>imp()?kg*KG_LB:kg;
   const REC=recCard()+loadCard();
-  const bodyTabs=(rec,wt,lg)=>{const c=UI.bt||'rec';return subBar('bt',[['rec',t('bsRec')],['wt',t('bsWt')],['log',t('bsLog')]],c)+subWrap(c==='wt'?wt:(c==='log'?lg:rec));};
+  /* two tabs: Muscles (recovery, load and balance share the body figure) and Weight & measurements (the log lives under the chart)
+     dos pestañas: Músculos (recuperación, carga y equilibrio usan la figura) y Peso y medidas (el registro va bajo la gráfica) */
+  const bodyTabs=(rec,wt,lg)=>{const c=UI.bt==='wt'||UI.bt==='log'?'wt':'rec';return subBar('bt',[['rec',t('bsMus')],['wt',t('bsWtM')]],c)+subWrap(c==='wt'?wt+lg:rec+balCard());};
   let h='<div class="card form bwhero"><div class="lbl c">'+t('bwTitle')+'</div>'+
     '<div class="bw-row"><button class="bw-st" aria-label="'+esc(t('bwMinus'))+'" onclick="bwStep(-0.1)">−</button>'+
     '<span class="bw-f"><input id="bw" class="bw-in" type="text" inputmode="decimal" autocomplete="off" placeholder="'+esc(last?wShow(last.w):'0.0')+'"><b class="bw-u">'+wUnit()+'</b></span>'+
@@ -201,7 +203,7 @@ function vBody(){
     '<label>'+t('bodyFat')+' (%)<input id="bf" class="in wide" type="text" inputmode="decimal" autocomplete="off"></label>'+
     '<div class="lbl">'+t('measure')+' ('+lUnit()+')</div><div class="two">'+MEAS.map(k=>'<label>'+t('me_'+k)+'<input id="bm_'+k+'" class="in wide" type="text" inputmode="decimal" autocomplete="off"></label>').join('')+'</div>'+
     '<label>'+t('note')+'<input id="bn" class="in wide" type="text" maxlength="120"></label></details></div>';
-  if(!DATA.body.length){const tip='<div class="card tip"><b>'+t('emptyBodyT')+'</b><p>'+t('emptyBodyP')+'</p></div>';return bodyTabs(REC,h+tip,tip);}
+  if(!DATA.body.length){const tip='<div class="card tip"><b>'+t('emptyBodyT')+'</b><p>'+t('emptyBodyP')+'</p></div>';return bodyTabs(REC,h+tip,'');}
 
   const ws=DATA.body.filter(b=>b.w>0).slice().reverse();
   if(ws.length){

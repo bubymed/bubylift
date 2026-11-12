@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.120',items:[
+  {i:'🗂️',en:'<b>Tidier layout</b>: Body now has two tabs, Muscles (recovery, training load and muscle balance, all on the body figure) and Weight & measurements (your log sits under the chart). The Rank tab only shows ranks; the consistency level moved to Summary next to your streak; the 1RM calculator is under Tools at the end of Exercises. Big volume totals no longer wrap.',es:'<b>Todo en su lugar</b>: Cuerpo ahora tiene dos pestañas, Músculos (recuperación, carga y equilibrio muscular, todo en la figura) y Peso y medidas (tu registro va bajo la gráfica). Rango solo muestra rangos; el nivel de constancia pasó a Resumen junto a tu racha; la calculadora de máximo está en Herramientas al final de Ejercicios. Los totales de volumen grandes ya no se parten.'}
+ ]},
  {v:'v1.1.119',items:[
   {i:'\ud83e\ude79',en:'Rehab moves now have their own details in the guide: body area, difficulty, equipment, and easier and harder steps taken from the phases of their rehab plan.',es:'Los ejercicios de rehabilitaci\\u00f3n ahora tienen sus detalles en la gu\\u00eda: zona del cuerpo, dificultad, equipo, y pasos m\\u00e1s f\\u00e1ciles y m\\u00e1s dif\\u00edciles seg\\u00fan las fases de su plan de rehabilitaci\\u00f3n.'}
  ]},
