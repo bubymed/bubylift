@@ -45,7 +45,7 @@ const EXM={
 };
 /* Things an exercise needs besides its main equipment: 'bench' (bench or sturdy box) or 'bar' (pull-up / dip bar).
    Cosas extra que necesita un ejercicio además de su equipo principal: 'bench' (banco o cajón firme) o 'bar' (barra de dominadas / paralelas). */
-const NEED={pullup:'bar',chinup:'bar',assistpu:'machine',legraise:'bar',kneeup:'bar',dip:'bar',invrow:'bar',
+const NEED={z_chest_and_front_of_shoulder_stretc:'stick',z_round_the_world_shoulder_stretch:'stick',z_adductor_groin:'partner',z_on_your_back_quad_stretch:'bench',z_chair_leg_extended_stretch:'chair',z_chair_lower_back_stretch:'chair',z_chair_upper_body_stretch:'chair',pullup:'bar',chinup:'bar',assistpu:'machine',legraise:'bar',kneeup:'bar',dip:'bar',invrow:'bar',
  bench:'bench',incbench:'bench',declbench:'bench',dbbench:'bench',dbinc:'bench',decldb:'bench',cgbp:'bench',skull:'bench',lyingext:'bench',benchdip:'bench',hipthrust:'bench',
  bulgsplit:'bench',stepup:'bench',latstep:'bench',bwstepup:'bench',boxjump:'bench',boxdrop:'bench',powerstep:'bench',balstepup:'bench',inccurl:'bench',concurl:'bench',seatpress:'bench',seatdbcurl:'bench',pullover:'bench',preacher:'machine',sledpush:'sled',abwheel:'wheel',balfoam:'pad',balbosu:'pad',ammolift:'pack',sandlunge:'pack',decpush:'bench',sleddrag:'sled',dbfly:'bench',ballpress:'ball'};
 /* Equipment the person can say they have. / Equipo que la persona puede decir que tiene. */
