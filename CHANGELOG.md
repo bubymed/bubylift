@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.120 — 2026-11-10
+- **Tidier layout**: Body now has two tabs, Muscles (recovery, training load and muscle balance, all on the body figure) and Weight & measurements (your log sits under the chart). The Rank tab only shows ranks; the consistency level moved to Summary next to your streak; the 1RM calculator is under Tools at the end of Exercises. Big volume totals no longer wrap.
+  **Todo en su lugar**: Cuerpo ahora tiene dos pestañas, Músculos (recuperación, carga y equilibrio muscular, todo en la figura) y Peso y medidas (tu registro va bajo la gráfica). Rango solo muestra rangos; el nivel de constancia pasó a Resumen junto a tu racha; la calculadora de máximo está en Herramientas al final de Ejercicios. Los totales de volumen grandes ya no se parten.
+
 ## v1.1.119 — 2026-11-10
 - Rehab moves now have their own details in the guide: body area, difficulty, equipment, and easier and harder steps taken from the phases of their rehab plan.
   Los ejercicios de rehabilitaci\u00f3n ahora tienen sus detalles en la gu\u00eda: zona del cuerpo, dificultad, equipo, y pasos m\u00e1s f\u00e1ciles y m\u00e1s dif\u00edciles seg\u00fan las fases de su plan de rehabilitaci\u00f3n.
