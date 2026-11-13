@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.124 — 2026-11-13
+- History one tap away: an \u201cAll history\u201d button under your last workout, and the Progress tab reopens on the side you used last.
+  El historial a un toque: bot\u00f3n \u201cTodo el historial\u201d bajo tu \u00faltimo entrenamiento, y la pesta\u00f1a Progreso abre en el lado que usaste por \u00faltima vez.
+
 ## v1.1.123 — 2026-11-13
 - Cleaner home: one start block on top (train, repeat last, your routines); the plan promo only shows to newcomers and can be dismissed; the guest banner shows once.
   Inicio más limpio: un solo bloque arriba para empezar (entrenar, repetir el último, tus rutinas); la promo del plan solo sale a quien empieza y se puede quitar; el aviso de invitado sale una sola vez.

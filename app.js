@@ -5,11 +5,11 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.123';
+const APP_VER='v1.1.124';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
-const UI={ps:'prog',q:'',g:'',prog:null,pm:'',pickCb:null,rb:null};
+const UI={ps:'',q:'',g:'',prog:null,pm:'',pickCb:null,rb:null};
 
 /* ---------- helpers ---------- */
 const $=id=>document.getElementById(id);
@@ -147,7 +147,8 @@ function renderTabs(){
   const cur=tab;const g=$('moreBtn');if(g){g.innerHTML=ic('settings');g.classList.toggle('on',tab==='more');g.setAttribute('aria-label',t('tMore'));}
   $('tabbar').innerHTML=TAB_KEYS.filter(a=>a[0]!=='more').map(a=>'<button class="'+(cur===a[0]?'on':'')+'" onclick="go(\''+a[0]+'\')"'+(cur===a[0]?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+TAB_ICONS[a[0]]+'</svg><span>'+t(a[1])+'</span></button>').join('');
 }
-function go(x){if(x==='history'){x='progress';UI.ps='hist';}else if(x==='progress')UI.ps='prog';tab=x;UI.prog=null;renderTabs();render();window.scrollTo(0,0);pgAnim();}
+function go(x){if(x==='history'){x='progress';UI.ps='hist';}else if(x==='progress')UI.ps=SET.ps||'prog'; // the Progress tab reopens on the side you picked last (History or Progress) / Progreso abre en el lado que elegiste por última vez
+tab=x;UI.prog=null;renderTabs();render();window.scrollTo(0,0);pgAnim();}
 function pgAnim(){const m=$('main');if(!m)return;m.classList.remove('pgin');void m.offsetWidth;m.classList.add('pgin');}
 /* the big orange card stays reachable: when it scrolls away a slim copy (title + main button) pins under the top bar / la tarjeta naranja sigue a mano: al salir de pantalla queda una versión delgada */
 function skAttr(e,ti,l,f){return' data-sk-e="'+esc(e)+'" data-sk-t="'+esc(ti)+'" data-sk-l="'+esc(l)+'" data-sk-f="'+esc(f)+'"';}

@@ -244,7 +244,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   const eqRes=JSON.parse(ev("JSON.stringify((function(){const K="+JSON.stringify(EQK)+",r={};LIB_EQ.forEach(a=>{r[a]=[0,2,4].map(k=>libFocus(a,k,K[a]).length)});return r})())"));
   console.log('   (info) eq routine sizes',JSON.stringify(eqRes));
   ok(Object.keys(eqRes).length===9&&Object.keys(eqRes).every(a=>eqRes[a].every(n=>n>=4)),'each equipment area gives 4+ exercises at every level');
-  w.go('history');ok(ev("tab")==='progress'&&/class=\"seg\"/.test(main())&&/psSet/.test(main()),'history opens inside Progress with a switch');w.go('progress');ok(ev("UI.ps")==='prog','Progress tab shows the charts side');
+  w.go('history');ok(ev("tab")==='progress'&&/class=\"seg\"/.test(main())&&/psSet/.test(main()),'history opens inside Progress with a switch');w.go('progress');ok(ev("UI.ps")==='prog','Progress tab shows the charts side');w.psSet('hist');w.go('workout');w.go('progress');ok(ev("UI.ps")==='hist','Progress tab remembers you picked History');w.psSet('prog');ok(/seeAllH|go\('history'\)/.test(ev("vStart()"))||!ev("DATA.workouts.length"),'home links to all history');
   w.go('stretch');ok(/Quick sessions|Stretching and mobility on their own/.test(main())&&ev("document.querySelectorAll('#tabbar button').length")===4,'stretch screen renders and the bar has 4 tabs');
   ok(ev("[5,10,15].every(m=>['full','lower','upper','back','warm','cool'].every(k=>strItems(k,m).length>=4))"),'every stretch session has 4+ moves');
   ok(ev("STRETCH_AREAS.every(a=>STRETCH_BY[a].length>=5)")&&ev("STRETCH_AREAS.reduce((n,a)=>n+STRETCH_BY[a].length,0)")===132,'stretch areas hold all 132 mobility moves');

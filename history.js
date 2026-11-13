@@ -337,10 +337,10 @@ function vExProg(eid){
 }
 
 /* v0.99.10: History lives inside Progress as a segmented control / el Historial vive dentro de Progreso */
-function psSet(k){UI.ps=k;UI.prog=null;render();}
+function psSet(k){UI.ps=k;SET.ps=k;saveSet();UI.prog=null;render();}
 function vProgTab(){
   if(UI.prog||!DATA.workouts.length)return vProgress();
-  const h=UI.ps==='hist';
+  if(!UI.ps)UI.ps=SET.ps||'prog';const h=UI.ps==='hist';
   return'<div class="seg"><button class="'+(h?'':'on')+'" onclick="psSet(\'prog\')">'+ic('chart-bar')+' '+t('tProgress')+'</button><button class="'+(h?'on':'')+'" onclick="psSet(\'hist\')">'+ic('calendar')+' '+t('tHistory')+'</button></div>'+(h?vHistory():vProgress());
 }
 
