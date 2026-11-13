@@ -988,3 +988,10 @@ button,.btn,.chip,.chk,.stp,#tabbar{-webkit-user-select:none;user-select:none;-w
 .hst-rt .btn{background:rgba(0,0,0,.18);color:#fff;border:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card.hero .xdel{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.18);color:#fff}
 .card.hero{position:relative}
+/* extra exercise tips, folded / consejos extra plegados */
+.hmore{margin:2px 0 6px}
+.hmore>summary{cursor:pointer;list-style:none;font-size:.82rem;color:var(--muted);padding:4px 0}
+.hmore>summary::-webkit-details-marker{display:none}
+.hmore>summary::before{content:'▸ '}
+.hmore[open]>summary::before{content:'▾ '}
+.barln .lnk-d{white-space:normal;text-align:left;max-width:100%;height:auto;line-height:1.3}

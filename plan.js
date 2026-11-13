@@ -449,34 +449,32 @@ function startLine(x,reps){
   const rg=firstRange(x.eid,reps);
   return'<br><span class="sg">'+esc(rg?t('sgStart',wShow(rg[0])+'–'+wShow(rg[1])+' '+wUnit()):t('sgStartGen'))+'</span>';
 }
-function suggLine(x){
-  const L=curInjL(),bd=injBadge(x.eid);
-  let h='';
-  if(x.tg){
-    const s=sugg(x.eid,x.tg);
-    h='<div class="goalln">'+((x.tg.lo||x.tg.hi)?'<b>'+t('target')+':</b> '+esc(tgText({sets:x.sets.length,lo:x.tg.lo,hi:x.tg.hi,u:x.tg.u})):'');
-    if(s)h+='<br><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span>';
-    if(s&&s.r)h+='<br><span class="sg">'+esc(t('sgReps',s.r))+'</span>'+(s.key==='sgFirst'?startLine(x,s.r):'');
-    if(typeof x.tg.ln==='string'&&x.tg.ln)h+='<br><span class="sg">'+esc(x.tg.ln.slice(0,200))+'</span>';
-    if(x.tg.nt&&NT_KEYS.indexOf(x.tg.nt)>=0)h+='<br><span class="muted">'+esc(t(x.tg.nt))+'</span>';
-    if(x.tg.tp){const ss=x.tg.ss?optSsLabelAct(x):'';h+='<br><span class="muted">'+(ss?'<i class="ssl">'+ss+'</i> ':'')+esc(optLine(x.tg))+'</span>'+(ss?'<br><span class="muted">'+esc(t('ssHint'))+'</span>':'');}
-    h+='</div>';
-  }
-  // your own workouts get a suggestion too (a normal 6-12 range) / tus propios entrenamientos también reciben sugerencia
-  if(!x.tg&&(typeof ACT!=='undefined'&&ACT)){
-    const s=sugg(x.eid,{lo:6,hi:12,u:'r'});
-    if(s&&s.key!=='sgFirst'&&s.key!=='sgFirstBw')h='<div class="goalln"><span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span>'+(s.r?'<br><span class="sg">'+esc(t('sgReps',s.r))+'</span>':'')+'</div>';
-    else if(s&&s.r)h='<div class="goalln"><span class="sg">'+esc(t('sgReps',s.r))+'</span>'+(s.key==='sgFirst'?startLine(x,s.r):'')+'</div>';
-  }
+/* exercise card tips: the most important one shows, the rest open with a tap (priority: injury, progression, plateau, weight to use, coach note, reps, target, sides)
+   consejos de la tarjeta: se ve el más importante y el resto al tocar */
+function suggLine(x,rn){
+  const L=curInjL(),P=[],ln=(h,c)=>'<div class="goalln'+(c?' '+c:'')+'">'+h+'</div>';
   const si=typeof ACT!=='undefined'&&ACT?ACT.ex.indexOf(x):-1;
+  if(L&&stressLvl(x.eid,L))P.push([0,ln('⚠ '+esc(t(stressLvl(x.eid,L)>=2?'injNo':'injCare',jointNames(stressJoints(x.eid,L,1)))),'warnln')]);
+  if(si>=0){const pl=progLine(x,si);if(pl)P.push([1,pl]);}
+  if(si>=0&&!x.sets.some(q=>q.done)){const sl=stallLine(x);if(sl)P.push([2,sl]);}
+  let sg='';
+  const tg=x.tg,s=tg?sugg(x.eid,tg):(si>=0?sugg(x.eid,{lo:6,hi:12,u:'r'}):null);
+  if(s&&(tg||(s.key!=='sgFirst'&&s.key!=='sgFirstBw')))sg='<span class="sg">'+esc(t(s.key,s.w!=null?wShow(s.w)+' '+wUnit():''))+'</span>';
   if(si>=0&&exMode(x.eid)==='wr'&&x.sets.some(q=>!q.done&&q.w==null)){
-    const s2=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});
-    if(s2&&s2.w!=null)h+='<button class="btn sm sgbtn" onclick="useSugg('+si+')">'+esc(t('sgUse',wShow(s2.w)+' '+wUnit()))+'</button>';
+    const s2=sugg(x.eid,tg||{lo:6,hi:12,u:'r'});
+    if(s2&&s2.w!=null)sg+=(sg?'<br>':'')+'<button class="btn sm sgbtn" onclick="useSugg('+si+')">'+esc(t('sgUse',wShow(s2.w)+' '+wUnit()))+'</button>';
   }
-  if(si>=0)h+=progLine(x,si);
-  if(si>=0&&!x.sets.some(q=>q.done))h+=stallLine(x);
-  if(L&&stressLvl(x.eid,L))h+='<div class="goalln warnln">⚠ '+esc(t(stressLvl(x.eid,L)>=2?'injNo':'injCare',jointNames(stressJoints(x.eid,L,1))))+'</div>';
-  return h;
+  if(sg)P.push([3,ln(sg)]);
+  if(tg&&typeof tg.ln==='string'&&tg.ln)P.push([4,ln('<span class="sg">'+esc(tg.ln.slice(0,200))+'</span>')]);
+  if(s&&s.r)P.push([5,ln('<span class="sg">'+esc(t('sgReps',s.r))+'</span>'+(s.key==='sgFirst'?startLine(x,s.r):''))]);
+  if(tg&&(tg.lo||tg.hi))P.push([6,ln('<b>'+t('target')+':</b> '+esc(tgText({sets:x.sets.length,lo:tg.lo,hi:tg.hi,u:tg.u})))]);
+  if(tg&&tg.nt&&NT_KEYS.indexOf(tg.nt)>=0)P.push([7,ln('<span class="muted">'+esc(t(tg.nt))+'</span>')]);
+  if(tg&&tg.tp){const ss=tg.ss?optSsLabelAct(x):'';P.push([ss?2.5:7,ln('<span class="muted">'+(ss?'<i class="ssl">'+ss+'</i> ':'')+esc(optLine(tg))+'</span>'+(ss?'<br><span class="muted">'+esc(t('ssHint'))+'</span>':''))]);}
+  if(rn)P.push([8,'<p class="muted sm rn">'+esc(t(rn))+'</p>']);
+  if(!P.length)return'';
+  P.sort((a,b)=>a[0]-b[0]);
+  const top=P.filter(p=>p[0]===0).concat(P.filter(p=>p[0]!==0).slice(0,1)),rest=P.filter(p=>top.indexOf(p)<0); // a safety warning never hides the next line / un aviso de seguridad no oculta la siguiente línea
+  return top.map(p=>p[1]).join('')+(rest.length?'<details class="hmore"><summary>'+t(rest.length===1?'tip1':'tipsN',rest.length)+'</summary>'+rest.map(p=>p[1]).join('')+'</details>':'');
 }
 
 /* bodyweight moves: when every set hit the top of the range twice in a row, offer the next harder version from its progression;
