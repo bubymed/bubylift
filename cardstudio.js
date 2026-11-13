@@ -1,6 +1,7 @@
 /* Share studio (v95): transparent workout cards in 7 styles — put them over any photo or story, or add a photo here.
    Estudio de tarjetas (v95): tarjetas con fondo transparente en 7 estilos — ponlas sobre cualquier foto o historia, o agrega una foto aquí. */
 const CS_STYLES=['giant','vert','row','dots','classic','stack','poster','chips','lifts','badge','bar','pr','fun','duo','body','bone','bpill'];
+const CS_PICK=['giant','classic','lifts','pr','fun','body']; // the picker shows the ones that really differ; older styles still draw if they were saved / el selector muestra los que de verdad son distintos
 const CS_H={giant:1,dots:1,lifts:1,fun:1,duo:1}; // styles that also come in a wide version / estilos que también tienen versión ancha
 const CS_CLEAN={giant:1,dots:1,vert:1,row:1}; // already big and bold: no panel needed / ya son grandes y claros: sin panel
 let CS=null;
@@ -19,7 +20,7 @@ function csOpen(id){
     '<div class="chips cs-ori">'+chip('ori','v',t('csOriV'))+chip('ori','h',t('csOriH'))+'</div>'+
     '<div class="cs-l">'+t('csLolL')+'</div><div class="chips cs-row">'+chip('lol','off',t('csLolOff'))+chip('lol','on',t('csLolOn'))+'</div>'+
     '<div class="cs-l cs-detw"'+(CS.style==='body'?'':' hidden')+'>'+t('csDetL')+'</div><div class="chips cs-row cs-detw"'+(CS.style==='body'?'':' hidden')+'>'+chip('det','sm',t('csDet1'))+chip('det','md',t('csDet2'))+chip('det','lg',t('csDet3'))+'</div>'+
-    '<div class="cs-grid">'+CS_STYLES.map(k=>'<button class="cs-g'+(CS.style===k?' on':'')+'" data-k="style" data-v="'+k+'" onclick="csSet(\'style\',\''+k+'\')"><canvas data-s="'+k+'"></canvas><i class="cs-ck">'+ic('check')+'</i><span>'+t('csS_'+k)+'</span></button>').join('')+'</div>'+
+    '<div class="cs-grid">'+CS_PICK.map(k=>'<button class="cs-g'+(CS.style===k?' on':'')+'" data-k="style" data-v="'+k+'" onclick="csSet(\'style\',\''+k+'\')"><canvas data-s="'+k+'"></canvas><i class="cs-ck">'+ic('check')+'</i><span>'+t('csS_'+k)+'</span></button>').join('')+'</div>'+
     '<div class="cs-bar"><div class="cs-adv" id="csAdv" hidden>'+
       '<div class="cs-l">'+t('csBgL')+'</div><div class="chips cs-row">'+chip('bg','none',t('csBgNone'))+chip('bg','photo',t('csBgPhoto'),'csBgPhoto()')+chip('bg','dark',t('csBgDark'))+'</div>'+
       '<div class="cs-l">'+t('csPanL')+'</div><div class="chips cs-row">'+chip('panel','on',t('csPanOn'))+chip('panel','off',t('csPanOff'))+'</div>'+
@@ -160,6 +161,7 @@ function csRender(o,sc){
   const dy=o.pos==='top'?Math.round(H*.26-(B-330)):(o.pos==='mid'?Math.round(H*.5-(B-330)):0);
   g.save();g.translate(0,dy);
   S(g,{det:o.det||'sm',fs:o.fs|0,lol:o.lol==='on',h:o.ori==='h'&&!!CS_H[o.style],W:W,H:H,B:B,d:d,wk:wk,wo:wo,name:name,stats:stats,ink:ink,sub:sub,line:line,acc:acc,light:light,shadow:shadow});
+  if(o.style!=='classic'&&o.style!=='giant'&&!d.sv)csTxt(g,'bubymed.github.io/bubylift',80,B+Math.min(46,Math.round((H-B)*.5)),26,'600',csRgba(ink,.7)); // every card says where it comes from, right under the block (moves with it, stays on the sticker) / cada tarjeta dice de dónde viene, justo bajo el bloque
   g.restore();
   if(d.sv){shadow(false);csTxt(g,'Powered by Strava',W/2,H-40,28,'500',sub,'center');}
   if(o.bg==='none'&&o.panel!=='off'&&!CS_CLEAN[o.style])return csPanel(c,light,!!o.crop);
@@ -208,13 +210,14 @@ function csStack(g,v){
 }
 /* 3 · poster: one giant number / un solo número gigante */
 function csPoster(g,v){
-  const W=v.W,y=v.B-660,big=v.wo?v.stats[0]:v.stats[v.stats.length-1];
+  const W=v.W,big=v.wo?v.stats[0]:v.stats[v.stats.length-1],fp=big?csFit(g,big.v,W-160,250,'800'):0;
+  const off=Math.round(fp*.22),y=v.B-660-off; // room for the comma's tail under the big number / espacio para la cola de la coma bajo el número
   const nm=v.name.toUpperCase(),p=csFit(g,nm,W-160,62,'800');csTxt(g,nm,80,y,p,'800',v.acc);
-  if(big){const fp=csFit(g,big.v,W-160,250,'800');csTxt(g,big.v,70,y+250,fp,'800',v.ink);csTxt(g,big.l.toUpperCase(),80,y+310,36,'600',v.sub);}
+  if(big){csTxt(g,big.v,70,y+250,fp,'800',v.ink);csTxt(g,big.l.toUpperCase(),80,y+310+off,36,'600',v.sub);}
   const rest=v.stats.filter(s=>s!==big);
-  csTxt(g,rest.map(s=>s.v).join('   ·   '),80,y+410,50,'700',v.ink);
-  csPr(g,80,y+495,v);
-  csLogo(g,80,y+560,60,v.ink);
+  csTxt(g,rest.map(s=>s.v).join('   ·   '),80,y+410+off,50,'700',v.ink);
+  csPr(g,80,y+495+off,v);
+  csLogo(g,80,y+560+off,60,v.ink);
 }
 /* 4 · chips: translucent pills with an icon each / píldoras translúcidas con un icono */
 function csChips(g,v){
@@ -255,11 +258,12 @@ function csLifts(g,v){
 /* giant: one huge number, almost nothing else (the style that reads on any photo) / un solo número enorme y casi nada más (el estilo que se lee sobre cualquier foto) */
 function csGiant(g,v){
   if(v.h)return csGiantH(g,v);
-  const W=v.W,y=v.B-700,kg=wkVol(v.wk),num=wShow(kg);
+  const W=v.W,y=v.B-700,kg=wkVol(v.wk),num=vShow(kg);
   csLogo(g,80,y,60,v.ink,'left',v.acc);
+  if(!v.d.sv)csTxt(g,'bubymed.github.io/bubylift',W-80,y+46,28,'600',csRgba(v.ink,.7),'right'); // the link sits by the logo here: the bottom is full / aquí el enlace va junto al logo
   csTxt(g,t('csGiantL'),80,y+170,54,'700',v.sub);
   const fp=csFit(g,num,W-140,420,'900');csTxt(g,num,64,y+170+fp*.86,fp,'900',v.ink);
-  const y2=y+170+fp*.86+86;
+  const y2=y+170+fp*.86+86+(/[,.]/.test(num)?Math.round(fp*.1):0); // clear the comma's tail / deja libre la cola de la coma
   const ut=wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase();g.font=cardFont(58,'800');const pw=g.measureText(ut).width+72;
   g.fillStyle=v.acc;g.beginPath();if(g.roundRect)g.roundRect(80,y2-62,pw,92,46);else g.rect(80,y2-62,pw,92);g.fill();
   csTxt(g,ut,80+36,y2+2,58,'800','#ffffff');
@@ -323,7 +327,7 @@ function csDots(g,v){
 
 /* ---- wide versions (landscape cards) / versiones anchas (tarjetas horizontales) ---- */
 function csGiantH(g,v){
-  const W=v.W,y=v.B-420,kg=wkVol(v.wk),num=wShow(kg);
+  const W=v.W,y=v.B-420,kg=wkVol(v.wk),num=vShow(kg);
   csLogo(g,80,y,56,v.ink,'left',v.acc);
   csTxt(g,t('csGiantL'),80,y+150,46,'700',v.sub);
   csNum(g,num,80,y+200,480,300,'900',v.ink);
@@ -363,7 +367,7 @@ function csFunH(g,v){
   const l1=T+26;csTxt(g,t('csFunT'),x,l1,36,'700',v.sub);
   const nm=t('csObj_'+f.k),p=csFit(g,nm,cw,96,'800'),nB=l1+16+p*.78;csTxt(g,nm,x,nB,p,'800',v.ink);
   const ft=v.d.date,fq=csFit(g,ft,cw,28,'500');csTxt(g,ft,x,nb,fq,'500',v.sub);
-  csTxt(g,'= '+wShow(kg)+' '+wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase(),x,(nB+nb)/2+8,34,'600',v.sub);
+  csTxt(g,'= '+vShow(kg)+' '+wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase(),x,(nB+nb)/2+8,34,'600',v.sub);
 }
 
 /* duo: the "fun" card and the exercise list together in ONE image (stacked, or side by side when wide) / la tarjeta curiosa y la lista de ejercicios juntas en UNA imagen (apiladas, o lado a lado en horizontal) */
@@ -387,7 +391,7 @@ function csDuo(g,v){
   const x=560,cw=W-80-x;
   csTxt(g,t('csFunT'),x,y+160,34,'700',v.sub);
   const q=csFit(g,nmO,cw,70,'800');csTxt(g,nmO,x,y+160+q+10,q,'800',v.ink);
-  csTxt(g,'= '+wShow(kg)+' '+wUnit(),x,y+160+q+66,32,'600',v.sub);
+  csTxt(g,'= '+vShow(kg)+' '+wUnit(),x,y+160+q+66,32,'600',v.sub);
   g.fillStyle=v.acc;g.fillRect(80,y+380,150,10);
   csTxt(g,v.d.date,80,y+450,32,'600',v.sub);
   list(80,y+520,W-160);
@@ -423,12 +427,17 @@ function csPrCard(g,v){
   csLogo(g,80,y-40,60,v.ink);
   if(!pick||!pick.b){csTxt(g,v.name,80,y+200,90,'800',v.ink);return;}
   const isPr=pick.pr;
-  if(isPr){cardIcon(g,'trophy',80,y+70,70,v.acc);csTxt(g,t('csPrNew'),170,y+125,60,'800',v.acc);}else csTxt(g,t('csTopLift'),80,y+125,50,'800',v.acc);
+  if(isPr){cardIcon(g,'trophy',80,y+70,70,v.acc);csTxt(g,t('csPrNew'),170,y+125,isPr?csFit(g,t('csPrNew'),W-260-csRankW(g),60,'800'):60,'800',v.acc);}else csTxt(g,t('csTopLift'),80,y+125,50,'800',v.acc);
+  csRank(g,W-80,y+125,v);
   const nm=exName(pick.eid,pick.n),p=csFit(g,nm,W-160,86,'800');csTxt(g,nm,80,y+250,p,'800',v.ink);
   const big=wShow(pick.b.w)+' '+wUnit(),fp=csFit(g,big,W-160,230,'800');csTxt(g,big,70,y+470,fp,'800',v.ink);
   csTxt(g,'× '+pick.b.r+' '+t('colReps').toLowerCase(),80,y+545,60,'700',v.sub);
   csTxt(g,v.d.date,80,y+620,36,'500',v.sub);
 }
+/* your rank, right-aligned: "COLOSSUS" in its colour, only when the rank is known / tu rango a la derecha, solo si ya se conoce */
+function csRankOf(){try{const d=strData();if(!d.bw||d.n<3||d.score==null)return null;const s=d.cur!=null?d.cur:d.score,ix=rkIdx(s);let c='';try{c=getComputedStyle(document.documentElement).getPropertyValue('--rk'+ix).trim();}catch(e){}return{n:rkName(ix).toUpperCase(),c:c||'#ffb340'};}catch(e){return null;}}
+function csRankW(g){const r=csRankOf();if(!r)return 0;g.font=cardFont(34,'800');return g.measureText(r.n).width+40;}
+function csRank(g,x,y,v){const r=csRankOf();if(!r)return;csTxt(g,t('csRankL'),x,y-46,26,'700',v.sub,'right');csTxt(g,r.n,x,y,40,'800',r.c,'right');}
 /* 10 · fun: what you lifted, in things people know / lo que levantaste, en cosas conocidas */
 const CS_OBJ=[['whl',150000],['jet',41000],['hmp',30000],['fir',18000],['bus',11000],['trx',8000],['ele',6000],['orc',5000],['pck',2500],['rhi',2300],['cnt',2200],['hip',1500],['car',1300],['gir',1200],['shk',900],['cow',700],['hrs',500],['pia',450],['pbr',450],['mot',300],['vnd',250],['tig',220],['lio',190],['gor',160],['sum',150],['pnd',100],['fri',80],['adl',75],['keg',73],['kng',70],['cem',43],['dog',30],['lug',23],['tir',10],['mel',8],['bow',7],['cat',4.5],['bby',3.5],['gal',3.8],['lap',2],['soc',0.43],['b52',83000],['mbt',60000],['c13',34000],['f22',19700],['f35',13300],['a10',11300],['chn',11000],['f16',8600],['blk',5200],['hum',5000],['tmh',1600]].sort(function(a,b){return b[1]-a[1];}); // [key, kg] — sorted heaviest first / [clave, kg] — de más pesado a más ligero
 /* what you lifted, as a thing people know. With a seed it picks among the things that give a nice number (1 to 15), epic ones on big days; without one, the heaviest thing you outweigh /
@@ -480,7 +489,7 @@ function csFun(g,v){
   csTxt(g,t('csFunT'),80,y+110,50,'700',v.sub);
   const num=f.n>=10?String(Math.round(f.n)):f.n.toFixed(1),fp=csFit(g,num,W-160,300,'800');csTxt(g,num,70,y+360,fp,'800',v.acc);
   const nm=t('csObj_'+f.k),p=csFit(g,nm,W-160,110,'800');csTxt(g,nm,80,y+480,p,'800',v.ink);
-  csTxt(g,'= '+wShow(kg)+' '+wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase(),80,y+560,44,'600',v.sub);
+  csTxt(g,'= '+vShow(kg)+' '+wUnit()+'  ·  '+v.d.sets+' '+t('sets').toLowerCase(),80,y+560,44,'600',v.sub);
   csTxt(g,v.name+'  ·  '+v.d.date,80,y+625,34,'500',v.sub);
 }
 
@@ -497,10 +506,20 @@ function csFig(g,face,x,y,hf,yr,fill){ // figure scaled to height hf; soft fade 
   g.drawImage(c,x,y,w,hf);return w;
 }
 /* shared by the muscle cards: effective sets per muscle, colors, crop / común a las tarjetas de músculos: series efectivas por músculo, colores, recorte */
+/* muscles of a workout for the cards: effective sets, and sets where the muscle is the exercise's MAIN mover. The headline order is main mover first,
+   so a lat pulldown + rows day reads "Lats", not a helper; deep muscles (no shape on the figure) never headline.
+   músculos para las tarjetas: series efectivas y series como motor PRINCIPAL; el titular va por motor principal y nunca con músculos profundos */
+function csMusc(wk){
+  const sc={},pr={};
+  (wk.ex||[]).forEach(function(x){const n=(x.sets||[]).filter(function(q){return q.done!==false&&q.ty!=='w'&&(q.r>0||q.t>0);}).length;if(!n)return;const L=muW(x.eid,x.vr)||[],top=L.reduce(function(a,m){return Math.max(a,m[1]);},0);L.forEach(function(m){sc[m[0]]=(sc[m[0]]||0)+n*m[1];if(m[1]>=top)pr[m[0]]=(pr[m[0]]||0)+n;});});
+  const deep=typeof MUS_DEEP!=='undefined'?MUS_DEEP:[];
+  const keys=Object.keys(sc).filter(function(k){return MUS_BASE[k];}).sort(function(a,b){return((pr[b]||0)-(pr[a]||0))||(sc[b]-sc[a]);});
+  const head=keys.filter(function(k){return deep.indexOf(k)<0;}).concat(keys.filter(function(k){return deep.indexOf(k)>=0;}));
+  return{sc:sc,keys:head,mx:keys.reduce(function(a,k){return Math.max(a,sc[k]);},0)||1};
+}
+function csMs(k){return t('ms_'+k).replace(/\s*\((deep|profundo)\)/i,'');} // "(deep)" helps in the app, not on a shared card / "(profundo)" sirve en la app, no en la tarjeta
 function csBodySc(v){
-  const sc={};
-  (v.wk.ex||[]).forEach(function(x){const n=(x.sets||[]).filter(function(q){return q.done!==false&&(q.r>0||q.t>0);}).length;if(!n)return;(muW(x.eid,x.vr)||[]).forEach(function(m){sc[m[0]]=(sc[m[0]]||0)+n*m[1];});});
-  const keys=Object.keys(sc).filter(function(k){return MUS_BASE[k];}).sort(function(a,b){return sc[b]-sc[a];}),mx=keys.length?sc[keys[0]]:1;
+  const M=csMusc(v.wk),sc=M.sc,keys=M.keys,mx=M.mx;
   const up=keys.some(function(k){return CS_UP.indexOf(k)>=0;}),lo=keys.some(function(k){return CS_LO.indexOf(k)>=0;});
   const ld=function(f){return keys.reduce(function(a,k){return a+((anaDomFace(k)==='back')===(f==='back')?sc[k]:0);},0);};
   return{sc:sc,keys:keys,mx:mx,yr:up&&!lo?[-5,182]:(lo&&!up?[128,360]:[-5,360]),lead:ld('back')>ld('front')?'back':'front',
@@ -514,7 +533,7 @@ function csBodyOne(g,v){
   const ww=ANA[b.lead].vb.split(' ')[2]*hf/span;csFig(g,b.lead,80,y,hf,b.yr,b.col);
   const x=80+ww+50,bw=W-80-x;let c=y+40;
   csTxt(g,t('csBodyT'),x,c,40,'700',v.sub);c+=60;
-  const pitch=Math.max(84,Math.min(130,(hf-80)/6));b.keys.slice(0,Math.min(6,Math.floor((hf-60)/pitch))).forEach(function(k){csTxt(g,t('ms_'+k),x,c+4,36,'700',v.ink);csFill(g,x,c+22,bw,b.sc[k]/b.mx,b.col(k),v.ink);c+=pitch;});
+  const pitch=Math.max(84,Math.min(130,(hf-80)/6));b.keys.slice(0,Math.min(6,Math.floor((hf-60)/pitch))).forEach(function(k){csTxt(g,csMs(k),x,c+4,36,'700',v.ink);csFill(g,x,c+22,bw,b.sc[k]/b.mx,b.col(k),v.ink);c+=pitch;});
   const n=Math.min(3,v.stats.length),cw=(W-160)/Math.max(n,1);
   v.stats.slice(0,3).forEach(function(q,i){const xx=80+i*cw,fp=csFit(g,q.v,cw-40,64,'800');csTxt(g,q.v,xx,v.B-60,fp,'800',v.ink);csTxt(g,q.l,xx,v.B-20,28,'500',v.sub);});
 }
@@ -522,7 +541,7 @@ function csBodyOne(g,v){
 function csBodyPill(g,v){
   const W=v.W,b=csBodySc(v),span=b.yr[1]-b.yr[0],sq=v.H<1200,numH=sq?250:400,hf=Math.min(span>300?460:380,numH+30);
   const pills=b.keys.slice(0,sq?6:9);g.font=cardFont(34,'700');let rows=1,xx=80;
-  pills.forEach(function(k){const pw=g.measureText(t('ms_'+k)).width+56;if(xx+pw>W-80){xx=80;rows++;}xx+=pw+16;});
+  pills.forEach(function(k){const pw=g.measureText(csMs(k)).width+56;if(xx+pw>W-80){xx=80;rows++;}xx+=pw+16;});
   const y=v.B-150-rows*84-numH-80;
   csLogo(g,80,y-70,60,v.ink);csTxt(g,v.d.date,W-80,y-30,34,'500',v.sub,'right');
   csTxt(g,t('csBodyT'),80,y+30,44,'700',v.sub);
@@ -530,16 +549,14 @@ function csBodyPill(g,v){
   csTxt(g,t('csPillL'),sq?80+g.measureText(big).width+30:80,y+(sq?215:380),sq?48:56,'800',v.ink);
   const ww=ANA[b.lead].vb.split(' ')[2]*hf/span;csFig(g,b.lead,W-80-ww,y+60,hf,b.yr,b.col);
   let x=80,c=y+numH+60;g.font=cardFont(34,'700');
-  pills.forEach(function(k){const nm=t('ms_'+k),pw=g.measureText(nm).width+56;if(x+pw>W-80){x=80;c+=84;}
+  pills.forEach(function(k){const nm=csMs(k),pw=g.measureText(nm).width+56;if(x+pw>W-80){x=80;c+=84;}
     g.fillStyle=csRgba(b.col(k),.22);g.beginPath();g.roundRect(x,c,pw,64,32);g.fill();g.strokeStyle=b.col(k);g.lineWidth=3;g.stroke();
     csTxt(g,nm,x+28,c+43,34,'700',v.ink);x+=pw+16;});
   const n=Math.min(3,v.stats.length),cw=(W-160)/Math.max(n,1);
   v.stats.slice(0,3).forEach(function(q,i){const x2=80+i*cw,fq=csFit(g,q.v,cw-40,64,'800');csTxt(g,q.v,x2,v.B-60,fq,'800',v.ink);csTxt(g,q.l,x2,v.B-20,28,'500',v.sub);});
 }
 function csBody(g,v){
-  const W=v.W,wk=v.wk,sc={},det=v.det;
-  (wk.ex||[]).forEach(function(x){const n=(x.sets||[]).filter(function(q){return q.done!==false&&(q.r>0||q.t>0);}).length;if(!n)return;(muW(x.eid,x.vr)||[]).forEach(function(m){sc[m[0]]=(sc[m[0]]||0)+n*m[1];});});
-  const keys=Object.keys(sc).filter(function(k){return MUS_BASE[k];}).sort(function(a,b){return sc[b]-sc[a];}),mx=keys.length?sc[keys[0]]:1;
+  const W=v.W,det=v.det,M=csMusc(v.wk),sc=M.sc,keys=M.keys,mx=M.mx;
   const col=function(k){const r=(sc[k]||0)/mx;return r>=.6?v.acc:(r>=.25?'#2F9BFF':(r>0?'rgba(47,155,255,.35)':'rgba(128,128,140,.30)'));};
   const up=keys.some(function(k){return CS_UP.indexOf(k)>=0;}),lo=keys.some(function(k){return CS_LO.indexOf(k)>=0;});
   const yr=up&&!lo?[-5,182]:(lo&&!up?[128,360]:[-5,360]),span=yr[1]-yr[0];
@@ -553,11 +570,11 @@ function csBody(g,v){
   (ld('back')>ld('front')?['back','front']:['front','back']).forEach(function(face,i){csFig(g,face,x0+i*(ww+gap),fy,hf,yr,col);}); // the side with most work goes first / el lado con más trabajo va primero
   let c=fy+hf+50;
   csTxt(g,t('csBodyT'),80,c,44,'700',v.sub);c+=85;
-  const top=keys.slice(0,2).map(function(k){return t('ms_'+k);}),more=Math.max(0,keys.length-2);
+  const top=keys.slice(0,2).map(function(k){return csMs(k);}),more=Math.max(0,keys.length-2);
   const nm=top.length?top.join(' · '):v.name,p=csFit(g,nm,W-160,det==='sm'?100:84,'800');csTxt(g,nm,80,c,p,'800',v.ink);
   if(det==='sm'){if(more)csTxt(g,t('csBodyMore',more),80,c+65,48,'800',v.acc);c+=125;}else c+=45;
   bars.forEach(function(k,i){const r=sc[k]/mx,by=c+i*58,bw=W-80-(det==='lg'?190:0)-520;
-    csTxt(g,t('ms_'+k),80,by+30,34,'600',v.ink);
+    csTxt(g,csMs(k),80,by+30,34,'600',v.ink);
     g.fillStyle=csRgba(v.ink,.14);g.beginPath();g.roundRect(520,by+6,bw,22,11);g.fill();
     g.fillStyle=col(k);g.beginPath();g.roundRect(520,by+6,Math.max(22,bw*r),22,11);g.fill();
     if(det==='lg')csTxt(g,(Math.round(sc[k]*10)/10)+' '+t('sets').toLowerCase(),W-80,by+30,30,'600',v.sub,'right');});
