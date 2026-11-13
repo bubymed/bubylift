@@ -997,3 +997,9 @@ button,.btn,.chip,.chk,.stp,#tabbar{-webkit-user-select:none;user-select:none;-w
 .hmore[open]>summary::before{content:'▾ '}
 .barln .lnk-d{white-space:normal;text-align:left;max-width:100%;height:auto;line-height:1.3}
 .mb-mini i.no{background:rgba(255,255,255,.25);border-color:transparent}.mb-mini i.more{color:#fff;font-style:normal}
+/* sticky exercise note + warm-up link + superset tag / nota fija, calentamiento, superserie */
+.exnote{display:flex;align-items:flex-start;gap:6px;width:100%;text-align:left;background:color-mix(in srgb,var(--warn) 12%,var(--panel2));color:var(--txt);border:0;border-radius:12px;padding:8px 10px;margin:4px 0 8px;font-size:.88rem;line-height:1.3}
+.exnote .ic{width:16px;height:16px;flex:none;margin-top:1px;color:var(--warn)}
+.wulink{display:block;margin:0 0 6px}
+.exh-t .ssl{cursor:pointer}
+.exc.ssg{box-shadow:inset 3px 0 0 var(--accent),var(--shadow)}
