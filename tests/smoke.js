@@ -211,7 +211,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
   ok(/^﻿date,workout,exercise/.test(csv)&&csv.split('\n').length>3,'CSV exported');
   ev("DATA.workouts=[];DATA.body=[];DATA.routines=[];DATA.custom=[];saveData()");
   const mk=(obj)=>({files:[new w.File([JSON.stringify(obj)],'b.json')],value:'x'});
-  const waitImp=()=>new Promise(r=>setTimeout(r,150));
+  const waitImp=()=>new Promise(r=>{const t0=Date.now(),s0=sheetHtml();(function f(){if(sheetHtml()!==s0||Date.now()-t0>3000)setTimeout(r,30);else setTimeout(f,25);})();}); // wait for the file reader instead of a fixed time (CI machines are slower) / espera al lector de archivos
   w.importFile(mk(bk));await waitImp();
   ok(/Add \d+ workouts/.test(sheetHtml()),'import asks for confirmation');
   doc.querySelector('.dlg-b .btn.pri').click();
@@ -447,7 +447,7 @@ ok(!/undefined|NaN|\[object/.test(h),tb+' has no undefined/NaN ('+units+','+lang
    ok(ids==='wa1,wb2,wc3'&&rids==='wa1,wb2,wc3','two phones merge without losing workouts');
    w.eval("DATA.workouts=DATA.workouts.filter(x=>x.id!=='wb2');clTomb('wb2');saveData();");await w.cloudSync(true);
    ok((await dec()).workouts.map(x=>x.id).sort().join()==='wa1,wc3'&&!w.eval("DATA.workouts.some(x=>x.id==='wb2')"),'deleted workouts stay deleted (tombstones)');
-   w.eval("DATA.workouts.push({id:'zz9',t:1,end:0,name:'bad',ex:'nope'});");await w.cloudSync(true);
+   w.eval("DATA.workouts.push({id:'zz9',t:1,end:0,name:'bad',ex:'nope'});");await w.cloudSync(true);await w.cloudSync(true); // a second pass: a scheduled sync may still be running on slow machines / segunda pasada por si había una sincronización en curso
    ok(!/zz9/.test(JSON.stringify(await dec())),'invalid items are never uploaded');
    w.go('more');ok(/a@b\.co/.test(main())&&!/Sync now/.test(main())&&/Saves automatically|Synced/.test(main()),'signed-in card shows the account');
    // second phone: same password opens the same data / segundo teléfono

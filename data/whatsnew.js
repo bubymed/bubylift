@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.126',items:[
+  {i:'sun',en:'Light mode pass: rank names, the Mobility card numbers and red buttons now read clearly on white.',es:'Repaso del modo claro: los nombres de rango, los números de la tarjeta de Movilidad y los botones rojos ahora se leen bien sobre blanco.'}
+ ]},
  {v:'v1.1.125',items:[
   {i:'list',en:'Calmer exercise cards: one tip line (the most important) and the rest behind “more tips”; injury warnings always show. The bar-weight link no longer runs off the screen.',es:'Tarjetas de ejercicio más limpias: una sola línea de consejo (la más importante) y el resto en “más consejos”; los avisos de lesión siempre se ven. El enlace de peso con barra ya no se sale de la pantalla.'}
  ]},
