@@ -155,27 +155,40 @@ function mobCard(){
 }
 function mobGo(m){STX.type=m===5?'warm':'full';STX.min=m;strSessGo(0);}
 function hero0(){
-  return'<div class="card hero"'+skAttr(t('hiWelcome'),t('pkPlanT'),t('planMake'),'planSetup()')+'><span class="hero-e">'+t('hiWelcome')+'</span><h2>'+t('pkPlanT')+'</h2><p>'+t('pkPlanP')+'</p><button class="btn pri big wide" onclick="planSetup()">'+t('planMake')+'</button></div>';
+  return'<div class="card hero"'+skAttr(t('hiWelcome'),t('pkPlanT'),t('planMake'),'planSetup()')+'>'+(DATA.workouts.length?xBtn('planHideDo()'):'')+'<span class="hero-e">'+t('hiWelcome')+'</span><h2>'+t('pkPlanT')+'</h2><p>'+t('pkPlanP')+'</p><button class="btn pri big wide" onclick="planSetup()">'+t('planMake')+'</button></div>';
 }
 function exploreList(){
   const r=(i,tt,pp,fn)=>'<button class="lrow" onclick="'+fn+'"><span class="li">'+ic(i)+'</span><span class="lt2"><b>'+t(tt)+'</b><small>'+t(pp)+'</small></span><span class="lc">›</span></button>';
-  return'<div class="sec"><h2>'+t('exploreT')+'</h2></div><div class="lgrp">'+
+  return'<div class="sec"><h2>'+t('exploreT')+'</h2></div><div class="lgrp">'+(!DATA.plan&&!heroOn()?r('sparkles','pkPlanT','pkPlanP','planSetup()'):'')+
     r('barbell','pkMusT','pkMusP',"libGo('focus')")+r('arrows-shuffle','pkSpT','pkSpP',"libGo('split')")+r('trophy','pkPrT','pkPrP',"libGo('prog')")+r('stopwatch','pkChT','pkChP',"libGo('ch')")+'</div>';
 }
 /* start again with the same exercises and set counts as your last workout / empezar otra vez con los mismos ejercicios y series del último entrenamiento */
 function repeatLast(){const w=DATA.workouts.find(x=>x.ex&&x.ex.length&&wkAnySets(x)>0);if(!w)return;startWorkout({name:w.name||'',ex:w.ex.map(x=>({eid:x.eid,sets:Math.max(1,x.sets.length),n:x.n,vr:x.vr,mul:x.mul,bar:x.bar,v:x.v}))});}
+/* home: one big start block first, everything else below / inicio: primero un solo bloque para empezar, lo demás abajo */
+function heroOn(){return!DATA.plan&&!SET.planHide&&DATA.workouts.length<5;} // the plan promo is for newcomers; hidden once dismissed or once they train on their own / la promo del plan es para quien empieza
+function planHideDo(){SET.planHide=1;saveSet();render();}
+function startCard(){
+  const lw=DATA.workouts.find(w=>w.ex&&w.ex.length&&wkAnySets(w)>0),rts=DATA.routines.slice(0,3);
+  let h='<div class="card hero hst"'+skAttr(t('stE'),t('stT'),t('pkOwnT'),'startWorkout()')+'><span class="hero-e">'+t('stE')+'</span><h2>'+t('stT')+'</h2>'+
+    '<button class="btn pri big wide" onclick="startWorkout()">'+ic('pencil')+' '+t('pkOwnT')+'</button>';
+  if(lw)h+='<button class="btn wide hst-b" onclick="repeatLast()">↺ '+t('repLast')+(lw.name?' · '+esc(lw.name):'')+'</button>';
+  if(rts.length)h+='<div class="hst-rt">'+rts.map(r=>'<button class="btn sm" onclick="startRoutine(\''+r.id+'\')">'+ic('play')+' '+esc(r.name)+'</button>').join('')+'</div>';
+  return h+'</div>';
+}
 function vStart(){
   let h='';
-  if(needBackup())h+='<div class="card warn"><b>'+t('bkT')+'</b><p>'+t('bkP')+'</p><div class="row"><button class="btn pri sm" onclick="exportJSON()">'+t('exportBackup')+'</button><button class="btn sm" onclick="bkLater()">'+t('later')+'</button></div></div>';
   if(typeof inApp==='function'&&inApp())h+='<div class="card warn"><b>'+t('inappT')+'</b><p>'+t(isIOS()?'inappIos':'inappAnd')+'</p><div class="row"><button class="btn sm" onclick="installApp()">'+t('inappBtn')+'</button></div></div>';
+  if(DATA.plan)h+=planCard();
+  else if(heroOn())h+=hero0();
+  if(!DATA.plan&&heroOn())h+='<button class="btn wide emptyb" onclick="startWorkout()">'+ic('pencil')+' '+t('pkOwnT')+'</button>';
+  else h+=startCard();
+  h+=recCta();
+  if(DATA.workouts.length)h+=weekStrip();
+  if(needBackup())h+='<div class="card warn"><b>'+t('bkT')+'</b><p>'+t('bkP')+'</p><div class="row"><button class="btn pri sm" onclick="exportJSON()">'+t('exportBackup')+'</button><button class="btn sm" onclick="bkLater()">'+t('later')+'</button></div></div>';
+  if(typeof guestBar==='function')h+=guestBar();
   h+=wkSumCard();
   h+=rkTeaser();
-  h+=(DATA.plan?planCard():hero0())+recCta();
-  const lw0=DATA.workouts.find(w=>w.ex&&w.ex.length&&wkAnySets(w)>0);
-  if(lw0)h+='<button class="btn wide" onclick="repeatLast()">↺ '+t('repLast')+(lw0.name?' · '+esc(lw0.name):'')+'</button>';
-  h+='<button class="btn wide emptyb" onclick="startWorkout()">'+ic('pencil')+' '+t('pkOwnT')+'</button>';
   h+=mobCard();
-  if(DATA.workouts.length)h+=weekStrip();
   h+='<div class="sec"><h2>'+t('routines')+'</h2><button class="btn sm" onclick="rbOpen()">＋ '+t('newRoutine')+'</button></div>';
   if(!DATA.routines.length)h+='<div class="card tip"><p class="muted">'+t('noRoutines')+'</p></div>';
   else h+=DATA.routines.map(r=>'<div class="swp"><div class="swp-h swp-hl">'+t('swDelete')+'</div><div class="swp-h swp-hr">'+t('swEdit')+'</div><div class="card rt swp-in" data-l="rtDelAsk" data-r="rtEdit" data-a="'+r.id+'">'+rtThumb(r)+'<div class="rt-main"><b>'+esc(r.name)+'</b><div class="muted sm">'+r.ex.slice(0,4).map(x=>esc(exName(x.eid,x.n))).join(' · ')+(r.ex.length>4?' …':'')+'</div></div>'+'<div class="rt-b"><button class="btn pri sm" onclick="startRoutine(\''+r.id+'\')">'+t('start')+'</button><button class="btn sm" onclick="rbOpen(\''+r.id+'\')">'+t('edit')+'</button></div></div></div>').join('');
