@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.129',items:[
+  {i:'share',en:'Share cards: 6 clearly different styles, totals always with separators (15,058), no overlapping text, the muscle cards lead with the main muscle and drop “(deep)”, the record card shows your rank, and every card carries the app link. Links to the app now show a preview image in WhatsApp, Instagram and Facebook.',es:'Tarjetas para compartir: 6 estilos bien distintos, totales siempre con separadores (15,058), sin texto encimado, las tarjetas de músculos empiezan por el músculo principal y sin “(profundo)”, la tarjeta de récord muestra tu rango y todas llevan el enlace de la app. El enlace de la app ahora sale con imagen en WhatsApp, Instagram y Facebook.'}
+ ]},
  {v:'v1.1.128',items:[
   {i:'cloud',en:'Automatic copies: every day you use the app a copy is kept on your phone (last 7, More → Your data). If the app ever opens empty, it offers to bring your workouts back. The backup reminder now comes every two weeks and says plainly what is at risk.',es:'Copias automáticas: cada día que usas la app se guarda una copia en tu teléfono (las últimas 7, Más → Tus datos). Si la app abre vacía, te ofrece recuperar tus entrenamientos. El recordatorio de respaldo sale cada dos semanas y dice claro qué se arriesga.'}
  ]},
