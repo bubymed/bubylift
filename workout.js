@@ -15,6 +15,13 @@ function exMode(id){const e=exById(id);return e?e.m:'wr';}
 function isHold(id){const e=exById(id);return!!e&&e.m==='t'&&e.g!=='cardio';}
 function tSplit(t){if(t==null)return null;const sc=Math.round(t*60);return[Math.floor(sc/60),sc%60];}
 function tShow(t){if(t==null)return'';return Number.isInteger(Math.round(t*600)/600)?fmtNum(t)+' min':fmtClock(Math.round(t*60));}
+/* last time's set for row j, matched by kind: warm-up rows with last time's warm-ups, working rows with last time's working sets
+   la serie de la vez pasada para la fila j, por tipo: calentamiento con calentamiento, trabajo con trabajo */
+function pvAt(ps,sets,j){
+  const w=!!(sets[j]&&sets[j].ty==='w'),k=sets.slice(0,j).filter(q=>(q.ty==='w')===w).length,L=(ps||[]).filter(q=>(q.ty==='w')===w);
+  return L[k]||L[L.length-1]||null;
+}
+function wkN(x){return Math.max(1,x.sets.filter(q=>q.ty!=='w').length);} // working sets only: warm-ups are added fresh each time / solo series de trabajo
 function newSet(){return{w:null,r:null,t:null,d:null,done:false};}
 
 /* ---------- scoring / PR logic ---------- */
@@ -129,6 +136,7 @@ function addExTo(eid,nSets,nm,tg,src){
     if(src.v===2||src.keep){delete x.bar;delete x.mul;} // saved with the new model: absent means none / guardado con el modelo nuevo: ausente significa ninguno
     if(src.bar>0)x.bar=src.bar;
     if(src.mul>1)x.mul=src.mul;
+    if(/^[A-H]$/.test(src.ss||''))x.ss=src.ss;
   }
   if(tg){x.tg=tg;const sg=sugg(eid,tg);if(sg&&sg.w!=null)x.sg=sg.w;}
   ACT.ex.push(x);
@@ -163,7 +171,7 @@ function exploreList(){
     r('barbell','pkMusT','pkMusP',"libGo('focus')")+r('arrows-shuffle','pkSpT','pkSpP',"libGo('split')")+r('trophy','pkPrT','pkPrP',"libGo('prog')")+r('stopwatch','pkChT','pkChP',"libGo('ch')")+'</div>';
 }
 /* start again with the same exercises and set counts as your last workout / empezar otra vez con los mismos ejercicios y series del último entrenamiento */
-function repeatLast(){const w=DATA.workouts.find(x=>x.ex&&x.ex.length&&wkAnySets(x)>0);if(!w)return;startWorkout({name:w.name||'',ex:w.ex.map(x=>({eid:x.eid,sets:Math.max(1,x.sets.length),n:x.n,vr:x.vr,mul:x.mul,bar:x.bar,v:x.v}))});}
+function repeatLast(){const w=DATA.workouts.find(x=>x.ex&&x.ex.length&&wkAnySets(x)>0);if(!w)return;startWorkout({name:w.name||'',ex:w.ex.map(x=>({eid:x.eid,sets:wkN(x),n:x.n,vr:x.vr,mul:x.mul,bar:x.bar,v:x.v,ss:x.ss}))});}
 /* home: one big start block first, everything else below / inicio: primero un solo bloque para empezar, lo demás abajo */
 function heroOn(){return!DATA.plan&&!SET.planHide&&DATA.workouts.length<5;} // the plan promo is for newcomers; hidden once dismissed or once they train on their own / la promo del plan es para quien empieza
 function planHideDo(){SET.planHide=1;saveSet();render();}
@@ -263,7 +271,7 @@ function cueOf(eid){const s=HOWTO&&HOWTO[eid];if(!s)return'';const st=(s[LANG===
 /* fill the empty sets with what you did last time, in one tap / llena las series vacías con lo de la última vez, en un toque */
 function fillLast(i){
   const x=ACT.ex[i],le=lastEx(xk(x));if(!le)return;const ps=le.x.sets,m=exMode(x.eid);
-  x.sets.forEach((s,j)=>{if(s.done)return;const p=ps[j]||ps[ps.length-1];if(!p)return;
+  x.sets.forEach((s,j)=>{if(s.done)return;const p=pvAt(ps,x.sets,j);if(!p)return;
     if(m==='t'){if(s.t==null)s.t=p.t;if(s.d==null)s.d=p.d;}else{if(s.w==null)s.w=p.w;if(s.r==null)s.r=p.r;}});
   saveAct();exRedraw(i);toast(t('flDone'));
 }
@@ -296,8 +304,10 @@ function exCard(i,x){
   const m=exMode(x.eid),le=lastEx(xk(x)),pv=le?le.x.sets:[];
   const ml=m==='wr'?mulOf(x):1,pw=v=>v==null?'':wShow(Math.max(0,v/ml));
   const cue=cueOf(x.eid),dm=(typeof EXPHOTO!=='undefined'&&EXPHOTO.has(x.eid))?'<button class="exdm" onclick="howOpen(\''+x.eid+'\')" aria-label="'+esc(t('guideB'))+'">'+exImgs(x.eid,'this.remove()')+'</button>':'';
-  let h='<section class="exc" data-dcard="1" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+varChip(i,x)+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button>'+(ACT.ex.length>1?'<span class="pv-grip" role="button" tabindex="0" data-k="act" data-ei="'+i+'" aria-label="'+esc(t('dragAria'))+'">⠿</span>':'')+'</div>';
+  let h='<section class="exc'+(ssOf(x)?' ssg':'')+'" data-dcard="1" id="exc'+i+'"><div class="exh">'+dm+'<span class="exh-t"><b>'+(ssLab(i)?'<i class="ssl" onclick="ssMenu('+i+')">'+ssLab(i)+'</i> ':'')+esc(exName(x.eid,x.n))+'</b>'+(cue?'<small class="cue">'+esc(cue)+'</small>':'')+varChip(i,x)+'</span>'+xBtn('rmEx('+i+')',1)+'<button class="exmore" onclick="exMenu('+i+')" aria-label="'+esc(t('options'))+'">⋯</button>'+(ACT.ex.length>1?'<span class="pv-grip" role="button" tabindex="0" data-k="act" data-ei="'+i+'" aria-label="'+esc(t('dragAria'))+'">⠿</span>':'')+'</div>';
   h+=suggLine(x,repNote(x.eid,m));
+  {const nt=exNoteOf(x.eid);if(nt)h+='<button class="exnote" onclick="exNoteOpen('+i+')">'+ic('pin')+' '+esc(nt)+'</button>';}
+  if(wuCan(i))h+='<button class="lnk-d wulink" onclick="wuAdd('+i+')">＋ '+t('wuAdd')+'</button>';
   if(i===0&&DATA.workouts.length<4)h+='<p class="muted sm">'+t('tyHint')+'</p>';
   h+='<div class="exsub muted sm"><span>'+(le?t('lastTime',dFmt(le.wk.t,{month:'short',day:'numeric'}),esc(le.x.sets.map(s=>fmtPrev(m,s)).join('  '))):t('firstTime'))+'</span>'+(le&&x.sets.some(s=>!s.done)?'<button class="lnk-d" onclick="fillLast('+i+')">↺ '+t('flBtn')+'</button>':'')+'<button class="lnk-d" onclick="restPick('+i+')">⏱ '+(exRest(x)===0?t('restOff'):fmtClock(exRest(x)!=null?exRest(x):(SET.rest||90)))+'</button></div>';
   const hd=m==='t'&&isHold(x.eid),c1=m==='t'?t('colMin'):(m==='bw'?'+'+wUnit().toUpperCase():wUnit().toUpperCase()),c2=hd?t('colSec'):(m==='t'?dUnit().toUpperCase():t('colReps'));
@@ -306,12 +316,12 @@ function exCard(i,x){
   h+='<div class="srow hd"><span>'+t('colSet')+'</span><span>'+c1+'</span><span>'+c2+'</span><span></span></div>';
   const sg=(m==='wr'||m==='bw')?sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'}):null;
   x.sets.forEach((s,j)=>{
-    const ph=pv[j]||(pv.length?pv[pv.length-1]:null)||(j>0?x.sets[j-1]:null);
+    const ph=pvAt(pv,x.sets,j)||(j>0?x.sets[j-1]:null);
     let f1,f2,p1,p2,k1,k2;
     if(hd){k1='tm';k2='ts';const a=tSplit(s.t),b=ph?tSplit(ph.t):null;f1=a?String(a[0]):'';f2=a?String(a[1]):'';p1=b?String(b[0]):'';p2=b?String(b[1]):'';}
     else if(m==='t'){k1='t';k2='d';f1=s.t!=null?fmtNum(s.t):'';f2=dShow(s.d);p1=ph&&ph.t!=null?fmtNum(ph.t):'';p2=ph&&ph.d?dShow(ph.d):'';}
     else{k1='w';k2='r';f1=m==='wr'?pw(s.w):wShow(s.w);f2=s.r!=null?String(s.r):'';p1=ph&&ph.w!=null?(m==='wr'?pw(ph.w):wShow(ph.w)):(m==='bw'?'0':'');p2=ph&&ph.r!=null?String(ph.r):'';if(m==='wr'&&x.sg!=null)p1=pw(x.sg);}
-    if((m==='wr'||m==='bw')&&sg&&!s.done&&s.ty!=='w'&&!x.sets.slice(0,j).some(q=>q.r!=null)){ // suggestion, unless an earlier set already shows what you do today / sugerencia, salvo que una serie anterior ya muestre lo de hoy
+    if((m==='wr'||m==='bw')&&sg&&!s.done&&s.ty!=='w'&&!x.sets.slice(0,j).some(q=>q.ty!=='w'&&q.r!=null)){ // suggestion, unless an earlier set already shows what you do today / sugerencia, salvo que una serie anterior ya muestre lo de hoy
       if(sg.r&&s.r==null)p2=String(sg.r);
       if(m==='wr'&&sg.w!=null&&x.sg==null&&s.w==null)p1=pw(sg.w);
     }
@@ -352,7 +362,7 @@ function sv(i,j,f,v){
 document.addEventListener('focusin',function(ev){const el=ev.target;if(el&&el.dataset&&el.dataset.i!=null&&el.classList.contains('in')){REST_LAST=+el.dataset.i;restFab();}});
 function stepSet(i,j,f,d){
   const x=ACT.ex[i],s=x.sets[j],m=exMode(x.eid);if(m==='t')return;
-  const pv=lastEx(xk(x)),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
+  const pv=lastEx(xk(x)),ps=pv?pv.x.sets:[],ph=pvAt(ps,x.sets,j)||(j>0?x.sets[j-1]:null);
   if(f==='w'){
     let b=s.w;if(b==null)b=(m==='wr'&&x.sg!=null)?x.sg:(ph&&ph.w!=null?ph.w:(m==='wr'?barOf(x)-wInc()*d:0)); // an empty barbell set starts at the empty bar / una serie vacía con barra empieza en la barra sola
     const st=wInc(),ml=m==='wr'?mulOf(x):1;let dv=Math.max(0,b/ml);dv=Math.max(0,Math.round((dv+d*st)/st)*st);s.w=dv*ml;
@@ -384,9 +394,9 @@ function tgSet(i,j){REST_LAST=i;
   unlockAudio();
   if(!s.done){
     const bk={w:s.w,r:s.r,t:s.t,d:s.d}; // so a rejected tap leaves the row untouched / para que un toque rechazado no cambie la fila
-    const pv=lastEx(xk(x)),ps=pv?pv.x.sets:[],ph=ps[j]||(ps.length?ps[ps.length-1]:null)||(j>0?x.sets[j-1]:null);
+    const pv=lastEx(xk(x)),ps=pv?pv.x.sets:[],ph=pvAt(ps,x.sets,j)||(j>0?x.sets[j-1]:null);
     if(m==='wr'&&s.w==null&&x.sg!=null)s.w=x.sg;
-    if((m==='wr'||m==='bw')&&s.ty!=='w'&&!x.sets.slice(0,j).some(q=>q.r!=null)){const g=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});if(g){if(g.r&&s.r==null)s.r=g.r;if(m==='wr'&&g.w!=null&&x.sg==null&&s.w==null)s.w=g.w;}}
+    if((m==='wr'||m==='bw')&&s.ty!=='w'&&!x.sets.slice(0,j).some(q=>q.ty!=='w'&&q.r!=null)){const g=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});if(g){if(g.r&&s.r==null)s.r=g.r;if(m==='wr'&&g.w!=null&&x.sg==null&&s.w==null)s.w=g.w;}}
     if(ph){
       if(m==='t'){if(s.t==null&&ph.t!=null)s.t=ph.t;if(s.d==null&&ph.d)s.d=ph.d;}
       else{if(s.w==null&&ph.w!=null&&m!=='bw')s.w=ph.w;if(s.w==null&&m==='bw'&&ph.w)s.w=ph.w;if(s.r==null&&ph.r!=null)s.r=ph.r;}
@@ -396,10 +406,10 @@ function tgSet(i,j){REST_LAST=i;
     const prev=bestScore(xk(x),m,s),sc=setScore(m,s);
     s.done=true;if(!ACT.ts){ACT.ts=ACT.t0&&actTotals().done>1?ACT.t0:Date.now();ACT.sn=ACT.ts;ACT.acc=0;ACT.pz=false;}else if(ACT.pz){ACT.pz=false;ACT.sn=Date.now();}
     if(prev>0&&sc>prev){s.pr=true;toast(m==='wr'?t('newPR2',wShow(Math.round(sc))+' '+wUnit(),wShow(Math.round(sc-prev))+' '+wUnit()):t('newPR'));}else delete s.pr;
-    startRest(exRest(x));
+    if(ssNext(i)==null)startRest(exRest(x)); // a superset goes straight to its partner, rest after the last one / superset: directo a la pareja, descanso tras la última
   }else{s.done=false;delete s.pr;}
   saveAct();exRedraw(i);
-  if(s.done){buzz(s.pr?[12,60,24]:12);popRow(i,j);if(s.pr)prBurst(i,j);nextInView(i,j);}
+  if(s.done){buzz(s.pr?[12,60,24]:12);popRow(i,j);if(s.pr)prBurst(i,j);const n2=ssNext(i),f2=ssFirstOpen(i);if(n2!=null)ssJump(n2);else if(f2!=null&&f2!==i)ssJump(f2);else nextInView(i,j);}
 }
 /* redraw only the exercise you touched: no flash, no jump, keeps your place / redibuja solo el ejercicio que tocaste: sin parpadeo ni saltos */
 function exRedraw(i){
@@ -443,12 +453,66 @@ function nextInView(i,j){
   const r=nx.getBoundingClientRect();
   if(r.bottom>window.innerHeight-170||r.top<70){try{nx.scrollIntoView({block:'center',behavior:'smooth'});}catch(e){}}
 }
+/* ---------- supersets: pair exercises in your own workout / superseries: empareja ejercicios en tu propio entrenamiento ---------- */
+function ssOf(x){return x&&(x.ss||(x.tg&&x.tg.ss))||'';}
+function ssIdx(g){const r=[];ACT.ex.forEach((y,k)=>{if(ssOf(y)===g)r.push(k);});return r;}
+function ssLab(i){const x=ACT.ex[i],g=ssOf(x);if(!g)return'';return g+(ssIdx(g).indexOf(i)+1);}
+function ssOpen(k){return ACT.ex[k].sets.some(q=>!q.done);}
+function ssNext(i){const g=ssOf(ACT.ex[i]);if(!g)return null;const G=ssIdx(g),p=G.indexOf(i);for(let k=p+1;k<G.length;k++)if(ssOpen(G[k]))return G[k];return null;}
+function ssFirstOpen(i){const g=ssOf(ACT.ex[i]);if(!g)return null;const G=ssIdx(g);for(const k of G)if(ssOpen(k))return k;return null;}
+function ssJump(k){const el=document.getElementById('exc'+k);if(!el)return;const r=el.querySelector('.srow:not(.hd):not(.done)')||el;try{r.scrollIntoView({block:'center',behavior:'smooth'});}catch(e){}}
+function ssMenu(i){
+  const x=ACT.ex[i];
+  if(ssOf(x)){const g=ssOf(x);ACT.ex.forEach(y=>{if(y.ss===g)delete y.ss;if(y.tg&&y.tg.ss===g)delete y.tg.ss;});}
+  else{const y=ACT.ex[i+1];if(!y)return;const used=ACT.ex.map(ssOf);const g=ssOf(y)||'ABCDEFGH'.split('').find(c=>used.indexOf(c)<0)||'A';x.ss=g;if(!ssOf(y))y.ss=g;toast(t('ssHint'));}
+  saveAct();sheetClose();render();
+}
+/* ---------- sticky note per exercise ("seat on 4, wide grip"), kept across sessions / nota fija por ejercicio, se queda entre sesiones ---------- */
+function exNoteOf(eid){return SET.exNote&&SET.exNote[eid]||'';}
+function exNoteOpen(i){
+  const x=ACT.ex[i];
+  sheet('<h3>'+t('noteT')+'</h3><p class="muted sm">'+esc(exName(x.eid,x.n))+' · '+t('noteP')+'</p><textarea id="exnt" class="in" maxlength="120" rows="3" placeholder="'+esc(t('notePh'))+'">'+esc(exNoteOf(x.eid))+'</textarea><div class="row"><button class="btn pri" onclick="exNoteSave('+i+')">'+t('save')+'</button>'+(exNoteOf(x.eid)?'<button class="btn danger" onclick="exNoteSave('+i+',1)">'+t('delete')+'</button>':'')+'<button class="btn" onclick="sheetClose()">'+t('close')+'</button></div>');
+  setTimeout(()=>{const e=$('exnt');if(e)e.focus();},60);
+}
+function exNoteSave(i,del){
+  const x=ACT.ex[i],v=del?'':String(($('exnt')||{}).value||'').trim().slice(0,120);
+  SET.exNote=Object.assign({},SET.exNote||{});
+  if(v)SET.exNote[x.eid]=v;else delete SET.exNote[x.eid];
+  const k=Object.keys(SET.exNote);if(k.length>150)delete SET.exNote[k[0]]; // keep the synced settings small / ajustes sincronizados pequeños
+  saveSet();sheetClose();exRedraw(i);
+}
+/* ---------- warm-up sets for a heavy lift: ramp to the working weight / series de aproximación hasta el peso de trabajo ---------- */
+function wuWork(x){
+  const g=sugg(x.eid,x.tg||{lo:6,hi:12,u:'r'});if(g&&g.w!=null)return g.w;
+  const s=x.sets.find(q=>q.ty!=='w'&&q.w!=null);if(s)return s.w;
+  const le=lastEx(xk(x));if(!le)return null;let b=null;le.x.sets.forEach(q=>{if(q.ty!=='w'&&q.w!=null&&(b==null||q.w>b))b=q.w;});return b;
+}
+function wuCan(i,any){
+  const x=ACT&&ACT.ex[i];if(!x||exMode(x.eid)!=='wr'||isDb(x)||x.sets.some(q=>q.ty==='w'||q.done))return false;
+  const W=wuWork(x),e=exById(x.eid);if(!(W>0))return false;
+  if(any)return true;
+  // the link shows only on the first barbell lift of the day / el enlace solo en el primer ejercicio con barra del día
+  const first=ACT.ex.findIndex(y=>exMode(y.eid)==='wr'&&!isDb(y)&&exById(y.eid)&&exById(y.eid).e==='barbell');
+  return first===i&&!!e&&e.e==='barbell'&&W>=(x.bar||20)*1.6;
+}
+function wuPlan(x){
+  const W=wuWork(x);if(!(W>0))return[];const bar=x.bar>0?x.bar:0,out=[];
+  if(bar&&W>=bar*1.6)out.push({w:bar,r:10});
+  [[.5,8],[.7,5],[.85,3]].forEach(p=>{const w=wRound(W*p[0]);if(w>=W*.95||w<=bar||out.some(o=>o.w===w))return;out.push({w:w,r:p[1]});});
+  return out;
+}
+function wuAdd(i){
+  const x=ACT.ex[i],pl=wuPlan(x);if(!pl.length){toast(t('wuNone'));return;}
+  const snap=JSON.stringify(ACT);
+  x.sets=pl.map(p=>Object.assign(newSet(),{w:p.w,r:p.r,ty:'w'})).concat(x.sets);
+  saveAct();sheetClose();exRedraw(i);undoToast(t('wuDone',pl.length),snap);
+}
 function exMenu(i){
   const x=ACT.ex[i];
   sheet('<h3>'+esc(exNameV(x.eid,x.vr,x.n))+'</h3><div class="menu">'+
     '<button class="pri" onclick="swapOpen('+i+')">↔ '+t('swapB')+'</button>'+(exVars(x.eid).length?'<button onclick="varOpen('+i+')">⚙ '+t('varB')+'</button>':'')+'<button onclick="howOpen(\''+x.eid+'\')">ⓘ '+t('guideB')+'</button>'+(x.eid.indexOf('c_')===0?'<button onclick="customOpen(\''+x.eid+'\')">✎ '+t('cxEdit')+'</button>':'')+
     '<button onclick="tasteLike(\''+x.eid+'\');exMenu('+i+')">'+ic('heart')+' '+t(tasteOf(x.eid)==='lk'?'tkLiked':'tkLike')+'</button><button onclick="tasteDis(\'act\','+i+')">'+ic('ban')+' '+t('tkDis')+'</button>'+
-    '<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+''+(exMode(x.eid)==='wr'&&!isDb(x)?'<button onclick="sheetClose();pcOpenEx('+i+')">🏋 '+t('pcT')+'</button>':'')+(exMode(x.eid)==='wr'&&isDb(x)?'<button onclick="mulMenu('+i+')">🏋 '+t('mulTitle')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
+    '<button onclick="exNoteOpen('+i+')">'+ic('pin')+' '+t(exNoteOf(x.eid)?'noteEdit':'noteAdd')+'</button>'+(i<ACT.ex.length-1||ssOf(x)?'<button onclick="ssMenu('+i+')">⇄ '+t(ssOf(x)?'ssOff':'ssWith')+'</button>':'')+(wuCan(i,1)?'<button onclick="wuAdd('+i+')">＋ '+t('wuAdd')+'</button>':'')+'<button onclick="restPick('+i+')">⏱ '+t('restEx')+'</button>'+(x.sets.some(q=>q.done)?'<button onclick="unDoneLast('+i+')">↩ '+t('unDone')+'</button>':'')+''+(exMode(x.eid)==='wr'&&!isDb(x)?'<button onclick="sheetClose();pcOpenEx('+i+')">🏋 '+t('pcT')+'</button>':'')+(exMode(x.eid)==='wr'&&isDb(x)?'<button onclick="mulMenu('+i+')">🏋 '+t('mulTitle')+'</button>':'')+'<button onclick="rmSet('+i+')">− '+t('rmLastSet')+'</button><button class="danger" onclick="rmEx('+i+')">✕ '+t('rmEx')+'</button></div><button class="btn wide" onclick="sheetClose()">'+t('close')+'</button>');
 }
 /* remove one set (the swipe-left uses this); the last set left is emptied instead / quitar una serie (lo usa deslizar a la izquierda); si queda una sola, se vacía */
 function rmSetAt(i,j){
@@ -506,7 +570,7 @@ function wkCheer(wk,prs){
 }
 function finishWk(){
   const end=Date.now();
-  const ex=ACT.ex.map(x=>{const o={eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})};if(x.v)o.v=x.v;if(x.vr)o.vr=x.vr;if(x.mul>1)o.mul=x.mul;if(x.bar>0)o.bar=x.bar;return o;}).filter(x=>x.sets.length);
+  const ex=ACT.ex.map(x=>{const o={eid:x.eid,n:x.n,sets:x.sets.filter(s=>s.done).map(s=>{const o={w:s.w,r:s.r,t:s.t,d:s.d};if(s.pr)o.pr=1;if(s.ty)o.ty=s.ty;return o;})};if(x.v)o.v=x.v;if(x.vr)o.vr=x.vr;if(x.mul>1)o.mul=x.mul;if(x.bar>0)o.bar=x.bar;if(x.ss)o.ss=x.ss;return o;}).filter(x=>x.sets.length);
   const t0=actStart()||ACT.t0,dur=actStart()?actMs():end-t0,wk={id:ACT.id,t:t0,end:t0+dur,name:(ACT.name||'').trim()||autoName(t0),note:(ACT.note||'').trim(),ex:ex};
   if(ACT.pl!=null){wk.pl=ACT.pl;if(DATA.plan)DATA.plan.cur=(ACT.pl+1)%DATA.plan.n;}
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
@@ -846,10 +910,10 @@ function customDel(id){
 }
 
 /* ---------- routines ---------- */
-function saveAsRoutine(){UI.rb={id:null,name:ACT.name||'',ex:ACT.ex.map(x=>({eid:x.eid,n:x.n,sets:x.sets.length}))};rbDraw();}
+function saveAsRoutine(){UI.rb={id:null,name:ACT.name||'',ex:ACT.ex.map(x=>rbKeep(x,wkN(x)))};rbDraw();}
 /* a routine line keeps the variation, multiplier and bar of the exercise it came from / una línea de rutina conserva la variante, el multiplicador y la barra */
-function rbKeep(x,sets){const o={eid:x.eid,n:x.n,sets:sets};if(x.vr)o.vr=x.vr;if(x.mul>1)o.mul=x.mul;if(x.bar>0)o.bar=x.bar;if(x.v===2||x.keep)o.keep=1;return o;}
-function saveWkAsRoutine(id){const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;UI.rb={id:null,name:wk.name||'',ex:wk.ex.map(x=>rbKeep(x,x.sets.length))};rbDraw();}
+function rbKeep(x,sets){const o={eid:x.eid,n:x.n,sets:sets};if(x.vr)o.vr=x.vr;if(x.mul>1)o.mul=x.mul;if(x.bar>0)o.bar=x.bar;if(x.v===2||x.keep)o.keep=1;if(x.ss)o.ss=x.ss;return o;}
+function saveWkAsRoutine(id){const wk=DATA.workouts.find(w=>w.id===id);if(!wk)return;UI.rb={id:null,name:wk.name||'',ex:wk.ex.map(x=>rbKeep(x,wkN(x)))};rbDraw();}
 function rbOpen(id){
   if(id){const r=DATA.routines.find(x=>x.id===id);if(!r)return;UI.rb={id:r.id,name:r.name,ex:r.ex.map(x=>rbKeep(x,x.sets))};}
   else UI.rb={id:null,name:'',ex:[]};

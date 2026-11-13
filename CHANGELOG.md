@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.127 — 2026-11-13
+- Supersets in your own workouts (⋯ → Superset with the next exercise: no rest until the last of the pair, kept in routines and history). Sticky notes per exercise (“seat on 4, wide grip”) that show every time. Warm-up sets: one tap ramps up to your working weight on the first barbell lift.
+  Superseries en tus propios entrenamientos (⋯ → Superserie con el siguiente ejercicio: sin descanso hasta el último de la pareja, se guarda en rutinas e historial). Notas fijas por ejercicio (“asiento en 4, agarre ancho”) que salen cada vez. Series de calentamiento: un toque sube hasta tu peso de trabajo en el primer ejercicio con barra.
+
 ## v1.1.126 — 2026-11-13
 - Light mode pass: rank names, the Mobility card numbers and red buttons now read clearly on white.
   Repaso del modo claro: los nombres de rango, los números de la tarjeta de Movilidad y los botones rojos ahora se leen bien sobre blanco.

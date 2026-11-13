@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.127',items:[
+  {i:'barbell',en:'Supersets in your own workouts (⋯ → Superset with the next exercise: no rest until the last of the pair, kept in routines and history). Sticky notes per exercise (“seat on 4, wide grip”) that show every time. Warm-up sets: one tap ramps up to your working weight on the first barbell lift.',es:'Superseries en tus propios entrenamientos (⋯ → Superserie con el siguiente ejercicio: sin descanso hasta el último de la pareja, se guarda en rutinas e historial). Notas fijas por ejercicio (“asiento en 4, agarre ancho”) que salen cada vez. Series de calentamiento: un toque sube hasta tu peso de trabajo en el primer ejercicio con barra.'}
+ ]},
  {v:'v1.1.126',items:[
   {i:'sun',en:'Light mode pass: rank names, the Mobility card numbers and red buttons now read clearly on white.',es:'Repaso del modo claro: los nombres de rango, los números de la tarjeta de Movilidad y los botones rojos ahora se leen bien sobre blanco.'}
  ]},

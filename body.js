@@ -373,7 +373,7 @@ function cleanHr(h){return(h&&typeof h==='object'&&isFinite(h.a)&&h.a>=30&&h.a<=
 function cleanWk(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||typeof x.t!=='number'||!isFinite(x.t)||!Array.isArray(x.ex))return null;
   const ex=[];
-  x.ex.forEach(e=>{if(!e||!ID_RE.test(String(e.eid))||!Array.isArray(e.sets))return;const sets=e.sets.map(cleanSet).filter(Boolean);if(!sets.length)return;const o={eid:String(e.eid),n:String(e.n||e.eid).slice(0,80),sets:sets};if(e.v===2)o.v=2;if(e.vr&&ID_RE.test(String(e.vr)))o.vr=String(e.vr);if(e.mul===2)o.mul=2;if(typeof e.bar==='number'&&e.bar>0&&e.bar<=100)o.bar=e.bar;ex.push(o);});
+  x.ex.forEach(e=>{if(!e||!ID_RE.test(String(e.eid))||!Array.isArray(e.sets))return;const sets=e.sets.map(cleanSet).filter(Boolean);if(!sets.length)return;const o={eid:String(e.eid),n:String(e.n||e.eid).slice(0,80),sets:sets};if(e.v===2)o.v=2;if(e.vr&&ID_RE.test(String(e.vr)))o.vr=String(e.vr);if(e.mul===2)o.mul=2;if(typeof e.bar==='number'&&e.bar>0&&e.bar<=100)o.bar=e.bar;if(/^[A-H]$/.test(e.ss||''))o.ss=e.ss;ex.push(o);});
   const sid=/^\d{1,15}$/.test(String(x.sid||''))?String(x.sid):'';
   if(!ex.length&&!sid)return null; // watch-only workouts come from Strava / los entrenamientos solo-reloj vienen de Strava
   return{id:String(x.id),t:x.t,end:(typeof x.end==='number'&&isFinite(x.end))?x.end:0,name:String(x.name||'').slice(0,80),note:String(x.note||'').slice(0,500),ex:ex,hr:cleanHr(x.hr),kcal:(isFinite(x.kcal)&&x.kcal>0&&x.kcal<=10000)?Math.round(x.kcal):undefined,sv:x.sv?1:undefined,pl:(Number.isInteger(x.pl)&&x.pl>=0&&x.pl<5)?x.pl:undefined,ch:cleanCh(x.ch),sid:sid||undefined,sp:sid?String(x.sp||'').slice(0,30):undefined,sec:(sid&&isFinite(x.sec)&&x.sec>0&&x.sec<172800)?Math.round(x.sec):undefined,u:(isFinite(x.u)&&x.u>0?x.u:undefined)};
@@ -389,7 +389,7 @@ function cleanBody(x){
 }
 function cleanRt(x){
   if(!x||typeof x!=='object'||!ID_RE.test(String(x.id))||!Array.isArray(x.ex))return null;
-  const ex=x.ex.filter(e=>e&&ID_RE.test(String(e.eid))).map(e=>{const o={eid:String(e.eid),n:String(e.n||e.eid).slice(0,80),sets:Math.max(1,Math.min(20,Math.round(cn(e.sets)||1)))};if(e.vr&&ID_RE.test(String(e.vr)))o.vr=String(e.vr);if(e.mul===2)o.mul=2;if(typeof e.bar==='number'&&e.bar>0&&e.bar<=100)o.bar=e.bar;if(e.keep)o.keep=1;return o;});
+  const ex=x.ex.filter(e=>e&&ID_RE.test(String(e.eid))).map(e=>{const o={eid:String(e.eid),n:String(e.n||e.eid).slice(0,80),sets:Math.max(1,Math.min(20,Math.round(cn(e.sets)||1)))};if(e.vr&&ID_RE.test(String(e.vr)))o.vr=String(e.vr);if(e.mul===2)o.mul=2;if(typeof e.bar==='number'&&e.bar>0&&e.bar<=100)o.bar=e.bar;if(e.keep)o.keep=1;if(/^[A-H]$/.test(e.ss||''))o.ss=e.ss;return o;});
   return ex.length?{id:String(x.id),name:String(x.name||'').slice(0,60),ex:ex,u:(isFinite(x.u)&&x.u>0?x.u:undefined)}:null;
 }
 function cleanCx(x){
