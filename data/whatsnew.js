@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.124',items:[
+  {i:'calendar',en:'History one tap away: an \\u201cAll history\\u201d button under your last workout, and the Progress tab reopens on the side you used last.',es:'El historial a un toque: bot\\u00f3n \\u201cTodo el historial\\u201d bajo tu \\u00faltimo entrenamiento, y la pesta\\u00f1a Progreso abre en el lado que usaste por \\u00faltima vez.'}
+ ]},
  {v:'v1.1.123',items:[
   {i:'home',en:'Cleaner home: one start block on top (train, repeat last, your routines); the plan promo only shows to newcomers and can be dismissed; the guest banner shows once.',es:'Inicio más limpio: un solo bloque arriba para empezar (entrenar, repetir el último, tus rutinas); la promo del plan solo sale a quien empieza y se puede quitar; el aviso de invitado sale una sola vez.'}
  ]},
