@@ -317,6 +317,7 @@ function vMore(){
     (DATA.plan.prof&&DATA.plan.prof.test==='aft'?mrow(ic('target'),t('afT'),'aftOpen()'):'')+mrow(ic('compass'),t('planAll'),'planOpen()')+'</div>';
   h+='<div class="sec"><h2>'+t('yourData')+'</h2></div><div class="card grp mlist">'+
     mrow(ic('download'),t('exportBackup'),'exportJSON()',SET.lastExport?t('lastBackup',dFmt(SET.lastExport)):t('noBackup'))+
+    mrow(ic('clipboard-list'),t('bkaT'),'bkOpen()',t('bkaS'))+
     mrow(ic('file-text'),t('exportCsv'),'exportCSV()')+
     '<label class="mrow"><span class="mi">'+ic('upload')+'</span><span class="mt">'+t('importCsv')+'</span><span class="mc">›</span><input type="file" accept=".csv,text/csv" onchange="importCsv(this)" hidden></label>'+
     '<label class="mrow"><span class="mi">'+ic('upload')+'</span><span class="mt">'+t('importBackup')+'</span><span class="mc">›</span><input type="file" accept=".json,application/json" onchange="importFile(this)" hidden></label></div>'+
@@ -413,6 +414,12 @@ function importFile(inp){
   const r=new FileReader();
   r.onload=function(){
     let o;try{o=JSON.parse(r.result);}catch(e){toast(t('impBad'));return;}
+    importObj(o);
+  };
+  r.onerror=function(){toast(t('impBad'));};
+  r.readAsText(f);
+}
+function importObj(o){{
     if(!o||o.app!=='bubylift'||!o.data||typeof o.data!=='object'){toast(t('impBad'));return;}
     const d=o.data,arr=k=>Array.isArray(d[k])?d[k]:[];
     const have=k=>{const s={};DATA[k].forEach(x=>{s[x.id]=1;});return s;};
@@ -428,15 +435,12 @@ function importFile(inp){
       DATA.workouts.sort((a,b)=>b.t-a.t);DATA.body.sort((a,b)=>b.t-a.t);legacyFix();
       saveData();toast(t('imported'));render();
     });
-  };
-  r.onerror=function(){toast(t('impBad'));};
-  r.readAsText(f);
-}
+}}
 
 /* ---------- erase everything ---------- */
 function eraseAsk(){ask(t('eraseAsk'),t('continue'),function(){ask(t('eraseAsk2'),t('eraseAll'),eraseAll,true);},true);}
 function eraseAll(){
-  [K_DATA,K_SET,K_ACT].forEach(jdel);
+  [K_DATA,K_SET,K_ACT].forEach(jdel);if(typeof bkWipe==='function')bkWipe();
   stopRest();unwake();
   const go=function(){location.replace(location.pathname);};
   go();

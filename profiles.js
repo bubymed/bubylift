@@ -320,10 +320,10 @@ function gDelete(id){
 }
 function pfDelete(id){
   const p=pfGet(id);if(!p)return;
-  const k=pfKeys(id);try{[k.d,k.s,k.a].forEach(x=>localStorage.removeItem(x));if(localStorage.getItem('bl_last')===id)localStorage.removeItem('bl_last');}catch(e){}
+  const k=pfKeys(id);const drop=typeof bkDrop==='function'?bkDrop(k.d):Promise.resolve();try{[k.d,k.s,k.a].forEach(x=>localStorage.removeItem(x));if(localStorage.getItem('bl_last')===id)localStorage.removeItem('bl_last');}catch(e){}
   PFS=PFS.filter(x=>x.id!==id);pfSave();
   try{sessionStorage.removeItem('bl_sess');sessionStorage.setItem('bl_pick','1');}catch(e){}
-  location.replace(location.pathname);
+  Promise.race([drop,new Promise(r=>setTimeout(r,800))]).then(()=>location.replace(location.pathname)); // let the copies go first / primero se borran sus copias
 }
 
 /* in-app profile menu (avatar button) / menú del perfil dentro de la app */

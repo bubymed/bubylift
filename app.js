@@ -5,7 +5,7 @@
 'use strict';
 /* Bubylift — workout log. No account, no server: everything stays in this device's localStorage.
    Bubylift — registro de entrenamientos. Sin cuenta ni servidor: todo se queda en el almacenamiento local de este dispositivo. */
-const APP_VER='v1.1.127';
+const APP_VER='v1.1.128';
 const KG_LB=2.20462262185,KM_MI=0.621371192,CM_IN=0.393700787;
 let K_DATA='bl_data',K_SET='bl_settings',K_ACT='bl_active'; // switched per profile by profiles.js / cambian por perfil (profiles.js)
 let LANG='en',SET={},DATA={workouts:[],routines:[],body:[],custom:[],plan:null},ACT=null,tab='workout';
@@ -309,6 +309,7 @@ function bootApp(){
   setTimeout(()=>{try{guestNag();}catch(e){}},4500);
   setTimeout(()=>{try{welcomeInit(0);}catch(e){}},9000);
   try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}
+  if(typeof bkBoot==='function')bkBoot();
 }
 
 /* keep sheets with a search box above the keyboard: follow the visible part of the screen / mantiene las hojas con buscador sobre el teclado: sigue la parte visible de la pantalla */

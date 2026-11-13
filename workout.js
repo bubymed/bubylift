@@ -148,7 +148,7 @@ function vWorkout(){if(!ACT)return vStart();if(ACT.guide&&!ACT.gOff&&typeof vGui
 function needBackup(){
   const n=DATA.workouts.length+DATA.body.length;
   if(typeof CL!=='undefined'&&CL&&CL.uid&&!CL.bad&&!CL.err&&CL.last&&Date.now()-CL.last<7*864e5)return false; // signed in and synced this week: the cloud is the backup / con sesión y sincronizado esta semana: la nube es el respaldo
-  return n>=5&&(Date.now()-(SET.lastExport||0))>30*864e5&&Date.now()>(SET.bkSnooze||0);
+  return n>=5&&(Date.now()-(SET.lastExport||0))>14*864e5&&Date.now()>(SET.bkSnooze||0); // every two weeks: a guest's log lives only in this browser / cada dos semanas
 }
 function weekStrip(){
   const ws=weekStart(Date.now()),td=new Date().getDay(),days=[];
@@ -184,7 +184,7 @@ function startCard(){
   return h+'</div>';
 }
 function vStart(){
-  let h='';
+  let h=typeof bkFound==='function'?bkFound():'';
   if(typeof inApp==='function'&&inApp())h+='<div class="card warn"><b>'+t('inappT')+'</b><p>'+t(isIOS()?'inappIos':'inappAnd')+'</p><div class="row"><button class="btn sm" onclick="installApp()">'+t('inappBtn')+'</button></div></div>';
   if(DATA.plan)h+=planCard();
   else if(heroOn())h+=hero0();
@@ -575,7 +575,7 @@ function finishWk(){
   if(ACT.pl!=null){wk.pl=ACT.pl;if(DATA.plan)DATA.plan.cur=(ACT.pl+1)%DATA.plan.n;}
   DATA.workouts.push(wk);DATA.workouts.sort((a,b)=>b.t-a.t);
   goalsCheck();rkCheck();
-  saveData();
+  saveData();if(typeof bkAuto==='function')setTimeout(bkAuto,500);
   if(typeof trkGuest==='function')trkGuest('wk_done');
   ACT=null;saveAct();stopRest();unwake();
   render();
