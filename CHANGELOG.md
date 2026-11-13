@@ -7,9 +7,13 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.125 — 2026-11-13
+- Calmer exercise cards: one tip line (the most important) and the rest behind “more tips”; injury warnings always show. The bar-weight link no longer runs off the screen.
+  Tarjetas de ejercicio más limpias: una sola línea de consejo (la más importante) y el resto en “más consejos”; los avisos de lesión siempre se ven. El enlace de peso con barra ya no se sale de la pantalla.
+
 ## v1.1.124 — 2026-11-13
-- History one tap away: an \u201cAll history\u201d button under your last workout, and the Progress tab reopens on the side you used last.
-  El historial a un toque: bot\u00f3n \u201cTodo el historial\u201d bajo tu \u00faltimo entrenamiento, y la pesta\u00f1a Progreso abre en el lado que usaste por \u00faltima vez.
+- History one tap away: an “All history” button under your last workout, and the Progress tab reopens on the side you used last.
+  El historial a un toque: botón “Todo el historial” bajo tu último entrenamiento, y la pestaña Progreso abre en el lado que usaste por última vez.
 
 ## v1.1.123 — 2026-11-13
 - Cleaner home: one start block on top (train, repeat last, your routines); the plan promo only shows to newcomers and can be dismissed; the guest banner shows once.
@@ -29,23 +33,23 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 
 ## v1.1.119 — 2026-11-10
 - Rehab moves now have their own details in the guide: body area, difficulty, equipment, and easier and harder steps taken from the phases of their rehab plan.
-  Los ejercicios de rehabilitaci\u00f3n ahora tienen sus detalles en la gu\u00eda: zona del cuerpo, dificultad, equipo, y pasos m\u00e1s f\u00e1ciles y m\u00e1s dif\u00edciles seg\u00fan las fases de su plan de rehabilitaci\u00f3n.
+  Los ejercicios de rehabilitación ahora tienen sus detalles en la guía: zona del cuerpo, dificultad, equipo, y pasos más fáciles y más difíciles según las fases de su plan de rehabilitación.
 
 ## v1.1.118 — 2026-11-10
-- **Up next tells you how much**: each suggestion shows sets \u00d7 reps and a weight from your last time (or a starting range the first time). And when a lift has not improved in 3+ weeks, its card says so and suggests a variation to try or a 10% reset.
-  **Sigue te dice cu\u00e1nto**: cada sugerencia muestra series \u00d7 repeticiones y un peso seg\u00fan la \u00faltima vez (o un rango inicial la primera vez). Y cuando un ejercicio no mejora en 3+ semanas, su tarjeta te avisa y sugiere una variante o bajar un 10%.
+- **Up next tells you how much**: each suggestion shows sets × reps and a weight from your last time (or a starting range the first time). And when a lift has not improved in 3+ weeks, its card says so and suggests a variation to try or a 10% reset.
+  **Sigue te dice cuánto**: cada sugerencia muestra series × repeticiones y un peso según la última vez (o un rango inicial la primera vez). Y cuando un ejercicio no mejora en 3+ semanas, su tarjeta te avisa y sugiere una variante o bajar un 10%.
 
 ## v1.1.117 — 2026-11-10
 - Opens lighter: the what's-new notes and the imported technique guides now load after the app is open instead of before (22% less to load at start).
-  Abre m\u00e1s ligera: las novedades y las gu\u00edas de t\u00e9cnica importadas ahora se cargan despu\u00e9s de abrir la app, no antes (22% menos que cargar al inicio).
+  Abre más ligera: las novedades y las guías de técnica importadas ahora se cargan después de abrir la app, no antes (22% menos que cargar al inicio).
 
 ## v1.1.116 — 2026-11-10
-- **Bodyweight progressions**: when you hit the top of the range on every set two sessions in a row (push-ups, pull-ups, dips\u2026), the workout offers the next harder version with one tap. If the last two sessions were very hard, it offers the easier one so you can build up. It respects your equipment and injuries.
-  **Progresiones con peso corporal**: cuando llegas al tope en todas las series dos sesiones seguidas (lagartijas, dominadas, fondos\u2026), el entrenamiento te ofrece la versi\u00f3n m\u00e1s dif\u00edcil con un toque. Si las dos \u00faltimas sesiones fueron muy duras, te ofrece la m\u00e1s f\u00e1cil para avanzar. Respeta tu equipo y tus lesiones.
+- **Bodyweight progressions**: when you hit the top of the range on every set two sessions in a row (push-ups, pull-ups, dips…), the workout offers the next harder version with one tap. If the last two sessions were very hard, it offers the easier one so you can build up. It respects your equipment and injuries.
+  **Progresiones con peso corporal**: cuando llegas al tope en todas las series dos sesiones seguidas (lagartijas, dominadas, fondos…), el entrenamiento te ofrece la versión más difícil con un toque. Si las dos últimas sesiones fueron muy duras, te ofrece la más fácil para avanzar. Respeta tu equipo y tus lesiones.
 
 ## v1.1.115 — 2026-11-10
 - **Safer sync between phones**: if you edit a workout, routine, body entry or custom exercise on one phone while offline, that edit is no longer overwritten by an older copy when another phone synced in between. The copy changed last always wins.
-  **Sincronizaci\u00f3n m\u00e1s segura entre tel\u00e9fonos**: si editas un entrenamiento, rutina, registro corporal o ejercicio propio en un tel\u00e9fono sin conexi\u00f3n, esa edici\u00f3n ya no se pierde porque otro tel\u00e9fono sincroniz\u00f3 en medio. Siempre gana la copia que cambi\u00f3 al final.
+  **Sincronización más segura entre teléfonos**: si editas un entrenamiento, rutina, registro corporal o ejercicio propio en un teléfono sin conexión, esa edición ya no se pierde porque otro teléfono sincronizó en medio. Siempre gana la copia que cambió al final.
 
 ## v1.1.114 — 2026-11-10
 - Search also fixes typos in short words like "remp" or "pusj".
