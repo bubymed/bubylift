@@ -982,3 +982,9 @@ button,.btn,.chip,.chk,.stp,#tabbar{-webkit-user-select:none;user-select:none;-w
 /* picker rows off screen are not laid out or painted until you scroll to them / las filas fuera de pantalla no se dibujan hasta que llegas */
 #sheet.pks .exrow{content-visibility:auto;contain-intrinsic-size:auto 74px}.pk-mo{height:600px}
 .nx-n small.nx-d{color:var(--accent);font-weight:600}
+/* home start block / bloque de inicio */
+.card.hst .btn.hst-b{margin-top:10px;background:rgba(255,255,255,.18);color:#fff;border:0}
+.hst-rt{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.hst-rt .btn{background:rgba(0,0,0,.18);color:#fff;border:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card.hero .xdel{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.18);color:#fff}
+.card.hero{position:relative}

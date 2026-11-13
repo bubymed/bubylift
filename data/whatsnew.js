@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.123',items:[
+  {i:'home',en:'Cleaner home: one start block on top (train, repeat last, your routines); the plan promo only shows to newcomers and can be dismissed; the guest banner shows once.',es:'Inicio más limpio: un solo bloque arriba para empezar (entrenar, repetir el último, tus rutinas); la promo del plan solo sale a quien empieza y se puede quitar; el aviso de invitado sale una sola vez.'}
+ ]},
  {v:'v1.1.122',items:[
   {i:'🩹',en:'<b>New recovery plan: inner thigh / groin pain (adductors)</b>, in 4 phases from squeeze isometrics to the Copenhagen exercise and return to sport. The recovery plans section is now called <b>Injuries</b> (in Mobility), and Body › Muscles has a shortcut: "Pain or an injury?".',es:'<b>Plan nuevo: dolor en la ingle o la cara interna del muslo (aductores)</b>, en 4 fases desde apretar sin moverte hasta el ejercicio Copenhague y el regreso al deporte. La sección de planes de recuperación ahora se llama <b>Lesiones</b> (en Movilidad), y Cuerpo › Músculos tiene un acceso directo: "¿Dolor o una lesión?".'}
  ]},

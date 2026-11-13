@@ -1045,7 +1045,7 @@ csTotal:['Total lifted','Total levantado'],csPrNew:['NEW PERSONAL RECORD','NUEVO
  pkMusP:['Full body, chest, back, legs… or kettlebell, dumbbells, bands, cables… at six levels, with the equipment you have.','Cuerpo completo, pecho, espalda, piernas… o pesa rusa, mancuernas, bandas, poleas… en seis niveles, con el equipo que tienes.'],
  pkChT:['Challenges','Retos'],
  pkChP:['30 timed sessions: morning PT, military, CrossFit-style, Hyrox-style and running.','30 sesiones con tiempo: PT de la mañana, militares, estilo CrossFit, estilo Hyrox y carrera.'],
- pkOwnT:['Train my own way','Entrenar a mi manera'],
+ pkOwnT:['Train my own way','Entrenar a mi manera'],stE:['Ready?','¿Listo?'],stT:['Start a workout','Empieza a entrenar'],
  pkOwnP:['You know what you want: start empty and add your exercises, or use a saved routine below.','Ya sabes lo que quieres: empieza vacío y agrega tus ejercicios, o usa una rutina guardada abajo.'],
  rankOf:['Rank {0} of 6','Rango {0} de 6'],
  lvd_0:['Small but mighty: stable moves, both sides together, normal range of motion. You learn the pattern and build the base. 3 sets with about 75 s of rest. Challenges are the shortest and lightest.','Pequeño pero poderoso: movimientos estables, ambos lados juntos y rango normal. Aprendes el patrón y construyes la base. 3 series con unos 75 s de descanso. Los retos son los más cortos y ligeros.'],
