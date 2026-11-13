@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.131',items:[
+  {i:'link',en:'New public web page that explains Bubylift in 10 seconds, with real screens and install steps for your phone (More → Bubylift web page).',es:'Nueva página web pública que explica Bubylift en 10 segundos, con pantallas reales y pasos para instalar en tu teléfono (Más → Página web de Bubylift).'}
+ ]},
  {v:'v1.1.130',items:[
   {i:'trophy',en:'Weekly challenge: one goal a week for everyone (100 pull-ups, 300 push-ups, 4 workouts…), counted from what you already log, with a card to share. In Progress → Overview.',es:'Reto semanal: una meta por semana para todos (100 dominadas, 300 lagartijas, 4 entrenamientos…), contada con lo que ya registras, con tarjeta para compartir. En Progreso → Resumen.'}
  ]},

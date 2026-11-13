@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bubylift — free gym log that works offline</title>
+<meta name="description" content="Free gym log that works offline: log sets in seconds, follow a plan built for you, see your rank and progress. No ads, no subscription. English &amp; Español.">
+<link rel="canonical" href="https://bubymed.github.io/bubylift/about/">
+<meta name="theme-color" content="#0B0B0F">
+<link rel="icon" href="../icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bubylift">
+<meta property="og:title" content="Bubylift — free gym log that works offline">
+<meta property="og:description" content="Log sets in seconds, follow a plan built for you, see your rank and progress. No ads, no subscription. English &amp; Español.">
+<meta property="og:url" content="https://bubymed.github.io/bubylift/about/">
+<meta property="og:image" content="https://bubymed.github.io/bubylift/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://bubymed.github.io/bubylift/img/og.jpg">
+<style>
+:root{--bg:#0B0B0F;--panel:#16161b;--panel2:#1f1f26;--line:#2b2b33;--txt:#f4f4f6;--sub:#b4b4bf;--acc:#FF6A2B;--acc2:#E8430C;--ok:#32D74B}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+a{color:inherit}
+.w{max-width:1080px;margin:0 auto;padding:0 20px}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.02em;font-size:1.25rem;text-decoration:none}
+.logo b{color:var(--acc)}
+.lang{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px}
+.lang button{background:none;border:0;color:var(--sub);font:inherit;font-weight:700;font-size:.85rem;padding:6px 12px;border-radius:999px;cursor:pointer}
+.lang button.on{background:var(--txt);color:var(--bg)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:36px 0 56px}
+h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.03em;margin:0 0 18px;font-weight:900}
+h1 em{font-style:normal;color:var(--acc)}
+.lead{font-size:1.2rem;color:var(--sub);margin:0 0 28px;max-width:34em}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 26px;border-radius:16px;font-weight:800;font-size:1.05rem;text-decoration:none;border:0;cursor:pointer}
+.btn.pri{background:linear-gradient(150deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 12px 30px -12px var(--acc)}
+.btn.sec{background:var(--panel);color:var(--txt);border:1px solid var(--line)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.tags span{font-size:.85rem;color:var(--sub);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.phone{justify-self:center;width:min(330px,80vw);aspect-ratio:780/1300;border-radius:42px;border:8px solid #26262d;overflow:hidden;box-shadow:0 40px 90px -30px rgba(255,106,43,.45),0 20px 60px rgba(0,0,0,.6)}
+.phone img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+section{padding:56px 0;border-top:1px solid var(--line)}
+h2{font-size:clamp(1.6rem,3.6vw,2.3rem);letter-spacing:-.02em;margin:0 0 8px;font-weight:900}
+.sub{color:var(--sub);margin:0 0 30px}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.f{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px}
+.f i{display:flex;width:40px;height:40px;border-radius:12px;align-items:center;justify-content:center;background:color-mix(in srgb,var(--acc) 18%,transparent);color:var(--acc);font-style:normal;font-size:1.2rem;margin-bottom:12px}
+.f b{display:block;font-size:1.08rem;margin-bottom:4px}
+.f p{margin:0;color:var(--sub);font-size:.95rem}
+.shots{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.shots figure{margin:0}
+.shots img{width:100%;height:auto;border-radius:22px;border:1px solid var(--line);display:block}
+.shots figcaption{color:var(--sub);font-size:.9rem;margin-top:8px;text-align:center}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.st{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px}
+.st.me{border-color:var(--acc)}
+.st h3{margin:0 0 10px;font-size:1.1rem}
+.st ol{margin:0;padding-left:20px;color:var(--sub)}
+.st li{margin:4px 0}
+.me-t{font-size:.75rem;font-weight:800;color:var(--acc);letter-spacing:.06em;text-transform:uppercase;display:none;margin-bottom:6px}
+.st:not(.me) .me-t{display:none!important}.st.me .me-t[data-en]{display:block}html[lang=es] .st.me .me-t[data-en]{display:none}html[lang=es] .st.me .me-t[data-es]{display:block}
+.who{display:flex;gap:20px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px}
+.who img{width:84px;height:84px;border-radius:50%;object-fit:cover;flex:none}
+.who p{margin:0;color:var(--sub)}
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin-bottom:10px}
+.faq summary{font-weight:800;cursor:pointer}
+.faq p{color:var(--sub);margin:10px 0 0}
+footer{padding:36px 0 60px;color:var(--sub);font-size:.9rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+[data-es]{display:none}
+html[lang=es] [data-en]{display:none}
+html[lang=es] [data-es]{display:revert}
+@media(max-width:860px){.hero{grid-template-columns:1fr;padding-top:12px}.phone{order:-1;width:min(260px,70vw)}.feat,.steps{grid-template-columns:1fr}.shots{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="w">
+<header>
+  <a class="logo" href="../"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6A2B" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M2 12h1M6 8v8M3 10v4M18 8v8M21 10v4M22 12h-1M6 12h12"/></svg><span>BUBY<b>LIFT</b></span></a>
+  <div class="lang" role="group" aria-label="Language"><button id="bEn" onclick="setLang('en')">EN</button><button id="bEs" onclick="setLang('es')">ES</button></div>
+</header>
+
+<div class="hero">
+  <div>
+    <h1><span data-en>Your gym log.<br><em>Free.</em> Offline.</span><span data-es>Tu registro del gym.<br><em>Gratis.</em> Sin internet.</span></h1>
+    <p class="lead"><span data-en>Log a set in two taps, follow a plan built around you, and watch your rank climb. No ads, no subscription, and it works with zero signal in the gym.</span><span data-es>Registra una serie en dos toques, sigue un plan hecho para ti y mira cómo sube tu rango. Sin anuncios, sin suscripción, y funciona sin señal en el gym.</span></p>
+    <div class="cta">
+      <a class="btn pri" href="../"><span data-en>Open Bubylift</span><span data-es>Abrir Bubylift</span></a>
+      <a class="btn sec" href="#install"><span data-en>Install on my phone</span><span data-es>Instalar en mi teléfono</span></a>
+    </div>
+    <div class="tags"><span data-en>No account needed</span><span data-es>Sin cuenta obligatoria</span><span>iPhone · Android · PC</span><span>English · Español</span></div>
+  </div>
+  <div class="phone"><img src="../img/land-home.jpg" alt="Bubylift home screen" width="780" height="1300"></div>
+</div>
+
+<section>
+  <h2><span data-en>Everything you need. Nothing you don't.</span><span data-es>Todo lo que necesitas. Nada de más.</span></h2>
+  <p class="sub"><span data-en>Built by a combat medic and certified trainer who wanted a log that just works.</span><span data-es>Hecha por un médico de combate y entrenador certificado que quería un registro que simplemente funcione.</span></p>
+  <div class="feat">
+    <div class="f"><i>⚡</i><b data-en>Log in seconds</b><b data-es>Registra en segundos</b><p data-en>Last time's numbers are pre-filled. Tap ✓ and go; the rest timer is one tap away.</p><p data-es>Los números de la vez pasada ya están puestos. Toca ✓ y sigue; el descanso está a un toque.</p></div>
+    <div class="f"><i>🧭</i><b data-en>A plan built for you</b><b data-es>Un plan hecho para ti</b><p data-en>Answer a few questions and get a weekly plan with the reason behind every choice. Or train your own way.</p><p data-es>Responde unas preguntas y recibe un plan semanal con la razón de cada elección. O entrena a tu manera.</p></div>
+    <div class="f"><i>🏆</i><b data-en>Ranks and records</b><b data-es>Rangos y récords</b><p data-en>16 strength ranks from your own lifts, personal records called out the moment you hit them.</p><p data-es>16 rangos de fuerza con tus propios levantamientos y récords personales al instante.</p></div>
+    <div class="f"><i>📴</i><b data-en>Works offline</b><b data-es>Funciona sin internet</b><p data-en>Everything runs on your phone. Sign up only if you want sync and a cloud backup.</p><p data-es>Todo corre en tu teléfono. Crea cuenta solo si quieres sincronizar y respaldo en la nube.</p></div>
+    <div class="f"><i>🧘</i><b data-en>Mobility and injuries</b><b data-es>Movilidad y lesiones</b><p data-en>Guided stretching sessions and step-by-step plans for common pains like runner's knee or shoulder pain.</p><p data-es>Sesiones guiadas de estiramiento y planes paso a paso para dolores comunes como rodilla del corredor u hombro.</p></div>
+    <div class="f"><i>📸</i><b data-en>Cards to share</b><b data-es>Tarjetas para compartir</b><p data-en>Turn a workout into a story-ready card: total lifted, muscles worked, or your new record.</p><p data-es>Convierte un entrenamiento en una tarjeta para historias: total levantado, músculos trabajados o tu nuevo récord.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2><span data-en>See it</span><span data-es>Míralo</span></h2>
+  <p class="sub"><span data-en>Real screens from the app.</span><span data-es>Pantallas reales de la app.</span></p>
+  <div class="shots">
+    <figure><img src="../img/land-home.jpg" alt="" loading="lazy" width="780" height="1300"><figcaption data-en>Start in one tap</figcaption><figcaption data-es>Empieza en un toque</figcaption></figure>
+    <figure><img src="../img/land-wk.jpg" alt="" loading="lazy" width="780" height="1300"><figcaption data-en>Fast set logging</figcaption><figcaption data-es>Series rápidas</figcaption></figure>
+    <figure><img src="../img/land-rank.jpg" alt="" loading="lazy" width="780" height="1300"><figcaption data-en>Your strength rank</figcaption><figcaption data-es>Tu rango de fuerza</figcaption></figure>
+    <figure><img src="../img/land-body.jpg" alt="" loading="lazy" width="780" height="1300"><figcaption data-en>Muscle recovery</figcaption><figcaption data-es>Recuperación muscular</figcaption></figure>
+  </div>
+</section>
+
+<section id="install">
+  <h2><span data-en>Install it like an app</span><span data-es>Instálala como una app</span></h2>
+  <p class="sub"><span data-en>No app store needed. It takes 10 seconds and then opens full screen from your home screen.</span><span data-es>No hace falta tienda de apps. Toma 10 segundos y luego abre a pantalla completa desde tu inicio.</span></p>
+  <div class="steps">
+    <div class="st" id="sIos"><span class="me-t" data-en>Your phone</span><span class="me-t" data-es>Tu teléfono</span><h3>iPhone</h3><ol><li data-en>Open the link in <b>Safari</b></li><li data-es>Abre el enlace en <b>Safari</b></li><li data-en>Tap <b>Share</b> (square with arrow)</li><li data-es>Toca <b>Compartir</b> (cuadro con flecha)</li><li data-en>Tap <b>Add to Home Screen</b></li><li data-es>Toca <b>Agregar a inicio</b></li></ol></div>
+    <div class="st" id="sAnd"><span class="me-t" data-en>Your phone</span><span class="me-t" data-es>Tu teléfono</span><h3>Android</h3><ol><li data-en>Open the link in <b>Chrome</b></li><li data-es>Abre el enlace en <b>Chrome</b></li><li data-en>Tap <b>Install</b> in the app, or ⋮ → <b>Install app</b></li><li data-es>Toca <b>Instalar</b> en la app, o ⋮ → <b>Instalar app</b></li><li data-en>Open it from your home screen</li><li data-es>Ábrela desde tu inicio</li></ol></div>
+    <div class="st" id="sPc"><span class="me-t" data-en>Your device</span><span class="me-t" data-es>Tu equipo</span><h3>PC / Mac</h3><ol><li data-en>Open it in Chrome or Edge</li><li data-es>Ábrela en Chrome o Edge</li><li data-en>Click the install icon in the address bar</li><li data-es>Haz clic en el icono de instalar en la barra de direcciones</li></ol></div>
+  </div>
+  <div class="cta" style="margin-top:24px"><a class="btn pri" href="../"><span data-en>Open Bubylift</span><span data-es>Abrir Bubylift</span></a></div>
+</section>
+
+<section>
+  <div class="who"><img src="../icons/creator.jpg" alt="Mike" width="84" height="84" loading="lazy"><div><b>Mike · @bubylifts</b><p data-en>U.S. Army combat medic, NASM-certified personal trainer and EMT. I built Bubylift so anyone can train with a clear plan, whatever their budget.</p><p data-es>Médico de combate del Ejército de EE. UU., entrenador personal certificado por NASM y EMT. Hice Bubylift para que cualquiera pueda entrenar con un plan claro, sin importar su presupuesto.</p><p style="margin-top:8px"><a href="https://instagram.com/bubylifts" rel="noopener">Instagram ↗</a></p></div></div>
+</section>
+
+<section class="faq">
+  <h2><span data-en>Questions</span><span data-es>Preguntas</span></h2>
+  <details><summary><span data-en>Is it really free?</span><span data-es>¿De verdad es gratis?</span></summary><p data-en>Yes. No ads, no subscription, no paywall.</p><p data-es>Sí. Sin anuncios, sin suscripción, sin funciones de pago.</p></details>
+  <details><summary><span data-en>Where is my data?</span><span data-es>¿Dónde quedan mis datos?</span></summary><p data-en>On your phone. If you create an account, it is also synced, encrypted, so you can use another phone. You can export everything at any time.</p><p data-es>En tu teléfono. Si creas una cuenta, también se sincroniza cifrado para usarla en otro teléfono. Puedes exportar todo cuando quieras.</p></details>
+  <details><summary><span data-en>Can I bring my history from Strong or Hevy?</span><span data-es>¿Puedo traer mi historial de Strong o Hevy?</span></summary><p data-en>Yes. Export a CSV from that app and import it in More → Your data.</p><p data-es>Sí. Exporta un CSV desde esa app e impórtalo en Más → Tus datos.</p></details>
+</section>
+
+<footer><span>© Bubylift</span><a href="../">bubymed.github.io/bubylift</a></footer>
+</div>
+<script>
+function setLang(l){document.documentElement.lang=l;document.getElementById('bEn').classList.toggle('on',l==='en');document.getElementById('bEs').classList.toggle('on',l==='es');try{localStorage.setItem('bl_ab_lang',l);}catch(e){}}
+(function(){var l='';try{l=localStorage.getItem('bl_ab_lang')||'';}catch(e){}
+  if(!l){var q=/[?&]lang=(en|es)/.exec(location.search);l=q?q[1]:((navigator.language||'').toLowerCase().indexOf('es')===0?'es':'en');}
+  setLang(l);
+  var u=navigator.userAgent||'',k=/iphone|ipad|ipod/i.test(u)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)?'sIos':(/android/i.test(u)?'sAnd':'sPc');
+  var e=document.getElementById(k);if(e)e.classList.add('me');
+})();
+</script>
+</body>
+</html>
