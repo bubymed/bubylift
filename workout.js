@@ -180,8 +180,11 @@ function vStart(){
   if(typeof inApp==='function'&&inApp())h+='<div class="card warn"><b>'+t('inappT')+'</b><p>'+t(isIOS()?'inappIos':'inappAnd')+'</p><div class="row"><button class="btn sm" onclick="installApp()">'+t('inappBtn')+'</button></div></div>';
   if(DATA.plan)h+=planCard();
   else if(heroOn())h+=hero0();
-  if(!DATA.plan&&heroOn())h+='<button class="btn wide emptyb" onclick="startWorkout()">'+ic('pencil')+' '+t('pkOwnT')+'</button>';
-  else h+=startCard();
+  if(DATA.plan||heroOn()){ // a plan card or the newcomer promo is already the big orange block: plain buttons here / ya hay un bloque naranja: aquí botones simples
+    const l0=DATA.workouts.find(w=>w.ex&&w.ex.length&&wkAnySets(w)>0);
+    if(l0)h+='<button class="btn wide" onclick="repeatLast()">↺ '+t('repLast')+(l0.name?' · '+esc(l0.name):'')+'</button>';
+    h+='<button class="btn wide emptyb" onclick="startWorkout()">'+ic('pencil')+' '+t('pkOwnT')+'</button>';
+  }else h+=startCard();
   h+=recCta();
   if(DATA.workouts.length)h+=weekStrip();
   if(needBackup())h+='<div class="card warn"><b>'+t('bkT')+'</b><p>'+t('bkP')+'</p><div class="row"><button class="btn pri sm" onclick="exportJSON()">'+t('exportBackup')+'</button><button class="btn sm" onclick="bkLater()">'+t('later')+'</button></div></div>';
