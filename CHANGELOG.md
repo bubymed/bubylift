@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.131 — 2026-11-13
+- New public web page that explains Bubylift in 10 seconds, with real screens and install steps for your phone (More → Bubylift web page).
+  Nueva página web pública que explica Bubylift en 10 segundos, con pantallas reales y pasos para instalar en tu teléfono (Más → Página web de Bubylift).
+
 ## v1.1.130 — 2026-11-13
 - Weekly challenge: one goal a week for everyone (100 pull-ups, 300 push-ups, 4 workouts…), counted from what you already log, with a card to share. In Progress → Overview.
   Reto semanal: una meta por semana para todos (100 dominadas, 300 lagartijas, 4 entrenamientos…), contada con lo que ya registras, con tarjeta para compartir. En Progreso → Resumen.
