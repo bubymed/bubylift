@@ -106,7 +106,7 @@ function strHero(){
   const l=strItemsOf(),n=l.length;
   return'<div class="card hero mb-hero"'+skAttr(t('mobToday'),strSessName(),t('mobGo'),'strSessGo(0)')+'><span class="hero-e">'+t('mobToday')+'</span><h2>'+esc(strSessName())+'</h2>'+
     '<div class="mb-stats"><span><b>'+n+'</b>'+t('mbMovesL')+'</span><span><b>'+STX.min+'</b>'+t('mbMinL')+'</span><span><b>'+strSecs()+'s</b>'+t('mbEachL')+'</span></div>'+
-    '<div class="pv-mini mb-mini">'+l.slice(0,7).map(m=>pvMiniTh(m.eid)).join('')+(n>7?'<i class="more">+'+(n-7)+'</i>':'')+'</div>'+
+    (l.slice(0,7).some(m=>typeof EXPHOTO!=='undefined'&&EXPHOTO.has(m.eid))?'<div class="pv-mini mb-mini">'+l.slice(0,7).map(m=>pvMiniTh(m.eid)).join('')+(n>7?'<i class="more">+'+(n-7)+'</i>':'')+'</div>':'')+ // empty circles only when no move has a picture: skip the row / sin fotos, sin fila de círculos vacíos
     '<button class="btn pri big wide pv-go" onclick="strSessGo(0)">'+ic('stopwatch')+' '+t('mobGo')+'</button></div>';
 }
 const MB_IC={full:'yoga',lower:'target',upper:'bolt',back:'refresh',warm:'sparkles',cool:'heart'};
