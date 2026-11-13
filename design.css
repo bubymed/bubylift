@@ -1003,3 +1003,11 @@ button,.btn,.chip,.chk,.stp,#tabbar{-webkit-user-select:none;user-select:none;-w
 .wulink{display:block;margin:0 0 6px}
 .exh-t .ssl{cursor:pointer}
 .exc.ssg{box-shadow:inset 3px 0 0 var(--accent),var(--shadow)}
+/* weekly challenge / reto semanal */
+.wcc .wcc-h{display:flex;justify-content:space-between;align-items:center}
+.wcc .hero-e{color:var(--accent)}
+.wcc h3{margin:6px 0 10px;font-size:1.3rem;font-weight:800}
+.wcc-bar{height:12px;border-radius:6px;background:color-mix(in srgb,var(--txt) 12%,transparent);overflow:hidden}
+.wcc-bar u{display:block;height:100%;background:var(--accent);border-radius:6px}
+.wcc.done .wcc-bar u{background:var(--green)}
+.wcc-f{display:flex;align-items:baseline;gap:4px;margin-top:10px}.wcc-f b{font-size:1.5rem;font-weight:800}.wcc-f .btn{margin-left:auto}

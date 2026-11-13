@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.130 — 2026-11-13
+- Weekly challenge: one goal a week for everyone (100 pull-ups, 300 push-ups, 4 workouts…), counted from what you already log, with a card to share. In Progress → Overview.
+  Reto semanal: una meta por semana para todos (100 dominadas, 300 lagartijas, 4 entrenamientos…), contada con lo que ya registras, con tarjeta para compartir. En Progreso → Resumen.
+
 ## v1.1.129 — 2026-11-13
 - Share cards: 6 clearly different styles, totals always with separators (15,058), no overlapping text, the muscle cards lead with the main muscle and drop “(deep)”, the record card shows your rank, and every card carries the app link. Links to the app now show a preview image in WhatsApp, Instagram and Facebook.
   Tarjetas para compartir: 6 estilos bien distintos, totales siempre con separadores (15,058), sin texto encimado, las tarjetas de músculos empiezan por el músculo principal y sin “(profundo)”, la tarjeta de récord muestra tu rango y todas llevan el enlace de la app. El enlace de la app ahora sale con imagen en WhatsApp, Instagram y Facebook.

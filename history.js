@@ -284,7 +284,7 @@ function vProgress(){
   for(let i=7;i>=0;i--){const a=wkOff(ws,-i),b=wkOff(ws,1-i);vals.push(DATA.workouts.filter(w=>w.t>=a&&w.t<b).length);labels.push(dFmt(a,{month:'numeric',day:'numeric'}));}
   let vol=0,sets=0;DATA.workouts.forEach(w=>{vol+=wkVol(w);sets+=wkSets(w);});
   const pt=UI.pt||'sum';
-  let h=streakCard()+xpCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+vShort(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
+  let h=streakCard()+(typeof wcCard==='function'?wcCard():'')+xpCard()+goalsCard()+'<div class="stats card"><div><b>'+DATA.workouts.length+'</b><span>'+t('workouts')+'</span></div><div><b>'+sets+'</b><span>'+t('sets')+'</span></div><div><b>'+vShort(vol)+'</b><span>'+t('volume')+' ('+wUnit()+')</span></div></div>';
   h+='<div class="card"><b>'+t('perWeek')+'</b>'+barSvg(vals,labels)+'</div>';
   const rk=strCard()+bwCard(); // consistency level moved to Summary, muscle balance to Body > Muscles / constancia a Resumen, equilibrio a Cuerpo > Músculos
   let ex=featCharts()+'<div class="sec"><h2>'+t('exercises')+'</h2></div><div class="lgrp">';
