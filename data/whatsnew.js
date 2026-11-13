@@ -2,6 +2,9 @@
    Ventana "Novedades" — se muestra una vez por versión después de una actualización, y desde Más → Novedades.
    Add a new entry at the TOP for every release with something new (same value as APP_VER). Keep it short: 1–3 items. */
 const WHATSNEW=[
+ {v:'v1.1.128',items:[
+  {i:'cloud',en:'Automatic copies: every day you use the app a copy is kept on your phone (last 7, More → Your data). If the app ever opens empty, it offers to bring your workouts back. The backup reminder now comes every two weeks and says plainly what is at risk.',es:'Copias automáticas: cada día que usas la app se guarda una copia en tu teléfono (las últimas 7, Más → Tus datos). Si la app abre vacía, te ofrece recuperar tus entrenamientos. El recordatorio de respaldo sale cada dos semanas y dice claro qué se arriesga.'}
+ ]},
  {v:'v1.1.127',items:[
   {i:'barbell',en:'Supersets in your own workouts (⋯ → Superset with the next exercise: no rest until the last of the pair, kept in routines and history). Sticky notes per exercise (“seat on 4, wide grip”) that show every time. Warm-up sets: one tap ramps up to your working weight on the first barbell lift.',es:'Superseries en tus propios entrenamientos (⋯ → Superserie con el siguiente ejercicio: sin descanso hasta el último de la pareja, se guarda en rutinas e historial). Notas fijas por ejercicio (“asiento en 4, agarre ancho”) que salen cada vez. Series de calentamiento: un toque sube hasta tu peso de trabajo en el primer ejercicio con barra.'}
  ]},

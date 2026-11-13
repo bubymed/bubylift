@@ -7,6 +7,10 @@ Resumen bilingüe de todo lo agregado o corregido, lo más nuevo primero.
 - Dev tooling: `npm run lint` (also in CI) joins the scripts in load order and fails on undefined names, a function defined twice across files, duplicate object keys and unreachable code — the bug classes behind the earlier "Bar style" and message-key mix-ups.
   Herramientas: `npm run lint` (también en CI) une los scripts en orden de carga y falla con nombres sin definir, funciones definidas dos veces entre archivos, claves duplicadas y código inalcanzable — las clases de error detrás de los fallos anteriores del estilo "Bar" y las claves de mensajes mezcladas.
 
+## v1.1.128 — 2026-11-13
+- Automatic copies: every day you use the app a copy is kept on your phone (last 7, More → Your data). If the app ever opens empty, it offers to bring your workouts back. The backup reminder now comes every two weeks and says plainly what is at risk.
+  Copias automáticas: cada día que usas la app se guarda una copia en tu teléfono (las últimas 7, Más → Tus datos). Si la app abre vacía, te ofrece recuperar tus entrenamientos. El recordatorio de respaldo sale cada dos semanas y dice claro qué se arriesga.
+
 ## v1.1.127 — 2026-11-13
 - Supersets in your own workouts (⋯ → Superset with the next exercise: no rest until the last of the pair, kept in routines and history). Sticky notes per exercise (“seat on 4, wide grip”) that show every time. Warm-up sets: one tap ramps up to your working weight on the first barbell lift.
   Superseries en tus propios entrenamientos (⋯ → Superserie con el siguiente ejercicio: sin descanso hasta el último de la pareja, se guarda en rutinas e historial). Notas fijas por ejercicio (“asiento en 4, agarre ancho”) que salen cada vez. Series de calentamiento: un toque sube hasta tu peso de trabajo en el primer ejercicio con barra.
